@@ -43,12 +43,13 @@
 
 - (NSString*)getLatestSensorData:(NSString *)sensorName{
     for (AWARESensor* sensor in awareSensors) {
+//        NSLog(@"%@ <---> %@", sensor.getSensorName, sensorName);
         if ([sensor.getSensorName isEqualToString:sensorName]) {
             NSString *sensorValue = [sensor getLatestValue];
             return sensorValue;
         }
     }
-    return @"---";
+    return @"";
 }
 
 @end

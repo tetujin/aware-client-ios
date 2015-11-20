@@ -7,7 +7,6 @@
 //
 
 #import "Accelerometer.h"
-#import "AWAREStudyManager.h"
 
 @implementation Accelerometer{
     CMMotionManager *manager;

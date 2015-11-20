@@ -42,6 +42,16 @@
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     // Saves changes in the application's managed object context before the application terminates.
     [self saveContext];
+    UILocalNotification *notification = [[UILocalNotification alloc] init];
+    if (notification){
+        //        notification.timeZone = [NSTimeZone defaultTimeZone];
+        notification.repeatInterval = 0;
+        notification.alertBody = @"Application is stoped! Please reboot this app for logging your acitivties.";
+        notification.alertAction = @"Reboot";
+        notification.soundName = UILocalNotificationDefaultSoundName;
+        notification.applicationIconBadgeNumber = 1;
+        [[UIApplication sharedApplication] scheduleLocalNotification:notification];
+    }
 }
 
 #pragma mark - Core Data stack

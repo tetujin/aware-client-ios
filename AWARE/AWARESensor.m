@@ -195,7 +195,7 @@
 - (BOOL)insertSensorData:(NSString *)data withDeviceId:(NSString *)deviceId url:(NSString *)url{
     previusUploadingState = YES; //file lock
     NSString *post = [NSString stringWithFormat:@"device_id=%@&data=%@", deviceId, data];
-    NSLog(@"%@", post);
+//    NSLog(@"%@", post);
     NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
     NSString *postLength = [NSString stringWithFormat:@"%ld", [postData length]];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
@@ -212,7 +212,7 @@
         NSData *resData = [NSURLConnection sendSynchronousRequest:request
                                                 returningResponse:&response error:&error];
         NSString* newStr = [[NSString alloc] initWithData:resData encoding:NSUTF8StringEncoding];
-        NSLog(@"%@", newStr);
+//        NSLog(@"%@", newStr);
         //                    NSArray *mqttArray = [NSJSONSerialization JSONObjectWithData:resData options:NSJSONReadingMutableContainers error:nil];
         //        id obj = [NSJSONSerialization JSONObjectWithData:resData options:NSJSONReadingMutableContainers error:nil];
         //        NSData *data = [NSJSONSerialization dataWithJSONObject:obj options:0 error:nil];
@@ -243,7 +243,7 @@
     NSData *resData = [NSURLConnection sendSynchronousRequest:request
                                             returningResponse:&response error:&error];
     NSString* newStr = [[NSString alloc] initWithData:resData encoding:NSUTF8StringEncoding];
-    NSLog(@"%@", newStr);
+//    NSLog(@"%@", newStr);
     int responseCode = (int)[response statusCode];
     if(responseCode == 200){
         NSLog(@"UPLOADED SENSOR DATA TO A SERVER");
@@ -260,10 +260,6 @@
 
 - (BOOL)clearTable:(NSString *)data withDeviceId:(NSString *)deviceId withUrl:(NSString *)url{
     return NO;
-}
-
-- (void)uploadSensorData {
-    
 }
 
 /*

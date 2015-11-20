@@ -3,7 +3,6 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9049"/>
-        <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
     </dependencies>
     <scenes>
         <!--AWARE-->
@@ -19,7 +18,7 @@
                                 <rect key="frame" x="0.0" y="92" width="600" height="95"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Jlv-Hb-QNm" id="9JS-s5-0aB">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="95"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="94.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>
@@ -30,15 +29,11 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="AWARE" id="tQb-LZ-vWa">
-                        <barButtonItem key="leftBarButtonItem" image="menu_filled" id="ZWb-9L-PHT"/>
-                        <rightBarButtonItems>
-                            <barButtonItem image="more_filled" id="zWv-li-TXP"/>
-                            <barButtonItem image="QR_code_filled" id="BRn-rr-Hag">
-                                <connections>
-                                    <segue destination="Hnq-7Q-yrY" kind="push" id="3U1-pi-fNP"/>
-                                </connections>
-                            </barButtonItem>
-                        </rightBarButtonItems>
+                        <barButtonItem key="rightBarButtonItem" image="QR_code_filled" id="BRn-rr-Hag">
+                            <connections>
+                                <segue destination="Hnq-7Q-yrY" kind="push" id="3U1-pi-fNP"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eTN-Zo-OWZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -85,7 +80,5 @@
     </scenes>
     <resources>
         <image name="QR_code_filled" width="32" height="32"/>
-        <image name="menu_filled" width="32" height="32"/>
-        <image name="more_filled" width="32" height="32"/>
     </resources>
 </document>

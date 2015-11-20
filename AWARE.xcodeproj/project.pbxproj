@@ -24,6 +24,12 @@
 		1623CEB71BFE175F00EFAD72 /* AWARESensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 1623CEB61BFE175F00EFAD72 /* AWARESensor.m */; };
 		1623CEB91BFE319100EFAD72 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1623CEB81BFE319100EFAD72 /* CoreMotion.framework */; };
 		1623CEBC1BFE390600EFAD72 /* Accelerometer.m in Sources */ = {isa = PBXBuildFile; fileRef = 1623CEBB1BFE390600EFAD72 /* Accelerometer.m */; };
+		169A7B241BFF16E700A7C06D /* Gyroscope.m in Sources */ = {isa = PBXBuildFile; fileRef = 169A7B231BFF16E700A7C06D /* Gyroscope.m */; };
+		169A7B271BFF193C00A7C06D /* Magnetometer.m in Sources */ = {isa = PBXBuildFile; fileRef = 169A7B261BFF193C00A7C06D /* Magnetometer.m */; };
+		169A7B2A1BFF1C2300A7C06D /* Battery.m in Sources */ = {isa = PBXBuildFile; fileRef = 169A7B291BFF1C2300A7C06D /* Battery.m */; };
+		169A7B2D1BFF219500A7C06D /* Barometer.m in Sources */ = {isa = PBXBuildFile; fileRef = 169A7B2C1BFF219500A7C06D /* Barometer.m */; };
+		169A7B301BFF280C00A7C06D /* Locations.m in Sources */ = {isa = PBXBuildFile; fileRef = 169A7B2F1BFF280C00A7C06D /* Locations.m */; };
+		169A7B321BFF282800A7C06D /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 169A7B311BFF282800A7C06D /* CoreLocation.framework */; };
 		16FCE2771BFE9326005FC71A /* AWARESensorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 16FCE2761BFE9326005FC71A /* AWARESensorManager.m */; };
 		FC2AF85D761397B784DECBD3 /* libPods-AWARE.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9ED04F29ED60F3FCC960F6CD /* libPods-AWARE.a */; };
 /* End PBXBuildFile section */
@@ -76,6 +82,17 @@
 		1623CEB81BFE319100EFAD72 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		1623CEBA1BFE390600EFAD72 /* Accelerometer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Accelerometer.h; sourceTree = "<group>"; };
 		1623CEBB1BFE390600EFAD72 /* Accelerometer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Accelerometer.m; sourceTree = "<group>"; };
+		169A7B221BFF16E700A7C06D /* Gyroscope.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Gyroscope.h; sourceTree = "<group>"; };
+		169A7B231BFF16E700A7C06D /* Gyroscope.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Gyroscope.m; sourceTree = "<group>"; };
+		169A7B251BFF193C00A7C06D /* Magnetometer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Magnetometer.h; sourceTree = "<group>"; };
+		169A7B261BFF193C00A7C06D /* Magnetometer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Magnetometer.m; sourceTree = "<group>"; };
+		169A7B281BFF1C2300A7C06D /* Battery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Battery.h; sourceTree = "<group>"; };
+		169A7B291BFF1C2300A7C06D /* Battery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Battery.m; sourceTree = "<group>"; };
+		169A7B2B1BFF219500A7C06D /* Barometer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Barometer.h; sourceTree = "<group>"; };
+		169A7B2C1BFF219500A7C06D /* Barometer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Barometer.m; sourceTree = "<group>"; };
+		169A7B2E1BFF280C00A7C06D /* Locations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Locations.h; sourceTree = "<group>"; };
+		169A7B2F1BFF280C00A7C06D /* Locations.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Locations.m; sourceTree = "<group>"; };
+		169A7B311BFF282800A7C06D /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		16FCE2751BFE9326005FC71A /* AWARESensorManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AWARESensorManager.h; sourceTree = "<group>"; };
 		16FCE2761BFE9326005FC71A /* AWARESensorManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AWARESensorManager.m; sourceTree = "<group>"; };
 		9B5BAD09F1FBEE0838867ACF /* Pods-AWARE.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AWARE.release.xcconfig"; path = "Pods/Target Support Files/Pods-AWARE/Pods-AWARE.release.xcconfig"; sourceTree = "<group>"; };
@@ -88,6 +105,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				169A7B321BFF282800A7C06D /* CoreLocation.framework in Frameworks */,
 				1623CEB91BFE319100EFAD72 /* CoreMotion.framework in Frameworks */,
 				1623CEB11BFD40FB00EFAD72 /* AVFoundation.framework in Frameworks */,
 				1623CEA51BFD255200EFAD72 /* HealthKit.framework in Frameworks */,
@@ -153,6 +171,16 @@
 				16FCE2761BFE9326005FC71A /* AWARESensorManager.m */,
 				1623CEBA1BFE390600EFAD72 /* Accelerometer.h */,
 				1623CEBB1BFE390600EFAD72 /* Accelerometer.m */,
+				169A7B221BFF16E700A7C06D /* Gyroscope.h */,
+				169A7B231BFF16E700A7C06D /* Gyroscope.m */,
+				169A7B251BFF193C00A7C06D /* Magnetometer.h */,
+				169A7B261BFF193C00A7C06D /* Magnetometer.m */,
+				169A7B281BFF1C2300A7C06D /* Battery.h */,
+				169A7B291BFF1C2300A7C06D /* Battery.m */,
+				169A7B2B1BFF219500A7C06D /* Barometer.h */,
+				169A7B2C1BFF219500A7C06D /* Barometer.m */,
+				169A7B2E1BFF280C00A7C06D /* Locations.h */,
+				169A7B2F1BFF280C00A7C06D /* Locations.m */,
 				1623CE721BFD1B2C00EFAD72 /* Main.storyboard */,
 				1623CE781BFD1B2C00EFAD72 /* Assets.xcassets */,
 				1623CE7A1BFD1B2C00EFAD72 /* LaunchScreen.storyboard */,
@@ -192,6 +220,7 @@
 		2A3CA9F5620967BACB187EB7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				169A7B311BFF282800A7C06D /* CoreLocation.framework */,
 				1623CEB81BFE319100EFAD72 /* CoreMotion.framework */,
 				1623CEB01BFD40FB00EFAD72 /* AVFoundation.framework */,
 				1623CEA41BFD255200EFAD72 /* HealthKit.framework */,
@@ -416,13 +445,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				1623CEB71BFE175F00EFAD72 /* AWARESensor.m in Sources */,
+				169A7B271BFF193C00A7C06D /* Magnetometer.m in Sources */,
 				1623CEAF1BFD407900EFAD72 /* QRCodeViewController.m in Sources */,
 				1623CE711BFD1B2C00EFAD72 /* ViewController.m in Sources */,
+				169A7B241BFF16E700A7C06D /* Gyroscope.m in Sources */,
 				1623CE6E1BFD1B2C00EFAD72 /* AppDelegate.m in Sources */,
 				16FCE2771BFE9326005FC71A /* AWARESensorManager.m in Sources */,
+				169A7B2D1BFF219500A7C06D /* Barometer.m in Sources */,
+				169A7B2A1BFF1C2300A7C06D /* Battery.m in Sources */,
 				1623CE771BFD1B2C00EFAD72 /* AWARE.xcdatamodeld in Sources */,
 				1623CEBC1BFE390600EFAD72 /* Accelerometer.m in Sources */,
 				1623CEB41BFD659000EFAD72 /* AWAREStudyManager.m in Sources */,
+				169A7B301BFF280C00A7C06D /* Locations.m in Sources */,
 				1623CE6B1BFD1B2C00EFAD72 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -569,6 +603,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = AWARE/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = jp.ac.keio.sfc.ht.tetujin.AWARE;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -585,6 +620,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = AWARE/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = jp.ac.keio.sfc.ht.tetujin.AWARE;
 				PRODUCT_NAME = "$(TARGET_NAME)";
