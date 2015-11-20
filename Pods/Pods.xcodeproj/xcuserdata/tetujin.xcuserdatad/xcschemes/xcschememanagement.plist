@@ -24,10 +24,15 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>SCNetworkReachability.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>147A0DCC54778AA2B072B8DB7582A84B</key>
+		<key>52C5058913D13A69D3140165AB8A8E79</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -37,12 +42,17 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>879104CEE122558B5F3AFC156CA69A14</key>
+		<key>8FEDA230AA096456FAD2E13F78429FF8</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
 		<key>D54AB3ECEB9A8FBA15D4F73CBE326692</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>F438AD00133D5EDB5E0477BC4F14390A</key>
 		<dict>
 			<key>primary</key>
 			<true/>

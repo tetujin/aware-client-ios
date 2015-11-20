@@ -30,6 +30,8 @@
 		169A7B2D1BFF219500A7C06D /* Barometer.m in Sources */ = {isa = PBXBuildFile; fileRef = 169A7B2C1BFF219500A7C06D /* Barometer.m */; };
 		169A7B301BFF280C00A7C06D /* Locations.m in Sources */ = {isa = PBXBuildFile; fileRef = 169A7B2F1BFF280C00A7C06D /* Locations.m */; };
 		169A7B321BFF282800A7C06D /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 169A7B311BFF282800A7C06D /* CoreLocation.framework */; };
+		169A7B351BFFB67800A7C06D /* Network.m in Sources */ = {isa = PBXBuildFile; fileRef = 169A7B341BFFB67800A7C06D /* Network.m */; };
+		169A7B381BFFB81300A7C06D /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 169A7B371BFFB81300A7C06D /* Reachability.m */; };
 		16FCE2771BFE9326005FC71A /* AWARESensorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 16FCE2761BFE9326005FC71A /* AWARESensorManager.m */; };
 		FC2AF85D761397B784DECBD3 /* libPods-AWARE.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9ED04F29ED60F3FCC960F6CD /* libPods-AWARE.a */; };
 /* End PBXBuildFile section */
@@ -93,6 +95,10 @@
 		169A7B2E1BFF280C00A7C06D /* Locations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Locations.h; sourceTree = "<group>"; };
 		169A7B2F1BFF280C00A7C06D /* Locations.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Locations.m; sourceTree = "<group>"; };
 		169A7B311BFF282800A7C06D /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		169A7B331BFFB67800A7C06D /* Network.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Network.h; sourceTree = "<group>"; };
+		169A7B341BFFB67800A7C06D /* Network.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Network.m; sourceTree = "<group>"; };
+		169A7B361BFFB81300A7C06D /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
+		169A7B371BFFB81300A7C06D /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		16FCE2751BFE9326005FC71A /* AWARESensorManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AWARESensorManager.h; sourceTree = "<group>"; };
 		16FCE2761BFE9326005FC71A /* AWARESensorManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AWARESensorManager.m; sourceTree = "<group>"; };
 		9B5BAD09F1FBEE0838867ACF /* Pods-AWARE.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AWARE.release.xcconfig"; path = "Pods/Target Support Files/Pods-AWARE/Pods-AWARE.release.xcconfig"; sourceTree = "<group>"; };
@@ -157,6 +163,8 @@
 			isa = PBXGroup;
 			children = (
 				1623CEA11BFD253A00EFAD72 /* AWARE.entitlements */,
+				169A7B361BFFB81300A7C06D /* Reachability.h */,
+				169A7B371BFFB81300A7C06D /* Reachability.m */,
 				1623CE6C1BFD1B2C00EFAD72 /* AppDelegate.h */,
 				1623CE6D1BFD1B2C00EFAD72 /* AppDelegate.m */,
 				1623CE6F1BFD1B2C00EFAD72 /* ViewController.h */,
@@ -181,6 +189,8 @@
 				169A7B2C1BFF219500A7C06D /* Barometer.m */,
 				169A7B2E1BFF280C00A7C06D /* Locations.h */,
 				169A7B2F1BFF280C00A7C06D /* Locations.m */,
+				169A7B331BFFB67800A7C06D /* Network.h */,
+				169A7B341BFFB67800A7C06D /* Network.m */,
 				1623CE721BFD1B2C00EFAD72 /* Main.storyboard */,
 				1623CE781BFD1B2C00EFAD72 /* Assets.xcassets */,
 				1623CE7A1BFD1B2C00EFAD72 /* LaunchScreen.storyboard */,
@@ -445,6 +455,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1623CEB71BFE175F00EFAD72 /* AWARESensor.m in Sources */,
+				169A7B351BFFB67800A7C06D /* Network.m in Sources */,
 				169A7B271BFF193C00A7C06D /* Magnetometer.m in Sources */,
 				1623CEAF1BFD407900EFAD72 /* QRCodeViewController.m in Sources */,
 				1623CE711BFD1B2C00EFAD72 /* ViewController.m in Sources */,
@@ -453,6 +464,7 @@
 				16FCE2771BFE9326005FC71A /* AWARESensorManager.m in Sources */,
 				169A7B2D1BFF219500A7C06D /* Barometer.m in Sources */,
 				169A7B2A1BFF1C2300A7C06D /* Battery.m in Sources */,
+				169A7B381BFFB81300A7C06D /* Reachability.m in Sources */,
 				1623CE771BFD1B2C00EFAD72 /* AWARE.xcdatamodeld in Sources */,
 				1623CEBC1BFE390600EFAD72 /* Accelerometer.m in Sources */,
 				1623CEB41BFD659000EFAD72 /* AWAREStudyManager.m in Sources */,

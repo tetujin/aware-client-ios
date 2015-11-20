@@ -1,12 +1,18 @@
 PODS:
+  - macros_blocks (0.0.1)
   - MagicalRecord (2.3.0)
   - MQTTKit (0.1.0-next)
   - RNGridMenu (0.1.3)
+  - SCNetworkReachability (2.0.4):
+    - SCNetworkReachability/Core (= 2.0.4)
+  - SCNetworkReachability/Core (2.0.4):
+    - macros_blocks (= 0.0.1)
 
 DEPENDENCIES:
   - MagicalRecord
   - MQTTKit (from `https://github.com/mobile-web-messaging/MQTTKit.git`)
   - RNGridMenu (~> 0.1.2)
+  - SCNetworkReachability
 
 EXTERNAL SOURCES:
   MQTTKit:
@@ -18,8 +24,10 @@ CHECKOUT OPTIONS:
     :git: https://github.com/mobile-web-messaging/MQTTKit.git
 
 SPEC CHECKSUMS:
+  macros_blocks: da2106a0975514e16f3669f2f50a02efaff642cf
   MagicalRecord: 89eb7d7ead39fb37f01c3d010665ee94d17f8dba
   MQTTKit: 513ffc31464db7adeffefac986e228fdf6cd87e5
   RNGridMenu: c58db81f87b5473936bb1b675dc3e947c409b51d
+  SCNetworkReachability: 4d836180e9ef916da4ef68a34fec748f88950712
 
 COCOAPODS: 0.39.0

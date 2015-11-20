@@ -14,6 +14,7 @@
 #import "Battery.h"
 #import "Barometer.h"
 #import "Locations.h"
+#import "Network.h"
 
 @interface ViewController (){
     NSString *KEY_CEL_TITLE;
@@ -141,22 +142,25 @@
 - (void) addAwareSensor:(NSString *) key{
     AWARESensor* awareSensor;
     if ([key isEqualToString:SENSOR_ACCELEROMETER]) {
-        awareSensor= [[Accelerometer alloc] initWithSensorName:SENSOR_ACCELEROMETER];
-        [awareSensor startSensor:0.1f withUploadInterval:10.0f];
+//        awareSensor= [[Accelerometer alloc] initWithSensorName:SENSOR_ACCELEROMETER];
+//        [awareSensor startSensor:0.1f withUploadInterval:10.0f];
     }else if([key isEqualToString:SENSOR_BAROMETER]){
-        awareSensor = [[Barometer alloc] initWithSensorName:SENSOR_BAROMETER];
-        [awareSensor startSensor:0.1f withUploadInterval:10.0];
+//        awareSensor = [[Barometer alloc] initWithSensorName:SENSOR_BAROMETER];
+//        [awareSensor startSensor:0.1f withUploadInterval:10.0];
     }else if([key isEqualToString:SENSOR_GYROSCOPE]){
-        awareSensor = [[Gyroscope alloc] initWithSensorName:SENSOR_GYROSCOPE];
-        [awareSensor startSensor:0.1f withUploadInterval:10.0f];
+//        awareSensor = [[Gyroscope alloc] initWithSensorName:SENSOR_GYROSCOPE];
+//        [awareSensor startSensor:0.1f withUploadInterval:10.0f];
     }else if([key isEqualToString:SENSOR_MAGNETOMETER]){
-        awareSensor = [[Magnetometer alloc] initWithSensorName:SENSOR_MAGNETOMETER];
-        [awareSensor startSensor:0.1f withUploadInterval:10.0f];
+//        awareSensor = [[Magnetometer alloc] initWithSensorName:SENSOR_MAGNETOMETER];
+//        [awareSensor startSensor:0.1f withUploadInterval:10.0f];
     }else if([key isEqualToString:SENSOR_BATTERY]){
-        awareSensor = [[Battery alloc] initWithSensorName:SENSOR_BATTERY];
-        [awareSensor startSensor:0.1f withUploadInterval:10.0f];
+//        awareSensor = [[Battery alloc] initWithSensorName:SENSOR_BATTERY];
+//        [awareSensor startSensor:0.1f withUploadInterval:10.0f];
     }else if([key isEqualToString:SENSOR_LOCATIONS]){
-        awareSensor = [[Locations alloc] initWithSensorName:SENSOR_LOCATIONS];
+//        awareSensor = [[Locations alloc] initWithSensorName:SENSOR_LOCATIONS];
+//        [awareSensor startSensor:0 withUploadInterval:10.0f];//0=>auto
+    }else if([key isEqualToString:SENSOR_NETWORK]){
+        awareSensor = [[Network alloc] initWithSensorName:SENSOR_NETWORK];
         [awareSensor startSensor:0.1f withUploadInterval:10.0f];
     }
     
