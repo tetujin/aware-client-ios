@@ -16,6 +16,16 @@
 		1623CE7C1BFD1B2C00EFAD72 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1623CE7A1BFD1B2C00EFAD72 /* LaunchScreen.storyboard */; };
 		1623CE871BFD1B2C00EFAD72 /* AWARETests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1623CE861BFD1B2C00EFAD72 /* AWARETests.m */; };
 		1623CE921BFD1B2C00EFAD72 /* AWAREUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1623CE911BFD1B2C00EFAD72 /* AWAREUITests.m */; };
+		1623CEA31BFD255100EFAD72 /* ExternalAccessory.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1623CEA21BFD255100EFAD72 /* ExternalAccessory.framework */; };
+		1623CEA51BFD255200EFAD72 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1623CEA41BFD255200EFAD72 /* HealthKit.framework */; };
+		1623CEAF1BFD407900EFAD72 /* QRCodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1623CEAE1BFD407900EFAD72 /* QRCodeViewController.m */; };
+		1623CEB11BFD40FB00EFAD72 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1623CEB01BFD40FB00EFAD72 /* AVFoundation.framework */; };
+		1623CEB41BFD659000EFAD72 /* AWAREStudyManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1623CEB31BFD659000EFAD72 /* AWAREStudyManager.m */; };
+		1623CEB71BFE175F00EFAD72 /* AWARESensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 1623CEB61BFE175F00EFAD72 /* AWARESensor.m */; };
+		1623CEB91BFE319100EFAD72 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1623CEB81BFE319100EFAD72 /* CoreMotion.framework */; };
+		1623CEBC1BFE390600EFAD72 /* Accelerometer.m in Sources */ = {isa = PBXBuildFile; fileRef = 1623CEBB1BFE390600EFAD72 /* Accelerometer.m */; };
+		16FCE2771BFE9326005FC71A /* AWARESensorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 16FCE2761BFE9326005FC71A /* AWARESensorManager.m */; };
+		FC2AF85D761397B784DECBD3 /* libPods-AWARE.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9ED04F29ED60F3FCC960F6CD /* libPods-AWARE.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +63,24 @@
 		1623CE8D1BFD1B2C00EFAD72 /* AWAREUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AWAREUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1623CE911BFD1B2C00EFAD72 /* AWAREUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AWAREUITests.m; sourceTree = "<group>"; };
 		1623CE931BFD1B2C00EFAD72 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1623CEA11BFD253A00EFAD72 /* AWARE.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = AWARE.entitlements; sourceTree = "<group>"; };
+		1623CEA21BFD255100EFAD72 /* ExternalAccessory.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ExternalAccessory.framework; path = System/Library/Frameworks/ExternalAccessory.framework; sourceTree = SDKROOT; };
+		1623CEA41BFD255200EFAD72 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
+		1623CEAD1BFD407900EFAD72 /* QRCodeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QRCodeViewController.h; sourceTree = "<group>"; };
+		1623CEAE1BFD407900EFAD72 /* QRCodeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QRCodeViewController.m; sourceTree = "<group>"; };
+		1623CEB01BFD40FB00EFAD72 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		1623CEB21BFD659000EFAD72 /* AWAREStudyManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AWAREStudyManager.h; sourceTree = "<group>"; };
+		1623CEB31BFD659000EFAD72 /* AWAREStudyManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AWAREStudyManager.m; sourceTree = "<group>"; };
+		1623CEB51BFE175F00EFAD72 /* AWARESensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AWARESensor.h; sourceTree = "<group>"; };
+		1623CEB61BFE175F00EFAD72 /* AWARESensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AWARESensor.m; sourceTree = "<group>"; };
+		1623CEB81BFE319100EFAD72 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
+		1623CEBA1BFE390600EFAD72 /* Accelerometer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Accelerometer.h; sourceTree = "<group>"; };
+		1623CEBB1BFE390600EFAD72 /* Accelerometer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Accelerometer.m; sourceTree = "<group>"; };
+		16FCE2751BFE9326005FC71A /* AWARESensorManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AWARESensorManager.h; sourceTree = "<group>"; };
+		16FCE2761BFE9326005FC71A /* AWARESensorManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AWARESensorManager.m; sourceTree = "<group>"; };
+		9B5BAD09F1FBEE0838867ACF /* Pods-AWARE.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AWARE.release.xcconfig"; path = "Pods/Target Support Files/Pods-AWARE/Pods-AWARE.release.xcconfig"; sourceTree = "<group>"; };
+		9ED04F29ED60F3FCC960F6CD /* libPods-AWARE.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AWARE.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		EE6BA2397CB9F7AB5C901B47 /* Pods-AWARE.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AWARE.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AWARE/Pods-AWARE.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +88,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1623CEB91BFE319100EFAD72 /* CoreMotion.framework in Frameworks */,
+				1623CEB11BFD40FB00EFAD72 /* AVFoundation.framework in Frameworks */,
+				1623CEA51BFD255200EFAD72 /* HealthKit.framework in Frameworks */,
+				1623CEA31BFD255100EFAD72 /* ExternalAccessory.framework in Frameworks */,
+				FC2AF85D761397B784DECBD3 /* libPods-AWARE.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -87,6 +120,8 @@
 				1623CE851BFD1B2C00EFAD72 /* AWARETests */,
 				1623CE901BFD1B2C00EFAD72 /* AWAREUITests */,
 				1623CE671BFD1B2C00EFAD72 /* Products */,
+				FB81DBFF7EDA98B8AA03FF24 /* Pods */,
+				2A3CA9F5620967BACB187EB7 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -103,10 +138,21 @@
 		1623CE681BFD1B2C00EFAD72 /* AWARE */ = {
 			isa = PBXGroup;
 			children = (
+				1623CEA11BFD253A00EFAD72 /* AWARE.entitlements */,
 				1623CE6C1BFD1B2C00EFAD72 /* AppDelegate.h */,
 				1623CE6D1BFD1B2C00EFAD72 /* AppDelegate.m */,
 				1623CE6F1BFD1B2C00EFAD72 /* ViewController.h */,
 				1623CE701BFD1B2C00EFAD72 /* ViewController.m */,
+				1623CEAD1BFD407900EFAD72 /* QRCodeViewController.h */,
+				1623CEAE1BFD407900EFAD72 /* QRCodeViewController.m */,
+				1623CEB21BFD659000EFAD72 /* AWAREStudyManager.h */,
+				1623CEB31BFD659000EFAD72 /* AWAREStudyManager.m */,
+				1623CEB51BFE175F00EFAD72 /* AWARESensor.h */,
+				1623CEB61BFE175F00EFAD72 /* AWARESensor.m */,
+				16FCE2751BFE9326005FC71A /* AWARESensorManager.h */,
+				16FCE2761BFE9326005FC71A /* AWARESensorManager.m */,
+				1623CEBA1BFE390600EFAD72 /* Accelerometer.h */,
+				1623CEBB1BFE390600EFAD72 /* Accelerometer.m */,
 				1623CE721BFD1B2C00EFAD72 /* Main.storyboard */,
 				1623CE781BFD1B2C00EFAD72 /* Assets.xcassets */,
 				1623CE7A1BFD1B2C00EFAD72 /* LaunchScreen.storyboard */,
@@ -143,6 +189,27 @@
 			path = AWAREUITests;
 			sourceTree = "<group>";
 		};
+		2A3CA9F5620967BACB187EB7 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1623CEB81BFE319100EFAD72 /* CoreMotion.framework */,
+				1623CEB01BFD40FB00EFAD72 /* AVFoundation.framework */,
+				1623CEA41BFD255200EFAD72 /* HealthKit.framework */,
+				1623CEA21BFD255100EFAD72 /* ExternalAccessory.framework */,
+				9ED04F29ED60F3FCC960F6CD /* libPods-AWARE.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		FB81DBFF7EDA98B8AA03FF24 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				EE6BA2397CB9F7AB5C901B47 /* Pods-AWARE.debug.xcconfig */,
+				9B5BAD09F1FBEE0838867ACF /* Pods-AWARE.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -150,9 +217,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1623CE961BFD1B2C00EFAD72 /* Build configuration list for PBXNativeTarget "AWARE" */;
 			buildPhases = (
+				68D9BE595750CD388937C4E7 /* Check Pods Manifest.lock */,
 				1623CE621BFD1B2C00EFAD72 /* Sources */,
 				1623CE631BFD1B2C00EFAD72 /* Frameworks */,
 				1623CE641BFD1B2C00EFAD72 /* Resources */,
+				35EEDFB59E9C7F753E79CF14 /* Embed Pods Frameworks */,
+				558BE3D37807A33B7448A1B4 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -210,6 +280,30 @@
 				TargetAttributes = {
 					1623CE651BFD1B2C00EFAD72 = {
 						CreatedOnToolsVersion = 7.1;
+						DevelopmentTeam = FH352PYMNC;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+							com.apple.DataProtection = {
+								enabled = 0;
+							};
+							com.apple.HealthKit = {
+								enabled = 1;
+							};
+							com.apple.InterAppAudio = {
+								enabled = 0;
+							};
+							com.apple.Maps.iOS = {
+								enabled = 0;
+							};
+							com.apple.SafariKeychain = {
+								enabled = 0;
+							};
+							com.apple.WAC = {
+								enabled = 1;
+							};
+						};
 					};
 					1623CE811BFD1B2C00EFAD72 = {
 						CreatedOnToolsVersion = 7.1;
@@ -268,14 +362,67 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		35EEDFB59E9C7F753E79CF14 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-AWARE/Pods-AWARE-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		558BE3D37807A33B7448A1B4 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-AWARE/Pods-AWARE-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		68D9BE595750CD388937C4E7 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		1623CE621BFD1B2C00EFAD72 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1623CEB71BFE175F00EFAD72 /* AWARESensor.m in Sources */,
+				1623CEAF1BFD407900EFAD72 /* QRCodeViewController.m in Sources */,
 				1623CE711BFD1B2C00EFAD72 /* ViewController.m in Sources */,
 				1623CE6E1BFD1B2C00EFAD72 /* AppDelegate.m in Sources */,
+				16FCE2771BFE9326005FC71A /* AWARESensorManager.m in Sources */,
 				1623CE771BFD1B2C00EFAD72 /* AWARE.xcdatamodeld in Sources */,
+				1623CEBC1BFE390600EFAD72 /* Accelerometer.m in Sources */,
+				1623CEB41BFD659000EFAD72 /* AWAREStudyManager.m in Sources */,
 				1623CE6B1BFD1B2C00EFAD72 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -415,23 +562,33 @@
 		};
 		1623CE971BFD1B2C00EFAD72 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = EE6BA2397CB9F7AB5C901B47 /* Pods-AWARE.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = AWARE/AWARE.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = AWARE/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = jp.ac.keio.sfc.ht.tetujin.AWARE;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
 		1623CE981BFD1B2C00EFAD72 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9B5BAD09F1FBEE0838867ACF /* Pods-AWARE.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = AWARE/AWARE.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = AWARE/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = jp.ac.keio.sfc.ht.tetujin.AWARE;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};
@@ -502,6 +659,7 @@
 				1623CE981BFD1B2C00EFAD72 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		1623CE991BFD1B2C00EFAD72 /* Build configuration list for PBXNativeTarget "AWARETests" */ = {
 			isa = XCConfigurationList;
@@ -510,6 +668,7 @@
 				1623CE9B1BFD1B2C00EFAD72 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		1623CE9C1BFD1B2C00EFAD72 /* Build configuration list for PBXNativeTarget "AWAREUITests" */ = {
 			isa = XCConfigurationList;
@@ -518,6 +677,7 @@
 				1623CE9E1BFD1B2C00EFAD72 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 

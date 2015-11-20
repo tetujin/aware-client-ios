@@ -7,9 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <MQTTKit/MQTTKit.h>
+#import "AWARESensorManager.h"
 
-@interface ViewController : UIViewController
+@interface ViewController : UITableViewController <UITableViewDelegate, UITableViewDataSource, UITabBarControllerDelegate, UINavigationBarDelegate>
 
+@property (nonatomic,strong) NSMutableArray *sensors;
+@property (nonatomic, strong) AWARESensorManager* sensorManager;
+
+@property MQTTClient *client;
 
 @end
 
