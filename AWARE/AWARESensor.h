@@ -7,6 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FMDatabase.h" // - Represents a single SQLite database. Used for executing SQL statements.
+#import "FMResultSet.h"  //- Represents the results of executing a query on an FMDatabase.
+#import "FMDatabaseQueue.h"
 
 @protocol AWARESensorDelegate <NSObject>
 - (BOOL) startSensor:(double) interval withUploadInterval:(double)upInterval;
@@ -16,8 +19,12 @@
 
 @interface AWARESensor : NSObject <AWARESensorDelegate>
 
+@property (strong, nonatomic) FMDatabase *db;
+
 - (instancetype) initWithSensorName:(NSString *) sensorName;
+
 -(void) setLatestValue:(NSString *) valueStr;
+
 -(NSString *) getLatestValue;
 
 -(NSString *) getDeviceId;

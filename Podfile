@@ -9,6 +9,7 @@ pod "MagicalRecord"
 pod 'RNGridMenu', '~> 0.1.2'
 pod 'SCNetworkReachability'
 pod 'FMDB'
+pod 'SVProgressHUD'
 
 end
 

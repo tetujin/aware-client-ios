@@ -32,7 +32,7 @@
 }
 
 - (BOOL)startSensor:(double)interval withUploadInterval:(double)upInterval{
-    NSLog(@"Start Gyroscope!");
+    NSLog(@"Start Location!");
     uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval target:self selector:@selector(uploadSensorData) userInfo:nil repeats:YES];
     if (nil == locationManager){
         locationManager = [[CLLocationManager alloc] init];

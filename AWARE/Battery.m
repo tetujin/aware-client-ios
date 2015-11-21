@@ -31,7 +31,7 @@
 }
 
 - (BOOL)startSensor:(double)interval withUploadInterval:(double)upInterval{
-    NSLog(@"Start Gyroscope!");
+    NSLog(@"Start Battery!");
     uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval target:self selector:@selector(uploadSensorData) userInfo:nil repeats:YES];
     sensingTimer = [NSTimer scheduledTimerWithTimeInterval:interval target:self selector:@selector(getSensorData) userInfo:nil repeats:YES];
     return YES;

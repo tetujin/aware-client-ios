@@ -9,11 +9,14 @@
 #import "AWARESensor.h"
 #import "AWAREStudyManager.h"
 
+
 @interface AWARESensor (){
     NSMutableString *tempData;
     BOOL previusUploadingState;
     NSString * awareSensorName;
     NSString *latestSensorValue;
+//    FMDatabase *db;
+    NSString *dbPath;
 }
 @end
 
@@ -49,6 +52,26 @@
 
 - (void) setSensorName:(NSString *)sensorName{
     awareSensorName = sensorName;
+    //        FMDatabase *db = [FMDatabase databaseWithPath:@"/tmp/tmp.db"];
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString *dbName = [NSString stringWithFormat:@"%@.db",sensorName];
+    dbPath = [documentsDirectory stringByAppendingPathComponent:dbName];
+    _db = [FMDatabase databaseWithPath:dbPath];
+    if (![_db open]) {
+        NSLog(@"%@ dabase was not opened. Please check path of database of configuration.", sensorName);
+        _db = nil;
+    }else{
+        NSLog(@"%@ dabase was created!!", sensorName);
+    }
+//    [_db executeStatements:@"drop table data;"];
+    NSString *sql = @"create table data (id integer primary key autoincrement, timestamp double, data text);";
+    if(![_db executeStatements:sql]){
+        NSLog(@"Error: You could not make %@ table.", sensorName);
+    }else{
+        NSLog(@"%@ table was created!", sensorName);
+    }
+    [_db close];
 }
 
 - (NSString *)getSensorName{
@@ -67,84 +90,66 @@
     NSError*error=nil;
     NSData*d=[NSJSONSerialization dataWithJSONObject:data options:2 error:&error];
     NSString*jsonstr=[[NSString alloc]initWithData:d encoding:NSUTF8StringEncoding];
-    [self appendLine:jsonstr path:fileName];
+//    [self appendLine:jsonstr path:fileName];
+    // update to SQLite.
+    NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
+    NSNumber* unixtime = [NSNumber numberWithDouble:timeStamp];
+    NSString* sql = [NSString stringWithFormat:@"insert into data (timestamp, data) values (%f, '%@')", unixtime.doubleValue, jsonstr];
+//     _db = [FMDatabase databaseWithPath:dbPath];
+    if (![_db open]) NSLog(@"%@ dabase was not opened.", dbPath);
+    bool result = [_db executeStatements:sql];
+    if(result){
+//        NSLog(@"sucess!");
+    }else{
+        NSLog(@"failure...");
+    }
+    [_db close];
     return @"";
 }
 
-- (BOOL) appendLine:(NSString *)line path:(NSString*) fileName {
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0];
-    NSString * path = [documentsDirectory stringByAppendingPathComponent:fileName];
-    if(previusUploadingState){
-        [tempData appendFormat:@"%@\n", line];
-        return YES;
-    }else{
-        NSFileHandle *fh = [NSFileHandle fileHandleForWritingAtPath:path];
-        if (!fh) { // no
-            NSLog(@"Re-create the file! ");
-            [self createNewFile:path];
-            fh = [NSFileHandle fileHandleForWritingAtPath:path];
-        }
-        [fh seekToEndOfFile];
-        if (![tempData isEqualToString:@""]) {
-            [fh writeData:[tempData dataUsingEncoding:NSUTF8StringEncoding]]; //write temp data to the main file
-            tempData = [[NSMutableString alloc] init];// init
-            NSLog(@"----> add temp data to the file!!!! ");
-        }
-        line = [NSString stringWithFormat:@"%@\n", line];
-        NSData *data = [line dataUsingEncoding:NSUTF8StringEncoding];
-        [fh writeData:data];
-        [fh synchronizeFile];
-        [fh closeFile];
-        return YES;
-    }
-}
 
--(void)createNewFile:(NSString*) path
-{
-    NSFileManager *manager = [NSFileManager defaultManager];
-    if (![manager fileExistsAtPath:path]) { // yes
-        BOOL result = [manager createFileAtPath:path
-                                       contents:[NSData data] attributes:nil];
-        if (!result) {
-            NSLog(@"ファイルの作成に失敗");
-            return;
-        }else{
-            NSLog(@"Created a file");
-        }
+-  (NSString*) getData:(NSString *)fileName withJsonArrayFormat:(bool)jsonArrayFormat{
+    // 1. Get sensor data.
+    // 1.1 Open the database
+    NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
+    NSNumber* unixtime = [NSNumber numberWithDouble:timeStamp];
+    NSString* sql = [NSString stringWithFormat:@"select * from data where timestamp < %f", unixtime.doubleValue];
+    if (![_db open]) {
+        NSLog(@"%@ dabase was not opened.", dbPath);
+        return @"";
     }
-    NSFileHandle *fh = [NSFileHandle fileHandleForWritingAtPath:path];
-    if (!fh) {
-        NSLog(@"ファイルハンドルの作成に失敗");
-        return;
-    }
-    [fh closeFile];
-}
-
-
-- (NSString*) getData:(NSString *)fileName withJsonArrayFormat:(bool)jsonArrayFormat{
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0];
-    NSString * path = [documentsDirectory stringByAppendingPathComponent:fileName];
-    NSFileHandle *fileHandle = [NSFileHandle fileHandleForReadingAtPath:path];
-    if (!fileHandle) {
-        NSLog(@"ファイルがありません．");
-        return @"[]";
-    }
-    NSString *str = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
-    [fileHandle closeFile];
+    int count = 0;
+    FMResultSet *s = [_db executeQuery:sql];
+    [_db close];
     
-    NSMutableString *data = nil;
-    @autoreleasepool {
-        data = [[NSMutableString alloc] initWithString:@"["];
-        [str enumerateLinesUsingBlock:^(NSString *line, BOOL *stop) {
-            [data appendString:[NSString stringWithFormat:@"%@,", line]];
-        }];
-        [data deleteCharactersInRange:NSMakeRange([data length]-1, 1)];
-        [data appendString:@"]"];
+    NSMutableString *data = [[NSMutableString alloc] initWithString:@"["];
+    while ([s next]) {
+        NSString *value = nil;
+        @autoreleasepool{
+            count++;
+            value = [s objectForColumnName:@"data"];
+            [data appendString:[NSString stringWithFormat:@"%@,", value]];
+        }
     }
-    return [NSString stringWithString:data];
+    NSLog(@"You got %d records",count);
+    [s close];
+    if([data length] > 1) [data deleteCharactersInRange:NSMakeRange([data length]-1, 1)];
+    [data appendString:@"]"];
+    // 2. Remove old sensor data.
+
+    sql = [NSString stringWithFormat:@"delete from data where timestamp < %f", unixtime.doubleValue];
+    bool result = [_db executeStatements:sql];
+//    [db close];
+    if (result) {
+        NSLog(@"deleted");
+    }else{
+        NSLog(@"error!");
+    }
+
+    // 3. Return sensor data sa a NSString.
+    return data;
 }
+
 
 - (NSString *)getInsertUrl:(NSString *)sensorName{
 //    - insert: insert new data to the table
@@ -197,6 +202,7 @@
     NSURLSession *session = nil;
     @autoreleasepool {
         previusUploadingState = YES; //file lock
+//        NSLog(@"%@", data);
         post = [NSString stringWithFormat:@"device_id=%@&data=%@", deviceId, data];
         postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
         NSString *postLength = [NSString stringWithFormat:@"%ld", [postData length]];
@@ -219,9 +225,6 @@
                                 NSLog(@"UPLOADED SENSOR DATA TO A SERVER");
                             }
                             previusUploadingState = NO;
-//                            [session finishTasksAndInvalidate];
-//                            [session invalidateAndCancel];
-                           
                            dispatch_async(dispatch_get_main_queue(), ^{
                                [session finishTasksAndInvalidate];
                                [session invalidateAndCancel];
@@ -272,6 +275,154 @@
 - (void)uploadSensorData{
     
 }
+
+
+
+// Using SQLite
+
+//- (NSString *)saveData:(NSDictionary *)data toLocalFile:(NSString *)fileName{
+//    NSError*error=nil;
+//    NSData*d=[NSJSONSerialization dataWithJSONObject:data options:2 error:&error];
+//    NSString*jsonstr=[[NSString alloc]initWithData:d encoding:NSUTF8StringEncoding];
+//    //    [self appendLine:jsonstr path:fileName];
+//    // update to SQLite.
+//    NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
+//    NSNumber* unixtime = [NSNumber numberWithDouble:timeStamp];
+//    NSString* sql = [NSString stringWithFormat:@"insert into data (timestamp, data) values (%f, '%@')", unixtime.doubleValue, jsonstr];
+//    //     _db = [FMDatabase databaseWithPath:dbPath];
+//    if (![_db open]) NSLog(@"%@ dabase was not opened.", dbPath);
+//    bool result = [_db executeStatements:sql];
+//    if(result){
+//        //        NSLog(@"sucess!");
+//    }else{
+//        NSLog(@"failure...");
+//    }
+//    [_db close];
+//    return @"";
+//}
+//
+//
+//-  (NSString*) getData:(NSString *)fileName withJsonArrayFormat:(bool)jsonArrayFormat{
+//    // 1. Get sensor data.
+//    // 1.1 Open the database
+//    NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
+//    NSNumber* unixtime = [NSNumber numberWithDouble:timeStamp];
+//    NSString* sql = [NSString stringWithFormat:@"select * from data where timestamp < %f", unixtime.doubleValue];
+//    if (![_db open]) {
+//        NSLog(@"%@ dabase was not opened.", dbPath);
+//        return @"";
+//    }
+//    int count = 0;
+//    FMResultSet *s = [_db executeQuery:sql];
+//    [_db close];
+//    
+//    NSMutableString *data = [[NSMutableString alloc] initWithString:@"["];
+//    while ([s next]) {
+//        NSString *value = nil;
+//        @autoreleasepool{
+//            count++;
+//            value = [s objectForColumnName:@"data"];
+//            [data appendString:[NSString stringWithFormat:@"%@,", value]];
+//        }
+//    }
+//    NSLog(@"You got %d records",count);
+//    [s close];
+//    if([data length] > 1) [data deleteCharactersInRange:NSMakeRange([data length]-1, 1)];
+//    [data appendString:@"]"];
+//    // 2. Remove old sensor data.
+//    
+//    sql = [NSString stringWithFormat:@"delete from data where timestamp < %f", unixtime.doubleValue];
+//    bool result = [_db executeStatements:sql];
+//    //    [db close];
+//    if (result) {
+//        NSLog(@"deleted");
+//    }else{
+//        NSLog(@"error!");
+//    }
+//    
+//    // 3. Return sensor data sa a NSString.
+//    return data;
+//}
+
+
+
+
+
+//- (BOOL) appendLine:(NSString *)line path:(NSString*) fileName {
+//    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+//    NSString *documentsDirectory = [paths objectAtIndex:0];
+//    NSString * path = [documentsDirectory stringByAppendingPathComponent:fileName];
+//    if(previusUploadingState){
+//        [tempData appendFormat:@"%@\n", line];
+//        return YES;
+//    }else{
+//        NSFileHandle *fh = [NSFileHandle fileHandleForWritingAtPath:path];
+//        if (!fh) { // no
+//            NSLog(@"Re-create the file! ");
+//            [self createNewFile:path];
+//            fh = [NSFileHandle fileHandleForWritingAtPath:path];
+//        }
+//        [fh seekToEndOfFile];
+//        if (![tempData isEqualToString:@""]) {
+//            [fh writeData:[tempData dataUsingEncoding:NSUTF8StringEncoding]]; //write temp data to the main file
+//            tempData = [[NSMutableString alloc] init];// init
+//            NSLog(@"----> add temp data to the file!!!! ");
+//        }
+//        line = [NSString stringWithFormat:@"%@\n", line];
+//        NSData *data = [line dataUsingEncoding:NSUTF8StringEncoding];
+//        [fh writeData:data];
+//        [fh synchronizeFile];
+//        [fh closeFile];
+//        return YES;
+//    }
+//}
+
+//-(void)createNewFile:(NSString*) path
+//{
+//    NSFileManager *manager = [NSFileManager defaultManager];
+//    if (![manager fileExistsAtPath:path]) { // yes
+//        BOOL result = [manager createFileAtPath:path
+//                                       contents:[NSData data] attributes:nil];
+//        if (!result) {
+//            NSLog(@"ファイルの作成に失敗");
+//            return;
+//        }else{
+//            NSLog(@"Created a file");
+//        }
+//    }
+//    NSFileHandle *fh = [NSFileHandle fileHandleForWritingAtPath:path];
+//    if (!fh) {
+//        NSLog(@"ファイルハンドルの作成に失敗");
+//        return;
+//    }
+//    [fh closeFile];
+//}
+
+
+//- (NSString*) getData:(NSString *)fileName withJsonArrayFormat:(bool)jsonArrayFormat{
+//    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+//    NSString *documentsDirectory = [paths objectAtIndex:0];
+//    NSString * path = [documentsDirectory stringByAppendingPathComponent:fileName];
+//    NSFileHandle *fileHandle = [NSFileHandle fileHandleForReadingAtPath:path];
+//    if (!fileHandle) {
+//        NSLog(@"ファイルがありません．");
+//        return @"[]";
+//    }
+//    NSString *str = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
+//    [fileHandle closeFile];
+//
+//    NSMutableString *data = nil;
+//    @autoreleasepool {
+//        data = [[NSMutableString alloc] initWithString:@"["];
+//        [str enumerateLinesUsingBlock:^(NSString *line, BOOL *stop) {
+//            [data appendString:[NSString stringWithFormat:@"%@,", line]];
+//        }];
+//        [data deleteCharactersInRange:NSMakeRange([data length]-1, 1)];
+//        [data appendString:@"]"];
+//    }
+//    return [NSString stringWithString:data];
+//}
+
 
 /*
 #pragma mark - Navigation

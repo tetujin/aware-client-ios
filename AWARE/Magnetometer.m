@@ -32,7 +32,7 @@
 }
 
 - (BOOL)startSensor:(double)interval withUploadInterval:(double)upInterval{
-    NSLog(@"Start Gyroscope!");
+    NSLog(@"Start Magnetometer!");
     timer = [NSTimer scheduledTimerWithTimeInterval:upInterval target:self selector:@selector(uploadSensorData) userInfo:nil repeats:YES];
     manager.magnetometerUpdateInterval = interval;
     [manager startMagnetometerUpdatesToQueue:[NSOperationQueue currentQueue] withHandler:^(CMMagnetometerData * _Nullable magnetometerData, NSError * _Nullable error) {

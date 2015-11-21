@@ -188,6 +188,8 @@
         retry   = NO;
         rc      = sqlite3_close(_db);
         if (SQLITE_BUSY == rc || SQLITE_LOCKED == rc) {
+            NSLog(@"SQLITE_CLOCKED: value is %d", SQLITE_LOCKED);
+            NSLog(@"SQLITE_BUSY: value is %d", SQLITE_BUSY);
             if (!triedFinalizingOpenStatements) {
                 triedFinalizingOpenStatements = YES;
                 sqlite3_stmt *pStmt;

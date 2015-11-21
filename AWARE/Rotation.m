@@ -41,7 +41,7 @@
  */
 
 - (BOOL)startSensor:(double)interval withUploadInterval:(double)upInterval{
-    NSLog(@"Start Wifi sensing!");
+    NSLog(@"Start Rotation sensing!");
     uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval target:self selector:@selector(uploadSensorData) userInfo:nil repeats:YES];
     /** motion */
     if( motionManager.deviceMotionAvailable ){
