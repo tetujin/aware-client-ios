@@ -4,6 +4,11 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>FMDB.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>MQTTKit.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -32,7 +37,12 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>52C5058913D13A69D3140165AB8A8E79</key>
+		<key>3487560292F10083FE264FACE7DC1746</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>5B1F52B00604147939785F7A043E1FC5</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -42,17 +52,17 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>8FEDA230AA096456FAD2E13F78429FF8</key>
+		<key>9F12FB4A63E20F601CFB2E64A65B57C1</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>AF17E4257693E8A184047AEA0D50D5C3</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
 		<key>D54AB3ECEB9A8FBA15D4F73CBE326692</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>F438AD00133D5EDB5E0477BC4F14390A</key>
 		<dict>
 			<key>primary</key>
 			<true/>

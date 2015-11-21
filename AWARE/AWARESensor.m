@@ -75,7 +75,6 @@
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
     NSString * path = [documentsDirectory stringByAppendingPathComponent:fileName];
-//    NSLog(@"--> %@", path);
     if(previusUploadingState){
         [tempData appendFormat:@"%@\n", line];
         return YES;
@@ -87,7 +86,6 @@
             fh = [NSFileHandle fileHandleForWritingAtPath:path];
         }
         [fh seekToEndOfFile];
-        //if tempdata has some data
         if (![tempData isEqualToString:@""]) {
             [fh writeData:[tempData dataUsingEncoding:NSUTF8StringEncoding]]; //write temp data to the main file
             tempData = [[NSMutableString alloc] init];// init
@@ -125,7 +123,6 @@
 
 
 - (NSString*) getData:(NSString *)fileName withJsonArrayFormat:(bool)jsonArrayFormat{
-    // ファイルハンドルを作成する
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
     NSString * path = [documentsDirectory stringByAppendingPathComponent:fileName];
@@ -134,18 +131,19 @@
         NSLog(@"ファイルがありません．");
         return @"[]";
     }
-    // ファイルの末尾まで読み込む
     NSString *str = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
     [fileHandle closeFile];
     
-    NSMutableString *data = [[NSMutableString alloc] initWithString:@"["];
-    // 1行ずつ文字列を列挙
-    [str enumerateLinesUsingBlock:^(NSString *line, BOOL *stop) {
-        [data appendString:[NSString stringWithFormat:@"%@,", line]];
-    }];
-    [data deleteCharactersInRange:NSMakeRange([data length]-1, 1)];
-    [data appendString:@"]"];
-    return data;
+    NSMutableString *data = nil;
+    @autoreleasepool {
+        data = [[NSMutableString alloc] initWithString:@"["];
+        [str enumerateLinesUsingBlock:^(NSString *line, BOOL *stop) {
+            [data appendString:[NSString stringWithFormat:@"%@,", line]];
+        }];
+        [data deleteCharactersInRange:NSMakeRange([data length]-1, 1)];
+        [data appendString:@"]"];
+    }
+    return [NSString stringWithString:data];
 }
 
 - (NSString *)getInsertUrl:(NSString *)sensorName{
@@ -193,40 +191,49 @@
 }
 
 - (BOOL)insertSensorData:(NSString *)data withDeviceId:(NSString *)deviceId url:(NSString *)url{
-    previusUploadingState = YES; //file lock
-    NSString *post = [NSString stringWithFormat:@"device_id=%@&data=%@", deviceId, data];
-//    NSLog(@"%@", post);
-    NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
-    NSString *postLength = [NSString stringWithFormat:@"%ld", [postData length]];
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
-    [request setURL:[NSURL URLWithString:url]];
-    [request setHTTPMethod:@"POST"];
-    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
-    //    [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-    [request setHTTPBody:postData];
-    
-    //    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-        NSError *error = nil;
-        NSHTTPURLResponse *response = nil;
-        NSData *resData = [NSURLConnection sendSynchronousRequest:request
-                                                returningResponse:&response error:&error];
-        NSString* newStr = [[NSString alloc] initWithData:resData encoding:NSUTF8StringEncoding];
-//        NSLog(@"%@", newStr);
-        //                    NSArray *mqttArray = [NSJSONSerialization JSONObjectWithData:resData options:NSJSONReadingMutableContainers error:nil];
-        //        id obj = [NSJSONSerialization JSONObjectWithData:resData options:NSJSONReadingMutableContainers error:nil];
-        //        NSData *data = [NSJSONSerialization dataWithJSONObject:obj options:0 error:nil];
-        //        NSLog(@"%@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
-        int responseCode = (int)[response statusCode];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if(responseCode == 200){
-                NSLog(@"UPLOADED SENSOR DATA TO A SERVER");
-            }
-            previusUploadingState = NO; //file unlock
-        });
-    });
+    NSString *post = nil;
+    NSData *postData = nil;
+    NSMutableURLRequest *request = nil;
+    NSURLSession *session = nil;
+    @autoreleasepool {
+        previusUploadingState = YES; //file lock
+        post = [NSString stringWithFormat:@"device_id=%@&data=%@", deviceId, data];
+        postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
+        NSString *postLength = [NSString stringWithFormat:@"%ld", [postData length]];
+        request = [[NSMutableURLRequest alloc] init];
+        [request setURL:[NSURL URLWithString:url]];
+        [request setHTTPMethod:@"POST"];
+        [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+        //    [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+        [request setHTTPBody:postData];
+
+        @autoreleasepool {
+            session = [NSURLSession sharedSession];
+            [[session dataTaskWithRequest:request
+                       completionHandler:^(NSData * _Nullable data,
+                                           NSURLResponse * _Nullable response,
+                                           NSError * _Nullable error) {
+                            NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
+                            int responseCode = (int)[httpResponse statusCode];
+                            if(responseCode == 200){
+                                NSLog(@"UPLOADED SENSOR DATA TO A SERVER");
+                            }
+                            previusUploadingState = NO;
+//                            [session finishTasksAndInvalidate];
+//                            [session invalidateAndCancel];
+                           
+                           dispatch_async(dispatch_get_main_queue(), ^{
+                               [session finishTasksAndInvalidate];
+                               [session invalidateAndCancel];
+                               
+                           });
+            }] resume];
+        }
+    }
     return YES;
 }
+
+
 
 
 - (NSString *)getLatestSensorData:(NSString *)deviceId withUrl:(NSString *)url{
@@ -260,6 +267,10 @@
 
 - (BOOL)clearTable:(NSString *)data withDeviceId:(NSString *)deviceId withUrl:(NSString *)url{
     return NO;
+}
+
+- (void)uploadSensorData{
+    
 }
 
 /*

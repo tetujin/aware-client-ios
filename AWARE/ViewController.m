@@ -15,6 +15,10 @@
 #import "Barometer.h"
 #import "Locations.h"
 #import "Network.h"
+#import "Wifi.h"
+#import "Processor.h"
+#import "Gravity.h"
+#import "LinearAccelerometer.h"
 
 @interface ViewController (){
     NSString *KEY_CEL_TITLE;
@@ -81,8 +85,13 @@
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     _sensors = [[NSMutableArray alloc] init];
     // devices
-    [_sensors addObject:[self getCelContent:@"AWARE Device ID" desc:[userDefaults objectForKey:KEY_MQTT_USERNAME] image:@"" key:@""]];
-    [_sensors addObject:[self getCelContent:@"AWARE Study" desc:[userDefaults objectForKey:KEY_STUDY_ID] image:@"ic_action_study" key:@""]];
+    NSString *deviceId = [userDefaults objectForKey:KEY_MQTT_USERNAME];
+    NSString *awareStudyId = [userDefaults objectForKey:KEY_STUDY_ID];
+    if(deviceId == nil) deviceId = @"";
+    if(awareStudyId == nil) awareStudyId = @"";
+    
+    [_sensors addObject:[self getCelContent:@"AWARE Device ID" desc:deviceId image:@"" key:@""]];
+    [_sensors addObject:[self getCelContent:@"AWARE Study" desc:awareStudyId image:@"ic_action_study" key:@""]];
     [_sensors addObject:[self getCelContent:@"MQTT Server" desc:@"Allows remove questionnaires, P2P context exchange" image:@"ic_action_mqtt" key:@""]];
     
     // sensor
@@ -91,11 +100,13 @@
     [_sensors addObject:[self getCelContent:@"Battery" desc:@"Battery and power event" image:@"ic_action_battery" key:SENSOR_BATTERY]];
     [_sensors addObject:[self getCelContent:@"Bluetooth" desc:@"Bluetooth sensing" image:@"ic_action_bluetooth" key:SENSOR_BLUETOOTH]];
     [_sensors addObject:[self getCelContent:@"Gyroscope" desc:@"Rate of rotation of device (rad/s)" image:@"ic_action_gyroscope" key:SENSOR_GYROSCOPE]];
+    [_sensors addObject:[self getCelContent:@"Gravity" desc:@"Gravity provides a three dimensional vector indicating the direction and magnitude of gravity (in m/s²)" image:@"ic_action_gravity" key:SENSOR_GRAVITY]];
+    [_sensors addObject:[self getCelContent:@"Linear Accelerometer" desc:@"The linear accelerometer measures the acceleration applied to the sensor built-in into the device, excluding the force of gravity, in m/s" image:@"ic_action_linear_acceleration" key:SENSOR_LINEAR_ACCELEROMETER]];
     [_sensors addObject:[self getCelContent:@"Locations" desc:@"User's estimated location by GPS and network triangulation" image:@"ic_action_locations" key:SENSOR_LOCATIONS]];
     [_sensors addObject:[self getCelContent:@"Magnetometer" desc:@"Geomagnetic field strength around the device (uT)" image:@"ic_action_magnetometer" key:SENSOR_MAGNETOMETER]];
     [_sensors addObject:[self getCelContent:@"Mobile ESM/EMA" desc:@"Mobile questionnaries" image:@"ic_action_esm" key:SENSOR_ESMS]];
     [_sensors addObject:[self getCelContent:@"Network" desc:@"Network usage and traffic" image:@"ic_action_network" key:SENSOR_NETWORK]];
-    [_sensors addObject:[self getCelContent:@"Processor" desc:@"CPU workload for user, system and idle(%)" image:@"ic_action_processor" key:SENSOR_PROCESSOR]];
+//    [_sensors addObject:[self getCelContent:@"Processor" desc:@"CPU workload for user, system and idle(%)" image:@"ic_action_processor" key:SENSOR_PROCESSOR]];
 //    [_sensors addObject:[self getCelContent:@"Telephony" desc:@"Mobile operator and specifications, cell tower and neighbor scanning" image:@"ic_action_telephony" key:SENSOR_TELEPHONY]];
     [_sensors addObject:[self getCelContent:@"WiFi" desc:@"Wi-Fi sensing" image:@"ic_action_wifi" key:SENSOR_WIFI]];
 
@@ -140,27 +151,40 @@
 
 
 - (void) addAwareSensor:(NSString *) key{
-    AWARESensor* awareSensor;
+    double uploadTime = 60.0f;
+    AWARESensor* awareSensor = nil;
     if ([key isEqualToString:SENSOR_ACCELEROMETER]) {
-//        awareSensor= [[Accelerometer alloc] initWithSensorName:SENSOR_ACCELEROMETER];
-//        [awareSensor startSensor:0.1f withUploadInterval:10.0f];
+        awareSensor= [[Accelerometer alloc] initWithSensorName:SENSOR_ACCELEROMETER];
+        [awareSensor startSensor:0.1f withUploadInterval:uploadTime];
     }else if([key isEqualToString:SENSOR_BAROMETER]){
-//        awareSensor = [[Barometer alloc] initWithSensorName:SENSOR_BAROMETER];
-//        [awareSensor startSensor:0.1f withUploadInterval:10.0];
+        awareSensor = [[Barometer alloc] initWithSensorName:SENSOR_BAROMETER];
+        [awareSensor startSensor:1.0f withUploadInterval:10.0];
     }else if([key isEqualToString:SENSOR_GYROSCOPE]){
-//        awareSensor = [[Gyroscope alloc] initWithSensorName:SENSOR_GYROSCOPE];
-//        [awareSensor startSensor:0.1f withUploadInterval:10.0f];
+        awareSensor = [[Gyroscope alloc] initWithSensorName:SENSOR_GYROSCOPE];
+        [awareSensor startSensor:0.1f withUploadInterval:10.0f];
     }else if([key isEqualToString:SENSOR_MAGNETOMETER]){
-//        awareSensor = [[Magnetometer alloc] initWithSensorName:SENSOR_MAGNETOMETER];
-//        [awareSensor startSensor:0.1f withUploadInterval:10.0f];
+        awareSensor = [[Magnetometer alloc] initWithSensorName:SENSOR_MAGNETOMETER];
+        [awareSensor startSensor:0.1f withUploadInterval:10.0f];
     }else if([key isEqualToString:SENSOR_BATTERY]){
-//        awareSensor = [[Battery alloc] initWithSensorName:SENSOR_BATTERY];
-//        [awareSensor startSensor:0.1f withUploadInterval:10.0f];
+        awareSensor = [[Battery alloc] initWithSensorName:SENSOR_BATTERY];
+        [awareSensor startSensor:1.0f withUploadInterval:10.0f];
     }else if([key isEqualToString:SENSOR_LOCATIONS]){
-//        awareSensor = [[Locations alloc] initWithSensorName:SENSOR_LOCATIONS];
-//        [awareSensor startSensor:0 withUploadInterval:10.0f];//0=>auto
+        awareSensor = [[Locations alloc] initWithSensorName:SENSOR_LOCATIONS];
+        [awareSensor startSensor:0 withUploadInterval:10.0f];//0=>auto
     }else if([key isEqualToString:SENSOR_NETWORK]){
         awareSensor = [[Network alloc] initWithSensorName:SENSOR_NETWORK];
+        [awareSensor startSensor:1.0f withUploadInterval:10.0f];
+    }else if([key isEqualToString:SENSOR_WIFI]){
+        awareSensor = [[Wifi alloc] initWithSensorName:SENSOR_WIFI];
+        [awareSensor startSensor:1.0f withUploadInterval:10.0f];
+    }else if ([key isEqualToString:SENSOR_PROCESSOR]){
+        awareSensor = [[Processor alloc] initWithSensorName:SENSOR_PROCESSOR];
+        [awareSensor startSensor:1.0f withUploadInterval:10.0f];
+    }else if ([key isEqualToString:SENSOR_GRAVITY]){
+        awareSensor = [[Gravity alloc] initWithSensorName:SENSOR_GRAVITY];
+        [awareSensor startSensor:0.1f withUploadInterval:10.0f];
+    }else if([key isEqualToString:SENSOR_LINEAR_ACCELEROMETER]){
+        awareSensor = [[LinearAccelerometer alloc] initWithSensorName:SENSOR_LINEAR_ACCELEROMETER];
         [awareSensor startSensor:0.1f withUploadInterval:10.0f];
     }
     
@@ -191,36 +215,41 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView
          cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *MyIdentifier = @"MyReuseIdentifier";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:MyIdentifier];
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle  reuseIdentifier:MyIdentifier];
-    }
-    NSDictionary *item = (NSDictionary *)[_sensors objectAtIndex:indexPath.row];
-    cell.textLabel.text = [item objectForKey:KEY_CEL_TITLE];
-    cell.detailTextLabel.text = [item objectForKey:KEY_CEL_DESC];
-    [cell.detailTextLabel setNumberOfLines:2];
-    UIImage *theImage = [UIImage imageNamed:[item objectForKey:KEY_CEL_IMAGE]];
-    NSString *stateStr = [item objectForKey:KEY_CEL_STATE];
-    cell.imageView.image = theImage;
-    
-    //update latest sensor data
-    NSString *sensorKey = [item objectForKey:KEY_CEL_SENSOR_NAME];
-    NSString* latestSensorData = [_sensorManager getLatestSensorData:sensorKey];
-    if(![latestSensorData isEqualToString:@""]){
-        [cell.detailTextLabel setText:latestSensorData];
-        
-    }
-//    NSLog(@"-> %@",latestSensorData);
-    
-    if ([stateStr isEqualToString:@"true"]) {
-        theImage = [theImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        UIImageView *aImageView = [[UIImageView alloc] initWithImage:theImage];
-        aImageView.tintColor = UIColor.redColor;
+    @autoreleasepool {
+        static NSString *MyIdentifier = @"MyReuseIdentifier";
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:MyIdentifier];
+        if (cell == nil) {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle  reuseIdentifier:MyIdentifier];
+        }
+        NSDictionary *item = (NSDictionary *)[_sensors objectAtIndex:indexPath.row];
+        cell.textLabel.text = [item objectForKey:KEY_CEL_TITLE];
+        cell.detailTextLabel.text = [item objectForKey:KEY_CEL_DESC];
+        [cell.detailTextLabel setNumberOfLines:2];
+        NSString * imageName = [item objectForKey:KEY_CEL_IMAGE];
+        UIImage *theImage= nil;
+        if (![imageName isEqualToString:@""]) {
+             theImage = [UIImage imageNamed:imageName];
+        }
+        NSString *stateStr = [item objectForKey:KEY_CEL_STATE];
         cell.imageView.image = theImage;
+        
+        //update latest sensor data
+        NSString *sensorKey = [item objectForKey:KEY_CEL_SENSOR_NAME];
+        NSString* latestSensorData = [_sensorManager getLatestSensorData:sensorKey];
+        if(![latestSensorData isEqualToString:@""]){
+            [cell.detailTextLabel setText:latestSensorData];
+            
+        }
+    //    NSLog(@"-> %@",latestSensorData);
+        
+        if ([stateStr isEqualToString:@"true"]) {
+            theImage = [theImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            UIImageView *aImageView = [[UIImageView alloc] initWithImage:theImage];
+            aImageView.tintColor = UIColor.redColor;
+            cell.imageView.image = theImage;
+        }
+        return cell;
     }
-
-    return cell;
 }
 
 

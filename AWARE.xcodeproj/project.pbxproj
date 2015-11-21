@@ -32,6 +32,12 @@
 		169A7B321BFF282800A7C06D /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 169A7B311BFF282800A7C06D /* CoreLocation.framework */; };
 		169A7B351BFFB67800A7C06D /* Network.m in Sources */ = {isa = PBXBuildFile; fileRef = 169A7B341BFFB67800A7C06D /* Network.m */; };
 		169A7B381BFFB81300A7C06D /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 169A7B371BFFB81300A7C06D /* Reachability.m */; };
+		169A7B3B1BFFC8B100A7C06D /* Wifi.m in Sources */ = {isa = PBXBuildFile; fileRef = 169A7B3A1BFFC8B100A7C06D /* Wifi.m */; };
+		169A7B3D1BFFC9F900A7C06D /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 169A7B3C1BFFC9F900A7C06D /* SystemConfiguration.framework */; };
+		169A7B401BFFD55A00A7C06D /* Processor.m in Sources */ = {isa = PBXBuildFile; fileRef = 169A7B3F1BFFD55A00A7C06D /* Processor.m */; };
+		169A7B431BFFDE8F00A7C06D /* Rotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 169A7B421BFFDE8F00A7C06D /* Rotation.m */; };
+		169A7B461C0052F800A7C06D /* Gravity.m in Sources */ = {isa = PBXBuildFile; fileRef = 169A7B451C0052F800A7C06D /* Gravity.m */; };
+		169A7B491C00591A00A7C06D /* LinearAccelerometer.m in Sources */ = {isa = PBXBuildFile; fileRef = 169A7B481C00591A00A7C06D /* LinearAccelerometer.m */; };
 		16FCE2771BFE9326005FC71A /* AWARESensorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 16FCE2761BFE9326005FC71A /* AWARESensorManager.m */; };
 		FC2AF85D761397B784DECBD3 /* libPods-AWARE.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9ED04F29ED60F3FCC960F6CD /* libPods-AWARE.a */; };
 /* End PBXBuildFile section */
@@ -99,6 +105,17 @@
 		169A7B341BFFB67800A7C06D /* Network.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Network.m; sourceTree = "<group>"; };
 		169A7B361BFFB81300A7C06D /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		169A7B371BFFB81300A7C06D /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
+		169A7B391BFFC8B100A7C06D /* Wifi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Wifi.h; sourceTree = "<group>"; };
+		169A7B3A1BFFC8B100A7C06D /* Wifi.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Wifi.m; sourceTree = "<group>"; };
+		169A7B3C1BFFC9F900A7C06D /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		169A7B3E1BFFD55A00A7C06D /* Processor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Processor.h; sourceTree = "<group>"; };
+		169A7B3F1BFFD55A00A7C06D /* Processor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Processor.m; sourceTree = "<group>"; };
+		169A7B411BFFDE8F00A7C06D /* Rotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rotation.h; sourceTree = "<group>"; };
+		169A7B421BFFDE8F00A7C06D /* Rotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Rotation.m; sourceTree = "<group>"; };
+		169A7B441C0052F800A7C06D /* Gravity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Gravity.h; sourceTree = "<group>"; };
+		169A7B451C0052F800A7C06D /* Gravity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Gravity.m; sourceTree = "<group>"; };
+		169A7B471C00591A00A7C06D /* LinearAccelerometer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LinearAccelerometer.h; sourceTree = "<group>"; };
+		169A7B481C00591A00A7C06D /* LinearAccelerometer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LinearAccelerometer.m; sourceTree = "<group>"; };
 		16FCE2751BFE9326005FC71A /* AWARESensorManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AWARESensorManager.h; sourceTree = "<group>"; };
 		16FCE2761BFE9326005FC71A /* AWARESensorManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AWARESensorManager.m; sourceTree = "<group>"; };
 		9B5BAD09F1FBEE0838867ACF /* Pods-AWARE.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AWARE.release.xcconfig"; path = "Pods/Target Support Files/Pods-AWARE/Pods-AWARE.release.xcconfig"; sourceTree = "<group>"; };
@@ -111,6 +128,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				169A7B3D1BFFC9F900A7C06D /* SystemConfiguration.framework in Frameworks */,
 				169A7B321BFF282800A7C06D /* CoreLocation.framework in Frameworks */,
 				1623CEB91BFE319100EFAD72 /* CoreMotion.framework in Frameworks */,
 				1623CEB11BFD40FB00EFAD72 /* AVFoundation.framework in Frameworks */,
@@ -186,11 +204,21 @@
 				169A7B281BFF1C2300A7C06D /* Battery.h */,
 				169A7B291BFF1C2300A7C06D /* Battery.m */,
 				169A7B2B1BFF219500A7C06D /* Barometer.h */,
-				169A7B2C1BFF219500A7C06D /* Barometer.m */,
 				169A7B2E1BFF280C00A7C06D /* Locations.h */,
 				169A7B2F1BFF280C00A7C06D /* Locations.m */,
 				169A7B331BFFB67800A7C06D /* Network.h */,
 				169A7B341BFFB67800A7C06D /* Network.m */,
+				169A7B2C1BFF219500A7C06D /* Barometer.m */,
+				169A7B391BFFC8B100A7C06D /* Wifi.h */,
+				169A7B3A1BFFC8B100A7C06D /* Wifi.m */,
+				169A7B3E1BFFD55A00A7C06D /* Processor.h */,
+				169A7B3F1BFFD55A00A7C06D /* Processor.m */,
+				169A7B411BFFDE8F00A7C06D /* Rotation.h */,
+				169A7B421BFFDE8F00A7C06D /* Rotation.m */,
+				169A7B441C0052F800A7C06D /* Gravity.h */,
+				169A7B451C0052F800A7C06D /* Gravity.m */,
+				169A7B471C00591A00A7C06D /* LinearAccelerometer.h */,
+				169A7B481C00591A00A7C06D /* LinearAccelerometer.m */,
 				1623CE721BFD1B2C00EFAD72 /* Main.storyboard */,
 				1623CE781BFD1B2C00EFAD72 /* Assets.xcassets */,
 				1623CE7A1BFD1B2C00EFAD72 /* LaunchScreen.storyboard */,
@@ -230,6 +258,7 @@
 		2A3CA9F5620967BACB187EB7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				169A7B3C1BFFC9F900A7C06D /* SystemConfiguration.framework */,
 				169A7B311BFF282800A7C06D /* CoreLocation.framework */,
 				1623CEB81BFE319100EFAD72 /* CoreMotion.framework */,
 				1623CEB01BFD40FB00EFAD72 /* AVFoundation.framework */,
@@ -456,19 +485,24 @@
 			files = (
 				1623CEB71BFE175F00EFAD72 /* AWARESensor.m in Sources */,
 				169A7B351BFFB67800A7C06D /* Network.m in Sources */,
+				169A7B3B1BFFC8B100A7C06D /* Wifi.m in Sources */,
 				169A7B271BFF193C00A7C06D /* Magnetometer.m in Sources */,
 				1623CEAF1BFD407900EFAD72 /* QRCodeViewController.m in Sources */,
 				1623CE711BFD1B2C00EFAD72 /* ViewController.m in Sources */,
+				169A7B461C0052F800A7C06D /* Gravity.m in Sources */,
 				169A7B241BFF16E700A7C06D /* Gyroscope.m in Sources */,
 				1623CE6E1BFD1B2C00EFAD72 /* AppDelegate.m in Sources */,
 				16FCE2771BFE9326005FC71A /* AWARESensorManager.m in Sources */,
 				169A7B2D1BFF219500A7C06D /* Barometer.m in Sources */,
+				169A7B401BFFD55A00A7C06D /* Processor.m in Sources */,
 				169A7B2A1BFF1C2300A7C06D /* Battery.m in Sources */,
 				169A7B381BFFB81300A7C06D /* Reachability.m in Sources */,
 				1623CE771BFD1B2C00EFAD72 /* AWARE.xcdatamodeld in Sources */,
 				1623CEBC1BFE390600EFAD72 /* Accelerometer.m in Sources */,
+				169A7B431BFFDE8F00A7C06D /* Rotation.m in Sources */,
 				1623CEB41BFD659000EFAD72 /* AWAREStudyManager.m in Sources */,
 				169A7B301BFF280C00A7C06D /* Locations.m in Sources */,
+				169A7B491C00591A00A7C06D /* LinearAccelerometer.m in Sources */,
 				1623CE6B1BFD1B2C00EFAD72 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

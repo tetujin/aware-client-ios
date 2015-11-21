@@ -40,6 +40,8 @@ extern NSString* const SENSOR_ROTATION;
 extern NSString* const SENSOR_SCREEN;
 extern NSString* const SENSOR_TELEPHONY;
 extern NSString* const SENSOR_WIFI;
+extern NSString* const SENSOR_GRAVITY;
+extern NSString* const SENSOR_LINEAR_ACCELEROMETER;
 //extern NSString* const SENSOR_
 //extern NSString* const SENSOR_
 //extern NSString* const SENSOR_

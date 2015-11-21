@@ -14,7 +14,7 @@
 - (void) uploadSensorData;
 @end
 
-@interface AWARESensor : NSObject <AWARESensorDelegate, NSURLConnectionDataDelegate, NSURLConnectionDelegate>
+@interface AWARESensor : NSObject <AWARESensorDelegate>
 
 - (instancetype) initWithSensorName:(NSString *) sensorName;
 -(void) setLatestValue:(NSString *) valueStr;

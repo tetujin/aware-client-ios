@@ -65,8 +65,11 @@
 }
 
 -(void) uploadSensorData{
-    NSString * jsonStr = [self getData:SENSOR_ACCELEROMETER withJsonArrayFormat:YES];
-    [self insertSensorData:jsonStr withDeviceId:[self getDeviceId] url:[self getInsertUrl:SENSOR_ACCELEROMETER]];
+    NSString * jsonStr = nil;
+    @autoreleasepool {
+        jsonStr = [self getData:SENSOR_ACCELEROMETER withJsonArrayFormat:YES];
+        [self insertSensorData:jsonStr withDeviceId:[self getDeviceId] url:[self getInsertUrl:SENSOR_ACCELEROMETER]];
+    }
 }
 
 @end

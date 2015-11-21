@@ -39,6 +39,8 @@ NSString* const SENSOR_ROTATION = @"rotation";
 NSString* const SENSOR_SCREEN = @"screen";
 NSString* const SENSOR_TELEPHONY = @"telephony";
 NSString* const SENSOR_WIFI = @"wifi";
+NSString* const SENSOR_GRAVITY = @"gravity";
+NSString* const SENSOR_LINEAR_ACCELEROMETER = @"linear_accelerometer";
 
 @implementation AWAREStudyManager
 
