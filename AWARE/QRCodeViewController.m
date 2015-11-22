@@ -121,6 +121,12 @@
         int responseCode = (int)[response statusCode];
         NSLog(@"%d",responseCode);
         if(responseCode == 0){
+//            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Public Certificate"
+//                                                            message:@"You need to arrow a public certificate for HTTPS posts. Please install it and read QR code again."
+//                                                           delegate:nil
+//                                                  cancelButtonTitle:@"OK"
+//                                                  otherButtonTitles:nil];
+//            [alert show];
             NSString *url =  crtUrl;
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
         }else{

@@ -51,7 +51,11 @@
                                           [dic setObject:[NSNumber numberWithDouble:accelerometerData.acceleration.z] forKey:@"double_values_2"];
                                           [dic setObject:@0 forKey:@"accuracy"];
                                           [dic setObject:@"text" forKey:@"label"];
-                                          [self setLatestValue:[NSString stringWithFormat:@"%f, %f, %f",accelerometerData.acceleration.x,accelerometerData.acceleration.y, accelerometerData.acceleration.z]];
+                                          [self setLatestValue:[NSString stringWithFormat:
+                                                                @"%f, %f, %f",
+                                                                accelerometerData.acceleration.x,
+                                                                accelerometerData.acceleration.y,
+                                                                accelerometerData.acceleration.z]];
                                           [self saveData:dic toLocalFile:SENSOR_ACCELEROMETER];
                                       }
                                   }];
@@ -66,10 +70,10 @@
 
 -(void) uploadSensorData{
     NSString * jsonStr = nil;
-    @autoreleasepool {
+//    @autoreleasepool {
         jsonStr = [self getData:SENSOR_ACCELEROMETER withJsonArrayFormat:YES];
         [self insertSensorData:jsonStr withDeviceId:[self getDeviceId] url:[self getInsertUrl:SENSOR_ACCELEROMETER]];
-    }
+//    }
 }
 
 @end

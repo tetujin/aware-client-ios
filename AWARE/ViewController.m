@@ -141,7 +141,6 @@
             NSString * value = [[sensors objectAtIndex:i] objectForKey:@"value"];
             if ([value isEqualToString:@"true"]) {
                 [dic setObject:@"true" forKey:KEY_CEL_STATE];
-                NSLog(@"true");
                 [self addAwareSensor:key];
             }
         }
@@ -151,7 +150,7 @@
 
 
 - (void) addAwareSensor:(NSString *) key{
-    double uploadTime = 60.0f;
+    double uploadTime = 10.0f;
     AWARESensor* awareSensor = nil;
     if ([key isEqualToString:SENSOR_ACCELEROMETER]) {
         awareSensor= [[Accelerometer alloc] initWithSensorName:SENSOR_ACCELEROMETER];
@@ -182,12 +181,12 @@
         [awareSensor startSensor:1.0f withUploadInterval:10.0f];
     }else if ([key isEqualToString:SENSOR_GRAVITY]){
         awareSensor = [[Gravity alloc] initWithSensorName:SENSOR_GRAVITY];
-        [awareSensor startSensor:0.1f withUploadInterval:10.0f];
+        [awareSensor startSensor:1 withUploadInterval:uploadTime];
     }else if([key isEqualToString:SENSOR_LINEAR_ACCELEROMETER]){
         awareSensor = [[LinearAccelerometer alloc] initWithSensorName:SENSOR_LINEAR_ACCELEROMETER];
-        [awareSensor startSensor:0.1f withUploadInterval:10.0f];
+        [awareSensor startSensor:1 withUploadInterval:uploadTime];
     }
-    
+
     if (awareSensor != NULL) {
         [_sensorManager addNewSensor:awareSensor];
     }
@@ -268,7 +267,6 @@
 }
 
 - (bool) connectMqttServer{
-    
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     // if Study ID is new, AWARE adds new Device ID to the AWARE server.
     mqttServer = [userDefaults objectForKey:KEY_MQTT_SERVER];
@@ -283,6 +281,12 @@
 //    NSNumber* unixtime = [NSNumber numberWithDouble:timeStamp];
     if (mqttPassword == nil) {
         NSLog(@"An AWARE study is not registed! Please read QR code");
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"AWARE Study"
+                                                        message:@"You have not registed an AWARE study yet. Please read a QR code for AWARE study."
+                                                       delegate:nil
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
+        [alert show];
         return NO;
     }
     
@@ -300,7 +304,7 @@
     // define the handler that will be called when MQTT messages are received by the client
     [self.client setMessageHandler:^(MQTTMessage *message) {
         NSString *text = message.payloadString;
-        NSLog(@"received message %@", text);
+        NSLog(@"Received messages %@", text);
         
         
         
@@ -327,7 +331,7 @@
     [self.client connectToHost:mqttServer
              completionHandler:^(MQTTConnectionReturnCode code) {
                  if (code == ConnectionAccepted) {
-                     NSLog(@"connected!");
+                     NSLog(@"Connected to the MQTT server!");
                      // when the client is connected, send a MQTT message
                      //Study specific subscribes
                      [self.client subscribe:[NSString stringWithFormat:@"%@/%@/broadcasts",studyId,mqttUserName] withQos:[mqttQos intValue] completionHandler:^(NSArray *grantedQos) {
