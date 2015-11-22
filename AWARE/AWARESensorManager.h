@@ -16,6 +16,9 @@
 - (void) stopAllSensors;
 - (void) stopASensor:(NSString *) sensorName;
 - (void) addNewSensor:(AWARESensor *) sensor;
+- (bool) addNewSensorWithSensorName:(NSString *)sensorName
+                           settings:(NSArray*)settings
+                     uploadInterval:(double) uploadTime;
 - (NSString*)getLatestSensorData:(NSString *)sensorName;
 
 @end

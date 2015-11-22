@@ -87,7 +87,11 @@
     return awareSensorName;
 }
 
-- (BOOL)startSensor:(double) interval withUploadInterval:(double)upInterval{
+//- (BOOL)startSensor:(double) interval withUploadInterval:(double)upInterval{
+//    return NO;
+//}
+
+-(BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
     return NO;
 }
 
@@ -261,50 +265,79 @@
     NSString *post = nil;
     NSData *postData = nil;
     NSMutableURLRequest *request = nil;
-    NSURLSession *session = nil;
+    __weak NSURLSession *session = nil;
+    NSString *postLength = nil;
 //    NSLog(@"Wifi network state is %d", wifiState);
     if (!wifiState) {
         NSLog(@"You need wifi network to upload sensor data.");
         return NO;
     }
     
+    previusUploadingState = YES; //file lock
+    
     @autoreleasepool {
-        previusUploadingState = YES; //file lock
         post = [NSString stringWithFormat:@"device_id=%@&data=%@", deviceId, data];
         postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
-        NSString *postLength = [NSString stringWithFormat:@"%ld", [postData length]];
+        postLength = [NSString stringWithFormat:@"%ld", [postData length]];
         request = [[NSMutableURLRequest alloc] init];
         [request setURL:[NSURL URLWithString:url]];
         [request setHTTPMethod:@"POST"];
         [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
-        //    [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+        [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
         [request setHTTPBody:postData];
-
-        @autoreleasepool {
-            session = [NSURLSession sharedSession];
-            [[session dataTaskWithRequest:request
-                       completionHandler:^(NSData * _Nullable data,
-                                           NSURLResponse * _Nullable response,
-                                           NSError * _Nullable error) {
-                            NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
-                            int responseCode = (int)[httpResponse statusCode];
-                            if(responseCode == 200){
-                                NSLog(@"Sucess to upload sensor data (%@) to AWARE server", [self getSensorName]);
+        
+        session = [NSURLSession sharedSession];
+        [[session dataTaskWithRequest:request
+                   completionHandler:^(NSData * _Nullable data,
+                                       NSURLResponse * _Nullable response,
+                                       NSError * _Nullable error) {
+                        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
+                        int responseCode = (int)[httpResponse statusCode];
+                        if(responseCode == 200){
+                            NSLog(@"Sucess to upload sensor data (%@) to AWARE server", [self getSensorName]);
 //                                [self removeFile:[self getSensorName]];
+                        }
+                       @autoreleasepool {
+                           
+                           previusUploadingState = NO;
+                           fileClearState = YES;
+                           data = nil;
+                           response = nil;
+                           error = nil;
+                           httpResponse = nil;
+                       }
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            @autoreleasepool {
+                                [session finishTasksAndInvalidate];
+                                [session invalidateAndCancel];
                             }
-                            previusUploadingState = NO;
-                            fileClearState = YES;
-                            dispatch_async(dispatch_get_main_queue(), ^{
-                               [session finishTasksAndInvalidate];
-                               [session invalidateAndCancel];
-                               
-                           });
-            }] resume];
-        }
+                       });
+        }] resume];
+        [session finishTasksAndInvalidate];
+        [session invalidateAndCancel];
+        post = nil;
+        postData = nil;
+        request = nil;
+        session = nil;
     }
     return YES;
 }
 
+- (void)URLSession:(NSURLSession *)session didBecomeInvalidWithError:(NSError *)error{
+    
+}
+
+- (void)URLSession:(NSURLSession *)session didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition, NSURLCredential * _Nullable))completionHandler{
+    
+}
+
+- (void)URLSessionDidFinishEventsForBackgroundURLSession:(NSURLSession *)session{
+    
+}
+
+//- URLSession:didBecomeInvalidWithErr
+//- URLSession:didReceiveChallenge:completionHandler:
+//- URLSessionDidFinishEventsForBackgroundURLSession:
 
 
 

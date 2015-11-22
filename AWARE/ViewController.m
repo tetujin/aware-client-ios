@@ -8,17 +8,7 @@
 
 #import "ViewController.h"
 #import "AWAREStudyManager.h"
-#import "Accelerometer.h"
-#import "Gyroscope.h"
-#import "Magnetometer.h"
-#import "Battery.h"
-#import "Barometer.h"
-#import "Locations.h"
-#import "Network.h"
-#import "Wifi.h"
-#import "Processor.h"
-#import "Gravity.h"
-#import "LinearAccelerometer.h"
+
 
 @interface ViewController (){
     NSString *KEY_CEL_TITLE;
@@ -134,63 +124,15 @@
 
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSArray *sensors = [userDefaults objectForKey:KEY_SENSORS];
-    for (int i=0; i<sensors.count; i++) {
-        NSString *setting = [[sensors objectAtIndex:i] objectForKey:@"setting"];
-        NSString *settingKey = [NSString stringWithFormat:@"status_%@",key];
-        if ([setting isEqualToString:settingKey]) {
-            NSString * value = [[sensors objectAtIndex:i] objectForKey:@"value"];
-            if ([value isEqualToString:@"true"]) {
-                [dic setObject:@"true" forKey:KEY_CEL_STATE];
-                [self addAwareSensor:key];
-            }
-        }
-    }
+    bool state = [_sensorManager addNewSensorWithSensorName:key settings:sensors uploadInterval:30.0f];
+    if (state) [dic setObject:@"true" forKey:KEY_CEL_STATE];
     return dic;
 }
 
 
-- (void) addAwareSensor:(NSString *) key{
-    double uploadTime = 10.0f;
-    AWARESensor* awareSensor = nil;
-    if ([key isEqualToString:SENSOR_ACCELEROMETER]) {
-        awareSensor= [[Accelerometer alloc] initWithSensorName:SENSOR_ACCELEROMETER];
-        [awareSensor startSensor:0.1f withUploadInterval:uploadTime];
-    }else if([key isEqualToString:SENSOR_BAROMETER]){
-        awareSensor = [[Barometer alloc] initWithSensorName:SENSOR_BAROMETER];
-        [awareSensor startSensor:1.0f withUploadInterval:10.0];
-    }else if([key isEqualToString:SENSOR_GYROSCOPE]){
-        awareSensor = [[Gyroscope alloc] initWithSensorName:SENSOR_GYROSCOPE];
-        [awareSensor startSensor:0.1f withUploadInterval:10.0f];
-    }else if([key isEqualToString:SENSOR_MAGNETOMETER]){
-        awareSensor = [[Magnetometer alloc] initWithSensorName:SENSOR_MAGNETOMETER];
-        [awareSensor startSensor:0.1f withUploadInterval:10.0f];
-    }else if([key isEqualToString:SENSOR_BATTERY]){
-        awareSensor = [[Battery alloc] initWithSensorName:SENSOR_BATTERY];
-        [awareSensor startSensor:1.0f withUploadInterval:10.0f];
-    }else if([key isEqualToString:SENSOR_LOCATIONS]){
-        awareSensor = [[Locations alloc] initWithSensorName:SENSOR_LOCATIONS];
-        [awareSensor startSensor:0 withUploadInterval:10.0f];//0=>auto
-    }else if([key isEqualToString:SENSOR_NETWORK]){
-        awareSensor = [[Network alloc] initWithSensorName:SENSOR_NETWORK];
-        [awareSensor startSensor:1.0f withUploadInterval:10.0f];
-    }else if([key isEqualToString:SENSOR_WIFI]){
-        awareSensor = [[Wifi alloc] initWithSensorName:SENSOR_WIFI];
-        [awareSensor startSensor:1.0f withUploadInterval:10.0f];
-    }else if ([key isEqualToString:SENSOR_PROCESSOR]){
-        awareSensor = [[Processor alloc] initWithSensorName:SENSOR_PROCESSOR];
-        [awareSensor startSensor:1.0f withUploadInterval:10.0f];
-    }else if ([key isEqualToString:SENSOR_GRAVITY]){
-        awareSensor = [[Gravity alloc] initWithSensorName:SENSOR_GRAVITY];
-        [awareSensor startSensor:1 withUploadInterval:uploadTime];
-    }else if([key isEqualToString:SENSOR_LINEAR_ACCELEROMETER]){
-        awareSensor = [[LinearAccelerometer alloc] initWithSensorName:SENSOR_LINEAR_ACCELEROMETER];
-        [awareSensor startSensor:1 withUploadInterval:uploadTime];
-    }
-
-    if (awareSensor != NULL) {
-        [_sensorManager addNewSensor:awareSensor];
-    }
-}
+//- (void) addAwareSensor:(NSString *) key{
+//
+//}
 
 
 

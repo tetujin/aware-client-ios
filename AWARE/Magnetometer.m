@@ -31,10 +31,11 @@
     return self;
 }
 
-- (BOOL)startSensor:(double)interval withUploadInterval:(double)upInterval{
+//- (BOOL)startSensor:(double)interval withUploadInterval:(double)upInterval{
+- (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
     NSLog(@"Start Magnetometer!");
     timer = [NSTimer scheduledTimerWithTimeInterval:upInterval target:self selector:@selector(uploadSensorData) userInfo:nil repeats:YES];
-    manager.magnetometerUpdateInterval = interval;
+    manager.magnetometerUpdateInterval = 0.1f; //interval;
     [manager startMagnetometerUpdatesToQueue:[NSOperationQueue currentQueue] withHandler:^(CMMagnetometerData * _Nullable magnetometerData, NSError * _Nullable error) {
         if( error ) {
             NSLog(@"%@:%ld", [error domain], [error code] );

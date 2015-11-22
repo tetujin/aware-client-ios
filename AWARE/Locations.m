@@ -31,8 +31,10 @@
     return self;
 }
 
-- (BOOL)startSensor:(double)interval withUploadInterval:(double)upInterval{
+//- (BOOL)startSensor:(double)interval withUploadInterval:(double)upInterval{
+- (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings {
     NSLog(@"Start Location!");
+    double interval = 1.0f;
     uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval target:self selector:@selector(uploadSensorData) userInfo:nil repeats:YES];
     if (nil == locationManager){
         locationManager = [[CLLocationManager alloc] init];

@@ -30,12 +30,14 @@
     return self;
 }
 
-- (BOOL)startSensor:(double)interval withUploadInterval:(double)upInterval{
+//- (BOOL)startSensor:(double)interval withUploadInterval:(double)upInterval{
+- (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
     NSLog(@"Start Gyroscope!");
     uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval target:self selector:@selector(uploadSensorData) userInfo:nil repeats:YES];
     if (![CMAltimeter isRelativeAltitudeAvailable]) {
         NSLog(@"This device doesen't support CMAltimeter.");
     } else {
+//        double interval = 1.0f;
         altitude = [[CMAltimeter alloc] init];
         [altitude startRelativeAltitudeUpdatesToQueue:[NSOperationQueue mainQueue]
                                            withHandler:^(CMAltitudeData *altitudeData, NSError *error) {

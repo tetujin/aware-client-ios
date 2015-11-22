@@ -14,7 +14,8 @@
 #import "FMDatabaseQueue.h"
 
 @protocol AWARESensorDelegate <NSObject>
-- (BOOL) startSensor:(double) interval withUploadInterval:(double)upInterval;
+//- (BOOL) startSensor:(double) interval withUploadInterval:(double)upInterval;
+- (BOOL) startSensor:(double)upInterval withSettings:(NSArray *)settings;
 - (BOOL) stopSensor;
 - (void) uploadSensorData;
 @end

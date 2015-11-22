@@ -32,10 +32,15 @@
     return self;
 }
 
-- (BOOL)startSensor:(double)interval withUploadInterval:(double)upInterval{
+//- (BOOL)startSensor:(double)interval withUploadInterval:(double)upInterval{
+- (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
     NSLog(@"Start Gyroscope!");
     gTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval target:self selector:@selector(uploadSensorData) userInfo:nil repeats:YES];
-    gyroManager.gyroUpdateInterval = interval;
+    gyroManager.gyroUpdateInterval = 0.1f;
+    
+    // Get frequency information from settings
+    
+    
     [gyroManager startGyroUpdatesToQueue:[NSOperationQueue currentQueue] withHandler:^(CMGyroData * _Nullable gyroData, NSError * _Nullable error) {
         if( error ) {
             NSLog(@"%@:%ld", [error domain], [error code] );

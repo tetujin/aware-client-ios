@@ -40,8 +40,10 @@
  * https://developer.apple.com/library/ios/documentation/CoreMotion/Reference/CMDeviceMotion_Class/index.html#//apple_ref/occ/cl/CMDeviceMotion
  */
 
-- (BOOL)startSensor:(double)interval withUploadInterval:(double)upInterval{
+//- (BOOL)startSensor:(double)interval withUploadInterval:(double)upInterval{
+- (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
     NSLog(@"Start Linear Accelerometer sensing!");
+    double interval = 0.1f;
     uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval target:self selector:@selector(uploadSensorData) userInfo:nil repeats:YES];
     /** motion */
     if( motionManager.deviceMotionAvailable ){

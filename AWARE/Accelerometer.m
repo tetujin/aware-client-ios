@@ -31,11 +31,14 @@
     return self;
 }
 
--(BOOL)startSensor:(double) interval withUploadInterval:(double)upInterval{
+-(BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
     NSLog(@"Start Accelerometer!");
     timer = [NSTimer scheduledTimerWithTimeInterval:upInterval
                                              target:self selector:@selector(uploadSensorData) userInfo:nil repeats:YES];
-    manager.accelerometerUpdateInterval = interval;
+    manager.accelerometerUpdateInterval = 0.1f; //default value
+    
+    // Get settings from setting list
+    
     [manager startAccelerometerUpdatesToQueue:[NSOperationQueue currentQueue]
                                   withHandler:^(CMAccelerometerData *accelerometerData, NSError *error) {
                                       if( error ) {

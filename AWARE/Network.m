@@ -38,9 +38,10 @@
     return self;
 }
 
-- (BOOL)startSensor:(double)interval withUploadInterval:(double)upInterval{
+//- (BOOL)startSensor:(double)interval withUploadInterval:(double)upInterval{
+- (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings {
     NSLog(@"Start Network Sensing!");
-    
+    double interval = 1.0f;
     reachability = [[SCNetworkReachability alloc] initWithHost:@"https://github.com"];
     [reachability reachabilityStatus:^(SCNetworkStatus status)
      {
