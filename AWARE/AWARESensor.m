@@ -13,6 +13,8 @@
 
 @interface AWARESensor (){
     NSMutableString *tempData;
+    NSMutableString *bufferStr;
+    int bufferLimit;
     BOOL previusUploadingState;
     BOOL fileClearState;
     NSString * awareSensorName;
@@ -32,6 +34,8 @@
     self = [super init];
     if (self) {
         tempData = [[NSMutableString alloc] init];
+        bufferStr = [[NSMutableString alloc] init];
+        bufferLimit = 100000;
         previusUploadingState = NO;
         fileClearState = NO;
         awareSensorName = @"";
@@ -46,6 +50,10 @@
         awareSensorName = sensorName;
     }
     return self;
+}
+
+- (void) setBufferLimit:(int)limit{
+    bufferLimit = limit;
 }
 
 - (void) setLatestValue:(NSString *) valueStr{
@@ -104,8 +112,24 @@
     NSError*error=nil;
     NSData*d=[NSJSONSerialization dataWithJSONObject:data options:2 error:&error];
     NSString*jsonstr=[[NSString alloc]initWithData:d encoding:NSUTF8StringEncoding];
-    [self appendLine:jsonstr path:fileName];
-    return @"";
+    
+    if ([fileName isEqualToString:SENSOR_ACCELEROMETER]) {
+        NSLog(@"%ld", bufferStr.length);
+    }
+    
+    // buffer method
+    if (bufferStr.length < bufferLimit) {
+        [bufferStr appendString:jsonstr];
+        [bufferStr appendFormat:@"\n"];
+        return @"";
+    }else{
+        // append sensor data the file
+        [bufferStr appendString:jsonstr];
+        [self appendLine:bufferStr path:fileName];
+        bufferStr = nil;
+        bufferStr = [[NSMutableString alloc] init];
+        return @"";
+    }
 }
 
 - (BOOL) appendLine:(NSString *)line path:(NSString*) fileName {

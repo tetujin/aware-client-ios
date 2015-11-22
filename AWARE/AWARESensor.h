@@ -26,6 +26,8 @@
 
 - (instancetype) initWithSensorName:(NSString *) sensorName;
 
+- (void) setBufferLimit:(int) limit;
+
 -(void) setLatestValue:(NSString *) valueStr;
 
 -(NSString *) getLatestValue;

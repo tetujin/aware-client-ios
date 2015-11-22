@@ -124,16 +124,11 @@
 
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSArray *sensors = [userDefaults objectForKey:KEY_SENSORS];
+    // [NOTE] If this sensor is "active", addNewSensorWithSensorName method return TRUE value.
     bool state = [_sensorManager addNewSensorWithSensorName:key settings:sensors uploadInterval:30.0f];
     if (state) [dic setObject:@"true" forKey:KEY_CEL_STATE];
     return dic;
 }
-
-
-//- (void) addAwareSensor:(NSString *) key{
-//
-//}
-
 
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
