@@ -37,6 +37,15 @@
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
     NSLog(@"Start Wifi sensing!");
     double interval = 1.0f;
+    
+    //sensing interval
+//    [self setBufferLimit:10000];
+    double frequency = [self getSensorSetting:settings withKey:@"frequency_wifi"];
+    if(frequency != -1){
+        NSLog(@"Location sensing requency is %f ", frequency);
+        interval = frequency;
+    }
+    
     uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval target:self selector:@selector(uploadSensorData) userInfo:nil repeats:YES];
     sensingTimer = [NSTimer scheduledTimerWithTimeInterval:interval target:self selector:@selector(getSensorData) userInfo:nil repeats:YES];
     return YES;

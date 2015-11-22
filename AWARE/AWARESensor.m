@@ -12,8 +12,6 @@
 
 
 @interface AWARESensor (){
-    NSMutableString *tempData;
-    NSMutableString *bufferStr;
     int bufferLimit;
     BOOL previusUploadingState;
     BOOL fileClearState;
@@ -33,9 +31,9 @@
 {
     self = [super init];
     if (self) {
-        tempData = [[NSMutableString alloc] init];
-        bufferStr = [[NSMutableString alloc] init];
-        bufferLimit = 100000;
+        _tempData = [[NSMutableString alloc] init];
+        _bufferStr = [[NSMutableString alloc] init];
+        bufferLimit = 0;
         previusUploadingState = NO;
         fileClearState = NO;
         awareSensorName = @"";
@@ -113,23 +111,25 @@
     NSData*d=[NSJSONSerialization dataWithJSONObject:data options:2 error:&error];
     NSString*jsonstr=[[NSString alloc]initWithData:d encoding:NSUTF8StringEncoding];
     
-    if ([fileName isEqualToString:SENSOR_ACCELEROMETER]) {
-        NSLog(@"%ld", bufferStr.length);
-    }
+//    if ([fileName isEqualToString:SENSOR_ACCELEROMETER]) {
+//        NSLog(@"%ld", bufferStr.length);
+//    }
     
     // buffer method
-    if (bufferStr.length < bufferLimit) {
-        [bufferStr appendString:jsonstr];
-        [bufferStr appendFormat:@"\n"];
+    if(jsonstr == nil) return @"";
+    if (_bufferStr.length < bufferLimit) {
+        [_bufferStr appendString:jsonstr];
+        [_bufferStr appendFormat:@"\n"];
         return @"";
     }else{
         // append sensor data the file
-        [bufferStr appendString:jsonstr];
-        [self appendLine:bufferStr path:fileName];
-        bufferStr = nil;
-        bufferStr = [[NSMutableString alloc] init];
+        [_bufferStr appendString:jsonstr];
+        [self appendLine:_bufferStr path:fileName];
+        [_bufferStr setString:@""];
         return @"";
     }
+//    [self appendLine:jsonstr path:fileName];
+    return @"";
 }
 
 - (BOOL) appendLine:(NSString *)line path:(NSString*) fileName {
@@ -144,9 +144,10 @@
     }
     
     if(previusUploadingState){
-        [tempData appendFormat:@"%@\n", line];
+        [_tempData appendFormat:@"%@\n", line];
         return YES;
     }else{
+        NSData * tempdataLine = [_tempData dataUsingEncoding:NSUTF8StringEncoding];
         NSFileHandle *fh = [NSFileHandle fileHandleForWritingAtPath:path];
         if (!fh) { // no
 //            NSLog(@"You don't have a file for %@, then system recreated new file!", fileName);
@@ -154,9 +155,10 @@
             fh = [NSFileHandle fileHandleForWritingAtPath:path];
         }
         [fh seekToEndOfFile];
-        if (![tempData isEqualToString:@""]) {
-            [fh writeData:[tempData dataUsingEncoding:NSUTF8StringEncoding]]; //write temp data to the main file
-            tempData = [[NSMutableString alloc] init];// init
+        if (![_tempData isEqualToString:@""]) {
+            [fh writeData:tempdataLine]; //write temp data to the main file
+//            _tempData = [[NSMutableString alloc] init];// init
+            [_tempData setString:@""];
             NSLog(@"Add sensor data to the temp variable! @ %@", fileName);
         }
         line = [NSString stringWithFormat:@"%@\n", line];
@@ -218,7 +220,7 @@
     NSString * path = [documentsDirectory stringByAppendingPathComponent:fileName];
     NSMutableString *data = nil;
     
-    @autoreleasepool {
+//    @autoreleasepool {
         NSFileHandle *fileHandle = [NSFileHandle fileHandleForReadingAtPath:path];
         if (!fileHandle) {
             NSLog(@"AWARE can not find the file of %@.", fileName);
@@ -236,8 +238,21 @@
         [data deleteCharactersInRange:NSMakeRange([data length]-1, 1)];
         [data appendString:@"]"];
         NSLog(@"You got %d lines of sensor data", lineCount);
-    }
+//    }
     return [NSString stringWithString:data];
+}
+
+
+- (double)getSensorSetting:(NSArray *)settings withKey:(NSString *)key{
+    if (settings != nil) {
+        for (NSDictionary * setting in settings) {
+            if ([[setting objectForKey:@"setting"] isEqualToString:key]) {
+                double value = [[setting objectForKey:@"value"] doubleValue];
+                return value;
+            }
+        }
+    }
+    return -1;
 }
 
 
@@ -402,6 +417,25 @@
     
 }
 
+
+
+- (double) convertMotionSensorFrequecyFromAndroid:(double)frequency{
+    //        Android: Non-deterministic frequency in microseconds (dependent of the hardware sensor capabilities and resources), e.g., 200000 (normal), 60000 (UI), 20000 (game), 0 (fastest).
+    //         iOS: https://developer.apple.com/library/ios/documentation/EventHandling/Conceptual/EventHandlingiPhoneOS/motion_event_basics/motion_event_basics.html
+    //          e.g 10-20Hz, 30-60Hz, 70-100Hz
+    double y1 = 0.01; //iOS 1 max
+    double y2 = 0.1; //iOS 2 min
+    double x1 = 0; //Android 1 max
+    double x2 = 200000; // Android 2 min
+    
+    // y1 = a * x1 + b;
+    // y2 = a * x2 + b;
+    double a = (y1-y2)/(x1-x2);
+    double b = y1 - x1*a;
+    //y =a * x + b;
+    NSLog(@"%f", a *frequency + b);
+    return 0;
+}
 
 
 // Using SQLite

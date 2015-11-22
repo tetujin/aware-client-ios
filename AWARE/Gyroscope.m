@@ -36,9 +36,17 @@
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
     NSLog(@"Start Gyroscope!");
     gTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval target:self selector:@selector(uploadSensorData) userInfo:nil repeats:YES];
-    gyroManager.gyroUpdateInterval = 0.1f;
     
-    // Get frequency information from settings
+    [self setBufferLimit:10000];
+    
+    double frequency = [self getSensorSetting:settings withKey:@"frequency_gyroscope"];
+    if(frequency != -1){
+        NSLog(@"Accelerometer's frequency is %f !!", frequency);
+        double iOSfrequency = [self convertMotionSensorFrequecyFromAndroid:frequency];
+        gyroManager.gyroUpdateInterval = iOSfrequency;
+    }else{
+        gyroManager.gyroUpdateInterval = 0.1f;//default value
+    }
     
     
     [gyroManager startGyroUpdatesToQueue:[NSOperationQueue currentQueue] withHandler:^(CMGyroData * _Nullable gyroData, NSError * _Nullable error) {

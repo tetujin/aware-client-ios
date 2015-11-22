@@ -86,6 +86,7 @@
     return NO;
 }
 
+
 - (void)addNewSensor:(AWARESensor *)sensor{
     [awareSensors addObject:sensor];
 }

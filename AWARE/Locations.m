@@ -34,7 +34,26 @@
 //- (BOOL)startSensor:(double)interval withUploadInterval:(double)upInterval{
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings {
     NSLog(@"Start Location!");
-    double interval = 1.0f;
+    
+    double interval = 0;
+    
+    //sensing interval
+//    [self setBufferLimit:10000];
+    double frequency = [self getSensorSetting:settings withKey:@"frequency_gps"];
+    if(frequency != -1){
+        NSLog(@"Location sensing requency is %f ", frequency);
+        interval = frequency;
+    }
+    
+    //min gps
+    double miniDistrance = [self getSensorSetting:settings withKey:@"min_gps_accuracy"];
+    if (miniDistrance) {
+        NSLog(@"Mini gps accuracy is %f", miniDistrance);
+    }else{
+        miniDistrance = 25;
+    }
+    
+    
     uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval target:self selector:@selector(uploadSensorData) userInfo:nil repeats:YES];
     if (nil == locationManager){
         locationManager = [[CLLocationManager alloc] init];
@@ -48,7 +67,7 @@
             [locationManager requestAlwaysAuthorization];
         }
         // Set a movement threshold for new events.
-        locationManager.distanceFilter = 25; // meters
+        locationManager.distanceFilter = miniDistrance; // meters
         [locationManager startUpdatingLocation];
         //    [_locationManager startMonitoringVisits]; // This method calls didVisit.
         [locationManager startUpdatingHeading];

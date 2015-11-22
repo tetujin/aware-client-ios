@@ -23,6 +23,8 @@
 @interface AWARESensor : NSObject <AWARESensorDelegate>
 
 //@property (strong, nonatomic) FMDatabase *db;
+@property (strong, nonatomic) NSMutableString *tempData;
+@property (strong, nonatomic) NSMutableString *bufferStr;
 
 - (instancetype) initWithSensorName:(NSString *) sensorName;
 
@@ -56,6 +58,8 @@
 // get latest sensor data -> for debug
 - (NSString *) getLatestSensorData:(NSString*)deviceId withUrl:(NSString*) url;
 
+- (double) getSensorSetting:(NSArray *)settings withKey:(NSString *)key;
+
 // create new table in the database
 - (BOOL) createTable:(NSString *)data withDeviceId:(NSString *)deviceId withUrl:(NSString *)url;
 
@@ -63,6 +67,8 @@
 - (BOOL) clearTable:(NSString *)data withDeviceId:(NSString *)deviceId withUrl:(NSString*)url;
 
 - (void) setSensorName:(NSString *) sensorName;
+
+- (double) convertMotionSensorFrequecyFromAndroid:(double)frequency;
 
 - (NSString *) getSensorName;
 

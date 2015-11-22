@@ -44,6 +44,16 @@
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
     NSLog(@"Start Linear Accelerometer sensing!");
     double interval = 0.1f;
+    
+    
+    [self setBufferLimit:10000];
+    double frequency = [self getSensorSetting:settings withKey:@"frequency_linear_accelerometer"];
+    if(frequency != -1){
+        NSLog(@"Accelerometer's frequency is %f !!", frequency);
+        double iOSfrequency = [self convertMotionSensorFrequecyFromAndroid:frequency];
+        interval = iOSfrequency;
+    }
+    
     uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval target:self selector:@selector(uploadSensorData) userInfo:nil repeats:YES];
     /** motion */
     if( motionManager.deviceMotionAvailable ){

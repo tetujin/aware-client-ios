@@ -35,9 +35,18 @@
     NSLog(@"Start Accelerometer!");
     timer = [NSTimer scheduledTimerWithTimeInterval:upInterval
                                              target:self selector:@selector(uploadSensorData) userInfo:nil repeats:YES];
-    manager.accelerometerUpdateInterval = 0.1f; //default value
-    
     // Get settings from setting list
+    [self setBufferLimit:10000];
+    
+    double frequency = [self getSensorSetting:settings withKey:@"frequency_accelerometer"];
+    if(frequency != -1){
+        NSLog(@"Accelerometer's frequency is %f !!", frequency);
+        double iOSfrequency = [self convertMotionSensorFrequecyFromAndroid:frequency];
+        manager.accelerometerUpdateInterval = iOSfrequency;
+    }else{
+        manager.accelerometerUpdateInterval = 0.1f; //default value
+    }
+    
     
     [manager startAccelerometerUpdatesToQueue:[NSOperationQueue currentQueue]
                                   withHandler:^(CMAccelerometerData *accelerometerData, NSError *error) {
@@ -78,5 +87,6 @@
         [self insertSensorData:jsonStr withDeviceId:[self getDeviceId] url:[self getInsertUrl:SENSOR_ACCELEROMETER]];
 //    }
 }
+
 
 @end

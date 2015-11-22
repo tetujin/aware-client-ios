@@ -35,7 +35,17 @@
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
     NSLog(@"Start Magnetometer!");
     timer = [NSTimer scheduledTimerWithTimeInterval:upInterval target:self selector:@selector(uploadSensorData) userInfo:nil repeats:YES];
-    manager.magnetometerUpdateInterval = 0.1f; //interval;
+    
+    [self setBufferLimit:10000];
+    double frequency = [self getSensorSetting:settings withKey:@"frequency_magnetometer"];
+    if(frequency != -1){
+        NSLog(@"Accelerometer's frequency is %f !!", frequency);
+        double iOSfrequency = [self convertMotionSensorFrequecyFromAndroid:frequency];
+        manager.magnetometerUpdateInterval = iOSfrequency;
+    }else{
+        manager.magnetometerUpdateInterval = 0.1f;//default value
+    }
+    
     [manager startMagnetometerUpdatesToQueue:[NSOperationQueue currentQueue] withHandler:^(CMMagnetometerData * _Nullable magnetometerData, NSError * _Nullable error) {
         if( error ) {
             NSLog(@"%@:%ld", [error domain], [error code] );
