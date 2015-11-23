@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "ViewController.h"
 
 @interface AppDelegate ()
 
@@ -17,12 +18,51 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    //[defaults setInteger:[[self.fps text] integerValue] forKey:KEY_FPS];
+    [defaults setBool:YES forKey:@"APP_STATE"];
+    
+    
+    [application unregisterForRemoteNotifications];
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 80000
+    // iOSのバージョンが 8.0以降の場合の処理
+    [application registerForRemoteNotifications];
+#else
+    // それ以外の場合の処理
+    UIRemoteNotificationType remoteNotificationType =
+    UIRemoteNotificationTypeBadge|
+    UIRemoteNotificationTypeSound|
+    UIRemoteNotificationTypeAlert|
+    UIRemoteNotificationTypeNewsstandContentAvailability;
+    [application registerForRemoteNotificationTypes:remoteNotificationType];
+#endif
+    
+    UIUserNotificationType types =
+    UIUserNotificationTypeBadge|
+    UIUserNotificationTypeSound|
+    UIUserNotificationTypeNone|
+    UIUserNotificationTypeAlert;
+    UIUserNotificationSettings *mySettings = [UIUserNotificationSettings settingsForTypes:types categories:nil];
+    [application registerUserNotificationSettings:mySettings];
+    
+    [application setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
+    
+    
+    
+    NSError* configureError;
+    [[GGLContext sharedInstance] configureWithError: &configureError];
+    NSAssert(!configureError, @"Error configuring Google services: %@", configureError);
+    [GIDSignIn sharedInstance].delegate = self;
+    
     return YES;
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
     // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setBool:NO forKey:@"APP_STATE"];
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
@@ -36,6 +76,10 @@
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    //    http://d.hatena.ne.jp/glass-_-onion/20120405/1333611664
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    //[defaults setInteger:[[self.fps text] integerValue] forKey:KEY_FPS];
+    [defaults setBool:YES forKey:@"APP_STATE"];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
@@ -132,6 +176,60 @@
             abort();
         }
     }
+}
+
+
+
+- (BOOL)application:(UIApplication *)application
+            openURL:(NSURL *)url
+  sourceApplication:(NSString *)sourceApplication
+         annotation:(id)annotation {
+    return [[GIDSignIn sharedInstance] handleURL:url
+                               sourceApplication:sourceApplication
+                                      annotation:annotation];
+}
+
+
+- (void)signIn:(GIDSignIn *)signIn
+didSignInForUser:(GIDGoogleUser *)user
+     withError:(NSError *)error {
+    // Perform any operations on signed in user here.
+    NSString *userId = user.userID;                  // For client-side use only!
+    NSString *idToken = user.authentication.idToken; // Safe to send to the server
+    NSString *name = user.profile.name;
+    NSString *email = user.profile.email;
+    NSLog(@"user id is %@", userId);
+    NSLog(@"name is %@", name);
+    NSLog(@"email is %@", email);
+    NSLog(@"idToken is %@", idToken);
+    
+    
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject:userId forKey:@"GOOGLE_ID"];
+    [defaults setObject:name forKey:@"GOOGLE_NAME"];
+    [defaults setObject:email forKey:@"GOOGLE_EMAIL"];
+    [defaults setObject:idToken forKey:@"GOOGLE_ID_TOKEN"];
+    
+//    ViewController *secondVC = [[ViewController alloc] init];
+//    UIViewController *viewController;
+//    if(isFirst){
+//        viewController = [storyboard instantiateViewControllerWithIdentifier@"initial view controller storyboard id"];
+//    }else{
+//        viewController = [storyboard instantiateViewControllerWithIdentifier@"main view controller storyboard id"];
+//    }
+    
+//    self.window.rootViewController = secondVC;
+//    [self.window makeKeyAndVisible];
+    
+//    [self presentViewController:secondVC animated:YES completion: nil];
+}
+
+- (void)signIn:(GIDSignIn *)signIn
+didDisconnectWithUser:(GIDGoogleUser *)user
+     withError:(NSError *)error {
+    // Perform any operations when the user disconnects from app here.
+    // ...
+    NSLog(@"Google login error..");
 }
 
 @end

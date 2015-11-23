@@ -4,17 +4,7 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>FMDB.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
 		<key>MQTTKit.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
-		<key>MagicalRecord.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -24,17 +14,7 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>RNGridMenu.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
 		<key>SCNetworkReachability.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
-		<key>SVProgressHUD.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -42,37 +22,17 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>03039CD547A2B76C5F462C4A15D072F4</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>07881E184789BB7D72F778EC70247A1A</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>25805DB48812619B8C063FFED7D7FBC7</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
 		<key>74CD2F578138157E0B27CCEE08C069EF</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>9F12FB4A63E20F601CFB2E64A65B57C1</key>
+		<key>7713F2A2237C759432549288F30E501D</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>D54AB3ECEB9A8FBA15D4F73CBE326692</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>ECABCF1481ACCB058E654FAB174EEE16</key>
+		<key>CCFD85B07892E78AEAB896DFE96BA990</key>
 		<dict>
 			<key>primary</key>
 			<true/>

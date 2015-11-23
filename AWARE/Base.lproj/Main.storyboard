@@ -18,7 +18,7 @@
                                 <rect key="frame" x="0.0" y="92" width="600" height="95"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Jlv-Hb-QNm" id="9JS-s5-0aB">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="94.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="95"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>
@@ -29,6 +29,11 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="AWARE" id="tQb-LZ-vWa">
+                        <barButtonItem key="leftBarButtonItem" image="user_male_circle" id="9xQ-aR-t9x">
+                            <connections>
+                                <segue destination="Civ-lf-EA0" kind="show" id="M26-Sm-zjK"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" image="QR_code_filled" id="BRn-rr-Hag">
                             <connections>
                                 <segue destination="Hnq-7Q-yrY" kind="push" id="3U1-pi-fNP"/>
@@ -38,7 +43,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eTN-Zo-OWZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1176" y="-150"/>
+            <point key="canvasLocation" x="1988" y="-150"/>
         </scene>
         <!--Code View Controller-->
         <scene sceneID="lwO-zc-Y6Y">
@@ -57,7 +62,77 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KSg-5v-tfN" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1838" y="-157"/>
+            <point key="canvasLocation" x="2782" y="-130"/>
+        </scene>
+        <!--Account-->
+        <scene sceneID="LNL-BY-Rix">
+            <objects>
+                <viewController id="Civ-lf-EA0" customClass="GoogleLoginViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="RrT-ub-R6h"/>
+                        <viewControllerLayoutGuide type="bottom" id="aEW-VJ-Pbe"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="PkX-Bc-wMY">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="AWARE for iOS" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1XA-rE-won">
+                                <rect key="frame" x="243" y="346" width="114" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                                <variation key="widthClass=compact" fixedFrame="YES">
+                                    <rect key="frame" x="143" y="346" width="114" height="21"/>
+                                </variation>
+                                <variation key="heightClass=compact-widthClass=compact" fixedFrame="YES">
+                                    <rect key="frame" x="143" y="263" width="114" height="21"/>
+                                </variation>
+                            </label>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="ic_launcher_aware-web" translatesAutoresizingMaskIntoConstraints="NO" id="2kQ-8E-5Ky">
+                                <rect key="frame" x="200" y="138" width="200" height="200"/>
+                                <variation key="widthClass=compact" fixedFrame="YES">
+                                    <rect key="frame" x="100" y="138" width="200" height="200"/>
+                                </variation>
+                                <variation key="heightClass=compact-widthClass=compact" fixedFrame="YES">
+                                    <rect key="frame" x="100" y="55" width="200" height="200"/>
+                                </variation>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ijP-yj-NiY">
+                                <rect key="frame" x="180" y="457" width="240" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                                <variation key="widthClass=compact" fixedFrame="YES">
+                                    <rect key="frame" x="80" y="488" width="240" height="21"/>
+                                </variation>
+                            </label>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AwP-Wk-0bs" customClass="GIDSignInButton">
+                                <rect key="frame" x="200" y="389" width="200" height="44"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <variation key="widthClass=compact" fixedFrame="YES">
+                                    <rect key="frame" x="122" y="415" width="157" height="42"/>
+                                </variation>
+                                <variation key="heightClass=compact-widthClass=compact" fixedFrame="YES">
+                                    <rect key="frame" x="80" y="322" width="240" height="58"/>
+                                </variation>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Account" id="C3S-Hf-vgx">
+                        <barButtonItem key="rightBarButtonItem" title="Logout" id="tVq-Ok-cJa">
+                            <connections>
+                                <action selector="didTapSignOut:" destination="Civ-lf-EA0" id="D4E-iL-cgs"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="account" destination="ijP-yj-NiY" id="c9v-jy-Kag"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ik1-bx-zWu" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2376" y="-817"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="VKE-as-dIt">
@@ -75,10 +150,12 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9sy-RM-6PR" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="392" y="-150"/>
+            <point key="canvasLocation" x="1204" y="-150"/>
         </scene>
     </scenes>
     <resources>
         <image name="QR_code_filled" width="32" height="32"/>
+        <image name="ic_launcher_aware-web" width="512" height="512"/>
+        <image name="user_male_circle" width="32" height="32"/>
     </resources>
 </document>

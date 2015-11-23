@@ -18,7 +18,7 @@
 {
     self = [super init];
     if (self) {
-        motionManager = [[CMMotionManager alloc] init];
+//        motionManager = [[CMMotionManager alloc] init];
     }
     return self;
 }

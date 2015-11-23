@@ -34,6 +34,7 @@
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
     NSLog(@"Start Battery!");
     double interval = 60.0f;
+    NSLog(@"upload interval is %f.", upInterval);
     uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval target:self selector:@selector(uploadSensorData) userInfo:nil repeats:YES];
     sensingTimer = [NSTimer scheduledTimerWithTimeInterval:interval target:self selector:@selector(getSensorData) userInfo:nil repeats:YES];
     return YES;

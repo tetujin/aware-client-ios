@@ -7,11 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <MagicalRecord/MagicalRecord.h>
 #import <SystemConfiguration/SystemConfiguration.h>
-#import "FMDatabase.h" // - Represents a single SQLite database. Used for executing SQL statements.
-#import "FMResultSet.h"  //- Represents the results of executing a query on an FMDatabase.
-#import "FMDatabaseQueue.h"
 
 @protocol AWARESensorDelegate <NSObject>
 //- (BOOL) startSensor:(double) interval withUploadInterval:(double)upInterval;

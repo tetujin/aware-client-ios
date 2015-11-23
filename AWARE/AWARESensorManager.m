@@ -33,6 +33,7 @@
 
 -(bool)addNewSensorWithSensorName:(NSString *)key settings:(NSArray*)settings uploadInterval:(double) uploadTime{
 //    double uploadTime = 10.0f;
+    NSLog(@"upload interval is %f.", uploadTime);
     AWARESensor* awareSensor = nil;    
     for (int i=0; i<settings.count; i++) {
         NSString *setting = [[settings objectAtIndex:i] objectForKey:@"setting"];

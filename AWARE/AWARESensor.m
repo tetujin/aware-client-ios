@@ -21,22 +21,14 @@
     SCNetworkReachability* reachability;
     NSMutableString *tempData;
     NSMutableString *bufferStr;
-//    NSString *bufferStr;
     bool wifiState;
-//    FMDatabase *db;
-//    NSString *dbPath;
 }
 
-//@property (strong, nonatomic) FMDatabase *db;
-//@property (nonatomic, strong) NSMutableString *tempData;
-//@property (nonatomic, strong) NSMutableString *bufferStr;
 
 @end
 
 @implementation AWARESensor
 
-//@synthesize bufferStr = _bufferStr;
-//@synthesize tempData = _tempData;
 
 - (instancetype)init
 {
@@ -50,7 +42,7 @@
 
 - (instancetype) initWithSensorName:(NSString *)sensorName {
     if (self = [super init]) {
-        NSLog(@"Init sensorname of %@", sensorName);
+        NSLog(@"Initialize an AWARESensor as '%@' ", sensorName);
         awareSensorName = sensorName;
         bufferLimit = 0;
         previusUploadingState = NO;
@@ -86,17 +78,17 @@
         switch (status)
         {
             case SCNetworkStatusReachableViaWiFi:
-                NSLog(@"Reachable via WiFi");
+                NSLog(@"Reachable via WiFi at %@", [self getSensorName]);
                 wifiState = YES;
                 break;
                 
             case SCNetworkStatusReachableViaCellular:
-                NSLog(@"Reachable via Cellular");
+                NSLog(@"Reachable via Cellular at %@", [self getSensorName]);
                 wifiState = NO;
                 break;
                 
             case SCNetworkStatusNotReachable:
-                NSLog(@"Not Reachable");
+                NSLog(@"Not Reachable at %@", [self getSensorName]);
                 wifiState = NO;
                 break;
         }
@@ -195,7 +187,7 @@
             NSLog(@"Failed to create the file at %@", path);
             return;
         }else{
-//            NSLog(@"Create the file at %@", path);
+            NSLog(@"Create the file at %@", path);
         }
     }
     NSFileHandle *fh = [NSFileHandle fileHandleForWritingAtPath:path];
@@ -206,7 +198,7 @@
     [fh closeFile];
 }
 
-- (void) removeFile:(NSString *) fileName {
+- (bool) removeFile:(NSString *) fileName {
     NSFileManager *manager = [NSFileManager defaultManager];
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
@@ -218,13 +210,17 @@
         bool result = [manager removeItemAtPath:path error:nil];
         if (!result) {
             NSLog(@"Failed to remove the file at %@", fileName);
-            return;
+            return NO;
         }else{
-//            NSLog(@"Sucsess to remove the file at %@", fileName);
+            NSLog(@"Sucsess to remove the file at %@", fileName);
+            [self createNewFile:path];
+            return YES;
         }
     }else{
         NSLog(@"File (%@) is not exist.", fileName);
+        return YES;
     }
+    return NO;
 }
 
 
@@ -329,32 +325,35 @@
     
     previusUploadingState = YES; //file lock
     
-//    @autoreleasepool {
-    
-        NSURLSessionConfiguration *sessionConfig =
-        [NSURLSessionConfiguration defaultSessionConfiguration];
-        
+    // Set settion configu and HTTP/POST body.
+    NSURLSessionConfiguration *sessionConfig =
+    [NSURLSessionConfiguration defaultSessionConfiguration];
 //        sessionConfig.allowsCellularAccess = NO;
 //        [sessionConfig setHTTPAdditionalHeaders:
 //         @{@"Accept": @"application/json"}];
-        sessionConfig.timeoutIntervalForRequest = 180.0;
-        sessionConfig.timeoutIntervalForResource = 300.0;
-        sessionConfig.HTTPMaximumConnectionsPerHost = 30;
-        
-        post = [NSString stringWithFormat:@"device_id=%@&data=%@", deviceId, data];
+    sessionConfig.timeoutIntervalForRequest = 180.0;
+    sessionConfig.timeoutIntervalForResource = 300.0;
+    sessionConfig.HTTPMaximumConnectionsPerHost = 30;
+    
+    post = [NSString stringWithFormat:@"device_id=%@&data=%@", deviceId, data];
 //        NSLog(@"%@", post);
-        postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
-        postLength = [NSString stringWithFormat:@"%ld", [postData length]];
-        request = [[NSMutableURLRequest alloc] init];
-        [request setURL:[NSURL URLWithString:url]];
-        [request setHTTPMethod:@"POST"];
-        [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
-//        [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-        [request setHTTPBody:postData];
-        
-//        session = [NSURLSession sharedSession];
+    postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
+    postLength = [NSString stringWithFormat:@"%ld", [postData length]];
+    request = [[NSMutableURLRequest alloc] init];
+    [request setURL:[NSURL URLWithString:url]];
+    [request setHTTPMethod:@"POST"];
+    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+    [request setHTTPBody:postData];
+    
+    
+    // Check application condition: "foreground(YES)" or "background(NO)"
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    bool foreground = [defaults objectForKey:@"APP_STATE"];
+    
+//    foreground = NO;
+    // HTTP/POST with each application condition
+    if (foreground) { // foreground
         session = [NSURLSession sessionWithConfiguration:sessionConfig];
-        
         [[session dataTaskWithRequest:request
                    completionHandler:^(NSData * _Nullable data,
                                        NSURLResponse * _Nullable response,
@@ -366,31 +365,42 @@
                        NSLog(@"%@: Response=> %@", [self getSensorName],newStr);
                        
                         if(responseCode == 200){
-                            NSLog(@"Sucess to upload sensor data (%@) to AWARE server", [self getSensorName]);
-//                                [self removeFile:[self getSensorName]];
+                            NSString *message = [NSString stringWithFormat:@"Sucess to upload sensor data (%@) to AWARE server in the fourground.", [self getSensorName]];
+                            NSLog(@"%@", message);
+                            [self sendLocalNotificationForMessage:message soundFlag:NO];
+                            fileClearState = YES;
                         }
-//                       @autoreleasepool {
-                           previusUploadingState = NO;
-                           fileClearState = YES;
-                           data = nil;
-                           response = nil;
-                           error = nil;
-                           httpResponse = nil;
-//                       }
-                        dispatch_async(dispatch_get_main_queue(), ^{
-//                            @autoreleasepool {
+                       previusUploadingState = NO;
+                       data = nil;
+                       response = nil;
+                       error = nil;
+                       httpResponse = nil;
+                       dispatch_async(dispatch_get_main_queue(), ^{
                                 [session finishTasksAndInvalidate];
                                 [session invalidateAndCancel];
-//                            }
                        });
         }] resume];
-//        [session finishTasksAndInvalidate];
-//        [session invalidateAndCancel];
-//        post = nil;
-//        postData = nil;
-//        request = nil;
-//        session = nil;
-//    }
+    }else{ // background
+        NSError *error = nil;
+        NSHTTPURLResponse *response = nil;
+        NSData *resData = [NSURLConnection sendSynchronousRequest:request
+                                                returningResponse:&response error:&error];
+        NSString* newStr = [[NSString alloc] initWithData:resData encoding:NSUTF8StringEncoding];
+        NSLog(@"%@: Response=> %@", [self getSensorName],newStr);
+        int responseCode = (int)[response statusCode];
+        if(responseCode == 200){
+            NSString *message = [NSString stringWithFormat:@"Sucess to upload sensor data (%@) to AWARE server in the background", [self getSensorName]];
+            NSLog(@"%@", message);
+            fileClearState = YES;
+            [self sendLocalNotificationForMessage:message soundFlag:NO];
+        }else{
+            return NO;
+        }
+        previusUploadingState = NO;
+        data = nil;
+        response = nil;
+        error = nil;
+    }
     return YES;
 }
 
@@ -467,6 +477,23 @@
 //    y =a * x + b;
 //    NSLog(@"%f", a *frequency + b);
     return a *frequency + b;
+}
+
+
+/**
+ Local push notification method
+ @param message text message for notification
+ @param sound type of sound for notification
+ */
+- (void)sendLocalNotificationForMessage:(NSString *)message soundFlag:(BOOL)soundFlag {
+    UILocalNotification *localNotification = [UILocalNotification new];
+    localNotification.alertBody = message;
+    //    localNotification.fireDate = [NSDate date];
+    localNotification.repeatInterval = 0;
+    if(soundFlag) {
+        localNotification.soundName = UILocalNotificationDefaultSoundName;
+    }
+    [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
 }
 
 

@@ -8,6 +8,7 @@
 
 #import "ViewController.h"
 #import "AWAREStudyManager.h"
+#import "GoogleLoginViewController.h"
 
 
 @interface ViewController (){
@@ -35,6 +36,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+
     
     KEY_CEL_TITLE = @"title";
     KEY_CEL_DESC = @"desc";
@@ -53,11 +55,14 @@
     mqttKeepAlive = @600;
     mqttQos = @2;
     
+    [self setNaviBarTitle];
+    
     _sensorManager = [[AWARESensorManager alloc] init];
     
-    [self initList];
+    uploadInterval = 60 * 10;
+//    uploadInterval = 10;
     
-    uploadInterval = 60*30;
+    [self initList];
     
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -66,6 +71,18 @@
     [self connectMqttServer];
     
     listUpdateTimer = [NSTimer scheduledTimerWithTimeInterval:0.1f target:self.tableView selector:@selector(reloadData) userInfo:nil repeats:YES];
+}
+
+- (void) setNaviBarTitle {
+//    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+//    NSString *email = [defaults objectForKey:@"GOOGLE_EMAIL"];
+//    NSString *name = [defaults objectForKey:@"GOOGLE_NAME"];
+//    NSLog(@"name:%@", name);
+//    if (![name isEqualToString:@""]) {
+//        [self.navigationController.navigationBar.topItem setTitle:name];
+//    }else{
+//        [self.navigationController.navigationBar.topItem setTitle:@"AWARE"];
+//    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -79,14 +96,23 @@
     // devices
     NSString *deviceId = [userDefaults objectForKey:KEY_MQTT_USERNAME];
     NSString *awareStudyId = [userDefaults objectForKey:KEY_STUDY_ID];
+    NSString *mqttServerName = [userDefaults objectForKey:KEY_MQTT_SERVER];
+    [userDefaults synchronize];
+    NSString *email = [userDefaults objectForKey:@"GOOGLE_EMAIL"];
+    NSString *name = [userDefaults objectForKey:@"GOOGLE_NAME"];
+    NSString *accountInfo = [NSString stringWithFormat:@"%@ (%@)", name, email];
+    if(name == nil) accountInfo = @"";
     if(deviceId == nil) deviceId = @"";
     if(awareStudyId == nil) awareStudyId = @"";
+    if(mqttServerName == nil) mqttServerName = @"";
     
     [_sensors addObject:[self getCelContent:@"AWARE Device ID" desc:deviceId image:@"" key:@""]];
-    [_sensors addObject:[self getCelContent:@"AWARE Study" desc:awareStudyId image:@"ic_action_study" key:@""]];
-    [_sensors addObject:[self getCelContent:@"MQTT Server" desc:@"Allows remove questionnaires, P2P context exchange" image:@"ic_action_mqtt" key:@""]];
+    [_sensors addObject:[self getCelContent:@"Google Account" desc:accountInfo image:@"" key:@""]];
+    [_sensors addObject:[self getCelContent:@"AWARE Study" desc:awareStudyId image:@"" key:@""]]; //ic_action_study
+    [_sensors addObject:[self getCelContent:@"MQTT Server" desc:mqttServerName image:@"" key:@""]]; //ic_action_mqtt
     
     // sensor
+    [_sensors addObject:[self getCelContent:@"Sensors" desc:@"" image:@"" key:@""]];
     [_sensors addObject:[self getCelContent:@"Accelerometer" desc:@"Acceleration, including the force of gravity(m/s^2)" image:@"ic_action_accelerometer" key:SENSOR_ACCELEROMETER]];
     [_sensors addObject:[self getCelContent:@"Barometer" desc:@"Atomospheric air pressure (mbar/hPa)" image:@"ic_action_barometer" key:SENSOR_BAROMETER]];
     [_sensors addObject:[self getCelContent:@"Battery" desc:@"Battery and power event" image:@"ic_action_battery" key:SENSOR_BATTERY]];
@@ -162,7 +188,7 @@
         NSDictionary *item = (NSDictionary *)[_sensors objectAtIndex:indexPath.row];
         cell.textLabel.text = [item objectForKey:KEY_CEL_TITLE];
         cell.detailTextLabel.text = [item objectForKey:KEY_CEL_DESC];
-        [cell.detailTextLabel setNumberOfLines:2];
+//        [cell.detailTextLabel setNumberOfLines:2];
         NSString * imageName = [item objectForKey:KEY_CEL_IMAGE];
         UIImage *theImage= nil;
         if (![imageName isEqualToString:@""]) {
@@ -202,10 +228,11 @@
     [self.tableView reloadData];
     [self connectMqttServer];
     //if you return NO, the back button press is cancelled
+    [self setNaviBarTitle];
     return YES;
 }
 
-- (bool) connectMqttServer{
+- (bool) connectMqttServer {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     // if Study ID is new, AWARE adds new Device ID to the AWARE server.
     mqttServer = [userDefaults objectForKey:KEY_MQTT_SERVER];
@@ -258,6 +285,7 @@
             [_sensorManager stopAllSensors];
             [self initList];
             [self.tableView reloadData];
+            [self sendLocalNotificationForMessage:@"AWARE study is updated via MQTT." soundFlag:NO];
         });
 //        NSLog(@"%@", dic);
     }];
@@ -302,6 +330,23 @@
                  }
              }];
     return YES;
+}
+
+
+/**
+ Local push notification method
+ @param message text message for notification
+ @param sound type of sound for notification
+ */
+- (void)sendLocalNotificationForMessage:(NSString *)message soundFlag:(BOOL)soundFlag {
+    UILocalNotification *localNotification = [UILocalNotification new];
+    localNotification.alertBody = message;
+    //    localNotification.fireDate = [NSDate date];
+    localNotification.repeatInterval = 0;
+    if(soundFlag) {
+        localNotification.soundName = UILocalNotificationDefaultSoundName;
+    }
+    [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
 }
 
 @end

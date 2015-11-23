@@ -11,7 +11,8 @@
 @implementation Locations{
     NSTimer *uploadTimer;
     NSTimer *locationTimer;
-    CLLocationManager *locationManager;
+//    CLLocationManager *locationManager;
+    IBOutlet CLLocationManager *locationManager;
 }
 
 
@@ -53,8 +54,8 @@
         miniDistrance = 25;
     }
     
-    
     uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval target:self selector:@selector(uploadSensorData) userInfo:nil repeats:YES];
+    
     if (nil == locationManager){
         locationManager = [[CLLocationManager alloc] init];
         locationManager.delegate = self;
@@ -72,13 +73,15 @@
         //    [_locationManager startMonitoringVisits]; // This method calls didVisit.
         [locationManager startUpdatingHeading];
         //    _location = [[CLLocation alloc] init];
-        if(interval > 0){
-            locationTimer = [NSTimer scheduledTimerWithTimeInterval:interval
-                                                             target:self
-                                                           selector:@selector(getGpsData:)
-                                                           userInfo:nil
-                                                            repeats:YES];
-        }
+        
+        
+//        if(interval > 0){
+//            locationTimer = [NSTimer scheduledTimerWithTimeInterval:interval
+//                                                             target:self
+//                                                           selector:@selector(getGpsData:)
+//                                                           userInfo:nil
+//                                                            repeats:YES];
+//        }
 
     
     }

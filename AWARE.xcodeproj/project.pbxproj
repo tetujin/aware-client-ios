@@ -24,6 +24,12 @@
 		1623CEB71BFE175F00EFAD72 /* AWARESensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 1623CEB61BFE175F00EFAD72 /* AWARESensor.m */; };
 		1623CEB91BFE319100EFAD72 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1623CEB81BFE319100EFAD72 /* CoreMotion.framework */; };
 		1623CEBC1BFE390600EFAD72 /* Accelerometer.m in Sources */ = {isa = PBXBuildFile; fileRef = 1623CEBB1BFE390600EFAD72 /* Accelerometer.m */; };
+		165A8B6F1C03B90500898C6C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 165A8B6E1C03B90500898C6C /* GoogleService-Info.plist */; };
+		165A8B701C03B90500898C6C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 165A8B6E1C03B90500898C6C /* GoogleService-Info.plist */; };
+		165A8B711C03B90500898C6C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 165A8B6E1C03B90500898C6C /* GoogleService-Info.plist */; };
+		165A8B741C03C0B300898C6C /* GoogleLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 165A8B731C03C0B300898C6C /* GoogleLoginViewController.m */; };
+		165A8B751C03C0B300898C6C /* GoogleLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 165A8B731C03C0B300898C6C /* GoogleLoginViewController.m */; };
+		165A8B761C03C0B300898C6C /* GoogleLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 165A8B731C03C0B300898C6C /* GoogleLoginViewController.m */; };
 		169A7B241BFF16E700A7C06D /* Gyroscope.m in Sources */ = {isa = PBXBuildFile; fileRef = 169A7B231BFF16E700A7C06D /* Gyroscope.m */; };
 		169A7B271BFF193C00A7C06D /* Magnetometer.m in Sources */ = {isa = PBXBuildFile; fileRef = 169A7B261BFF193C00A7C06D /* Magnetometer.m */; };
 		169A7B2A1BFF1C2300A7C06D /* Battery.m in Sources */ = {isa = PBXBuildFile; fileRef = 169A7B291BFF1C2300A7C06D /* Battery.m */; };
@@ -90,6 +96,9 @@
 		1623CEB81BFE319100EFAD72 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		1623CEBA1BFE390600EFAD72 /* Accelerometer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Accelerometer.h; sourceTree = "<group>"; };
 		1623CEBB1BFE390600EFAD72 /* Accelerometer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Accelerometer.m; sourceTree = "<group>"; };
+		165A8B6E1C03B90500898C6C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
+		165A8B721C03C0B300898C6C /* GoogleLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GoogleLoginViewController.h; sourceTree = "<group>"; };
+		165A8B731C03C0B300898C6C /* GoogleLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GoogleLoginViewController.m; sourceTree = "<group>"; };
 		169A7B221BFF16E700A7C06D /* Gyroscope.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Gyroscope.h; sourceTree = "<group>"; };
 		169A7B231BFF16E700A7C06D /* Gyroscope.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Gyroscope.m; sourceTree = "<group>"; };
 		169A7B251BFF193C00A7C06D /* Magnetometer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Magnetometer.h; sourceTree = "<group>"; };
@@ -180,6 +189,7 @@
 		1623CE681BFD1B2C00EFAD72 /* AWARE */ = {
 			isa = PBXGroup;
 			children = (
+				165A8B6E1C03B90500898C6C /* GoogleService-Info.plist */,
 				1623CEA11BFD253A00EFAD72 /* AWARE.entitlements */,
 				169A7B361BFFB81300A7C06D /* Reachability.h */,
 				169A7B371BFFB81300A7C06D /* Reachability.m */,
@@ -187,6 +197,8 @@
 				1623CE6D1BFD1B2C00EFAD72 /* AppDelegate.m */,
 				1623CE6F1BFD1B2C00EFAD72 /* ViewController.h */,
 				1623CE701BFD1B2C00EFAD72 /* ViewController.m */,
+				165A8B721C03C0B300898C6C /* GoogleLoginViewController.h */,
+				165A8B731C03C0B300898C6C /* GoogleLoginViewController.m */,
 				1623CEAD1BFD407900EFAD72 /* QRCodeViewController.h */,
 				1623CEAE1BFD407900EFAD72 /* QRCodeViewController.m */,
 				1623CEB21BFD659000EFAD72 /* AWAREStudyManager.h */,
@@ -409,6 +421,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1623CE7C1BFD1B2C00EFAD72 /* LaunchScreen.storyboard in Resources */,
+				165A8B6F1C03B90500898C6C /* GoogleService-Info.plist in Resources */,
 				1623CE791BFD1B2C00EFAD72 /* Assets.xcassets in Resources */,
 				1623CE741BFD1B2C00EFAD72 /* Main.storyboard in Resources */,
 			);
@@ -418,6 +431,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				165A8B701C03B90500898C6C /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -425,6 +439,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				165A8B711C03B90500898C6C /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -486,6 +501,7 @@
 				1623CEB71BFE175F00EFAD72 /* AWARESensor.m in Sources */,
 				169A7B351BFFB67800A7C06D /* Network.m in Sources */,
 				169A7B3B1BFFC8B100A7C06D /* Wifi.m in Sources */,
+				165A8B741C03C0B300898C6C /* GoogleLoginViewController.m in Sources */,
 				169A7B271BFF193C00A7C06D /* Magnetometer.m in Sources */,
 				1623CEAF1BFD407900EFAD72 /* QRCodeViewController.m in Sources */,
 				1623CE711BFD1B2C00EFAD72 /* ViewController.m in Sources */,
@@ -512,6 +528,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1623CE871BFD1B2C00EFAD72 /* AWARETests.m in Sources */,
+				165A8B751C03C0B300898C6C /* GoogleLoginViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -520,6 +537,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1623CE921BFD1B2C00EFAD72 /* AWAREUITests.m in Sources */,
+				165A8B761C03C0B300898C6C /* GoogleLoginViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -648,6 +666,7 @@
 				CODE_SIGN_ENTITLEMENTS = AWARE/AWARE.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = AWARE/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -665,6 +684,7 @@
 				CODE_SIGN_ENTITLEMENTS = AWARE/AWARE.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = AWARE/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

@@ -18,7 +18,7 @@
 {
     self = [super init];
     if (self) {
-        gyroManager = [[CMMotionManager alloc] init];
+//        gyroManager = [[CMMotionManager alloc] init];
     }
     return self;
 }
