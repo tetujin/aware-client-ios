@@ -24,7 +24,7 @@
 }
 
 - (instancetype)initWithSensorName:(NSString *)sensorName{
-    self = [super init];
+    self = [super initWithSensorName:sensorName];
     if (self) {
         [super setSensorName:sensorName];
         motionManager = [[CMMotionManager alloc] init];
@@ -49,7 +49,7 @@
     [self setBufferLimit:10000];
     double frequency = [self getSensorSetting:settings withKey:@"frequency_linear_accelerometer"];
     if(frequency != -1){
-        NSLog(@"Accelerometer's frequency is %f !!", frequency);
+        NSLog(@"Linear Accelerometer's frequency is %f !!", frequency);
         double iOSfrequency = [self convertMotionSensorFrequecyFromAndroid:frequency];
         interval = iOSfrequency;
     }

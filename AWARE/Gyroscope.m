@@ -24,7 +24,7 @@
 }
 
 - (instancetype)initWithSensorName:(NSString *)sensorName{
-    self = [super init];
+    self = [super initWithSensorName:sensorName];
     if (self) {
         gyroManager = [[CMMotionManager alloc] init];
         [super setSensorName:sensorName];

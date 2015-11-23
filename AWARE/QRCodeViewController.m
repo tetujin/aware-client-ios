@@ -93,13 +93,13 @@
                 readingState = NO;
                 NSLog(@"%@", qrcode);
                 [self getStudyInformation:qrcode withDeviceId:deviceId];
-            }
+            }else{
 //            if(state){
 //                [self.navigationController popToRootViewControllerAnimated:YES];
 //            }else{
-//                NSString *url =  crtUrl;
-//                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
-//            }
+                NSString *url =  crtUrl;
+                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
+            }
         }
     }
 }
@@ -127,8 +127,8 @@
 //                                                  cancelButtonTitle:@"OK"
 //                                                  otherButtonTitles:nil];
 //            [alert show];
-            NSString *url =  crtUrl;
-            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
+//            NSString *url =  crtUrl;
+//            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
         }else{
             NSArray *mqttArray = [NSJSONSerialization JSONObjectWithData:resData options:NSJSONReadingMutableContainers error:nil];
             id obj = [NSJSONSerialization JSONObjectWithData:resData options:NSJSONReadingMutableContainers error:nil];

@@ -22,9 +22,7 @@
 
 @interface AWARESensor : NSObject <AWARESensorDelegate>
 
-//@property (strong, nonatomic) FMDatabase *db;
-@property (strong, nonatomic) NSMutableString *tempData;
-@property (strong, nonatomic) NSMutableString *bufferStr;
+
 
 - (instancetype) initWithSensorName:(NSString *) sensorName;
 

@@ -26,6 +26,7 @@
     NSNumber* mqttKeepAlive;
     NSNumber* mqttQos;
     NSTimer* listUpdateTimer;
+    double uploadInterval;
 }
 
 @end
@@ -56,6 +57,7 @@
     
     [self initList];
     
+    uploadInterval = 60*30;
     
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -125,7 +127,7 @@
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSArray *sensors = [userDefaults objectForKey:KEY_SENSORS];
     // [NOTE] If this sensor is "active", addNewSensorWithSensorName method return TRUE value.
-    bool state = [_sensorManager addNewSensorWithSensorName:key settings:sensors uploadInterval:30.0f];
+    bool state = [_sensorManager addNewSensorWithSensorName:key settings:sensors uploadInterval:uploadInterval];
     if (state) [dic setObject:@"true" forKey:KEY_CEL_STATE];
     return dic;
 }
@@ -257,9 +259,7 @@
             [self initList];
             [self.tableView reloadData];
         });
-        
-
-        NSLog(@"%@", dic);
+//        NSLog(@"%@", dic);
     }];
     
 

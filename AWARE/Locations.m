@@ -24,7 +24,7 @@
 }
 
 - (instancetype)initWithSensorName:(NSString *)sensorName{
-    self = [super init];
+    self = [super initWithSensorName:sensorName];
     if (self) {
         [super setSensorName:sensorName];
     }
@@ -91,6 +91,26 @@
 {
     //[sdManager addLocation:[_locationManager location]];
     CLLocation* location = [locationManager location];
+    [self saveLocation:location];
+}
+
+- (void)locationManager:(CLLocationManager *)manager didUpdateHeading:(CLHeading *)newHeading {
+    if (newHeading.headingAccuracy < 0)
+        return;
+//    CLLocationDirection  theHeading = ((newHeading.trueHeading > 0) ?
+//                                       newHeading.trueHeading : newHeading.magneticHeading);
+//    [sdManager addSensorDataMagx:newHeading.x magy:newHeading.y magz:newHeading.z];
+//    [sdManager addHeading: theHeading];
+}
+
+
+- (void) locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations{
+    for (CLLocation* location in locations) {
+        [self saveLocation:location];
+    }
+}
+
+- (void) saveLocation:(CLLocation *)location{
     NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
     NSNumber* unixtime = [NSNumber numberWithDouble:timeStamp];
     NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
@@ -106,36 +126,7 @@
     [dic setObject:@"" forKey:@"label"];
     [self setLatestValue:[NSString stringWithFormat:@"%f, %f, %f", location.coordinate.latitude, location.coordinate.longitude, location.speed]];
     [self saveData:dic toLocalFile:@"locations"];
-}
 
-- (void)locationManager:(CLLocationManager *)manager didUpdateHeading:(CLHeading *)newHeading {
-    if (newHeading.headingAccuracy < 0)
-        return;
-//    CLLocationDirection  theHeading = ((newHeading.trueHeading > 0) ?
-//                                       newHeading.trueHeading : newHeading.magneticHeading);
-//    [sdManager addSensorDataMagx:newHeading.x magy:newHeading.y magz:newHeading.z];
-//    [sdManager addHeading: theHeading];
-}
-
-
-- (void) locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations{
-    for (CLLocation* location in locations) {
-        NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
-        NSNumber* unixtime = [NSNumber numberWithDouble:timeStamp];
-        NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-        [dic setObject:unixtime forKey:@"timestamp"];
-        [dic setObject:[self getDeviceId] forKey:@"device_id"];
-        [dic setObject:[NSNumber numberWithDouble:location.coordinate.latitude] forKey:@"double_latitude"];
-        [dic setObject:[NSNumber numberWithDouble:location.coordinate.longitude] forKey:@"double_longitude"];
-        [dic setObject:[NSNumber numberWithDouble:location.course] forKey:@"double_bearing"];
-        [dic setObject:[NSNumber numberWithDouble:location.speed] forKey:@"double_speed"];
-        [dic setObject:[NSNumber numberWithDouble:location.altitude] forKey:@"double_altitude"];
-        [dic setObject:@"gps" forKey:@"provider"];
-        [dic setObject:[NSNumber numberWithInt:location.verticalAccuracy] forKey:@"accuracy"];
-        [dic setObject:@"" forKey:@"label"];
-        [self setLatestValue:[NSString stringWithFormat:@"%f, %f, %f", location.coordinate.latitude, location.coordinate.longitude, location.speed]];
-        [self saveData:dic toLocalFile:@"locations"];
-    }
 }
 
 

@@ -19,25 +19,30 @@
     NSString *latestSensorValue;
     int lineCount;
     SCNetworkReachability* reachability;
+    NSMutableString *tempData;
+    NSMutableString *bufferStr;
+//    NSString *bufferStr;
     bool wifiState;
 //    FMDatabase *db;
 //    NSString *dbPath;
 }
+
+//@property (strong, nonatomic) FMDatabase *db;
+//@property (nonatomic, strong) NSMutableString *tempData;
+//@property (nonatomic, strong) NSMutableString *bufferStr;
+
 @end
 
 @implementation AWARESensor
+
+//@synthesize bufferStr = _bufferStr;
+//@synthesize tempData = _tempData;
 
 - (instancetype)init
 {
     self = [super init];
     if (self) {
-        _tempData = [[NSMutableString alloc] init];
-        _bufferStr = [[NSMutableString alloc] init];
-        bufferLimit = 0;
-        previusUploadingState = NO;
-        fileClearState = NO;
-        awareSensorName = @"";
-        latestSensorValue = @"";
+
     }
     return self;
 }
@@ -45,7 +50,15 @@
 
 - (instancetype) initWithSensorName:(NSString *)sensorName {
     if (self = [super init]) {
+        NSLog(@"Init sensorname of %@", sensorName);
         awareSensorName = sensorName;
+        bufferLimit = 0;
+        previusUploadingState = NO;
+        fileClearState = NO;
+        awareSensorName = @"";
+        latestSensorValue = @"";
+        tempData = [[NSMutableString alloc] init];
+        bufferStr = [[NSMutableString alloc] init];
     }
     return self;
 }
@@ -66,6 +79,7 @@
     awareSensorName = sensorName;
     // network check
     wifiState = NO;
+    
     reachability = [[SCNetworkReachability alloc] initWithHost:@"www.google.com"];
     [reachability observeReachability:^(SCNetworkStatus status)
     {
@@ -115,19 +129,19 @@
 //        NSLog(@"%ld", bufferStr.length);
 //    }
     
-    // buffer method
-    if(jsonstr == nil) return @"";
-    if (_bufferStr.length < bufferLimit) {
-        [_bufferStr appendString:jsonstr];
-        [_bufferStr appendFormat:@"\n"];
+//    if(jsonstr == nil) return @"";
+    if (bufferStr.length < bufferLimit) {
+        [bufferStr appendString:jsonstr];
+        [bufferStr appendFormat:@"\n"];
         return @"";
     }else{
         // append sensor data the file
-        [_bufferStr appendString:jsonstr];
-        [self appendLine:_bufferStr path:fileName];
-        [_bufferStr setString:@""];
+        [bufferStr appendString:jsonstr];
+        [self appendLine:bufferStr path:fileName];
+        [bufferStr setString:@""];
         return @"";
     }
+    
 //    [self appendLine:jsonstr path:fileName];
     return @"";
 }
@@ -144,10 +158,10 @@
     }
     
     if(previusUploadingState){
-        [_tempData appendFormat:@"%@\n", line];
+        [tempData appendFormat:@"%@\n", line];
         return YES;
     }else{
-        NSData * tempdataLine = [_tempData dataUsingEncoding:NSUTF8StringEncoding];
+        NSData * tempdataLine = [tempData dataUsingEncoding:NSUTF8StringEncoding];
         NSFileHandle *fh = [NSFileHandle fileHandleForWritingAtPath:path];
         if (!fh) { // no
 //            NSLog(@"You don't have a file for %@, then system recreated new file!", fileName);
@@ -155,10 +169,10 @@
             fh = [NSFileHandle fileHandleForWritingAtPath:path];
         }
         [fh seekToEndOfFile];
-        if (![_tempData isEqualToString:@""]) {
+        if (![tempData isEqualToString:@""]) {
             [fh writeData:tempdataLine]; //write temp data to the main file
 //            _tempData = [[NSMutableString alloc] init];// init
-            [_tempData setString:@""];
+            [tempData setString:@""];
             NSLog(@"Add sensor data to the temp variable! @ %@", fileName);
         }
         line = [NSString stringWithFormat:@"%@\n", line];
@@ -237,7 +251,8 @@
         }];
         [data deleteCharactersInRange:NSMakeRange([data length]-1, 1)];
         [data appendString:@"]"];
-        NSLog(@"You got %d lines of sensor data", lineCount);
+        NSLog(@"[%@] You got %d lines of sensor data", [self getSensorName], lineCount);
+//        NSLog(@"%@", data);
 //    }
     return [NSString stringWithString:data];
 }
@@ -314,51 +329,68 @@
     
     previusUploadingState = YES; //file lock
     
-    @autoreleasepool {
+//    @autoreleasepool {
+    
+        NSURLSessionConfiguration *sessionConfig =
+        [NSURLSessionConfiguration defaultSessionConfiguration];
+        
+//        sessionConfig.allowsCellularAccess = NO;
+//        [sessionConfig setHTTPAdditionalHeaders:
+//         @{@"Accept": @"application/json"}];
+        sessionConfig.timeoutIntervalForRequest = 180.0;
+        sessionConfig.timeoutIntervalForResource = 300.0;
+        sessionConfig.HTTPMaximumConnectionsPerHost = 30;
+        
         post = [NSString stringWithFormat:@"device_id=%@&data=%@", deviceId, data];
+//        NSLog(@"%@", post);
         postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
         postLength = [NSString stringWithFormat:@"%ld", [postData length]];
         request = [[NSMutableURLRequest alloc] init];
         [request setURL:[NSURL URLWithString:url]];
         [request setHTTPMethod:@"POST"];
         [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
-        [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+//        [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
         [request setHTTPBody:postData];
         
-        session = [NSURLSession sharedSession];
+//        session = [NSURLSession sharedSession];
+        session = [NSURLSession sessionWithConfiguration:sessionConfig];
+        
         [[session dataTaskWithRequest:request
                    completionHandler:^(NSData * _Nullable data,
                                        NSURLResponse * _Nullable response,
                                        NSError * _Nullable error) {
                         NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
                         int responseCode = (int)[httpResponse statusCode];
+                       
+                       NSString* newStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+                       NSLog(@"%@: Response=> %@", [self getSensorName],newStr);
+                       
                         if(responseCode == 200){
                             NSLog(@"Sucess to upload sensor data (%@) to AWARE server", [self getSensorName]);
 //                                [self removeFile:[self getSensorName]];
                         }
-                       @autoreleasepool {
-                           
+//                       @autoreleasepool {
                            previusUploadingState = NO;
                            fileClearState = YES;
                            data = nil;
                            response = nil;
                            error = nil;
                            httpResponse = nil;
-                       }
+//                       }
                         dispatch_async(dispatch_get_main_queue(), ^{
-                            @autoreleasepool {
+//                            @autoreleasepool {
                                 [session finishTasksAndInvalidate];
                                 [session invalidateAndCancel];
-                            }
+//                            }
                        });
         }] resume];
-        [session finishTasksAndInvalidate];
-        [session invalidateAndCancel];
-        post = nil;
-        postData = nil;
-        request = nil;
-        session = nil;
-    }
+//        [session finishTasksAndInvalidate];
+//        [session invalidateAndCancel];
+//        post = nil;
+//        postData = nil;
+//        request = nil;
+//        session = nil;
+//    }
     return YES;
 }
 
@@ -432,9 +464,9 @@
     // y2 = a * x2 + b;
     double a = (y1-y2)/(x1-x2);
     double b = y1 - x1*a;
-    //y =a * x + b;
-    NSLog(@"%f", a *frequency + b);
-    return 0;
+//    y =a * x + b;
+//    NSLog(@"%f", a *frequency + b);
+    return a *frequency + b;
 }
 
 

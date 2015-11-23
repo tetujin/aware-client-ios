@@ -23,7 +23,7 @@
 }
 
 - (instancetype)initWithSensorName:(NSString *)sensorName{
-    self = [super init];
+    self = [super initWithSensorName:sensorName ];
     if (self) {
         manager = [[CMMotionManager alloc] init];
         [super setSensorName:sensorName];
@@ -47,6 +47,7 @@
         manager.accelerometerUpdateInterval = 0.1f; //default value
     }
     
+//    manager.accelerometerUpdateInterval = 0.05f; //default value
     
     [manager startAccelerometerUpdatesToQueue:[NSOperationQueue currentQueue]
                                   withHandler:^(CMAccelerometerData *accelerometerData, NSError *error) {
@@ -63,6 +64,7 @@
                                           [dic setObject:[NSNumber numberWithDouble:accelerometerData.acceleration.z] forKey:@"double_values_2"];
                                           [dic setObject:@0 forKey:@"accuracy"];
                                           [dic setObject:@"text" forKey:@"label"];
+//                                          NSLog(@"log");
                                           [self setLatestValue:[NSString stringWithFormat:
                                                                 @"%f, %f, %f",
                                                                 accelerometerData.acceleration.x,
