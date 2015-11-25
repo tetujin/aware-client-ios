@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		160EE9BD1C050B4C00015688 /* Bluetooth.m in Sources */ = {isa = PBXBuildFile; fileRef = 160EE9BC1C050B4C00015688 /* Bluetooth.m */; };
+		160EE9BF1C050B9000015688 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 160EE9BE1C050B9000015688 /* CoreBluetooth.framework */; };
+		160EE9C31C052DAA00015688 /* OpenWeather.m in Sources */ = {isa = PBXBuildFile; fileRef = 160EE9C21C052DAA00015688 /* OpenWeather.m */; };
 		1623CE6B1BFD1B2C00EFAD72 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1623CE6A1BFD1B2C00EFAD72 /* main.m */; };
 		1623CE6E1BFD1B2C00EFAD72 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1623CE6D1BFD1B2C00EFAD72 /* AppDelegate.m */; };
 		1623CE711BFD1B2C00EFAD72 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1623CE701BFD1B2C00EFAD72 /* ViewController.m */; };
@@ -16,8 +19,6 @@
 		1623CE7C1BFD1B2C00EFAD72 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1623CE7A1BFD1B2C00EFAD72 /* LaunchScreen.storyboard */; };
 		1623CE871BFD1B2C00EFAD72 /* AWARETests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1623CE861BFD1B2C00EFAD72 /* AWARETests.m */; };
 		1623CE921BFD1B2C00EFAD72 /* AWAREUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1623CE911BFD1B2C00EFAD72 /* AWAREUITests.m */; };
-		1623CEA31BFD255100EFAD72 /* ExternalAccessory.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1623CEA21BFD255100EFAD72 /* ExternalAccessory.framework */; };
-		1623CEA51BFD255200EFAD72 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1623CEA41BFD255200EFAD72 /* HealthKit.framework */; };
 		1623CEAF1BFD407900EFAD72 /* QRCodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1623CEAE1BFD407900EFAD72 /* QRCodeViewController.m */; };
 		1623CEB11BFD40FB00EFAD72 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1623CEB01BFD40FB00EFAD72 /* AVFoundation.framework */; };
 		1623CEB41BFD659000EFAD72 /* AWAREStudyManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1623CEB31BFD659000EFAD72 /* AWAREStudyManager.m */; };
@@ -44,6 +45,10 @@
 		169A7B431BFFDE8F00A7C06D /* Rotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 169A7B421BFFDE8F00A7C06D /* Rotation.m */; };
 		169A7B461C0052F800A7C06D /* Gravity.m in Sources */ = {isa = PBXBuildFile; fileRef = 169A7B451C0052F800A7C06D /* Gravity.m */; };
 		169A7B491C00591A00A7C06D /* LinearAccelerometer.m in Sources */ = {isa = PBXBuildFile; fileRef = 169A7B481C00591A00A7C06D /* LinearAccelerometer.m */; };
+		16D810241C06242500605DE2 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16D810231C06242500605DE2 /* CFNetwork.framework */; };
+		16D810261C06242F00605DE2 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16D810251C06242F00605DE2 /* Security.framework */; };
+		16D8102B1C06645800605DE2 /* SensorDataManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 16D8102A1C06645800605DE2 /* SensorDataManager.mm */; };
+		16D8102D1C06671500605DE2 /* ExternalAccessory.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16D8102C1C06671500605DE2 /* ExternalAccessory.framework */; };
 		16FCE2771BFE9326005FC71A /* AWARESensorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 16FCE2761BFE9326005FC71A /* AWARESensorManager.m */; };
 		FC2AF85D761397B784DECBD3 /* libPods-AWARE.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9ED04F29ED60F3FCC960F6CD /* libPods-AWARE.a */; };
 /* End PBXBuildFile section */
@@ -66,6 +71,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		160EE9BB1C050B4C00015688 /* Bluetooth.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bluetooth.h; sourceTree = "<group>"; };
+		160EE9BC1C050B4C00015688 /* Bluetooth.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Bluetooth.m; sourceTree = "<group>"; };
+		160EE9BE1C050B9000015688 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
+		160EE9C11C052DAA00015688 /* OpenWeather.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenWeather.h; sourceTree = "<group>"; };
+		160EE9C21C052DAA00015688 /* OpenWeather.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenWeather.m; sourceTree = "<group>"; };
 		1623CE661BFD1B2C00EFAD72 /* AWARE.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AWARE.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1623CE6A1BFD1B2C00EFAD72 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		1623CE6C1BFD1B2C00EFAD72 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -84,8 +94,6 @@
 		1623CE911BFD1B2C00EFAD72 /* AWAREUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AWAREUITests.m; sourceTree = "<group>"; };
 		1623CE931BFD1B2C00EFAD72 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1623CEA11BFD253A00EFAD72 /* AWARE.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = AWARE.entitlements; sourceTree = "<group>"; };
-		1623CEA21BFD255100EFAD72 /* ExternalAccessory.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ExternalAccessory.framework; path = System/Library/Frameworks/ExternalAccessory.framework; sourceTree = SDKROOT; };
-		1623CEA41BFD255200EFAD72 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
 		1623CEAD1BFD407900EFAD72 /* QRCodeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QRCodeViewController.h; sourceTree = "<group>"; };
 		1623CEAE1BFD407900EFAD72 /* QRCodeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QRCodeViewController.m; sourceTree = "<group>"; };
 		1623CEB01BFD40FB00EFAD72 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
@@ -125,6 +133,11 @@
 		169A7B451C0052F800A7C06D /* Gravity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Gravity.m; sourceTree = "<group>"; };
 		169A7B471C00591A00A7C06D /* LinearAccelerometer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LinearAccelerometer.h; sourceTree = "<group>"; };
 		169A7B481C00591A00A7C06D /* LinearAccelerometer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LinearAccelerometer.m; sourceTree = "<group>"; };
+		16D810231C06242500605DE2 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		16D810251C06242F00605DE2 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		16D810291C06645800605DE2 /* SensorDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SensorDataManager.h; sourceTree = "<group>"; };
+		16D8102A1C06645800605DE2 /* SensorDataManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SensorDataManager.mm; sourceTree = "<group>"; };
+		16D8102C1C06671500605DE2 /* ExternalAccessory.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ExternalAccessory.framework; path = System/Library/Frameworks/ExternalAccessory.framework; sourceTree = SDKROOT; };
 		16FCE2751BFE9326005FC71A /* AWARESensorManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AWARESensorManager.h; sourceTree = "<group>"; };
 		16FCE2761BFE9326005FC71A /* AWARESensorManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AWARESensorManager.m; sourceTree = "<group>"; };
 		9B5BAD09F1FBEE0838867ACF /* Pods-AWARE.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AWARE.release.xcconfig"; path = "Pods/Target Support Files/Pods-AWARE/Pods-AWARE.release.xcconfig"; sourceTree = "<group>"; };
@@ -137,12 +150,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				16D810261C06242F00605DE2 /* Security.framework in Frameworks */,
+				16D810241C06242500605DE2 /* CFNetwork.framework in Frameworks */,
+				160EE9BF1C050B9000015688 /* CoreBluetooth.framework in Frameworks */,
 				169A7B3D1BFFC9F900A7C06D /* SystemConfiguration.framework in Frameworks */,
 				169A7B321BFF282800A7C06D /* CoreLocation.framework in Frameworks */,
 				1623CEB91BFE319100EFAD72 /* CoreMotion.framework in Frameworks */,
+				16D8102D1C06671500605DE2 /* ExternalAccessory.framework in Frameworks */,
 				1623CEB11BFD40FB00EFAD72 /* AVFoundation.framework in Frameworks */,
-				1623CEA51BFD255200EFAD72 /* HealthKit.framework in Frameworks */,
-				1623CEA31BFD255100EFAD72 /* ExternalAccessory.framework in Frameworks */,
 				FC2AF85D761397B784DECBD3 /* libPods-AWARE.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -197,6 +212,8 @@
 				1623CE6D1BFD1B2C00EFAD72 /* AppDelegate.m */,
 				1623CE6F1BFD1B2C00EFAD72 /* ViewController.h */,
 				1623CE701BFD1B2C00EFAD72 /* ViewController.m */,
+				16D810291C06645800605DE2 /* SensorDataManager.h */,
+				16D8102A1C06645800605DE2 /* SensorDataManager.mm */,
 				165A8B721C03C0B300898C6C /* GoogleLoginViewController.h */,
 				165A8B731C03C0B300898C6C /* GoogleLoginViewController.m */,
 				1623CEAD1BFD407900EFAD72 /* QRCodeViewController.h */,
@@ -231,6 +248,10 @@
 				169A7B451C0052F800A7C06D /* Gravity.m */,
 				169A7B471C00591A00A7C06D /* LinearAccelerometer.h */,
 				169A7B481C00591A00A7C06D /* LinearAccelerometer.m */,
+				160EE9BB1C050B4C00015688 /* Bluetooth.h */,
+				160EE9BC1C050B4C00015688 /* Bluetooth.m */,
+				160EE9C11C052DAA00015688 /* OpenWeather.h */,
+				160EE9C21C052DAA00015688 /* OpenWeather.m */,
 				1623CE721BFD1B2C00EFAD72 /* Main.storyboard */,
 				1623CE781BFD1B2C00EFAD72 /* Assets.xcassets */,
 				1623CE7A1BFD1B2C00EFAD72 /* LaunchScreen.storyboard */,
@@ -270,12 +291,14 @@
 		2A3CA9F5620967BACB187EB7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				16D8102C1C06671500605DE2 /* ExternalAccessory.framework */,
+				16D810251C06242F00605DE2 /* Security.framework */,
+				16D810231C06242500605DE2 /* CFNetwork.framework */,
+				160EE9BE1C050B9000015688 /* CoreBluetooth.framework */,
 				169A7B3C1BFFC9F900A7C06D /* SystemConfiguration.framework */,
 				169A7B311BFF282800A7C06D /* CoreLocation.framework */,
 				1623CEB81BFE319100EFAD72 /* CoreMotion.framework */,
 				1623CEB01BFD40FB00EFAD72 /* AVFoundation.framework */,
-				1623CEA41BFD255200EFAD72 /* HealthKit.framework */,
-				1623CEA21BFD255100EFAD72 /* ExternalAccessory.framework */,
 				9ED04F29ED60F3FCC960F6CD /* libPods-AWARE.a */,
 			);
 			name = Frameworks;
@@ -369,13 +392,16 @@
 								enabled = 0;
 							};
 							com.apple.HealthKit = {
-								enabled = 1;
+								enabled = 0;
 							};
 							com.apple.InterAppAudio = {
 								enabled = 0;
 							};
 							com.apple.Maps.iOS = {
 								enabled = 0;
+							};
+							com.apple.Push = {
+								enabled = 1;
 							};
 							com.apple.SafariKeychain = {
 								enabled = 0;
@@ -502,11 +528,14 @@
 				169A7B351BFFB67800A7C06D /* Network.m in Sources */,
 				169A7B3B1BFFC8B100A7C06D /* Wifi.m in Sources */,
 				165A8B741C03C0B300898C6C /* GoogleLoginViewController.m in Sources */,
+				16D8102B1C06645800605DE2 /* SensorDataManager.mm in Sources */,
 				169A7B271BFF193C00A7C06D /* Magnetometer.m in Sources */,
 				1623CEAF1BFD407900EFAD72 /* QRCodeViewController.m in Sources */,
 				1623CE711BFD1B2C00EFAD72 /* ViewController.m in Sources */,
+				160EE9BD1C050B4C00015688 /* Bluetooth.m in Sources */,
 				169A7B461C0052F800A7C06D /* Gravity.m in Sources */,
 				169A7B241BFF16E700A7C06D /* Gyroscope.m in Sources */,
+				160EE9C31C052DAA00015688 /* OpenWeather.m in Sources */,
 				1623CE6E1BFD1B2C00EFAD72 /* AppDelegate.m in Sources */,
 				16FCE2771BFE9326005FC71A /* AWARESensorManager.m in Sources */,
 				169A7B2D1BFF219500A7C06D /* Barometer.m in Sources */,
@@ -612,7 +641,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -650,7 +679,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";

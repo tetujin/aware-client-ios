@@ -9,6 +9,8 @@
 #import "ViewController.h"
 #import "AWAREStudyManager.h"
 #import "GoogleLoginViewController.h"
+#import "Accelerometer.h"
+#import "SensorDataManager.h"
 
 
 @interface ViewController (){
@@ -28,6 +30,9 @@
     NSNumber* mqttQos;
     NSTimer* listUpdateTimer;
     double uploadInterval;
+//    IBOutlet CLLocationManager *homeLocationManager;
+    NSTimer* testTimer;
+//    NSFileHandle *fh;
 }
 
 @end
@@ -36,15 +41,13 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
-    
+//     testTimer = [NSTimer scheduledTimerWithTimeInterval:0.1f target:self selector:@selector(test) userInfo:nil repeats:YES];
     KEY_CEL_TITLE = @"title";
     KEY_CEL_DESC = @"desc";
     KEY_CEL_IMAGE = @"image";
     KEY_CEL_STATE = @"state";
     KEY_CEL_SENSOR_NAME = @"sensorName";
     KEY = @"key";
-    
     
     mqttServer = @"";
     oldStudyId = @"";
@@ -56,11 +59,10 @@
     mqttQos = @2;
     
     [self setNaviBarTitle];
+    [self initLocationSensor];
     
     _sensorManager = [[AWARESensorManager alloc] init];
-    
-    uploadInterval = 60 * 10;
-//    uploadInterval = 10;
+    uploadInterval = 30;
     
     [self initList];
     
@@ -71,6 +73,64 @@
     [self connectMqttServer];
     
     listUpdateTimer = [NSTimer scheduledTimerWithTimeInterval:0.1f target:self.tableView selector:@selector(reloadData) userInfo:nil repeats:YES];
+    
+//    _sensorDataManager = [[SensorDataManager alloc] initWithDBPath:@"" userID:@"" ];
+    
+}
+
+- (void) test {
+    NSLog(@"test");
+//    [_sensorDataManager addNetwork:@"hogehoge"];
+    [_sensorDataManager saveAllSensorDataToDBWithBufferClean:NO];
+//    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+//    NSString *documentsDirectory = [paths objectAtIndex:0];
+//    NSString * path = [documentsDirectory stringByAppendingPathComponent:SENSOR_ACCELEROMETER];
+//    NSLog(@"Path: %@", path);
+//    NSFileManager *manager = [NSFileManager defaultManager];
+//    if (![manager fileExistsAtPath:path]) { // yes
+//        // 空のファイルを作成する
+//        BOOL result = [manager createFileAtPath:path
+//                                       contents:[NSData data]
+//                                     attributes:nil];
+//        if (!result) {
+//            NSLog(@"ファイルの作成に失敗");
+//            return;
+//        }else{
+//            NSLog(@"Created a file");
+//        }
+//    }
+//    NSFileHandle *fh = [NSFileHandle fileHandleForWritingAtPath:path];
+//    if (!fh) {
+//        NSLog(@"[test sensor] Not hudled");
+//    }else{
+//        NSLog(@"[test sensor] Hudled");
+//    }
+//    [fh synchronizeFile];
+//    [fh closeFile];
+}
+
+
+
+
+- (void) initLocationSensor{
+    if (nil == _homeLocationManager){
+        _homeLocationManager = [[CLLocationManager alloc] init];
+        _homeLocationManager.delegate = self;
+        //    locationManager.desiredAccuracy = kCLLocationAccuracyKilometer;
+        _homeLocationManager.desiredAccuracy = kCLLocationAccuracyBest;
+        _homeLocationManager.pausesLocationUpdatesAutomatically = NO;
+        _homeLocationManager.allowsBackgroundLocationUpdates = YES; //This variable is an important method for background sensing
+        _homeLocationManager.activityType = CLActivityTypeOther;
+        if ([_homeLocationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
+            [_homeLocationManager requestAlwaysAuthorization];
+        }
+        // Set a movement threshold for new events.
+        _homeLocationManager.distanceFilter = 150; // meters
+        [_homeLocationManager startUpdatingLocation];
+        //    [_locationManager startMonitoringVisits]; // This method calls didVisit.
+        [_homeLocationManager startUpdatingHeading];
+        //    _location = [[CLLocation alloc] init];
+    }
 }
 
 - (void) setNaviBarTitle {
@@ -140,6 +200,7 @@
 //    [_sensors addObject:[self getCelContent:@"Rotation (iOS)" desc:@"Orientation of the device" image:@"ic_action_rotation" key:SENSOR_ROTATION]];
 }
 
+
 - (NSMutableDictionary *) getCelContent:(NSString *)title
                                    desc:(NSString *)desc
                                   image:(NSString *)image
@@ -154,7 +215,9 @@
     NSArray *sensors = [userDefaults objectForKey:KEY_SENSORS];
     // [NOTE] If this sensor is "active", addNewSensorWithSensorName method return TRUE value.
     bool state = [_sensorManager addNewSensorWithSensorName:key settings:sensors uploadInterval:uploadInterval];
-    if (state) [dic setObject:@"true" forKey:KEY_CEL_STATE];
+    if (state) {
+        [dic setObject:@"true" forKey:KEY_CEL_STATE];
+    }
     return dic;
 }
 
@@ -175,6 +238,7 @@
 //{
 //    return 60;//[AwardTableViewCell rowHeight];
 //}
+
 
 - (UITableViewCell *)tableView:(UITableView *)tableView
          cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -202,7 +266,6 @@
         NSString* latestSensorData = [_sensorManager getLatestSensorData:sensorKey];
         if(![latestSensorData isEqualToString:@""]){
             [cell.detailTextLabel setText:latestSensorData];
-            
         }
     //    NSLog(@"-> %@",latestSensorData);
         
@@ -259,6 +322,35 @@
     if ([self.client connected]) {
         [self.client disconnectWithCompletionHandler:^(NSUInteger code) {
             NSLog(@"disconnected!");
+            [self.client unsubscribe:[NSString stringWithFormat:@"%@/%@/broadcasts",studyId,mqttUserName] withCompletionHandler:^{
+                //
+            }];
+            [self.client unsubscribe:[NSString stringWithFormat:@"%@/%@/esm", studyId,mqttUserName] withCompletionHandler:^{
+                //                         NSLog(grantedQos.description);
+            }];
+            [self.client unsubscribe:[NSString stringWithFormat:@"%@/%@/configuration",studyId,mqttUserName]  withCompletionHandler:^ {
+                //                         NSLog(grantedQos.description);
+            }];
+            [self.client unsubscribe:[NSString stringWithFormat:@"%@/%@/#",studyId,mqttUserName] withCompletionHandler:^ {
+                //                         NSLog(grantedQos.description);
+            }];
+            
+            
+            //Device specific subscribes
+            [self.client unsubscribe:[NSString stringWithFormat:@"%@/esm", mqttUserName] withCompletionHandler:^{
+                //                         NSLog(grantedQos.description);
+            }];
+            [self.client unsubscribe:[NSString stringWithFormat:@"%@/broadcasts", mqttUserName] withCompletionHandler:^{
+                //                         NSLog(grantedQos.description);
+            }];
+            [self.client unsubscribe:[NSString stringWithFormat:@"%@/configuration", mqttUserName] withCompletionHandler:^ {
+                //                         NSLog(grantedQos.description);
+            }];
+            [self.client unsubscribe:[NSString stringWithFormat:@"%@/#", mqttUserName] withCompletionHandler:^{
+                //                         NSLog(grantedQos.description);
+            }];
+            //                                 [self uploadSensorData];
+
         }];
     }
     
@@ -271,9 +363,6 @@
     [self.client setMessageHandler:^(MQTTMessage *message) {
         NSString *text = message.payloadString;
         NSLog(@"Received messages %@", text);
-        
-        
-        
         NSData *data = [text dataUsingEncoding:NSUTF8StringEncoding];
         NSDictionary * dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
         NSArray *array = [dic objectForKey:@"sensors"];
@@ -348,5 +437,21 @@
     }
     [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
 }
+
+//- (void)locationManager:(CLLocationManager *)manager didUpdateHeading:(CLHeading *)newHeading {
+//    if (newHeading.headingAccuracy < 0)
+//        return;
+//    //    CLLocationDirection  theHeading = ((newHeading.trueHeading > 0) ?
+//    //                                       newHeading.trueHeading : newHeading.magneticHeading);
+//    //    [sdManager addSensorDataMagx:newHeading.x magy:newHeading.y magz:newHeading.z];
+//    //    [sdManager addHeading: theHeading];
+//}
+
+//- (void) locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations{
+//    for (CLLocation* location in locations) {
+//        [self saveLocation:location];
+//    }
+//}
+
 
 @end

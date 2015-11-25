@@ -24,6 +24,10 @@
 
 - (void) setBufferLimit:(int) limit;
 
+- (void) startWriteAbleTimer;
+
+- (void) stopWriteableTimer;
+
 -(void) setLatestValue:(NSString *) valueStr;
 
 -(NSString *) getLatestValue;

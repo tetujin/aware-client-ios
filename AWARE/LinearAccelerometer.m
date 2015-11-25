@@ -44,9 +44,9 @@
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
     NSLog(@"Start Linear Accelerometer sensing!");
     double interval = 0.1f;
+//    [self setBufferLimit:10000];
+    [self startWriteAbleTimer];
     
-    
-    [self setBufferLimit:10000];
     double frequency = [self getSensorSetting:settings withKey:@"frequency_linear_accelerometer"];
     if(frequency != -1){
         NSLog(@"Linear Accelerometer's frequency is %f !!", frequency);
@@ -104,6 +104,7 @@
 - (BOOL)stopSensor{
     [uploadTimer invalidate];
     [motionManager stopDeviceMotionUpdates];
+    [self stopWriteableTimer];
     return YES;
 }
 

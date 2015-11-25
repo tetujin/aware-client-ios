@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "ViewController.h"
+#import "AWAREStudyManager.h"
 
 @interface AppDelegate ()
 
@@ -55,6 +56,9 @@
     NSAssert(!configureError, @"Error configuring Google services: %@", configureError);
     [GIDSignIn sharedInstance].delegate = self;
     
+    
+//    [[DeployGateSDK sharedInstance] launchApplicationWithAuthor:@"tetujin" key:@""];
+    
     return YES;
 }
 
@@ -63,15 +67,23 @@
     // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     [defaults setBool:NO forKey:@"APP_STATE"];
+    
+    NSLog(@"Go to background 1");
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setBool:NO forKey:@"APP_STATE"];
+    NSLog(@"Go to background 2");
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setBool:YES forKey:@"APP_STATE"];
+    NSLog(@"Go to fourground");
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
@@ -80,6 +92,9 @@
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     //[defaults setInteger:[[self.fps text] integerValue] forKey:KEY_FPS];
     [defaults setBool:YES forKey:@"APP_STATE"];
+    NSLog(@"Go to fourground");
+    
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:-1];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
@@ -96,7 +111,113 @@
         notification.applicationIconBadgeNumber = 1;
         [[UIApplication sharedApplication] scheduleLocalNotification:notification];
     }
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    
+    [defaults setBool:NO forKey:@"APP_STATE"];
+    NSLog(@"Stop background task of AWARE....");
 }
+
+
+
+
+
+
+- (void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
+{
+    //http://qiita.com/griffin_stewie/items/8371c09059b3ba7bb202
+    //    NSLog(@"hello world 2!");
+    
+    //    UILocalNotification *notification = [[UILocalNotification alloc] init];
+    //    if (notification){
+    //        //        notification.timeZone = [NSTimeZone defaultTimeZone];
+    //        notification.repeatInterval = 0;
+    //        notification.alertBody = @"Application is stoped! Please reboot this app for logging your acitivties.";
+    //        notification.alertAction = @"Reboot";
+    //        notification.soundName = UILocalNotificationDefaultSoundName;
+    //        notification.applicationIconBadgeNumber = 1;
+    //        [[UIApplication sharedApplication] scheduleLocalNotification:notification];
+    //    }
+    //
+    //    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    //    //[defaults setInteger:[[self.fps text] integerValue] forKey:KEY_FPS];
+    //    NSString* uid = [defaults objectForKey:@"UID"];
+    //
+    //    SensorDataManager *sd = [[SensorDataManager alloc] initWithDBPath:@"mybase.sqlite" userID:uid];
+    //    bool stateSensor = [sd uploadSensorDataWithURL:@"http://life-cloud.ht.sfc.keio.ac.jp/clip/api/mobile/sensor.php"];
+    //    bool statePed = [sd uploadPedDataToDBWithURL:@"http://life-cloud.ht.sfc.keio.ac.jp/clip/api/mobile/ped.php" dbClean:YES];
+    //
+    //
+    
+    
+    
+    
+    //    UILocalNotification *notification = [[UILocalNotification alloc] init];
+    //    if (notification){
+    //        //        notification.timeZone = [NSTimeZone defaultTimeZone];
+    //        notification.repeatInterval = 0;
+    //        notification.alertBody = @"Background Fetch !!! ";
+    //        notification.alertAction = @"Hello New World!";
+    //        notification.soundName = UILocalNotificationDefaultSoundName;
+    //        notification.applicationIconBadgeNumber = 1;
+    //        [[UIApplication sharedApplication] scheduleLocalNotification:notification];
+    //    }
+    //
+    //    //Tell the system that you ar done.
+    //    if(stateSensor){
+    completionHandler(UIBackgroundFetchResultNewData);
+    ////        completionHandler(UIBackgroundFetchResultNoData);
+    //        NSLog(@"ok");
+    //    }else{
+    //        completionHandler(UIBackgroundFetchResultFailed);
+    //        NSLog(@"no");
+    //    }
+    ////    completionHandler(UIBackgroundFetchResultFailed);
+}
+
+
+// DeviceToken受信成功
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+    
+    NSString *token = deviceToken.description;
+    
+    // <aaaa bbbb cccc dddd>みたいな形式でくるので、"<"、">"、"(空白)"を取ってあげると便利だよ
+    token = [token stringByReplacingOccurrencesOfString:@"<" withString:@""];
+    token = [token stringByReplacingOccurrencesOfString:@">" withString:@""];
+    token = [token stringByReplacingOccurrencesOfString:@" " withString:@""];
+    NSLog(@"%@", token);
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject:token forKey:KEY_APNS_TOKEN];
+    [defaults synchronize];
+    NSLog(@"deviceToken: %@", token);
+}
+
+// DeviceToken受信失敗
+- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
+    NSLog(@"deviceToken error: %@", [error description]);
+}
+
+
+// 通常のPush通知の受信
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
+    NSLog(@"pushInfo: %@", [userInfo description]);
+}
+
+// BackgroundFetchによるバックグラウンドの受信
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
+    NSLog(@"pushInfo in Background: %@", [userInfo description]);
+    completionHandler(UIBackgroundFetchResultNoData);
+}
+
+
+
+
+
+
+
+
+
+
+
 
 #pragma mark - Core Data stack
 

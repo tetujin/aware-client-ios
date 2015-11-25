@@ -74,6 +74,7 @@
 
 - (void)uploadSensorData{
     NSString * jsonStr = [self getData:SENSOR_BAROMETER withJsonArrayFormat:YES];
+//    NSLog(@"%@",jsonStr);
     [self insertSensorData:jsonStr withDeviceId:[self getDeviceId] url:[self getInsertUrl:SENSOR_BAROMETER]];
 }
 

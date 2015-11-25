@@ -38,6 +38,7 @@
     gTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval target:self selector:@selector(uploadSensorData) userInfo:nil repeats:YES];
     
     [self setBufferLimit:10000];
+    [self startWriteAbleTimer];
     
     double frequency = [self getSensorSetting:settings withKey:@"frequency_gyroscope"];
     if(frequency != -1){
@@ -73,6 +74,7 @@
 - (BOOL)stopSensor{
     [gyroManager stopGyroUpdates];
     [gTimer invalidate];
+    [self stopWriteableTimer];
     return YES;
 }
 

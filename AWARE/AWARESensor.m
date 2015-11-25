@@ -14,7 +14,6 @@
 @interface AWARESensor (){
     int bufferLimit;
     BOOL previusUploadingState;
-    BOOL fileClearState;
     NSString * awareSensorName;
     NSString *latestSensorValue;
     int lineCount;
@@ -22,6 +21,8 @@
     NSMutableString *tempData;
     NSMutableString *bufferStr;
     bool wifiState;
+    NSTimer* writeAbleTimer;
+    bool writeAble;
 }
 
 
@@ -42,17 +43,80 @@
 
 - (instancetype) initWithSensorName:(NSString *)sensorName {
     if (self = [super init]) {
-        NSLog(@"Initialize an AWARESensor as '%@' ", sensorName);
+        NSLog(@"[%@] Initialize an AWARESensor as '%@' ", sensorName, sensorName);
         awareSensorName = sensorName;
         bufferLimit = 0;
         previusUploadingState = NO;
-        fileClearState = NO;
+//        fileClearState = NO;
         awareSensorName = @"";
         latestSensorValue = @"";
         tempData = [[NSMutableString alloc] init];
         bufferStr = [[NSMutableString alloc] init];
+        reachability = [[SCNetworkReachability alloc] initWithHost:@"www.google.com"];
+        [reachability observeReachability:^(SCNetworkStatus status)
+         {
+             switch (status)
+             {
+                 case SCNetworkStatusReachableViaWiFi:
+                     NSLog(@"Reachable via WiFi at %@", [self getSensorName]);
+                     wifiState = YES;
+                     break;
+                     
+                 case SCNetworkStatusReachableViaCellular:
+                     NSLog(@"Reachable via Cellular at %@", [self getSensorName]);
+                     wifiState = NO;
+                     break;
+                     
+                 case SCNetworkStatusNotReachable:
+                     NSLog(@"Not Reachable at %@", [self getSensorName]);
+                     wifiState = NO;
+                     break;
+             }
+         }];
+        
+        // Make new file
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        NSString *documentsDirectory = [paths objectAtIndex:0];
+        NSString * path = [documentsDirectory stringByAppendingPathComponent:sensorName];
+        NSFileHandle *fh = [NSFileHandle fileHandleForWritingAtPath:path];
+        if (!fh) { // no
+            NSLog(@"You don't have a file for %@, then system recreated new file!", sensorName);
+            NSFileManager *manager = [NSFileManager defaultManager];
+            if (![manager fileExistsAtPath:path]) { // yes
+                BOOL result = [manager createFileAtPath:path
+                                               contents:[NSData data] attributes:nil];
+                if (!result) {
+                    NSLog(@"[%@] Error to create the file", sensorName);
+                }else{
+                    NSLog(@"[%@] Sucess to create the file", sensorName);
+                }
+            }
+        }
+        writeAble = YES;
     }
     return self;
+}
+
+- (void) setWriteableYES{
+    writeAble = YES;
+}
+
+- (void) setWriteableNO{
+    writeAble = NO;
+}
+
+- (void) startWriteAbleTimer{
+    writeAbleTimer =  [NSTimer scheduledTimerWithTimeInterval:1.0f
+                                                       target:self
+                                                     selector:@selector(setWriteableYES)
+                                                     userInfo:nil repeats:YES];
+    [writeAbleTimer fire];
+}
+
+- (void) stopWriteableTimer{
+    if (!writeAbleTimer) {
+        [writeAbleTimer invalidate];
+    }
 }
 
 - (void) setBufferLimit:(int)limit{
@@ -71,43 +135,18 @@
     awareSensorName = sensorName;
     // network check
     wifiState = NO;
-    
-    reachability = [[SCNetworkReachability alloc] initWithHost:@"www.google.com"];
-    [reachability observeReachability:^(SCNetworkStatus status)
-    {
-        switch (status)
-        {
-            case SCNetworkStatusReachableViaWiFi:
-                NSLog(@"Reachable via WiFi at %@", [self getSensorName]);
-                wifiState = YES;
-                break;
-                
-            case SCNetworkStatusReachableViaCellular:
-                NSLog(@"Reachable via Cellular at %@", [self getSensorName]);
-                wifiState = NO;
-                break;
-                
-            case SCNetworkStatusNotReachable:
-                NSLog(@"Not Reachable at %@", [self getSensorName]);
-                wifiState = NO;
-                break;
-        }
-    }];
 }
 
 - (NSString *)getSensorName{
     return awareSensorName;
 }
 
-//- (BOOL)startSensor:(double) interval withUploadInterval:(double)upInterval{
-//    return NO;
-//}
-
 -(BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
     return NO;
 }
 
 - (BOOL)stopSensor{
+    [writeAbleTimer invalidate];
     return NO;
 }
 
@@ -121,16 +160,17 @@
 //        NSLog(@"%ld", bufferStr.length);
 //    }
     
-//    if(jsonstr == nil) return @"";
-    if (bufferStr.length < bufferLimit) {
-        [bufferStr appendString:jsonstr];
-        [bufferStr appendFormat:@"\n"];
-        return @"";
-    }else{
+//    if (bufferStr.length < bufferLimit) {
+    if (writeAble) {
         // append sensor data the file
         [bufferStr appendString:jsonstr];
         [self appendLine:bufferStr path:fileName];
         [bufferStr setString:@""];
+        [self setWriteableNO];
+        return @"";
+    }else{
+        [bufferStr appendString:jsonstr];
+        [bufferStr appendFormat:@"\n"];
         return @"";
     }
     
@@ -139,63 +179,66 @@
 }
 
 - (BOOL) appendLine:(NSString *)line path:(NSString*) fileName {
+//        dispatch_async(dispatch_get_main_queue(), ^{
+            NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+            NSString *documentsDirectory = [paths objectAtIndex:0];
+            NSString * path = [documentsDirectory stringByAppendingPathComponent:fileName];
+            
+//             file initialization and data clear:
+//                if(fileClearState){
+//                    [self removeFile:fileName];
+//                    fileClearState = NO;
+//                }
+    
+            if(previusUploadingState){
+                [tempData appendFormat:@"%@\n", line];
+                return YES;
+            }else{
+                NSFileHandle *fh = [NSFileHandle fileHandleForWritingAtPath:path];
+                if (fh == nil) { // no
+//                    NSLog(@"[%@] You don't have a file, then sensor data can not be saved to the text file.", fileName);
+                    NSLog(@"[%@] ERROR: AWARE can not handle the file.", fileName);
+                    return NO;
+                }else{
+                    [fh seekToEndOfFile];
+                    if (![tempData isEqualToString:@""]) {
+                        NSData * tempdataLine = [tempData dataUsingEncoding:NSUTF8StringEncoding];
+                        [fh writeData:tempdataLine]; //write temp data to the main file
+                        [tempData setString:@""];
+                        NSLog(@"[%@] Add the sensor data to temp variable.", fileName);
+                    }
+                    line = [NSString stringWithFormat:@"%@\n", line];
+                    NSData *data = [line dataUsingEncoding:NSUTF8StringEncoding];
+                    [fh writeData:data];
+                    [fh synchronizeFile];
+                    [fh closeFile];
+                    return YES;
+                }
+            }
+//        });
+    
+        return YES;
+    
+}
+
+
+-(void)createNewFile:(NSString*) fileName
+{
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
     NSString * path = [documentsDirectory stringByAppendingPathComponent:fileName];
-    
-    // file initialization and data clear:
-    if(fileClearState){
-        [self removeFile:fileName];
-        fileClearState = NO;
-    }
-    
-    if(previusUploadingState){
-        [tempData appendFormat:@"%@\n", line];
-        return YES;
-    }else{
-        NSData * tempdataLine = [tempData dataUsingEncoding:NSUTF8StringEncoding];
-        NSFileHandle *fh = [NSFileHandle fileHandleForWritingAtPath:path];
-        if (!fh) { // no
-//            NSLog(@"You don't have a file for %@, then system recreated new file!", fileName);
-            [self createNewFile:path];
-            fh = [NSFileHandle fileHandleForWritingAtPath:path];
-        }
-        [fh seekToEndOfFile];
-        if (![tempData isEqualToString:@""]) {
-            [fh writeData:tempdataLine]; //write temp data to the main file
-//            _tempData = [[NSMutableString alloc] init];// init
-            [tempData setString:@""];
-            NSLog(@"Add sensor data to the temp variable! @ %@", fileName);
-        }
-        line = [NSString stringWithFormat:@"%@\n", line];
-        NSData *data = [line dataUsingEncoding:NSUTF8StringEncoding];
-        [fh writeData:data];
-        [fh synchronizeFile];
-        [fh closeFile];
-        return YES;
-    }
-//    return YES;
-}
-
--(void)createNewFile:(NSString*) path
-{
     NSFileManager *manager = [NSFileManager defaultManager];
     if (![manager fileExistsAtPath:path]) { // yes
         BOOL result = [manager createFileAtPath:path
-                                       contents:[NSData data] attributes:nil];
+                                       contents:[NSData data]
+                                     attributes:nil];
         if (!result) {
-            NSLog(@"Failed to create the file at %@", path);
+            NSLog(@"[%@] Failed to create the file.", fileName);
             return;
         }else{
-            NSLog(@"Create the file at %@", path);
+            NSLog(@"[%@] Create the file.", fileName);
         }
     }
-    NSFileHandle *fh = [NSFileHandle fileHandleForWritingAtPath:path];
-    if (!fh) {
-        NSLog(@"Failed to handle the file at %@", path);
-        return;
-    }
-    [fh closeFile];
 }
 
 - (bool) removeFile:(NSString *) fileName {
@@ -204,20 +247,33 @@
     NSString *documentsDirectory = [paths objectAtIndex:0];
     NSString * path = [documentsDirectory stringByAppendingPathComponent:fileName];
     if ([manager fileExistsAtPath:path]) { // yes
-//        NSLog(@"%@",path);
-//        BOOL result = [manager createFileAtPath:path
-//                                       contents:[NSData data] attributes:nil];
-        bool result = [manager removeItemAtPath:path error:nil];
-        if (!result) {
-            NSLog(@"Failed to remove the file at %@", fileName);
-            return NO;
+//        bool result = [manager removeItemAtPath:path error:nil];
+//        if(!result){
+//            NSLog(@"[%@] failed to remove the file...", [self getSensorName]);
+//        }else{
+//            NSLog(@"[%@] sucess to remove the file!", [self getSensorName]);
+//            [self createNewFile:fileName];
+//        }
+//        NSFileHandle *fh = [NSFileHandle fileHandleForWritingAtPath:path];
+//        NSFileHandle *fh = [NSFileHandle fileHandleForUpdatingAtPath:path];
+//        if (!fh) { // no
+//            NSLog(@"[%@] file is not exist.", fileName);
+//            return NO;
+//        }
+//        [fh writeData:[@"" dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES]];
+//        [fh fileDescriptor];
+//        [fh synchronizeFile];
+//        [fh closeFile];
+        bool result = [@"" writeToFile:path atomically:NO encoding:NSUTF8StringEncoding error:nil];
+        if (result) {
+            NSLog(@"[%@] Correct to clear sensor data.", fileName);
         }else{
-            NSLog(@"Sucsess to remove the file at %@", fileName);
-            [self createNewFile:path];
-            return YES;
+            NSLog(@"[%@] Error to clear sensor data.", fileName);
         }
+        
     }else{
-        NSLog(@"File (%@) is not exist.", fileName);
+        NSLog(@"[%@] The file is not exist.", fileName);
+        [self createNewFile:fileName];
         return YES;
     }
     return NO;
@@ -225,31 +281,34 @@
 
 
 - (NSString*) getData:(NSString *)fileName withJsonArrayFormat:(bool)jsonArrayFormat{
+    lineCount = 0;
+    
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
     NSString * path = [documentsDirectory stringByAppendingPathComponent:fileName];
     NSMutableString *data = nil;
     
-//    @autoreleasepool {
-        NSFileHandle *fileHandle = [NSFileHandle fileHandleForReadingAtPath:path];
-        if (!fileHandle) {
-            NSLog(@"AWARE can not find the file of %@.", fileName);
-            return @"[]";
-        }
-        NSString *str = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
-        [fileHandle closeFile];
-        
-        lineCount = 0;
-        data = [[NSMutableString alloc] initWithString:@"["];
-        [str enumerateLinesUsingBlock:^(NSString *line, BOOL *stop) {
-            lineCount++;
-            [data appendString:[NSString stringWithFormat:@"%@,", line]];
-        }];
+    NSFileHandle *fileHandle = [NSFileHandle fileHandleForReadingAtPath:path];
+    if (!fileHandle) {
+        NSLog(@"[%@] AWARE can not handle the file.", fileName);
+        [self createNewFile:fileName];
+        return @"[]";
+    }
+    NSString *str = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
+    [fileHandle closeFile];
+    
+
+    data = [[NSMutableString alloc] initWithString:@"["];
+    [str enumerateLinesUsingBlock:^(NSString *line, BOOL *stop) {
+        lineCount++;
+        [data appendString:[NSString stringWithFormat:@"%@,", line]];
+    }];
+    if(data.length > 1){
         [data deleteCharactersInRange:NSMakeRange([data length]-1, 1)];
-        [data appendString:@"]"];
-        NSLog(@"[%@] You got %d lines of sensor data", [self getSensorName], lineCount);
-//        NSLog(@"%@", data);
-//    }
+    }
+    [data appendString:@"]"];
+    NSLog(@"[%@] You got %d lines of sensor data", [self getSensorName], lineCount);
+
     return [NSString stringWithString:data];
 }
 
@@ -352,7 +411,7 @@
     
 //    foreground = NO;
     // HTTP/POST with each application condition
-    if (foreground) { // foreground
+    if(foreground){
         session = [NSURLSession sessionWithConfiguration:sessionConfig];
         [[session dataTaskWithRequest:request
                    completionHandler:^(NSData * _Nullable data,
@@ -362,13 +421,14 @@
                         int responseCode = (int)[httpResponse statusCode];
                        
                        NSString* newStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-                       NSLog(@"%@: Response=> %@", [self getSensorName],newStr);
+                       NSLog(@"[%@] Response=> %@", [self getSensorName],newStr);
                        
                         if(responseCode == 200){
-                            NSString *message = [NSString stringWithFormat:@"Sucess to upload sensor data (%@) to AWARE server in the fourground.", [self getSensorName]];
+                            [self removeFile:[self getSensorName]];
+//                            [self createNewFile:[self getSensorName]];
+                            NSString *message = [NSString stringWithFormat:@"[%@] Sucess to upload sensor data to AWARE server with %d record", [self getSensorName], lineCount ];
                             NSLog(@"%@", message);
                             [self sendLocalNotificationForMessage:message soundFlag:NO];
-                            fileClearState = YES;
                         }
                        previusUploadingState = NO;
                        data = nil;
@@ -386,12 +446,13 @@
         NSData *resData = [NSURLConnection sendSynchronousRequest:request
                                                 returningResponse:&response error:&error];
         NSString* newStr = [[NSString alloc] initWithData:resData encoding:NSUTF8StringEncoding];
-        NSLog(@"%@: Response=> %@", [self getSensorName],newStr);
+        NSLog(@"[%@] Response=> %@", [self getSensorName],newStr);
         int responseCode = (int)[response statusCode];
         if(responseCode == 200){
-            NSString *message = [NSString stringWithFormat:@"Sucess to upload sensor data (%@) to AWARE server in the background", [self getSensorName]];
+            [self removeFile:[self getSensorName]];
+//            [self createNewFile:[self getSensorName]];
+            NSString *message = [NSString stringWithFormat:@"[%@] Sucess to upload sensor data to AWARE server with %d record in the background.", [self getSensorName], lineCount ];
             NSLog(@"%@", message);
-            fileClearState = YES;
             [self sendLocalNotificationForMessage:message soundFlag:NO];
         }else{
             return NO;

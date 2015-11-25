@@ -45,7 +45,8 @@
     NSLog(@"Start Rotation sensing!");
     int interval = 0.1f;
     
-    [self setBufferLimit:10000];
+//    [self setBufferLimit:10000];
+    [self startWriteAbleTimer];
     double frequency = [self getSensorSetting:settings withKey:@"frequency_rotation"];
     if(frequency != -1){
         NSLog(@"Accelerometer's frequency is %f !!", frequency);
@@ -104,6 +105,7 @@
 - (BOOL)stopSensor{
     [uploadTimer invalidate];
     [motionManager stopDeviceMotionUpdates];
+    [self stopWriteableTimer];
     return YES;
 }
 

@@ -8,6 +8,8 @@
 
 #import "AWAREStudyManager.h"
 
+NSString* const KEY_APNS_TOKEN = @"key_apns_token";
+
 NSString* const KEY_SENSORS = @"sensors";
 
 NSString* const KEY_MQTT_PASS = @"mqtt_password";

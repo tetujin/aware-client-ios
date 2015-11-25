@@ -19,6 +19,7 @@
 #import "Processor.h"
 #import "Gravity.h"
 #import "LinearAccelerometer.h"
+#import "Bluetooth.h"
 
 @implementation AWARESensorManager
 
@@ -74,6 +75,9 @@
                     [awareSensor startSensor:uploadTime withSettings:settings];
                 }else if([key isEqualToString:SENSOR_LINEAR_ACCELEROMETER]){
                     awareSensor = [[LinearAccelerometer alloc] initWithSensorName:SENSOR_LINEAR_ACCELEROMETER];
+                    [awareSensor startSensor:uploadTime withSettings:settings];
+                }else if([key isEqualToString:SENSOR_BLUETOOTH]){
+                    awareSensor = [[Bluetooth alloc] initWithSensorName:SENSOR_BLUETOOTH];
                     [awareSensor startSensor:uploadTime withSettings:settings];
                 }
                 

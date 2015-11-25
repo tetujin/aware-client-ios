@@ -75,13 +75,13 @@
         //    _location = [[CLLocation alloc] init];
         
         
-//        if(interval > 0){
-//            locationTimer = [NSTimer scheduledTimerWithTimeInterval:interval
-//                                                             target:self
-//                                                           selector:@selector(getGpsData:)
-//                                                           userInfo:nil
-//                                                            repeats:YES];
-//        }
+        if(interval > 0){
+            locationTimer = [NSTimer scheduledTimerWithTimeInterval:interval
+                                                             target:self
+                                                           selector:@selector(getGpsData:)
+                                                           userInfo:nil
+                                                            repeats:YES];
+        }
 
     
     }

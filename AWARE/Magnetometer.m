@@ -36,7 +36,8 @@
     NSLog(@"Start Magnetometer!");
     timer = [NSTimer scheduledTimerWithTimeInterval:upInterval target:self selector:@selector(uploadSensorData) userInfo:nil repeats:YES];
     
-    [self setBufferLimit:10000];
+//    [self setBufferLimit:10000];
+    [self startWriteAbleTimer];
     double frequency = [self getSensorSetting:settings withKey:@"frequency_magnetometer"];
     if(frequency != -1){
         NSLog(@"Accelerometer's frequency is %f !!", frequency);
@@ -68,8 +69,9 @@
 }
 
 - (BOOL)stopSensor{
-    [manager stopGyroUpdates];
+    [manager stopMagnetometerUpdates];
     [timer invalidate];
+    [self stopWriteableTimer];
     return YES;
 }
 

@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+extern NSString* const KEY_APNS_TOKEN;
+
 extern NSString* const KEY_SENSORS;
 
 extern NSString* const KEY_MQTT_PASS;
