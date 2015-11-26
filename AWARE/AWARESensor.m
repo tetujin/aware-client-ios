@@ -156,9 +156,9 @@
     NSData*d=[NSJSONSerialization dataWithJSONObject:data options:2 error:&error];
     NSString*jsonstr=[[NSString alloc]initWithData:d encoding:NSUTF8StringEncoding];
     
-//    if ([fileName isEqualToString:SENSOR_ACCELEROMETER]) {
-//        NSLog(@"%ld", bufferStr.length);
-//    }
+    if ([fileName isEqualToString:SENSOR_AMBIENT_NOISE]) {
+        NSLog(@"%ld", bufferStr.length);
+    }
     
 //    if (bufferStr.length < bufferLimit) {
     if (writeAble) {

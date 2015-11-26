@@ -12,6 +12,8 @@
 #import "Accelerometer.h"
 #import "SensorDataManager.h"
 
+#import "AmbientNoise.h"
+
 
 @interface ViewController (){
     NSString *KEY_CEL_TITLE;
@@ -101,6 +103,7 @@
     }
 }
 
+
 - (void) setNaviBarTitle {
 //    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
 //    NSString *email = [defaults objectForKey:@"GOOGLE_EMAIL"];
@@ -113,10 +116,12 @@
 //    }
 }
 
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
 
 - (void) initList {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -155,6 +160,7 @@
 //    [_sensors addObject:[self getCelContent:@"Processor" desc:@"CPU workload for user, system and idle(%)" image:@"ic_action_processor" key:SENSOR_PROCESSOR]];
 //    [_sensors addObject:[self getCelContent:@"Telephony" desc:@"Mobile operator and specifications, cell tower and neighbor scanning" image:@"ic_action_telephony" key:SENSOR_TELEPHONY]];
     [_sensors addObject:[self getCelContent:@"WiFi" desc:@"Wi-Fi sensing" image:@"ic_action_wifi" key:SENSOR_WIFI]];
+    [_sensors addObject:[self getCelContent:@"AmbientNoise" desc:@"AmbientNoise sensor" image:@"" key:SENSOR_AMBIENT_NOISE]];
 
     // android specific sensors
     //[_sensors addObject:[self getCelContent:@"Gravity" desc:@"Force of gravity as a 3D vector with direction and magnitude of gravity (m^2)" image:@"ic_action_gravity"]];
@@ -166,7 +172,15 @@
 //    [_sensors addObject:[self getCelContent:@"Screen (iOS)" desc:@"Screen events (on/off, locked/unlocked)" image:@"ic_action_screen" key:SENSOR_SCREEN]];
 //    [_sensors addObject:[self getCelContent:@"Direction (iOS)" desc:@"Device's direction (0-360)" image:@"safari_copyrighted" key:SENSOR_DIRECTION]];
 //    [_sensors addObject:[self getCelContent:@"Rotation (iOS)" desc:@"Orientation of the device" image:@"ic_action_rotation" key:SENSOR_ROTATION]];
+    
+    
+    // for test
+//    AWARESensor *ambientSensor = [[AmbientNoise alloc] initWithSensorName:SENSOR_AMBIENT_NOISE];
+//    [_sensorManager addNewSensor:ambientSensor];
+//    [ambientSensor startSensor:10 withSettings:nil];
 }
+
+
 
 
 - (NSMutableDictionary *) getCelContent:(NSString *)title

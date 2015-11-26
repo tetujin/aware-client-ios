@@ -44,6 +44,7 @@ extern NSString* const SENSOR_TELEPHONY;
 extern NSString* const SENSOR_WIFI;
 extern NSString* const SENSOR_GRAVITY;
 extern NSString* const SENSOR_LINEAR_ACCELEROMETER;
+extern NSString* const SENSOR_AMBIENT_NOISE;
 //extern NSString* const SENSOR_
 //extern NSString* const SENSOR_
 //extern NSString* const SENSOR_

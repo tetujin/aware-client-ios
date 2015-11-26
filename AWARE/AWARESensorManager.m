@@ -20,6 +20,7 @@
 #import "Gravity.h"
 #import "LinearAccelerometer.h"
 #import "Bluetooth.h"
+#import "AmbientNoise.h"
 
 @implementation AWARESensorManager
 
@@ -35,7 +36,7 @@
 -(bool)addNewSensorWithSensorName:(NSString *)key settings:(NSArray*)settings uploadInterval:(double) uploadTime{
 //    double uploadTime = 10.0f;
     NSLog(@"upload interval is %f.", uploadTime);
-    AWARESensor* awareSensor = nil;    
+    AWARESensor* awareSensor = nil;
     for (int i=0; i<settings.count; i++) {
         NSString *setting = [[settings objectAtIndex:i] objectForKey:@"setting"];
         NSString *settingKey = [NSString stringWithFormat:@"status_%@",key];

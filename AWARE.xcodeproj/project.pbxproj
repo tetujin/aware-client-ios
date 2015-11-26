@@ -31,6 +31,8 @@
 		165A8B741C03C0B300898C6C /* GoogleLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 165A8B731C03C0B300898C6C /* GoogleLoginViewController.m */; };
 		165A8B751C03C0B300898C6C /* GoogleLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 165A8B731C03C0B300898C6C /* GoogleLoginViewController.m */; };
 		165A8B761C03C0B300898C6C /* GoogleLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 165A8B731C03C0B300898C6C /* GoogleLoginViewController.m */; };
+		168683031C07C43600CB4266 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 168683021C07C43600CB4266 /* AudioToolbox.framework */; };
+		168683061C07C48900CB4266 /* AmbientNoise.m in Sources */ = {isa = PBXBuildFile; fileRef = 168683051C07C48900CB4266 /* AmbientNoise.m */; };
 		169A7B241BFF16E700A7C06D /* Gyroscope.m in Sources */ = {isa = PBXBuildFile; fileRef = 169A7B231BFF16E700A7C06D /* Gyroscope.m */; };
 		169A7B271BFF193C00A7C06D /* Magnetometer.m in Sources */ = {isa = PBXBuildFile; fileRef = 169A7B261BFF193C00A7C06D /* Magnetometer.m */; };
 		169A7B2A1BFF1C2300A7C06D /* Battery.m in Sources */ = {isa = PBXBuildFile; fileRef = 169A7B291BFF1C2300A7C06D /* Battery.m */; };
@@ -107,6 +109,9 @@
 		165A8B6E1C03B90500898C6C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
 		165A8B721C03C0B300898C6C /* GoogleLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GoogleLoginViewController.h; sourceTree = "<group>"; };
 		165A8B731C03C0B300898C6C /* GoogleLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GoogleLoginViewController.m; sourceTree = "<group>"; };
+		168683021C07C43600CB4266 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		168683041C07C48900CB4266 /* AmbientNoise.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AmbientNoise.h; sourceTree = "<group>"; };
+		168683051C07C48900CB4266 /* AmbientNoise.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AmbientNoise.m; sourceTree = "<group>"; };
 		169A7B221BFF16E700A7C06D /* Gyroscope.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Gyroscope.h; sourceTree = "<group>"; };
 		169A7B231BFF16E700A7C06D /* Gyroscope.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Gyroscope.m; sourceTree = "<group>"; };
 		169A7B251BFF193C00A7C06D /* Magnetometer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Magnetometer.h; sourceTree = "<group>"; };
@@ -150,6 +155,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				168683031C07C43600CB4266 /* AudioToolbox.framework in Frameworks */,
 				16D810261C06242F00605DE2 /* Security.framework in Frameworks */,
 				16D810241C06242500605DE2 /* CFNetwork.framework in Frameworks */,
 				160EE9BF1C050B9000015688 /* CoreBluetooth.framework in Frameworks */,
@@ -266,6 +272,8 @@
 				1623CEB61BFE175F00EFAD72 /* AWARESensor.m */,
 				1623CEBA1BFE390600EFAD72 /* Accelerometer.h */,
 				1623CEBB1BFE390600EFAD72 /* Accelerometer.m */,
+				168683041C07C48900CB4266 /* AmbientNoise.h */,
+				168683051C07C48900CB4266 /* AmbientNoise.m */,
 				169A7B221BFF16E700A7C06D /* Gyroscope.h */,
 				169A7B231BFF16E700A7C06D /* Gyroscope.m */,
 				169A7B251BFF193C00A7C06D /* Magnetometer.h */,
@@ -299,6 +307,7 @@
 		2A3CA9F5620967BACB187EB7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				168683021C07C43600CB4266 /* AudioToolbox.framework */,
 				16D8102C1C06671500605DE2 /* ExternalAccessory.framework */,
 				16D810251C06242F00605DE2 /* Security.framework */,
 				16D810231C06242500605DE2 /* CFNetwork.framework */,
@@ -538,6 +547,7 @@
 				1623CEB71BFE175F00EFAD72 /* AWARESensor.m in Sources */,
 				169A7B351BFFB67800A7C06D /* Network.m in Sources */,
 				169A7B3B1BFFC8B100A7C06D /* Wifi.m in Sources */,
+				168683061C07C48900CB4266 /* AmbientNoise.m in Sources */,
 				165A8B741C03C0B300898C6C /* GoogleLoginViewController.m in Sources */,
 				16D8102B1C06645800605DE2 /* SensorDataManager.mm in Sources */,
 				169A7B271BFF193C00A7C06D /* Magnetometer.m in Sources */,
