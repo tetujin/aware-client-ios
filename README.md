@@ -1,3 +1,1 @@
-# AWARE Framework Client for iOS source code
-
-
+# AWARE Framework Client for iOS
