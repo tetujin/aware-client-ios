@@ -1,3 +1,3 @@
-# AWARE Framework Client for iOS source code (http://awareframework.com)
+# AWARE Framework Client for iOS source code
 
 
