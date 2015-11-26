@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <SystemConfiguration/SystemConfiguration.h>
+#import <Foundation/Foundation.h>
 
 @protocol AWARESensorDelegate <NSObject>
 //- (BOOL) startSensor:(double) interval withUploadInterval:(double)upInterval;
@@ -17,8 +18,6 @@
 @end
 
 @interface AWARESensor : NSObject <AWARESensorDelegate>
-
-
 
 - (instancetype) initWithSensorName:(NSString *) sensorName;
 

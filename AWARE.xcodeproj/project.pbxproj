@@ -385,6 +385,9 @@
 						CreatedOnToolsVersion = 7.1;
 						DevelopmentTeam = FH352PYMNC;
 						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
 							com.apple.BackgroundModes = {
 								enabled = 1;
 							};

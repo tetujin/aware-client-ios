@@ -51,13 +51,14 @@
     }
     
 //    manager.accelerometerUpdateInterval = 0.05f; //default value
-
+    
+    NSLog(@"hello accelerometer");
+    
     [manager startAccelerometerUpdatesToQueue:[NSOperationQueue currentQueue]
                                   withHandler:^(CMAccelerometerData *accelerometerData, NSError *error) {
                                       if( error ) {
                                           NSLog(@"%@:%ld", [error domain], [error code] );
                                       } else {
-//                                          dispatch_sync(dispatch_get_main_queue(), ^{
                                               NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
                                               NSNumber* unixtime = [NSNumber numberWithDouble:timeStamp];
                                               NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
@@ -73,7 +74,8 @@
                                                                     accelerometerData.acceleration.x,
                                                                 accelerometerData.acceleration.y,
                                                                 accelerometerData.acceleration.z]];
-//
+                                          //
+//                                            dispatch_sync(dispatch_get_main_queue(), ^{
                                                [self saveData:dic toLocalFile:SENSOR_ACCELEROMETER];
 //                                            });
                                         }

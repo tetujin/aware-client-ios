@@ -56,9 +56,6 @@
     NSAssert(!configureError, @"Error configuring Google services: %@", configureError);
     [GIDSignIn sharedInstance].delegate = self;
     
-    
-//    [[DeployGateSDK sharedInstance] launchApplicationWithAuthor:@"tetujin" key:@""];
-    
     return YES;
 }
 

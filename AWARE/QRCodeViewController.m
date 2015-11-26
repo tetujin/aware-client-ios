@@ -211,7 +211,7 @@
     NSString *systemVersion = [[UIDevice currentDevice] systemVersion];
 //    NSString *localizeModel = [[UIDevice currentDevice] localizedModel];
     NSString *model = [[UIDevice currentDevice] model];
-    NSString *deviceName = [self deviceName];
+//    NSString *deviceName = [self deviceName];
     NSString *manufacturer = @"Apple";
     
     [jsonQuery setValue:uuid  forKey:@"device_id"];

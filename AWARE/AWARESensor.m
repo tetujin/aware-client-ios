@@ -173,8 +173,6 @@
         [bufferStr appendFormat:@"\n"];
         return @"";
     }
-    
-//    [self appendLine:jsonstr path:fileName];
     return @"";
 }
 
@@ -182,7 +180,7 @@
 //        dispatch_async(dispatch_get_main_queue(), ^{
             NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
             NSString *documentsDirectory = [paths objectAtIndex:0];
-            NSString * path = [documentsDirectory stringByAppendingPathComponent:fileName];
+            NSString * path = [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.dat",fileName]];
             
 //             file initialization and data clear:
 //                if(fileClearState){
@@ -226,7 +224,7 @@
 {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
-    NSString * path = [documentsDirectory stringByAppendingPathComponent:fileName];
+    NSString * path = [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.dat",fileName]];
     NSFileManager *manager = [NSFileManager defaultManager];
     if (![manager fileExistsAtPath:path]) { // yes
         BOOL result = [manager createFileAtPath:path
@@ -245,7 +243,7 @@
     NSFileManager *manager = [NSFileManager defaultManager];
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
-    NSString * path = [documentsDirectory stringByAppendingPathComponent:fileName];
+    NSString * path = [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.dat",fileName]];
     if ([manager fileExistsAtPath:path]) { // yes
 //        bool result = [manager removeItemAtPath:path error:nil];
 //        if(!result){
@@ -285,7 +283,7 @@
     
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
-    NSString * path = [documentsDirectory stringByAppendingPathComponent:fileName];
+    NSString * path = [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.dat",fileName]];
     NSMutableString *data = nil;
     
     NSFileHandle *fileHandle = [NSFileHandle fileHandleForReadingAtPath:path];
@@ -411,7 +409,8 @@
     
 //    foreground = NO;
     // HTTP/POST with each application condition
-    if(foreground){
+//    foreground = YES;
+//    if(foreground){
         session = [NSURLSession sessionWithConfiguration:sessionConfig];
         [[session dataTaskWithRequest:request
                    completionHandler:^(NSData * _Nullable data,
@@ -440,28 +439,28 @@
                                 [session invalidateAndCancel];
                        });
         }] resume];
-    }else{ // background
-        NSError *error = nil;
-        NSHTTPURLResponse *response = nil;
-        NSData *resData = [NSURLConnection sendSynchronousRequest:request
-                                                returningResponse:&response error:&error];
-        NSString* newStr = [[NSString alloc] initWithData:resData encoding:NSUTF8StringEncoding];
-        NSLog(@"[%@] Response=> %@", [self getSensorName],newStr);
-        int responseCode = (int)[response statusCode];
-        if(responseCode == 200){
-            [self removeFile:[self getSensorName]];
-//            [self createNewFile:[self getSensorName]];
-            NSString *message = [NSString stringWithFormat:@"[%@] Sucess to upload sensor data to AWARE server with %d record in the background.", [self getSensorName], lineCount ];
-            NSLog(@"%@", message);
-            [self sendLocalNotificationForMessage:message soundFlag:NO];
-        }else{
-            return NO;
-        }
-        previusUploadingState = NO;
-        data = nil;
-        response = nil;
-        error = nil;
-    }
+//    }else{ // background
+//        NSError *error = nil;
+//        NSHTTPURLResponse *response = nil;
+//        NSData *resData = [NSURLConnection sendSynchronousRequest:request
+//                                                returningResponse:&response error:&error];
+//        NSString* newStr = [[NSString alloc] initWithData:resData encoding:NSUTF8StringEncoding];
+//        NSLog(@"[%@] Response=> %@", [self getSensorName],newStr);
+//        int responseCode = (int)[response statusCode];
+//        if(responseCode == 200){
+//            [self removeFile:[self getSensorName]];
+////            [self createNewFile:[self getSensorName]];
+//            NSString *message = [NSString stringWithFormat:@"[%@] Sucess to upload sensor data to AWARE server with %d record in the background.", [self getSensorName], lineCount ];
+//            NSLog(@"%@", message);
+//            [self sendLocalNotificationForMessage:message soundFlag:NO];
+//        }else{
+//            return NO;
+//        }
+//        previusUploadingState = NO;
+//        data = nil;
+//        response = nil;
+//        error = nil;
+//    }
     return YES;
 }
 

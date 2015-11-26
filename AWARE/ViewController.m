@@ -79,9 +79,9 @@
 }
 
 - (void) test {
-    NSLog(@"test");
+//    NSLog(@"test");
 //    [_sensorDataManager addNetwork:@"hogehoge"];
-    [_sensorDataManager saveAllSensorDataToDBWithBufferClean:NO];
+//    [_sensorDataManager saveAllSensorDataToDBWithBufferClean:NO];
 //    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 //    NSString *documentsDirectory = [paths objectAtIndex:0];
 //    NSString * path = [documentsDirectory stringByAppendingPathComponent:SENSOR_ACCELEROMETER];
@@ -113,6 +113,7 @@
 
 
 - (void) initLocationSensor{
+    NSLog(@"start location sensing!");
     if (nil == _homeLocationManager){
         _homeLocationManager = [[CLLocationManager alloc] init];
         _homeLocationManager.delegate = self;
