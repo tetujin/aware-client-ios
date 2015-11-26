@@ -62,7 +62,7 @@
     [self initLocationSensor];
     
     _sensorManager = [[AWARESensorManager alloc] init];
-    uploadInterval = 30;
+    uploadInterval = 60*15;
     
     [self initList];
     
@@ -77,39 +77,6 @@
 //    _sensorDataManager = [[SensorDataManager alloc] initWithDBPath:@"" userID:@"" ];
     
 }
-
-- (void) test {
-//    NSLog(@"test");
-//    [_sensorDataManager addNetwork:@"hogehoge"];
-//    [_sensorDataManager saveAllSensorDataToDBWithBufferClean:NO];
-//    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-//    NSString *documentsDirectory = [paths objectAtIndex:0];
-//    NSString * path = [documentsDirectory stringByAppendingPathComponent:SENSOR_ACCELEROMETER];
-//    NSLog(@"Path: %@", path);
-//    NSFileManager *manager = [NSFileManager defaultManager];
-//    if (![manager fileExistsAtPath:path]) { // yes
-//        // 空のファイルを作成する
-//        BOOL result = [manager createFileAtPath:path
-//                                       contents:[NSData data]
-//                                     attributes:nil];
-//        if (!result) {
-//            NSLog(@"ファイルの作成に失敗");
-//            return;
-//        }else{
-//            NSLog(@"Created a file");
-//        }
-//    }
-//    NSFileHandle *fh = [NSFileHandle fileHandleForWritingAtPath:path];
-//    if (!fh) {
-//        NSLog(@"[test sensor] Not hudled");
-//    }else{
-//        NSLog(@"[test sensor] Hudled");
-//    }
-//    [fh synchronizeFile];
-//    [fh closeFile];
-}
-
-
 
 
 - (void) initLocationSensor{

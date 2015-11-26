@@ -196,6 +196,7 @@
                 if (fh == nil) { // no
 //                    NSLog(@"[%@] You don't have a file, then sensor data can not be saved to the text file.", fileName);
                     NSLog(@"[%@] ERROR: AWARE can not handle the file.", fileName);
+                    [self createNewFile:fileName];
                     return NO;
                 }else{
                     [fh seekToEndOfFile];
@@ -279,6 +280,10 @@
 
 
 - (NSString*) getData:(NSString *)fileName withJsonArrayFormat:(bool)jsonArrayFormat{
+    if (!wifiState) {
+        NSLog(@"You need wifi network to upload sensor data.");
+        return @"";
+    }
     lineCount = 0;
     
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
@@ -369,17 +374,17 @@
 }
 
 - (BOOL)insertSensorData:(NSString *)data withDeviceId:(NSString *)deviceId url:(NSString *)url{
+    if (!wifiState) {
+        NSLog(@"You need wifi network to upload sensor data.");
+        return NO;
+    }
+    
     NSString *post = nil;
     NSData *postData = nil;
     NSMutableURLRequest *request = nil;
     __weak NSURLSession *session = nil;
     NSString *postLength = nil;
 //    NSLog(@"Wifi network state is %d", wifiState);
-    if (!wifiState) {
-        NSLog(@"You need wifi network to upload sensor data.");
-        return NO;
-    }
-    
     previusUploadingState = YES; //file lock
     
     // Set settion configu and HTTP/POST body.
