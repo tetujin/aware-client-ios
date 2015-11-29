@@ -1,1 +1,1 @@
-# aware-client-ios
+# AWARE Framework Client for iOS
