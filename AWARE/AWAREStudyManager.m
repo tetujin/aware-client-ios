@@ -11,6 +11,8 @@
 NSString* const KEY_APNS_TOKEN = @"key_apns_token";
 
 NSString* const KEY_SENSORS = @"sensors";
+NSString* const KEY_PLUGINS = @"plugins";
+NSString* const KEY_PLUGIN = @"plugin";
 
 NSString* const KEY_MQTT_PASS = @"mqtt_password";
 NSString* const KEY_MQTT_USERNAME = @"mqtt_username";
@@ -43,7 +45,8 @@ NSString* const SENSOR_TELEPHONY = @"telephony";
 NSString* const SENSOR_WIFI = @"wifi";
 NSString* const SENSOR_GRAVITY = @"gravity";
 NSString* const SENSOR_LINEAR_ACCELEROMETER = @"linear_accelerometer";
-NSString* const SENSOR_AMBIENT_NOISE = @"ambient_noise";
+NSString* const SENSOR_AMBIENT_NOISE = @"plugin_ambient_noise";
+NSString* const SENSOR_PLUGIING_GOOGLE_ACTIVITY_RECOGNITION = @"plugin_google_activity_recognition";
 
 @implementation AWAREStudyManager
 

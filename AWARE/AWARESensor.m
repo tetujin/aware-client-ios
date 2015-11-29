@@ -156,9 +156,9 @@
     NSData*d=[NSJSONSerialization dataWithJSONObject:data options:2 error:&error];
     NSString*jsonstr=[[NSString alloc]initWithData:d encoding:NSUTF8StringEncoding];
     
-    if ([fileName isEqualToString:SENSOR_AMBIENT_NOISE]) {
-        NSLog(@"%ld", bufferStr.length);
-    }
+//    if ([fileName isEqualToString:SENSOR_AMBIENT_NOISE]) {
+//        NSLog(@"%ld", bufferStr.length);
+//    }
     
 //    if (bufferStr.length < bufferLimit) {
     if (writeAble) {
@@ -206,8 +206,8 @@
                         [tempData setString:@""];
                         NSLog(@"[%@] Add the sensor data to temp variable.", fileName);
                     }
-                    line = [NSString stringWithFormat:@"%@\n", line];
-                    NSData *data = [line dataUsingEncoding:NSUTF8StringEncoding];
+                    NSString * oneLine = [[NSString alloc] initWithString:[NSString stringWithFormat:@"%@\n", line]];
+                    NSData *data = [oneLine dataUsingEncoding:NSUTF8StringEncoding];
                     [fh writeData:data];
                     [fh synchronizeFile];
                     [fh closeFile];
@@ -343,7 +343,7 @@
 
 - (NSString *)getCreateTableUrl:(NSString *)sensorName{
     //    - create_table: creates a table if it doesn’t exist already
-    return [NSString stringWithFormat:@"%@/%@/create_tablet", [self getWebserviceUrl], sensorName];
+    return [NSString stringWithFormat:@"%@/%@/create_table", [self getWebserviceUrl], sensorName];
 }
 
 
@@ -416,6 +416,7 @@
     // HTTP/POST with each application condition
 //    foreground = YES;
 //    if(foreground){
+    // Set settion configu and HTTP/POST body.
         session = [NSURLSession sessionWithConfiguration:sessionConfig];
         [[session dataTaskWithRequest:request
                    completionHandler:^(NSData * _Nullable data,
@@ -425,7 +426,7 @@
                         int responseCode = (int)[httpResponse statusCode];
                        
                        NSString* newStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-                       NSLog(@"[%@] Response=> %@", [self getSensorName],newStr);
+                       NSLog(@"[%@] Response=====> %@", [self getSensorName],newStr);
                        
                         if(responseCode == 200){
                             [self removeFile:[self getSensorName]];
@@ -512,11 +513,118 @@
 
 
 
-- (BOOL)createTable:(NSString *)data withDeviceId:(NSString *)deviceId withUrl:(NSString *)url{
-    return NO;
+- (void) createTable:(NSString *)query{
+    
+    NSLog(@"%@",[self getCreateTableUrl:[self getSensorName]]);
+    
+    NSString *post = nil;
+    NSData *postData = nil;
+    NSMutableURLRequest *request = nil;
+    __weak NSURLSession *session = nil;
+    NSString *postLength = nil;
+    post = [NSString stringWithFormat:@"device_id=%@&fields=%@", [self getDeviceId], query];
+            NSLog(@"%@", post);
+    postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
+    postLength = [NSString stringWithFormat:@"%ld", [postData length]];
+    request = [[NSMutableURLRequest alloc] init];
+    [request setURL:[NSURL URLWithString:[self getCreateTableUrl:[self getSensorName]]]];
+    [request setHTTPMethod:@"POST"];
+    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+    [request setHTTPBody:postData];
+    
+    NSURLSessionConfiguration *sessionConfig =
+    [NSURLSessionConfiguration defaultSessionConfiguration];
+    //        sessionConfig.allowsCellularAccess = NO;
+    //        [sessionConfig setHTTPAdditionalHeaders:
+    //         @{@"Accept": @"application/json"}];
+    sessionConfig.timeoutIntervalForRequest = 180.0;
+    sessionConfig.timeoutIntervalForResource = 300.0;
+    sessionConfig.HTTPMaximumConnectionsPerHost = 30;
+
+    session = [NSURLSession sessionWithConfiguration:sessionConfig];
+    [[session dataTaskWithRequest:request
+                completionHandler:^(NSData * _Nullable data,
+                                    NSURLResponse * _Nullable response,
+                                    NSError * _Nullable error) {
+                    NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
+                    int responseCode = (int)[httpResponse statusCode];
+                    
+                    NSString* newStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+                    NSLog(@"[%@] Response----> %d, %@", [self getSensorName],responseCode, newStr);
+                    
+                    if(responseCode == 200){
+//                        [self removeFile:[self getSensorName]];
+//                        //                            [self createNewFile:[self getSensorName]];
+                        NSString *message = [NSString stringWithFormat:@"[%@] Sucess to create new table on AWARE server.", [self getSensorName]];
+                        NSLog(@"%@", message);
+//                        [self sendLocalNotificationForMessage:message soundFlag:NO];
+                    }
+//                    previusUploadingState = NO;
+                    data = nil;
+                    response = nil;
+                    error = nil;
+                    httpResponse = nil;
+//                    dispatch_async(dispatch_get_main_queue(), ^{
+//                        [session finishTasksAndInvalidate];
+//                        [session invalidateAndCancel];
+//                    });
+                }] resume];
 }
 
-- (BOOL)clearTable:(NSString *)data withDeviceId:(NSString *)deviceId withUrl:(NSString *)url{
+- (BOOL)clearTable{
+    NSLog(@"%@",[self getCreateTableUrl:[self getSensorName]]);
+    NSString *post = nil;
+    NSData *postData = nil;
+    NSMutableURLRequest *request = nil;
+    __weak NSURLSession *session = nil;
+    NSString *postLength = nil;
+    post = [NSString stringWithFormat:@"device_id=%@", [self getDeviceId]];
+    NSLog(@"%@", post);
+    postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
+    postLength = [NSString stringWithFormat:@"%ld", [postData length]];
+    request = [[NSMutableURLRequest alloc] init];
+    [request setURL:[NSURL URLWithString:[self getClearTableUrl:[self getSensorName]]]];
+    [request setHTTPMethod:@"POST"];
+    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+    [request setHTTPBody:postData];
+    
+    NSURLSessionConfiguration *sessionConfig =
+    [NSURLSessionConfiguration defaultSessionConfiguration];
+    //        sessionConfig.allowsCellularAccess = NO;
+    //        [sessionConfig setHTTPAdditionalHeaders:
+    //         @{@"Accept": @"application/json"}];
+    sessionConfig.timeoutIntervalForRequest = 180.0;
+    sessionConfig.timeoutIntervalForResource = 300.0;
+    sessionConfig.HTTPMaximumConnectionsPerHost = 30;
+    
+    session = [NSURLSession sessionWithConfiguration:sessionConfig];
+    [[session dataTaskWithRequest:request
+                completionHandler:^(NSData * _Nullable data,
+                                    NSURLResponse * _Nullable response,
+                                    NSError * _Nullable error) {
+                    NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
+                    int responseCode = (int)[httpResponse statusCode];
+                    
+                    NSString* newStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+                    NSLog(@"[%@] Response----> %d, %@", [self getSensorName],responseCode, newStr);
+                    
+                    if(responseCode == 200){
+                        //                        [self removeFile:[self getSensorName]];
+                        //                        //                            [self createNewFile:[self getSensorName]];
+                        NSString *message = [NSString stringWithFormat:@"[%@] Sucess to clear table on AWARE server.", [self getSensorName]];
+                        NSLog(@"%@", message);
+                        //                        [self sendLocalNotificationForMessage:message soundFlag:NO];
+                    }
+                    //                    previusUploadingState = NO;
+                    data = nil;
+                    response = nil;
+                    error = nil;
+                    httpResponse = nil;
+                    //                    dispatch_async(dispatch_get_main_queue(), ^{
+                    //                        [session finishTasksAndInvalidate];
+                    //                        [session invalidateAndCancel];
+                    //                    });
+                }] resume];
     return NO;
 }
 

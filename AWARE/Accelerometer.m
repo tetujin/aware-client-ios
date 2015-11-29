@@ -52,7 +52,7 @@
     
 //    manager.accelerometerUpdateInterval = 0.05f; //default value
     
-    NSLog(@"hello accelerometer");
+//    NSLog(@"hello accelerometer");
     
     [manager startAccelerometerUpdatesToQueue:[NSOperationQueue currentQueue]
                                   withHandler:^(CMAccelerometerData *accelerometerData, NSError *error) {

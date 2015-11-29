@@ -11,6 +11,8 @@
 extern NSString* const KEY_APNS_TOKEN;
 
 extern NSString* const KEY_SENSORS;
+extern NSString* const KEY_PLUGINS;
+extern NSString* const KEY_PLUGIN;
 
 extern NSString* const KEY_MQTT_PASS;
 extern NSString* const KEY_MQTT_USERNAME;
@@ -45,6 +47,7 @@ extern NSString* const SENSOR_WIFI;
 extern NSString* const SENSOR_GRAVITY;
 extern NSString* const SENSOR_LINEAR_ACCELEROMETER;
 extern NSString* const SENSOR_AMBIENT_NOISE;
+extern NSString* const SENSOR_PLUGIING_GOOGLE_ACTIVITY_RECOGNITION;
 //extern NSString* const SENSOR_
 //extern NSString* const SENSOR_
 //extern NSString* const SENSOR_

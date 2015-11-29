@@ -58,10 +58,10 @@
 - (double) getSensorSetting:(NSArray *)settings withKey:(NSString *)key;
 
 // create new table in the database
-- (BOOL) createTable:(NSString *)data withDeviceId:(NSString *)deviceId withUrl:(NSString *)url;
+- (void) createTable:(NSString *)query;
 
 // clear the table in the database
-- (BOOL) clearTable:(NSString *)data withDeviceId:(NSString *)deviceId withUrl:(NSString*)url;
+- (BOOL) clearTable;
 
 - (void) setSensorName:(NSString *) sensorName;
 

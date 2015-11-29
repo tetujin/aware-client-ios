@@ -139,6 +139,7 @@
                 if(responseCode == 200){
                     NSLog(@"GET Study Information");
                     NSArray * array = [[mqttArray objectAtIndex:0] objectForKey:@"sensors"];
+                    NSArray * plugins = [[mqttArray objectAtIndex:0] objectForKey:KEY_PLUGINS];
                     
                     for (int i=0; i<[array count]; i++) {
                         NSDictionary *settingElement = [array objectAtIndex:i];
@@ -185,6 +186,7 @@
                     [userDefaults synchronize];
                     
                     [userDefaults setObject:array forKey:KEY_SENSORS];
+                    [userDefaults setObject:plugins forKey:KEY_PLUGINS];
                     
                     readingState = YES;
                     [self.navigationController popToRootViewControllerAnimated:YES];

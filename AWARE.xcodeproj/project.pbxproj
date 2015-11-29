@@ -33,6 +33,7 @@
 		165A8B761C03C0B300898C6C /* GoogleLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 165A8B731C03C0B300898C6C /* GoogleLoginViewController.m */; };
 		168683031C07C43600CB4266 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 168683021C07C43600CB4266 /* AudioToolbox.framework */; };
 		168683061C07C48900CB4266 /* AmbientNoise.m in Sources */ = {isa = PBXBuildFile; fileRef = 168683051C07C48900CB4266 /* AmbientNoise.m */; };
+		168683091C08050100CB4266 /* ActivityRecognition.m in Sources */ = {isa = PBXBuildFile; fileRef = 168683081C08050100CB4266 /* ActivityRecognition.m */; };
 		169A7B241BFF16E700A7C06D /* Gyroscope.m in Sources */ = {isa = PBXBuildFile; fileRef = 169A7B231BFF16E700A7C06D /* Gyroscope.m */; };
 		169A7B271BFF193C00A7C06D /* Magnetometer.m in Sources */ = {isa = PBXBuildFile; fileRef = 169A7B261BFF193C00A7C06D /* Magnetometer.m */; };
 		169A7B2A1BFF1C2300A7C06D /* Battery.m in Sources */ = {isa = PBXBuildFile; fileRef = 169A7B291BFF1C2300A7C06D /* Battery.m */; };
@@ -112,6 +113,8 @@
 		168683021C07C43600CB4266 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		168683041C07C48900CB4266 /* AmbientNoise.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AmbientNoise.h; sourceTree = "<group>"; };
 		168683051C07C48900CB4266 /* AmbientNoise.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AmbientNoise.m; sourceTree = "<group>"; };
+		168683071C08050100CB4266 /* ActivityRecognition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActivityRecognition.h; sourceTree = "<group>"; };
+		168683081C08050100CB4266 /* ActivityRecognition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActivityRecognition.m; sourceTree = "<group>"; };
 		169A7B221BFF16E700A7C06D /* Gyroscope.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Gyroscope.h; sourceTree = "<group>"; };
 		169A7B231BFF16E700A7C06D /* Gyroscope.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Gyroscope.m; sourceTree = "<group>"; };
 		169A7B251BFF193C00A7C06D /* Magnetometer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Magnetometer.h; sourceTree = "<group>"; };
@@ -300,6 +303,8 @@
 				160EE9BC1C050B4C00015688 /* Bluetooth.m */,
 				160EE9C11C052DAA00015688 /* OpenWeather.h */,
 				160EE9C21C052DAA00015688 /* OpenWeather.m */,
+				168683071C08050100CB4266 /* ActivityRecognition.h */,
+				168683081C08050100CB4266 /* ActivityRecognition.m */,
 			);
 			name = AWARESensors;
 			sourceTree = "<group>";
@@ -561,6 +566,7 @@
 				16FCE2771BFE9326005FC71A /* AWARESensorManager.m in Sources */,
 				169A7B2D1BFF219500A7C06D /* Barometer.m in Sources */,
 				169A7B401BFFD55A00A7C06D /* Processor.m in Sources */,
+				168683091C08050100CB4266 /* ActivityRecognition.m in Sources */,
 				169A7B2A1BFF1C2300A7C06D /* Battery.m in Sources */,
 				169A7B381BFFB81300A7C06D /* Reachability.m in Sources */,
 				1623CE771BFD1B2C00EFAD72 /* AWARE.xcdatamodeld in Sources */,

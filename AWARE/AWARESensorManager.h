@@ -18,6 +18,7 @@
 - (void) addNewSensor:(AWARESensor *) sensor;
 - (bool) addNewSensorWithSensorName:(NSString *)sensorName
                            settings:(NSArray*)settings
+                            plugins:(NSArray*)plugins
                      uploadInterval:(double) uploadTime;
 - (NSString*)getLatestSensorData:(NSString *)sensorName;
 

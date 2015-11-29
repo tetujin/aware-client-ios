@@ -13,6 +13,7 @@
 #import "SensorDataManager.h"
 
 #import "AmbientNoise.h"
+#import "ActivityRecognition.h"
 
 
 @interface ViewController (){
@@ -160,10 +161,10 @@
 //    [_sensors addObject:[self getCelContent:@"Processor" desc:@"CPU workload for user, system and idle(%)" image:@"ic_action_processor" key:SENSOR_PROCESSOR]];
 //    [_sensors addObject:[self getCelContent:@"Telephony" desc:@"Mobile operator and specifications, cell tower and neighbor scanning" image:@"ic_action_telephony" key:SENSOR_TELEPHONY]];
     [_sensors addObject:[self getCelContent:@"WiFi" desc:@"Wi-Fi sensing" image:@"ic_action_wifi" key:SENSOR_WIFI]];
-    [_sensors addObject:[self getCelContent:@"AmbientNoise" desc:@"AmbientNoise sensor" image:@"" key:SENSOR_AMBIENT_NOISE]];
+//    [_sensors addObject:[self getCelContent:@"AmbientNoise" desc:@"AmbientNoise sensor" image:@"" key:SENSOR_AMBIENT_NOISE]];
 
     // android specific sensors
-    //[_sensors addObject:[self getCelContent:@"Gravity" desc:@"Force of gravity as a 3D vector with direction and magnitude of gravity (m^2)" image:@"ic_action_gravity"]];
+    //[_sensors addObject:[self getCelContent:@"Gravity" desc:@"Force of gravity as a 3D vector with direction and magnitude of gravity (m^2)" image:@"ic_action_ gravity"]];
     //[_sensors addObject:[self getCelContent:@"Light" desc:@"Ambient Light (lux)" image:@"ic_action_light"]];
     //[_sensors addObject:[self getCelContent:@"Proximity" desc:@"" image:@"ic_action_proximity"]];
     //[_sensors addObject:[self getCelContent:@"Temperature" desc:@"" image:@"ic_action_temperature"]];
@@ -173,11 +174,21 @@
 //    [_sensors addObject:[self getCelContent:@"Direction (iOS)" desc:@"Device's direction (0-360)" image:@"safari_copyrighted" key:SENSOR_DIRECTION]];
 //    [_sensors addObject:[self getCelContent:@"Rotation (iOS)" desc:@"Orientation of the device" image:@"ic_action_rotation" key:SENSOR_ROTATION]];
     
+    [_sensors addObject:[self getCelContent:@"Ambient Noise" desc:@"Anbient noise sensing by using a microphone on a smartphone," image:@"" key:SENSOR_AMBIENT_NOISE]];
     
-    // for test
+    [_sensors addObject:[self getCelContent:@"Activity Recognition" desc:@"iOS Activity Recognition" image:@"" key:SENSOR_PLUGIING_GOOGLE_ACTIVITY_RECOGNITION]];
+    
+    
+    // Test code for ambient noize sensor
 //    AWARESensor *ambientSensor = [[AmbientNoise alloc] initWithSensorName:SENSOR_AMBIENT_NOISE];
 //    [_sensorManager addNewSensor:ambientSensor];
 //    [ambientSensor startSensor:10 withSettings:nil];
+    
+    // Test code for activity recognition sensor
+//    AWARESensor *activityRecognition = [[ActivityRecognition alloc] initWithSensorName:SENSOR_PLUGIING_GOOGLE_ACTIVITY_RECOGNITION];
+//    [activityRecognition startSensor:30 withSettings:nil];
+//    [_sensorManager addNewSensor:activityRecognition];
+    
 }
 
 
@@ -195,8 +206,9 @@
 
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSArray *sensors = [userDefaults objectForKey:KEY_SENSORS];
+    NSArray *plugins = [userDefaults objectForKey:KEY_PLUGINS];
     // [NOTE] If this sensor is "active", addNewSensorWithSensorName method return TRUE value.
-    bool state = [_sensorManager addNewSensorWithSensorName:key settings:sensors uploadInterval:uploadInterval];
+    bool state = [_sensorManager addNewSensorWithSensorName:key settings:sensors plugins:plugins uploadInterval:uploadInterval];
     if (state) {
         [dic setObject:@"true" forKey:KEY_CEL_STATE];
     }
@@ -344,11 +356,14 @@
     // define the handler that will be called when MQTT messages are received by the client
     [self.client setMessageHandler:^(MQTTMessage *message) {
         NSString *text = message.payloadString;
-        NSLog(@"Received messages %@", text);
+//        NSLog(@"Received messages %@", text);
         NSData *data = [text dataUsingEncoding:NSUTF8StringEncoding];
         NSDictionary * dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
-        NSArray *array = [dic objectForKey:@"sensors"];
+        NSLog(@"%@",dic);
+        NSArray *array = [dic objectForKey:KEY_SENSORS];
+        NSArray *plugins = [dic objectForKey:KEY_PLUGINS];
         [userDefaults setObject:array forKey:KEY_SENSORS];
+        [userDefaults setObject:plugins forKey:KEY_PLUGINS];
         [userDefaults synchronize];
         
         dispatch_async(dispatch_get_main_queue(), ^{

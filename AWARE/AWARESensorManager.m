@@ -21,6 +21,7 @@
 #import "LinearAccelerometer.h"
 #import "Bluetooth.h"
 #import "AmbientNoise.h"
+#import "ActivityRecognition.h"
 
 @implementation AWARESensorManager
 
@@ -33,7 +34,10 @@
     return self;
 }
 
--(bool)addNewSensorWithSensorName:(NSString *)key settings:(NSArray*)settings uploadInterval:(double) uploadTime{
+-(bool)addNewSensorWithSensorName:(NSString *)key
+                         settings:(NSArray*)settings
+                          plugins:(NSArray*)plugins
+                   uploadInterval:(double) uploadTime{
 //    double uploadTime = 10.0f;
     NSLog(@"upload interval is %f.", uploadTime);
     AWARESensor* awareSensor = nil;
@@ -82,13 +86,47 @@
                     [awareSensor startSensor:uploadTime withSettings:settings];
                 }
                 
-                if (awareSensor != NULL) {
-                    [self addNewSensor:awareSensor];
-                    return YES;
+//                if (awareSensor != NULL) {
+//                    [self addNewSensor:awareSensor];
+////                    return YES;
+//                }
+            }
+        }
+    }
+    
+    // add plugin
+//    awareSensor = nil;
+    for (int i=0; i<plugins.count; i++) {
+        NSDictionary *plugin = [plugins objectAtIndex:i];
+        NSLog(@"%@", plugin);
+//        NSString *pluginUri = [plugin objectForKey:@"plugin"];
+        NSArray *pluginSettings = [plugin objectForKey:@"settings"];
+//        NSLog(@"%@",pluginSettings);
+        for (NSDictionary* pluginSetting in pluginSettings) {
+            NSString *pluginStateKey = [NSString stringWithFormat:@"status_%@",key];
+            NSString *pluginStateName = [pluginSetting objectForKey:@"setting"];
+            if ([pluginStateKey isEqualToString:pluginStateName]) {
+                bool pluginState = [pluginSetting objectForKey:@"value"];
+                if (pluginState) {
+                    if ([key isEqualToString:SENSOR_PLUGIING_GOOGLE_ACTIVITY_RECOGNITION]) {
+//                        NSLog(@"goole");
+                        awareSensor = [[ActivityRecognition alloc] initWithSensorName:SENSOR_PLUGIING_GOOGLE_ACTIVITY_RECOGNITION];
+                        [awareSensor startSensor:uploadTime withSettings:settings];
+                    }else if([key isEqualToString:SENSOR_AMBIENT_NOISE]){
+//                        NSLog(@"noize");
+                        awareSensor = [[AmbientNoise alloc] initWithSensorName:SENSOR_AMBIENT_NOISE];
+                        [awareSensor startSensor:uploadTime withSettings:settings];
+                    }
                 }
             }
         }
     }
+    
+    if (awareSensor != NULL) {
+        [self addNewSensor:awareSensor];
+        return YES;
+    }
+
     return NO;
 }
 
