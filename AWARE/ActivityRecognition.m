@@ -54,7 +54,6 @@
     [self createTable];
 
     uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval target:self selector:@selector(uploadSensorData) userInfo:nil repeats:YES];
-    /** motion */
     /** motion activity */
     if([CMMotionActivityManager isActivityAvailable]){
         motionActivityManager = [CMMotionActivityManager new];
@@ -83,36 +82,36 @@
     //https://developers.google.com/android/reference/com/google/android/gms/location/DetectedActivity
     NSString *motionName = @"";
     NSNumber *motionType = @4;
-    NSLog(@"Quite probably a new activity.");
+//    NSLog(@"Quite probably a new activity.");
     //        NSDate *started = motionActivity.startDate;
     if (motionActivity.stationary){
         motionName = @"still";
-        NSLog(@"still");
+//        NSLog(@"still");
         motionType = @3;
     } else if (motionActivity.running){
         motionName = @"running";
-        NSLog(@"running");
+//        NSLog(@"running");
         motionType = @8;
     } else if (motionActivity.automotive){
         motionName = @"in_vehicle";
         motionType = @1;
-        NSLog(@"in_vehicle");
+//        NSLog(@"in_vehicle");
     } else if (motionActivity.walking){
         motionName = @"walking";
         motionType = @7;
-        NSLog(@"walking");
+//        NSLog(@"walking");
     } else if (motionActivity.cycling){
         motionName = @"on_bicycle";
         motionType = @1;
-        NSLog(@"on_bicycle");
+//        NSLog(@"on_bicycle");
     } else if (motionActivity.unknown){
         motionName = @"unknown";
         motionType = @4;
-        NSLog(@"unknown");
+//        NSLog(@"unknown");
     } else {
         motionName = @"unknown";
         motionType = @4;
-        NSLog(@"unknown");
+//        NSLog(@"unknown");
     }
     
     //    NSLog(@"Discovered characteristic %@", characteristic);

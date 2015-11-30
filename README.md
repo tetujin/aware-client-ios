@@ -1,4 +1,4 @@
-# AWARE Framework Client source code for iOS (http://awareframework.com)
+## AWARE Framework Client source code for iOS (http://awareframework.com)
 AWARE is an Android and iOS framework dedicated to instrument, infer, log and share mobile context information, 
 for application developers, researchers and smartphone users. AWARE captures hardware-, software-, and human-based data. 
 The data is then analyzed using AWARE plugins. They transform data into information you can understand.

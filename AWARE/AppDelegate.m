@@ -26,31 +26,32 @@
     
     
     [application unregisterForRemoteNotifications];
-#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 80000
-    // iOSのバージョンが 8.0以降の場合の処理
-    [application registerForRemoteNotifications];
-#else
-    // それ以外の場合の処理
-    UIRemoteNotificationType remoteNotificationType =
-    UIRemoteNotificationTypeBadge|
-    UIRemoteNotificationTypeSound|
-    UIRemoteNotificationTypeAlert|
-    UIRemoteNotificationTypeNewsstandContentAvailability;
-    [application registerForRemoteNotificationTypes:remoteNotificationType];
-#endif
     
-    UIUserNotificationType types =
-    UIUserNotificationTypeBadge|
-    UIUserNotificationTypeSound|
-    UIUserNotificationTypeNone|
-    UIUserNotificationTypeAlert;
-    UIUserNotificationSettings *mySettings = [UIUserNotificationSettings settingsForTypes:types categories:nil];
-    [application registerUserNotificationSettings:mySettings];
+    // Get OS version
+    CGFloat currentVersion = [[[UIDevice currentDevice] systemVersion] floatValue];
+    NSLog(@"OS:%f", currentVersion);
+    if (currentVersion >= 8.0) {
+        [application registerForRemoteNotifications];
+        
+        // For Push Notification and Background Fetch
+        UIUserNotificationType types =
+        UIUserNotificationTypeBadge|
+        UIUserNotificationTypeSound|
+        UIUserNotificationTypeNone|
+        UIUserNotificationTypeAlert;
+        UIUserNotificationSettings *mySettings = [UIUserNotificationSettings settingsForTypes:types categories:nil];
+        [application registerUserNotificationSettings:mySettings];
+        [application setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
+    }else{
+        UIRemoteNotificationType remoteNotificationType =
+        UIRemoteNotificationTypeBadge|
+        UIRemoteNotificationTypeSound|
+        UIRemoteNotificationTypeAlert;
+        //   |UIRemoteNotificationTypeNewsstandContentAvailability;
+        [application registerForRemoteNotificationTypes:remoteNotificationType];
+    }
     
-    [application setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
-    
-    
-    
+    // For Google Auth API
     NSError* configureError;
     [[GGLContext sharedInstance] configureWithError: &configureError];
     NSAssert(!configureError, @"Error configuring Google services: %@", configureError);
