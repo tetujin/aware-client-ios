@@ -90,7 +90,11 @@
         //    locationManager.desiredAccuracy = kCLLocationAccuracyKilometer;
         _homeLocationManager.desiredAccuracy = kCLLocationAccuracyBest;
         _homeLocationManager.pausesLocationUpdatesAutomatically = NO;
-        _homeLocationManager.allowsBackgroundLocationUpdates = YES; //This variable is an important method for background sensing
+        CGFloat currentVersion = [[[UIDevice currentDevice] systemVersion] floatValue];
+        NSLog(@"OS:%f", currentVersion);
+        if (currentVersion >= 9.0) {
+            _homeLocationManager.allowsBackgroundLocationUpdates = YES; //This variable is an important method for background sensing
+        }
         _homeLocationManager.activityType = CLActivityTypeOther;
         if ([_homeLocationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
             [_homeLocationManager requestAlwaysAuthorization];
