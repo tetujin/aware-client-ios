@@ -14,7 +14,7 @@ Nothing is more stressful than to interrupt a mobile phone user at the most unfo
 
 
 ## Author
-AWARE Framerowk client for iOS is developed by [Yuuki Nishiyama](https://www.ht.sfc.keio.ac.jp/~tetujin/) (Tokuda Laboratory, SFC, Keio University). Also, original [AWARE Framework client](https://github.com/denzilferreira/aware-client) (for Android) was created by [Denzil Ferreira](http://www.denzilferreira.com/) (Community Imaging Group, University of Oulu) and his group.
+AWARE Framework client for iOS is developed by [Yuuki Nishiyama](https://www.ht.sfc.keio.ac.jp/~tetujin/) (Tokuda Laboratory, SFC, Keio University). Also, [AWARE framework](http://www.awareframework.com/) and [AWARE Framework client](https://github.com/denzilferreira/aware-client) (for Android) were created by [Denzil Ferreira](http://www.denzilferreira.com/) (Community Imaging Group, University of Oulu) and his group originally.
 
 ## Libraries
 AWARE Framework Client for iOS uses following external libraries via [CocoaPod](https://cocoapods.org/).
