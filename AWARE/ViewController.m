@@ -71,8 +71,12 @@
     
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    self.navigationController.navigationBar.delegate = self;
-    
+//    self.navigationController.navigationBar.delegate = self;
+    CGFloat currentVersion = [[[UIDevice currentDevice] systemVersion] floatValue];
+//    NSLog(@"OS:%f", currentVersion);
+    if (currentVersion >= 8.0) {
+        [self.navigationController.navigationBar setDelegate:self];
+    }
     [self connectMqttServer];
     
     listUpdateTimer = [NSTimer scheduledTimerWithTimeInterval:0.1f target:self.tableView selector:@selector(reloadData) userInfo:nil repeats:YES];
@@ -278,6 +282,24 @@
 }
 
 
+
+- (IBAction)pushedStudyRefreshButton:(id)sender {
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"AWARE Study"
+                                                    message:@"AWARE Study was refreshed!"
+                                                   delegate:nil
+                                          cancelButtonTitle:@"OK"
+                                          otherButtonTitles:nil];
+    [alert show];
+    [_sensorManager stopAllSensors];
+    NSLog(@"remove all sensors");
+    [self initList];
+    [self.tableView reloadData];
+    [self connectMqttServer];
+    //if you return NO, the back button press is cancelled
+//    [self setNaviBarTitle];
+}
+
+
 -(BOOL)navigationBar:(UINavigationBar *)navigationBar shouldPopItem:(UINavigationItem *)item
 {
     NSLog(@"Back button got pressed!");
@@ -292,6 +314,7 @@
     [self setNaviBarTitle];
     return YES;
 }
+
 
 - (bool) connectMqttServer {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];

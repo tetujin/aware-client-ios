@@ -19,6 +19,7 @@
 @property (strong, nonatomic) CLLocationManager *homeLocationManager;
 //@property (strong, nonatomic) SensorDataManager * sensorDataManager;
 
+- (IBAction)pushedStudyRefreshButton:(id)sender;
 
 @property MQTTClient *client;
 

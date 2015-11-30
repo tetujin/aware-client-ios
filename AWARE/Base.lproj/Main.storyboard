@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9049"/>
+        <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
     </dependencies>
     <scenes>
         <!--AWARE-->
@@ -34,11 +35,18 @@
                                 <segue destination="Civ-lf-EA0" kind="show" id="M26-Sm-zjK"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" image="QR_code_filled" id="BRn-rr-Hag">
-                            <connections>
-                                <segue destination="Hnq-7Q-yrY" kind="push" id="3U1-pi-fNP"/>
-                            </connections>
-                        </barButtonItem>
+                        <rightBarButtonItems>
+                            <barButtonItem image="QR_code_filled" id="BRn-rr-Hag">
+                                <connections>
+                                    <segue destination="Hnq-7Q-yrY" kind="push" id="3U1-pi-fNP"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem systemItem="refresh" id="bHX-ZG-1pZ">
+                                <connections>
+                                    <action selector="pushedStudyRefreshButton:" destination="68D-Qb-jCP" id="Hpz-jY-Pro"/>
+                                </connections>
+                            </barButtonItem>
+                        </rightBarButtonItems>
                     </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eTN-Zo-OWZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
