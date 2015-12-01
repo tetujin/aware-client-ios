@@ -65,7 +65,7 @@
     [self initLocationSensor];
     
     _sensorManager = [[AWARESensorManager alloc] init];
-    uploadInterval = 60*15;
+    uploadInterval = 60;//60*15;
     
     [self initList];
     
@@ -78,9 +78,7 @@
         [self.navigationController.navigationBar setDelegate:self];
     }
     [self connectMqttServer];
-    
     listUpdateTimer = [NSTimer scheduledTimerWithTimeInterval:0.1f target:self.tableView selector:@selector(reloadData) userInfo:nil repeats:YES];
-    
 //    _sensorDataManager = [[SensorDataManager alloc] initWithDBPath:@"" userID:@"" ];
     
 }
@@ -91,7 +89,7 @@
     if (nil == _homeLocationManager){
         _homeLocationManager = [[CLLocationManager alloc] init];
         _homeLocationManager.delegate = self;
-        //    locationManager.desiredAccuracy = kCLLocationAccuracyKilometer;
+        // locationManager.desiredAccuracy = kCLLocationAccuracyKilometer;
         _homeLocationManager.desiredAccuracy = kCLLocationAccuracyBest;
         _homeLocationManager.pausesLocationUpdatesAutomatically = NO;
         CGFloat currentVersion = [[[UIDevice currentDevice] systemVersion] floatValue];

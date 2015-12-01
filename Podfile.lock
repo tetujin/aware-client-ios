@@ -1,5 +1,9 @@
 PODS:
-  - DeployGateSDK (1.0.7)
+  - FMDB (2.5):
+    - FMDB/standard (= 2.5)
+  - FMDB/common (2.5)
+  - FMDB/standard (2.5):
+    - FMDB/common
   - Google/Core (1.2.1):
     - GoogleInterchangeUtilities (~> 1.0)
     - GoogleNetworkingUtilities (~> 1.0)
@@ -33,7 +37,7 @@ PODS:
     - macros_blocks (= 0.0.1)
 
 DEPENDENCIES:
-  - DeployGateSDK
+  - FMDB
   - Google/SignIn
   - MQTTKit (from `https://github.com/mobile-web-messaging/MQTTKit.git`)
   - SCNetworkReachability
@@ -48,7 +52,7 @@ CHECKOUT OPTIONS:
     :git: https://github.com/mobile-web-messaging/MQTTKit.git
 
 SPEC CHECKSUMS:
-  DeployGateSDK: df3d5838db7e35c05a711c35a3bdeef3c2b016ba
+  FMDB: 96e8f1bcc1329e269330f99770ad4285d9003e52
   Google: fd33b5fa40fa3aaee5176de49c873a74e3d11dce
   GoogleAppUtilities: c01c6a5671e9da8b9d690fdaec5959d6c2aac699
   GoogleAuthUtilities: 049ffd3a297cdffd271451b82fd4e75304f15ef3

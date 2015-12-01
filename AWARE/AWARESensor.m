@@ -9,6 +9,9 @@
 #import "AWARESensor.h"
 #import "AWAREStudyManager.h"
 #import "SCNetworkReachability.h"
+#import "FMDatabase.h"
+#import "FMResultSet.h"
+#import "FMDatabaseQueue.h"
 
 
 @interface AWARESensor (){
@@ -23,6 +26,9 @@
     bool wifiState;
     NSTimer* writeAbleTimer;
     bool writeAble;
+    NSString *dbPath;
+    FMDatabase *db;
+    bool readingDataFromDB;
 }
 
 
@@ -78,21 +84,37 @@
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
         NSString *documentsDirectory = [paths objectAtIndex:0];
         NSString * path = [documentsDirectory stringByAppendingPathComponent:sensorName];
-        NSFileHandle *fh = [NSFileHandle fileHandleForWritingAtPath:path];
-        if (!fh) { // no
-            NSLog(@"You don't have a file for %@, then system recreated new file!", sensorName);
-            NSFileManager *manager = [NSFileManager defaultManager];
-            if (![manager fileExistsAtPath:path]) { // yes
-                BOOL result = [manager createFileAtPath:path
-                                               contents:[NSData data] attributes:nil];
-                if (!result) {
-                    NSLog(@"[%@] Error to create the file", sensorName);
-                }else{
-                    NSLog(@"[%@] Sucess to create the file", sensorName);
-                }
-            }
-        }
+//        NSFileHandle *fh = [NSFileHandle fileHandleForWritingAtPath:path];
+//        if (!fh) { // no
+//            NSLog(@"You don't have a file for %@, then system recreated new file!", sensorName);
+//            NSFileManager *manager = [NSFileManager defaultManager];
+//            if (![manager fileExistsAtPath:path]) { // yes
+//                BOOL result = [manager createFileAtPath:path
+//                                               contents:[NSData data] attributes:nil];
+//                if (!result) {
+//                    NSLog(@"[%@] Error to create the file", sensorName);
+//                }else{
+//                    NSLog(@"[%@] Sucess to create the file", sensorName);
+//                }
+//            }
+//        }
         writeAble = YES;
+        // init database
+        dbPath = [[NSString alloc] initWithFormat:@"%@.db", path];
+        db = [FMDatabase databaseWithPath:dbPath];//@"/tmp/tmp.db"];
+        if ([db open]) {
+            NSString *sql = @"create table data (id integer primary key autoincrement, timestamp real, data text);";
+            if([db executeStatements:sql]){
+                NSLog(@"[%@] Sucess to create a table.", sensorName);
+            }else{
+                NSLog(@"[%@] Faile to create a table.", sensorName);
+            }
+        }else{
+            NSLog(@"[%@] Faile to open the database.", sensorName);
+        }
+        readingDataFromDB = false;
+
+        
     }
     return self;
 }
@@ -151,30 +173,27 @@
 }
 
 
-- (NSString *)saveData:(NSDictionary *)data toLocalFile:(NSString *)fileName{
-    NSError*error=nil;
-    NSData*d=[NSJSONSerialization dataWithJSONObject:data options:2 error:&error];
-    NSString*jsonstr=[[NSString alloc]initWithData:d encoding:NSUTF8StringEncoding];
-    
-//    if ([fileName isEqualToString:SENSOR_AMBIENT_NOISE]) {
-//        NSLog(@"%ld", bufferStr.length);
+//- (NSString *)saveData:(NSDictionary *)data toLocalFile:(NSString *)fileName{
+//    NSError*error=nil;
+//    NSData*d=[NSJSONSerialization dataWithJSONObject:data options:2 error:&error];
+//    NSString*jsonstr=[[NSString alloc]initWithData:d encoding:NSUTF8StringEncoding];
+//
+//    if (writeAble) {
+//        // append sensor data the file
+//        [bufferStr appendString:jsonstr];
+//        [self appendLine:bufferStr path:fileName];
+//        [bufferStr setString:@""];
+//        [self setWriteableNO];
+//        return @"";
+//    }else{
+//        [bufferStr appendString:jsonstr];
+//        [bufferStr appendFormat:@"\n"];
+//        return @"";
 //    }
-    
-//    if (bufferStr.length < bufferLimit) {
-    if (writeAble) {
-        // append sensor data the file
-        [bufferStr appendString:jsonstr];
-        [self appendLine:bufferStr path:fileName];
-        [bufferStr setString:@""];
-        [self setWriteableNO];
-        return @"";
-    }else{
-        [bufferStr appendString:jsonstr];
-        [bufferStr appendFormat:@"\n"];
-        return @"";
-    }
-    return @"";
-}
+//    return @"";
+//}
+
+
 
 - (BOOL) appendLine:(NSString *)line path:(NSString*) fileName {
 //        dispatch_async(dispatch_get_main_queue(), ^{
@@ -246,23 +265,6 @@
     NSString *documentsDirectory = [paths objectAtIndex:0];
     NSString * path = [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.dat",fileName]];
     if ([manager fileExistsAtPath:path]) { // yes
-//        bool result = [manager removeItemAtPath:path error:nil];
-//        if(!result){
-//            NSLog(@"[%@] failed to remove the file...", [self getSensorName]);
-//        }else{
-//            NSLog(@"[%@] sucess to remove the file!", [self getSensorName]);
-//            [self createNewFile:fileName];
-//        }
-//        NSFileHandle *fh = [NSFileHandle fileHandleForWritingAtPath:path];
-//        NSFileHandle *fh = [NSFileHandle fileHandleForUpdatingAtPath:path];
-//        if (!fh) { // no
-//            NSLog(@"[%@] file is not exist.", fileName);
-//            return NO;
-//        }
-//        [fh writeData:[@"" dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES]];
-//        [fh fileDescriptor];
-//        [fh synchronizeFile];
-//        [fh closeFile];
         bool result = [@"" writeToFile:path atomically:NO encoding:NSUTF8StringEncoding error:nil];
         if (result) {
             NSLog(@"[%@] Correct to clear sensor data.", fileName);
@@ -279,41 +281,41 @@
 }
 
 
-- (NSString*) getData:(NSString *)fileName withJsonArrayFormat:(bool)jsonArrayFormat{
-    if (!wifiState) {
-        NSLog(@"You need wifi network to upload sensor data.");
-        return @"";
-    }
-    lineCount = 0;
-    
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0];
-    NSString * path = [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.dat",fileName]];
-    NSMutableString *data = nil;
-    
-    NSFileHandle *fileHandle = [NSFileHandle fileHandleForReadingAtPath:path];
-    if (!fileHandle) {
-        NSLog(@"[%@] AWARE can not handle the file.", fileName);
-        [self createNewFile:fileName];
-        return @"[]";
-    }
-    NSString *str = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
-    [fileHandle closeFile];
-    
-
-    data = [[NSMutableString alloc] initWithString:@"["];
-    [str enumerateLinesUsingBlock:^(NSString *line, BOOL *stop) {
-        lineCount++;
-        [data appendString:[NSString stringWithFormat:@"%@,", line]];
-    }];
-    if(data.length > 1){
-        [data deleteCharactersInRange:NSMakeRange([data length]-1, 1)];
-    }
-    [data appendString:@"]"];
-    NSLog(@"[%@] You got %d lines of sensor data", [self getSensorName], lineCount);
-
-    return [NSString stringWithString:data];
-}
+//- (NSString*) getData:(NSString *)fileName withJsonArrayFormat:(bool)jsonArrayFormat{
+//    if (!wifiState) {
+//        NSLog(@"You need wifi network to upload sensor data.");
+//        return @"";
+//    }
+//    lineCount = 0;
+//    
+//    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+//    NSString *documentsDirectory = [paths objectAtIndex:0];
+//    NSString * path = [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.dat",fileName]];
+//    NSMutableString *data = nil;
+//    
+//    NSFileHandle *fileHandle = [NSFileHandle fileHandleForReadingAtPath:path];
+//    if (!fileHandle) {
+//        NSLog(@"[%@] AWARE can not handle the file.", fileName);
+//        [self createNewFile:fileName];
+//        return @"[]";
+//    }
+//    NSString *str = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
+//    [fileHandle closeFile];
+//    
+//
+//    data = [[NSMutableString alloc] initWithString:@"["];
+//    [str enumerateLinesUsingBlock:^(NSString *line, BOOL *stop) {
+//        lineCount++;
+//        [data appendString:[NSString stringWithFormat:@"%@,", line]];
+//    }];
+//    if(data.length > 1){
+//        [data deleteCharactersInRange:NSMakeRange([data length]-1, 1)];
+//    }
+//    [data appendString:@"]"];
+//    NSLog(@"[%@] You got %d lines of sensor data", [self getSensorName], lineCount);
+//
+//    return [NSString stringWithString:data];
+//}
 
 
 - (double)getSensorSetting:(NSArray *)settings withKey:(NSString *)key{
@@ -398,7 +400,7 @@
     sessionConfig.HTTPMaximumConnectionsPerHost = 30;
     
     post = [NSString stringWithFormat:@"device_id=%@&data=%@", deviceId, data];
-//        NSLog(@"%@", post);
+//    NSLog(@"%@", post);
     postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
     postLength = [NSString stringWithFormat:@"%ld", [postData length]];
     request = [[NSMutableURLRequest alloc] init];
@@ -523,7 +525,7 @@
     __weak NSURLSession *session = nil;
     NSString *postLength = nil;
     post = [NSString stringWithFormat:@"device_id=%@&fields=%@", [self getDeviceId], query];
-            NSLog(@"%@", post);
+//            NSLog(@"%@", post);
     postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
     postLength = [NSString stringWithFormat:@"%ld", [postData length]];
     request = [[NSMutableURLRequest alloc] init];
@@ -671,70 +673,91 @@
 
 
 // Using SQLite
-
-//- (NSString *)saveData:(NSDictionary *)data toLocalFile:(NSString *)fileName{
-//    NSError*error=nil;
-//    NSData*d=[NSJSONSerialization dataWithJSONObject:data options:2 error:&error];
-//    NSString*jsonstr=[[NSString alloc]initWithData:d encoding:NSUTF8StringEncoding];
-//    //    [self appendLine:jsonstr path:fileName];
-//    // update to SQLite.
-//    NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
-//    NSNumber* unixtime = [NSNumber numberWithDouble:timeStamp];
-//    NSString* sql = [NSString stringWithFormat:@"insert into data (timestamp, data) values (%f, '%@')", unixtime.doubleValue, jsonstr];
-//    //     _db = [FMDatabase databaseWithPath:dbPath];
-//    if (![_db open]) NSLog(@"%@ dabase was not opened.", dbPath);
-//    bool result = [_db executeStatements:sql];
-//    if(result){
-//        //        NSLog(@"sucess!");
-//    }else{
-//        NSLog(@"failure...");
-//    }
-//    [_db close];
-//    return @"";
-//}
-//
-//
-//-  (NSString*) getData:(NSString *)fileName withJsonArrayFormat:(bool)jsonArrayFormat{
-//    // 1. Get sensor data.
-//    // 1.1 Open the database
-//    NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
-//    NSNumber* unixtime = [NSNumber numberWithDouble:timeStamp];
-//    NSString* sql = [NSString stringWithFormat:@"select * from data where timestamp < %f", unixtime.doubleValue];
-//    if (![_db open]) {
-//        NSLog(@"%@ dabase was not opened.", dbPath);
+- (NSString *)saveData:(NSDictionary *)data toLocalFile:(NSString *)fileName{
+    NSError*error=nil;
+    NSData*d=[NSJSONSerialization dataWithJSONObject:data options:2 error:&error];
+    NSString*jsonstr=[[NSString alloc]initWithData:d encoding:NSUTF8StringEncoding];
+    //    [self appendLine:jsonstr path:fileName];
+    // update to SQLite.
+    [bufferStr appendString:jsonstr];
+    [bufferStr appendFormat:@","];
+    
+//    if (previusUploadingState) {
+//        NSLog(@"[%@] Now sensordata uploading..", [self getSensorName]);
 //        return @"";
 //    }
-//    int count = 0;
-//    FMResultSet *s = [_db executeQuery:sql];
-//    [_db close];
-//    
-//    NSMutableString *data = [[NSMutableString alloc] initWithString:@"["];
-//    while ([s next]) {
-//        NSString *value = nil;
-//        @autoreleasepool{
-//            count++;
-//            value = [s objectForColumnName:@"data"];
-//            [data appendString:[NSString stringWithFormat:@"%@,", value]];
-//        }
-//    }
-//    NSLog(@"You got %d records",count);
-//    [s close];
-//    if([data length] > 1) [data deleteCharactersInRange:NSMakeRange([data length]-1, 1)];
-//    [data appendString:@"]"];
-//    // 2. Remove old sensor data.
-//    
-//    sql = [NSString stringWithFormat:@"delete from data where timestamp < %f", unixtime.doubleValue];
-//    bool result = [_db executeStatements:sql];
-//    //    [db close];
-//    if (result) {
-//        NSLog(@"deleted");
-//    }else{
-//        NSLog(@"error!");
-//    }
-//    
-//    // 3. Return sensor data sa a NSString.
-//    return data;
-//}
+    
+    if (readingDataFromDB){
+        NSLog(@"[%@] Now database is used by reader..", [self getSensorName]);
+        return @"";
+    }
+    if (writeAble) {
+        NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
+        NSNumber* unixtime = [NSNumber numberWithDouble:timeStamp];
+        NSString* sql = [NSString stringWithFormat:@"insert into data (timestamp, data) values (%f, '%@')", unixtime.doubleValue, bufferStr];
+        if ([db open]) {
+            bool result = [db executeStatements:sql];
+            if(result){
+                //        NSLog(@"sucess!");
+            }else{
+                NSLog(@"failure...");
+                return @"";
+            }
+            [db close];
+            [bufferStr setString:@""];
+            [self setWriteableNO];
+        }else{
+            NSLog(@"%@ dabase was not opened.", dbPath);
+            return @"";
+        }
+    }else{
+        return @"";
+    }
+    return @"";
+    
+    
+}
+
+
+-  (NSString*) getData:(NSString *)fileName withJsonArrayFormat:(bool)jsonArrayFormat{
+    // 1. Get sensor data.
+    // 1.1 Open the database
+    readingDataFromDB = YES;
+    NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
+    NSNumber* unixtime = [NSNumber numberWithDouble:timeStamp];
+    NSString* sql = [NSString stringWithFormat:@"select * from data where timestamp < %f ORDER BY timestamp ASC limit 100", unixtime.doubleValue];
+    if (![db open]) {
+        NSLog(@"[%@] Dabase was not opened.", dbPath);
+        return @"";
+    }
+    lineCount = 0;
+    FMResultSet *s = [db executeQuery:sql];
+    NSMutableString *data = [[NSMutableString alloc] initWithString:@"["];
+    while ([s next]) {
+        NSString *value = nil;
+        lineCount++;
+        value = [s objectForColumnName:@"data"];
+        [data appendString:[NSString stringWithFormat:@"%@", value]];
+    }
+    NSLog(@"[%@] You got %d records",[self getSensorName], lineCount);
+    if([data length] > 1) {
+        [data deleteCharactersInRange:NSMakeRange([data length]-1, 1)];
+    }
+    [data appendString:@"]"];
+    
+    // 2. Remove old sensor data.
+    sql = [NSString stringWithFormat:@"delete from data where timestamp < %f ORDER BY timestamp ASC limit 100", unixtime.doubleValue];
+    bool result = [db executeStatements:sql];
+    [db close];
+    if (result) {
+        NSLog(@"[%@] Aucess to delete data from the database.", [self getSensorName]);
+    }else{
+        NSLog(@"[%@] Faile to delete data from the database.", [self getSensorName]);
+    }
+    readingDataFromDB = NO;
+    // 3. Return sensor data sa a NSString.
+    return data;
+}
 
 
 

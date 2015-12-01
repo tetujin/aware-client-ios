@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AWARE/AWARESensor.m"
-            timestampString = "470259656.252712"
+            timestampString = "470636339.538663"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "235"
-            endingLineNumber = "235"
+            startingLineNumber = "254"
+            endingLineNumber = "254"
             landmarkName = "-createNewFile:"
             landmarkType = "5">
          </BreakpointContent>
@@ -26,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AWARE/AWARESensor.m"
-            timestampString = "470259656.252712"
+            timestampString = "470636339.538663"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "274"
-            endingLineNumber = "274"
+            startingLineNumber = "276"
+            endingLineNumber = "276"
             landmarkName = "-removeFile:"
             landmarkType = "5">
          </BreakpointContent>
@@ -74,11 +74,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AWARE/AWARESensor.m"
-            timestampString = "470259656.252712"
+            timestampString = "470636339.538663"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "238"
-            endingLineNumber = "238"
+            startingLineNumber = "257"
+            endingLineNumber = "257"
             landmarkName = "-createNewFile:"
             landmarkType = "5">
          </BreakpointContent>

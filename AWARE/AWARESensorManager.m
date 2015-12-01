@@ -94,14 +94,9 @@
         }
     }
     
-    // add plugin
-//    awareSensor = nil;
     for (int i=0; i<plugins.count; i++) {
         NSDictionary *plugin = [plugins objectAtIndex:i];
-        NSLog(@"%@", plugin);
-//        NSString *pluginUri = [plugin objectForKey:@"plugin"];
         NSArray *pluginSettings = [plugin objectForKey:@"settings"];
-//        NSLog(@"%@",pluginSettings);
         for (NSDictionary* pluginSetting in pluginSettings) {
             NSString *pluginStateKey = [NSString stringWithFormat:@"status_%@",key];
             NSString *pluginStateName = [pluginSetting objectForKey:@"setting"];
@@ -109,11 +104,9 @@
                 bool pluginState = [pluginSetting objectForKey:@"value"];
                 if (pluginState) {
                     if ([key isEqualToString:SENSOR_PLUGIING_GOOGLE_ACTIVITY_RECOGNITION]) {
-//                        NSLog(@"goole");
                         awareSensor = [[ActivityRecognition alloc] initWithSensorName:SENSOR_PLUGIING_GOOGLE_ACTIVITY_RECOGNITION];
                         [awareSensor startSensor:uploadTime withSettings:settings];
                     }else if([key isEqualToString:SENSOR_AMBIENT_NOISE]){
-//                        NSLog(@"noize");
                         awareSensor = [[AmbientNoise alloc] initWithSensorName:SENSOR_AMBIENT_NOISE];
                         [awareSensor startSensor:uploadTime withSettings:settings];
                     }
