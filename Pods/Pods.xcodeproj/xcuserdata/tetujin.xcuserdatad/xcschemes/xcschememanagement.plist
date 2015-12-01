@@ -4,11 +4,6 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>FMDB.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
 		<key>MQTTKit.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -32,17 +27,12 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>9F12FB4A63E20F601CFB2E64A65B57C1</key>
+		<key>7713F2A2237C759432549288F30E501D</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>B14C83985F8E9387CCF5AD5A8BA2C6DE</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>BE75D4C28BA47248463566208C2DE324</key>
+		<key>CCFD85B07892E78AEAB896DFE96BA990</key>
 		<dict>
 			<key>primary</key>
 			<true/>

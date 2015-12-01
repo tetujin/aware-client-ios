@@ -93,7 +93,7 @@
                                     <rect key="frame" x="143" y="346" width="114" height="21"/>
                                 </variation>
                                 <variation key="heightClass=compact-widthClass=compact" fixedFrame="YES">
-                                    <rect key="frame" x="143" y="263" width="114" height="21"/>
+                                    <rect key="frame" x="143" y="218" width="114" height="21"/>
                                 </variation>
                                 <variation key="heightClass=regular-widthClass=regular" fixedFrame="YES">
                                     <rect key="frame" x="343" y="367" width="114" height="21"/>
@@ -105,7 +105,7 @@
                                     <rect key="frame" x="100" y="138" width="200" height="200"/>
                                 </variation>
                                 <variation key="heightClass=compact-widthClass=compact" fixedFrame="YES">
-                                    <rect key="frame" x="100" y="55" width="200" height="200"/>
+                                    <rect key="frame" x="135" y="80" width="130" height="130"/>
                                 </variation>
                                 <variation key="heightClass=regular-widthClass=regular" fixedFrame="YES">
                                     <rect key="frame" x="300" y="159" width="200" height="200"/>
@@ -130,7 +130,7 @@
                                     <rect key="frame" x="122" y="415" width="157" height="42"/>
                                 </variation>
                                 <variation key="heightClass=compact-widthClass=compact" fixedFrame="YES">
-                                    <rect key="frame" x="80" y="322" width="240" height="58"/>
+                                    <rect key="frame" x="80" y="247" width="240" height="58"/>
                                 </variation>
                                 <variation key="heightClass=regular-widthClass=regular" fixedFrame="YES">
                                     <rect key="frame" x="300" y="410" width="200" height="44"/>
@@ -152,7 +152,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ik1-bx-zWu" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2376" y="-817"/>
+            <point key="canvasLocation" x="2376" y="-817.5"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="VKE-as-dIt">

@@ -11,7 +11,6 @@
 #import "GoogleLoginViewController.h"
 #import "Accelerometer.h"
 #import "SensorDataManager.h"
-
 #import "AmbientNoise.h"
 #import "ActivityRecognition.h"
 
@@ -24,14 +23,14 @@
     NSString *KEY_CEL_SENSOR_NAME;
     NSString *KEY;
     NSString *mqttServer;
-    NSString * oldStudyId;
+    NSString *oldStudyId;
     NSString *mqttPassword;
     NSString *mqttUserName;
-    NSString* studyId;
+    NSString *studyId;
     NSNumber *mqttPort;
-    NSNumber* mqttKeepAlive;
-    NSNumber* mqttQos;
-    NSTimer* listUpdateTimer;
+    NSNumber *mqttKeepAlive;
+    NSNumber *mqttQos;
+    NSTimer *listUpdateTimer;
     double uploadInterval;
 //    IBOutlet CLLocationManager *homeLocationManager;
     NSTimer* testTimer;
@@ -65,7 +64,7 @@
     [self initLocationSensor];
     
     _sensorManager = [[AWARESensorManager alloc] init];
-    uploadInterval = 60;//60*15;
+    uploadInterval = 60*15;
     
     [self initList];
     
