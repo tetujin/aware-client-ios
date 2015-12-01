@@ -31,6 +31,8 @@
 		165A8B741C03C0B300898C6C /* GoogleLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 165A8B731C03C0B300898C6C /* GoogleLoginViewController.m */; };
 		165A8B751C03C0B300898C6C /* GoogleLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 165A8B731C03C0B300898C6C /* GoogleLoginViewController.m */; };
 		165A8B761C03C0B300898C6C /* GoogleLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 165A8B731C03C0B300898C6C /* GoogleLoginViewController.m */; };
+		1681CF0F1C0E2B350045CBC4 /* TitleViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1681CF0E1C0E2B350045CBC4 /* TitleViewCell.xib */; };
+		1681CF121C0E2B7A0045CBC4 /* TitleViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1681CF111C0E2B7A0045CBC4 /* TitleViewCell.m */; };
 		168683031C07C43600CB4266 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 168683021C07C43600CB4266 /* AudioToolbox.framework */; };
 		168683061C07C48900CB4266 /* AmbientNoise.m in Sources */ = {isa = PBXBuildFile; fileRef = 168683051C07C48900CB4266 /* AmbientNoise.m */; };
 		168683091C08050100CB4266 /* ActivityRecognition.m in Sources */ = {isa = PBXBuildFile; fileRef = 168683081C08050100CB4266 /* ActivityRecognition.m */; };
@@ -50,7 +52,6 @@
 		169A7B491C00591A00A7C06D /* LinearAccelerometer.m in Sources */ = {isa = PBXBuildFile; fileRef = 169A7B481C00591A00A7C06D /* LinearAccelerometer.m */; };
 		16D810241C06242500605DE2 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16D810231C06242500605DE2 /* CFNetwork.framework */; };
 		16D810261C06242F00605DE2 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16D810251C06242F00605DE2 /* Security.framework */; };
-		16D8102B1C06645800605DE2 /* SensorDataManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 16D8102A1C06645800605DE2 /* SensorDataManager.mm */; };
 		16D8102D1C06671500605DE2 /* ExternalAccessory.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16D8102C1C06671500605DE2 /* ExternalAccessory.framework */; };
 		16FCE2771BFE9326005FC71A /* AWARESensorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 16FCE2761BFE9326005FC71A /* AWARESensorManager.m */; };
 		FC2AF85D761397B784DECBD3 /* libPods-AWARE.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9ED04F29ED60F3FCC960F6CD /* libPods-AWARE.a */; };
@@ -110,6 +111,9 @@
 		165A8B6E1C03B90500898C6C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
 		165A8B721C03C0B300898C6C /* GoogleLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GoogleLoginViewController.h; sourceTree = "<group>"; };
 		165A8B731C03C0B300898C6C /* GoogleLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GoogleLoginViewController.m; sourceTree = "<group>"; };
+		1681CF0E1C0E2B350045CBC4 /* TitleViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TitleViewCell.xib; sourceTree = "<group>"; };
+		1681CF101C0E2B7A0045CBC4 /* TitleViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TitleViewCell.h; sourceTree = "<group>"; };
+		1681CF111C0E2B7A0045CBC4 /* TitleViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TitleViewCell.m; sourceTree = "<group>"; };
 		168683021C07C43600CB4266 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		168683041C07C48900CB4266 /* AmbientNoise.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AmbientNoise.h; sourceTree = "<group>"; };
 		168683051C07C48900CB4266 /* AmbientNoise.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AmbientNoise.m; sourceTree = "<group>"; };
@@ -143,8 +147,6 @@
 		169A7B481C00591A00A7C06D /* LinearAccelerometer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LinearAccelerometer.m; sourceTree = "<group>"; };
 		16D810231C06242500605DE2 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		16D810251C06242F00605DE2 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
-		16D810291C06645800605DE2 /* SensorDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SensorDataManager.h; sourceTree = "<group>"; };
-		16D8102A1C06645800605DE2 /* SensorDataManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SensorDataManager.mm; sourceTree = "<group>"; };
 		16D8102C1C06671500605DE2 /* ExternalAccessory.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ExternalAccessory.framework; path = System/Library/Frameworks/ExternalAccessory.framework; sourceTree = SDKROOT; };
 		16FCE2751BFE9326005FC71A /* AWARESensorManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AWARESensorManager.h; sourceTree = "<group>"; };
 		16FCE2761BFE9326005FC71A /* AWARESensorManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AWARESensorManager.m; sourceTree = "<group>"; };
@@ -221,8 +223,6 @@
 				1623CE6D1BFD1B2C00EFAD72 /* AppDelegate.m */,
 				1623CE6F1BFD1B2C00EFAD72 /* ViewController.h */,
 				1623CE701BFD1B2C00EFAD72 /* ViewController.m */,
-				16D810291C06645800605DE2 /* SensorDataManager.h */,
-				16D8102A1C06645800605DE2 /* SensorDataManager.mm */,
 				165A8B721C03C0B300898C6C /* GoogleLoginViewController.h */,
 				165A8B731C03C0B300898C6C /* GoogleLoginViewController.m */,
 				1623CEAD1BFD407900EFAD72 /* QRCodeViewController.h */,
@@ -231,6 +231,7 @@
 				1623CEB31BFD659000EFAD72 /* AWAREStudyManager.m */,
 				16FCE2751BFE9326005FC71A /* AWARESensorManager.h */,
 				16FCE2761BFE9326005FC71A /* AWARESensorManager.m */,
+				1681CF131C0E2B870045CBC4 /* TableViewCells */,
 				168683011C07922100CB4266 /* AWARESensors */,
 				1623CE721BFD1B2C00EFAD72 /* Main.storyboard */,
 				1623CE781BFD1B2C00EFAD72 /* Assets.xcassets */,
@@ -266,6 +267,16 @@
 				1623CE931BFD1B2C00EFAD72 /* Info.plist */,
 			);
 			path = AWAREUITests;
+			sourceTree = "<group>";
+		};
+		1681CF131C0E2B870045CBC4 /* TableViewCells */ = {
+			isa = PBXGroup;
+			children = (
+				1681CF0E1C0E2B350045CBC4 /* TitleViewCell.xib */,
+				1681CF101C0E2B7A0045CBC4 /* TitleViewCell.h */,
+				1681CF111C0E2B7A0045CBC4 /* TitleViewCell.m */,
+			);
+			name = TableViewCells;
 			sourceTree = "<group>";
 		};
 		168683011C07922100CB4266 /* AWARESensors */ = {
@@ -471,6 +482,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1623CE7C1BFD1B2C00EFAD72 /* LaunchScreen.storyboard in Resources */,
+				1681CF0F1C0E2B350045CBC4 /* TitleViewCell.xib in Resources */,
 				165A8B6F1C03B90500898C6C /* GoogleService-Info.plist in Resources */,
 				1623CE791BFD1B2C00EFAD72 /* Assets.xcassets in Resources */,
 				1623CE741BFD1B2C00EFAD72 /* Main.storyboard in Resources */,
@@ -553,7 +565,6 @@
 				169A7B3B1BFFC8B100A7C06D /* Wifi.m in Sources */,
 				168683061C07C48900CB4266 /* AmbientNoise.m in Sources */,
 				165A8B741C03C0B300898C6C /* GoogleLoginViewController.m in Sources */,
-				16D8102B1C06645800605DE2 /* SensorDataManager.mm in Sources */,
 				169A7B271BFF193C00A7C06D /* Magnetometer.m in Sources */,
 				1623CEAF1BFD407900EFAD72 /* QRCodeViewController.m in Sources */,
 				1623CE711BFD1B2C00EFAD72 /* ViewController.m in Sources */,
@@ -572,6 +583,7 @@
 				1623CEBC1BFE390600EFAD72 /* Accelerometer.m in Sources */,
 				169A7B431BFFDE8F00A7C06D /* Rotation.m in Sources */,
 				1623CEB41BFD659000EFAD72 /* AWAREStudyManager.m in Sources */,
+				1681CF121C0E2B7A0045CBC4 /* TitleViewCell.m in Sources */,
 				169A7B301BFF280C00A7C06D /* Locations.m in Sources */,
 				169A7B491C00591A00A7C06D /* LinearAccelerometer.m in Sources */,
 				1623CE6B1BFD1B2C00EFAD72 /* main.m in Sources */,

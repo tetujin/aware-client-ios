@@ -10,9 +10,10 @@
 #import "AWAREStudyManager.h"
 #import "GoogleLoginViewController.h"
 #import "Accelerometer.h"
-#import "SensorDataManager.h"
 #import "AmbientNoise.h"
 #import "ActivityRecognition.h"
+
+#import "TitleViewCell.h"
 
 
 @interface ViewController (){
@@ -60,16 +61,22 @@
     mqttKeepAlive = @600;
     mqttQos = @2;
     
+    uploadInterval = 60*15;
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setBool:NO forKey:SETTING_DEBUG_STATE];
+    [userDefaults setBool:YES forKey:SETTING_SYNC_WIFI_ONLY];
+    [userDefaults setDouble:uploadInterval forKey:SETTING_SYNC_INT];
+    
+    
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+    
     [self setNaviBarTitle];
     [self initLocationSensor];
     
     _sensorManager = [[AWARESensorManager alloc] init];
-    uploadInterval = 60*15;
-    
-    [self initList];
-    
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
+
 //    self.navigationController.navigationBar.delegate = self;
     CGFloat currentVersion = [[[UIDevice currentDevice] systemVersion] floatValue];
 //    NSLog(@"OS:%f", currentVersion);
@@ -77,8 +84,11 @@
         [self.navigationController.navigationBar setDelegate:self];
     }
     [self connectMqttServer];
+    
+    [self initList];
+    
     listUpdateTimer = [NSTimer scheduledTimerWithTimeInterval:0.1f target:self.tableView selector:@selector(reloadData) userInfo:nil repeats:YES];
-//    _sensorDataManager = [[SensorDataManager alloc] initWithDBPath:@"" userID:@"" ];
+    
     
 }
 
@@ -145,13 +155,30 @@
     if(awareStudyId == nil) awareStudyId = @"";
     if(mqttServerName == nil) mqttServerName = @"";
     
-    [_sensors addObject:[self getCelContent:@"AWARE Device ID" desc:deviceId image:@"" key:@""]];
-    [_sensors addObject:[self getCelContent:@"Google Account" desc:accountInfo image:@"" key:@""]];
-    [_sensors addObject:[self getCelContent:@"AWARE Study" desc:awareStudyId image:@"" key:@""]]; //ic_action_study
-    [_sensors addObject:[self getCelContent:@"MQTT Server" desc:mqttServerName image:@"" key:@""]]; //ic_action_mqtt
+    NSString* debugState = @"OFF";
+    if ([userDefaults boolForKey:SETTING_DEBUG_STATE]) {
+        debugState = @"ON";
+    }else{
+        debugState = @"OFF";
+    }
     
+    NSString *syncInterval = [NSString stringWithFormat:@"%d",(int)[userDefaults doubleForKey:SETTING_SYNC_INT]/60];
+    
+    NSString *wifiOnly = @"YES";
+    if ([userDefaults boolForKey:SETTING_SYNC_WIFI_ONLY]) {
+        wifiOnly = @"YES";
+    }else{
+        wifiOnly = @"NO";
+    }
+    
+    
+    [_sensors addObject:[self getCelContent:@"Study" desc:@"" image:@"" key:@"TITLE_CELL_VIEW"]];
+    [_sensors addObject:[self getCelContent:@"AWARE Device ID" desc:deviceId image:@"" key:@"STUDY_CELL_VIEW"]];
+    [_sensors addObject:[self getCelContent:@"AWARE Study" desc:awareStudyId image:@"" key:@"STUDY_CELL_VIEW"]]; //ic_action_study
+    [_sensors addObject:[self getCelContent:@"MQTT Server" desc:mqttServerName image:@"" key:@"STUDY_CELL_VIEW"]]; //ic_action_mqtt
+    [_sensors addObject:[self getCelContent:@"Google Account" desc:accountInfo image:@"" key:@"STUDY_CELL_VIEW"]];
     // sensor
-    [_sensors addObject:[self getCelContent:@"Sensors" desc:@"" image:@"" key:@""]];
+    [_sensors addObject:[self getCelContent:@"Sensors" desc:@"" image:@"" key:@"TITLE_CELL_VIEW"]];
     [_sensors addObject:[self getCelContent:@"Accelerometer" desc:@"Acceleration, including the force of gravity(m/s^2)" image:@"ic_action_accelerometer" key:SENSOR_ACCELEROMETER]];
     [_sensors addObject:[self getCelContent:@"Barometer" desc:@"Atomospheric air pressure (mbar/hPa)" image:@"ic_action_barometer" key:SENSOR_BAROMETER]];
     [_sensors addObject:[self getCelContent:@"Battery" desc:@"Battery and power event" image:@"ic_action_battery" key:SENSOR_BATTERY]];
@@ -182,18 +209,12 @@
     [_sensors addObject:[self getCelContent:@"Ambient Noise" desc:@"Anbient noise sensing by using a microphone on a smartphone," image:@"" key:SENSOR_AMBIENT_NOISE]];
     
     [_sensors addObject:[self getCelContent:@"Activity Recognition" desc:@"iOS Activity Recognition" image:@"" key:SENSOR_PLUGIING_GOOGLE_ACTIVITY_RECOGNITION]];
+
     
-    
-    // Test code for ambient noize sensor
-//    AWARESensor *ambientSensor = [[AmbientNoise alloc] initWithSensorName:SENSOR_AMBIENT_NOISE];
-//    [_sensorManager addNewSensor:ambientSensor];
-//    [ambientSensor startSensor:10 withSettings:nil];
-    
-    // Test code for activity recognition sensor
-//    AWARESensor *activityRecognition = [[ActivityRecognition alloc] initWithSensorName:SENSOR_PLUGIING_GOOGLE_ACTIVITY_RECOGNITION];
-//    [activityRecognition startSensor:30 withSettings:nil];
-//    [_sensorManager addNewSensor:activityRecognition];
-    
+    [_sensors addObject:[self getCelContent:@"Settings" desc:@"" image:@"" key:@"TITLE_CELL_VIEW"]];
+    [_sensors addObject:[self getCelContent:@"Debug" desc:debugState image:@"" key:@"STUDY_CELL_DEBUG"]]; //ic_action_mqtt
+    [_sensors addObject:[self getCelContent:@"Sync Interval to AWARE Server (min)" desc:syncInterval image:@"" key:@"STUDY_CELL_SYNC"]]; //ic_action_mqtt
+    [_sensors addObject:[self getCelContent:@"Sync only wifi" desc:wifiOnly image:@"" key:@"STUDY_CELL_WIFI"]]; //ic_action_mqtt
 }
 
 
@@ -213,6 +234,7 @@
     NSArray *sensors = [userDefaults objectForKey:KEY_SENSORS];
     NSArray *plugins = [userDefaults objectForKey:KEY_PLUGINS];
     // [NOTE] If this sensor is "active", addNewSensorWithSensorName method return TRUE value.
+    uploadInterval = [userDefaults doubleForKey:SETTING_SYNC_INT];
     bool state = [_sensorManager addNewSensorWithSensorName:key settings:sensors plugins:plugins uploadInterval:uploadInterval];
     if (state) {
         [dic setObject:@"true" forKey:KEY_CEL_STATE];
@@ -220,6 +242,72 @@
     return dic;
 }
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSLog(@"%ld is selected!", indexPath.row);
+    NSDictionary *item = (NSDictionary *)[_sensors objectAtIndex:indexPath.row];
+    NSString *key = [item objectForKey:KEY_CEL_SENSOR_NAME];
+    if([key isEqualToString:@"STUDY_CELL_DEBUG"]){ //Debug
+        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Debug Statement" message:@"" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"ON", @"OFF", nil];
+        [alert show];
+    }else if([key isEqualToString:@"STUDY_CELL_SYNC"]){ //Sync
+        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Sync Interval (min)" message:@"Please inpute a sync interval to the server." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Done",nil];
+        alert.alertViewStyle = UIAlertViewStylePlainTextInput;
+        [[alert textFieldAtIndex:0] setKeyboardType:UIKeyboardTypeNumberPad];
+        [[alert textFieldAtIndex:0] becomeFirstResponder];
+        [alert show];
+    }else if([key isEqualToString:@"STUDY_CELL_WIFI"]){ //wifi
+        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Sync Statement" message:@"Do you want to sync your data only WiFi enviroment?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"YES",@"NO",nil];
+        [alert show];
+    }
+}
+
+- (void)alertView:(UIAlertView *)alertView
+clickedButtonAtIndex:(NSInteger)buttonIndex{
+    NSString* title = alertView.title;
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    
+    if([title isEqualToString:@"Debug Statement"]){
+        NSLog(@"%ld", buttonIndex);
+        if (buttonIndex == 1){ //yes
+            [userDefaults setBool:YES forKey:SETTING_DEBUG_STATE];
+            [self pushedStudyRefreshButton:nil];
+        } else if (buttonIndex == 2){ // no
+            //reset clicked
+            [userDefaults setBool:NO forKey:SETTING_DEBUG_STATE];
+            [self pushedStudyRefreshButton:nil];
+        } else {
+            NSLog(@"Cancel");
+        }
+        
+    }else if([title isEqualToString:@"Sync Interval (min)"]){
+        if ( buttonIndex == [alertView cancelButtonIndex]){
+            NSLog(@"Cancel");
+            return;
+        }
+        NSString *interval = [alertView textFieldAtIndex:0].text;
+        if ([interval isEqualToString:@""] || [interval isEqualToString:@"0"]) {
+            return;
+        }
+        double syncInterval = [interval doubleValue] * 60.0f;
+        [userDefaults setObject:[NSNumber numberWithDouble:syncInterval] forKey:SETTING_SYNC_INT];
+        [self pushedStudyRefreshButton:nil];
+    }else if([title isEqualToString:@"Sync Statement"]){
+        NSLog(@"%ld", buttonIndex);
+        if (buttonIndex == 1){ //yes
+            [userDefaults setBool:YES forKey:SETTING_SYNC_WIFI_ONLY];
+            [self pushedStudyRefreshButton:nil];
+        } else if (buttonIndex == 2){ // no
+            //reset clicked
+            [userDefaults setBool:NO forKey:SETTING_SYNC_WIFI_ONLY];
+            [self pushedStudyRefreshButton:nil];
+        } else {
+            NSLog(@"Cancel");
+        }
+    }
+    
+
+}
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     return 1;
@@ -233,10 +321,17 @@
 
 
 
-//- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-//{
-//    return 60;//[AwardTableViewCell rowHeight];
-//}
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSDictionary *item = (NSDictionary *)[_sensors objectAtIndex:indexPath.row];
+    if ([[item objectForKey:KEY_CEL_SENSOR_NAME] isEqualToString:@"TITLE_CELL_VIEW"]) {
+        return 40;//[TitleViewCell rowHeight];
+    }else if ([[item objectForKey:KEY_CEL_SENSOR_NAME] isEqualToString:@"STUDY_CELL_VIEW"]){
+        return 80;
+    }else{
+        return [tableView rowHeight];
+    }
+}
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView
@@ -244,11 +339,23 @@
 {
     @autoreleasepool {
         static NSString *MyIdentifier = @"MyReuseIdentifier";
+        
+        NSDictionary *item = (NSDictionary *)[_sensors objectAtIndex:indexPath.row];
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:MyIdentifier];
         if (cell == nil) {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle  reuseIdentifier:MyIdentifier];
         }
-        NSDictionary *item = (NSDictionary *)[_sensors objectAtIndex:indexPath.row];
+        
+//        if([[item objectForKey:KEY_CEL_SENSOR_NAME] isEqualToString:@"TITLE_CELL_VIEW"]){
+////            [cell.textLabel setTextColor:self.view.tintColor];
+//            [cell.textLabel setTextColor:[UIColor grayColor]];
+//        }
+//        
+//        if([[item objectForKey:KEY_CEL_SENSOR_NAME] isEqualToString:@"STUDY_CELL_VIEW"]){
+//            [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
+//        }
+        
+        
         cell.textLabel.text = [item objectForKey:KEY_CEL_TITLE];
         cell.detailTextLabel.text = [item objectForKey:KEY_CEL_DESC];
 //        [cell.detailTextLabel setNumberOfLines:2];

@@ -23,6 +23,11 @@ NSString* const KEY_MQTT_QOS = @"mqtt_qos";
 NSString* const KEY_STUDY_ID = @"study_id";
 NSString* const KEY_WEBSERVICE_SERVER = @"webservice_server";
 
+NSString* const SETTING_DEBUG_STATE = @"setting_debug_state";
+NSString *const SETTING_SYNC_WIFI_ONLY = @"setting_sync_wifi_only";
+NSString* const SETTING_SYNC_INT = @"setting_sync_interval";
+
+
 NSString* const TABLE_INSERT = @"insert";
 NSString* const TABLE_LATEST = @"latest";
 NSString* const TABLE_CREATE = @"create";

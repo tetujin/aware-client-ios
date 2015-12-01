@@ -10,9 +10,8 @@
 #import <MQTTKit/MQTTKit.h>
 #import <CoreLocation/CoreLocation.h>
 #import "AWARESensorManager.h"
-#import "SensorDataManager.h"
 
-@interface ViewController : UITableViewController <UITableViewDelegate, UITableViewDataSource, UITabBarControllerDelegate, UINavigationBarDelegate, CLLocationManagerDelegate>
+@interface ViewController : UITableViewController <UITableViewDelegate, UITableViewDataSource, UITabBarControllerDelegate, UINavigationBarDelegate, CLLocationManagerDelegate, UIAlertViewDelegate>
 
 @property (nonatomic,strong) NSMutableArray *sensors;
 @property (strong, nonatomic) AWARESensorManager* sensorManager;

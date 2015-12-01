@@ -433,7 +433,12 @@
 //                            [self createNewFile:[self getSensorName]];
                             NSString *message = [NSString stringWithFormat:@"[%@] Sucess to upload sensor data to AWARE server with %d record", [self getSensorName], lineCount ];
                             NSLog(@"%@", message);
-//                            [self sendLocalNotificationForMessage:message soundFlag:NO];
+                        
+                            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+                            bool debugState = [userDefaults boolForKey:SETTING_DEBUG_STATE];
+                            if (debugState) {
+                                [self sendLocalNotificationForMessage:message soundFlag:NO];
+                            }
                         }
                        previusUploadingState = NO;
                        data = nil;
