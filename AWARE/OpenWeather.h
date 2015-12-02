@@ -7,8 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "AWARESensor.h"
 
-@interface OpenWeather : NSObject{
+@interface OpenWeather : AWARESensor <AWARESensorDelegate>
+{
 //    NSString* deviceOrientation;
 //    NSString* proximity;
     NSDictionary* jsonWeatherData;

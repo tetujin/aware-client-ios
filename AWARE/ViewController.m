@@ -255,6 +255,7 @@
         alert.alertViewStyle = UIAlertViewStylePlainTextInput;
         [[alert textFieldAtIndex:0] setKeyboardType:UIKeyboardTypeNumberPad];
         [[alert textFieldAtIndex:0] becomeFirstResponder];
+        [alert textFieldAtIndex:0].text = [NSString stringWithFormat:@"%d", (int)uploadInterval/60];
         [alert show];
     }else if([key isEqualToString:@"STUDY_CELL_WIFI"]){ //wifi
         UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Sync Statement" message:@"Do you want to sync your data only WiFi enviroment?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"YES",@"NO",nil];

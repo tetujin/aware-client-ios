@@ -60,6 +60,25 @@ int ONE_HOUR = 60*60;
     return self;
 }
 
+
+- (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
+//    NSLog(@"Start Blutooth sensing");
+//    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval target:self selector:@selector(uploadSensorData) userInfo:nil repeats:YES];
+    return YES;
+}
+
+- (BOOL)stopSensor{
+//    [uploadTimer invalidate];
+    return YES;
+}
+
+- (void)uploadSensorData{
+//    NSString * jsonStr = [self getData:SENSOR_BLUETOOTH withJsonArrayFormat:YES];
+//    [self insertSensorData:jsonStr withDeviceId:[self getDeviceId] url:[self getInsertUrl:SENSOR_BLUETOOTH]];
+}
+
+
+
 - (void)updateWeatherData:(NSDate *)date Lat:(double)lat Lon:(double)lon
 {
     thisDate = date;
