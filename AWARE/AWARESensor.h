@@ -14,7 +14,6 @@
 //- (BOOL) startSensor:(double) interval withUploadInterval:(double)upInterval;
 - (BOOL) startSensor:(double)upInterval withSettings:(NSArray *)settings;
 - (BOOL) stopSensor;
-- (void) uploadSensorData;
 @end
 
 @interface AWARESensor : NSObject <AWARESensorDelegate>
@@ -45,12 +44,16 @@
 // get clear table URL
 - (NSString *) getClearTableUrl:(NSString*) sensorName;
 
-- (NSString *) saveData:(NSDictionary*)data toLocalFile:(NSString*)fileName;
-
-- (NSString *) getData:(NSString*)fileName withJsonArrayFormat:(bool)jsonArrayFormat;
+//- (NSString *) saveData:(NSDictionary*)data toLocalFile:(NSString*)fileName;
+//
+//- (NSString *) getData:(NSString*)fileName withJsonArrayFormat:(bool)jsonArrayFormat;
 
 // insert sensor data
-- (BOOL) insertSensorData:(NSString*)data withDeviceId:(NSString*)deviceId url:(NSString*)url;
+//- (BOOL) insertSensorData:(NSString*)data withDeviceId:(NSString*)deviceId url:(NSString*)url;
+
+- (bool) saveData:(NSDictionary *) data;
+
+- (bool) saveData:(NSDictionary *) data toLocalFile:(NSString*) fileName;
 
 - (void) syncAwareDB;
 

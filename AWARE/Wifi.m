@@ -46,7 +46,7 @@
         interval = frequency;
     }
     
-    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval target:self selector:@selector(uploadSensorData) userInfo:nil repeats:YES];
+    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval target:self selector:@selector(syncAwareDB) userInfo:nil repeats:YES];
     sensingTimer = [NSTimer scheduledTimerWithTimeInterval:interval target:self selector:@selector(getSensorData) userInfo:nil repeats:YES];
     return YES;
 }
@@ -127,9 +127,10 @@
     return YES;
 }
 
-- (void)uploadSensorData{
-    NSString * jsonStr = [self getData:SENSOR_WIFI withJsonArrayFormat:YES];
-    [self insertSensorData:jsonStr withDeviceId:[self getDeviceId] url:[self getInsertUrl:SENSOR_WIFI]];
-}
+//- (void)uploadSensorData{
+//    [self syncAwareDB];
+////    NSString * jsonStr = [self getData:SENSOR_WIFI withJsonArrayFormat:YES];
+////    [self insertSensorData:jsonStr withDeviceId:[self getDeviceId] url:[self getInsertUrl:SENSOR_WIFI]];
+//}
 
 @end

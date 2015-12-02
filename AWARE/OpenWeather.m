@@ -7,17 +7,27 @@
 //
 
 #import "OpenWeather.h"
+#import "AWAREStudyManager.h"
 
-@implementation OpenWeather
+@implementation OpenWeather{
+    IBOutlet CLLocationManager *locationManager;
+    NSTimer* syncTimer;
+    NSTimer* sensingTimer;
+}
 /** api */
 NSString* OPEN_WEATHER_API = @"http://api.openweathermap.org/data/2.5/weather?lat=%d&lon=%d&APPID=54e5dee2e6a2479e0cc963cf20f233cc";
 /** sys */
 NSString* KEY_SYS         = @"sys";
 NSString* ELE_COUNTORY    = @"country";
+NSString* ELE_SUNSET      = @"sunset";
+NSString* ELE_SUNRISE      = @"sunrise";
+
 /** weather */
 NSString* KEY_WEATHER     = @"weather";
 NSString* ELE_MAIN        = @"main";
 NSString* ELE_DESCRIPTION = @"description";
+NSString* ELE_ICON        = @"icon";
+
 /** main */
 NSString* KEY_MAIN        = @"main";
 NSString* ELE_TEMP        = @"temp";
@@ -31,6 +41,7 @@ NSString* ELE_SPEED       = @"speed";
 NSString* ELE_DEG         = @"deg";
 /** rain */
 NSString* KEY_RAIN        = @"rain";
+NSString* KEY_SNOW        = @"snow";
 NSString* ELE_3H          = @"3h";
 /** clouds */
 NSString* KEY_CLOUDS      = @"clouds";
@@ -43,40 +54,146 @@ NSString* ZERO            = @"0";
     
 int ONE_HOUR = 60*60;
 
-- (id) init
-{
-    self = [super init];
+//- (instancetype) initWithDate:(NSDate *) date
+//               Lat:(double)lat
+//               Lon:(double)lon
+//{
+//    locationManager = nil;
+//    [self updateWeatherData:date Lat:0 Lon:0];
+//    return self;
+//}
+
+- (instancetype) initWithSensorName:(NSString *)sensorName {
+    self = [super initWithSensorName:SENSOR_PLUGIN_OPEN_WEATHER];
     if (self) {
-        return [self initWithDate:[NSDate date] Lat:0 Lon:0];
+        locationManager = nil;
+        NSDate *date = [NSDate new];
+        [self updateWeatherData:date Lat:0 Lon:0];
     }
     return self;
 }
 
-- (id) initWithDate:(NSDate *) date
-               Lat:(double)lat
-               Lon:(double)lon
-{
-    [self updateWeatherData:date Lat:lat Lon:lon];
-    return self;
-}
-
-
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
-//    NSLog(@"Start Blutooth sensing");
-//    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval target:self selector:@selector(uploadSensorData) userInfo:nil repeats:YES];
+    NSLog(@"Start Open Weather Map");
+    [self createTable];
+    [self initLocationSensor];
+    syncTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval
+                                                 target:self selector:@selector(syncAwareDB)
+                                               userInfo:nil
+                                                repeats:YES];
+    sensingTimer = [NSTimer scheduledTimerWithTimeInterval:ONE_HOUR
+                                                    target:self
+                                                  selector:@selector(getNewWeatherData)
+                                                  userInfo:nil
+                                                   repeats:YES];
+    [self getNewWeatherData];
     return YES;
 }
 
 - (BOOL)stopSensor{
-//    [uploadTimer invalidate];
+    [syncTimer invalidate];
+    [sensingTimer invalidate];
     return YES;
 }
 
-- (void)uploadSensorData{
-//    NSString * jsonStr = [self getData:SENSOR_BLUETOOTH withJsonArrayFormat:YES];
-//    [self insertSensorData:jsonStr withDeviceId:[self getDeviceId] url:[self getInsertUrl:SENSOR_BLUETOOTH]];
+- (void) createTable{
+    NSString *query = [[NSString alloc] init];
+    query =
+    @"_id integer primary key autoincrement,"
+    "timestamp real default 0,"
+    "device_id text default '',"
+    "city text default '',"
+    "temperature real default 0,"
+    "temperature_max real default 0,"
+    "temperature_min real default 0,"
+    "unit text default '',"
+    "humidity real default 0,"
+    "pressure real default 0,"
+    "wind_speed real default 0,"
+    "wind_degrees real default 0,"
+    "cloudiness real default 0,"
+    "weather_icon_id default 0,"
+    "rain real default 0,"
+    "snow real default 0,"
+    "sunrise real default 0,"
+    "sunset real default 0,"
+    "UNIQUE (timestamp,device_id)";
+    [super createTable:query];
 }
 
+- (void) initLocationSensor {
+//    NSLog(@"start location sensing!");
+    if (locationManager == nil){
+        locationManager = [[CLLocationManager alloc] init];
+        locationManager.delegate = self;
+        // locationManager.desiredAccuracy = kCLLocationAccuracyKilometer;
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+        locationManager.pausesLocationUpdatesAutomatically = NO;
+        CGFloat currentVersion = [[[UIDevice currentDevice] systemVersion] floatValue];
+        NSLog(@"OS:%f", currentVersion);
+        if (currentVersion >= 9.0) {
+            locationManager.allowsBackgroundLocationUpdates = YES; //This variable is an important method for background sensing
+        }
+        locationManager.activityType = CLActivityTypeOther;
+        if ([locationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
+            [locationManager requestAlwaysAuthorization];
+        }
+        // Set a movement threshold for new events.
+        locationManager.distanceFilter = 150; // meters
+        [locationManager startUpdatingLocation];
+        //    [_locationManager startMonitoringVisits]; // This method calls didVisit.
+        [locationManager startUpdatingHeading];
+    }
+}
+
+- (void) getNewWeatherData {
+    //[sdManager addLocation:[_locationManager location]];
+    CLLocation* location = [locationManager location];
+    NSDate *now = [NSDate new];
+    [self updateWeatherData:now
+                        Lat:location.coordinate.latitude
+                        Lon:location.coordinate.longitude];
+}
+
+//- (void) locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations{
+//    for (CLLocation* location in locations) {
+//        //        [self saveLocation:location];
+//        NSDate *now = [NSDate new];
+//        [self updateWeatherData:now
+//                            Lat:location.coordinate.latitude
+//                            Lon:location.coordinate.longitude];
+//    }
+//}
+
+//- (void)locationManager:(CLLocationManager *)manager didUpdateHeading:(CLHeading *)newHeading {
+//    if (newHeading.headingAccuracy < 0)
+//        return;
+//    //    CLLocationDirection  theHeading = ((newHeading.trueHeading > 0) ?
+//    //                                       newHeading.trueHeading : newHeading.magneticHeading);
+//    //    [sdManager addSensorDataMagx:newHeading.x magy:newHeading.y magz:newHeading.z];
+//    //    [sdManager addHeading: theHeading];
+//}
+
+
+
+
+//- (void) saveLocation:(CLLocation *)location{
+////    NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
+////    NSNumber* unixtime = [NSNumber numberWithDouble:timeStamp];
+////    NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+////    [dic setObject:unixtime forKey:@"timestamp"];
+////    [dic setObject:[self getDeviceId] forKey:@"device_id"];
+////    [dic setObject:[NSNumber numberWithDouble:location.coordinate.latitude] forKey:@"double_latitude"];
+////    [dic setObject:[NSNumber numberWithDouble:location.coordinate.longitude] forKey:@"double_longitude"];
+////    [dic setObject:[NSNumber numberWithDouble:location.course] forKey:@"double_bearing"];
+////    [dic setObject:[NSNumber numberWithDouble:location.speed] forKey:@"double_speed"];
+////    [dic setObject:[NSNumber numberWithDouble:location.altitude] forKey:@"double_altitude"];
+////    [dic setObject:@"gps" forKey:@"provider"];
+////    [dic setObject:[NSNumber numberWithInt:location.verticalAccuracy] forKey:@"accuracy"];
+////    [dic setObject:@"" forKey:@"label"];
+////    [self setLatestValue:[NSString stringWithFormat:@"%f, %f, %f", location.coordinate.latitude, location.coordinate.longitude, location.speed]];
+////    [self saveData:dic toLocalFile:@"locations"];
+//}
 
 
 - (void)updateWeatherData:(NSDate *)date Lat:(double)lat Lon:(double)lon
@@ -91,43 +208,83 @@ int ONE_HOUR = 60*60;
 
 - (void) getWeatherJSONStr:(double)lat
                              lon:(double)lon{
-    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
-    [queue addOperationWithBlock:^{
-        //Get an access token from API
-        NSString *url = [NSString stringWithFormat:OPEN_WEATHER_API, (int)lat, (int)lon];
-        
-        //Create a request to get weather data
-        NSMutableURLRequest *request;
-        request = [[NSMutableURLRequest alloc] init];
-        [request setHTTPMethod:@"GET"];
-        [request setURL:[NSURL URLWithString:url]];
-        [request setCachePolicy:NSURLRequestReloadIgnoringLocalCacheData];
-        [request setTimeoutInterval:20];
-        [request setHTTPShouldHandleCookies:FALSE];
-        //[request setHTTPBody:[param dataUsingEncoding:NSUTF8StringEncoding]];
-        
-        // HTTP/GET
-        NSURLResponse *response = nil;
-        NSError *error = nil;
-        NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
-        if (error != nil) {
-            NSLog(@"Error!");
-            NSLog(@"%@",[error description]);
-            return;
-        }else{
-            NSLog(@"Got Weather Information from API!");
-        }
-        
-        NSError *e = nil;
-        jsonWeatherData = [NSJSONSerialization JSONObjectWithData:data
-                                                          options:NSJSONReadingAllowFragments
-                                                            error:&e];
-        //NSLog([jsonWeatherData description]);
-        //NSLog(jsonWeatherData.description);
-        //weatherState = true;
-        //return dict;
-        //[NSJSONSerialization JSON
-    }];
+    NSMutableURLRequest *request = nil;
+    __weak NSURLSession *session = nil;
+    NSString *postLength = nil;
+    
+    // Set settion configu and HTTP/POST body.
+    NSURLSessionConfiguration *sessionConfig =
+    [NSURLSessionConfiguration defaultSessionConfiguration];
+    sessionConfig.timeoutIntervalForRequest = 180.0;
+    sessionConfig.timeoutIntervalForResource = 300.0;
+    sessionConfig.HTTPMaximumConnectionsPerHost = 30;
+    
+    
+    NSString *url = [NSString stringWithFormat:OPEN_WEATHER_API, (int)lat, (int)lon];
+    request = [[NSMutableURLRequest alloc] init];
+    [request setURL:[NSURL URLWithString:url]];
+    [request setHTTPMethod:@"GET"];
+    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+    
+    session = [NSURLSession sessionWithConfiguration:sessionConfig];
+    [[session dataTaskWithRequest:request
+                completionHandler:^(NSData * _Nullable data,
+                                    NSURLResponse * _Nullable response,
+                                    NSError * _Nullable error) {
+                    NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
+                    int responseCode = (int)[httpResponse statusCode];
+                    NSLog(@"response code : %d", responseCode);
+
+                    if (error != nil) {
+                        NSLog(@"Error!");
+                        NSLog(@"%@",[error description]);
+                        return;
+                    }else{
+                        NSLog(@"Got Weather Information from API!");
+                    }
+                    
+                    if (responseCode == 200) {
+                        NSError *e = nil;
+                        jsonWeatherData = [NSJSONSerialization JSONObjectWithData:data
+                                                                          options:NSJSONReadingAllowFragments
+                                                                            error:&e];
+                        
+//                        NSLog(@"%@", jsonWeatherData);
+                        if (jsonWeatherData == nil) {
+                            return;
+                        };
+//                        jsonWeatherData = [[NSDictionary alloc] init];
+                        NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+                        NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
+                        NSNumber* unixtime = [NSNumber numberWithDouble:timeStamp];
+                        [dic setObject:unixtime forKey:@"timestamp"];
+                        [dic setObject:[self getDeviceId] forKey:@"device_id"];
+                        [dic setObject:[self getCountry] forKey:@"city"];
+                        [dic setObject:[self getTemp] forKey:@"temperature"];
+                        [dic setObject:[self getTempMax] forKey:@"temperature_max"];
+                        [dic setObject:[self getTempMax] forKey:@"temperature_min"];
+                        [dic setObject:@"" forKey:@"unit"];
+                        [dic setObject:[self getHumidity] forKey:@"humidity"];
+                        [dic setObject:[self getPressure] forKey:@"pressure"];
+                        [dic setObject:[self getWindSpeed] forKey:@"wind_speed"];
+                        [dic setObject:[self getWindDeg] forKey:@"wind_degrees"];
+                        [dic setObject:[self getClouds] forKey:@"cloudiness"];
+                        [dic setObject:[self getWeatherIcon] forKey:@"weather_icon_id"];
+                        [dic setObject:[self getWeatherDescription] forKey:@"weather_description"];
+                        [dic setObject:[self getRain] forKey:@"rain"];
+                        [dic setObject:[self getSnow] forKey:@"snow"];
+                        [dic setObject:[self getSunRise] forKey:@"sunrise"];
+                        [dic setObject:[self getSunSet] forKey:@"sunset"];
+                        [self setLatestValue:[NSString stringWithFormat:@"%@: %@", [self getWeather], [self getWeatherDescription]]];
+                        [self saveData:dic];
+                        
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            [session finishTasksAndInvalidate];
+                            [session invalidateAndCancel];
+                        });
+                    }
+                   
+                }] resume];
 }
 
 - (NSString *) getCountry
@@ -142,60 +299,119 @@ int ONE_HOUR = 60*60;
 
 - (NSString *) getWeather
 {
-    return [[[jsonWeatherData valueForKey:KEY_WEATHER] objectAtIndex:0] valueForKey:ELE_MAIN];
+    NSString *value = [[[jsonWeatherData valueForKey:KEY_WEATHER] objectAtIndex:0] valueForKey:ELE_MAIN];
+    if (value != nil) {
+        return value;
+    }else{
+        return @"0";
+    }
+}
+
+
+- (NSString *) getWeatherIcon
+{
+    NSString * value = [[[jsonWeatherData valueForKey:KEY_WEATHER] objectAtIndex:0] valueForKey:ELE_ICON];
+    if(value != nil){
+        return  value;
+    }else{
+        return @"0";
+    }
 }
 
 - (NSString *) getWeatherDescription
 {
-     return [[[jsonWeatherData valueForKey:KEY_WEATHER] objectAtIndex:0] valueForKey:ELE_DESCRIPTION];
+    NSString * value= [[[jsonWeatherData valueForKey:KEY_WEATHER] objectAtIndex:0] valueForKey:ELE_DESCRIPTION];
+    if(value != nil){
+        return  value;
+    }else{
+        return @"0";
+    }
 }
 
-- (NSString *) getTemp
+- (NSNumber *) getTemp
 {
    // NSLog(@"--> %@", [self convertKelToCel:[[jsonWeatherData valueForKey:KEY_MAIN] valueForKey:ELE_TEMP]]);
-    return [self convertKelToCel:[[jsonWeatherData valueForKey:KEY_MAIN] valueForKey:ELE_TEMP]];
+    double temp = [[[jsonWeatherData valueForKey:KEY_MAIN] objectForKey:ELE_TEMP] doubleValue];
+    return [NSNumber numberWithDouble:temp];
 }
 
-- (NSString *) getTempMax
+- (NSNumber *) getTempMax
 {
-    return [self convertKelToCel:[[jsonWeatherData valueForKey:KEY_MAIN] valueForKey:ELE_TEMP_MAX]];
+    double maxTemp = [[[jsonWeatherData valueForKey:KEY_MAIN] objectForKey:ELE_TEMP_MAX] doubleValue];
+    return [NSNumber numberWithDouble:maxTemp];
+//    return [self convertKelToCel:[[jsonWeatherData valueForKey:KEY_MAIN] valueForKey:ELE_TEMP_MAX]];
 }
 
-- (NSString *) getTempMin
+- (NSNumber *) getTempMin
 {
-    return [self convertKelToCel:[[jsonWeatherData valueForKey:KEY_MAIN] valueForKey:ELE_TEMP_MIN]];
+    double minTemp = [[[jsonWeatherData valueForKey:KEY_MAIN] objectForKey:ELE_TEMP_MIN] doubleValue];
+    return [NSNumber numberWithDouble:minTemp];
+//    return [self convertKelToCel:[[jsonWeatherData valueForKey:KEY_MAIN] valueForKey:ELE_TEMP_MIN]];
 }
 
-- (NSString *) getHumidity
+- (NSNumber *) getHumidity
 {
     //NSLog(@"--> %@",  [[jsonWeatherData valueForKey:KEY_MAIN] valueForKey:ELE_HUMIDITY]);
-    return [[jsonWeatherData valueForKey:KEY_MAIN] valueForKey:ELE_HUMIDITY];
+    double humidity = [[[jsonWeatherData valueForKey:KEY_MAIN] objectForKey:ELE_HUMIDITY] doubleValue];
+    return [NSNumber numberWithDouble:humidity];
+//    return [[jsonWeatherData valueForKey:KEY_MAIN] valueForKey:ELE_HUMIDITY];
 }
 
-- (NSString *) getPressure
+- (NSNumber *) getPressure
 {
-    return [[jsonWeatherData valueForKey:KEY_MAIN] valueForKey:ELE_PRESSURE];
+    double pressure = [[[jsonWeatherData valueForKey:KEY_MAIN] objectForKey:ELE_PRESSURE] doubleValue];
+    return [NSNumber numberWithDouble:pressure];
+//    return [[jsonWeatherData valueForKey:KEY_MAIN] valueForKey:ELE_PRESSURE];
 }
 
-- (NSString *) getWindSpeed
+- (NSNumber *) getWindSpeed
 {
-    return [[jsonWeatherData valueForKey:KEY_WIND] valueForKey:ELE_SPEED];
+    double windSpeed = [[[jsonWeatherData valueForKey:KEY_WIND] objectForKey:ELE_SPEED] doubleValue];
+    return [NSNumber numberWithDouble:windSpeed];
+//    return [[jsonWeatherData valueForKey:KEY_WIND] valueForKey:ELE_SPEED];
 }
 
-- (NSString *) getWindDeg
+- (NSNumber *) getWindDeg
 {
-    return [[jsonWeatherData valueForKey:KEY_WIND] valueForKey:ELE_DEG];
+    double windDeg = [[[jsonWeatherData valueForKey:KEY_WIND] objectForKey:ELE_DEG] doubleValue];
+    return [NSNumber numberWithDouble:windDeg];
+//    return [[jsonWeatherData valueForKey:KEY_WIND] valueForKey:ELE_DEG];
 }
 
-- (NSString *) getRain
+- (NSNumber *) getRain
 {
-    return [[jsonWeatherData valueForKey:KEY_RAIN] valueForKey:ELE_3H];
+    double rain =  [[[jsonWeatherData valueForKey:KEY_RAIN] objectForKey:ELE_3H] doubleValue];
+    return [NSNumber numberWithDouble:rain];
+//    return [[jsonWeatherData valueForKey:KEY_RAIN] valueForKey:ELE_3H];
 }
 
-- (NSString *) getClouds
+- (NSNumber *) getSnow
 {
-    return [[jsonWeatherData valueForKey:KEY_CLOUDS] valueForKey:ELE_ALL];
+    double snow =  [[[jsonWeatherData valueForKey:KEY_SNOW] objectForKey:ELE_3H] doubleValue];
+    return [NSNumber numberWithDouble:snow];
+//    return [[jsonWeatherData valueForKey:KEY_RAIN] valueForKey:ELE_3H];
 }
+
+- (NSNumber *) getClouds
+{
+    double cloudiness = [[[jsonWeatherData valueForKey:KEY_CLOUDS] objectForKey:ELE_ALL] doubleValue];
+    return [NSNumber numberWithDouble:cloudiness];
+//    return [[jsonWeatherData valueForKey:KEY_CLOUDS] valueForKey:ELE_ALL];
+}
+
+
+- (NSNumber *) getSunRise
+{
+    double value = [[[jsonWeatherData valueForKey:KEY_SYS] valueForKey:ELE_SUNRISE] doubleValue];
+    return [NSNumber numberWithDouble:value];
+}
+
+- (NSNumber *) getSunSet
+{
+    double value = [[[jsonWeatherData valueForKey:KEY_SYS] valueForKey:ELE_SUNSET] doubleValue];
+    return [NSNumber numberWithDouble:value];
+}
+
 
 - (NSString *) getName
 {

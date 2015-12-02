@@ -37,17 +37,6 @@
 
 @implementation AWARESensor
 
-
-- (instancetype)init
-{
-    self = [super init];
-    if (self) {
-
-    }
-    return self;
-}
-
-
 - (instancetype) initWithSensorName:(NSString *)sensorName {
     if (self = [super init]) {
         NSLog(@"[%@] Initialize an AWARESensor as '%@' ", sensorName, sensorName);
@@ -56,7 +45,7 @@
         marker = 0;
         previusUploadingState = NO;
 //        fileClearState = NO;
-        awareSensorName = @"";
+        awareSensorName = sensorName;
         latestSensorValue = @"";
         tempData = [[NSMutableString alloc] init];
         bufferStr = [[NSMutableString alloc] init];
@@ -66,17 +55,17 @@
              switch (status)
              {
                  case SCNetworkStatusReachableViaWiFi:
-                     NSLog(@"Reachable via WiFi at %@", [self getSensorName]);
+                     NSLog(@"[%@] Reachable via WiFi", [self getSensorName]);
                      wifiState = YES;
                      break;
                      
                  case SCNetworkStatusReachableViaCellular:
-                     NSLog(@"Reachable via Cellular at %@", [self getSensorName]);
+                     NSLog(@"[%@] Reachable via Cellular", [self getSensorName]);
                      wifiState = NO;
                      break;
                      
                  case SCNetworkStatusNotReachable:
-                     NSLog(@"Not Reachable at %@", [self getSensorName]);
+                     NSLog(@"[%@] Not Reachable", [self getSensorName]);
                      wifiState = NO;
                      break;
              }
@@ -230,21 +219,24 @@
     return deviceId;
 }
 
-- (NSString *)saveData:(NSDictionary *)data toLocalFile:(NSString *)fileName{
+
+- (bool) saveData:(NSDictionary *)data{
+    return [self saveData:data toLocalFile:[self getSensorName]];
+}
+            
+
+- (bool) saveData:(NSDictionary *)data toLocalFile:(NSString *)fileName{
     NSError*error=nil;
     NSData*d=[NSJSONSerialization dataWithJSONObject:data options:2 error:&error];
     NSString*jsonstr=[[NSString alloc]initWithData:d encoding:NSUTF8StringEncoding];
     [bufferStr appendString:jsonstr];
     [bufferStr appendFormat:@","];
     if (writeAble) {
-        // append sensor data the file
-//        [bufferStr appendString:jsonstr];
         [self appendLine:bufferStr path:fileName];
         [bufferStr setString:@""];
         [self setWriteableNO];
-        return @"";
     }
-    return @"";
+    return YES;
 }
 
 
@@ -383,7 +375,6 @@ return YES;
         marker += 1;
     }
     data = [self fixJsonFormat:data];
-//    NSLog(@"=> %ld", data.length);
 
     // Set settion configu and HTTP/POST body.
     NSURLSessionConfiguration *sessionConfig =
@@ -396,7 +387,6 @@ return YES;
     sessionConfig.HTTPMaximumConnectionsPerHost = 30;
     
     post = [NSString stringWithFormat:@"device_id=%@&data=%@", deviceId, data];
-//    NSLog(@"%@", post);
     postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
     postLength = [NSString stringWithFormat:@"%ld", [postData length]];
     request = [[NSMutableURLRequest alloc] init];
@@ -420,10 +410,22 @@ return YES;
                     NSString* newStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
                     NSLog(@"[%@] %d  Response =====> %@",[self getSensorName], responseCode, newStr);
                     
+
+                    
                     if(responseCode == 200){
-//                        [self removeFile:[self getSensorName]];
-                        //                            [self createNewFile:[self getSensorName]];
-                        NSString *message = [NSString stringWithFormat:@"[%@] Sucess to upload sensor data to AWARE server with %d bytes. - %d", [self getSensorName], lineCount, marker ];
+                        // [self removeFile:[self getSensorName]];
+                        // [self createNewFile:[self getSensorName]];
+                        NSString *bytes = @"";
+                        if (lineCount >= 1000*1000) { //MB
+                            bytes = [NSString stringWithFormat:@"%.2f MB", (double)lineCount/(double)(1000*1000)];
+                        } else if (lineCount >= 1000) { //KB
+                            bytes = [NSString stringWithFormat:@"%.2f KB", (double)lineCount/(double)1000];
+                        } else if (lineCount < 1000) {
+                            bytes = [NSString stringWithFormat:@"%d Bytes", lineCount];
+                        } else {
+                            bytes = [NSString stringWithFormat:@"%d Bytes", lineCount];
+                        }
+                        NSString *message = [NSString stringWithFormat:@"[%@] Sucess to upload sensor data to AWARE server with %@ - %d", [self getSensorName], bytes, marker ];
                         NSLog(@"%@", message);
                         // send notification
                         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];

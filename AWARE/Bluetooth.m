@@ -23,7 +23,7 @@
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
     NSLog(@"Start Blutooth sensing");
     _myCentralManager = [[CBCentralManager alloc] initWithDelegate:self queue:nil];
-    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval target:self selector:@selector(uploadSensorData) userInfo:nil repeats:YES];
+    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval target:self selector:@selector(syncAwareDB) userInfo:nil repeats:YES];
     return YES;
 }
 
@@ -33,10 +33,11 @@
     return YES;
 }
 
-- (void)uploadSensorData{
-    NSString * jsonStr = [self getData:SENSOR_BLUETOOTH withJsonArrayFormat:YES];
-    [self insertSensorData:jsonStr withDeviceId:[self getDeviceId] url:[self getInsertUrl:SENSOR_BLUETOOTH]];
-}
+//- (void)uploadSensorData{
+//    [self syncAwareDB];
+////    NSString * jsonStr = [self getData:SENSOR_BLUETOOTH withJsonArrayFormat:YES];
+////    [self insertSensorData:jsonStr withDeviceId:[self getDeviceId] url:[self getInsertUrl:SENSOR_BLUETOOTH]];
+//}
 
 
 - (void)centralManagerDidUpdateState:(CBCentralManager *)central

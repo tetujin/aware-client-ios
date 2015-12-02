@@ -34,7 +34,7 @@
 //- (BOOL)startSensor:(double)interval withUploadInterval:(double)upInterval{
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
     NSLog(@"Start Magnetometer!");
-    timer = [NSTimer scheduledTimerWithTimeInterval:upInterval target:self selector:@selector(uploadSensorData) userInfo:nil repeats:YES];
+    timer = [NSTimer scheduledTimerWithTimeInterval:upInterval target:self selector:@selector(syncAwareDB) userInfo:nil repeats:YES];
     
 //    [self setBufferLimit:10000];
     [self startWriteAbleTimer];
@@ -75,10 +75,11 @@
     return YES;
 }
 
-- (void)uploadSensorData{
-    NSString * jsonStr = [self getData:SENSOR_MAGNETOMETER withJsonArrayFormat:YES];
-    [self insertSensorData:jsonStr withDeviceId:[self getDeviceId] url:[self getInsertUrl:SENSOR_MAGNETOMETER]];
-}
+//- (void)uploadSensorData{
+//    [self syncAwareDB];
+////    NSString * jsonStr = [self getData:SENSOR_MAGNETOMETER withJsonArrayFormat:YES];
+////    [self insertSensorData:jsonStr withDeviceId:[self getDeviceId] url:[self getInsertUrl:SENSOR_MAGNETOMETER]];
+//}
 
 
 @end

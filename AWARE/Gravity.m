@@ -56,7 +56,7 @@
     
     
     
-    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval target:self selector:@selector(uploadSensorData) userInfo:nil repeats:YES];
+    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval target:self selector:@selector(syncAwareDB) userInfo:nil repeats:YES];
     /** motion */
     if( motionManager.deviceMotionAvailable ){
         motionManager.deviceMotionUpdateInterval = interval;
@@ -110,8 +110,10 @@
     return YES;
 }
 
-- (void)uploadSensorData{
-    NSString * jsonStr = [self getData:SENSOR_GRAVITY withJsonArrayFormat:YES];
-    [self insertSensorData:jsonStr withDeviceId:[self getDeviceId] url:[self getInsertUrl:SENSOR_GRAVITY]];
-}
+//- (void)uploadSensorData{
+//    [self syncAwareDB];
+////    NSString * jsonStr = [self getData:SENSOR_GRAVITY withJsonArrayFormat:YES];
+////    [self insertSensorData:jsonStr withDeviceId:[self getDeviceId] url:[self getInsertUrl:SENSOR_GRAVITY]];
+//}
+
 @end

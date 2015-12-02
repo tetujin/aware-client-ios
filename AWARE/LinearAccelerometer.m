@@ -14,14 +14,6 @@
     NSTimer * uploadTimer;
 }
 
-- (instancetype)init
-{
-    self = [super init];
-    if (self) {
-//        motionManager = [[CMMotionManager alloc] init];
-    }
-    return self;
-}
 
 - (instancetype)initWithSensorName:(NSString *)sensorName{
     self = [super initWithSensorName:sensorName];
@@ -54,7 +46,7 @@
         interval = iOSfrequency;
     }
     
-    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval target:self selector:@selector(uploadSensorData) userInfo:nil repeats:YES];
+    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval target:self selector:@selector(syncAwareDB) userInfo:nil repeats:YES];
     /** motion */
     if( motionManager.deviceMotionAvailable ){
         motionManager.deviceMotionUpdateInterval = interval;
@@ -108,10 +100,11 @@
     return YES;
 }
 
-- (void)uploadSensorData{
-    NSString * jsonStr = [self getData:SENSOR_LINEAR_ACCELEROMETER withJsonArrayFormat:YES];
-    [self insertSensorData:jsonStr withDeviceId:[self getDeviceId] url:[self getInsertUrl:SENSOR_LINEAR_ACCELEROMETER]];
-}
+//- (void)uploadSensorData{
+//    [self syncAwareDB];
+////    NSString * jsonStr = [self getData:SENSOR_LINEAR_ACCELEROMETER withJsonArrayFormat:YES];
+////    [self insertSensorData:jsonStr withDeviceId:[self getDeviceId] url:[self getInsertUrl:SENSOR_LINEAR_ACCELEROMETER]];
+//}
 
 
 @end

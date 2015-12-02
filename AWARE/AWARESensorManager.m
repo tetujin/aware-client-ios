@@ -22,6 +22,7 @@
 #import "Bluetooth.h"
 #import "AmbientNoise.h"
 #import "ActivityRecognition.h"
+#import "OpenWeather.h"
 
 @implementation AWARESensorManager
 
@@ -39,7 +40,7 @@
                           plugins:(NSArray*)plugins
                    uploadInterval:(double) uploadTime{
 //    double uploadTime = 10.0f;
-    NSLog(@"upload interval is %f.", uploadTime);
+    NSLog(@"[%@] Upload interval is %f.", key, uploadTime);
     AWARESensor* awareSensor = nil;
     for (int i=0; i<settings.count; i++) {
         NSString *setting = [[settings objectAtIndex:i] objectForKey:@"setting"];
@@ -103,11 +104,14 @@
             if ([pluginStateKey isEqualToString:pluginStateName]) {
                 bool pluginState = [pluginSetting objectForKey:@"value"];
                 if (pluginState) {
-                    if ([key isEqualToString:SENSOR_PLUGIING_GOOGLE_ACTIVITY_RECOGNITION]) {
-                        awareSensor = [[ActivityRecognition alloc] initWithSensorName:SENSOR_PLUGIING_GOOGLE_ACTIVITY_RECOGNITION];
+                    if ([key isEqualToString:SENSOR_PLUGIN_GOOGLE_ACTIVITY_RECOGNITION]) {
+                        awareSensor = [[ActivityRecognition alloc] initWithSensorName:SENSOR_PLUGIN_GOOGLE_ACTIVITY_RECOGNITION];
                         [awareSensor startSensor:uploadTime withSettings:settings];
                     }else if([key isEqualToString:SENSOR_AMBIENT_NOISE]){
                         awareSensor = [[AmbientNoise alloc] initWithSensorName:SENSOR_AMBIENT_NOISE];
+                        [awareSensor startSensor:uploadTime withSettings:settings];
+                    }else if([key isEqualToString:SENSOR_PLUGIN_OPEN_WEATHER]){
+                        awareSensor = [[OpenWeather alloc] initWithSensorName:SENSOR_PLUGIN_OPEN_WEATHER];
                         [awareSensor startSensor:uploadTime withSettings:settings];
                     }
                 }

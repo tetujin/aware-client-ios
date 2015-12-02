@@ -52,7 +52,8 @@ extern NSString* const SENSOR_WIFI;
 extern NSString* const SENSOR_GRAVITY;
 extern NSString* const SENSOR_LINEAR_ACCELEROMETER;
 extern NSString* const SENSOR_AMBIENT_NOISE;
-extern NSString* const SENSOR_PLUGIING_GOOGLE_ACTIVITY_RECOGNITION;
+extern NSString* const SENSOR_PLUGIN_GOOGLE_ACTIVITY_RECOGNITION;
+extern NSString* const SENSOR_PLUGIN_OPEN_WEATHER;
 //extern NSString* const SENSOR_
 //extern NSString* const SENSOR_
 //extern NSString* const SENSOR_

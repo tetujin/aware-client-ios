@@ -53,7 +53,7 @@
     
     [self createTable];
 
-    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval target:self selector:@selector(uploadSensorData) userInfo:nil repeats:YES];
+    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval target:self selector:@selector(syncAwareDB) userInfo:nil repeats:YES];
     /** motion activity */
     if([CMMotionActivityManager isActivityAvailable]){
         motionActivityManager = [CMMotionActivityManager new];
@@ -125,7 +125,7 @@
     [dic setObject:motionConfidence forKey:@"confidence"]; //int
     [dic setObject:@"" forKey:@"activities"]; //text
     [self setLatestValue:[NSString stringWithFormat:@"%@, %@, %@", motionName, motionType, motionConfidence]];
-    [self saveData:dic toLocalFile:SENSOR_PLUGIING_GOOGLE_ACTIVITY_RECOGNITION];
+    [self saveData:dic toLocalFile:SENSOR_PLUGIN_GOOGLE_ACTIVITY_RECOGNITION];
 }
 
 
@@ -137,9 +137,10 @@
     return YES;
 }
 
-- (void)uploadSensorData{
-    NSString * jsonStr = [self getData:SENSOR_PLUGIING_GOOGLE_ACTIVITY_RECOGNITION withJsonArrayFormat:YES];
-    [self insertSensorData:jsonStr withDeviceId:[self getDeviceId] url:[self getInsertUrl:SENSOR_PLUGIING_GOOGLE_ACTIVITY_RECOGNITION]];
-}
+//- (void)uploadSensorData{
+//    [self syncAwareDB];
+////    NSString * jsonStr = [self getData:SENSOR_PLUGIING_GOOGLE_ACTIVITY_RECOGNITION withJsonArrayFormat:YES];
+////    [self insertSensorData:jsonStr withDeviceId:[self getDeviceId] url:[self getInsertUrl:SENSOR_PLUGIING_GOOGLE_ACTIVITY_RECOGNITION]];
+//}
 
 @end

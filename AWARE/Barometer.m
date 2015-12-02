@@ -33,7 +33,7 @@
 //- (BOOL)startSensor:(double)interval withUploadInterval:(double)upInterval{
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
     NSLog(@"Start Gyroscope!");
-    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval target:self selector:@selector(uploadSensorData) userInfo:nil repeats:YES];
+    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval target:self selector:@selector(syncAwareDB) userInfo:nil repeats:YES];
     if (![CMAltimeter isRelativeAltitudeAvailable]) {
         NSLog(@"This device doesen't support CMAltimeter.");
     } else {
@@ -72,11 +72,12 @@
     return YES;
 }
 
-- (void)uploadSensorData{
-    NSString * jsonStr = [self getData:SENSOR_BAROMETER withJsonArrayFormat:YES];
-//    NSLog(@"%@",jsonStr);
-    [self insertSensorData:jsonStr withDeviceId:[self getDeviceId] url:[self getInsertUrl:SENSOR_BAROMETER]];
-}
+//- (void)uploadSensorData{
+//    [self syncAwareDB];
+////    NSString * jsonStr = [self getData:SENSOR_BAROMETER withJsonArrayFormat:YES];
+//////    NSLog(@"%@",jsonStr);
+////    [self insertSensorData:jsonStr withDeviceId:[self getDeviceId] url:[self getInsertUrl:SENSOR_BAROMETER]];
+//}
 
 
 @end
