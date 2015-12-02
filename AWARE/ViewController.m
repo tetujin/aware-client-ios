@@ -61,7 +61,7 @@
     mqttKeepAlive = @600;
     mqttQos = @2;
     
-    uploadInterval = 60*15;
+    uploadInterval = 30;
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults setBool:NO forKey:SETTING_DEBUG_STATE];
@@ -253,6 +253,7 @@
     }else if([key isEqualToString:@"STUDY_CELL_SYNC"]){ //Sync
         UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Sync Interval (min)" message:@"Please inpute a sync interval to the server." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Done",nil];
         alert.alertViewStyle = UIAlertViewStylePlainTextInput;
+        
         [[alert textFieldAtIndex:0] setKeyboardType:UIKeyboardTypeNumberPad];
         [[alert textFieldAtIndex:0] becomeFirstResponder];
         [alert textFieldAtIndex:0].text = [NSString stringWithFormat:@"%d", (int)uploadInterval/60];

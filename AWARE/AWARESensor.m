@@ -26,6 +26,7 @@
     bool wifiState;
     NSTimer* writeAbleTimer;
     bool writeAble;
+    int marker;
 //    NSString *dbPath;
 //    FMDatabase *db;
 //    bool readingDataFromDB;
@@ -52,6 +53,7 @@
         NSLog(@"[%@] Initialize an AWARESensor as '%@' ", sensorName, sensorName);
         awareSensorName = sensorName;
         bufferLimit = 0;
+        marker = 0;
         previusUploadingState = NO;
 //        fileClearState = NO;
         awareSensorName = @"";
@@ -171,70 +173,119 @@
 }
 
 
+- (double)getSensorSetting:(NSArray *)settings withKey:(NSString *)key{
+    if (settings != nil) {
+        for (NSDictionary * setting in settings) {
+            if ([[setting objectForKey:@"setting"] isEqualToString:key]) {
+                double value = [[setting objectForKey:@"value"] doubleValue];
+                return value;
+            }
+        }
+    }
+    return -1;
+}
+
+
+- (NSString *)getInsertUrl:(NSString *)sensorName{
+    //    - insert: insert new data to the table
+    return [NSString stringWithFormat:@"%@/%@/insert", [self getWebserviceUrl], sensorName];
+}
+
+
+- (NSString *)getLatestDataUrl:(NSString *)sensorName{
+    //    - latest: returns the latest timestamp on the server, for synching what’s new on the phone
+    return [NSString stringWithFormat:@"%@/%@/latest", [self getWebserviceUrl], sensorName];
+}
+
+
+- (NSString *)getCreateTableUrl:(NSString *)sensorName{
+    //    - create_table: creates a table if it doesn’t exist already
+    return [NSString stringWithFormat:@"%@/%@/create_table", [self getWebserviceUrl], sensorName];
+}
+
+
+- (NSString *)getClearTableUrl:(NSString *)sensorName{
+    //    - clear_table: remove a specific device ID data from the database table
+    return [NSString stringWithFormat:@"%@/%@/clear_table", [self getWebserviceUrl], sensorName];
+}
+
+
+- (NSString *)getWebserviceUrl{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString* url = [userDefaults objectForKey:KEY_WEBSERVICE_SERVER];
+    if (url == NULL) {
+        NSLog(@"[Error] You did not have a StudyID. Please check your study configuration.");
+        return @"";
+    }
+    return url;
+}
+
+- (NSString *)getDeviceId{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString* deviceId = [userDefaults objectForKey:KEY_MQTT_USERNAME];
+    if (deviceId == NULL) {
+        NSLog(@"[Error] You did not have a StudyID. Please check your study configuration.");
+        return @"";
+    }
+    return deviceId;
+}
+
 - (NSString *)saveData:(NSDictionary *)data toLocalFile:(NSString *)fileName{
     NSError*error=nil;
     NSData*d=[NSJSONSerialization dataWithJSONObject:data options:2 error:&error];
     NSString*jsonstr=[[NSString alloc]initWithData:d encoding:NSUTF8StringEncoding];
-
+    [bufferStr appendString:jsonstr];
+    [bufferStr appendFormat:@","];
     if (writeAble) {
         // append sensor data the file
-        [bufferStr appendString:jsonstr];
+//        [bufferStr appendString:jsonstr];
         [self appendLine:bufferStr path:fileName];
         [bufferStr setString:@""];
         [self setWriteableNO];
-        return @"";
-    }else{
-        [bufferStr appendString:jsonstr];
-        [bufferStr appendFormat:@"\n"];
         return @"";
     }
     return @"";
 }
 
 
-
 - (BOOL) appendLine:(NSString *)line path:(NSString*) fileName {
-//        dispatch_async(dispatch_get_main_queue(), ^{
-            NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-            NSString *documentsDirectory = [paths objectAtIndex:0];
-            NSString * path = [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.dat",fileName]];
-            
-//             file initialization and data clear:
-//                if(fileClearState){
-//                    [self removeFile:fileName];
-//                    fileClearState = NO;
-//                }
-    
-            if(previusUploadingState){
-                [tempData appendFormat:@"%@\n", line];
-                return YES;
-            }else{
-                NSFileHandle *fh = [NSFileHandle fileHandleForWritingAtPath:path];
-                if (fh == nil) { // no
-//                    NSLog(@"[%@] You don't have a file, then sensor data can not be saved to the text file.", fileName);
-                    NSLog(@"[%@] ERROR: AWARE can not handle the file.", fileName);
-                    [self createNewFile:fileName];
-                    return NO;
-                }else{
-                    [fh seekToEndOfFile];
-                    if (![tempData isEqualToString:@""]) {
-                        NSData * tempdataLine = [tempData dataUsingEncoding:NSUTF8StringEncoding];
-                        [fh writeData:tempdataLine]; //write temp data to the main file
-                        [tempData setString:@""];
-                        NSLog(@"[%@] Add the sensor data to temp variable.", fileName);
-                    }
-                    NSString * oneLine = [[NSString alloc] initWithString:[NSString stringWithFormat:@"%@\n", line]];
-                    NSData *data = [oneLine dataUsingEncoding:NSUTF8StringEncoding];
-                    [fh writeData:data];
-                    [fh synchronizeFile];
-                    [fh closeFile];
-                    return YES;
-                }
-            }
-//        });
-    
+    if (!line) {
+        NSLog(@"[%@] Line is null", [self getSensorName] );
+        return NO;
+    }
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString * path = [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.dat",fileName]];
+    if(previusUploadingState){
+        [tempData appendFormat:@"%@", line];
         return YES;
-    
+    }else{
+        NSFileHandle *fh = [NSFileHandle fileHandleForWritingAtPath:path];
+        if (fh == nil) { // no
+            NSLog(@"[%@] ERROR: AWARE can not handle the file.", fileName);
+            [self createNewFile:fileName];
+            return NO;
+        }else{
+            [fh seekToEndOfFile];
+            if (![tempData isEqualToString:@""]) {
+                NSData * tempdataLine = [tempData dataUsingEncoding:NSUTF8StringEncoding];
+                [fh writeData:tempdataLine]; //write temp data to the main file
+                [tempData setString:@""];
+                NSLog(@"[%@] Add the sensor data to temp variable.", fileName);
+            }
+//                    NSString * oneLine = [[NSString alloc] initWithString:[NSString stringWithFormat:@"%@\n", line]];
+            NSString * oneLine = [[NSString alloc] initWithString:[NSString stringWithFormat:@"%@", line]];
+            NSData *data = [oneLine dataUsingEncoding:NSUTF8StringEncoding];
+            [fh writeData:data];
+            [fh synchronizeFile];
+            [fh closeFile];
+            return YES;
+        }
+    }
+//        });
+
+return YES;
+
 }
 
 
@@ -279,6 +330,166 @@
 }
 
 
+
+- (void) syncAwareDB {
+    if (!wifiState) {
+        NSLog(@"You need wifi network to upload sensor data.");
+        return;
+    }
+    
+//    NSUInteger seek = 0;
+    NSUInteger length = 1000 * 1000 * 10; // 10MB
+//    NSUInteger length = 1000 * 100; // 10MB
+    NSUInteger seek = marker * length;
+    
+    previusUploadingState = YES;
+    
+    // init variables
+    NSString *post = nil;
+    NSData *postData = nil;
+    NSMutableURLRequest *request = nil;
+    __weak NSURLSession *session = nil;
+    NSString *postLength = nil;
+    NSString *sensorName = [self getSensorName];
+    NSString *deviceId = [self getDeviceId];
+    NSString *url = [self getInsertUrl:sensorName];
+    lineCount = 0;
+    
+    // get sensor data from file
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString * path = [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.dat",sensorName]];
+    NSMutableString *data = nil;
+    NSFileHandle *fileHandle = [NSFileHandle fileHandleForReadingAtPath:path];
+    if (!fileHandle) {
+        NSLog(@"[%@] AWARE can not handle the file.", sensorName);
+        [self createNewFile:sensorName];
+        previusUploadingState = NO;
+        return;// @"[]";
+    }
+    [fileHandle seekToFileOffset:seek];
+    NSData *clipedData = [fileHandle readDataOfLength:length];
+    [fileHandle closeFile];
+    
+    data = [[NSMutableString alloc] initWithData:clipedData encoding:NSUTF8StringEncoding];
+    lineCount = (int)data.length;
+    NSLog(@"[%@] Line lenght is %ld", [self getSensorName], data.length);
+//    NSLog(@"%@", data);
+    if(data.length < length){
+        // more post = 0
+        marker = 0;
+    }else{
+        // more post += 1
+        marker += 1;
+    }
+    data = [self fixJsonFormat:data];
+//    NSLog(@"=> %ld", data.length);
+
+    // Set settion configu and HTTP/POST body.
+    NSURLSessionConfiguration *sessionConfig =
+    [NSURLSessionConfiguration defaultSessionConfiguration];
+    //        sessionConfig.allowsCellularAccess = NO;
+    //        [sessionConfig setHTTPAdditionalHeaders:
+    //         @{@"Accept": @"application/json"}];
+    sessionConfig.timeoutIntervalForRequest = 180.0;
+    sessionConfig.timeoutIntervalForResource = 300.0;
+    sessionConfig.HTTPMaximumConnectionsPerHost = 30;
+    
+    post = [NSString stringWithFormat:@"device_id=%@&data=%@", deviceId, data];
+//    NSLog(@"%@", post);
+    postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
+    postLength = [NSString stringWithFormat:@"%ld", [postData length]];
+    request = [[NSMutableURLRequest alloc] init];
+    [request setURL:[NSURL URLWithString:url]];
+    [request setHTTPMethod:@"POST"];
+    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+    [request setHTTPBody:postData];
+    
+    // Check application condition: "foreground(YES)" or "background(NO)"
+//    NSUserDefaults* defaults =` [NSUserDefaults standardUserDefaults];
+//    bool foreground = [defaults objectForKey:@"APP_STATE"];
+    
+    session = [NSURLSession sessionWithConfiguration:sessionConfig];
+    [[session dataTaskWithRequest:request
+                completionHandler:^(NSData * _Nullable data,
+                                    NSURLResponse * _Nullable response,
+                                    NSError * _Nullable error) {
+                    NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
+                    int responseCode = (int)[httpResponse statusCode];
+                    
+                    NSString* newStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+                    NSLog(@"[%@] %d  Response =====> %@",[self getSensorName], responseCode, newStr);
+                    
+                    if(responseCode == 200){
+//                        [self removeFile:[self getSensorName]];
+                        //                            [self createNewFile:[self getSensorName]];
+                        NSString *message = [NSString stringWithFormat:@"[%@] Sucess to upload sensor data to AWARE server with %d bytes. - %d", [self getSensorName], lineCount, marker ];
+                        NSLog(@"%@", message);
+                        // send notification
+                        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+                        bool debugState = [userDefaults boolForKey:SETTING_DEBUG_STATE];
+                        if (debugState) {
+                            [self sendLocalNotificationForMessage:message soundFlag:NO];
+                        }
+                    }
+                    
+                    data = nil;
+                    response = nil;
+                    error = nil;
+                    httpResponse = nil;
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [session finishTasksAndInvalidate];
+                        [session invalidateAndCancel];
+                        if (marker != 0) {
+                            [self syncAwareDB];
+                        }else{
+                            if(responseCode == 200){
+                                [self removeFile:[self getSensorName]];
+//                                NSLog(@"[%@] File is removed.", [self getSensorName]);
+                            }
+                            previusUploadingState = NO;
+                        }
+                    });
+                }] resume];
+
+}
+
+- (NSMutableString *) fixJsonFormat:(NSMutableString *) clipedText {
+    // head
+    if ([clipedText hasPrefix:@"{"]) {
+        NSLog(@"HEAD => correct!");
+    }else{
+        NSRange rangeOfExtraText = [clipedText rangeOfString:@"{"];
+        if (rangeOfExtraText.location == NSNotFound) {
+            NSLog(@"[HEAD] There is no extra text");
+        }else{
+            NSLog(@"[HEAD] There is some extra text!");
+            NSRange deleteRange = NSMakeRange(0, rangeOfExtraText.location);
+            [clipedText deleteCharactersInRange:deleteRange];
+        }
+    }
+    
+    // tail
+    if ([clipedText hasSuffix:@"}"]){
+        NSLog(@"TAIL => correct!");
+    }else{
+        NSRange rangeOfExtraText = [clipedText rangeOfString:@"}" options:NSBackwardsSearch];
+        if (rangeOfExtraText.location == NSNotFound) {
+            NSLog(@"[TAIL] There is no extra text");
+        }else{
+            NSLog(@"[TAIL] There is some extra text!");
+            NSRange deleteRange = NSMakeRange(rangeOfExtraText.location+1, clipedText.length-rangeOfExtraText.location-1);
+            //                NSLog(@"%@", clipedText);
+            [clipedText deleteCharactersInRange:deleteRange];
+        }
+    }
+    [clipedText insertString:@"[" atIndex:0];
+    [clipedText appendString:@"]"];
+    
+    return clipedText;
+}
+
+
 - (NSString*) getData:(NSString *)fileName withJsonArrayFormat:(bool)jsonArrayFormat{
     if (!wifiState) {
         NSLog(@"You need wifi network to upload sensor data.");
@@ -300,78 +511,26 @@
     NSString *str = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
     [fileHandle closeFile];
     
+//    NSLog(@"%@", str);
 
     data = [[NSMutableString alloc] initWithString:@"["];
-    [str enumerateLinesUsingBlock:^(NSString *line, BOOL *stop) {
-        lineCount++;
-        [data appendString:[NSString stringWithFormat:@"%@,", line]];
-    }];
+    [data appendString:str];
+    
+//    [str enumerateLinesUsingBlock:^(NSString *line, BOOL *stop) {
+//        lineCount++;
+//        [data appendString:[NSString stringWithFormat:@"%@,", line]];
+//    }];
     if(data.length > 1){
         [data deleteCharactersInRange:NSMakeRange([data length]-1, 1)];
     }
     [data appendString:@"]"];
+    NSLog(@"%@", data);
     NSLog(@"[%@] You got %d lines of sensor data", [self getSensorName], lineCount);
 
     return [NSString stringWithString:data];
 }
 
 
-- (double)getSensorSetting:(NSArray *)settings withKey:(NSString *)key{
-    if (settings != nil) {
-        for (NSDictionary * setting in settings) {
-            if ([[setting objectForKey:@"setting"] isEqualToString:key]) {
-                double value = [[setting objectForKey:@"value"] doubleValue];
-                return value;
-            }
-        }
-    }
-    return -1;
-}
-
-
-- (NSString *)getInsertUrl:(NSString *)sensorName{
-//    - insert: insert new data to the table
-    return [NSString stringWithFormat:@"%@/%@/insert", [self getWebserviceUrl], sensorName];
-}
-
-
-- (NSString *)getLatestDataUrl:(NSString *)sensorName{
-    //    - latest: returns the latest timestamp on the server, for synching what’s new on the phone
-    return [NSString stringWithFormat:@"%@/%@/latest", [self getWebserviceUrl], sensorName];
-}
-
-
-- (NSString *)getCreateTableUrl:(NSString *)sensorName{
-    //    - create_table: creates a table if it doesn’t exist already
-    return [NSString stringWithFormat:@"%@/%@/create_table", [self getWebserviceUrl], sensorName];
-}
-
-
-- (NSString *)getClearTableUrl:(NSString *)sensorName{
-    //    - clear_table: remove a specific device ID data from the database table
-    return [NSString stringWithFormat:@"%@/%@/clear_table", [self getWebserviceUrl], sensorName];
-}
-
-
-- (NSString *)getWebserviceUrl{
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    NSString* url = [userDefaults objectForKey:KEY_WEBSERVICE_SERVER];
-    if (url == NULL) {
-        NSLog(@"[Error] You did not have a StudyID. Please check your study configuration.");
-        return @"";
-    }
-    return url;
-}
-
-- (NSString *)getDeviceId{
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    NSString* deviceId = [userDefaults objectForKey:KEY_MQTT_USERNAME];
-    if (deviceId == NULL) {
-        NSLog(@"[Error] You did not have a StudyID. Please check your study configuration.");
-        return @"";
-    }
-    return deviceId;
-}
 
 - (BOOL)insertSensorData:(NSString *)data withDeviceId:(NSString *)deviceId url:(NSString *)url{
     if (!wifiState) {

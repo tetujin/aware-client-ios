@@ -52,6 +52,8 @@
 // insert sensor data
 - (BOOL) insertSensorData:(NSString*)data withDeviceId:(NSString*)deviceId url:(NSString*)url;
 
+- (void) syncAwareDB;
+
 // get latest sensor data -> for debug
 - (NSString *) getLatestSensorData:(NSString*)deviceId withUrl:(NSString*) url;
 
