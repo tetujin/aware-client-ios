@@ -442,8 +442,11 @@ return YES;
                     error = nil;
                     httpResponse = nil;
                     dispatch_async(dispatch_get_main_queue(), ^{
-                        [session finishTasksAndInvalidate];
-                        [session invalidateAndCancel];
+                        CGFloat currentVersion = [[[UIDevice currentDevice] systemVersion] floatValue];
+                        if (currentVersion >= 9.0) {
+                            [session finishTasksAndInvalidate];
+                            [session invalidateAndCancel];
+                        }
                         if (marker != 0) {
                             [self syncAwareDB];
                         }else{

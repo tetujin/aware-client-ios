@@ -115,7 +115,6 @@
         [_homeLocationManager startUpdatingLocation];
         //    [_locationManager startMonitoringVisits]; // This method calls didVisit.
         [_homeLocationManager startUpdatingHeading];
-        //    _location = [[CLLocation alloc] init];
     }
 }
 
