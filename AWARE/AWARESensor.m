@@ -382,8 +382,8 @@ return YES;
     //        sessionConfig.allowsCellularAccess = NO;
     //        [sessionConfig setHTTPAdditionalHeaders:
     //         @{@"Accept": @"application/json"}];
-    sessionConfig.timeoutIntervalForRequest = 180.0;
-    sessionConfig.timeoutIntervalForResource = 300.0;
+    sessionConfig.timeoutIntervalForRequest = 120.0;
+//    sessionConfig.timeoutIntervalForResource = 300.0;
     sessionConfig.HTTPMaximumConnectionsPerHost = 30;
     
     post = [NSString stringWithFormat:@"device_id=%@&data=%@", deviceId, data];
@@ -435,6 +435,8 @@ return YES;
                         }
                     }
                     
+                    previusUploadingState = NO;
+                    
                     data = nil;
                     response = nil;
                     error = nil;
@@ -449,7 +451,7 @@ return YES;
                                 [self removeFile:[self getSensorName]];
 //                                NSLog(@"[%@] File is removed.", [self getSensorName]);
                             }
-                            previusUploadingState = NO;
+//                            previusUploadingState = NO;
                         }
                     });
                 }] resume];
