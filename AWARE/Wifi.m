@@ -91,7 +91,7 @@
         }else if(element.length == 2){
             [finalBSSID appendString:[NSString stringWithFormat:@"%@:",element]];
         }else{
-            NSLog(@"error");
+//            NSLog(@"error");
         }
     }
     if (finalBSSID.length > 0) {

@@ -228,6 +228,7 @@
             
 
 - (bool) saveData:(NSDictionary *)data toLocalFile:(NSString *)fileName{
+    // TODO: error hundling of nill in NSDictionary.
     NSError*error=nil;
     NSData*d=[NSJSONSerialization dataWithJSONObject:data options:2 error:&error];
     NSString*jsonstr=[[NSString alloc]initWithData:d encoding:NSUTF8StringEncoding];
@@ -333,7 +334,7 @@ return YES;
     }
     
 //    NSUInteger seek = 0;
-    NSUInteger length = 1000 * 1000 * 10; // 10MB
+    NSUInteger length = 1000 * 1000 *10; // 10MB
 //    NSUInteger length = 1000 * 100; // 10MB
     NSUInteger seek = marker * length;
     
@@ -370,6 +371,12 @@ return YES;
     lineCount = (int)data.length;
     NSLog(@"[%@] Line lenght is %ld", [self getSensorName], (unsigned long)data.length);
 //    NSLog(@"%@", data);
+    if (data.length == 0) {
+        previusUploadingState = NO;
+        marker = 0;
+        return;
+    }
+    
     if(data.length < length){
         // more post = 0
         marker = 0;
