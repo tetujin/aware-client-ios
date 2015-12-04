@@ -9,6 +9,9 @@
 #import "AppDelegate.h"
 #import "ViewController.h"
 #import "AWAREStudyManager.h"
+#import "DeployGateSDK/DeployGateSDK.h"
+
+//#define NSLog DGSLog
 
 @interface AppDelegate ()
 
@@ -56,6 +59,9 @@
     [[GGLContext sharedInstance] configureWithError: &configureError];
     NSAssert(!configureError, @"Error configuring Google services: %@", configureError);
     [GIDSignIn sharedInstance].delegate = self;
+    
+    
+    [[DeployGateSDK sharedInstance] launchApplicationWithAuthor:@"tetujin" key:@"2741cd90ae47212ad345d40c87f9fd31ee49195a"];
     
     return YES;
 }

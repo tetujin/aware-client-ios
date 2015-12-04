@@ -14,7 +14,7 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = 'primary'
-               BlueprintIdentifier = '80514220874B2DFA65AD9A61'
+               BlueprintIdentifier = 'C640247C624C283417A95A32'
                BlueprintName = 'SCNetworkReachability'
                ReferencedContainer = 'container:Pods.xcodeproj'
                BuildableName = 'libSCNetworkReachability.a'>

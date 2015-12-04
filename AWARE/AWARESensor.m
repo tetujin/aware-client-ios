@@ -6,12 +6,14 @@
 //  Copyright © 2015 Yuuki NISHIYAMA. All rights reserved.
 //
 
+
 #import "AWARESensor.h"
 #import "AWAREStudyManager.h"
 #import "SCNetworkReachability.h"
 //#import "FMDatabase.h"
 //#import "FMResultSet.h"
 //#import "FMDatabaseQueue.h"
+
 
 
 @interface AWARESensor (){
@@ -365,7 +367,7 @@ return YES;
     
     data = [[NSMutableString alloc] initWithData:clipedData encoding:NSUTF8StringEncoding];
     lineCount = (int)data.length;
-    NSLog(@"[%@] Line lenght is %ld", [self getSensorName], data.length);
+    NSLog(@"[%@] Line lenght is %ld", [self getSensorName], (unsigned long)data.length);
 //    NSLog(@"%@", data);
     if(data.length < length){
         // more post = 0
