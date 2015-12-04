@@ -228,11 +228,18 @@
             
 
 - (bool) saveData:(NSDictionary *)data toLocalFile:(NSString *)fileName{
-    // TODO: error hundling of nill in NSDictionary.
     NSError*error=nil;
     NSData*d=[NSJSONSerialization dataWithJSONObject:data options:2 error:&error];
-    NSString*jsonstr=[[NSString alloc]initWithData:d encoding:NSUTF8StringEncoding];
-    
+    NSString*jsonstr= @"";
+    // TODO: error hundling of nill in NSDictionary.
+    if (!error) {
+        jsonstr = [[NSString alloc]initWithData:d encoding:NSUTF8StringEncoding];
+    } else {
+        NSString * errorStr = [NSString stringWithFormat:@"[%@] %@", [self getSensorName], [error localizedDescription]];
+        [self sendLocalNotificationForMessage:errorStr soundFlag:YES];
+        return NO;
+        //Do additional data manipulation or handling work here.
+    }
     [bufferStr appendString:jsonstr];
     [bufferStr appendFormat:@","];
     if (writeAble) {
