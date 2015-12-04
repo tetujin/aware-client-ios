@@ -1,6 +1,10 @@
 # Acknowledgements
 This application makes use of the following third party libraries:
 
+## DeployGateSDK
+
+Copyright 2015 DeployGate Inc. All rights reserved.
+
 ## Google
 
 Copyright 2015 Google Inc.
