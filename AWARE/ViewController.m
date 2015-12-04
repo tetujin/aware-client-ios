@@ -80,7 +80,7 @@
 //    self.navigationController.navigationBar.delegate = self;
     CGFloat currentVersion = [[[UIDevice currentDevice] systemVersion] floatValue];
 //    NSLog(@"OS:%f", currentVersion);
-    if (currentVersion >= 8.0) {
+    if (currentVersion >= 9.0) {
         [self.navigationController.navigationBar setDelegate:self];
     }
     [self connectMqttServer];
