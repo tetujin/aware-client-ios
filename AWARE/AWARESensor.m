@@ -231,6 +231,7 @@
     NSError*error=nil;
     NSData*d=[NSJSONSerialization dataWithJSONObject:data options:2 error:&error];
     NSString*jsonstr=[[NSString alloc]initWithData:d encoding:NSUTF8StringEncoding];
+    
     [bufferStr appendString:jsonstr];
     [bufferStr appendFormat:@","];
     if (writeAble) {
