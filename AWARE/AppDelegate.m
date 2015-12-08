@@ -194,7 +194,6 @@
     
     NSString *token = deviceToken.description;
     
-    // <aaaa bbbb cccc dddd>みたいな形式でくるので、"<"、">"、"(空白)"を取ってあげると便利だよ
     token = [token stringByReplacingOccurrencesOfString:@"<" withString:@""];
     token = [token stringByReplacingOccurrencesOfString:@">" withString:@""];
     token = [token stringByReplacingOccurrencesOfString:@" " withString:@""];
