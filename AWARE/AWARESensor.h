@@ -9,9 +9,9 @@
 #import <UIKit/UIKit.h>
 #import <SystemConfiguration/SystemConfiguration.h>
 #import <Foundation/Foundation.h>
-//#import <DeployGateSDK/DeployGateSDK.h>
+#import <DeployGateSDK/DeployGateSDK.h>
 
-//#define NSLog DGSLog
+#define NSLog DGSLog
 
 @protocol AWARESensorDelegate <NSObject>
 //- (BOOL) startSensor:(double) interval withUploadInterval:(double)upInterval;
