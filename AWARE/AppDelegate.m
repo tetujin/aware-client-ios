@@ -138,55 +138,16 @@
 
 - (void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
-    //http://qiita.com/griffin_stewie/items/8371c09059b3ba7bb202
-    //    NSLog(@"hello world 2!");
-    
-    //    UILocalNotification *notification = [[UILocalNotification alloc] init];
-    //    if (notification){
-    //        //        notification.timeZone = [NSTimeZone defaultTimeZone];
-    //        notification.repeatInterval = 0;
-    //        notification.alertBody = @"Application is stoped! Please reboot this app for logging your acitivties.";
-    //        notification.alertAction = @"Reboot";
-    //        notification.soundName = UILocalNotificationDefaultSoundName;
-    //        notification.applicationIconBadgeNumber = 1;
-    //        [[UIApplication sharedApplication] scheduleLocalNotification:notification];
-    //    }
-    //
-    //    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-    //    //[defaults setInteger:[[self.fps text] integerValue] forKey:KEY_FPS];
-    //    NSString* uid = [defaults objectForKey:@"UID"];
-    //
-    //    SensorDataManager *sd = [[SensorDataManager alloc] initWithDBPath:@"mybase.sqlite" userID:uid];
-    //    bool stateSensor = [sd uploadSensorDataWithURL:@"http://life-cloud.ht.sfc.keio.ac.jp/clip/api/mobile/sensor.php"];
-    //    bool statePed = [sd uploadPedDataToDBWithURL:@"http://life-cloud.ht.sfc.keio.ac.jp/clip/api/mobile/ped.php" dbClean:YES];
-    //
-    //
-    
-    
-    
-    
-    //    UILocalNotification *notification = [[UILocalNotification alloc] init];
-    //    if (notification){
-    //        //        notification.timeZone = [NSTimeZone defaultTimeZone];
-    //        notification.repeatInterval = 0;
-    //        notification.alertBody = @"Background Fetch !!! ";
-    //        notification.alertAction = @"Hello New World!";
-    //        notification.soundName = UILocalNotificationDefaultSoundName;
-    //        notification.applicationIconBadgeNumber = 1;
-    //        [[UIApplication sharedApplication] scheduleLocalNotification:notification];
-    //    }
-    //
-    //    //Tell the system that you ar done.
-    //    if(stateSensor){
     completionHandler(UIBackgroundFetchResultNewData);
-    ////        completionHandler(UIBackgroundFetchResultNoData);
-    //        NSLog(@"ok");
-    //    }else{
-    //        completionHandler(UIBackgroundFetchResultFailed);
-    //        NSLog(@"no");
-    //    }
-    ////    completionHandler(UIBackgroundFetchResultFailed);
 }
+
+
+// BackgroundFetchによるバックグラウンドの受信
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
+    NSLog(@"pushInfo in Background: %@", [userInfo description]);
+    completionHandler(UIBackgroundFetchResultNoData);
+}
+
 
 
 // DeviceToken受信成功
@@ -214,22 +175,6 @@
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
     NSLog(@"pushInfo: %@", [userInfo description]);
 }
-
-// BackgroundFetchによるバックグラウンドの受信
-- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
-    NSLog(@"pushInfo in Background: %@", [userInfo description]);
-    completionHandler(UIBackgroundFetchResultNoData);
-}
-
-
-
-
-
-
-
-
-
-
 
 
 #pragma mark - Core Data stack
