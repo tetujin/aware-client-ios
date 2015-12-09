@@ -14,6 +14,7 @@
 #import "ActivityRecognition.h"
 
 #import "TitleViewCell.h"
+#import "MSBand.h"
 
 
 @interface ViewController (){
@@ -213,6 +214,12 @@
     [_sensors addObject:[self getCelContent:@"Debug" desc:debugState image:@"" key:@"STUDY_CELL_DEBUG"]]; //ic_action_mqtt
     [_sensors addObject:[self getCelContent:@"Sync Interval to AWARE Server (min)" desc:syncInterval image:@"" key:@"STUDY_CELL_SYNC"]]; //ic_action_mqtt
     [_sensors addObject:[self getCelContent:@"Sync only wifi" desc:wifiOnly image:@"" key:@"STUDY_CELL_WIFI"]]; //ic_action_mqtt
+
+    //for test
+    AWARESensor *msBand = [[MSBand alloc] initWithSensorName:SENSOR_PLUGIN_MSBAND];
+    [msBand startSensor:60.0f withSettings:nil];
+    [_sensorManager addNewSensor:msBand];
+
 }
 
 
@@ -506,9 +513,6 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
         });
 //        NSLog(@"%@", dic);
     }];
-    
-
-    
 
     [self.client connectToHost:mqttServer
              completionHandler:^(MQTTConnectionReturnCode code) {

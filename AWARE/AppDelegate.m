@@ -62,7 +62,7 @@
     
     
 //    [[DeployGateSDK sharedInstance] launchApplicationWithAuthor:@"tetujin" key:@"2741cd90ae47212ad345d40c87f9fd31ee49195a"];
-    [[DeployGateSDK sharedInstance] launchApplicationWithAuthor:@"tetujin" key:@"2741cd90ae47212ad345d40c87f9fd31ee49195a" userInfomationEnabled:YES];
+//    [[DeployGateSDK sharedInstance] launchApplicationWithAuthor:@"tetujin" key:@"2741cd90ae47212ad345d40c87f9fd31ee49195a" userInfomationEnabled:YES];
     return YES;
 }
 
@@ -122,19 +122,19 @@
 }
 
 // for DeplyGate
-- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
-    return [[DeployGateSDK sharedInstance] handleOpenUrl:url sourceApplication:sourceApplication annotation:annotation];
-}
+//- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
+//    return [[DeployGateSDK sharedInstance] handleOpenUrl:url sourceApplication:sourceApplication annotation:annotation];
+//}
 
 // for Google Auth
-//- (BOOL)application:(UIApplication *)application
-//            openURL:(NSURL *)url
-//  sourceApplication:(NSString *)sourceApplication
-//         annotation:(id)annotation {
-//    return [[GIDSignIn sharedInstance] handleURL:url
-//                               sourceApplication:sourceApplication
-//                                      annotation:annotation];
-//}
+- (BOOL)application:(UIApplication *)application
+            openURL:(NSURL *)url
+  sourceApplication:(NSString *)sourceApplication
+         annotation:(id)annotation {
+    return [[GIDSignIn sharedInstance] handleURL:url
+                               sourceApplication:sourceApplication
+                                      annotation:annotation];
+}
 
 - (void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {

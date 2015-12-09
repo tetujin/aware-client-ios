@@ -411,7 +411,6 @@ return YES;
     [request setHTTPMethod:@"POST"];
     [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
     [request setHTTPBody:postData];
-    
     // Check application condition: "foreground(YES)" or "background(NO)"
 //    NSUserDefaults* defaults =` [NSUserDefaults standardUserDefaults];
 //    bool foreground = [defaults objectForKey:@"APP_STATE"];
@@ -598,8 +597,8 @@ return YES;
 //    foreground = NO;
     // HTTP/POST with each application condition
 //    foreground = YES;
-//    if(foreground){
-    // Set settion configu and HTTP/POST body.
+    if(foreground){
+//     Set settion configu and HTTP/POST body.
         session = [NSURLSession sessionWithConfiguration:sessionConfig];
         [[session dataTaskWithRequest:request
                    completionHandler:^(NSData * _Nullable data,
@@ -633,28 +632,35 @@ return YES;
                                 [session invalidateAndCancel];
                        });
         }] resume];
-//    }else{ // background
-//        NSError *error = nil;
-//        NSHTTPURLResponse *response = nil;
-//        NSData *resData = [NSURLConnection sendSynchronousRequest:request
-//                                                returningResponse:&response error:&error];
-//        NSString* newStr = [[NSString alloc] initWithData:resData encoding:NSUTF8StringEncoding];
-//        NSLog(@"[%@] Response=> %@", [self getSensorName],newStr);
-//        int responseCode = (int)[response statusCode];
-//        if(responseCode == 200){
-//            [self removeFile:[self getSensorName]];
-////            [self createNewFile:[self getSensorName]];
-//            NSString *message = [NSString stringWithFormat:@"[%@] Sucess to upload sensor data to AWARE server with %d record in the background.", [self getSensorName], lineCount ];
-//            NSLog(@"%@", message);
-//            [self sendLocalNotificationForMessage:message soundFlag:NO];
-//        }else{
-//            return NO;
-//        }
-//        previusUploadingState = NO;
-//        data = nil;
-//        response = nil;
-//        error = nil;
-//    }
+    }else{ // background
+        NSError *error = nil;
+        NSHTTPURLResponse *response = nil;
+        NSData *resData = [NSURLConnection sendSynchronousRequest:request
+                                                returningResponse:&response error:&error];
+        NSString* newStr = [[NSString alloc] initWithData:resData encoding:NSUTF8StringEncoding];
+        NSLog(@"[%@] Response=> %@", [self getSensorName],newStr);
+        int responseCode = (int)[response statusCode];
+        if(responseCode == 200){
+            [self removeFile:[self getSensorName]];
+            //                            [self createNewFile:[self getSensorName]];
+            NSString *message = [NSString stringWithFormat:@"[%@] Sucess to upload sensor data to AWARE server with %d record", [self getSensorName], lineCount ];
+            NSLog(@"%@", message);
+            
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+            bool debugState = [userDefaults boolForKey:SETTING_DEBUG_STATE];
+            if (debugState) {
+                [self sendLocalNotificationForMessage:message soundFlag:NO];
+            }
+        }
+        previusUploadingState = NO;
+        data = nil;
+        response = nil;
+        error = nil;
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            [session finishTasksAndInvalidate];
+//            [session invalidateAndCancel];
+//        });
+    }
     return YES;
 }
 
@@ -855,6 +861,63 @@ return YES;
         localNotification.soundName = UILocalNotificationDefaultSoundName;
     }
     [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
+}
+
+
+- (void)connection:(NSURLConnection *)connection
+didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge {
+    NSLog(@"-------------------");
+    if ([[[challenge protectionSpace] authenticationMethod] isEqualToString: NSURLAuthenticationMethodServerTrust]){
+        
+        do {
+            SecTrustRef serverTrust = [[challenge protectionSpace] serverTrust];
+            if (serverTrust == nil)
+                break; // failed
+            
+            SecTrustResultType trustResult;
+            OSStatus status = SecTrustEvaluate(serverTrust, &trustResult);
+            if (!(errSecSuccess == status))
+                break; // fatal error in trust evaluation -> failed
+            
+            if (!((trustResult == kSecTrustResultProceed)
+                  || (trustResult == kSecTrustResultUnspecified)))
+            {
+                break; // see "Certificate, Key, and Trust Services Reference"
+                // for explanation of result codes.
+            }
+            
+            SecCertificateRef serverCertificate = SecTrustGetCertificateAtIndex(serverTrust, 0);
+            if (serverCertificate == nil)
+                break; // failed
+            
+            CFDataRef serverCertificateData = SecCertificateCopyData(serverCertificate);
+            if (serverCertificateData == nil)
+                break; // failed
+            
+            const UInt8* const data = CFDataGetBytePtr(serverCertificateData);
+            const CFIndex size = CFDataGetLength(serverCertificateData);
+            NSData* server_cert = [NSData dataWithBytes:data length:(NSUInteger)size];
+            CFRelease(serverCertificateData);
+            
+            NSString* file = [[NSBundle mainBundle] pathForResource:@"awareframework"
+                                                             ofType:@"der"];
+            NSData* my_cert = [NSData dataWithContentsOfFile:file];
+            
+            if (server_cert == nil || my_cert == nil)
+                break; // failed
+            
+            const BOOL equal = [server_cert isEqualToData:my_cert];
+            if (!equal)
+                break; // failed
+            
+            // Athentication succeeded:
+            return [[challenge sender] useCredential:[NSURLCredential credentialForTrust:serverTrust]
+                          forAuthenticationChallenge:challenge];
+        } while (0);
+        
+        // Authentication failed:
+        return [[challenge sender] cancelAuthenticationChallenge:challenge];
+    }
 }
 
 
