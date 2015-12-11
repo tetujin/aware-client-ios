@@ -7,7 +7,7 @@
 //
 
 #import "AWARESensor.h"
-#import "AWAREStudyManager.h"
+#import "AWAREKeys.h"
 
 @interface Battery : AWARESensor <AWARESensorDelegate>
 

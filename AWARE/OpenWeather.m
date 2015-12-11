@@ -7,7 +7,7 @@
 //
 
 #import "OpenWeather.h"
-#import "AWAREStudyManager.h"
+#import "AWAREKeys.h"
 
 @implementation OpenWeather{
     IBOutlet CLLocationManager *locationManager;

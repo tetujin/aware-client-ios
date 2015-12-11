@@ -16,6 +16,32 @@
                     <view key="view" contentMode="scaleToFill" id="Imr-IW-fxt">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="ic_launcher_aware-web" translatesAutoresizingMaskIntoConstraints="NO" id="cdZ-zr-gMM">
+                                <rect key="frame" x="200" y="200" width="200" height="200"/>
+                                <variation key="heightClass=regular" fixedFrame="YES">
+                                    <rect key="frame" x="200" y="300" width="200" height="200"/>
+                                </variation>
+                                <variation key="widthClass=compact" fixedFrame="YES">
+                                    <rect key="frame" x="95" y="200" width="200" height="200"/>
+                                </variation>
+                                <variation key="widthClass=regular" fixedFrame="YES">
+                                    <rect key="frame" x="300" y="200" width="200" height="200"/>
+                                </variation>
+                                <variation key="heightClass=compact-widthClass=compact" fixedFrame="YES">
+                                    <rect key="frame" x="100" y="100" width="200" height="200"/>
+                                </variation>
+                                <variation key="heightClass=compact-widthClass=regular" fixedFrame="YES">
+                                    <rect key="frame" x="300" y="100" width="200" height="200"/>
+                                </variation>
+                                <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
+                                    <rect key="frame" x="100" y="300" width="200" height="200"/>
+                                </variation>
+                                <variation key="heightClass=regular-widthClass=regular" fixedFrame="YES">
+                                    <rect key="frame" x="300" y="300" width="200" height="200"/>
+                                </variation>
+                            </imageView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                 </viewController>
@@ -24,4 +50,7 @@
             <point key="canvasLocation" x="1342" y="247"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="ic_launcher_aware-web" width="512" height="512"/>
+    </resources>
 </document>

@@ -7,13 +7,13 @@
 //
 
 #import "ViewController.h"
-#import "AWAREStudyManager.h"
+#import "AWAREKeys.h"
 #import "GoogleLoginViewController.h"
 #import "Accelerometer.h"
 #import "AmbientNoise.h"
 #import "ActivityRecognition.h"
 
-#import "TitleViewCell.h"
+//#import "TitleViewCell.h"
 #import "MSBand.h"
 
 

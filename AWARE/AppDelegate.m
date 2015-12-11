@@ -8,8 +8,8 @@
 
 #import "AppDelegate.h"
 #import "ViewController.h"
-#import "AWAREStudyManager.h"
-#import "DeployGateSDK/DeployGateSDK.h"
+#import "AWAREKeys.h"
+//#import "DeployGateSDK/DeployGateSDK.h"
 
 //#define NSLog DGSLog
 
@@ -60,6 +60,8 @@
     NSAssert(!configureError, @"Error configuring Google services: %@", configureError);
     [GIDSignIn sharedInstance].delegate = self;
     
+    
+    [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
     
 //    [[DeployGateSDK sharedInstance] launchApplicationWithAuthor:@"tetujin" key:@"2741cd90ae47212ad345d40c87f9fd31ee49195a"];
 //    [[DeployGateSDK sharedInstance] launchApplicationWithAuthor:@"tetujin" key:@"2741cd90ae47212ad345d40c87f9fd31ee49195a" userInfomationEnabled:YES];
@@ -142,12 +144,23 @@
 }
 
 
-// BackgroundFetchによるバックグラウンドの受信
+// This method is called then iOS receieved data by BackgroundFetch
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
     NSLog(@"pushInfo in Background: %@", [userInfo description]);
     completionHandler(UIBackgroundFetchResultNoData);
 }
 
+
+- (void)application:(UIApplication *)application
+handleEventsForBackgroundURLSession:(NSString *)identifier
+  completionHandler:(void (^)())completionHandler {
+    NSLog(@"Background OK");
+    completionHandler();
+    /*
+     Store the completion handler. The completion handler is invoked by the view            controller's checkForAllDownloadsHavingCompleted method (if all the download tasks have been            completed).
+     */
+//    self.backgroundSessionCompletionHandler = completionHandler;
+}
 
 
 // DeviceToken受信成功

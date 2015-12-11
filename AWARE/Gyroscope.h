@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreMotion/CoreMotion.h>
 #import "AWARESensor.h"
-#import "AWAREStudyManager.h"
+#import "AWAREKeys.h"
 
 @interface Gyroscope : AWARESensor <AWARESensorDelegate>
 

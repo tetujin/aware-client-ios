@@ -8,7 +8,7 @@
 
 #import "AWARESensor.h"
 #import <CoreMotion/CoreMotion.h>
-#import "AWAREStudyManager.h"
+#import "AWAREKeys.h"
 
 @interface Magnetometer : AWARESensor <AWARESensorDelegate>
 
