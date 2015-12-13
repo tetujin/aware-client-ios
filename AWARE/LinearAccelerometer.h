@@ -7,7 +7,7 @@
 //
 
 #import "AWARESensor.h"
-#import "AWAREStudyManager.h"
+#import "AWAREKeys.h"
 #import <CoreMotion/CoreMotion.h>
 
 @interface LinearAccelerometer : AWARESensor <AWARESensorDelegate>

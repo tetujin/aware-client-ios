@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <CoreMotion/CoreMotion.h>
 #import "AWARESensor.h"
-#import "AWAREStudyManager.h"
+#import "AWAREKeys.h"
 
 @interface Accelerometer : AWARESensor <AWARESensorDelegate>
 

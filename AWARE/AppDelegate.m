@@ -117,61 +117,43 @@
     NSLog(@"Stop background task of AWARE....");
 }
 
+// for DeplyGate
+//- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
+//    return [[DeployGateSDK sharedInstance] handleOpenUrl:url sourceApplication:sourceApplication annotation:annotation];
+//}
 
-
-
-
+// for Google Auth
+- (BOOL)application:(UIApplication *)application
+            openURL:(NSURL *)url
+  sourceApplication:(NSString *)sourceApplication
+         annotation:(id)annotation {
+    return [[GIDSignIn sharedInstance] handleURL:url
+                               sourceApplication:sourceApplication
+                                      annotation:annotation];
+}
 
 - (void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
-    //http://qiita.com/griffin_stewie/items/8371c09059b3ba7bb202
-    //    NSLog(@"hello world 2!");
-    
-    //    UILocalNotification *notification = [[UILocalNotification alloc] init];
-    //    if (notification){
-    //        //        notification.timeZone = [NSTimeZone defaultTimeZone];
-    //        notification.repeatInterval = 0;
-    //        notification.alertBody = @"Application is stoped! Please reboot this app for logging your acitivties.";
-    //        notification.alertAction = @"Reboot";
-    //        notification.soundName = UILocalNotificationDefaultSoundName;
-    //        notification.applicationIconBadgeNumber = 1;
-    //        [[UIApplication sharedApplication] scheduleLocalNotification:notification];
-    //    }
-    //
-    //    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-    //    //[defaults setInteger:[[self.fps text] integerValue] forKey:KEY_FPS];
-    //    NSString* uid = [defaults objectForKey:@"UID"];
-    //
-    //    SensorDataManager *sd = [[SensorDataManager alloc] initWithDBPath:@"mybase.sqlite" userID:uid];
-    //    bool stateSensor = [sd uploadSensorDataWithURL:@"http://life-cloud.ht.sfc.keio.ac.jp/clip/api/mobile/sensor.php"];
-    //    bool statePed = [sd uploadPedDataToDBWithURL:@"http://life-cloud.ht.sfc.keio.ac.jp/clip/api/mobile/ped.php" dbClean:YES];
-    //
-    //
-    
-    
-    
-    
-    //    UILocalNotification *notification = [[UILocalNotification alloc] init];
-    //    if (notification){
-    //        //        notification.timeZone = [NSTimeZone defaultTimeZone];
-    //        notification.repeatInterval = 0;
-    //        notification.alertBody = @"Background Fetch !!! ";
-    //        notification.alertAction = @"Hello New World!";
-    //        notification.soundName = UILocalNotificationDefaultSoundName;
-    //        notification.applicationIconBadgeNumber = 1;
-    //        [[UIApplication sharedApplication] scheduleLocalNotification:notification];
-    //    }
-    //
-    //    //Tell the system that you ar done.
-    //    if(stateSensor){
     completionHandler(UIBackgroundFetchResultNewData);
-    ////        completionHandler(UIBackgroundFetchResultNoData);
-    //        NSLog(@"ok");
-    //    }else{
-    //        completionHandler(UIBackgroundFetchResultFailed);
-    //        NSLog(@"no");
-    //    }
-    ////    completionHandler(UIBackgroundFetchResultFailed);
+}
+
+
+// This method is called then iOS receieved data by BackgroundFetch
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
+    NSLog(@"pushInfo in Background: %@", [userInfo description]);
+    completionHandler(UIBackgroundFetchResultNoData);
+}
+
+
+- (void)application:(UIApplication *)application
+handleEventsForBackgroundURLSession:(NSString *)identifier
+  completionHandler:(void (^)())completionHandler {
+    NSLog(@"Background OK");
+    completionHandler();
+    /*
+     Store the completion handler. The completion handler is invoked by the view            controller's checkForAllDownloadsHavingCompleted method (if all the download tasks have been            completed).
+     */
+//    self.backgroundSessionCompletionHandler = completionHandler;
 }
 
 
@@ -180,7 +162,6 @@
     
     NSString *token = deviceToken.description;
     
-    // <aaaa bbbb cccc dddd>みたいな形式でくるので、"<"、">"、"(空白)"を取ってあげると便利だよ
     token = [token stringByReplacingOccurrencesOfString:@"<" withString:@""];
     token = [token stringByReplacingOccurrencesOfString:@">" withString:@""];
     token = [token stringByReplacingOccurrencesOfString:@" " withString:@""];
@@ -201,22 +182,6 @@
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
     NSLog(@"pushInfo: %@", [userInfo description]);
 }
-
-// BackgroundFetchによるバックグラウンドの受信
-- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
-    NSLog(@"pushInfo in Background: %@", [userInfo description]);
-    completionHandler(UIBackgroundFetchResultNoData);
-}
-
-
-
-
-
-
-
-
-
-
 
 
 #pragma mark - Core Data stack
@@ -301,14 +266,7 @@
 
 
 
-- (BOOL)application:(UIApplication *)application
-            openURL:(NSURL *)url
-  sourceApplication:(NSString *)sourceApplication
-         annotation:(id)annotation {
-    return [[GIDSignIn sharedInstance] handleURL:url
-                               sourceApplication:sourceApplication
-                                      annotation:annotation];
-}
+
 
 
 - (void)signIn:(GIDSignIn *)signIn

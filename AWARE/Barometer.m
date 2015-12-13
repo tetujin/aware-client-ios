@@ -14,13 +14,13 @@
 }
 
 
-- (instancetype)init
-{
-    self = [super init];
-    if (self) {
-    }
-    return self;
-}
+//- (instancetype)init
+//{
+//    self = [super init];
+//    if (self) {
+//    }
+//    return self;
+//}
 
 - (instancetype)initWithSensorName:(NSString *)sensorName{
     self = [super initWithSensorName:sensorName];

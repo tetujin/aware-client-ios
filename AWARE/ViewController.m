@@ -7,13 +7,14 @@
 //
 
 #import "ViewController.h"
-#import "AWAREStudyManager.h"
+#import "AWAREKeys.h"
 #import "GoogleLoginViewController.h"
 #import "Accelerometer.h"
 #import "AmbientNoise.h"
 #import "ActivityRecognition.h"
 
-#import "TitleViewCell.h"
+//#import "TitleViewCell.h"
+#import "MSBand.h"
 
 
 @interface ViewController (){
@@ -64,9 +65,14 @@
     uploadInterval = 60*15;
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults setBool:NO forKey:SETTING_DEBUG_STATE];
-    [userDefaults setBool:YES forKey:SETTING_SYNC_WIFI_ONLY];
-    [userDefaults setDouble:uploadInterval forKey:SETTING_SYNC_INT];
+    // Get default information from local storage
+    if (![userDefaults boolForKey:@"aware_inited"]) {
+        [userDefaults setBool:NO forKey:SETTING_DEBUG_STATE];
+        [userDefaults setBool:YES forKey:SETTING_SYNC_WIFI_ONLY];
+        [userDefaults setDouble:uploadInterval forKey:SETTING_SYNC_INT];
+        [userDefaults setBool:YES forKey:@"aware_inited"];
+    }
+
     
     
     self.tableView.delegate = self;
@@ -213,6 +219,12 @@
     [_sensors addObject:[self getCelContent:@"Debug" desc:debugState image:@"" key:@"STUDY_CELL_DEBUG"]]; //ic_action_mqtt
     [_sensors addObject:[self getCelContent:@"Sync Interval to AWARE Server (min)" desc:syncInterval image:@"" key:@"STUDY_CELL_SYNC"]]; //ic_action_mqtt
     [_sensors addObject:[self getCelContent:@"Sync only wifi" desc:wifiOnly image:@"" key:@"STUDY_CELL_WIFI"]]; //ic_action_mqtt
+
+    //for test
+    AWARESensor *msBand = [[MSBand alloc] initWithSensorName:SENSOR_PLUGIN_MSBAND];
+    [msBand startSensor:60.0f withSettings:nil];
+    [_sensorManager addNewSensor:msBand];
+
 }
 
 
@@ -245,10 +257,10 @@
     NSLog(@"%ld is selected!", indexPath.row);
     NSDictionary *item = (NSDictionary *)[_sensors objectAtIndex:indexPath.row];
     NSString *key = [item objectForKey:KEY_CEL_SENSOR_NAME];
-    if([key isEqualToString:@"STUDY_CELL_DEBUG"]){ //Debug
+    if ([key isEqualToString:@"STUDY_CELL_DEBUG"]) { //Debug
         UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Debug Statement" message:@"" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"ON", @"OFF", nil];
         [alert show];
-    }else if([key isEqualToString:@"STUDY_CELL_SYNC"]){ //Sync
+    } else if ([key isEqualToString:@"STUDY_CELL_SYNC"]) { //Sync
         UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Sync Interval (min)" message:@"Please inpute a sync interval to the server." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Done",nil];
         alert.alertViewStyle = UIAlertViewStylePlainTextInput;
         
@@ -394,8 +406,10 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
                                           cancelButtonTitle:@"OK"
                                           otherButtonTitles:nil];
     [alert show];
-    [_sensorManager stopAllSensors];
-    NSLog(@"remove all sensors");
+    @autoreleasepool {
+        [_sensorManager stopAllSensors];
+        NSLog(@"remove all sensors");
+    }
     [self initList];
     [self.tableView reloadData];
     [self connectMqttServer];
@@ -506,9 +520,6 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
         });
 //        NSLog(@"%@", dic);
     }];
-    
-
-    
 
     [self.client connectToHost:mqttServer
              completionHandler:^(MQTTConnectionReturnCode code) {

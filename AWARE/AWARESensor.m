@@ -8,7 +8,7 @@
 
 
 #import "AWARESensor.h"
-#import "AWAREStudyManager.h"
+#import "AWAREKeys.h"
 #import "SCNetworkReachability.h"
 //#import "FMDatabase.h"
 //#import "FMResultSet.h"
@@ -22,6 +22,7 @@
     NSString * awareSensorName;
     NSString *latestSensorValue;
     int lineCount;
+//    NSString* jsonstr;
     SCNetworkReachability* reachability;
     NSMutableString *tempData;
     NSMutableString *bufferStr;
@@ -49,23 +50,20 @@
 //        fileClearState = NO;
         awareSensorName = sensorName;
         latestSensorValue = @"";
+//        jsonstr = [[NSString alloc] init];
         tempData = [[NSMutableString alloc] init];
         bufferStr = [[NSMutableString alloc] init];
         reachability = [[SCNetworkReachability alloc] initWithHost:@"www.google.com"];
-        [reachability observeReachability:^(SCNetworkStatus status)
-         {
-             switch (status)
-             {
+        [reachability observeReachability:^(SCNetworkStatus status){
+             switch (status){
                  case SCNetworkStatusReachableViaWiFi:
                      NSLog(@"[%@] Reachable via WiFi", [self getSensorName]);
                      wifiState = YES;
                      break;
-                     
                  case SCNetworkStatusReachableViaCellular:
                      NSLog(@"[%@] Reachable via Cellular", [self getSensorName]);
                      wifiState = NO;
                      break;
-                     
                  case SCNetworkStatusNotReachable:
                      NSLog(@"[%@] Not Reachable", [self getSensorName]);
                      wifiState = NO;
@@ -77,9 +75,9 @@
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
         NSString *documentsDirectory = [paths objectAtIndex:0];
         NSString * path = [documentsDirectory stringByAppendingPathComponent:sensorName];
-        NSFileHandle *fh = [NSFileHandle fileHandleForWritingAtPath:path];
+        NSFileHandle *fh = [NSFileHandle fileHandleForWritingAtPath:[NSString stringWithFormat:@"%@.dat",path]];
         if (!fh) { // no
-            NSLog(@"You don't have a file for %@, then system recreated new file!", sensorName);
+            NSLog(@"[%@] You don't have a file for %@, then system recreated new file!", sensorName, sensorName);
             NSFileManager *manager = [NSFileManager defaultManager];
             if (![manager fileExistsAtPath:path]) { // yes
                 BOOL result = [manager createFileAtPath:path
@@ -92,20 +90,6 @@
             }
         }
         writeAble = YES;
-        // init database
-//        dbPath = [[NSString alloc] initWithFormat:@"%@.db", path];
-//        db = [FMDatabase databaseWithPath:dbPath];//@"/tmp/tmp.db"];
-//        if ([db open]) {
-//            NSString *sql = @"create table data (id integer primary key autoincrement, timestamp real, data text);";
-//            if([db executeStatements:sql]){
-//                NSLog(@"[%@] Sucess to create a table.", sensorName);
-//            }else{
-//                NSLog(@"[%@] Faile to create a table.", sensorName);
-//            }
-//        }else{
-//            NSLog(@"[%@] Faile to open the database.", sensorName);
-//        }
-//        readingDataFromDB = false;
     }
     return self;
 }
@@ -228,10 +212,10 @@
             
 
 - (bool) saveData:(NSDictionary *)data toLocalFile:(NSString *)fileName{
-    // TODO: error hundling of nill in NSDictionary.
     NSError*error=nil;
     NSData*d=[NSJSONSerialization dataWithJSONObject:data options:2 error:&error];
-    NSString*jsonstr= @"";
+    NSString* jsonstr = [[NSString alloc] init];
+    // TODO: error hundling of nill in NSDictionary.
     if (!error) {
         jsonstr = [[NSString alloc]initWithData:d encoding:NSUTF8StringEncoding];
     } else {
@@ -323,7 +307,6 @@ return YES;
         }else{
             NSLog(@"[%@] Error to clear sensor data.", fileName);
         }
-        
     }else{
         NSLog(@"[%@] The file is not exist.", fileName);
         [self createNewFile:fileName];
@@ -341,7 +324,7 @@ return YES;
     }
     
 //    NSUInteger seek = 0;
-    NSUInteger length = 1000 * 1000 *10; // 10MB
+    NSUInteger length = 1000 * 1000 * 5; // 5MB //10MB
 //    NSUInteger length = 1000 * 100; // 10MB
     NSUInteger seek = marker * length;
     
@@ -393,16 +376,33 @@ return YES;
     }
     data = [self fixJsonFormat:data];
 
-    // Set settion configu and HTTP/POST body.
-    NSURLSessionConfiguration *sessionConfig =
-    [NSURLSessionConfiguration defaultSessionConfiguration];
-    //        sessionConfig.allowsCellularAccess = NO;
+    
+    
+    // Set session configuration
+    NSURLSessionConfiguration *sessionConfig = nil;
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    BOOL foreground = [defaults boolForKey:@"APP_STATE"];
+    foreground = NO;
+    
+    if (foreground) {
+        // If the app in the foreground, we will make a default session
+        sessionConfig = [NSURLSessionConfiguration defaultSessionConfiguration];
+    } else {
+        // If the app in the background, we will make a background session with identifier.
+        NSDate *now = [NSDate date];
+        NSString* identifier = [NSString stringWithFormat:@"%@_%f", sensorName, [now timeIntervalSince1970]];
+        sessionConfig = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:identifier];
+    }
+    sessionConfig.timeoutIntervalForRequest = 120.0;
+    sessionConfig.HTTPMaximumConnectionsPerHost = 30;
+    sessionConfig.timeoutIntervalForResource = 30;//60*60*24; // 1 day
+    sessionConfig.allowsCellularAccess = NO;
+    sessionConfig.discretionary = YES;
     //        [sessionConfig setHTTPAdditionalHeaders:
     //         @{@"Accept": @"application/json"}];
-    sessionConfig.timeoutIntervalForRequest = 120.0;
-//    sessionConfig.timeoutIntervalForResource = 300.0;
-    sessionConfig.HTTPMaximumConnectionsPerHost = 30;
-    
+    //    sessionConfig.timeoutIntervalForResource = 300.0;
+
+    // set HTTP/POST body information
     post = [NSString stringWithFormat:@"device_id=%@&data=%@", deviceId, data];
     postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
     postLength = [NSString stringWithFormat:@"%ld", [postData length]];
@@ -412,82 +412,83 @@ return YES;
     [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
     [request setHTTPBody:postData];
     
-    // Check application condition: "foreground(YES)" or "background(NO)"
-//    NSUserDefaults* defaults =` [NSUserDefaults standardUserDefaults];
-//    bool foreground = [defaults objectForKey:@"APP_STATE"];
+    if (foreground) {
+        NSLog(@"--- This is a foreground task----");
+        session = [NSURLSession sessionWithConfiguration:sessionConfig];
+        [[session dataTaskWithRequest:request
+                    completionHandler:^(NSData * _Nullable data,
+                                        NSURLResponse * _Nullable response,
+                                        NSError * _Nullable error) {
+                        
+                        [self receivedResponseFromServer:response withData:data error:error];
+                    }] resume];
+    } else {
+        NSLog(@"--- This is background task ----");
+        session = [NSURLSession sessionWithConfiguration:sessionConfig delegate:self delegateQueue:nil];
+        NSURLSessionDataTask* dataTask = [session dataTaskWithRequest:request];
+        [dataTask resume];
+    }
     
-    session = [NSURLSession sessionWithConfiguration:sessionConfig];
-    [[session dataTaskWithRequest:request
-                completionHandler:^(NSData * _Nullable data,
-                                    NSURLResponse * _Nullable response,
-                                    NSError * _Nullable error) {
-                    NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
-                    int responseCode = (int)[httpResponse statusCode];
-                    
-                    NSString* newStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-                    NSLog(@"[%@] %d  Response =====> %@",[self getSensorName], responseCode, newStr);
-                    
-
-                    
-                    if(responseCode == 200){
-                        // [self removeFile:[self getSensorName]];
-                        // [self createNewFile:[self getSensorName]];
-                        NSString *bytes = @"";
-                        if (lineCount >= 1000*1000) { //MB
-                            bytes = [NSString stringWithFormat:@"%.2f MB", (double)lineCount/(double)(1000*1000)];
-                        } else if (lineCount >= 1000) { //KB
-                            bytes = [NSString stringWithFormat:@"%.2f KB", (double)lineCount/(double)1000];
-                        } else if (lineCount < 1000) {
-                            bytes = [NSString stringWithFormat:@"%d Bytes", lineCount];
-                        } else {
-                            bytes = [NSString stringWithFormat:@"%d Bytes", lineCount];
-                        }
-                        NSString *message = [NSString stringWithFormat:@"[%@] Sucess to upload sensor data to AWARE server with %@ - %d", [self getSensorName], bytes, marker ];
-                        NSLog(@"%@", message);
-                        // send notification
-                        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-                        bool debugState = [userDefaults boolForKey:SETTING_DEBUG_STATE];
-                        if (debugState) {
-                            [self sendLocalNotificationForMessage:message soundFlag:NO];
-                        }
-                    }
-                    
-                    previusUploadingState = NO;
-                    
-                    data = nil;
-                    response = nil;
-                    error = nil;
-                    httpResponse = nil;
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        CGFloat currentVersion = [[[UIDevice currentDevice] systemVersion] floatValue];
-                        if (currentVersion >= 9.0) {
-                            [session finishTasksAndInvalidate];
-                            [session invalidateAndCancel];
-                        }
-                        if (marker != 0) {
-                            [self syncAwareDB];
-                        }else{
-                            if(responseCode == 200){
-                                [self removeFile:[self getSensorName]];
-//                                NSLog(@"[%@] File is removed.", [self getSensorName]);
-                            }
-//                            previusUploadingState = NO;
-                        }
-                    });
-                }] resume];
-
 }
+
+- (void)URLSession:(NSURLSession *)session
+          dataTask:(NSURLSessionDataTask *)dataTask
+didReceiveResponse:(NSURLResponse *)response
+ completionHandler:(void (^)(NSURLSessionResponseDisposition disposition))completionHandler {
+    NSLog(@"[%@] Get response from the server.", [self getSensorName]);
+    [self receivedResponseFromServer:dataTask.response withData:nil error:nil];
+    completionHandler(NSURLSessionResponseAllow);
+}
+
+
+-(void)URLSession:(NSURLSession *)session
+         dataTask:(NSURLSessionDataTask *)dataTask
+   didReceiveData:(NSData *)data {
+    // If the data is null, this method is not called.
+    NSLog(@"[%@] Data is coming!", [self getSensorName]);
+    NSString * result = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    NSLog(@"[%@] response => %@", result);
+    
+    [session finishTasksAndInvalidate];
+    [session invalidateAndCancel];
+    
+//    previusUploadingState = NO;
+//    [self receivedResponseFromServer:dataTask.response withData:data error:nil];
+//    [receivedData appendData:data];
+}
+
+- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error {
+    if (error) {
+        // Handle error
+        NSLog(@"[%@] Session task finished with error.", [self getSensorName]);
+//        [session invalidateAndCancel];
+//        [session finishTasksAndInvalidate];
+    } else {
+        NSLog(@"[%@] Session task finished correctly.", [self getSensorName]);
+    }
+    previusUploadingState = NO;
+    [session finishTasksAndInvalidate];
+    [session invalidateAndCancel];
+}
+
+- (void)URLSession:(NSURLSession *)session didBecomeInvalidWithError:(NSError *)error{
+    NSLog(@"[%@] error.... then this session is canceled.: %@", [self getSensorName], session.sessionDescription);
+    previusUploadingState = NO;
+//    [session invalidateAndCancel];
+//    [session finishTasksAndInvalidate];
+}
+
 
 - (NSMutableString *) fixJsonFormat:(NSMutableString *) clipedText {
     // head
     if ([clipedText hasPrefix:@"{"]) {
-        NSLog(@"HEAD => correct!");
+//        NSLog(@"HEAD => correct!");
     }else{
         NSRange rangeOfExtraText = [clipedText rangeOfString:@"{"];
         if (rangeOfExtraText.location == NSNotFound) {
-            NSLog(@"[HEAD] There is no extra text");
+//            NSLog(@"[HEAD] There is no extra text");
         }else{
-            NSLog(@"[HEAD] There is some extra text!");
+//            NSLog(@"[HEAD] There is some extra text!");
             NSRange deleteRange = NSMakeRange(0, rangeOfExtraText.location);
             [clipedText deleteCharactersInRange:deleteRange];
         }
@@ -495,13 +496,13 @@ return YES;
     
     // tail
     if ([clipedText hasSuffix:@"}"]){
-        NSLog(@"TAIL => correct!");
+//        NSLog(@"TAIL => correct!");
     }else{
         NSRange rangeOfExtraText = [clipedText rangeOfString:@"}" options:NSBackwardsSearch];
         if (rangeOfExtraText.location == NSNotFound) {
-            NSLog(@"[TAIL] There is no extra text");
+//            NSLog(@"[TAIL] There is no extra text");
         }else{
-            NSLog(@"[TAIL] There is some extra text!");
+//            NSLog(@"[TAIL] There is some extra text!");
             NSRange deleteRange = NSMakeRange(rangeOfExtraText.location+1, clipedText.length-rangeOfExtraText.location-1);
             //                NSLog(@"%@", clipedText);
             [clipedText deleteCharactersInRange:deleteRange];
@@ -513,166 +514,63 @@ return YES;
     return clipedText;
 }
 
-
-- (NSString*) getData:(NSString *)fileName withJsonArrayFormat:(bool)jsonArrayFormat{
-    if (!wifiState) {
-        NSLog(@"You need wifi network to upload sensor data.");
-        return @"";
-    }
-    lineCount = 0;
-    
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0];
-    NSString * path = [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.dat",fileName]];
-    NSMutableString *data = nil;
-    
-    NSFileHandle *fileHandle = [NSFileHandle fileHandleForReadingAtPath:path];
-    if (!fileHandle) {
-        NSLog(@"[%@] AWARE can not handle the file.", fileName);
-        [self createNewFile:fileName];
-        return @"[]";
-    }
-    NSString *str = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
-    [fileHandle closeFile];
-    
-//    NSLog(@"%@", str);
-
-    data = [[NSMutableString alloc] initWithString:@"["];
-    [data appendString:str];
-    
-//    [str enumerateLinesUsingBlock:^(NSString *line, BOOL *stop) {
-//        lineCount++;
-//        [data appendString:[NSString stringWithFormat:@"%@,", line]];
-//    }];
-    if(data.length > 1){
-        [data deleteCharactersInRange:NSMakeRange([data length]-1, 1)];
-    }
-    [data appendString:@"]"];
-    NSLog(@"%@", data);
-    NSLog(@"[%@] You got %d lines of sensor data", [self getSensorName], lineCount);
-
-    return [NSString stringWithString:data];
-}
-
-
-
-- (BOOL)insertSensorData:(NSString *)data withDeviceId:(NSString *)deviceId url:(NSString *)url{
-    if (!wifiState) {
-        NSLog(@"You need wifi network to upload sensor data.");
-        return NO;
+//NSData * _Nullable data,
+//NSURLResponse * _Nullable response,
+//NSError * _Nullable error
+- (void)receivedResponseFromServer:(NSURLResponse *)response
+                          withData:(NSData *)data
+                             error:(NSError *)error{
+    NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
+    int responseCode = (int)[httpResponse statusCode];
+    NSString* newStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    NSLog(@"[%@] %d  Response =====> %@",[self getSensorName], responseCode, newStr);
+    if(responseCode == 200){
+        // [self removeFile:[self getSensorName]];
+        // [self createNewFile:[self getSensorName]];
+        NSString *bytes = @"";
+        if (lineCount >= 1000*1000) { //MB
+            bytes = [NSString stringWithFormat:@"%.2f MB", (double)lineCount/(double)(1000*1000)];
+        } else if (lineCount >= 1000) { //KB
+            bytes = [NSString stringWithFormat:@"%.2f KB", (double)lineCount/(double)1000];
+        } else if (lineCount < 1000) {
+            bytes = [NSString stringWithFormat:@"%d Bytes", lineCount];
+        } else {
+            bytes = [NSString stringWithFormat:@"%d Bytes", lineCount];
+        }
+        NSString *message = [NSString stringWithFormat:@"[%@] Sucess to upload sensor data to AWARE server with %@ - %d", [self getSensorName], bytes, marker ];
+        NSLog(@"%@", message);
+        // send notification
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        bool debugState = [userDefaults boolForKey:SETTING_DEBUG_STATE];
+//        debugState = YES;
+        if (debugState) {
+            [self sendLocalNotificationForMessage:message soundFlag:NO];
+        }
     }
     
-    NSString *post = nil;
-    NSData *postData = nil;
-    NSMutableURLRequest *request = nil;
-    __weak NSURLSession *session = nil;
-    NSString *postLength = nil;
-//    NSLog(@"Wifi network state is %d", wifiState);
-    previusUploadingState = YES; //file lock
+    previusUploadingState = NO;
     
-    // Set settion configu and HTTP/POST body.
-    NSURLSessionConfiguration *sessionConfig =
-    [NSURLSessionConfiguration defaultSessionConfiguration];
-//        sessionConfig.allowsCellularAccess = NO;
-//        [sessionConfig setHTTPAdditionalHeaders:
-//         @{@"Accept": @"application/json"}];
-    sessionConfig.timeoutIntervalForRequest = 180.0;
-    sessionConfig.timeoutIntervalForResource = 300.0;
-    sessionConfig.HTTPMaximumConnectionsPerHost = 30;
-    
-    post = [NSString stringWithFormat:@"device_id=%@&data=%@", deviceId, data];
-//    NSLog(@"%@", post);
-    postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
-    postLength = [NSString stringWithFormat:@"%ld", [postData length]];
-    request = [[NSMutableURLRequest alloc] init];
-    [request setURL:[NSURL URLWithString:url]];
-    [request setHTTPMethod:@"POST"];
-    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
-    [request setHTTPBody:postData];
-    
-    
-    // Check application condition: "foreground(YES)" or "background(NO)"
-    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-    bool foreground = [defaults objectForKey:@"APP_STATE"];
-    
-//    foreground = NO;
-    // HTTP/POST with each application condition
-//    foreground = YES;
-//    if(foreground){
-    // Set settion configu and HTTP/POST body.
-        session = [NSURLSession sessionWithConfiguration:sessionConfig];
-        [[session dataTaskWithRequest:request
-                   completionHandler:^(NSData * _Nullable data,
-                                       NSURLResponse * _Nullable response,
-                                       NSError * _Nullable error) {
-                        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
-                        int responseCode = (int)[httpResponse statusCode];
-                       
-                       NSString* newStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-                       NSLog(@"[%@] Response=====> %@", [self getSensorName],newStr);
-                       
-                        if(responseCode == 200){
-                            [self removeFile:[self getSensorName]];
-//                            [self createNewFile:[self getSensorName]];
-                            NSString *message = [NSString stringWithFormat:@"[%@] Sucess to upload sensor data to AWARE server with %d record", [self getSensorName], lineCount ];
-                            NSLog(@"%@", message);
-                        
-                            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-                            bool debugState = [userDefaults boolForKey:SETTING_DEBUG_STATE];
-                            if (debugState) {
-                                [self sendLocalNotificationForMessage:message soundFlag:NO];
-                            }
-                        }
-                       previusUploadingState = NO;
-                       data = nil;
-                       response = nil;
-                       error = nil;
-                       httpResponse = nil;
-                       dispatch_async(dispatch_get_main_queue(), ^{
-                                [session finishTasksAndInvalidate];
-                                [session invalidateAndCancel];
-                       });
-        }] resume];
-//    }else{ // background
-//        NSError *error = nil;
-//        NSHTTPURLResponse *response = nil;
-//        NSData *resData = [NSURLConnection sendSynchronousRequest:request
-//                                                returningResponse:&response error:&error];
-//        NSString* newStr = [[NSString alloc] initWithData:resData encoding:NSUTF8StringEncoding];
-//        NSLog(@"[%@] Response=> %@", [self getSensorName],newStr);
-//        int responseCode = (int)[response statusCode];
-//        if(responseCode == 200){
-//            [self removeFile:[self getSensorName]];
-////            [self createNewFile:[self getSensorName]];
-//            NSString *message = [NSString stringWithFormat:@"[%@] Sucess to upload sensor data to AWARE server with %d record in the background.", [self getSensorName], lineCount ];
-//            NSLog(@"%@", message);
-//            [self sendLocalNotificationForMessage:message soundFlag:NO];
-//        }else{
-//            return NO;
-//        }
-//        previusUploadingState = NO;
-//        data = nil;
-//        response = nil;
-//        error = nil;
-//    }
-    return YES;
+    data = nil;
+    response = nil;
+    error = nil;
+    httpResponse = nil;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        CGFloat currentVersion = [[[UIDevice currentDevice] systemVersion] floatValue];
+        if (currentVersion >= 9.0) {
+//            [session finishTasksAndInvalidate];
+//            [session invalidateAndCancel];
+        }
+        if (marker != 0) {
+            [self syncAwareDB];
+        }else{
+            if(responseCode == 200){
+                [self removeFile:[self getSensorName]];
+                //                                NSLog(@"[%@] File is removed.", [self getSensorName]);
+            }
+            //                            previusUploadingState = NO;
+        }
+    });
 }
-
-- (void)URLSession:(NSURLSession *)session didBecomeInvalidWithError:(NSError *)error{
-    
-}
-
-- (void)URLSession:(NSURLSession *)session didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition, NSURLCredential * _Nullable))completionHandler{
-    
-}
-
-- (void)URLSessionDidFinishEventsForBackgroundURLSession:(NSURLSession *)session{
-    
-}
-
-//- URLSession:didBecomeInvalidWithErr
-//- URLSession:didReceiveChallenge:completionHandler:
-//- URLSessionDidFinishEventsForBackgroundURLSession:
 
 
 
@@ -855,6 +753,63 @@ return YES;
         localNotification.soundName = UILocalNotificationDefaultSoundName;
     }
     [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
+}
+
+
+- (void)connection:(NSURLConnection *)connection
+didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge {
+    NSLog(@"-------------------");
+    if ([[[challenge protectionSpace] authenticationMethod] isEqualToString: NSURLAuthenticationMethodServerTrust]){
+        
+        do {
+            SecTrustRef serverTrust = [[challenge protectionSpace] serverTrust];
+            if (serverTrust == nil)
+                break; // failed
+            
+            SecTrustResultType trustResult;
+            OSStatus status = SecTrustEvaluate(serverTrust, &trustResult);
+            if (!(errSecSuccess == status))
+                break; // fatal error in trust evaluation -> failed
+            
+            if (!((trustResult == kSecTrustResultProceed)
+                  || (trustResult == kSecTrustResultUnspecified)))
+            {
+                break; // see "Certificate, Key, and Trust Services Reference"
+                // for explanation of result codes.
+            }
+            
+            SecCertificateRef serverCertificate = SecTrustGetCertificateAtIndex(serverTrust, 0);
+            if (serverCertificate == nil)
+                break; // failed
+            
+            CFDataRef serverCertificateData = SecCertificateCopyData(serverCertificate);
+            if (serverCertificateData == nil)
+                break; // failed
+            
+            const UInt8* const data = CFDataGetBytePtr(serverCertificateData);
+            const CFIndex size = CFDataGetLength(serverCertificateData);
+            NSData* server_cert = [NSData dataWithBytes:data length:(NSUInteger)size];
+            CFRelease(serverCertificateData);
+            
+            NSString* file = [[NSBundle mainBundle] pathForResource:@"awareframework"
+                                                             ofType:@"der"];
+            NSData* my_cert = [NSData dataWithContentsOfFile:file];
+            
+            if (server_cert == nil || my_cert == nil)
+                break; // failed
+            
+            const BOOL equal = [server_cert isEqualToData:my_cert];
+            if (!equal)
+                break; // failed
+            
+            // Athentication succeeded:
+            return [[challenge sender] useCredential:[NSURLCredential credentialForTrust:serverTrust]
+                          forAuthenticationChallenge:challenge];
+        } while (0);
+        
+        // Authentication failed:
+        return [[challenge sender] cancelAuthenticationChallenge:challenge];
+    }
 }
 
 

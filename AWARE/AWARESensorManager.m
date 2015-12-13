@@ -7,7 +7,7 @@
 //
 
 #import "AWARESensorManager.h"
-#import "AWAREStudyManager.h"
+#import "AWAREKeys.h"
 #import "Accelerometer.h"
 #import "Gyroscope.h"
 #import "Magnetometer.h"

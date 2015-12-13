@@ -15,7 +15,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.2.1</string>
+	<string>1.3.0</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
@@ -36,9 +36,17 @@
 				<string>com.googleusercontent.apps.513561083200-em3srmsc40a2q6cuh8o2hguvhd1umfll</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>deploygate.b937db2b61c9d6a3916c5dd855aacbaac5dcc3bc</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>2</string>
+	<string>6</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -53,9 +61,11 @@
 		<string>audio</string>
 		<string>bluetooth-central</string>
 		<string>bluetooth-peripheral</string>
+		<string>external-accessory</string>
 		<string>fetch</string>
 		<string>location</string>
 		<string>remote-notification</string>
+		<string>voip</string>
 	</array>
 	<key>UIFileSharingEnabled</key>
 	<true/>

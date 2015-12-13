@@ -8,7 +8,7 @@
 
 #import "AWARESensor.h"
 #import <CoreLocation/CoreLocation.h>
-#import "AWAREStudyManager.h"
+#import "AWAREKeys.h"
 
 @interface Locations : AWARESensor <AWARESensorDelegate, CLLocationManagerDelegate>
 

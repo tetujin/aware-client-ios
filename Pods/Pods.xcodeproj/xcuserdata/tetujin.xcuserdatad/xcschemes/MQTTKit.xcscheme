@@ -14,7 +14,7 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = 'primary'
-               BlueprintIdentifier = '4FC5596CB2B4290C7ED3C688'
+               BlueprintIdentifier = '4FCB1EEE476516C19FED3788'
                BlueprintName = 'MQTTKit'
                ReferencedContainer = 'container:Pods.xcodeproj'
                BuildableName = 'libMQTTKit.a'>
