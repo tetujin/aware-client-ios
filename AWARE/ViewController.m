@@ -65,9 +65,14 @@
     uploadInterval = 60*15;
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults setBool:NO forKey:SETTING_DEBUG_STATE];
-    [userDefaults setBool:YES forKey:SETTING_SYNC_WIFI_ONLY];
-    [userDefaults setDouble:uploadInterval forKey:SETTING_SYNC_INT];
+    // Get default information from local storage
+    if (![userDefaults boolForKey:@"aware_inited"]) {
+        [userDefaults setBool:NO forKey:SETTING_DEBUG_STATE];
+        [userDefaults setBool:YES forKey:SETTING_SYNC_WIFI_ONLY];
+        [userDefaults setDouble:uploadInterval forKey:SETTING_SYNC_INT];
+        [userDefaults setBool:YES forKey:@"aware_inited"];
+    }
+
     
     
     self.tableView.delegate = self;
@@ -252,10 +257,10 @@
     NSLog(@"%ld is selected!", indexPath.row);
     NSDictionary *item = (NSDictionary *)[_sensors objectAtIndex:indexPath.row];
     NSString *key = [item objectForKey:KEY_CEL_SENSOR_NAME];
-    if([key isEqualToString:@"STUDY_CELL_DEBUG"]){ //Debug
+    if ([key isEqualToString:@"STUDY_CELL_DEBUG"]) { //Debug
         UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Debug Statement" message:@"" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"ON", @"OFF", nil];
         [alert show];
-    }else if([key isEqualToString:@"STUDY_CELL_SYNC"]){ //Sync
+    } else if ([key isEqualToString:@"STUDY_CELL_SYNC"]) { //Sync
         UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Sync Interval (min)" message:@"Please inpute a sync interval to the server." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Done",nil];
         alert.alertViewStyle = UIAlertViewStylePlainTextInput;
         
@@ -401,8 +406,10 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
                                           cancelButtonTitle:@"OK"
                                           otherButtonTitles:nil];
     [alert show];
-    [_sensorManager stopAllSensors];
-    NSLog(@"remove all sensors");
+    @autoreleasepool {
+        [_sensorManager stopAllSensors];
+        NSLog(@"remove all sensors");
+    }
     [self initList];
     [self.tableView reloadData];
     [self connectMqttServer];

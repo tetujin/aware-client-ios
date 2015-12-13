@@ -57,6 +57,8 @@ static void AudioInputCallback(
                                              target:self selector:@selector(syncAwareDB) userInfo:nil repeats:YES];
     [self startWriteAbleTimer];
     [self startUpdatingVolume];
+//    [audioController setInputEnabled:NO];
+//    AudioSessionSetActive(false);
     return YES;
 }
 

@@ -7,6 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <MQTTKit/MQTTKit.h>
+#import <UIKit/UIKit.h>
 
 @interface AWAREMqtt : NSObject
 
@@ -19,5 +21,6 @@
 @property (nonatomic,strong) NSNumber * mqttKeepAlive;// = @600;
 @property (nonatomic,strong) NSNumber * mqttQos;// = @2;
 
+@property MQTTClient *client;
 
 @end

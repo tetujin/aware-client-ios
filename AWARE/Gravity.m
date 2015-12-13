@@ -8,20 +8,19 @@
 
 #import "Gravity.h"
 
-@implementation Gravity
-{
+@implementation Gravity {
     CMMotionManager* motionManager;
     NSTimer * uploadTimer;
 }
 
-- (instancetype)init
-{
-    self = [super init];
-    if (self) {
-//        motionManager = [[CMMotionManager alloc] init];
-    }
-    return self;
-}
+//- (instancetype)init
+//{
+//    self = [super init];
+//    if (self) {
+////        motionManager = [[CMMotionManager alloc] init];
+//    }
+//    return self;
+//}
 
 - (instancetype)initWithSensorName:(NSString *)sensorName{
     self = [super initWithSensorName:sensorName];
@@ -74,7 +73,8 @@
                                                [dic setObject:@0 forKey:@"accuracy"];//int
                                                [dic setObject:@"" forKey:@"label"]; //text
                                                [self setLatestValue:[NSString stringWithFormat:@"%f, %f, %f",motion.attitude.pitch, motion.attitude.roll,motion.attitude.yaw]];
-                                               [self saveData:dic toLocalFile:SENSOR_GRAVITY];
+//                                               [self saveData:dic toLocalFile:SENSOR_GRAVITY];
+                                               [self saveData:dic];
                                            }];
     }
     return YES;

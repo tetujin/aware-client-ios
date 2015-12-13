@@ -22,7 +22,7 @@
     NSString * awareSensorName;
     NSString *latestSensorValue;
     int lineCount;
-    NSString* jsonstr;
+//    NSString* jsonstr;
     SCNetworkReachability* reachability;
     NSMutableString *tempData;
     NSMutableString *bufferStr;
@@ -50,7 +50,7 @@
 //        fileClearState = NO;
         awareSensorName = sensorName;
         latestSensorValue = @"";
-        jsonstr = [[NSString alloc] init];
+//        jsonstr = [[NSString alloc] init];
         tempData = [[NSMutableString alloc] init];
         bufferStr = [[NSMutableString alloc] init];
         reachability = [[SCNetworkReachability alloc] initWithHost:@"www.google.com"];
@@ -75,7 +75,7 @@
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
         NSString *documentsDirectory = [paths objectAtIndex:0];
         NSString * path = [documentsDirectory stringByAppendingPathComponent:sensorName];
-        NSFileHandle *fh = [NSFileHandle fileHandleForWritingAtPath:path];
+        NSFileHandle *fh = [NSFileHandle fileHandleForWritingAtPath:[NSString stringWithFormat:@"%@.dat",path]];
         if (!fh) { // no
             NSLog(@"[%@] You don't have a file for %@, then system recreated new file!", sensorName, sensorName);
             NSFileManager *manager = [NSFileManager defaultManager];
@@ -214,7 +214,7 @@
 - (bool) saveData:(NSDictionary *)data toLocalFile:(NSString *)fileName{
     NSError*error=nil;
     NSData*d=[NSJSONSerialization dataWithJSONObject:data options:2 error:&error];
-    jsonstr= @"";
+    NSString* jsonstr = [[NSString alloc] init];
     // TODO: error hundling of nill in NSDictionary.
     if (!error) {
         jsonstr = [[NSString alloc]initWithData:d encoding:NSUTF8StringEncoding];
@@ -307,7 +307,6 @@ return YES;
         }else{
             NSLog(@"[%@] Error to clear sensor data.", fileName);
         }
-        
     }else{
         NSLog(@"[%@] The file is not exist.", fileName);
         [self createNewFile:fileName];
@@ -325,7 +324,7 @@ return YES;
     }
     
 //    NSUInteger seek = 0;
-    NSUInteger length = 1000 * 1000 *10; // 10MB
+    NSUInteger length = 1000 * 1000 * 5; // 5MB //10MB
 //    NSUInteger length = 1000 * 100; // 10MB
     NSUInteger seek = marker * length;
     
@@ -383,6 +382,8 @@ return YES;
     NSURLSessionConfiguration *sessionConfig = nil;
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     BOOL foreground = [defaults boolForKey:@"APP_STATE"];
+    foreground = NO;
+    
     if (foreground) {
         // If the app in the foreground, we will make a default session
         sessionConfig = [NSURLSessionConfiguration defaultSessionConfiguration];
@@ -447,6 +448,11 @@ didReceiveResponse:(NSURLResponse *)response
     NSLog(@"[%@] Data is coming!", [self getSensorName]);
     NSString * result = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     NSLog(@"[%@] response => %@", result);
+    
+    [session finishTasksAndInvalidate];
+    [session invalidateAndCancel];
+    
+//    previusUploadingState = NO;
 //    [self receivedResponseFromServer:dataTask.response withData:data error:nil];
 //    [receivedData appendData:data];
 }
@@ -460,12 +466,16 @@ didReceiveResponse:(NSURLResponse *)response
     } else {
         NSLog(@"[%@] Session task finished correctly.", [self getSensorName]);
     }
+    previusUploadingState = NO;
+    [session finishTasksAndInvalidate];
+    [session invalidateAndCancel];
 }
 
 - (void)URLSession:(NSURLSession *)session didBecomeInvalidWithError:(NSError *)error{
     NSLog(@"[%@] error.... then this session is canceled.: %@", [self getSensorName], session.sessionDescription);
-    [session invalidateAndCancel];
-    [session finishTasksAndInvalidate];
+    previusUploadingState = NO;
+//    [session invalidateAndCancel];
+//    [session finishTasksAndInvalidate];
 }
 
 
@@ -532,6 +542,7 @@ didReceiveResponse:(NSURLResponse *)response
         // send notification
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         bool debugState = [userDefaults boolForKey:SETTING_DEBUG_STATE];
+//        debugState = YES;
         if (debugState) {
             [self sendLocalNotificationForMessage:message soundFlag:NO];
         }
@@ -546,8 +557,8 @@ didReceiveResponse:(NSURLResponse *)response
     dispatch_async(dispatch_get_main_queue(), ^{
         CGFloat currentVersion = [[[UIDevice currentDevice] systemVersion] floatValue];
         if (currentVersion >= 9.0) {
-            //            [session finishTasksAndInvalidate];
-            //            [session invalidateAndCancel];
+//            [session finishTasksAndInvalidate];
+//            [session invalidateAndCancel];
         }
         if (marker != 0) {
             [self syncAwareDB];

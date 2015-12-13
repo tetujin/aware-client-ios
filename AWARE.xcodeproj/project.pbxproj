@@ -430,7 +430,7 @@
 						DevelopmentTeam = FH352PYMNC;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
-								enabled = 1;
+								enabled = 0;
 							};
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -752,7 +752,7 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = AWARE/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = jp.ac.keio.sfc.ht.tetujin.AWARE;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -774,7 +774,7 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = AWARE/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = jp.ac.keio.sfc.ht.tetujin.AWARE;
 				PRODUCT_NAME = "$(TARGET_NAME)";

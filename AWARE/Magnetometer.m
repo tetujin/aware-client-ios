@@ -13,14 +13,14 @@
     NSTimer* timer;
 }
 
-- (instancetype)init
-{
-    self = [super init];
-    if (self) {
-//        manager = [[CMMotionManager alloc] init];
-    }
-    return self;
-}
+//- (instancetype)init
+//{
+//    self = [super init];
+//    if (self) {
+////        manager = [[CMMotionManager alloc] init];
+//    }
+//    return self;
+//}
 
 - (instancetype)initWithSensorName:(NSString *)sensorName{
     self = [super initWithSensorName:sensorName];
@@ -62,7 +62,8 @@
             [dic setObject:@0 forKey:@"accuracy"];
             [dic setObject:@"text" forKey:@"label"];
             [self setLatestValue:[NSString stringWithFormat:@"%f, %f, %f",magnetometerData.magneticField.x, magnetometerData.magneticField.y, magnetometerData.magneticField.z]];
-            [self saveData:dic toLocalFile:SENSOR_MAGNETOMETER];
+//            [self saveData:dic toLocalFile:SENSOR_MAGNETOMETER];
+            [self saveData:dic];
         }
     }];
     return YES;

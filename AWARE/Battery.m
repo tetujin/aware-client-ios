@@ -12,14 +12,14 @@
     NSTimer *uploadTimer;
     NSTimer *sensingTimer;
 }
-- (instancetype)init
-{
-    self = [super init];
-    if (self) {
-//        manager = [[CMMotionManager alloc] init];
-    }
-    return self;
-}
+//- (instancetype)init
+//{
+//    self = [super init];
+//    if (self) {
+////        manager = [[CMMotionManager alloc] init];
+//    }
+//    return self;
+//}
 
 - (instancetype)initWithSensorName:(NSString *)sensorName{
     self = [super initWithSensorName:sensorName];

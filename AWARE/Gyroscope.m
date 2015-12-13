@@ -14,14 +14,14 @@
     NSTimer* gTimer;
 }
 
-- (instancetype)init
-{
-    self = [super init];
-    if (self) {
-//        gyroManager = [[CMMotionManager alloc] init];
-    }
-    return self;
-}
+//- (instancetype)init
+//{
+//    self = [super init];
+//    if (self) {
+////        gyroManager = [[CMMotionManager alloc] init];
+//    }
+//    return self;
+//}
 
 - (instancetype)initWithSensorName:(NSString *)sensorName{
     self = [super initWithSensorName:sensorName];
@@ -65,7 +65,8 @@
             [dic setObject:@0 forKey:@"accuracy"];
             [dic setObject:@"text" forKey:@"label"];
             [self setLatestValue:[NSString stringWithFormat:@"%f, %f, %f",gyroData.rotationRate.x,gyroData.rotationRate.y,gyroData.rotationRate.z]];
-            [self saveData:dic toLocalFile:SENSOR_GYROSCOPE];
+//            [self saveData:dic toLocalFile:SENSOR_GYROSCOPE];
+            [self saveData:dic];
         }
     }];
     return YES;

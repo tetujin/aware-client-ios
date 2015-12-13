@@ -11,18 +11,17 @@
 @implementation Locations{
     NSTimer *uploadTimer;
     NSTimer *locationTimer;
-//    CLLocationManager *locationManager;
     IBOutlet CLLocationManager *locationManager;
 }
 
 
-- (instancetype)init
-{
-    self = [super init];
-    if (self) {
-    }
-    return self;
-}
+//- (instancetype)init
+//{
+//    self = [super init];
+//    if (self) {
+//    }
+//    return self;
+//}
 
 - (instancetype)initWithSensorName:(NSString *)sensorName{
     self = [super initWithSensorName:sensorName];
@@ -95,8 +94,7 @@
 
 
 
-- (void) getGpsData: (NSTimer *) theTimer
-{
+- (void) getGpsData: (NSTimer *) theTimer {
     //[sdManager addLocation:[_locationManager location]];
     CLLocation* location = [locationManager location];
     [self saveLocation:location];

@@ -27,7 +27,7 @@
     return self;
 }
 
-- (instancetype)initWithSensorName:(NSString *)sensorName{
+- (instancetype)initWithSensorName:(NSString *)sensorName {
     self = [super initWithSensorName:sensorName];
     if (self) {
         [super setSensorName:sensorName];
@@ -43,10 +43,8 @@
     NSLog(@"Start Network Sensing!");
     double interval = 1.0f;
     reachability = [[SCNetworkReachability alloc] initWithHost:@"https://github.com"];
-    [reachability reachabilityStatus:^(SCNetworkStatus status)
-     {
-         switch (status)
-         {
+    [reachability reachabilityStatus:^(SCNetworkStatus status) {
+         switch (status) {
              case SCNetworkStatusReachableViaWiFi:
                  NSLog(@"Reachable via WiFi");
                  networkState= YES;
