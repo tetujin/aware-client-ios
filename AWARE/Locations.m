@@ -14,31 +14,41 @@
     IBOutlet CLLocationManager *locationManager;
 }
 
-
-//- (instancetype)init
-//{
-//    self = [super init];
-//    if (self) {
-//    }
-//    return self;
-//}
-
 - (instancetype)initWithSensorName:(NSString *)sensorName{
-    self = [super initWithSensorName:sensorName];
+    self = [super initWithSensorName:@"locations"];
     if (self) {
-        [super setSensorName:sensorName];
+        [super setSensorName:@"locations"];
     }
     return self;
 }
 
-//- (BOOL)startSensor:(double)interval withUploadInterval:(double)upInterval{
+
+- (void) createTable{
+    NSString *query = [[NSString alloc] init];
+    query =
+        @"_id integer primary key autoincrement,"
+        "timestamp real default 0,"
+        "device_id text default '',"
+        "double_latitude real default 0,"
+        "double_longitude real default 0,"
+        "double_bearing real default 0,"
+        "double_speed real default 0,"
+        "double_altitude real default 0,"
+        "provider text default '',"
+        "accuracy integer default 0,"
+        "label text default '',"
+        "UNIQUE (timestamp,device_id)";
+    [super createTable:query];
+}
+
+
+
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings {
-    NSLog(@"Start Location!");
+    NSLog(@"[%@] Create Table", [self getSensorName]);
+    [self createTable];
     
+    NSLog(@"[%@] Start Sensor!", [self getSensorName]);
     double interval = 0;
-    
-    //sensing interval
-//    [self setBufferLimit:10000];
     double frequency = [self getSensorSetting:settings withKey:@"frequency_gps"];
     if(frequency != -1){
         NSLog(@"Location sensing requency is %f ", frequency);
@@ -141,11 +151,5 @@
     [uploadTimer invalidate];
     return YES;
 }
-
-//- (void)uploadSensorData{
-//    [self syncAwareDB];
-////    NSString * jsonStr = [self getData:@"locations" withJsonArrayFormat:YES];
-////    [self insertSensorData:jsonStr withDeviceId:[self getDeviceId] url:[self getInsertUrl:@"locations"]];
-//}
 
 @end

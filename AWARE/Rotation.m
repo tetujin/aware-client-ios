@@ -8,20 +8,34 @@
 
 #import "Rotation.h"
 
-@implementation Rotation
-{
+@implementation Rotation {
     CMMotionManager* motionManager;
     NSTimer * uploadTimer;
 }
 
 
-- (instancetype)initWithSensorName:(NSString *)sensorName{
+- (instancetype)initWithSensorName:(NSString *)sensorName {
     self = [super initWithSensorName:sensorName];
     if (self) {
         [super setSensorName:sensorName];
         motionManager = [[CMMotionManager alloc] init];
     }
     return self;
+}
+
+- (void) createTable{
+    NSString *query = [[NSString alloc] init];
+    query = @"_id integer primary key autoincrement,"
+    "timestamp real default 0,"
+    "device_id text default '',"
+    "double_values_0 real default 0,"
+    "double_values_1 real default 0,"
+    "double_values_2 real default 0,"
+    "double_values_3 real default 0,"
+    "accuracy integer default 0,"
+    "label text default '',"
+    "UNIQUE (timestamp,device_id)";
+    [super createTable:query];
 }
 
 /**
@@ -34,7 +48,10 @@
 
 //- (BOOL)startSensor:(double)interval withUploadInterval:(double)upInterval{
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
-    NSLog(@"Start Rotation sensing!");
+    NSLog(@"[%@] Create Table", [self getSensorName]);
+    [self createTable];
+    
+    NSLog(@"[%@] Start Sensor", [self getSensorName]);
     int interval = 0.1f;
     
 //    [self setBufferLimit:10000];

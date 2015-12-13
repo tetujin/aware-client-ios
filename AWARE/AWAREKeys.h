@@ -11,6 +11,9 @@
 extern NSString* const KEY_APNS_TOKEN;
 extern NSString* const KEY_AWARE_STUDY;
 
+extern NSString* const KEY_MAX_DATA_SIZE;
+extern NSString* const KEY_MARK;
+
 extern NSString* const KEY_SENSORS;
 extern NSString* const KEY_PLUGINS;
 extern NSString* const KEY_PLUGIN;

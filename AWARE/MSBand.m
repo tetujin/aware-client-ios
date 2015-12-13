@@ -21,6 +21,23 @@
     return self;
 }
 
+/**
+ * MSBand Delegate
+ */
+- (void)clientManager:(MSBClientManager *)clientManager
+               client:(MSBClient *)client
+didFailToConnectWithError:(NSError *)error{
+    
+}
+
+- (void) clientManager:(MSBClientManager *)clientManager clientDidConnect:(MSBClient *)client {
+    NSLog(@"Microsoft Band is connected!");
+}
+
+- (void) clientManager:(MSBClientManager *)clientManager clientDidDisconnect:(MSBClient *)client{
+    NSLog(@"Microsoft Band is disconnected!");
+}
+
 
 /** 
  * AWARESensor Delegate
@@ -47,14 +64,7 @@
 }
 
 
-/**
- * MSBand Delegate
- */
-- (void)clientManager:(MSBClientManager *)clientManager
-               client:(MSBClient *)client
-didFailToConnectWithError:(NSError *)error{
-    
-}
+
 
 
 - (void)startMSBSensors{
@@ -206,8 +216,6 @@ didFailToConnectWithError:(NSError *)error{
     if (![self.client.sensorManager startGyroscopeUpdatesToQueue:nil errorRef:&stateError withHandler:gyroHandler]) {
         NSLog(@"Gyro sensor is faild: %@", stateError.description);
     }
-    
-//    NSLog(@"Set a HeartRate Sensor!");
     
 //    NSLog(@"Set a Skin Teamperature Sensor!");
     if (![self.client.sensorManager startSkinTempUpdatesToQueue:nil errorRef:&stateError withHandler:skinHandler]) {

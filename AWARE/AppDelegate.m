@@ -8,7 +8,8 @@
 
 #import "AppDelegate.h"
 #import "ViewController.h"
-#import "AWAREStudyManager.h"
+#import "AWAREKeys.h"
+//#import "DeployGateSDK/DeployGateSDK.h"
 
 //#define NSLog DGSLog
 
@@ -59,6 +60,11 @@
     NSAssert(!configureError, @"Error configuring Google services: %@", configureError);
     [GIDSignIn sharedInstance].delegate = self;
     
+    
+    [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
+    
+//    [[DeployGateSDK sharedInstance] launchApplicationWithAuthor:@"tetujin" key:@"2741cd90ae47212ad345d40c87f9fd31ee49195a"];
+//    [[DeployGateSDK sharedInstance] launchApplicationWithAuthor:@"tetujin" key:@"2741cd90ae47212ad345d40c87f9fd31ee49195a" userInfomationEnabled:YES];
     return YES;
 }
 

@@ -14,27 +14,37 @@
     NSTimer * sensingTimer;
 }
 
-- (instancetype)init
-{
-    self = [super init];
-    if (self) {
-        //        manager = [[CMMotionManager alloc] init];
-    }
-    return self;
-}
-
 - (instancetype)initWithSensorName:(NSString *)sensorName{
     self = [super initWithSensorName:sensorName];
     if (self) {
-        //        manager = [[CMMotionManager alloc] init];
         [super setSensorName:sensorName];
     }
     return self;
 }
 
-//- (BOOL)startSensor:(double)interval withUploadInterval:(double)upInterval{
+
+- (void) createTable{
+    NSString *query = [[NSString alloc] init];
+    query = @"_id integer primary key autoincrement,"
+    "timestamp real default 0,"
+    "device_id text default '',"
+    "double_last_user real default 0,"
+    "double_last_system real default 0,"
+    "double_last_idle real default 0,"
+    "double_user_load real default 0,"
+    "double_system_load real default 0,"
+    "double_idle real default 0,"
+    "UNIQUE (timestamp,device_id)";
+    [super createTable:query];
+}
+
+
+
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings {
-    NSLog(@"Start Processor sensing");
+    NSLog(@"[%@] Create Table", [self getSensorName]);
+    [self createTable];
+    
+    NSLog(@"[%@] Start Sensor", [self getSensorName]);
     double interval = 1.0f;
     uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval target:self selector:@selector(syncAwareDB) userInfo:nil repeats:YES];
     sensingTimer = [NSTimer scheduledTimerWithTimeInterval:interval target:self selector:@selector(getSensorData) userInfo:nil repeats:YES];
@@ -68,13 +78,6 @@
     [uploadTimer invalidate];
     return YES;
 }
-
-//- (void)uploadSensorData{
-//    [self syncAwareDB];
-////    NSString * jsonStr = [self getData:SENSOR_PROCESSOR withJsonArrayFormat:YES];
-////    [self insertSensorData:jsonStr withDeviceId:[self getDeviceId] url:[self getInsertUrl:SENSOR_PROCESSOR]];
-//}
-
 
 
 - (float) getCpuUsage {

@@ -6,21 +6,20 @@
 //  Copyright © 2015 Yuuki NISHIYAMA. All rights reserved.
 //
 
+/**
+ * [CoreMotion API]
+ * https://developer.apple.com/library/ios/documentation/EventHandling/Conceptual/EventHandlingiPhoneOS/motion_event_basics/motion_event_basics.html
+ *
+ * [CMDeviceMotion API]
+ * https://developer.apple.com/library/ios/documentation/CoreMotion/Reference/CMDeviceMotion_Class/index.html#//apple_ref/occ/cl/CMDeviceMotion
+ */
+
 #import "Gravity.h"
 
 @implementation Gravity {
     CMMotionManager* motionManager;
     NSTimer * uploadTimer;
 }
-
-//- (instancetype)init
-//{
-//    self = [super init];
-//    if (self) {
-////        motionManager = [[CMMotionManager alloc] init];
-//    }
-//    return self;
-//}
 
 - (instancetype)initWithSensorName:(NSString *)sensorName{
     self = [super initWithSensorName:sensorName];
@@ -31,29 +30,36 @@
     return self;
 }
 
-/**
- * [CoreMotion API]
- * https://developer.apple.com/library/ios/documentation/EventHandling/Conceptual/EventHandlingiPhoneOS/motion_event_basics/motion_event_basics.html
- *
- * [CMDeviceMotion API]
- * https://developer.apple.com/library/ios/documentation/CoreMotion/Reference/CMDeviceMotion_Class/index.html#//apple_ref/occ/cl/CMDeviceMotion
- */
 
-//- (BOOL)startSensor:(double)interval withUploadInterval:(double)upInterval{
+- (void) createTable{
+    NSString *query = [[NSString alloc] init];
+    query = @"_id integer primary key autoincrement,"
+    "timestamp real default 0,"
+    "device_id text default '',"
+    "double_values_0 real default 0,"
+    "double_values_1 real default 0,"
+    "double_values_2 real default 0,"
+    "accuracy integer default 0,"
+    "label text default '',"
+    "UNIQUE (timestamp,device_id)";
+    [super createTable:query];
+}
+
+
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
-    NSLog(@"Start Gravity sensing !");
+    NSLog(@"[%@] Create Table", [self getSensorName]);
+    [self createTable];
+    
+    NSLog(@"[%@] Start Sensor", [self getSensorName]);
     double interval = 0.1f;
     
-//    [self setBufferLimit:10000];
     [self startWriteAbleTimer];
     double frequency = [self getSensorSetting:settings withKey:@"frequency_gravity"];
     if(frequency != -1){
-        NSLog(@"Accelerometer's frequency is %f !!", frequency);
+        NSLog(@"Gravity's frequency is %f !!", frequency);
         double iOSfrequency = [self convertMotionSensorFrequecyFromAndroid:frequency];
         interval = iOSfrequency;
     }
-    
-    
     
     uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval target:self selector:@selector(syncAwareDB) userInfo:nil repeats:YES];
     /** motion */
@@ -80,6 +86,12 @@
     return YES;
 }
 
+- (BOOL)stopSensor{
+    [uploadTimer invalidate];
+    [motionManager stopDeviceMotionUpdates];
+    [self stopWriteableTimer];
+    return YES;
+}
 
 
 //    deviceMotion.magneticField.field.x; done
@@ -103,17 +115,6 @@
 //    deviceMotion.userAcceleration.z;
 
 
-- (BOOL)stopSensor{
-    [uploadTimer invalidate];
-    [motionManager stopDeviceMotionUpdates];
-    [self stopWriteableTimer];
-    return YES;
-}
 
-//- (void)uploadSensorData{
-//    [self syncAwareDB];
-////    NSString * jsonStr = [self getData:SENSOR_GRAVITY withJsonArrayFormat:YES];
-////    [self insertSensorData:jsonStr withDeviceId:[self getDeviceId] url:[self getInsertUrl:SENSOR_GRAVITY]];
-//}
 
 @end

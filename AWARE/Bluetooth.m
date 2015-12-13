@@ -20,8 +20,26 @@
     return self;
 }
 
+
+- (void) createTable{
+    NSString *query = [[NSString alloc] init];
+    query = @"_id integer primary key autoincrement,"
+    "timestamp real default 0,"
+    "device_id text default '',"
+    "bt_address text default '',"
+    "bt_name text default '',"
+    "bt_rssi text default '',"
+    "label text default '',"
+    "UNIQUE (timestamp,device_id)";
+    [super createTable:query];
+}
+
+
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
-    NSLog(@"Start Blutooth sensing");
+    NSLog(@"[%@] Create Table", [self getSensorName]);
+    [self createTable];
+    
+    NSLog(@"[%@] Start Sensor", [self getSensorName]);
     _myCentralManager = [[CBCentralManager alloc] initWithDelegate:self queue:nil];
     uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval target:self selector:@selector(syncAwareDB) userInfo:nil repeats:YES];
     return YES;
@@ -32,12 +50,6 @@
     [uploadTimer invalidate];
     return YES;
 }
-
-//- (void)uploadSensorData{
-//    [self syncAwareDB];
-////    NSString * jsonStr = [self getData:SENSOR_BLUETOOTH withJsonArrayFormat:YES];
-////    [self insertSensorData:jsonStr withDeviceId:[self getDeviceId] url:[self getInsertUrl:SENSOR_BLUETOOTH]];
-//}
 
 
 - (void)centralManagerDidUpdateState:(CBCentralManager *)central
@@ -86,8 +98,7 @@
 - (void) centralManager:(CBCentralManager *)central
   didDiscoverPeripheral:(CBPeripheral *)peripheral
       advertisementData:(NSDictionary *)advertisementData
-                   RSSI:(NSNumber *)RSSI
-{
+                   RSSI:(NSNumber *)RSSI {
     NSLog(@"Discovered %@", peripheral.name);
     NSLog(@"UUID %@", peripheral.identifier);
     NSLog(@"%@", peripheral);

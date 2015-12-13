@@ -14,14 +14,6 @@
 }
 
 
-//- (instancetype)init
-//{
-//    self = [super init];
-//    if (self) {
-//    }
-//    return self;
-//}
-
 - (instancetype)initWithSensorName:(NSString *)sensorName{
     self = [super initWithSensorName:sensorName];
     if (self) {
@@ -30,14 +22,30 @@
     return self;
 }
 
+
+- (void) createTable{
+    NSString *query = [[NSString alloc] init];
+    query = @"_id integer primary key autoincrement,"
+    "timestamp real default 0,"
+    "device_id text default '',"
+    "double_values_0 real default 0,"
+    "accuracy integer default 0,"
+    "label text default '',"
+    "UNIQUE (timestamp,device_id)";
+    [super createTable:query];
+}
+
+
 //- (BOOL)startSensor:(double)interval withUploadInterval:(double)upInterval{
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
-    NSLog(@"Start Gyroscope!");
+    NSLog(@"[%@] Create Table", [self getSensorName]);
+    [self createTable];
+    
+    NSLog(@"[%@] Start Sensor", [self getSensorName]);
     uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval target:self selector:@selector(syncAwareDB) userInfo:nil repeats:YES];
     if (![CMAltimeter isRelativeAltitudeAvailable]) {
         NSLog(@"This device doesen't support CMAltimeter.");
     } else {
-//        double interval = 1.0f;
         altitude = [[CMAltimeter alloc] init];
         [altitude startRelativeAltitudeUpdatesToQueue:[NSOperationQueue mainQueue]
                                            withHandler:^(CMAltitudeData *altitudeData, NSError *error) {
@@ -56,7 +64,7 @@
                                                [dic setObject:@0 forKey:@"accuracy"];
                                                [dic setObject:@"" forKey:@"label"];
                                                [self setLatestValue:[NSString stringWithFormat:@"%f", pressure_f*10.0f]];
-                                               [self saveData:dic toLocalFile:SENSOR_BAROMETER];
+                                               [self saveData:dic];
                                            }];
     }
     
@@ -71,13 +79,6 @@
     [uploadTimer invalidate];
     return YES;
 }
-
-//- (void)uploadSensorData{
-//    [self syncAwareDB];
-////    NSString * jsonStr = [self getData:SENSOR_BAROMETER withJsonArrayFormat:YES];
-//////    NSLog(@"%@",jsonStr);
-////    [self insertSensorData:jsonStr withDeviceId:[self getDeviceId] url:[self getInsertUrl:SENSOR_BAROMETER]];
-//}
 
 
 @end

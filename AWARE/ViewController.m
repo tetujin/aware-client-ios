@@ -71,6 +71,8 @@
         [userDefaults setBool:YES forKey:SETTING_SYNC_WIFI_ONLY];
         [userDefaults setDouble:uploadInterval forKey:SETTING_SYNC_INT];
         [userDefaults setBool:YES forKey:@"aware_inited"];
+        [userDefaults setInteger:0 forKey:KEY_MARK];
+        [userDefaults setInteger:1000 * 1000 * 5 forKey:KEY_MAX_DATA_SIZE]; // 5MB
     }
 
     

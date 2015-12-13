@@ -18,15 +18,6 @@
     NSString* networkSubtype;
 }
 
-
-- (instancetype)init
-{
-    self = [super init];
-    if (self) {
-    }
-    return self;
-}
-
 - (instancetype)initWithSensorName:(NSString *)sensorName {
     self = [super initWithSensorName:sensorName];
     if (self) {
@@ -38,8 +29,27 @@
     return self;
 }
 
+
+- (void) createTable{
+    NSString *query = [[NSString alloc] init];
+    query = @"_id integer primary key autoincrement,"
+    "timestamp real default 0,"
+    "device_id text default '',"
+    "network_type integer default 0,"
+    "network_subtype text default '',"
+    "network_state integer default 0,"
+    "UNIQUE (timestamp,device_id)";
+    [super createTable:query];
+}
+
+
 //- (BOOL)startSensor:(double)interval withUploadInterval:(double)upInterval{
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings {
+    // crate table
+    NSLog(@"[%@] Cretate Table", [self getSensorName]);
+    [self createTable];
+    
+    // start sensor
     NSLog(@"Start Network Sensing!");
     double interval = 1.0f;
     reachability = [[SCNetworkReachability alloc] initWithHost:@"https://github.com"];
@@ -80,13 +90,6 @@
     [uploadTimer invalidate];
     return YES;
 }
-
-
-//- (void)uploadSensorData{
-//    [self syncAwareDB];
-////    NSString * jsonStr = [self getData:SENSOR_NETWORK withJsonArrayFormat:YES];
-////    [self insertSensorData:jsonStr withDeviceId:[self getDeviceId] url:[self getInsertUrl:SENSOR_NETWORK]];
-//}
 
 
 - (void) getNetworkInfo{

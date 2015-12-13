@@ -73,6 +73,7 @@ int ONE_HOUR = 60*60;
     return self;
 }
 
+
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
     NSLog(@"Start Open Weather Map");
     [self createTable];

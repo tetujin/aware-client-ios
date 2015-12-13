@@ -14,15 +14,6 @@
     NSTimer* gTimer;
 }
 
-//- (instancetype)init
-//{
-//    self = [super init];
-//    if (self) {
-////        gyroManager = [[CMMotionManager alloc] init];
-//    }
-//    return self;
-//}
-
 - (instancetype)initWithSensorName:(NSString *)sensorName{
     self = [super initWithSensorName:sensorName];
     if (self) {
@@ -32,9 +23,26 @@
     return self;
 }
 
+- (void) createTable{
+    NSString *query = [[NSString alloc] init];
+    query = @"_id integer primary key autoincrement,"
+    "timestamp real default 0,"
+    "device_id text default '',"
+    "double_values_x real default 0,"
+    "double_values_y real default 0,"
+    "double_values_z real default 0,"
+    "accuracy integer default 0,"
+    "label text default '',"
+    "UNIQUE (timestamp,device_id)";
+    [super createTable:query];
+}
+
+
 //- (BOOL)startSensor:(double)interval withUploadInterval:(double)upInterval{
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
-    NSLog(@"Start Gyroscope!");
+    NSLog(@"[%@] Create Table", [self getSensorName]);
+    [self createTable];
+    NSLog(@"[%@] Start Sensor", [self getSensorName]);
     gTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval target:self selector:@selector(syncAwareDB) userInfo:nil repeats:YES];
     
     [self setBufferLimit:10000];

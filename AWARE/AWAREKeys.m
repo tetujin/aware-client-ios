@@ -11,6 +11,9 @@
 NSString* const KEY_APNS_TOKEN = @"key_apns_token";
 NSString* const KEY_AWARE_STUDY = @"key_aware_study";
 
+NSString* const KEY_MAX_DATA_SIZE = @"key_max_data_size_";
+NSString* const KEY_MARK = @"key_data_mark_";
+
 NSString* const KEY_SENSORS = @"sensors";
 NSString* const KEY_PLUGINS = @"plugins";
 NSString* const KEY_PLUGIN = @"plugin";

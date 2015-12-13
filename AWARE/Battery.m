@@ -12,14 +12,6 @@
     NSTimer *uploadTimer;
     NSTimer *sensingTimer;
 }
-//- (instancetype)init
-//{
-//    self = [super init];
-//    if (self) {
-////        manager = [[CMMotionManager alloc] init];
-//    }
-//    return self;
-//}
 
 - (instancetype)initWithSensorName:(NSString *)sensorName{
     self = [super initWithSensorName:sensorName];
@@ -30,9 +22,32 @@
     return self;
 }
 
+
+- (void) createTable{
+    NSString *query = [[NSString alloc] init];
+    query = @"_id integer primary key autoincrement,"
+    "timestamp real default 0,"
+    "device_id text default '',"
+    "battery_status integer default 0,"
+    "battery_level integer default 0,"
+    "battery_scale integer default 0,"
+    "battery_voltage integer default 0,"
+    "battery_temperature integer default 0,"
+    "battery_adaptor integer default 0,"
+    "battery_health integer default 0,"
+    "battery_technology text default '',"
+    "UNIQUE (timestamp,device_id)";
+    [super createTable:query];
+}
+
 //- (BOOL)startSensor:(double)interval withUploadInterval:(double)upInterval{
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
-    NSLog(@"Start Battery!");
+    // create table
+    NSLog(@"[%@] Create Table");
+    [self createTable];
+    
+    // start sensor
+    NSLog(@"[%@] Start Sensor");
     double interval = 60.0f;
     NSLog(@"upload interval is %f.", upInterval);
     uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval target:self selector:@selector(syncAwareDB) userInfo:nil repeats:YES];

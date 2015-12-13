@@ -15,15 +15,6 @@
     NSTimer * sensingTimer;
 }
 
-- (instancetype)init
-{
-    self = [super init];
-    if (self) {
-        //        manager = [[CMMotionManager alloc] init];
-    }
-    return self;
-}
-
 - (instancetype)initWithSensorName:(NSString *)sensorName{
     self = [super initWithSensorName:sensorName];
     if (self) {
@@ -33,13 +24,29 @@
     return self;
 }
 
-//- (BOOL)startSensor:(double)interval withUploadInterval:(double)upInterval{
+
+- (void) createTable{
+    NSString *query = [[NSString alloc] init];
+    query = @"_id integer primary key autoincrement,"
+    "timestamp real default 0,"
+    "device_id text default '',"
+    "bssid text default '',"
+    "ssid text default '',"
+    "security text default '',"
+    "frequency integer default 0,"
+    "rssi integer default 0,"
+    "label text default '',"
+    "UNIQUE (timestamp,device_id)";
+    [super createTable:query];
+}
+
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
-    NSLog(@"Start Wifi sensing!");
+    NSLog(@"[%@] Create Table", [self getSensorName]);
+    [self createTable];
+    
+    NSLog(@"[%@] Start Sensor", [self getSensorName]);
     double interval = 1.0f;
     
-    //sensing interval
-//    [self setBufferLimit:10000];
     double frequency = [self getSensorSetting:settings withKey:@"frequency_wifi"];
     if(frequency != -1){
         NSLog(@"Location sensing requency is %f ", frequency);
