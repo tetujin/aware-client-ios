@@ -26,6 +26,7 @@
 #import "Screen.h"
 #import "DeviceUsage.h"
 #import "NTPTime.h"
+#import "Proximity.h"
 
 @implementation AWARESensorManager
 
@@ -89,6 +90,9 @@
                     [awareSensor startSensor:uploadTime withSettings:settings];
                 }else if([key isEqualToString:SENSOR_SCREEN]){
                     awareSensor = [[Screen alloc] initWithSensorName:SENSOR_SCREEN];
+                    [awareSensor startSensor:uploadTime withSettings:settings];
+                }else if([key isEqualToString:SENSOR_PROXIMITY]){
+                    awareSensor = [[Proximity alloc] initWithSensorName:SENSOR_PROXIMITY];
                     [awareSensor startSensor:uploadTime withSettings:settings];
                 }
                 

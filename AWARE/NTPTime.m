@@ -46,7 +46,7 @@
 //    netAssociation = [[NetAssociation alloc] initWithServerName:@"time.apple.com"];
 //    netAssociation.delegate = self;
     
-    sensingTimer = [NSTimer scheduledTimerWithTimeInterval:1
+    sensingTimer = [NSTimer scheduledTimerWithTimeInterval:60
                                                     target:self
                                                   selector:@selector(getNTPTime)
                                                   userInfo:nil
