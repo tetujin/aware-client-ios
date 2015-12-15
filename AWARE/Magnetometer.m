@@ -41,7 +41,7 @@
     NSLog(@"[%@] Create table", [self getSensorName]);
     [self createTable];
     
-    NSLog(@"[%@] Start sensor", [self getSensorName]);
+    NSLog(@"[%@] Start Mag sensor", [self getSensorName]);
     timer = [NSTimer scheduledTimerWithTimeInterval:upInterval target:self selector:@selector(syncAwareDB) userInfo:nil repeats:YES];
     
     [self startWriteAbleTimer];

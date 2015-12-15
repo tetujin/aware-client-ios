@@ -50,7 +50,7 @@
     NSLog(@"[%@] Create Table", [self getSensorName]);
     [self createTable];
     
-    NSLog(@"[%@] Start Sensor", [self getSensorName]);
+    NSLog(@"[%@] Start Gravity Sensor", [self getSensorName]);
     double interval = 0.1f;
     
     [self startWriteAbleTimer];

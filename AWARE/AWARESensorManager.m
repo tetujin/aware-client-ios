@@ -23,11 +23,11 @@
 #import "AmbientNoise.h"
 #import "ActivityRecognition.h"
 #import "OpenWeather.h"
+#import "Screen.h"
 
 @implementation AWARESensorManager
 
-- (instancetype)init
-{
+- (instancetype)init {
     self = [super init];
     if (self) {
         awareSensors = [[NSMutableArray alloc] init];
@@ -84,6 +84,9 @@
                     [awareSensor startSensor:uploadTime withSettings:settings];
                 }else if([key isEqualToString:SENSOR_BLUETOOTH]){
                     awareSensor = [[Bluetooth alloc] initWithSensorName:SENSOR_BLUETOOTH];
+                    [awareSensor startSensor:uploadTime withSettings:settings];
+                }else if([key isEqualToString:SENSOR_SCREEN]){
+                    awareSensor = [[Screen alloc] initWithSensorName:SENSOR_SCREEN];
                     [awareSensor startSensor:uploadTime withSettings:settings];
                 }
                 
@@ -158,6 +161,12 @@
         }
     }
     return @"";
+}
+
+- (void) syncAllSensorsWithDB{
+    for (AWARESensor* sensor in awareSensors) {
+        [sensor syncAwareDB];
+    }
 }
 
 @end

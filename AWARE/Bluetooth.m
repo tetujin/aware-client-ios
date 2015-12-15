@@ -39,7 +39,7 @@
     NSLog(@"[%@] Create Table", [self getSensorName]);
     [self createTable];
     
-    NSLog(@"[%@] Start Sensor", [self getSensorName]);
+    NSLog(@"[%@] Start BLE Sensor", [self getSensorName]);
     _myCentralManager = [[CBCentralManager alloc] initWithDelegate:self queue:nil];
     uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval target:self selector:@selector(syncAwareDB) userInfo:nil repeats:YES];
     return YES;
@@ -151,7 +151,7 @@
 
 - (void) peripheral:(CBPeripheral *)peripheral didDiscoverCharacteristicsForService:(CBService *)service error:(NSError *)error
 {
-    for (CBCharacteristic *characteristic in service.characteristics) {
+//    for (CBCharacteristic *characteristic in service.characteristics) {
         //[_peripheralDevice readValueForCharacteristic:characteristic];
 //        if([characteristic.UUID isEqual:[CBUUID UUIDWithString:UUID_HUM_CONF]]){ // 湿度
 //            [peripheral writeValue:enableData forCharacteristic:characteristic type:CBCharacteristicWriteWithResponse];
@@ -168,7 +168,7 @@
 //        } else if ( [characteristic.UUID isEqual:[CBUUID UUIDWithString:UUID_MOV_CONF]]){ //モーションセン
 //        } else if([characteristic.UUID isEqual:[CBUUID UUIDWithString:UUID_ID_DATA]]){ // ビープ音
 //        }
-    }
+//    }
 }
 
 
@@ -187,7 +187,7 @@
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic
              error:(NSError *)error
 {
-    NSLog(@"---");
+//    NSLog(@"---");
 //    if([characteristic.UUID isEqual:[CBUUID UUIDWithString:UUID_MOV_DATA]]){
 //        [self getMotionData:characteristic.value];
 //    } else if([characteristic.UUID isEqual:[CBUUID UUIDWithString:UUID_HUM_DATA]]){ // 湿度

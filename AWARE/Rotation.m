@@ -51,7 +51,7 @@
     NSLog(@"[%@] Create Table", [self getSensorName]);
     [self createTable];
     
-    NSLog(@"[%@] Start Sensor", [self getSensorName]);
+    NSLog(@"[%@] Start Rotation Sensor", [self getSensorName]);
     int interval = 0.1f;
     
 //    [self setBufferLimit:10000];

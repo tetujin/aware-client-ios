@@ -42,7 +42,7 @@
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
     NSLog(@"[%@] Create Table", [self getSensorName]);
     [self createTable];
-    NSLog(@"[%@] Start Sensor", [self getSensorName]);
+    NSLog(@"[%@] Start Gyro Sensor", [self getSensorName]);
     gTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval target:self selector:@selector(syncAwareDB) userInfo:nil repeats:YES];
     
     [self setBufferLimit:10000];

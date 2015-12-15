@@ -12,12 +12,10 @@
 #import "Accelerometer.h"
 #import "AmbientNoise.h"
 #import "ActivityRecognition.h"
-
-//#import "TitleViewCell.h"
 #import "MSBand.h"
 
 
-@interface ViewController (){
+@interface ViewController () {
     NSString *KEY_CEL_TITLE;
     NSString *KEY_CEL_DESC;
     NSString *KEY_CEL_IMAGE;
@@ -34,9 +32,7 @@
     NSNumber *mqttQos;
     NSTimer *listUpdateTimer;
     double uploadInterval;
-//    IBOutlet CLLocationManager *homeLocationManager;
     NSTimer* testTimer;
-//    NSFileHandle *fh;
 }
 
 @end
@@ -45,7 +41,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-//     testTimer = [NSTimer scheduledTimerWithTimeInterval:0.1f target:self selector:@selector(test) userInfo:nil repeats:YES];
     KEY_CEL_TITLE = @"title";
     KEY_CEL_DESC = @"desc";
     KEY_CEL_IMAGE = @"image";
@@ -75,29 +70,20 @@
         [userDefaults setInteger:1000 * 1000 * 5 forKey:KEY_MAX_DATA_SIZE]; // 5MB
     }
 
-    
-    
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     
-    [self setNaviBarTitle];
     [self initLocationSensor];
     
     _sensorManager = [[AWARESensorManager alloc] init];
-
-//    self.navigationController.navigationBar.delegate = self;
     CGFloat currentVersion = [[[UIDevice currentDevice] systemVersion] floatValue];
-//    NSLog(@"OS:%f", currentVersion);
     if (currentVersion >= 9.0) {
         [self.navigationController.navigationBar setDelegate:self];
     }
     [self connectMqttServer];
-    
     [self initList];
     
     listUpdateTimer = [NSTimer scheduledTimerWithTimeInterval:0.1f target:self.tableView selector:@selector(reloadData) userInfo:nil repeats:YES];
-    
-    
 }
 
 
@@ -126,18 +112,6 @@
     }
 }
 
-
-- (void) setNaviBarTitle {
-//    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-//    NSString *email = [defaults objectForKey:@"GOOGLE_EMAIL"];
-//    NSString *name = [defaults objectForKey:@"GOOGLE_NAME"];
-//    NSLog(@"name:%@", name);
-//    if (![name isEqualToString:@""]) {
-//        [self.navigationController.navigationBar.topItem setTitle:name];
-//    }else{
-//        [self.navigationController.navigationBar.topItem setTitle:@"AWARE"];
-//    }
-}
 
 
 - (void)didReceiveMemoryWarning {
@@ -197,19 +171,19 @@
     [_sensors addObject:[self getCelContent:@"Magnetometer" desc:@"Geomagnetic field strength around the device (uT)" image:@"ic_action_magnetometer" key:SENSOR_MAGNETOMETER]];
     [_sensors addObject:[self getCelContent:@"Mobile ESM/EMA" desc:@"Mobile questionnaries" image:@"ic_action_esm" key:SENSOR_ESMS]];
     [_sensors addObject:[self getCelContent:@"Network" desc:@"Network usage and traffic" image:@"ic_action_network" key:SENSOR_NETWORK]];
+    [_sensors addObject:[self getCelContent:@"Screen (iOS)" desc:@"Screen events (on/off, locked/unlocked)" image:@"ic_action_screen" key:SENSOR_SCREEN]];
 //    [_sensors addObject:[self getCelContent:@"Processor" desc:@"CPU workload for user, system and idle(%)" image:@"ic_action_processor" key:SENSOR_PROCESSOR]];
 //    [_sensors addObject:[self getCelContent:@"Telephony" desc:@"Mobile operator and specifications, cell tower and neighbor scanning" image:@"ic_action_telephony" key:SENSOR_TELEPHONY]];
     [_sensors addObject:[self getCelContent:@"WiFi" desc:@"Wi-Fi sensing" image:@"ic_action_wifi" key:SENSOR_WIFI]];
 //    [_sensors addObject:[self getCelContent:@"AmbientNoise" desc:@"AmbientNoise sensor" image:@"" key:SENSOR_AMBIENT_NOISE]];
 
     // android specific sensors
-    //[_sensors addObject:[self getCelContent:@"Gravity" desc:@"Force of gravity as a 3D vector with direction and magnitude of gravity (m^2)" image:@"ic_action_ gravity"]];
     //[_sensors addObject:[self getCelContent:@"Light" desc:@"Ambient Light (lux)" image:@"ic_action_light"]];
     //[_sensors addObject:[self getCelContent:@"Proximity" desc:@"" image:@"ic_action_proximity"]];
     //[_sensors addObject:[self getCelContent:@"Temperature" desc:@"" image:@"ic_action_temperature"]];
     
     // iOS specific sensors
-//    [_sensors addObject:[self getCelContent:@"Screen (iOS)" desc:@"Screen events (on/off, locked/unlocked)" image:@"ic_action_screen" key:SENSOR_SCREEN]];
+
 //    [_sensors addObject:[self getCelContent:@"Direction (iOS)" desc:@"Device's direction (0-360)" image:@"safari_copyrighted" key:SENSOR_DIRECTION]];
 //    [_sensors addObject:[self getCelContent:@"Rotation (iOS)" desc:@"Orientation of the device" image:@"ic_action_rotation" key:SENSOR_ROTATION]];
     
@@ -415,23 +389,18 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
     [self initList];
     [self.tableView reloadData];
     [self connectMqttServer];
-    //if you return NO, the back button press is cancelled
-//    [self setNaviBarTitle];
 }
 
 
 -(BOOL)navigationBar:(UINavigationBar *)navigationBar shouldPopItem:(UINavigationItem *)item
 {
-    NSLog(@"Back button got pressed!");
+    NSLog(@"Back button is pressed!");
     [self.navigationController popToRootViewControllerAnimated:YES];
-    //update sensor list !
     [_sensorManager stopAllSensors];
-    NSLog(@"remove all sensors");
+    NSLog(@"Remove all sensors");
     [self initList];
     [self.tableView reloadData];
     [self connectMqttServer];
-    //if you return NO, the back button press is cancelled
-    [self setNaviBarTitle];
     return YES;
 }
 
@@ -452,7 +421,7 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
     if (mqttPassword == nil) {
         NSLog(@"An AWARE study is not registed! Please read QR code");
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"AWARE Study"
-                                                        message:@"You have not registed an AWARE study yet. Please read a QR code for AWARE study."
+                                                        message:@"You don't registed an AWARE study yet. Please read a QR code for AWARE study."
                                                        delegate:nil
                                               cancelButtonTitle:@"OK"
                                               otherButtonTitles:nil];

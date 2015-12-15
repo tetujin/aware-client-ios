@@ -21,5 +21,5 @@
                             plugins:(NSArray*)plugins
                      uploadInterval:(double) uploadTime;
 - (NSString*)getLatestSensorData:(NSString *)sensorName;
-
+- (void) syncAllSensorsWithDB;
 @end

@@ -16,7 +16,6 @@
 - (instancetype)initWithSensorName:(NSString *)sensorName{
     self = [super initWithSensorName:sensorName];
     if (self) {
-//        manager = [[CMMotionManager alloc] init];
         [super setSensorName:sensorName];
     }
     return self;
@@ -43,11 +42,11 @@
 //- (BOOL)startSensor:(double)interval withUploadInterval:(double)upInterval{
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
     // create table
-    NSLog(@"[%@] Create Table");
+//    NSLog(@"[%@] Create Table");
     [self createTable];
     
     // start sensor
-    NSLog(@"[%@] Start Sensor");
+//    NSLog(@"[%@] Start Battery Sensor");
     double interval = 60.0f;
     NSLog(@"upload interval is %f.", upInterval);
     uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval target:self selector:@selector(syncAwareDB) userInfo:nil repeats:YES];

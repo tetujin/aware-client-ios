@@ -354,17 +354,15 @@
         return;
     }
     
-    if(data.length < length){
+    if ( data.length < length ) {
         // more post = 0
         marker = 0;
-    }else{
+    } else {
         // more post += 1
         marker += 1;
     }
     data = [self fixJsonFormat:data];
 
-    
-    
     // Set session configuration
     NSURLSessionConfiguration *sessionConfig = nil;
 //    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
@@ -449,7 +447,11 @@ didReceiveResponse:(NSURLResponse *)response
             marker = marker - 1;
         }
         errorPosts++;
-        [self sendLocalNotificationForMessage:[NSString stringWithFormat:@"[%@] Retry - %d (%d)", [self getSensorName], marker, errorPosts] soundFlag:NO];
+        NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+        bool debugState = [defaults boolForKey:SETTING_DEBUG_STATE];
+        if (debugState) {
+            [self sendLocalNotificationForMessage:[NSString stringWithFormat:@"[%@] Retry - %d (%d)", [self getSensorName], marker, errorPosts] soundFlag:NO];
+        }
 //        [self downLimit];
         if (errorPosts < 3) { //TODO
             [self syncAwareDB];

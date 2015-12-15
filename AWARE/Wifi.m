@@ -44,7 +44,7 @@
     NSLog(@"[%@] Create Table", [self getSensorName]);
     [self createTable];
     
-    NSLog(@"[%@] Start Sensor", [self getSensorName]);
+    NSLog(@"[%@] Start Wifi Sensor", [self getSensorName]);
     double interval = 1.0f;
     
     double frequency = [self getSensorSetting:settings withKey:@"frequency_wifi"];
