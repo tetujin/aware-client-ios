@@ -1,4 +1,5 @@
 PODS:
+  - CocoaAsyncSocket (7.4.2)
   - DeployGateSDK (1.0.7)
   - Google/Core (1.2.1):
     - GoogleInterchangeUtilities (~> 1.0)
@@ -25,6 +26,8 @@ PODS:
   - GoogleSymbolUtilities (1.0.3)
   - GoogleUtilities (1.1.0):
     - GoogleSymbolUtilities (~> 1.0.0)
+  - ios-ntp (1.1.1):
+    - CocoaAsyncSocket (~> 7.4.1)
   - macros_blocks (0.0.1)
   - MQTTKit (0.1.0-next)
   - SCNetworkReachability (2.0.4):
@@ -35,6 +38,7 @@ PODS:
 DEPENDENCIES:
   - DeployGateSDK
   - Google/SignIn
+  - ios-ntp
   - MQTTKit (from `https://github.com/mobile-web-messaging/MQTTKit.git`)
   - SCNetworkReachability
 
@@ -48,6 +52,7 @@ CHECKOUT OPTIONS:
     :git: https://github.com/mobile-web-messaging/MQTTKit.git
 
 SPEC CHECKSUMS:
+  CocoaAsyncSocket: f5783bdedd232d91b89769bc4b5a1580aed518ad
   DeployGateSDK: df3d5838db7e35c05a711c35a3bdeef3c2b016ba
   Google: fd33b5fa40fa3aaee5176de49c873a74e3d11dce
   GoogleAppUtilities: c01c6a5671e9da8b9d690fdaec5959d6c2aac699
@@ -57,6 +62,7 @@ SPEC CHECKSUMS:
   GoogleSignIn: 79929b51e6299c69f1197bbd9c7a1367d523ecd8
   GoogleSymbolUtilities: 82ad9f93d3615244b3f4ce440f5ab2515e8b4f56
   GoogleUtilities: 8ed9134debe11719097881711464752900668f10
+  ios-ntp: 5f2f4fecf0432169b358eb3b564f12b94157108f
   macros_blocks: da2106a0975514e16f3669f2f50a02efaff642cf
   MQTTKit: 513ffc31464db7adeffefac986e228fdf6cd87e5
   SCNetworkReachability: 4d836180e9ef916da4ef68a34fec748f88950712

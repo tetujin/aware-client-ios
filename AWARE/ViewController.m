@@ -189,7 +189,9 @@
     
     [_sensors addObject:[self getCelContent:@"Ambient Noise" desc:@"Anbient noise sensing by using a microphone on a smartphone." image:@"" key:SENSOR_AMBIENT_NOISE]];
     [_sensors addObject:[self getCelContent:@"Activity Recognition" desc:@"iOS Activity Recognition" image:@"" key:SENSOR_PLUGIN_GOOGLE_ACTIVITY_RECOGNITION]];
+    [_sensors addObject:[self getCelContent:@"Device Usage" desc:@"This plugin measures how much you use your device" image:@"" key:SENSOR_PLUGIN_DEVICE_USAGE]];
     [_sensors addObject:[self getCelContent:@"Open Weather" desc:@"Weather information by OpenWeatherMap API." image:@"" key:SENSOR_PLUGIN_OPEN_WEATHER]];
+    [_sensors addObject:[self getCelContent:@"NTPTime" desc:@"Measure device's clock drift from an NTP server." image:@"" key:SENSOR_PLUGIN_NTPTIME]];
     
     [_sensors addObject:[self getCelContent:@"Settings" desc:@"" image:@"" key:@"TITLE_CELL_VIEW"]];
     [_sensors addObject:[self getCelContent:@"Debug" desc:debugState image:@"" key:@"STUDY_CELL_DEBUG"]]; //ic_action_mqtt

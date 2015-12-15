@@ -58,6 +58,8 @@ NSString* const SENSOR_AMBIENT_NOISE = @"plugin_ambient_noise";
 NSString* const SENSOR_PLUGIN_GOOGLE_ACTIVITY_RECOGNITION = @"plugin_google_activity_recognition";
 NSString* const SENSOR_PLUGIN_OPEN_WEATHER = @"plugin_openweather";
 NSString* const SENSOR_PLUGIN_MSBAND = @"plugin_msband";
+NSString* const SENSOR_PLUGIN_DEVICE_USAGE = @"plugin_device_usage";
+NSString* const SENSOR_PLUGIN_NTPTIME = @"plugin_ntptime";
 
 @implementation AWAREKeys
 

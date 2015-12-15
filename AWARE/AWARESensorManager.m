@@ -24,6 +24,8 @@
 #import "ActivityRecognition.h"
 #import "OpenWeather.h"
 #import "Screen.h"
+#import "DeviceUsage.h"
+#import "NTPTime.h"
 
 @implementation AWARESensorManager
 
@@ -115,6 +117,12 @@
                         [awareSensor startSensor:uploadTime withSettings:settings];
                     }else if([key isEqualToString:SENSOR_PLUGIN_OPEN_WEATHER]){
                         awareSensor = [[OpenWeather alloc] initWithSensorName:SENSOR_PLUGIN_OPEN_WEATHER];
+                        [awareSensor startSensor:uploadTime withSettings:settings];
+                    }else if([key isEqualToString:SENSOR_PLUGIN_DEVICE_USAGE]){
+                        awareSensor = [[DeviceUsage alloc] initWithSensorName:SENSOR_PLUGIN_DEVICE_USAGE];
+                        [awareSensor startSensor:uploadTime withSettings:settings];
+                    }else if([key isEqualToString:SENSOR_PLUGIN_NTPTIME]){
+                        awareSensor = [[NTPTime alloc] initWithSensorName:SENSOR_PLUGIN_NTPTIME];
                         [awareSensor startSensor:uploadTime withSettings:settings];
                     }
                 }

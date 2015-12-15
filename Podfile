@@ -8,6 +8,7 @@ pod 'MQTTKit', :git => 'https://github.com/mobile-web-messaging/MQTTKit.git'
 pod 'SCNetworkReachability'
 pod 'Google/SignIn'
 pod 'DeployGateSDK'
+pod 'ios-ntp'
 end
 
 target 'AWARETests' do

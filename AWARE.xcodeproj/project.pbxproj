@@ -28,6 +28,8 @@
 		1623CEB91BFE319100EFAD72 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1623CEB81BFE319100EFAD72 /* CoreMotion.framework */; };
 		1623CEBC1BFE390600EFAD72 /* Accelerometer.m in Sources */ = {isa = PBXBuildFile; fileRef = 1623CEBB1BFE390600EFAD72 /* Accelerometer.m */; };
 		164DD65C1C1F762000ADA92B /* Screen.m in Sources */ = {isa = PBXBuildFile; fileRef = 164DD65B1C1F762000ADA92B /* Screen.m */; };
+		164DD65F1C1F9F1900ADA92B /* DeviceUsage.m in Sources */ = {isa = PBXBuildFile; fileRef = 164DD65E1C1F9F1900ADA92B /* DeviceUsage.m */; };
+		164DD6621C1FA72D00ADA92B /* NTPTime.m in Sources */ = {isa = PBXBuildFile; fileRef = 164DD6611C1FA72D00ADA92B /* NTPTime.m */; };
 		165A8B6F1C03B90500898C6C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 165A8B6E1C03B90500898C6C /* GoogleService-Info.plist */; };
 		165A8B701C03B90500898C6C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 165A8B6E1C03B90500898C6C /* GoogleService-Info.plist */; };
 		165A8B711C03B90500898C6C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 165A8B6E1C03B90500898C6C /* GoogleService-Info.plist */; };
@@ -118,6 +120,10 @@
 		1623CEBB1BFE390600EFAD72 /* Accelerometer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Accelerometer.m; sourceTree = "<group>"; };
 		164DD65A1C1F762000ADA92B /* Screen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Screen.h; sourceTree = "<group>"; };
 		164DD65B1C1F762000ADA92B /* Screen.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Screen.m; sourceTree = "<group>"; };
+		164DD65D1C1F9F1900ADA92B /* DeviceUsage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceUsage.h; sourceTree = "<group>"; };
+		164DD65E1C1F9F1900ADA92B /* DeviceUsage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeviceUsage.m; sourceTree = "<group>"; };
+		164DD6601C1FA72D00ADA92B /* NTPTime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTPTime.h; sourceTree = "<group>"; };
+		164DD6611C1FA72D00ADA92B /* NTPTime.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTPTime.m; sourceTree = "<group>"; };
 		165A8B6E1C03B90500898C6C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
 		165A8B721C03C0B300898C6C /* GoogleLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GoogleLoginViewController.h; sourceTree = "<group>"; };
 		165A8B731C03C0B300898C6C /* GoogleLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GoogleLoginViewController.m; sourceTree = "<group>"; };
@@ -330,6 +336,10 @@
 				169384F21C17C3D300A17F2C /* MSBand.m */,
 				164DD65A1C1F762000ADA92B /* Screen.h */,
 				164DD65B1C1F762000ADA92B /* Screen.m */,
+				164DD65D1C1F9F1900ADA92B /* DeviceUsage.h */,
+				164DD65E1C1F9F1900ADA92B /* DeviceUsage.m */,
+				164DD6601C1FA72D00ADA92B /* NTPTime.h */,
+				164DD6611C1FA72D00ADA92B /* NTPTime.m */,
 			);
 			name = AWARESensors;
 			sourceTree = "<group>";
@@ -601,11 +611,13 @@
 				169A7B2A1BFF1C2300A7C06D /* Battery.m in Sources */,
 				1623CE771BFD1B2C00EFAD72 /* AWARE.xcdatamodeld in Sources */,
 				1623CEBC1BFE390600EFAD72 /* Accelerometer.m in Sources */,
+				164DD6621C1FA72D00ADA92B /* NTPTime.m in Sources */,
 				169A7B431BFFDE8F00A7C06D /* Rotation.m in Sources */,
 				1623CEB41BFD659000EFAD72 /* AWAREKeys.m in Sources */,
 				169A7B301BFF280C00A7C06D /* Locations.m in Sources */,
 				169A7B491C00591A00A7C06D /* LinearAccelerometer.m in Sources */,
 				1623CE6B1BFD1B2C00EFAD72 /* main.m in Sources */,
+				164DD65F1C1F9F1900ADA92B /* DeviceUsage.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
