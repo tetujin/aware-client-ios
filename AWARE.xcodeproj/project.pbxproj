@@ -31,6 +31,7 @@
 		164DD65F1C1F9F1900ADA92B /* DeviceUsage.m in Sources */ = {isa = PBXBuildFile; fileRef = 164DD65E1C1F9F1900ADA92B /* DeviceUsage.m */; };
 		164DD6621C1FA72D00ADA92B /* NTPTime.m in Sources */ = {isa = PBXBuildFile; fileRef = 164DD6611C1FA72D00ADA92B /* NTPTime.m */; };
 		164DD6651C1FB1A400ADA92B /* Proximity.m in Sources */ = {isa = PBXBuildFile; fileRef = 164DD6641C1FB1A400ADA92B /* Proximity.m */; };
+		164DD6681C1FBA9100ADA92B /* Timezone.m in Sources */ = {isa = PBXBuildFile; fileRef = 164DD6671C1FBA9100ADA92B /* Timezone.m */; };
 		165A8B6F1C03B90500898C6C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 165A8B6E1C03B90500898C6C /* GoogleService-Info.plist */; };
 		165A8B701C03B90500898C6C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 165A8B6E1C03B90500898C6C /* GoogleService-Info.plist */; };
 		165A8B711C03B90500898C6C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 165A8B6E1C03B90500898C6C /* GoogleService-Info.plist */; };
@@ -127,6 +128,8 @@
 		164DD6611C1FA72D00ADA92B /* NTPTime.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTPTime.m; sourceTree = "<group>"; };
 		164DD6631C1FB1A400ADA92B /* Proximity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Proximity.h; sourceTree = "<group>"; };
 		164DD6641C1FB1A400ADA92B /* Proximity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Proximity.m; sourceTree = "<group>"; };
+		164DD6661C1FBA9100ADA92B /* Timezone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Timezone.h; sourceTree = "<group>"; };
+		164DD6671C1FBA9100ADA92B /* Timezone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Timezone.m; sourceTree = "<group>"; };
 		165A8B6E1C03B90500898C6C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
 		165A8B721C03C0B300898C6C /* GoogleLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GoogleLoginViewController.h; sourceTree = "<group>"; };
 		165A8B731C03C0B300898C6C /* GoogleLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GoogleLoginViewController.m; sourceTree = "<group>"; };
@@ -345,6 +348,8 @@
 				164DD6611C1FA72D00ADA92B /* NTPTime.m */,
 				164DD6631C1FB1A400ADA92B /* Proximity.h */,
 				164DD6641C1FB1A400ADA92B /* Proximity.m */,
+				164DD6661C1FBA9100ADA92B /* Timezone.h */,
+				164DD6671C1FBA9100ADA92B /* Timezone.m */,
 			);
 			name = AWARESensors;
 			sourceTree = "<group>";
@@ -597,6 +602,7 @@
 				169A7B3B1BFFC8B100A7C06D /* Wifi.m in Sources */,
 				164DD65C1C1F762000ADA92B /* Screen.m in Sources */,
 				168683061C07C48900CB4266 /* AmbientNoise.m in Sources */,
+				164DD6681C1FBA9100ADA92B /* Timezone.m in Sources */,
 				169384F31C17C3D300A17F2C /* MSBand.m in Sources */,
 				165A8B741C03C0B300898C6C /* GoogleLoginViewController.m in Sources */,
 				169A7B271BFF193C00A7C06D /* Magnetometer.m in Sources */,

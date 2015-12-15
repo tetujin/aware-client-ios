@@ -27,6 +27,7 @@
 #import "DeviceUsage.h"
 #import "NTPTime.h"
 #import "Proximity.h"
+#import "Timezone.h"
 
 @implementation AWARESensorManager
 
@@ -93,6 +94,9 @@
                     [awareSensor startSensor:uploadTime withSettings:settings];
                 }else if([key isEqualToString:SENSOR_PROXIMITY]){
                     awareSensor = [[Proximity alloc] initWithSensorName:SENSOR_PROXIMITY];
+                    [awareSensor startSensor:uploadTime withSettings:settings];
+                }else if([key isEqualToString:SENSOR_TIMEZONE]){
+                    awareSensor = [[Timezone alloc] initWithSensorName:SENSOR_TIMEZONE];
                     [awareSensor startSensor:uploadTime withSettings:settings];
                 }
                 
