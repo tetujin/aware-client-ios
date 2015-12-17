@@ -42,7 +42,7 @@ NSString* const SENSOR_BAROMETER = @"barometer";//barometer
 NSString* const SENSOR_BATTERY = @"battery";
 NSString* const SENSOR_BLUETOOTH = @"bluetooth";
 NSString* const SENSOR_MAGNETOMETER = @"magnetometer";
-NSString* const SENSOR_ESMS = @"esms";
+NSString* const SENSOR_ESMS = @"esm";
 NSString* const SENSOR_GYROSCOPE = @"gyroscope";//Gyroscope
 NSString* const SENSOR_LOCATIONS = @"location_gps";
 NSString* const SENSOR_NETWORK = @"network";
@@ -61,6 +61,7 @@ NSString* const SENSOR_PLUGIN_OPEN_WEATHER = @"plugin_openweather";
 NSString* const SENSOR_PLUGIN_MSBAND = @"plugin_msband";
 NSString* const SENSOR_PLUGIN_DEVICE_USAGE = @"plugin_device_usage";
 NSString* const SENSOR_PLUGIN_NTPTIME = @"plugin_ntptime";
+NSString* const SENSOR_PLUGIN_SCHEDULER = @"scheduler";
 
 @implementation AWAREKeys
 

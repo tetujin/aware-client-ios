@@ -62,6 +62,7 @@ extern NSString* const SENSOR_PLUGIN_OPEN_WEATHER;
 extern NSString* const SENSOR_PLUGIN_MSBAND;
 extern NSString* const SENSOR_PLUGIN_DEVICE_USAGE;
 extern NSString* const SENSOR_PLUGIN_NTPTIME;
+extern NSString* const SENSOR_PLUGIN_SCHEDULER;
 //extern NSString* const SENSOR_
 //extern NSString* const SENSOR_
 //extern NSString* const SENSOR_

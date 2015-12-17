@@ -84,6 +84,11 @@
     [self initList];
     
     listUpdateTimer = [NSTimer scheduledTimerWithTimeInterval:0.1f target:self.tableView selector:@selector(reloadData) userInfo:nil repeats:YES];
+ 
+}
+
+- (void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
 }
 
 
@@ -251,6 +256,11 @@
     }else if([key isEqualToString:@"STUDY_CELL_WIFI"]){ //wifi
         UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Sync Statement" message:@"Do you want to sync your data only WiFi enviroment?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"YES",@"NO",nil];
         [alert show];
+    }else if([key isEqualToString:SENSOR_ESMS]){
+        // [TODO] For testing ESM Module...
+        [self performSegueWithIdentifier:@"esmView" sender:self];
+    }else if([key isEqualToString:SENSOR_PLUGIN_SCHEDULER]){
+        // [TODO] For making new schedule.
     }
 }
 

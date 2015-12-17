@@ -223,6 +223,34 @@
     return YES;
 }
 
+- (bool) saveDataWithArray:(NSArray*) array {
+    NSError*error=nil;
+    for (NSDictionary *dic in array) {
+        NSLog(@"%f", [dic objectForKey:@"timestamp"]);
+        NSData*d=[NSJSONSerialization dataWithJSONObject:dic options:2 error:&error];
+        NSString* jsonstr = [[NSString alloc] init];
+        // TODO: error hundling of nill in NSDictionary.
+        if (!error) {
+            jsonstr = [[NSString alloc]initWithData:d encoding:NSUTF8StringEncoding];
+        } else {
+            NSString * errorStr = [NSString stringWithFormat:@"[%@] %@", [self getSensorName], [error localizedDescription]];
+            [self sendLocalNotificationForMessage:errorStr soundFlag:YES];
+            return NO;
+            //Do additional data manipulation or handling work here.
+        }
+        [bufferStr appendString:jsonstr];
+        [bufferStr appendFormat:@","];
+    }
+    if (writeAble) {
+        [self appendLine:bufferStr path:[self getSensorName]];
+        [bufferStr setString:@""];
+        [self setWriteableNO];
+        return YES;
+    } else {
+        return YES;
+    }
+}
+
 
 - (BOOL) appendLine:(NSString *)line path:(NSString*) fileName {
     if (!line) {
@@ -590,6 +618,46 @@ didReceiveResponse:(NSURLResponse *)response
     });
 }
 
+
+
+
+/** Sync with AWARE database */
+- (BOOL) syncAwareDBWithData:(NSDictionary *) dictionary {
+    // init variables
+    NSString *deviceId = [self getDeviceId];
+    NSError *error = nil;
+    NSData*d=[NSJSONSerialization dataWithJSONObject:dictionary options:2 error:&error];
+    NSString* jsonstr = [[NSString alloc] init];
+    if (!error) {
+        jsonstr = [[NSString alloc]initWithData:d encoding:NSUTF8StringEncoding];
+    } else {
+        NSString * errorStr = [NSString stringWithFormat:@"[%@] %@", [self getSensorName], [error localizedDescription]];
+        [self sendLocalNotificationForMessage:errorStr soundFlag:YES];
+        return NO;
+    }
+
+    NSString *post = [NSString stringWithFormat:@"device_id=%@&data=%@", deviceId, jsonstr];
+    NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
+    NSString *postLength = [NSString stringWithFormat:@"%ld", [postData length]];
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+    NSString *url = [self getInsertUrl:[self getSensorName]];
+    [request setURL:[NSURL URLWithString:url]];
+    [request setHTTPMethod:@"POST"];
+    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+    [request setHTTPBody:postData];
+    NSHTTPURLResponse *response = nil;
+    NSData *resData = [NSURLConnection sendSynchronousRequest:request
+                                            returningResponse:&response error:&error];
+    NSString* newStr = [[NSString alloc] initWithData:resData encoding:NSUTF8StringEncoding];
+    //    NSLog(@"%@", newStr);
+    int responseCode = (int)[response statusCode];
+    if(responseCode == 200){
+        NSLog(@"Success to upload the data: %@", newStr);
+        return YES;
+    }else{
+        return NO;
+    }
+}
 
 
 - (NSString *)getLatestSensorData:(NSString *)deviceId withUrl:(NSString *)url{

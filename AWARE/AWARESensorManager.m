@@ -28,6 +28,7 @@
 #import "NTPTime.h"
 #import "Proximity.h"
 #import "Timezone.h"
+#import "ESM.h"
 
 @implementation AWARESensorManager
 
@@ -97,6 +98,9 @@
                     [awareSensor startSensor:uploadTime withSettings:settings];
                 }else if([key isEqualToString:SENSOR_TIMEZONE]){
                     awareSensor = [[Timezone alloc] initWithSensorName:SENSOR_TIMEZONE];
+                    [awareSensor startSensor:uploadTime withSettings:settings];
+                }else if([key isEqualToString:SENSOR_ESMS]){
+                    awareSensor = [[ESM alloc] initWithSensorName:SENSOR_ESMS];
                     [awareSensor startSensor:uploadTime withSettings:settings];
                 }
                 

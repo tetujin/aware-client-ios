@@ -58,7 +58,10 @@
 
 - (bool) saveData:(NSDictionary *) data toLocalFile:(NSString*) fileName;
 
+- (bool) saveDataWithArray:(NSArray*) array;
+
 - (void) syncAwareDB;
+- (BOOL) syncAwareDBWithData:(NSDictionary *) dictionary;
 
 // get latest sensor data -> for debug
 - (NSString *) getLatestSensorData:(NSString*)deviceId withUrl:(NSString*) url;

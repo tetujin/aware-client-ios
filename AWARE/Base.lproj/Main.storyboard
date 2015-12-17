@@ -48,10 +48,50 @@
                             </barButtonItem>
                         </rightBarButtonItems>
                     </navigationItem>
+                    <connections>
+                        <segue destination="z9G-jw-719" kind="push" identifier="esmView" id="tu2-01-ZjG"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eTN-Zo-OWZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1988" y="-150"/>
+        </scene>
+        <!--Esm View Controller-->
+        <scene sceneID="vio-2b-1Ih">
+            <objects>
+                <viewController id="z9G-jw-719" customClass="AWAREEsmViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="RWU-ly-WYS"/>
+                        <viewControllerLayoutGuide type="bottom" id="GpS-0f-bwr"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="8Yh-N2-BXy" customClass="ADBannerView">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" bouncesZoom="NO" translatesAutoresizingMaskIntoConstraints="NO" id="402-tR-Um8">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <color key="backgroundColor" name="controlHighlightColor" catalog="System" colorSpace="catalog"/>
+                                <connections>
+                                    <outlet property="delegate" destination="z9G-jw-719" id="GsO-vy-KJe"/>
+                                </connections>
+                            </scrollView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="402-tR-Um8" firstAttribute="leading" secondItem="8Yh-N2-BXy" secondAttribute="leading" id="DXD-8L-nub"/>
+                            <constraint firstItem="402-tR-Um8" firstAttribute="bottom" secondItem="GpS-0f-bwr" secondAttribute="top" id="enW-gS-OFI"/>
+                            <constraint firstAttribute="trailing" secondItem="402-tR-Um8" secondAttribute="trailing" id="fhs-TF-pWp"/>
+                            <constraint firstItem="402-tR-Um8" firstAttribute="top" secondItem="8Yh-N2-BXy" secondAttribute="top" id="lvx-0H-viE"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="LKz-vB-k27"/>
+                    <connections>
+                        <outlet property="mainScrollView" destination="402-tR-Um8" id="4sW-Db-gBD"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="OOG-hI-93n" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1954" y="881"/>
         </scene>
         <!--Code View Controller-->
         <scene sceneID="lwO-zc-Y6Y">

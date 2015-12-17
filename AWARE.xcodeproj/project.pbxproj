@@ -27,11 +27,14 @@
 		1623CEB71BFE175F00EFAD72 /* AWARESensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 1623CEB61BFE175F00EFAD72 /* AWARESensor.m */; };
 		1623CEB91BFE319100EFAD72 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1623CEB81BFE319100EFAD72 /* CoreMotion.framework */; };
 		1623CEBC1BFE390600EFAD72 /* Accelerometer.m in Sources */ = {isa = PBXBuildFile; fileRef = 1623CEBB1BFE390600EFAD72 /* Accelerometer.m */; };
+		164810401C20ECC300B830D9 /* AWAREEsmViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1648103F1C20ECC300B830D9 /* AWAREEsmViewController.m */; };
+		164810851C21C08C00B830D9 /* ESM.m in Sources */ = {isa = PBXBuildFile; fileRef = 164810841C21C08C00B830D9 /* ESM.m */; };
 		164DD65C1C1F762000ADA92B /* Screen.m in Sources */ = {isa = PBXBuildFile; fileRef = 164DD65B1C1F762000ADA92B /* Screen.m */; };
 		164DD65F1C1F9F1900ADA92B /* DeviceUsage.m in Sources */ = {isa = PBXBuildFile; fileRef = 164DD65E1C1F9F1900ADA92B /* DeviceUsage.m */; };
 		164DD6621C1FA72D00ADA92B /* NTPTime.m in Sources */ = {isa = PBXBuildFile; fileRef = 164DD6611C1FA72D00ADA92B /* NTPTime.m */; };
 		164DD6651C1FB1A400ADA92B /* Proximity.m in Sources */ = {isa = PBXBuildFile; fileRef = 164DD6641C1FB1A400ADA92B /* Proximity.m */; };
 		164DD6681C1FBA9100ADA92B /* Timezone.m in Sources */ = {isa = PBXBuildFile; fileRef = 164DD6671C1FBA9100ADA92B /* Timezone.m */; };
+		164DD66A1C1FC1F900ADA92B /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 164DD6691C1FC1F900ADA92B /* MapKit.framework */; };
 		165A8B6F1C03B90500898C6C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 165A8B6E1C03B90500898C6C /* GoogleService-Info.plist */; };
 		165A8B701C03B90500898C6C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 165A8B6E1C03B90500898C6C /* GoogleService-Info.plist */; };
 		165A8B711C03B90500898C6C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 165A8B6E1C03B90500898C6C /* GoogleService-Info.plist */; };
@@ -120,6 +123,10 @@
 		1623CEB81BFE319100EFAD72 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		1623CEBA1BFE390600EFAD72 /* Accelerometer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Accelerometer.h; sourceTree = "<group>"; };
 		1623CEBB1BFE390600EFAD72 /* Accelerometer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Accelerometer.m; sourceTree = "<group>"; };
+		1648103E1C20ECC300B830D9 /* AWAREEsmViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AWAREEsmViewController.h; sourceTree = "<group>"; };
+		1648103F1C20ECC300B830D9 /* AWAREEsmViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AWAREEsmViewController.m; sourceTree = "<group>"; };
+		164810831C21C08C00B830D9 /* ESM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESM.h; sourceTree = "<group>"; };
+		164810841C21C08C00B830D9 /* ESM.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ESM.m; sourceTree = "<group>"; };
 		164DD65A1C1F762000ADA92B /* Screen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Screen.h; sourceTree = "<group>"; };
 		164DD65B1C1F762000ADA92B /* Screen.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Screen.m; sourceTree = "<group>"; };
 		164DD65D1C1F9F1900ADA92B /* DeviceUsage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceUsage.h; sourceTree = "<group>"; };
@@ -130,6 +137,7 @@
 		164DD6641C1FB1A400ADA92B /* Proximity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Proximity.m; sourceTree = "<group>"; };
 		164DD6661C1FBA9100ADA92B /* Timezone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Timezone.h; sourceTree = "<group>"; };
 		164DD6671C1FBA9100ADA92B /* Timezone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Timezone.m; sourceTree = "<group>"; };
+		164DD6691C1FC1F900ADA92B /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		165A8B6E1C03B90500898C6C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
 		165A8B721C03C0B300898C6C /* GoogleLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GoogleLoginViewController.h; sourceTree = "<group>"; };
 		165A8B731C03C0B300898C6C /* GoogleLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GoogleLoginViewController.m; sourceTree = "<group>"; };
@@ -181,6 +189,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				164DD66A1C1FC1F900ADA92B /* MapKit.framework in Frameworks */,
 				168683031C07C43600CB4266 /* AudioToolbox.framework in Frameworks */,
 				16D810261C06242F00605DE2 /* Security.framework in Frameworks */,
 				16D810241C06242500605DE2 /* CFNetwork.framework in Frameworks */,
@@ -256,6 +265,8 @@
 				169384F41C18DD3D00A17F2C /* awareframework.der */,
 				165A8B6E1C03B90500898C6C /* GoogleService-Info.plist */,
 				1623CEA11BFD253A00EFAD72 /* AWARE.entitlements */,
+				1623CE721BFD1B2C00EFAD72 /* Main.storyboard */,
+				1623CE7A1BFD1B2C00EFAD72 /* LaunchScreen.storyboard */,
 				1623CE6C1BFD1B2C00EFAD72 /* AppDelegate.h */,
 				1623CE6D1BFD1B2C00EFAD72 /* AppDelegate.m */,
 				1623CE6F1BFD1B2C00EFAD72 /* ViewController.h */,
@@ -264,10 +275,10 @@
 				165A8B731C03C0B300898C6C /* GoogleLoginViewController.m */,
 				1623CEAD1BFD407900EFAD72 /* QRCodeViewController.h */,
 				1623CEAE1BFD407900EFAD72 /* QRCodeViewController.m */,
+				1648103E1C20ECC300B830D9 /* AWAREEsmViewController.h */,
+				1648103F1C20ECC300B830D9 /* AWAREEsmViewController.m */,
 				160794491C1926840021816F /* AWAREFramework */,
-				1623CE721BFD1B2C00EFAD72 /* Main.storyboard */,
 				1623CE781BFD1B2C00EFAD72 /* Assets.xcassets */,
-				1623CE7A1BFD1B2C00EFAD72 /* LaunchScreen.storyboard */,
 				1623CE7D1BFD1B2C00EFAD72 /* Info.plist */,
 				1623CE751BFD1B2C00EFAD72 /* AWARE.xcdatamodeld */,
 				1623CE691BFD1B2C00EFAD72 /* Supporting Files */,
@@ -350,6 +361,8 @@
 				164DD6641C1FB1A400ADA92B /* Proximity.m */,
 				164DD6661C1FBA9100ADA92B /* Timezone.h */,
 				164DD6671C1FBA9100ADA92B /* Timezone.m */,
+				164810831C21C08C00B830D9 /* ESM.h */,
+				164810841C21C08C00B830D9 /* ESM.m */,
 			);
 			name = AWARESensors;
 			sourceTree = "<group>";
@@ -357,6 +370,7 @@
 		2A3CA9F5620967BACB187EB7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				164DD6691C1FC1F900ADA92B /* MapKit.framework */,
 				1607944D1C1A240F0021816F /* AudioUnit.framework */,
 				169384EF1C17C39300A17F2C /* MicrosoftBandKit_iOS.framework */,
 				168683021C07C43600CB4266 /* AudioToolbox.framework */,
@@ -470,7 +484,7 @@
 								enabled = 0;
 							};
 							com.apple.Maps.iOS = {
-								enabled = 0;
+								enabled = 1;
 							};
 							com.apple.Push = {
 								enabled = 1;
@@ -602,6 +616,7 @@
 				169A7B3B1BFFC8B100A7C06D /* Wifi.m in Sources */,
 				164DD65C1C1F762000ADA92B /* Screen.m in Sources */,
 				168683061C07C48900CB4266 /* AmbientNoise.m in Sources */,
+				164810401C20ECC300B830D9 /* AWAREEsmViewController.m in Sources */,
 				164DD6681C1FBA9100ADA92B /* Timezone.m in Sources */,
 				169384F31C17C3D300A17F2C /* MSBand.m in Sources */,
 				165A8B741C03C0B300898C6C /* GoogleLoginViewController.m in Sources */,
@@ -622,6 +637,7 @@
 				169A7B2A1BFF1C2300A7C06D /* Battery.m in Sources */,
 				1623CE771BFD1B2C00EFAD72 /* AWARE.xcdatamodeld in Sources */,
 				1623CEBC1BFE390600EFAD72 /* Accelerometer.m in Sources */,
+				164810851C21C08C00B830D9 /* ESM.m in Sources */,
 				164DD6621C1FA72D00ADA92B /* NTPTime.m in Sources */,
 				169A7B431BFFDE8F00A7C06D /* Rotation.m in Sources */,
 				1623CEB41BFD659000EFAD72 /* AWAREKeys.m in Sources */,
