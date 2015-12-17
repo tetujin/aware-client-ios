@@ -11,10 +11,6 @@ The original TCP version (AsyncSocket) was created by Dustin Voss in January 200
 Updated and maintained by Deusty LLC and the Apple development community.
 
 
-## DeployGateSDK
-
-Copyright 2015 DeployGate Inc. All rights reserved.
-
 ## Google
 
 Copyright 2015 Google Inc.

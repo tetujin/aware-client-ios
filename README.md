@@ -21,6 +21,7 @@ AWARE Framework Client for iOS uses following external libraries via [CocoaPod](
 - [MQTTKit](https://github.com/jmesnil/MQTTKit)
 - [SCNetworkReachability](https://github.com/belkevich/reachability-ios)
 - [Google/SignIn](https://developers.google.com/identity/sign-in/ios/)
+- [ios-ntp](https://github.com/jbenet/ios-ntp)
 
 ## License
 Copyright (c) 2015 AWARE Mobile Context Instrumentation Middleware/Framework for iOS (http://www.awareframework.com)

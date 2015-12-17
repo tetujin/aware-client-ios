@@ -10,17 +10,32 @@
 	<string>46</string>
 	<key>objects</key>
 	<dict>
+		<key>003CC9E2C0B425D900C688878D27FBE9</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>name</key>
+			<string>memory_mosq.h</string>
+			<key>path</key>
+			<string>libmosquitto/memory_mosq.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
 		<key>009B7DC02333E7955FB73FB5A390CC63</key>
 		<dict>
 			<key>fileRef</key>
-			<string>B1125B3851D9DAC8C8323AA9FB7808A9</string>
+			<string>726277ED1B93A1958DA6B057A9C4FC55</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 		</dict>
 		<key>00F3EFA16575C28D4DD56EC4D58EBAA6</key>
 		<dict>
 			<key>baseConfigurationReference</key>
-			<string>4237A49FEB527FB873E306C5E42E5906</string>
+			<string>57BEB1FE4622F0BCBC9DD5AFFC7754F1</string>
 			<key>buildSettings</key>
 			<dict>
 				<key>ENABLE_STRICT_OBJC_MSGSEND</key>
@@ -58,19 +73,6 @@
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 		</dict>
-		<key>013DE8A5D27DDAF3CDB1BD42258AC815</key>
-		<dict>
-			<key>children</key>
-			<array>
-				<string>598150E6CD71C0872596BCE74500A6C4</string>
-			</array>
-			<key>isa</key>
-			<string>PBXGroup</string>
-			<key>name</key>
-			<string>Resources</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
 		<key>01AE8AADB82668BFE29C50CB222E637D</key>
 		<dict>
 			<key>fileRef</key>
@@ -78,55 +80,16 @@
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 		</dict>
-		<key>01BE7ED621CEE86FAFDA079D99261478</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.h</string>
-			<key>name</key>
-			<string>logging_mosq.h</string>
-			<key>path</key>
-			<string>libmosquitto/logging_mosq.h</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>033E7A28EED29FF6E3BDA69AB06F6C7C</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>name</key>
-			<string>logging_mosq.c</string>
-			<key>path</key>
-			<string>libmosquitto/logging_mosq.c</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>0384FD4AF4C60CF2D95E16D6EAC2221A</key>
+		<key>031B2DB8BBF2E583DD939D2334F0B720</key>
 		<dict>
 			<key>children</key>
 			<array>
-				<string>51AC1B92DA192FB721EB692A9B0A5656</string>
-				<string>CAD8A6ED55FA7EE28DB30DCDEFC9EE38</string>
-				<string>2F2031D5C6DDE9BFA66D6171601A658C</string>
-				<string>881EBFA3662020FD8987484A7B567D56</string>
-				<string>6FBEFD80F3569EC3F2F9E06DF11017AF</string>
-				<string>AC31AE82762ED6F61B78E5156904F9A3</string>
-				<string>69F5618B588BE0ABAB0696FA0E1E55C5</string>
-				<string>23575ABA5BB98BB0A24CAE45ABAFEAE7</string>
-				<string>6BD557EB45240CC7881C4758C238443B</string>
-				<string>779A68F698DD83D41E28EA37595CDFE5</string>
-				<string>C67BCADEF961460E9C6701AE042B4278</string>
-				<string>3607A43D4C16493344760E4D971AB243</string>
+				<string>77C0E0887B29F84486FAC157AE244902</string>
 			</array>
 			<key>isa</key>
 			<string>PBXGroup</string>
 			<key>name</key>
-			<string>Core</string>
+			<string>Frameworks</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
@@ -141,46 +104,18 @@
 			<key>targetProxy</key>
 			<string>6B49727CDB82BDEC898DF011FD0B051A</string>
 		</dict>
-		<key>03A491FA749BFE23481AE55BEBDA41C8</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>name</key>
-			<string>ja.lproj</string>
-			<key>path</key>
-			<string>DeployGateSDK1.0.7.embeddedframework/DeployGateSDK.framework/Versions/A/Resources/ja.lproj</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>03BBC8B41462E7D1C710F71A333BB0F5</key>
+		<key>039135204361CD2559050A2734CA98CE</key>
 		<dict>
 			<key>includeInIndex</key>
 			<string>1</string>
 			<key>isa</key>
 			<string>PBXFileReference</string>
 			<key>lastKnownFileType</key>
-			<string>archive.ar</string>
+			<string>sourcecode.c.h</string>
 			<key>name</key>
-			<string>libGTMSessionFetcher_core.a</string>
+			<string>GIDProfileData.h</string>
 			<key>path</key>
-			<string>Libraries/libGTMSessionFetcher_core.a</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>0500304B79864EE5AB79997E2C9E4D32</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>archive.ar</string>
-			<key>name</key>
-			<string>libGTM_NSScannerJSON.a</string>
-			<key>path</key>
-			<string>Libraries/libGTM_NSScannerJSON.a</string>
+			<string>Headers/Public/GIDProfileData.h</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
@@ -252,10 +187,27 @@
 			<key>name</key>
 			<string>Release</string>
 		</dict>
+		<key>05E06C9883621E20955AB3754CF3BA5E</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>86BFE8D5FF44570CACBC06618947B73E</string>
+				<string>726277ED1B93A1958DA6B057A9C4FC55</string>
+				<string>C7ECB8D30EAD218C02BC8E0FDC4C95A0</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>name</key>
+			<string>Support Files</string>
+			<key>path</key>
+			<string>../Target Support Files/SCNetworkReachability</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
 		<key>06D2ACB9CE33A4488D297BC948E66A0D</key>
 		<dict>
 			<key>fileRef</key>
-			<string>206487E9F5D6D04FD9FDA8FDA95F0913</string>
+			<string>F0C084E42C7944A6BF5E77D3A0C6529A</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 			<key>settings</key>
@@ -266,10 +218,53 @@
 				</array>
 			</dict>
 		</dict>
+		<key>07E95EC9E0BE25CA7BC7B02934B9660F</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>name</key>
+			<string>logging_mosq.c</string>
+			<key>path</key>
+			<string>libmosquitto/logging_mosq.c</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>08702F3B784842931C1ED17554346401</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>archive.ar</string>
+			<key>name</key>
+			<string>libGTMSessionFetcher_core.a</string>
+			<key>path</key>
+			<string>Libraries/libGTMSessionFetcher_core.a</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>0A2F7C9F82A6BC9DF3733BF47E7F6902</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>archive.ar</string>
+			<key>name</key>
+			<string>libGGLSignIn.a</string>
+			<key>path</key>
+			<string>Libraries/libGGLSignIn.a</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
 		<key>0BFE82DD4B5056470E54436C8DC901B4</key>
 		<dict>
 			<key>fileRef</key>
-			<string>129CAD9C965D93B35228BD17201FFEB7</string>
+			<string>FD26418D47CCD4A529CD236FE486EEE8</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 			<key>settings</key>
@@ -283,7 +278,7 @@
 		<key>0CD59E4A07679254FCD5F69EDFCDC7B6</key>
 		<dict>
 			<key>fileRef</key>
-			<string>01BE7ED621CEE86FAFDA079D99261478</string>
+			<string>BCA5DF884A16E8D24E2B6BC70261E42E</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 			<key>settings</key>
@@ -294,84 +289,39 @@
 				</array>
 			</dict>
 		</dict>
-		<key>0CE762CDB6FF2D5E1884141B247BDA16</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.h</string>
-			<key>name</key>
-			<string>read_handle.h</string>
-			<key>path</key>
-			<string>libmosquitto/read_handle.h</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>0E6588C537E0171D8E987578A402D212</key>
-		<dict>
-			<key>children</key>
-			<array>
-				<string>621800F8BB4B7BDC9DAF785FD1F9D18D</string>
-				<string>360DFA8946AFEA1EC7F20005573FAA46</string>
-				<string>6AA70843D5849B57725889EEBCF1927A</string>
-			</array>
-			<key>isa</key>
-			<string>PBXGroup</string>
-			<key>name</key>
-			<string>SignIn</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
 		<key>0E68EABA33E9FD516C740C6294A025E6</key>
 		<dict>
 			<key>fileRef</key>
-			<string>1391FC3402B06E1F40E9292B9D3E6D1C</string>
+			<string>CAE885F292D26436346497608F858F09</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 		</dict>
-		<key>0FB604C4A3A1DAE7D9D714AA325F5178</key>
+		<key>11169B5E8E31F2F5D23633092AE3BBD8</key>
 		<dict>
 			<key>includeInIndex</key>
 			<string>1</string>
 			<key>isa</key>
 			<string>PBXFileReference</string>
 			<key>lastKnownFileType</key>
-			<string>sourcecode.c.h</string>
+			<string>archive.ar</string>
 			<key>name</key>
-			<string>mqtt3_protocol.h</string>
+			<string>libGTMOAuth2_internal.a</string>
 			<key>path</key>
-			<string>libmosquitto/mqtt3_protocol.h</string>
+			<string>Libraries/libGTMOAuth2_internal.a</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
 		<key>1162CB5DC8260BBD6B22FEA27151B559</key>
 		<dict>
 			<key>fileRef</key>
-			<string>EEB96EE04F534ED5B4910C86E7CEDBBE</string>
+			<string>C76B2A656030EC3277EC08C71999FE27</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
-		</dict>
-		<key>129CAD9C965D93B35228BD17201FFEB7</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.h</string>
-			<key>name</key>
-			<string>NSDate+NetworkClock.h</string>
-			<key>path</key>
-			<string>ios-ntp-lib/NSDate+NetworkClock.h</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
 		</dict>
 		<key>12BE33D676B92DE06A2AE7B4A323E7C8</key>
 		<dict>
 			<key>fileRef</key>
-			<string>47AFD95ECE9377EC73C6227DD99D9E5A</string>
+			<string>4EB37C77459218EE767DE7596FC96256</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 			<key>settings</key>
@@ -385,14 +335,14 @@
 		<key>12E5CCF37F4A675A327CA1E8D3F2D849</key>
 		<dict>
 			<key>fileRef</key>
-			<string>426FECA45B557F7303E66A05939BFFD3</string>
+			<string>D5537479CE1E706FE9E210EDF54E8920</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 		</dict>
 		<key>132010EF9B5680FF1CE24C01545D568C</key>
 		<dict>
 			<key>fileRef</key>
-			<string>0FB604C4A3A1DAE7D9D714AA325F5178</string>
+			<string>6628868B46696565273533D6595F60B9</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 			<key>settings</key>
@@ -402,21 +352,6 @@
 					<string>Project</string>
 				</array>
 			</dict>
-		</dict>
-		<key>1391FC3402B06E1F40E9292B9D3E6D1C</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.objc</string>
-			<key>name</key>
-			<string>NetAssociation.m</string>
-			<key>path</key>
-			<string>ios-ntp-lib/NetAssociation.m</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
 		</dict>
 		<key>14B8B9B15ECBE87983FF987239AB2D7B</key>
 		<dict>
@@ -431,36 +366,7 @@
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
-		<key>1765E8CFB311A8F12FAEF6C0F1D8E29E</key>
-		<dict>
-			<key>children</key>
-			<array>
-				<string>84EEDAB274DB91510801F8F9C33DBDCF</string>
-				<string>D62E67278FCE010C98F94C4027913D84</string>
-				<string>FB507E7915B36E2236E20C42658D7403</string>
-				<string>77C257A3C2DF38C696142BAE9012D4BB</string>
-				<string>6C6028B56DAAC4309F395F17AAE1AF86</string>
-				<string>B60CE13186CE7B6EB533D2C49A2B8C33</string>
-				<string>402F5E9C03DB822C619C71C0D068B3AD</string>
-				<string>5CFC779F034523F4552602D92C734631</string>
-				<string>0500304B79864EE5AB79997E2C9E4D32</string>
-				<string>F0AFF5F9C890A393E849DA120C76DC5D</string>
-				<string>C51B3DCC48BA3FC2629F2EE77C8E27E4</string>
-				<string>C0A194661842398357EC28225910F30C</string>
-				<string>1EE614E31842F149F3064DA180C02D3D</string>
-				<string>A298FC45390EC455F4FF575B043FA89B</string>
-				<string>A80FB3F636BBA1D4E33E18B0AB539562</string>
-				<string>B64DB3C547CC9CF5D38B5A9AABB6D867</string>
-				<string>20AF1BDBC8CE4769A7ED4CC7B33D1741</string>
-			</array>
-			<key>isa</key>
-			<string>PBXGroup</string>
-			<key>name</key>
-			<string>Frameworks</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>190AC0F41AAB157FF4D850878C54ED08</key>
+		<key>168ABB1DA7E0AD22DB92AFC0B0015FF9</key>
 		<dict>
 			<key>includeInIndex</key>
 			<string>1</string>
@@ -469,13 +375,39 @@
 			<key>lastKnownFileType</key>
 			<string>sourcecode.c.h</string>
 			<key>name</key>
-			<string>send_mosq.h</string>
+			<string>GGLErrorCode.h</string>
 			<key>path</key>
-			<string>libmosquitto/send_mosq.h</string>
+			<string>Headers/GGLCore/Public/GGLErrorCode.h</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
-		<key>1AD2DF027C6973B9B162AF6AD7AAA300</key>
+		<key>18E1F197879C46D8FE796916753EA572</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>name</key>
+			<string>memory_mosq.c</string>
+			<key>path</key>
+			<string>libmosquitto/memory_mosq.c</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>1B7349D0DECE5AD98F71DDCC7FE3449A</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>AE357C8A1D72D04CDDBCE207968F3CF5</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>name</key>
+			<string>Frameworks</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>1C8FC5341285F88740AFE87DF464E9FB</key>
 		<dict>
 			<key>includeInIndex</key>
 			<string>1</string>
@@ -493,50 +425,31 @@
 		<key>1CD43FF0958CF16A582FC025842CAB4A</key>
 		<dict>
 			<key>fileRef</key>
-			<string>E11822DC7A91E814DED9300C4A3CFE71</string>
+			<string>571ABE4F03F655249195B969A2B708BE</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 		</dict>
-		<key>1E0F033997E50B074F70D9A96DB7A843</key>
+		<key>1F39405A873C7E166D66958DFA6D026D</key>
 		<dict>
+			<key>children</key>
+			<array>
+				<string>F3DC24645C90697FF5F47143A23C17E0</string>
+				<string>34011DC154AC999C2FE094BC094E077C</string>
+				<string>C91023435C00E5728D559F33642DE726</string>
+				<string>1C8FC5341285F88740AFE87DF464E9FB</string>
+				<string>D5566D0C3B893FEAA137357D76DE9E89</string>
+				<string>B61573F64B14B379639968C9E8B2285D</string>
+				<string>3F1C42027A4F248D3251FEE89473AAF8</string>
+				<string>F0C084E42C7944A6BF5E77D3A0C6529A</string>
+				<string>6DDD533BC9462CDDF3BF70776F1821BC</string>
+				<string>5917D2AC1E93B647917E0C9927B4D490</string>
+			</array>
 			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>wrapper.framework</string>
+			<string>PBXGroup</string>
 			<key>name</key>
-			<string>DeployGateSDK.framework</string>
+			<string>CocoaAsyncSocket</string>
 			<key>path</key>
-			<string>DeployGateSDK1.0.7.embeddedframework/DeployGateSDK.framework</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>1EE614E31842F149F3064DA180C02D3D</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>archive.ar</string>
-			<key>name</key>
-			<string>libGTM_RoundedRectPath.a</string>
-			<key>path</key>
-			<string>Libraries/libGTM_RoundedRectPath.a</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>206487E9F5D6D04FD9FDA8FDA95F0913</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.h</string>
-			<key>name</key>
-			<string>GCDAsyncUdpSocket.h</string>
-			<key>path</key>
-			<string>Source/GCD/GCDAsyncUdpSocket.h</string>
+			<string>CocoaAsyncSocket</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
@@ -555,34 +468,6 @@
 			<key>sourceTree</key>
 			<string>BUILT_PRODUCTS_DIR</string>
 		</dict>
-		<key>20AF1BDBC8CE4769A7ED4CC7B33D1741</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>archive.ar</string>
-			<key>name</key>
-			<string>libGTMStackTrace.a</string>
-			<key>path</key>
-			<string>Libraries/libGTMStackTrace.a</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>21790EA867469ECD9374A211103E3FA0</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.h</string>
-			<key>path</key>
-			<string>SCNetworkReachability-prefix.pch</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
 		<key>21DD51D12AE2680E83193D33ACE3446B</key>
 		<dict>
 			<key>children</key>
@@ -600,93 +485,37 @@
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
-		<key>22B6D5C25E2830E1C6DA20F63BB3E926</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.h</string>
-			<key>name</key>
-			<string>config.h</string>
-			<key>path</key>
-			<string>libmosquitto/config.h</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>22D12EA8796AC398C0C834D1D0DD5832</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.h</string>
-			<key>name</key>
-			<string>GoogleSignIn.h</string>
-			<key>path</key>
-			<string>Headers/Public/GoogleSignIn.h</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>23575ABA5BB98BB0A24CAE45ABAFEAE7</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.h</string>
-			<key>name</key>
-			<string>GGLContext.h</string>
-			<key>path</key>
-			<string>Headers/GGLCore/Public/GGLContext.h</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>24D665324AECB27D9D64D6B5672247B6</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.h</string>
-			<key>name</key>
-			<string>AsyncUdpSocket.h</string>
-			<key>path</key>
-			<string>Source/RunLoop/AsyncUdpSocket.h</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>2546E59C99D53FF7F5EDA3D91C9D6DA5</key>
+		<key>232C735AEFEF5AC1EF5D7302DD8BAF83</key>
 		<dict>
 			<key>children</key>
 			<array>
-				<string>D475983FC1E7E8EED2E39FD7E1C7A7A9</string>
-				<string>A63897DBDCE258830A82BDD595C5E97B</string>
-				<string>6E2170B61741D2C10BA71141F9078D61</string>
-				<string>CA60F00E953D07F10FA26EA0E527BA4E</string>
-				<string>AC7E919525F8E0CAF02E504F13C94C60</string>
-				<string>3EB5F40F88EFEE9B1060C676E8F5197F</string>
-				<string>738D20A884C2813C665B52C128FB6F0A</string>
-				<string>7358D5ECB3876D63C60C99863B2B0640</string>
-				<string>ABBF7BE656D98B87099E4DD9D6F81B52</string>
-				<string>C0D7A0430A7E8B7789236CC587AC4165</string>
-				<string>A05931C38BBB3FE3652B5DF8EF774C17</string>
-				<string>41141007253239374FC59C2178DE32FC</string>
-				<string>A966B16961B4B37452663D9B35FB26C3</string>
-				<string>8CFEFB2FBCF1C589E896AED33B3AEFA8</string>
+				<string>DA3772CDE02EF08B52811748658BE920</string>
 			</array>
 			<key>isa</key>
 			<string>PBXGroup</string>
 			<key>name</key>
-			<string>Pods</string>
+			<string>GoogleInterchangeUtilities</string>
+			<key>path</key>
+			<string>GoogleInterchangeUtilities</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
-		<key>25C6BD83C6BAA0BDF07008E81648BFA0</key>
+		<key>250FB167F8044DF8B15066E683EFABD6</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>031B2DB8BBF2E583DD939D2334F0B720</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>name</key>
+			<string>GoogleSymbolUtilities</string>
+			<key>path</key>
+			<string>GoogleSymbolUtilities</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>29D22B55CDCABD53966C3C98668A7968</key>
 		<dict>
 			<key>includeInIndex</key>
 			<string>1</string>
@@ -694,59 +523,8 @@
 			<string>PBXFileReference</string>
 			<key>lastKnownFileType</key>
 			<string>sourcecode.c.h</string>
-			<key>name</key>
-			<string>ios-ntp.h</string>
 			<key>path</key>
-			<string>ios-ntp-lib/ios-ntp.h</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>25D4CE60815DB3DF108808D53C06E20F</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>name</key>
-			<string>send_client_mosq.c</string>
-			<key>path</key>
-			<string>libmosquitto/send_client_mosq.c</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>26452D0E38BBF28C51AA2EF5118036DF</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.objc</string>
-			<key>name</key>
-			<string>MQTTKit.m</string>
-			<key>path</key>
-			<string>MQTTKit/MQTTKit.m</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>2936706627BA9B26F860D5297A149AEE</key>
-		<dict>
-			<key>children</key>
-			<array>
-				<string>47CFA8715E844238B86005EFE2DB5CF6</string>
-				<string>D5C740E6491A1240E272934D77A787C0</string>
-				<string>2E368D926AEE7618F1582A081E793A71</string>
-				<string>4BFB7965D91CB421EE6E6F2EAFAAD7C6</string>
-				<string>3C36BE12A66D1FE5283241FE4836B335</string>
-				<string>9811FD8E45BDB8A87DC7C42FA8DAB4C3</string>
-				<string>B0D69EBC80EB48CB4064A26DA64D4FE5</string>
-				<string>62FF6FFB49FB4E2096FED659B08AFB83</string>
-				<string>9B9D9ED74C972D4684F4E4236276DE35</string>
-			</array>
-			<key>isa</key>
-			<string>PBXGroup</string>
-			<key>name</key>
-			<string>Core</string>
+			<string>MQTTKit-prefix.pch</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
@@ -763,23 +541,10 @@
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
-		<key>2BB2170F0CD364FFA6DDEA0760C46E96</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>name</key>
-			<string>time_mosq.c</string>
-			<key>path</key>
-			<string>libmosquitto/time_mosq.c</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
 		<key>2CF3ED369C859E3778E727C1AFC73150</key>
 		<dict>
 			<key>baseConfigurationReference</key>
-			<string>700700CE2D587720973EFAD82739CA1F</string>
+			<string>78D5ECD95CC0FFF0B8D4960ED7F89097</string>
 			<key>buildSettings</key>
 			<dict>
 				<key>ENABLE_STRICT_OBJC_MSGSEND</key>
@@ -813,7 +578,7 @@
 		<key>2D170371D8740F87A3E99AF3C2E8DE9F</key>
 		<dict>
 			<key>fileRef</key>
-			<string>47CFA8715E844238B86005EFE2DB5CF6</string>
+			<string>EB615CAEA362E6F07B2750C7E3D2B2F8</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 			<key>settings</key>
@@ -823,21 +588,6 @@
 					<string>Public</string>
 				</array>
 			</dict>
-		</dict>
-		<key>2D5CD8C695FA1616B9EBAD8753C17B93</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.h</string>
-			<key>name</key>
-			<string>memory_mosq.h</string>
-			<key>path</key>
-			<string>libmosquitto/memory_mosq.h</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
 		</dict>
 		<key>2D8E8EC45A3A1A1D94AE762CB5028504</key>
 		<dict>
@@ -856,7 +606,7 @@
 		<key>2DEC3FFF8F4822D2F72EA50B51493D76</key>
 		<dict>
 			<key>baseConfigurationReference</key>
-			<string>F547FBE4C5697569D8E436FA862A96CA</string>
+			<string>86BFE8D5FF44570CACBC06618947B73E</string>
 			<key>buildSettings</key>
 			<dict>
 				<key>ENABLE_STRICT_OBJC_MSGSEND</key>
@@ -887,69 +637,23 @@
 			<key>name</key>
 			<string>Release</string>
 		</dict>
-		<key>2E368D926AEE7618F1582A081E793A71</key>
+		<key>2EAFEF6F158AC9F99F1BAB499207A453</key>
 		<dict>
 			<key>includeInIndex</key>
 			<string>1</string>
 			<key>isa</key>
 			<string>PBXFileReference</string>
 			<key>lastKnownFileType</key>
-			<string>sourcecode.c.h</string>
-			<key>name</key>
-			<string>SCNetworkStatus.h</string>
+			<string>text.xcconfig</string>
 			<key>path</key>
-			<string>Classes/Public/SCNetworkStatus.h</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>2F2031D5C6DDE9BFA66D6171601A658C</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.h</string>
-			<key>name</key>
-			<string>AppInvite-Module.h</string>
-			<key>path</key>
-			<string>Headers/ModuleHeaders/AppInvite-Module.h</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>2FBF268A9784F0EE70173B7D7B918996</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.h</string>
-			<key>name</key>
-			<string>GIDSignInButton.h</string>
-			<key>path</key>
-			<string>Headers/Public/GIDSignInButton.h</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>2FDE0F781C65ECD2F64468345B5C1747</key>
-		<dict>
-			<key>children</key>
-			<array>
-				<string>E57C5B358535B9016277DD4AAD80A35E</string>
-				<string>6FAA88F10EE592A10B25BDB55DA4CD69</string>
-			</array>
-			<key>isa</key>
-			<string>PBXGroup</string>
-			<key>name</key>
-			<string>Frameworks</string>
+			<string>CocoaAsyncSocket.xcconfig</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
 		<key>30105BC539ECE11FFF3A568B26EC2FA7</key>
 		<dict>
 			<key>fileRef</key>
-			<string>D5C740E6491A1240E272934D77A787C0</string>
+			<string>F4A33298F85EB89F5AEB17A3C87877A4</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 			<key>settings</key>
@@ -961,7 +665,7 @@
 		<key>303A4B3C92812D26F440797192AC2571</key>
 		<dict>
 			<key>fileRef</key>
-			<string>FEB8177CAA850243ED0FA3E299C58C80</string>
+			<string>BF2B26E1196AF4EBBE0969ABA3CAE691</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 			<key>settings</key>
@@ -975,43 +679,26 @@
 		<key>32F915F46FBD1AE2DD2F0F496ED2C09E</key>
 		<dict>
 			<key>fileRef</key>
-			<string>597AAA3B33A9D6865C2CF4E5DA7F9CF3</string>
+			<string>5439674F133E9D19AF2C1B757F0BA4D1</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 		</dict>
-		<key>349941F689A2F118D63CDB9F773C5C9C</key>
+		<key>34011DC154AC999C2FE094BC094E077C</key>
 		<dict>
-			<key>fileRef</key>
-			<string>60F85758B54CB0D843A3E97DFFB2F21F</string>
+			<key>includeInIndex</key>
+			<string>1</string>
 			<key>isa</key>
-			<string>PBXBuildFile</string>
-		</dict>
-		<key>350D9EEAA564EBC6AD06BD0A30960F1F</key>
-		<dict>
-			<key>fileRef</key>
-			<string>1AD2DF027C6973B9B162AF6AD7AAA300</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-			<key>settings</key>
-			<dict>
-				<key>COMPILER_FLAGS</key>
-				<string>-DOS_OBJECT_USE_OBJC=0</string>
-			</dict>
-		</dict>
-		<key>3607A43D4C16493344760E4D971AB243</key>
-		<dict>
-			<key>children</key>
-			<array>
-				<string>71B7D73D369D18EBE2726B971AB6ADDC</string>
-			</array>
-			<key>isa</key>
-			<string>PBXGroup</string>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.objc</string>
 			<key>name</key>
-			<string>Frameworks</string>
+			<string>AsyncSocket.m</string>
+			<key>path</key>
+			<string>Source/RunLoop/AsyncSocket.m</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
-		<key>360DFA8946AFEA1EC7F20005573FAA46</key>
+		<key>3462399016ED59E5CBB1187F00789F0F</key>
 		<dict>
 			<key>includeInIndex</key>
 			<string>1</string>
@@ -1020,31 +707,106 @@
 			<key>lastKnownFileType</key>
 			<string>sourcecode.c.h</string>
 			<key>name</key>
-			<string>SignIn.h</string>
+			<string>MQTTKit.h</string>
 			<key>path</key>
-			<string>Headers/GGLSignIn/Public/SignIn.h</string>
+			<string>MQTTKit/MQTTKit.h</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
-		<key>393BF4992B2C1A4D81DEBB342CECCCE8</key>
+		<key>349941F689A2F118D63CDB9F773C5C9C</key>
+		<dict>
+			<key>fileRef</key>
+			<string>60F85758B54CB0D843A3E97DFFB2F21F</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>34D47CF6B49F4DC3C200EE805A09EDFD</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>name</key>
+			<string>net_mosq.c</string>
+			<key>path</key>
+			<string>libmosquitto/net_mosq.c</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>34E7AD16847C79F3EDC503691AD67321</key>
 		<dict>
 			<key>includeInIndex</key>
 			<string>1</string>
 			<key>isa</key>
 			<string>PBXFileReference</string>
 			<key>lastKnownFileType</key>
-			<string>archive.ar</string>
+			<string>sourcecode.c.h</string>
 			<key>name</key>
-			<string>libGGLSignIn.a</string>
+			<string>GIDAuthentication.h</string>
 			<key>path</key>
-			<string>Libraries/libGGLSignIn.a</string>
+			<string>Headers/Public/GIDAuthentication.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>350D9EEAA564EBC6AD06BD0A30960F1F</key>
+		<dict>
+			<key>fileRef</key>
+			<string>1C8FC5341285F88740AFE87DF464E9FB</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>COMPILER_FLAGS</key>
+				<string>-DOS_OBJECT_USE_OBJC=0</string>
+			</dict>
+		</dict>
+		<key>3515FC7B9C127217870B848CF27188A5</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>name</key>
+			<string>GIDSignIn.h</string>
+			<key>path</key>
+			<string>Headers/Public/GIDSignIn.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>35C074661386DA666C07EC19AB07EC47</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>name</key>
+			<string>GIDGoogleUser.h</string>
+			<key>path</key>
+			<string>Headers/Public/GIDGoogleUser.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>39A1DD32076A9D8236D75AD9E2B2638D</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>name</key>
+			<string>mosquitto.c</string>
+			<key>path</key>
+			<string>libmosquitto/mosquitto.c</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
 		<key>3A470C1A4575E0423B418339C3A967DE</key>
 		<dict>
 			<key>fileRef</key>
-			<string>B3197837327EEC995EE41E00751366A1</string>
+			<string>B61573F64B14B379639968C9E8B2285D</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 			<key>settings</key>
@@ -1058,7 +820,7 @@
 		<key>3AB6BCE6926858E6B5CE3A9568670B60</key>
 		<dict>
 			<key>fileRef</key>
-			<string>2D5CD8C695FA1616B9EBAD8753C17B93</string>
+			<string>003CC9E2C0B425D900C688878D27FBE9</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 			<key>settings</key>
@@ -1068,21 +830,6 @@
 					<string>Project</string>
 				</array>
 			</dict>
-		</dict>
-		<key>3C36BE12A66D1FE5283241FE4836B335</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.objc</string>
-			<key>name</key>
-			<string>SCReachabilityFlagsParser.m</string>
-			<key>path</key>
-			<string>Classes/Private/SCReachabilityFlagsParser.m</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
 		</dict>
 		<key>3CA0F64AECDB104CA49BD300A0191097</key>
 		<dict>
@@ -1097,51 +844,25 @@
 			<key>runOnlyForDeploymentPostprocessing</key>
 			<string>0</string>
 		</dict>
-		<key>3EB5F40F88EFEE9B1060C676E8F5197F</key>
-		<dict>
-			<key>children</key>
-			<array>
-				<string>C8196F660CD3BE6EB2B0962E7BA9B472</string>
-			</array>
-			<key>isa</key>
-			<string>PBXGroup</string>
-			<key>name</key>
-			<string>GoogleInterchangeUtilities</string>
-			<key>path</key>
-			<string>GoogleInterchangeUtilities</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>3F0E22989C080AEA9D654EF92B55B55C</key>
+		<key>3F1C42027A4F248D3251FEE89473AAF8</key>
 		<dict>
 			<key>includeInIndex</key>
 			<string>1</string>
 			<key>isa</key>
 			<string>PBXFileReference</string>
 			<key>lastKnownFileType</key>
-			<string>sourcecode.c.h</string>
-			<key>path</key>
-			<string>macros_blocks.h</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>3F75E5DB09F5F796F7DB656E0C2BD110</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
+			<string>sourcecode.c.objc</string>
 			<key>name</key>
-			<string>read_handle_shared.c</string>
+			<string>GCDAsyncSocket.m</string>
 			<key>path</key>
-			<string>libmosquitto/read_handle_shared.c</string>
+			<string>Source/GCD/GCDAsyncSocket.m</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
 		<key>3FCBC8DED7E48831872465294DDB9B6E</key>
 		<dict>
 			<key>fileRef</key>
-			<string>C08C1B52B60399B7BB6AC375267804DB</string>
+			<string>7A662032D7038B5A17523074BF68E535</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 			<key>settings</key>
@@ -1152,16 +873,26 @@
 				</array>
 			</dict>
 		</dict>
-		<key>3FF21E0C188EDE2099863F405C9D1B58</key>
+		<key>40131FFABB94809864C581CE74C92AAE</key>
 		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
+			<key>children</key>
+			<array>
+				<string>7CF1F80BDB652F3361CE5696F1324C4B</string>
+				<string>8A821540A7BE5261D21C28776B31EF5C</string>
+				<string>CAE885F292D26436346497608F858F09</string>
+				<string>BF2B26E1196AF4EBBE0969ABA3CAE691</string>
+				<string>5439674F133E9D19AF2C1B757F0BA4D1</string>
+				<string>FD26418D47CCD4A529CD236FE486EEE8</string>
+				<string>C76B2A656030EC3277EC08C71999FE27</string>
+				<string>A81AA86671E1025A4ED523E14A0F9115</string>
+				<string>6BF4629EA43072D944408ACCE95A99CB</string>
+			</array>
 			<key>isa</key>
-			<string>PBXFileReference</string>
+			<string>PBXGroup</string>
 			<key>name</key>
-			<string>will_mosq.c</string>
+			<string>ios-ntp</string>
 			<key>path</key>
-			<string>libmosquitto/will_mosq.c</string>
+			<string>ios-ntp</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
@@ -1179,33 +910,16 @@
 			<key>isa</key>
 			<string>XCConfigurationList</string>
 		</dict>
-		<key>402F5E9C03DB822C619C71C0D068B3AD</key>
+		<key>412094A9B0E12A12E2457258C315BD52</key>
 		<dict>
 			<key>includeInIndex</key>
 			<string>1</string>
 			<key>isa</key>
 			<string>PBXFileReference</string>
 			<key>lastKnownFileType</key>
-			<string>archive.ar</string>
-			<key>name</key>
-			<string>libGTM_NSData+zlib.a</string>
+			<string>sourcecode.c.h</string>
 			<key>path</key>
-			<string>Libraries/libGTM_NSData+zlib.a</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>41141007253239374FC59C2178DE32FC</key>
-		<dict>
-			<key>children</key>
-			<array>
-				<string>3F0E22989C080AEA9D654EF92B55B55C</string>
-			</array>
-			<key>isa</key>
-			<string>PBXGroup</string>
-			<key>name</key>
-			<string>macros_blocks</string>
-			<key>path</key>
-			<string>macros_blocks</string>
+			<string>macros_blocks.h</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
@@ -1222,183 +936,20 @@
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
-		<key>4237A49FEB527FB873E306C5E42E5906</key>
+		<key>42ABED2213FDC590A3D9A486328C16B6</key>
 		<dict>
 			<key>includeInIndex</key>
 			<string>1</string>
 			<key>isa</key>
 			<string>PBXFileReference</string>
 			<key>lastKnownFileType</key>
-			<string>text.xcconfig</string>
+			<string>sourcecode.c.objc</string>
 			<key>path</key>
-			<string>MQTTKit.xcconfig</string>
+			<string>ios-ntp-dummy.m</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
-		<key>426FECA45B557F7303E66A05939BFFD3</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>name</key>
-			<string>thread_mosq.c</string>
-			<key>path</key>
-			<string>libmosquitto/thread_mosq.c</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>42BC1174E42CCD0AC399095BBBAE26CF</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.h</string>
-			<key>name</key>
-			<string>tls_mosq.h</string>
-			<key>path</key>
-			<string>libmosquitto/tls_mosq.h</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>42C834A7A5993D539FEEF35ADF562696</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>name</key>
-			<string>net_mosq.c</string>
-			<key>path</key>
-			<string>libmosquitto/net_mosq.c</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>45C257901E8F645FBF3015102728F0AC</key>
-		<dict>
-			<key>fileRef</key>
-			<string>701F7D142873CE79255AB2F39DA6ECE8</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-			<key>settings</key>
-			<dict>
-				<key>ATTRIBUTES</key>
-				<array>
-					<string>Public</string>
-				</array>
-			</dict>
-		</dict>
-		<key>463F6DB636698F3DEDAB0F34E8566E09</key>
-		<dict>
-			<key>fileRef</key>
-			<string>24D665324AECB27D9D64D6B5672247B6</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-			<key>settings</key>
-			<dict>
-				<key>ATTRIBUTES</key>
-				<array>
-					<string>Public</string>
-				</array>
-			</dict>
-		</dict>
-		<key>468C3B68DEF2C90B587786775E4B1AFA</key>
-		<dict>
-			<key>fileRef</key>
-			<string>CF2372DD31B47FBB8535D3C1D8EE7503</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-			<key>settings</key>
-			<dict>
-				<key>ATTRIBUTES</key>
-				<array>
-					<string>Project</string>
-				</array>
-			</dict>
-		</dict>
-		<key>46E2474F08B444442D41BA6A4748AE8E</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>archive.ar</string>
-			<key>name</key>
-			<string>libGSDK_Overload.a</string>
-			<key>path</key>
-			<string>Libraries/libGSDK_Overload.a</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>47AFD95ECE9377EC73C6227DD99D9E5A</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.h</string>
-			<key>name</key>
-			<string>net_mosq.h</string>
-			<key>path</key>
-			<string>libmosquitto/net_mosq.h</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>47CFA8715E844238B86005EFE2DB5CF6</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.h</string>
-			<key>name</key>
-			<string>SCNetworkReachability.h</string>
-			<key>path</key>
-			<string>Classes/Public/SCNetworkReachability.h</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>487E5D780F688C90C8A85D9632798121</key>
-		<dict>
-			<key>children</key>
-			<array>
-				<string>BB40CF5776FB37E3EF7AD34A4028F401</string>
-				<string>85002081ECC801178D673BA906748FB3</string>
-			</array>
-			<key>isa</key>
-			<string>PBXGroup</string>
-			<key>name</key>
-			<string>Frameworks</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>499B19242F01BE3A0C1B0C30485C732F</key>
-		<dict>
-			<key>fileRef</key>
-			<string>90034B840BDDD896510E59CAF56D1FF5</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-		</dict>
-		<key>49C79F1E6A28D8F1137F991B67E4FFC6</key>
-		<dict>
-			<key>fileRef</key>
-			<string>C6549D009583FDFFD324E2FFD5E2CEB2</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-			<key>settings</key>
-			<dict>
-				<key>ATTRIBUTES</key>
-				<array>
-					<string>Project</string>
-				</array>
-			</dict>
-		</dict>
-		<key>4AFD5734D485DE7288022A954DBF85DE</key>
+		<key>43E5C552DD6C197A7A592FE40B45A901</key>
 		<dict>
 			<key>includeInIndex</key>
 			<string>1</string>
@@ -1413,7 +964,64 @@
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
-		<key>4BFB7965D91CB421EE6E6F2EAFAAD7C6</key>
+		<key>4514DDE800CEE81A96316EAFCA73BB06</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>archive.ar</string>
+			<key>name</key>
+			<string>libSignIn.a</string>
+			<key>path</key>
+			<string>Libraries/libSignIn.a</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>45C257901E8F645FBF3015102728F0AC</key>
+		<dict>
+			<key>fileRef</key>
+			<string>3462399016ED59E5CBB1187F00789F0F</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>Public</string>
+				</array>
+			</dict>
+		</dict>
+		<key>463F6DB636698F3DEDAB0F34E8566E09</key>
+		<dict>
+			<key>fileRef</key>
+			<string>C91023435C00E5728D559F33642DE726</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>Public</string>
+				</array>
+			</dict>
+		</dict>
+		<key>468C3B68DEF2C90B587786775E4B1AFA</key>
+		<dict>
+			<key>fileRef</key>
+			<string>8D22D1A05F066E33582729C68AD03C5C</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>Project</string>
+				</array>
+			</dict>
+		</dict>
+		<key>48F73933B9BE9990E1F4C0AF2EE61406</key>
 		<dict>
 			<key>includeInIndex</key>
 			<string>1</string>
@@ -1422,9 +1030,58 @@
 			<key>lastKnownFileType</key>
 			<string>sourcecode.c.h</string>
 			<key>name</key>
-			<string>SCReachabilityFlagsParser.h</string>
+			<string>GIDSignInButton.h</string>
 			<key>path</key>
-			<string>Classes/Private/SCReachabilityFlagsParser.h</string>
+			<string>Headers/Public/GIDSignInButton.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>499B19242F01BE3A0C1B0C30485C732F</key>
+		<dict>
+			<key>fileRef</key>
+			<string>991FE24D5F9964785ED21BB48884BE65</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>49C79F1E6A28D8F1137F991B67E4FFC6</key>
+		<dict>
+			<key>fileRef</key>
+			<string>D1A043C9608019F2D606B84BAB20D4BC</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>Project</string>
+				</array>
+			</dict>
+		</dict>
+		<key>4B1FFCA6A80A9B1EF01E7CD983354ACE</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>0A2F7C9F82A6BC9DF3733BF47E7F6902</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>name</key>
+			<string>Frameworks</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>4B5E39FCEFD9C9F57EC35710B19D9247</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>archive.ar</string>
+			<key>name</key>
+			<string>libGTM_NSStringXML.a</string>
+			<key>path</key>
+			<string>Libraries/libGTM_NSStringXML.a</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
@@ -1453,23 +1110,25 @@
 			<key>productType</key>
 			<string>com.apple.product-type.library.static</string>
 		</dict>
-		<key>4D45365F58F5DC5AA75EE0EF123163FF</key>
+		<key>4EB37C77459218EE767DE7596FC96256</key>
 		<dict>
 			<key>includeInIndex</key>
 			<string>1</string>
 			<key>isa</key>
 			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
 			<key>name</key>
-			<string>mosquitto.c</string>
+			<string>net_mosq.h</string>
 			<key>path</key>
-			<string>libmosquitto/mosquitto.c</string>
+			<string>libmosquitto/net_mosq.h</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
 		<key>4EB69428C543D6AAC5EBB9DDF9C0F5C8</key>
 		<dict>
 			<key>fileRef</key>
-			<string>D1620CAC9D7EC6074F478E250F8E1C08</string>
+			<string>8A821540A7BE5261D21C28776B31EF5C</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 			<key>settings</key>
@@ -1483,7 +1142,7 @@
 		<key>506FFFAEC9AF3A4513919E7BFCBFDF15</key>
 		<dict>
 			<key>fileRef</key>
-			<string>B0D69EBC80EB48CB4064A26DA64D4FE5</string>
+			<string>A3982A50D0930FD0BC2C2D61E5E52374</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 			<key>settings</key>
@@ -1495,7 +1154,7 @@
 		<key>512D2D8A8D21F4AD9C03BC7978282F4E</key>
 		<dict>
 			<key>fileRef</key>
-			<string>2E368D926AEE7618F1582A081E793A71</string>
+			<string>9A71585AE8A6E8EB66714CB7BF396E32</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 			<key>settings</key>
@@ -1506,31 +1165,46 @@
 				</array>
 			</dict>
 		</dict>
-		<key>51AC1B92DA192FB721EB692A9B0A5656</key>
+		<key>5137801B3337A3A8CF931A32670BA319</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>name</key>
+			<string>will_mosq.c</string>
+			<key>path</key>
+			<string>libmosquitto/will_mosq.c</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>5361C369AE8751EB49E9D3F23E1F915A</key>
 		<dict>
 			<key>includeInIndex</key>
 			<string>1</string>
 			<key>isa</key>
 			<string>PBXFileReference</string>
 			<key>lastKnownFileType</key>
-			<string>sourcecode.c.h</string>
+			<string>archive.ar</string>
 			<key>name</key>
-			<string>AdMob-Module.h</string>
+			<string>libGTM_NSData+zlib.a</string>
 			<key>path</key>
-			<string>Headers/ModuleHeaders/AdMob-Module.h</string>
+			<string>Libraries/libGTM_NSData+zlib.a</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
-		<key>55814ED1B04FA8B54467153E7C385E40</key>
+		<key>5439674F133E9D19AF2C1B757F0BA4D1</key>
 		<dict>
 			<key>includeInIndex</key>
 			<string>1</string>
 			<key>isa</key>
 			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.objc</string>
 			<key>name</key>
-			<string>read_handle.c</string>
+			<string>NetworkClock.m</string>
 			<key>path</key>
-			<string>libmosquitto/read_handle.c</string>
+			<string>ios-ntp-lib/NetworkClock.m</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
@@ -1552,7 +1226,7 @@
 		<key>5711B9C0974381FA41135A9460E7DF75</key>
 		<dict>
 			<key>fileRef</key>
-			<string>8AA9174E4DD57032210F0D59FD2D316B</string>
+			<string>826C4F2E8C25807DEC58B29EC205072A</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 			<key>settings</key>
@@ -1563,7 +1237,7 @@
 				</array>
 			</dict>
 		</dict>
-		<key>597AAA3B33A9D6865C2CF4E5DA7F9CF3</key>
+		<key>571ABE4F03F655249195B969A2B708BE</key>
 		<dict>
 			<key>includeInIndex</key>
 			<string>1</string>
@@ -1571,14 +1245,86 @@
 			<string>PBXFileReference</string>
 			<key>lastKnownFileType</key>
 			<string>sourcecode.c.objc</string>
-			<key>name</key>
-			<string>NetworkClock.m</string>
 			<key>path</key>
-			<string>ios-ntp-lib/NetworkClock.m</string>
+			<string>MQTTKit-dummy.m</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
-		<key>598150E6CD71C0872596BCE74500A6C4</key>
+		<key>57BEB1FE4622F0BCBC9DD5AFFC7754F1</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>text.xcconfig</string>
+			<key>path</key>
+			<string>MQTTKit.xcconfig</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>5917D2AC1E93B647917E0C9927B4D490</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>2EAFEF6F158AC9F99F1BAB499207A453</string>
+				<string>B4DFE01CB59077BCE419052280450783</string>
+				<string>C3706B7B437761B429252E69765D731F</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>name</key>
+			<string>Support Files</string>
+			<key>path</key>
+			<string>../Target Support Files/CocoaAsyncSocket</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>59F6E6FE2D22A9ACB59760DA962E319E</key>
+		<dict>
+			<key>fileRef</key>
+			<string>E0F7127AA2AF73C80AA002E5A2587E70</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>Project</string>
+				</array>
+			</dict>
+		</dict>
+		<key>5B516D574D27ED288B0F49093FEF35F3</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>archive.ar</string>
+			<key>name</key>
+			<string>libGGLCore.a</string>
+			<key>path</key>
+			<string>Libraries/libGGLCore.a</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>5C495C99B6C82AF2DFE8F1ED8A6D7C00</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>archive.ar</string>
+			<key>name</key>
+			<string>libGTM_GTMURLBuilder.a</string>
+			<key>path</key>
+			<string>Libraries/libGTM_GTMURLBuilder.a</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>5C6DDA269CA77870A924FFCE68FA42A3</key>
 		<dict>
 			<key>includeInIndex</key>
 			<string>1</string>
@@ -1593,39 +1339,10 @@
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
-		<key>59F6E6FE2D22A9ACB59760DA962E319E</key>
-		<dict>
-			<key>fileRef</key>
-			<string>0CE762CDB6FF2D5E1884141B247BDA16</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-			<key>settings</key>
-			<dict>
-				<key>ATTRIBUTES</key>
-				<array>
-					<string>Project</string>
-				</array>
-			</dict>
-		</dict>
-		<key>5CFC779F034523F4552602D92C734631</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>archive.ar</string>
-			<key>name</key>
-			<string>libGTM_NSDictionary+URLArguments.a</string>
-			<key>path</key>
-			<string>Libraries/libGTM_NSDictionary+URLArguments.a</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
 		<key>5D38F4985865D9DA26D9864274C4A735</key>
 		<dict>
 			<key>baseConfigurationReference</key>
-			<string>700700CE2D587720973EFAD82739CA1F</string>
+			<string>78D5ECD95CC0FFF0B8D4960ED7F89097</string>
 			<key>buildSettings</key>
 			<dict>
 				<key>ENABLE_STRICT_OBJC_MSGSEND</key>
@@ -1659,22 +1376,9 @@
 		<key>5DA2189DB9C0CC634C959FF09DD7D2DF</key>
 		<dict>
 			<key>fileRef</key>
-			<string>3F75E5DB09F5F796F7DB656E0C2BD110</string>
+			<string>63C62D8463B5E956604979E00549D22E</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
-		</dict>
-		<key>5E539514A873153CAE1B22E745060581</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>name</key>
-			<string>send_mosq.c</string>
-			<key>path</key>
-			<string>libmosquitto/send_mosq.c</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
 		</dict>
 		<key>5FCF0EFA8736CCA78B4867991E27B849</key>
 		<dict>
@@ -1682,21 +1386,6 @@
 			<string>60F85758B54CB0D843A3E97DFFB2F21F</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
-		</dict>
-		<key>60F7F95F199D614FACA46DF6F69D9BC1</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.h</string>
-			<key>name</key>
-			<string>GIDAuthentication.h</string>
-			<key>path</key>
-			<string>Headers/Public/GIDAuthentication.h</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
 		</dict>
 		<key>60F85758B54CB0D843A3E97DFFB2F21F</key>
 		<dict>
@@ -1724,7 +1413,7 @@
 			<key>sourceTree</key>
 			<string>DEVELOPER_DIR</string>
 		</dict>
-		<key>621800F8BB4B7BDC9DAF785FD1F9D18D</key>
+		<key>621C497B579F487F7F64DECD8842A8AD</key>
 		<dict>
 			<key>includeInIndex</key>
 			<string>1</string>
@@ -1733,13 +1422,67 @@
 			<key>lastKnownFileType</key>
 			<string>sourcecode.c.h</string>
 			<key>name</key>
-			<string>GGLContext+SignIn.h</string>
+			<string>will_mosq.h</string>
 			<key>path</key>
-			<string>Headers/GGLSignIn/Public/GGLContext+SignIn.h</string>
+			<string>libmosquitto/will_mosq.h</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
-		<key>62FF6FFB49FB4E2096FED659B08AFB83</key>
+		<key>630BEFFB21533E60AE386221776DF057</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>1F39405A873C7E166D66958DFA6D026D</string>
+				<string>63DFD3A1BF6A078F298E2106315E1EF0</string>
+				<string>90C0EC64BC10AA19C8C2F6F77DC026FB</string>
+				<string>74A9C80873CB2313E500FBC527791230</string>
+				<string>232C735AEFEF5AC1EF5D7302DD8BAF83</string>
+				<string>7D78FBBF14C514F58F9D801FB3F874D5</string>
+				<string>804BC681A07BA13757B615341447F7C4</string>
+				<string>250FB167F8044DF8B15066E683EFABD6</string>
+				<string>A9DED76DA57E93B0240C189E4A537485</string>
+				<string>40131FFABB94809864C581CE74C92AAE</string>
+				<string>7B8363010B8B4DDD9724A07D6EA1310E</string>
+				<string>BD8EE132C2F085D253C5CDDEAE897492</string>
+				<string>E2927AFA22E5A81E6F63AEE05A60E2CF</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>name</key>
+			<string>Pods</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>63C62D8463B5E956604979E00549D22E</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>name</key>
+			<string>read_handle_shared.c</string>
+			<key>path</key>
+			<string>libmosquitto/read_handle_shared.c</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>63DFD3A1BF6A078F298E2106315E1EF0</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>E28D3EC694323E2545C2CD96BF3EF0FA</string>
+				<string>AD4937FFC93D5D0469C11978066315B8</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>name</key>
+			<string>Google</string>
+			<key>path</key>
+			<string>Google</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>6628868B46696565273533D6595F60B9</key>
 		<dict>
 			<key>includeInIndex</key>
 			<string>1</string>
@@ -1748,9 +1491,9 @@
 			<key>lastKnownFileType</key>
 			<string>sourcecode.c.h</string>
 			<key>name</key>
-			<string>SCReachabilityScheduler.h</string>
+			<string>mqtt3_protocol.h</string>
 			<key>path</key>
-			<string>Classes/Private/SCReachabilityScheduler.h</string>
+			<string>libmosquitto/mqtt3_protocol.h</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
@@ -1767,6 +1510,21 @@
 			<string>Release</string>
 			<key>isa</key>
 			<string>XCConfigurationList</string>
+		</dict>
+		<key>6689EFA19580685B5846473A14057D3F</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>archive.ar</string>
+			<key>name</key>
+			<string>libGTM_iPhone.a</string>
+			<key>path</key>
+			<string>Libraries/libGTM_iPhone.a</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
 		</dict>
 		<key>66B47A49EAFDC25170BCD3E6FEE12856</key>
 		<dict>
@@ -1824,49 +1582,6 @@
 			<key>productType</key>
 			<string>com.apple.product-type.library.static</string>
 		</dict>
-		<key>6819A109CF1476B9B92D8B392493938E</key>
-		<dict>
-			<key>children</key>
-			<array>
-				<string>46E2474F08B444442D41BA6A4748AE8E</string>
-			</array>
-			<key>isa</key>
-			<string>PBXGroup</string>
-			<key>name</key>
-			<string>Frameworks</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>691EFB89168F486679B741E84C6E261F</key>
-		<dict>
-			<key>children</key>
-			<array>
-				<string>ACA5B3FF8AEF34707D804035B6D38453</string>
-				<string>B5252CDFF4A76A3B946F21CE4C6D1BD2</string>
-				<string>731216C73F144EECD4E649ADCB44A214</string>
-			</array>
-			<key>isa</key>
-			<string>PBXGroup</string>
-			<key>name</key>
-			<string>Support Files</string>
-			<key>path</key>
-			<string>../Target Support Files/CocoaAsyncSocket</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>69547A965FAEE164D345BD76BF362D5B</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>name</key>
-			<string>util_mosq.c</string>
-			<key>path</key>
-			<string>libmosquitto/util_mosq.c</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
 		<key>69A690CE3231C3D12E916510E227770D</key>
 		<dict>
 			<key>buildActionMask</key>
@@ -1884,34 +1599,6 @@
 			<key>runOnlyForDeploymentPostprocessing</key>
 			<string>0</string>
 		</dict>
-		<key>69F5618B588BE0ABAB0696FA0E1E55C5</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.h</string>
-			<key>name</key>
-			<string>GGLConfiguration.h</string>
-			<key>path</key>
-			<string>Headers/GGLCore/Public/GGLConfiguration.h</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>6AA70843D5849B57725889EEBCF1927A</key>
-		<dict>
-			<key>children</key>
-			<array>
-				<string>393BF4992B2C1A4D81DEBB342CECCCE8</string>
-			</array>
-			<key>isa</key>
-			<string>PBXGroup</string>
-			<key>name</key>
-			<string>Frameworks</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
 		<key>6B49727CDB82BDEC898DF011FD0B051A</key>
 		<dict>
 			<key>containerPortal</key>
@@ -1925,40 +1612,48 @@
 			<key>remoteInfo</key>
 			<string>MQTTKit</string>
 		</dict>
-		<key>6BD557EB45240CC7881C4758C238443B</key>
+		<key>6BF4629EA43072D944408ACCE95A99CB</key>
 		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
+			<key>children</key>
+			<array>
+				<string>78D5ECD95CC0FFF0B8D4960ED7F89097</string>
+				<string>42ABED2213FDC590A3D9A486328C16B6</string>
+				<string>D1E0DC32F7BC24123E426F81161F02B0</string>
+			</array>
 			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.h</string>
+			<string>PBXGroup</string>
 			<key>name</key>
-			<string>GGLErrorCode.h</string>
+			<string>Support Files</string>
 			<key>path</key>
-			<string>Headers/GGLCore/Public/GGLErrorCode.h</string>
+			<string>../Target Support Files/ios-ntp</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
-		<key>6C6028B56DAAC4309F395F17AAE1AF86</key>
+		<key>6CE0803F1C1E2B2C7FC68B94B2B9D89A</key>
 		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
+			<key>children</key>
+			<array>
+				<string>EB615CAEA362E6F07B2750C7E3D2B2F8</string>
+				<string>F4A33298F85EB89F5AEB17A3C87877A4</string>
+				<string>9A71585AE8A6E8EB66714CB7BF396E32</string>
+				<string>E63D896227641A2978446670C280D2F3</string>
+				<string>71565FDCB40EF6473A94FF29EEC9F6B4</string>
+				<string>DFB9C95074EDAB73D0D2C4D1E320801E</string>
+				<string>A3982A50D0930FD0BC2C2D61E5E52374</string>
+				<string>EC4D34269F1D3E74E5DA665D33E8EB48</string>
+				<string>CB8114BBBA06ABED34FD9F55D258B055</string>
+			</array>
 			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>archive.ar</string>
+			<string>PBXGroup</string>
 			<key>name</key>
-			<string>libGTM_iPhone.a</string>
-			<key>path</key>
-			<string>Libraries/libGTM_iPhone.a</string>
+			<string>Core</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
 		<key>6D91FF378F7DABBE76EB9F122DEB517D</key>
 		<dict>
 			<key>fileRef</key>
-			<string>B082DD0A06CD89771598835B90E3547B</string>
+			<string>3F1C42027A4F248D3251FEE89473AAF8</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 			<key>settings</key>
@@ -1967,84 +1662,25 @@
 				<string>-DOS_OBJECT_USE_OBJC=0</string>
 			</dict>
 		</dict>
-		<key>6E2170B61741D2C10BA71141F9078D61</key>
-		<dict>
-			<key>children</key>
-			<array>
-				<string>0384FD4AF4C60CF2D95E16D6EAC2221A</string>
-				<string>0E6588C537E0171D8E987578A402D212</string>
-			</array>
-			<key>isa</key>
-			<string>PBXGroup</string>
-			<key>name</key>
-			<string>Google</string>
-			<key>path</key>
-			<string>Google</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>6FAA88F10EE592A10B25BDB55DA4CD69</key>
+		<key>6DDD533BC9462CDDF3BF70776F1821BC</key>
 		<dict>
 			<key>includeInIndex</key>
 			<string>1</string>
 			<key>isa</key>
 			<string>PBXFileReference</string>
 			<key>lastKnownFileType</key>
-			<string>archive.ar</string>
+			<string>sourcecode.c.objc</string>
 			<key>name</key>
-			<string>libGTMOAuth2_internal.a</string>
+			<string>GCDAsyncUdpSocket.m</string>
 			<key>path</key>
-			<string>Libraries/libGTMOAuth2_internal.a</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>6FBEFD80F3569EC3F2F9E06DF11017AF</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.h</string>
-			<key>name</key>
-			<string>Core.h</string>
-			<key>path</key>
-			<string>Headers/GGLCore/Public/Core.h</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>700700CE2D587720973EFAD82739CA1F</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>text.xcconfig</string>
-			<key>path</key>
-			<string>ios-ntp.xcconfig</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>701F7D142873CE79255AB2F39DA6ECE8</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.h</string>
-			<key>name</key>
-			<string>MQTTKit.h</string>
-			<key>path</key>
-			<string>MQTTKit/MQTTKit.h</string>
+			<string>Source/GCD/GCDAsyncUdpSocket.m</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
 		<key>702A36A2FB387BED332E93FE561203CF</key>
 		<dict>
 			<key>fileRef</key>
-			<string>7302F7172C80F3FBDD50CD1833A0F8D1</string>
+			<string>9944F87ECBFD41B2CBCB34A2B3D358B5</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 			<key>settings</key>
@@ -2055,7 +1691,37 @@
 				</array>
 			</dict>
 		</dict>
-		<key>71B7D73D369D18EBE2726B971AB6ADDC</key>
+		<key>70C777D312A85276A716866ACF233744</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>name</key>
+			<string>AdMob-Module.h</string>
+			<key>path</key>
+			<string>Headers/ModuleHeaders/AdMob-Module.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>71565FDCB40EF6473A94FF29EEC9F6B4</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.objc</string>
+			<key>name</key>
+			<string>SCReachabilityFlagsParser.m</string>
+			<key>path</key>
+			<string>Classes/Private/SCReachabilityFlagsParser.m</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>716CACB5501FE0D7956FC88440EA1D15</key>
 		<dict>
 			<key>includeInIndex</key>
 			<string>1</string>
@@ -2064,97 +1730,89 @@
 			<key>lastKnownFileType</key>
 			<string>archive.ar</string>
 			<key>name</key>
-			<string>libGGLCore.a</string>
+			<string>libGTM_UIFont+LineHeight.a</string>
 			<key>path</key>
-			<string>Libraries/libGGLCore.a</string>
+			<string>Libraries/libGTM_UIFont+LineHeight.a</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>71D8D9BA03132BB38ED7785E6C78CFD0</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>name</key>
+			<string>GoogleSignIn.h</string>
+			<key>path</key>
+			<string>Headers/Public/GoogleSignIn.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>71EAC605B296FED38E7057C2910B7514</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>5C6DDA269CA77870A924FFCE68FA42A3</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>name</key>
+			<string>Resources</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>71FA8157862E4EB9FBEEF24B92725CD3</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>name</key>
+			<string>send_mosq.h</string>
+			<key>path</key>
+			<string>libmosquitto/send_mosq.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>725E3CB79C64538DFE99DBA211E58188</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>name</key>
+			<string>SignIn.h</string>
+			<key>path</key>
+			<string>Headers/GGLSignIn/Public/SignIn.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>726277ED1B93A1958DA6B057A9C4FC55</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.objc</string>
+			<key>path</key>
+			<string>SCNetworkReachability-dummy.m</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
 		<key>7271E29F6B67D99AFEC12B55FDC0CE74</key>
 		<dict>
 			<key>fileRef</key>
-			<string>EBD77E3D4BE567D5DF54F22FED01104A</string>
+			<string>A5F338F4C1F626971E4B6A9F116D8881</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
-		</dict>
-		<key>7302F7172C80F3FBDD50CD1833A0F8D1</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.h</string>
-			<key>name</key>
-			<string>messages_mosq.h</string>
-			<key>path</key>
-			<string>libmosquitto/messages_mosq.h</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>731216C73F144EECD4E649ADCB44A214</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.h</string>
-			<key>path</key>
-			<string>CocoaAsyncSocket-prefix.pch</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>7358D5ECB3876D63C60C99863B2B0640</key>
-		<dict>
-			<key>children</key>
-			<array>
-				<string>60F7F95F199D614FACA46DF6F69D9BC1</string>
-				<string>EC304D33C9453364B732B42D32DB0284</string>
-				<string>F61305FDB33E96F9F01C17F47B995D3E</string>
-				<string>A6563A0D33CD9F20A5F111099CD08A48</string>
-				<string>2FBF268A9784F0EE70173B7D7B918996</string>
-				<string>22D12EA8796AC398C0C834D1D0DD5832</string>
-				<string>F621D824465BA343FA52D82CCB598710</string>
-				<string>487E5D780F688C90C8A85D9632798121</string>
-				<string>013DE8A5D27DDAF3CDB1BD42258AC815</string>
-			</array>
-			<key>isa</key>
-			<string>PBXGroup</string>
-			<key>name</key>
-			<string>GoogleSignIn</string>
-			<key>path</key>
-			<string>GoogleSignIn</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>7387B84473BEEA4E7FCDF3A640B4E261</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>name</key>
-			<string>memory_mosq.c</string>
-			<key>path</key>
-			<string>libmosquitto/memory_mosq.c</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>738D20A884C2813C665B52C128FB6F0A</key>
-		<dict>
-			<key>children</key>
-			<array>
-				<string>7C29F21E07A7C0597A91D1FAE9A72DE0</string>
-			</array>
-			<key>isa</key>
-			<string>PBXGroup</string>
-			<key>name</key>
-			<string>GoogleNetworkingUtilities</string>
-			<key>path</key>
-			<string>GoogleNetworkingUtilities</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
 		</dict>
 		<key>7411C03843BA534022FA35124FD32006</key>
 		<dict>
@@ -2216,6 +1874,21 @@
 			<key>isa</key>
 			<string>XCConfigurationList</string>
 		</dict>
+		<key>74A9C80873CB2313E500FBC527791230</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>B15B4E47C7301A96099949C25CDDB04F</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>name</key>
+			<string>GoogleAuthUtilities</string>
+			<key>path</key>
+			<string>GoogleAuthUtilities</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
 		<key>74CD2F578138157E0B27CCEE08C069EF</key>
 		<dict>
 			<key>buildConfigurationList</key>
@@ -2241,22 +1914,7 @@
 			<key>productType</key>
 			<string>com.apple.product-type.library.static</string>
 		</dict>
-		<key>779A68F698DD83D41E28EA37595CDFE5</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.h</string>
-			<key>name</key>
-			<string>GMRConfiguration.h</string>
-			<key>path</key>
-			<string>Headers/GGLCore/Public/GMRConfiguration.h</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>77C257A3C2DF38C696142BAE9012D4BB</key>
+		<key>756C98B9D91CE62ADB7D1FAD2854E9A8</key>
 		<dict>
 			<key>includeInIndex</key>
 			<string>1</string>
@@ -2265,9 +1923,39 @@
 			<key>lastKnownFileType</key>
 			<string>archive.ar</string>
 			<key>name</key>
-			<string>libGTM_GTMURLBuilder.a</string>
+			<string>libGTM_RoundedRectPath.a</string>
 			<key>path</key>
-			<string>Libraries/libGTM_GTMURLBuilder.a</string>
+			<string>Libraries/libGTM_RoundedRectPath.a</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>75B2EAD105F255BF6206184A1C901BB9</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>name</key>
+			<string>GGLContext+SignIn.h</string>
+			<key>path</key>
+			<string>Headers/GGLSignIn/Public/GGLContext+SignIn.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>77C0E0887B29F84486FAC157AE244902</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>archive.ar</string>
+			<key>name</key>
+			<string>libGSDK_Overload.a</string>
+			<key>path</key>
+			<string>Libraries/libGSDK_Overload.a</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
@@ -2283,6 +1971,49 @@
 			<string>Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.0.sdk/System/Library/Frameworks/Foundation.framework</string>
 			<key>sourceTree</key>
 			<string>DEVELOPER_DIR</string>
+		</dict>
+		<key>78D5ECD95CC0FFF0B8D4960ED7F89097</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>text.xcconfig</string>
+			<key>path</key>
+			<string>ios-ntp.xcconfig</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>7A51E96F17CFDE966B3E557AE228084F</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>name</key>
+			<string>util_mosq.h</string>
+			<key>path</key>
+			<string>libmosquitto/util_mosq.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>7A662032D7038B5A17523074BF68E535</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>name</key>
+			<string>time_mosq.h</string>
+			<key>path</key>
+			<string>libmosquitto/time_mosq.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
 		</dict>
 		<key>7ADCD2CAB7AF79E9803A1B2644FD48F9</key>
 		<dict>
@@ -2301,24 +2032,70 @@
 			<key>runOnlyForDeploymentPostprocessing</key>
 			<string>0</string>
 		</dict>
-		<key>7C29F21E07A7C0597A91D1FAE9A72DE0</key>
+		<key>7B8363010B8B4DDD9724A07D6EA1310E</key>
 		<dict>
 			<key>children</key>
 			<array>
-				<string>03BBC8B41462E7D1C710F71A333BB0F5</string>
-				<string>4AFD5734D485DE7288022A954DBF85DE</string>
+				<string>412094A9B0E12A12E2457258C315BD52</string>
 			</array>
 			<key>isa</key>
 			<string>PBXGroup</string>
 			<key>name</key>
-			<string>Frameworks</string>
+			<string>macros_blocks</string>
+			<key>path</key>
+			<string>macros_blocks</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>7C7643AB3A0DD2E3BFD228455E1364FB</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>name</key>
+			<string>config.h</string>
+			<key>path</key>
+			<string>libmosquitto/config.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>7CF1F80BDB652F3361CE5696F1324C4B</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>name</key>
+			<string>ios-ntp.h</string>
+			<key>path</key>
+			<string>ios-ntp-lib/ios-ntp.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>7D78FBBF14C514F58F9D801FB3F874D5</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>AF6ED17B186EF8A91BED87384B1CE3BF</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>name</key>
+			<string>GoogleNetworkingUtilities</string>
+			<key>path</key>
+			<string>GoogleNetworkingUtilities</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
 		<key>7D903C553419C201BADFBF1878868DD4</key>
 		<dict>
 			<key>fileRef</key>
-			<string>62FF6FFB49FB4E2096FED659B08AFB83</string>
+			<string>EC4D34269F1D3E74E5DA665D33E8EB48</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 			<key>settings</key>
@@ -2335,27 +2112,12 @@
 			<array>
 				<string>BA6428E9F66FD5A23C0A2E06ED26CD2F</string>
 				<string>14B8B9B15ECBE87983FF987239AB2D7B</string>
-				<string>2546E59C99D53FF7F5EDA3D91C9D6DA5</string>
+				<string>630BEFFB21533E60AE386221776DF057</string>
 				<string>21DD51D12AE2680E83193D33ACE3446B</string>
 				<string>FE92D563C012E8B2E0280FE99B8E3085</string>
 			</array>
 			<key>isa</key>
 			<string>PBXGroup</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>7E1BB193616EDEE13A912D9623822C89</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.h</string>
-			<key>name</key>
-			<string>ntp-log.h</string>
-			<key>path</key>
-			<string>ios-ntp-lib/ntp-log.h</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
@@ -2372,6 +2134,57 @@
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
+		<key>7F0C1AD05C8BCA047A767A3D724CE026</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>name</key>
+			<string>util_mosq.c</string>
+			<key>path</key>
+			<string>libmosquitto/util_mosq.c</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>7F376C442E75CF5217989A66A2154F40</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>name</key>
+			<string>UIViewController+SignIn.h</string>
+			<key>path</key>
+			<string>Headers/Public/UIViewController+SignIn.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>804BC681A07BA13757B615341447F7C4</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>34E7AD16847C79F3EDC503691AD67321</string>
+				<string>35C074661386DA666C07EC19AB07EC47</string>
+				<string>039135204361CD2559050A2734CA98CE</string>
+				<string>3515FC7B9C127217870B848CF27188A5</string>
+				<string>48F73933B9BE9990E1F4C0AF2EE61406</string>
+				<string>71D8D9BA03132BB38ED7785E6C78CFD0</string>
+				<string>7F376C442E75CF5217989A66A2154F40</string>
+				<string>A744784891565C2AD8DEBD41E05FC497</string>
+				<string>71EAC605B296FED38E7057C2910B7514</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>name</key>
+			<string>GoogleSignIn</string>
+			<key>path</key>
+			<string>GoogleSignIn</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
 		<key>805999EC05F8733A35ECF17E94F1C02B</key>
 		<dict>
 			<key>isa</key>
@@ -2383,24 +2196,7 @@
 			<key>targetProxy</key>
 			<string>CCFA5C8DCEBF813B36A4F45FAAE16C52</string>
 		</dict>
-		<key>81785F42D029226450BD802A45B3A1DA</key>
-		<dict>
-			<key>children</key>
-			<array>
-				<string>700700CE2D587720973EFAD82739CA1F</string>
-				<string>C3D311312BF5203FD998B87AAC6CEC63</string>
-				<string>F6250273A9B8477052C4FEC6DE9F7055</string>
-			</array>
-			<key>isa</key>
-			<string>PBXGroup</string>
-			<key>name</key>
-			<string>Support Files</string>
-			<key>path</key>
-			<string>../Target Support Files/ios-ntp</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>840BDD747E289F32DF8FFA8E13150A53</key>
+		<key>81BAE613BC4864115EAECDD8FFF56F7D</key>
 		<dict>
 			<key>includeInIndex</key>
 			<string>1</string>
@@ -2409,9 +2205,24 @@
 			<key>lastKnownFileType</key>
 			<string>sourcecode.c.h</string>
 			<key>name</key>
-			<string>CocoaAsyncSocket.h</string>
+			<string>GGLConfiguration.h</string>
 			<key>path</key>
-			<string>Source/CocoaAsyncSocket.h</string>
+			<string>Headers/GGLCore/Public/GGLConfiguration.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>826C4F2E8C25807DEC58B29EC205072A</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>name</key>
+			<string>mosquitto_internal.h</string>
+			<key>path</key>
+			<string>libmosquitto/mosquitto_internal.h</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
@@ -2431,40 +2242,10 @@
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
-		<key>84EEDAB274DB91510801F8F9C33DBDCF</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>archive.ar</string>
-			<key>name</key>
-			<string>libGTM_AddressBook.a</string>
-			<key>path</key>
-			<string>Libraries/libGTM_AddressBook.a</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>85002081ECC801178D673BA906748FB3</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>archive.ar</string>
-			<key>name</key>
-			<string>libSignIn.a</string>
-			<key>path</key>
-			<string>Libraries/libSignIn.a</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
 		<key>8523A06471E1C30D6EA21D9E59B755D9</key>
 		<dict>
 			<key>fileRef</key>
-			<string>904F48AA0528AB7FE86EC6851F16CCDA</string>
+			<string>F3DC24645C90697FF5F47143A23C17E0</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 			<key>settings</key>
@@ -2475,33 +2256,16 @@
 				</array>
 			</dict>
 		</dict>
-		<key>87A6EAFF0FCB2E77E5AA22EBFFE16FD0</key>
+		<key>86BFE8D5FF44570CACBC06618947B73E</key>
 		<dict>
 			<key>includeInIndex</key>
 			<string>1</string>
 			<key>isa</key>
 			<string>PBXFileReference</string>
 			<key>lastKnownFileType</key>
-			<string>archive.ar</string>
-			<key>name</key>
-			<string>libProtocolBuffers.a</string>
+			<string>text.xcconfig</string>
 			<key>path</key>
-			<string>Libraries/libProtocolBuffers.a</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>881EBFA3662020FD8987484A7B567D56</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.h</string>
-			<key>name</key>
-			<string>CloudMessaging-Module.h</string>
-			<key>path</key>
-			<string>Headers/ModuleHeaders/CloudMessaging-Module.h</string>
+			<string>SCNetworkReachability.xcconfig</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
@@ -2518,6 +2282,21 @@
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
+		<key>8A3035043B63C5F4E561F3C5334BC8BA</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>name</key>
+			<string>AppInvite-Module.h</string>
+			<key>path</key>
+			<string>Headers/ModuleHeaders/AppInvite-Module.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
 		<key>8A46BE9F8482FBBCBF876D0C51F5C9D8</key>
 		<dict>
 			<key>fileRef</key>
@@ -2525,7 +2304,7 @@
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 		</dict>
-		<key>8AA9174E4DD57032210F0D59FD2D316B</key>
+		<key>8A821540A7BE5261D21C28776B31EF5C</key>
 		<dict>
 			<key>includeInIndex</key>
 			<string>1</string>
@@ -2534,68 +2313,46 @@
 			<key>lastKnownFileType</key>
 			<string>sourcecode.c.h</string>
 			<key>name</key>
-			<string>mosquitto_internal.h</string>
+			<string>NetAssociation.h</string>
 			<key>path</key>
-			<string>libmosquitto/mosquitto_internal.h</string>
+			<string>ios-ntp-lib/NetAssociation.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>8BBA85F3F44DCAFF324CBCC1275E60A6</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>5B516D574D27ED288B0F49093FEF35F3</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>name</key>
+			<string>Frameworks</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
 		<key>8BE9DEE060207777C9BB1AEAEBC008EF</key>
 		<dict>
 			<key>fileRef</key>
-			<string>42C834A7A5993D539FEEF35ADF562696</string>
+			<string>34D47CF6B49F4DC3C200EE805A09EDFD</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 		</dict>
-		<key>8CB010461F772B22B375A7C9D092DBF7</key>
+		<key>8D22365F3E6F453DCFDCA3388B304F71</key>
 		<dict>
 			<key>includeInIndex</key>
 			<string>1</string>
 			<key>isa</key>
 			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.objc</string>
 			<key>name</key>
-			<string>AsyncSocket.m</string>
+			<string>time_mosq.c</string>
 			<key>path</key>
-			<string>Source/RunLoop/AsyncSocket.m</string>
+			<string>libmosquitto/time_mosq.c</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
-		<key>8CFEFB2FBCF1C589E896AED33B3AEFA8</key>
-		<dict>
-			<key>children</key>
-			<array>
-				<string>2936706627BA9B26F860D5297A149AEE</string>
-				<string>8D1B9DFC3E99E04348C61D78029B2A68</string>
-			</array>
-			<key>isa</key>
-			<string>PBXGroup</string>
-			<key>name</key>
-			<string>SCNetworkReachability</string>
-			<key>path</key>
-			<string>SCNetworkReachability</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>8D1B9DFC3E99E04348C61D78029B2A68</key>
-		<dict>
-			<key>children</key>
-			<array>
-				<string>F547FBE4C5697569D8E436FA862A96CA</string>
-				<string>B1125B3851D9DAC8C8323AA9FB7808A9</string>
-				<string>21790EA867469ECD9374A211103E3FA0</string>
-			</array>
-			<key>isa</key>
-			<string>PBXGroup</string>
-			<key>name</key>
-			<string>Support Files</string>
-			<key>path</key>
-			<string>../Target Support Files/SCNetworkReachability</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>8D8357BEE5646C4A41ADEA35F2CC153C</key>
+		<key>8D22D1A05F066E33582729C68AD03C5C</key>
 		<dict>
 			<key>includeInIndex</key>
 			<string>1</string>
@@ -2604,16 +2361,16 @@
 			<key>lastKnownFileType</key>
 			<string>sourcecode.c.h</string>
 			<key>name</key>
-			<string>util_mosq.h</string>
+			<string>mosquitto.h</string>
 			<key>path</key>
-			<string>libmosquitto/util_mosq.h</string>
+			<string>libmosquitto/mosquitto.h</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
 		<key>8E34C2C41BB9A646C73B40CC13C3A3A5</key>
 		<dict>
 			<key>fileRef</key>
-			<string>190AC0F41AAB157FF4D850878C54ED08</string>
+			<string>71FA8157862E4EB9FBEEF24B92725CD3</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 			<key>settings</key>
@@ -2627,50 +2384,35 @@
 		<key>8FE147D8E30A3FB7C21AB011A809ECA8</key>
 		<dict>
 			<key>fileRef</key>
-			<string>69547A965FAEE164D345BD76BF362D5B</string>
+			<string>7F0C1AD05C8BCA047A767A3D724CE026</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 		</dict>
-		<key>90034B840BDDD896510E59CAF56D1FF5</key>
+		<key>90693B9205ABFDF36A54CF9AF94FA8FD</key>
 		<dict>
 			<key>includeInIndex</key>
 			<string>1</string>
 			<key>isa</key>
 			<string>PBXFileReference</string>
 			<key>name</key>
-			<string>messages_mosq.c</string>
+			<string>send_mosq.c</string>
 			<key>path</key>
-			<string>libmosquitto/messages_mosq.c</string>
+			<string>libmosquitto/send_mosq.c</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
-		<key>9016409619E1E6C7528E279AAC2A9571</key>
+		<key>90C0EC64BC10AA19C8C2F6F77DC026FB</key>
 		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
+			<key>children</key>
+			<array>
+				<string>1B7349D0DECE5AD98F71DDCC7FE3449A</string>
+			</array>
 			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.h</string>
+			<string>PBXGroup</string>
 			<key>name</key>
-			<string>DeployGateSDK.h</string>
+			<string>GoogleAppUtilities</string>
 			<key>path</key>
-			<string>DeployGateSDK1.0.7.embeddedframework/DeployGateSDK.framework/Versions/A/Headers/DeployGateSDK.h</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>904F48AA0528AB7FE86EC6851F16CCDA</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.h</string>
-			<key>name</key>
-			<string>AsyncSocket.h</string>
-			<key>path</key>
-			<string>Source/RunLoop/AsyncSocket.h</string>
+			<string>GoogleAppUtilities</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
@@ -2701,10 +2443,25 @@
 			<key>isa</key>
 			<string>XCConfigurationList</string>
 		</dict>
+		<key>9644352352C286401A0F6C51119A7D53</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>archive.ar</string>
+			<key>name</key>
+			<string>libGTM_StringEncoding.a</string>
+			<key>path</key>
+			<string>Libraries/libGTM_StringEncoding.a</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
 		<key>97B21E7059F61481CC142680BECBF6AE</key>
 		<dict>
 			<key>baseConfigurationReference</key>
-			<string>4237A49FEB527FB873E306C5E42E5906</string>
+			<string>57BEB1FE4622F0BCBC9DD5AFFC7754F1</string>
 			<key>buildSettings</key>
 			<dict>
 				<key>ENABLE_STRICT_OBJC_MSGSEND</key>
@@ -2735,7 +2492,50 @@
 			<key>name</key>
 			<string>Debug</string>
 		</dict>
-		<key>9811FD8E45BDB8A87DC7C42FA8DAB4C3</key>
+		<key>97E495DF6CA284E09A1DE1F60E47EBD4</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>archive.ar</string>
+			<key>name</key>
+			<string>libGTM_AddressBook.a</string>
+			<key>path</key>
+			<string>Libraries/libGTM_AddressBook.a</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>98ECFE0E023896D9FDBBAA4881A8ED6F</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>archive.ar</string>
+			<key>name</key>
+			<string>libGTMOAuth2_external.a</string>
+			<key>path</key>
+			<string>Libraries/libGTMOAuth2_external.a</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>991FE24D5F9964785ED21BB48884BE65</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>name</key>
+			<string>messages_mosq.c</string>
+			<key>path</key>
+			<string>libmosquitto/messages_mosq.c</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>9944F87ECBFD41B2CBCB34A2B3D358B5</key>
 		<dict>
 			<key>includeInIndex</key>
 			<string>1</string>
@@ -2744,35 +2544,9 @@
 			<key>lastKnownFileType</key>
 			<string>sourcecode.c.h</string>
 			<key>name</key>
-			<string>SCReachabilityRefBuilder.h</string>
+			<string>messages_mosq.h</string>
 			<key>path</key>
-			<string>Classes/Private/SCReachabilityRefBuilder.h</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>98B3F82DC8A1E88AB305ED46C3B8B015</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>name</key>
-			<string>en.lproj</string>
-			<key>path</key>
-			<string>DeployGateSDK1.0.7.embeddedframework/DeployGateSDK.framework/Versions/A/Resources/en.lproj</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>9A3F2B2A4B18525F376FFC9271B80F98</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>name</key>
-			<string>read_handle_client.c</string>
-			<key>path</key>
-			<string>libmosquitto/read_handle_client.c</string>
+			<string>libmosquitto/messages_mosq.h</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
@@ -2799,6 +2573,21 @@
 			<string>text.plist.xml</string>
 			<key>path</key>
 			<string>Pods-AWARE-acknowledgements.plist</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>9A71585AE8A6E8EB66714CB7BF396E32</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>name</key>
+			<string>SCNetworkStatus.h</string>
+			<key>path</key>
+			<string>Classes/Public/SCNetworkStatus.h</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
@@ -2834,25 +2623,10 @@
 			<key>name</key>
 			<string>Debug</string>
 		</dict>
-		<key>9B9D9ED74C972D4684F4E4236276DE35</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.objc</string>
-			<key>name</key>
-			<string>SCReachabilityScheduler.m</string>
-			<key>path</key>
-			<string>Classes/Private/SCReachabilityScheduler.m</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
 		<key>9BBC14779408194043C420817A2CB6BA</key>
 		<dict>
 			<key>fileRef</key>
-			<string>B20C159E5E90D880B3A4CFB60DF9AA98</string>
+			<string>6DDD533BC9462CDDF3BF70776F1821BC</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 			<key>settings</key>
@@ -2868,17 +2642,62 @@
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 		</dict>
+		<key>9C5D847E6FCC364E2F1A958F24DE6722</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>archive.ar</string>
+			<key>name</key>
+			<string>libGTM_DebugUtils.a</string>
+			<key>path</key>
+			<string>Libraries/libGTM_DebugUtils.a</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
 		<key>9CA5A0153764AD308E84AAC712719823</key>
 		<dict>
 			<key>fileRef</key>
-			<string>9A3F2B2A4B18525F376FFC9271B80F98</string>
+			<string>F8FDB14F49F6AB16BBA5E4C82F27F182</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
+		</dict>
+		<key>9D712586E6953B9535C53478C4141503</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.objc</string>
+			<key>name</key>
+			<string>MQTTKit.m</string>
+			<key>path</key>
+			<string>MQTTKit/MQTTKit.m</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>9EF600B25167800374062D61C8131815</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>name</key>
+			<string>tls_mosq.h</string>
+			<key>path</key>
+			<string>libmosquitto/tls_mosq.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
 		</dict>
 		<key>9F6C99DA1DCDC81982B534727AED5D0C</key>
 		<dict>
 			<key>baseConfigurationReference</key>
-			<string>ACA5B3FF8AEF34707D804035B6D38453</string>
+			<string>2EAFEF6F158AC9F99F1BAB499207A453</string>
 			<key>buildSettings</key>
 			<dict>
 				<key>ENABLE_STRICT_OBJC_MSGSEND</key>
@@ -2909,6 +2728,21 @@
 			<key>name</key>
 			<string>Debug</string>
 		</dict>
+		<key>9FE99A3B9640B4069C103C7063865D4E</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>name</key>
+			<string>Core.h</string>
+			<key>path</key>
+			<string>Headers/GGLCore/Public/Core.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
 		<key>A03BB595E93CAF292F68799B38F0A2DC</key>
 		<dict>
 			<key>children</key>
@@ -2930,50 +2764,88 @@
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
-		<key>A05931C38BBB3FE3652B5DF8EF774C17</key>
+		<key>A0809BC0B76EAA7081065CA7E701142D</key>
 		<dict>
 			<key>children</key>
 			<array>
-				<string>25C6BD83C6BAA0BDF07008E81648BFA0</string>
-				<string>D1620CAC9D7EC6074F478E250F8E1C08</string>
-				<string>1391FC3402B06E1F40E9292B9D3E6D1C</string>
-				<string>FEB8177CAA850243ED0FA3E299C58C80</string>
-				<string>597AAA3B33A9D6865C2CF4E5DA7F9CF3</string>
-				<string>129CAD9C965D93B35228BD17201FFEB7</string>
-				<string>EEB96EE04F534ED5B4910C86E7CEDBBE</string>
-				<string>7E1BB193616EDEE13A912D9623822C89</string>
-				<string>81785F42D029226450BD802A45B3A1DA</string>
+				<string>57BEB1FE4622F0BCBC9DD5AFFC7754F1</string>
+				<string>571ABE4F03F655249195B969A2B708BE</string>
+				<string>29D22B55CDCABD53966C3C98668A7968</string>
 			</array>
 			<key>isa</key>
 			<string>PBXGroup</string>
 			<key>name</key>
-			<string>ios-ntp</string>
+			<string>Support Files</string>
 			<key>path</key>
-			<string>ios-ntp</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>A1D2DD82904AAAF2ACFA20A6306E8C13</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.h</string>
-			<key>path</key>
-			<string>MQTTKit-prefix.pch</string>
+			<string>../Target Support Files/MQTTKit</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
 		<key>A2531BC3DCCCAE822AFCEB98463DF2F9</key>
 		<dict>
 			<key>fileRef</key>
-			<string>55814ED1B04FA8B54467153E7C385E40</string>
+			<string>F9B8F556E7D08BA357784950CA9992FE</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 		</dict>
-		<key>A298FC45390EC455F4FF575B043FA89B</key>
+		<key>A3982A50D0930FD0BC2C2D61E5E52374</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.objc</string>
+			<key>name</key>
+			<string>SCReachabilityRefBuilder.m</string>
+			<key>path</key>
+			<string>Classes/Private/SCReachabilityRefBuilder.m</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>A5480052A40EAD7F92944602CD708AD6</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>97E495DF6CA284E09A1DE1F60E47EBD4</string>
+				<string>ECBA70D35E69F597285E4E7E5EBA2BC8</string>
+				<string>9C5D847E6FCC364E2F1A958F24DE6722</string>
+				<string>5C495C99B6C82AF2DFE8F1ED8A6D7C00</string>
+				<string>6689EFA19580685B5846473A14057D3F</string>
+				<string>F5AA3F0B544383C3BE160A34088EA3CD</string>
+				<string>5361C369AE8751EB49E9D3F23E1F915A</string>
+				<string>B4C54055ECFD5493601CEF413B5125B4</string>
+				<string>F154C5936AEB4244C517FE6DE16EE602</string>
+				<string>BF886CF6620244ABFBFA1A84EDF8F0A8</string>
+				<string>4B5E39FCEFD9C9F57EC35710B19D9247</string>
+				<string>B0554DA2F12C01F4FDC909D87DBC22FA</string>
+				<string>756C98B9D91CE62ADB7D1FAD2854E9A8</string>
+				<string>9644352352C286401A0F6C51119A7D53</string>
+				<string>CC9ECD31AD40D739BCD74842E7E1CEF1</string>
+				<string>716CACB5501FE0D7956FC88440EA1D15</string>
+				<string>C78FEDDB1BE9C157120C73DD83B69B5B</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>name</key>
+			<string>Frameworks</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>A5F338F4C1F626971E4B6A9F116D8881</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>name</key>
+			<string>tls_mosq.c</string>
+			<key>path</key>
+			<string>libmosquitto/tls_mosq.c</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>A62D636E5B3C76019AA089CA955A3B18</key>
 		<dict>
 			<key>includeInIndex</key>
 			<string>1</string>
@@ -2982,30 +2854,13 @@
 			<key>lastKnownFileType</key>
 			<string>archive.ar</string>
 			<key>name</key>
-			<string>libGTM_StringEncoding.a</string>
+			<string>libGIPNSURL+FIFE.a</string>
 			<key>path</key>
-			<string>Libraries/libGTM_StringEncoding.a</string>
+			<string>Libraries/libGIPNSURL+FIFE.a</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
-		<key>A63897DBDCE258830A82BDD595C5E97B</key>
-		<dict>
-			<key>children</key>
-			<array>
-				<string>9016409619E1E6C7528E279AAC2A9571</string>
-				<string>AF39EDB7656D8CC70CD63221C2A47379</string>
-				<string>BFC48C0EF5E0DE16FD110AFD9B69C986</string>
-			</array>
-			<key>isa</key>
-			<string>PBXGroup</string>
-			<key>name</key>
-			<string>DeployGateSDK</string>
-			<key>path</key>
-			<string>DeployGateSDK</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>A6563A0D33CD9F20A5F111099CD08A48</key>
+		<key>A672BDE15DE56661C86E0A8A74E0EFBD</key>
 		<dict>
 			<key>includeInIndex</key>
 			<string>1</string>
@@ -3014,9 +2869,9 @@
 			<key>lastKnownFileType</key>
 			<string>sourcecode.c.h</string>
 			<key>name</key>
-			<string>GIDSignIn.h</string>
+			<string>Analytics-Module.h</string>
 			<key>path</key>
-			<string>Headers/Public/GIDSignIn.h</string>
+			<string>Headers/ModuleHeaders/Analytics-Module.h</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
@@ -3036,25 +2891,39 @@
 			<key>runOnlyForDeploymentPostprocessing</key>
 			<string>0</string>
 		</dict>
-		<key>A80FB3F636BBA1D4E33E18B0AB539562</key>
+		<key>A744784891565C2AD8DEBD41E05FC497</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>A62D636E5B3C76019AA089CA955A3B18</string>
+				<string>4514DDE800CEE81A96316EAFCA73BB06</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>name</key>
+			<string>Frameworks</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>A81AA86671E1025A4ED523E14A0F9115</key>
 		<dict>
 			<key>includeInIndex</key>
 			<string>1</string>
 			<key>isa</key>
 			<string>PBXFileReference</string>
 			<key>lastKnownFileType</key>
-			<string>archive.ar</string>
+			<string>sourcecode.c.h</string>
 			<key>name</key>
-			<string>libGTM_SystemVersion.a</string>
+			<string>ntp-log.h</string>
 			<key>path</key>
-			<string>Libraries/libGTM_SystemVersion.a</string>
+			<string>ios-ntp-lib/ntp-log.h</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
 		<key>A82BB748CD97C5F0B8128EC4B54F5CB6</key>
 		<dict>
 			<key>fileRef</key>
-			<string>8D8357BEE5646C4A41ADEA35F2CC153C</string>
+			<string>7A51E96F17CFDE966B3E557AE228084F</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 			<key>settings</key>
@@ -3080,53 +2949,6 @@
 			<key>sourceTree</key>
 			<string>BUILT_PRODUCTS_DIR</string>
 		</dict>
-		<key>A966B16961B4B37452663D9B35FB26C3</key>
-		<dict>
-			<key>children</key>
-			<array>
-				<string>22B6D5C25E2830E1C6DA20F63BB3E926</string>
-				<string>C6549D009583FDFFD324E2FFD5E2CEB2</string>
-				<string>033E7A28EED29FF6E3BDA69AB06F6C7C</string>
-				<string>01BE7ED621CEE86FAFDA079D99261478</string>
-				<string>7387B84473BEEA4E7FCDF3A640B4E261</string>
-				<string>2D5CD8C695FA1616B9EBAD8753C17B93</string>
-				<string>90034B840BDDD896510E59CAF56D1FF5</string>
-				<string>7302F7172C80F3FBDD50CD1833A0F8D1</string>
-				<string>4D45365F58F5DC5AA75EE0EF123163FF</string>
-				<string>CF2372DD31B47FBB8535D3C1D8EE7503</string>
-				<string>8AA9174E4DD57032210F0D59FD2D316B</string>
-				<string>0FB604C4A3A1DAE7D9D714AA325F5178</string>
-				<string>701F7D142873CE79255AB2F39DA6ECE8</string>
-				<string>26452D0E38BBF28C51AA2EF5118036DF</string>
-				<string>42C834A7A5993D539FEEF35ADF562696</string>
-				<string>47AFD95ECE9377EC73C6227DD99D9E5A</string>
-				<string>55814ED1B04FA8B54467153E7C385E40</string>
-				<string>0CE762CDB6FF2D5E1884141B247BDA16</string>
-				<string>9A3F2B2A4B18525F376FFC9271B80F98</string>
-				<string>3F75E5DB09F5F796F7DB656E0C2BD110</string>
-				<string>25D4CE60815DB3DF108808D53C06E20F</string>
-				<string>5E539514A873153CAE1B22E745060581</string>
-				<string>190AC0F41AAB157FF4D850878C54ED08</string>
-				<string>426FECA45B557F7303E66A05939BFFD3</string>
-				<string>2BB2170F0CD364FFA6DDEA0760C46E96</string>
-				<string>C08C1B52B60399B7BB6AC375267804DB</string>
-				<string>EBD77E3D4BE567D5DF54F22FED01104A</string>
-				<string>42BC1174E42CCD0AC399095BBBAE26CF</string>
-				<string>69547A965FAEE164D345BD76BF362D5B</string>
-				<string>8D8357BEE5646C4A41ADEA35F2CC153C</string>
-				<string>3FF21E0C188EDE2099863F405C9D1B58</string>
-				<string>ADAF61E39F67222F535FDEDAA424124D</string>
-				<string>AF7152DB2418AAE3EB5598B2E7461FFE</string>
-			</array>
-			<key>isa</key>
-			<string>PBXGroup</string>
-			<key>name</key>
-			<string>MQTTKit</string>
-			<key>path</key>
-			<string>MQTTKit</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
 		<key>A9A5655A75493833B254220ABECBF7B4</key>
 		<dict>
 			<key>buildActionMask</key>
@@ -3143,20 +2965,22 @@
 		<key>A9B898403FEF2B5B8DC336054BB3F6A1</key>
 		<dict>
 			<key>fileRef</key>
-			<string>7387B84473BEEA4E7FCDF3A640B4E261</string>
+			<string>18E1F197879C46D8FE796916753EA572</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 		</dict>
-		<key>A9BAC42E4FFA4EDBD850CA90656D8448</key>
+		<key>A9DED76DA57E93B0240C189E4A537485</key>
 		<dict>
 			<key>children</key>
 			<array>
-				<string>CC434BDBAA12D7A00A51BFF2576297F9</string>
+				<string>A5480052A40EAD7F92944602CD708AD6</string>
 			</array>
 			<key>isa</key>
 			<string>PBXGroup</string>
 			<key>name</key>
-			<string>Frameworks</string>
+			<string>GoogleUtilities</string>
+			<key>path</key>
+			<string>GoogleUtilities</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
@@ -3166,51 +2990,6 @@
 			<string>77C49D928448B31FB9A7D5AE5C8D6C4E</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
-		</dict>
-		<key>ABBF7BE656D98B87099E4DD9D6F81B52</key>
-		<dict>
-			<key>children</key>
-			<array>
-				<string>6819A109CF1476B9B92D8B392493938E</string>
-			</array>
-			<key>isa</key>
-			<string>PBXGroup</string>
-			<key>name</key>
-			<string>GoogleSymbolUtilities</string>
-			<key>path</key>
-			<string>GoogleSymbolUtilities</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>AC31AE82762ED6F61B78E5156904F9A3</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.h</string>
-			<key>name</key>
-			<string>Core-Module.h</string>
-			<key>path</key>
-			<string>Headers/ModuleHeaders/Core-Module.h</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>AC7E919525F8E0CAF02E504F13C94C60</key>
-		<dict>
-			<key>children</key>
-			<array>
-				<string>2FDE0F781C65ECD2F64468345B5C1747</string>
-			</array>
-			<key>isa</key>
-			<string>PBXGroup</string>
-			<key>name</key>
-			<string>GoogleAuthUtilities</string>
-			<key>path</key>
-			<string>GoogleAuthUtilities</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
 		</dict>
 		<key>AC878CD0AFC70E240F0625958332767B</key>
 		<dict>
@@ -3229,16 +3008,33 @@
 			<key>runOnlyForDeploymentPostprocessing</key>
 			<string>0</string>
 		</dict>
-		<key>ACA5B3FF8AEF34707D804035B6D38453</key>
+		<key>ACE64353DCADB2FD393D033FF480461E</key>
 		<dict>
 			<key>includeInIndex</key>
 			<string>1</string>
 			<key>isa</key>
 			<string>PBXFileReference</string>
 			<key>lastKnownFileType</key>
-			<string>text.xcconfig</string>
+			<string>sourcecode.c.h</string>
+			<key>name</key>
+			<string>CloudMessaging-Module.h</string>
 			<key>path</key>
-			<string>CocoaAsyncSocket.xcconfig</string>
+			<string>Headers/ModuleHeaders/CloudMessaging-Module.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>AD4937FFC93D5D0469C11978066315B8</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>75B2EAD105F255BF6206184A1C901BB9</string>
+				<string>725E3CB79C64538DFE99DBA211E58188</string>
+				<string>4B1FFCA6A80A9B1EF01E7CD983354ACE</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>name</key>
+			<string>SignIn</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
@@ -3253,25 +3049,25 @@
 			<key>targetProxy</key>
 			<string>9A4EB8C7D55D082065D4394A9D982057</string>
 		</dict>
-		<key>ADAF61E39F67222F535FDEDAA424124D</key>
+		<key>AE357C8A1D72D04CDDBCE207968F3CF5</key>
 		<dict>
 			<key>includeInIndex</key>
 			<string>1</string>
 			<key>isa</key>
 			<string>PBXFileReference</string>
 			<key>lastKnownFileType</key>
-			<string>sourcecode.c.h</string>
+			<string>archive.ar</string>
 			<key>name</key>
-			<string>will_mosq.h</string>
+			<string>libOpenInChrome.a</string>
 			<key>path</key>
-			<string>libmosquitto/will_mosq.h</string>
+			<string>Libraries/libOpenInChrome.a</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
 		<key>AEFE393D0887C2BA2A34EE79AF69152F</key>
 		<dict>
 			<key>baseConfigurationReference</key>
-			<string>ACA5B3FF8AEF34707D804035B6D38453</string>
+			<string>2EAFEF6F158AC9F99F1BAB499207A453</string>
 			<key>buildSettings</key>
 			<dict>
 				<key>ENABLE_STRICT_OBJC_MSGSEND</key>
@@ -3302,11 +3098,12 @@
 			<key>name</key>
 			<string>Release</string>
 		</dict>
-		<key>AF39EDB7656D8CC70CD63221C2A47379</key>
+		<key>AF6ED17B186EF8A91BED87384B1CE3BF</key>
 		<dict>
 			<key>children</key>
 			<array>
-				<string>1E0F033997E50B074F70D9A96DB7A843</string>
+				<string>08702F3B784842931C1ED17554346401</string>
+				<string>43E5C552DD6C197A7A592FE40B45A901</string>
 			</array>
 			<key>isa</key>
 			<string>PBXGroup</string>
@@ -3315,93 +3112,32 @@
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
-		<key>AF7152DB2418AAE3EB5598B2E7461FFE</key>
+		<key>B0554DA2F12C01F4FDC909D87DBC22FA</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>archive.ar</string>
+			<key>name</key>
+			<string>libGTM_Regex.a</string>
+			<key>path</key>
+			<string>Libraries/libGTM_Regex.a</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>B15B4E47C7301A96099949C25CDDB04F</key>
 		<dict>
 			<key>children</key>
 			<array>
-				<string>4237A49FEB527FB873E306C5E42E5906</string>
-				<string>E11822DC7A91E814DED9300C4A3CFE71</string>
-				<string>A1D2DD82904AAAF2ACFA20A6306E8C13</string>
+				<string>98ECFE0E023896D9FDBBAA4881A8ED6F</string>
+				<string>11169B5E8E31F2F5D23633092AE3BBD8</string>
 			</array>
 			<key>isa</key>
 			<string>PBXGroup</string>
 			<key>name</key>
-			<string>Support Files</string>
-			<key>path</key>
-			<string>../Target Support Files/MQTTKit</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>B082DD0A06CD89771598835B90E3547B</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.objc</string>
-			<key>name</key>
-			<string>GCDAsyncSocket.m</string>
-			<key>path</key>
-			<string>Source/GCD/GCDAsyncSocket.m</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>B0D69EBC80EB48CB4064A26DA64D4FE5</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.objc</string>
-			<key>name</key>
-			<string>SCReachabilityRefBuilder.m</string>
-			<key>path</key>
-			<string>Classes/Private/SCReachabilityRefBuilder.m</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>B1125B3851D9DAC8C8323AA9FB7808A9</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.objc</string>
-			<key>path</key>
-			<string>SCNetworkReachability-dummy.m</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>B20C159E5E90D880B3A4CFB60DF9AA98</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.objc</string>
-			<key>name</key>
-			<string>GCDAsyncUdpSocket.m</string>
-			<key>path</key>
-			<string>Source/GCD/GCDAsyncUdpSocket.m</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>B3197837327EEC995EE41E00751366A1</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.h</string>
-			<key>name</key>
-			<string>GCDAsyncSocket.h</string>
-			<key>path</key>
-			<string>Source/GCD/GCDAsyncSocket.h</string>
+			<string>Frameworks</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
@@ -3492,7 +3228,22 @@
 			<key>isa</key>
 			<string>XCConfigurationList</string>
 		</dict>
-		<key>B5252CDFF4A76A3B946F21CE4C6D1BD2</key>
+		<key>B4C54055ECFD5493601CEF413B5125B4</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>archive.ar</string>
+			<key>name</key>
+			<string>libGTM_NSDictionary+URLArguments.a</string>
+			<key>path</key>
+			<string>Libraries/libGTM_NSDictionary+URLArguments.a</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>B4DFE01CB59077BCE419052280450783</key>
 		<dict>
 			<key>includeInIndex</key>
 			<string>1</string>
@@ -3508,7 +3259,7 @@
 		<key>B5C2FA7E6DCB003C3E97D27F79638811</key>
 		<dict>
 			<key>fileRef</key>
-			<string>3C36BE12A66D1FE5283241FE4836B335</string>
+			<string>71565FDCB40EF6473A94FF29EEC9F6B4</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 			<key>settings</key>
@@ -3517,33 +3268,18 @@
 				<string>-DOS_OBJECT_USE_OBJC=0</string>
 			</dict>
 		</dict>
-		<key>B60CE13186CE7B6EB533D2C49A2B8C33</key>
+		<key>B61573F64B14B379639968C9E8B2285D</key>
 		<dict>
 			<key>includeInIndex</key>
 			<string>1</string>
 			<key>isa</key>
 			<string>PBXFileReference</string>
 			<key>lastKnownFileType</key>
-			<string>archive.ar</string>
+			<string>sourcecode.c.h</string>
 			<key>name</key>
-			<string>libGTM_KVO.a</string>
+			<string>GCDAsyncSocket.h</string>
 			<key>path</key>
-			<string>Libraries/libGTM_KVO.a</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>B64DB3C547CC9CF5D38B5A9AABB6D867</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>archive.ar</string>
-			<key>name</key>
-			<string>libGTM_UIFont+LineHeight.a</string>
-			<key>path</key>
-			<string>Libraries/libGTM_UIFont+LineHeight.a</string>
+			<string>Source/GCD/GCDAsyncSocket.h</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
@@ -3590,21 +3326,6 @@
 			<key>xcLanguageSpecificationIdentifier</key>
 			<string>xcode.lang.ruby</string>
 		</dict>
-		<key>BB40CF5776FB37E3EF7AD34A4028F401</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>archive.ar</string>
-			<key>name</key>
-			<string>libGIPNSURL+FIFE.a</string>
-			<key>path</key>
-			<string>Libraries/libGIPNSURL+FIFE.a</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
 		<key>BB763A6D090D13B6632B549FD98E0469</key>
 		<dict>
 			<key>explicitFileType</key>
@@ -3620,6 +3341,68 @@
 			<key>sourceTree</key>
 			<string>BUILT_PRODUCTS_DIR</string>
 		</dict>
+		<key>BCA5DF884A16E8D24E2B6BC70261E42E</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>name</key>
+			<string>logging_mosq.h</string>
+			<key>path</key>
+			<string>libmosquitto/logging_mosq.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>BD8EE132C2F085D253C5CDDEAE897492</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>7C7643AB3A0DD2E3BFD228455E1364FB</string>
+				<string>D1A043C9608019F2D606B84BAB20D4BC</string>
+				<string>07E95EC9E0BE25CA7BC7B02934B9660F</string>
+				<string>BCA5DF884A16E8D24E2B6BC70261E42E</string>
+				<string>18E1F197879C46D8FE796916753EA572</string>
+				<string>003CC9E2C0B425D900C688878D27FBE9</string>
+				<string>991FE24D5F9964785ED21BB48884BE65</string>
+				<string>9944F87ECBFD41B2CBCB34A2B3D358B5</string>
+				<string>39A1DD32076A9D8236D75AD9E2B2638D</string>
+				<string>8D22D1A05F066E33582729C68AD03C5C</string>
+				<string>826C4F2E8C25807DEC58B29EC205072A</string>
+				<string>6628868B46696565273533D6595F60B9</string>
+				<string>3462399016ED59E5CBB1187F00789F0F</string>
+				<string>9D712586E6953B9535C53478C4141503</string>
+				<string>34D47CF6B49F4DC3C200EE805A09EDFD</string>
+				<string>4EB37C77459218EE767DE7596FC96256</string>
+				<string>F9B8F556E7D08BA357784950CA9992FE</string>
+				<string>E0F7127AA2AF73C80AA002E5A2587E70</string>
+				<string>F8FDB14F49F6AB16BBA5E4C82F27F182</string>
+				<string>63C62D8463B5E956604979E00549D22E</string>
+				<string>D6E5C5BDFDBCDAE09C23660773DB8285</string>
+				<string>90693B9205ABFDF36A54CF9AF94FA8FD</string>
+				<string>71FA8157862E4EB9FBEEF24B92725CD3</string>
+				<string>D5537479CE1E706FE9E210EDF54E8920</string>
+				<string>8D22365F3E6F453DCFDCA3388B304F71</string>
+				<string>7A662032D7038B5A17523074BF68E535</string>
+				<string>A5F338F4C1F626971E4B6A9F116D8881</string>
+				<string>9EF600B25167800374062D61C8131815</string>
+				<string>7F0C1AD05C8BCA047A767A3D724CE026</string>
+				<string>7A51E96F17CFDE966B3E557AE228084F</string>
+				<string>5137801B3337A3A8CF931A32670BA319</string>
+				<string>621C497B579F487F7F64DECD8842A8AD</string>
+				<string>A0809BC0B76EAA7081065CA7E701142D</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>name</key>
+			<string>MQTTKit</string>
+			<key>path</key>
+			<string>MQTTKit</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
 		<key>BE118A63C6950DF21C40997B592E362E</key>
 		<dict>
 			<key>isa</key>
@@ -3630,6 +3413,21 @@
 			<string>ECFE0958DDB7FEC79B3AA1C9337BC941</string>
 			<key>targetProxy</key>
 			<string>E50AD48E94967CC422AB771967DEC6DE</string>
+		</dict>
+		<key>BF2B26E1196AF4EBBE0969ABA3CAE691</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>name</key>
+			<string>NetworkClock.h</string>
+			<key>path</key>
+			<string>ios-ntp-lib/NetworkClock.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
 		</dict>
 		<key>BF73190C47FD6A02DF5C1E362F6FEA1A</key>
 		<dict>
@@ -3648,24 +3446,25 @@
 			<key>runOnlyForDeploymentPostprocessing</key>
 			<string>0</string>
 		</dict>
-		<key>BFC48C0EF5E0DE16FD110AFD9B69C986</key>
+		<key>BF886CF6620244ABFBFA1A84EDF8F0A8</key>
 		<dict>
-			<key>children</key>
-			<array>
-				<string>98B3F82DC8A1E88AB305ED46C3B8B015</string>
-				<string>03A491FA749BFE23481AE55BEBDA41C8</string>
-			</array>
+			<key>includeInIndex</key>
+			<string>1</string>
 			<key>isa</key>
-			<string>PBXGroup</string>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>archive.ar</string>
 			<key>name</key>
-			<string>Resources</string>
+			<string>libGTM_NSStringHTML.a</string>
+			<key>path</key>
+			<string>Libraries/libGTM_NSStringHTML.a</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
 		<key>BFC5F75D3A368EC52C555F4979DD1E06</key>
 		<dict>
 			<key>fileRef</key>
-			<string>25C6BD83C6BAA0BDF07008E81648BFA0</string>
+			<string>7CF1F80BDB652F3361CE5696F1324C4B</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 			<key>settings</key>
@@ -3679,11 +3478,11 @@
 		<key>C04406D31A494A2985E783F20D2AF526</key>
 		<dict>
 			<key>fileRef</key>
-			<string>25D4CE60815DB3DF108808D53C06E20F</string>
+			<string>D6E5C5BDFDBCDAE09C23660773DB8285</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 		</dict>
-		<key>C08C1B52B60399B7BB6AC375267804DB</key>
+		<key>C07CB45B89421084A926596D24A3DEFC</key>
 		<dict>
 			<key>includeInIndex</key>
 			<string>1</string>
@@ -3692,39 +3491,9 @@
 			<key>lastKnownFileType</key>
 			<string>sourcecode.c.h</string>
 			<key>name</key>
-			<string>time_mosq.h</string>
+			<string>GMRConfiguration.h</string>
 			<key>path</key>
-			<string>libmosquitto/time_mosq.h</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>C0A194661842398357EC28225910F30C</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>archive.ar</string>
-			<key>name</key>
-			<string>libGTM_Regex.a</string>
-			<key>path</key>
-			<string>Libraries/libGTM_Regex.a</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>C0D7A0430A7E8B7789236CC587AC4165</key>
-		<dict>
-			<key>children</key>
-			<array>
-				<string>1765E8CFB311A8F12FAEF6C0F1D8E29E</string>
-			</array>
-			<key>isa</key>
-			<string>PBXGroup</string>
-			<key>name</key>
-			<string>GoogleUtilities</string>
-			<key>path</key>
-			<string>GoogleUtilities</string>
+			<string>Headers/GGLCore/Public/GMRConfiguration.h</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
@@ -3743,30 +3512,30 @@
 			<key>sourceTree</key>
 			<string>BUILT_PRODUCTS_DIR</string>
 		</dict>
-		<key>C38DE79AE2AC674F6E8FF0B89624A68F</key>
-		<dict>
-			<key>fileRef</key>
-			<string>B5252CDFF4A76A3B946F21CE4C6D1BD2</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-		</dict>
-		<key>C3D311312BF5203FD998B87AAC6CEC63</key>
+		<key>C3706B7B437761B429252E69765D731F</key>
 		<dict>
 			<key>includeInIndex</key>
 			<string>1</string>
 			<key>isa</key>
 			<string>PBXFileReference</string>
 			<key>lastKnownFileType</key>
-			<string>sourcecode.c.objc</string>
+			<string>sourcecode.c.h</string>
 			<key>path</key>
-			<string>ios-ntp-dummy.m</string>
+			<string>CocoaAsyncSocket-prefix.pch</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
+		</dict>
+		<key>C38DE79AE2AC674F6E8FF0B89624A68F</key>
+		<dict>
+			<key>fileRef</key>
+			<string>B4DFE01CB59077BCE419052280450783</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
 		</dict>
 		<key>C4D07F5612B4C609247DE3CEC6D877B7</key>
 		<dict>
 			<key>fileRef</key>
-			<string>4BFB7965D91CB421EE6E6F2EAFAAD7C6</string>
+			<string>E63D896227641A2978446670C280D2F3</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 			<key>settings</key>
@@ -3776,21 +3545,6 @@
 					<string>Public</string>
 				</array>
 			</dict>
-		</dict>
-		<key>C51B3DCC48BA3FC2629F2EE77C8E27E4</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>archive.ar</string>
-			<key>name</key>
-			<string>libGTM_NSStringXML.a</string>
-			<key>path</key>
-			<string>Libraries/libGTM_NSStringXML.a</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
 		</dict>
 		<key>C6204446BD9150A17B12E81B4A6F9CA8</key>
 		<dict>
@@ -3805,40 +3559,10 @@
 			<key>sourceTree</key>
 			<string>DEVELOPER_DIR</string>
 		</dict>
-		<key>C6549D009583FDFFD324E2FFD5E2CEB2</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.h</string>
-			<key>name</key>
-			<string>dummypthread.h</string>
-			<key>path</key>
-			<string>libmosquitto/dummypthread.h</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>C67BCADEF961460E9C6701AE042B4278</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.h</string>
-			<key>name</key>
-			<string>SignIn-Module.h</string>
-			<key>path</key>
-			<string>Headers/ModuleHeaders/SignIn-Module.h</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
 		<key>C70624D2FCE51ACAEE1499BE2F2CB268</key>
 		<dict>
 			<key>fileRef</key>
-			<string>42BC1174E42CCD0AC399095BBBAE26CF</string>
+			<string>9EF600B25167800374062D61C8131815</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 			<key>settings</key>
@@ -3849,23 +3573,68 @@
 				</array>
 			</dict>
 		</dict>
-		<key>C8196F660CD3BE6EB2B0962E7BA9B472</key>
+		<key>C76B2A656030EC3277EC08C71999FE27</key>
 		<dict>
-			<key>children</key>
-			<array>
-				<string>87A6EAFF0FCB2E77E5AA22EBFFE16FD0</string>
-			</array>
+			<key>includeInIndex</key>
+			<string>1</string>
 			<key>isa</key>
-			<string>PBXGroup</string>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.objc</string>
 			<key>name</key>
-			<string>Frameworks</string>
+			<string>NSDate+NetworkClock.m</string>
+			<key>path</key>
+			<string>ios-ntp-lib/NSDate+NetworkClock.m</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>C78FEDDB1BE9C157120C73DD83B69B5B</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>archive.ar</string>
+			<key>name</key>
+			<string>libGTMStackTrace.a</string>
+			<key>path</key>
+			<string>Libraries/libGTMStackTrace.a</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>C7ECB8D30EAD218C02BC8E0FDC4C95A0</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>path</key>
+			<string>SCNetworkReachability-prefix.pch</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>C91023435C00E5728D559F33642DE726</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>name</key>
+			<string>AsyncUdpSocket.h</string>
+			<key>path</key>
+			<string>Source/RunLoop/AsyncUdpSocket.h</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
 		<key>C923A016BE1350049CCC0AB724E15821</key>
 		<dict>
 			<key>fileRef</key>
-			<string>9811FD8E45BDB8A87DC7C42FA8DAB4C3</string>
+			<string>DFB9C95074EDAB73D0D2C4D1E320801E</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 			<key>settings</key>
@@ -3876,37 +3645,37 @@
 				</array>
 			</dict>
 		</dict>
-		<key>CA60F00E953D07F10FA26EA0E527BA4E</key>
-		<dict>
-			<key>children</key>
-			<array>
-				<string>A9BAC42E4FFA4EDBD850CA90656D8448</string>
-			</array>
-			<key>isa</key>
-			<string>PBXGroup</string>
-			<key>name</key>
-			<string>GoogleAppUtilities</string>
-			<key>path</key>
-			<string>GoogleAppUtilities</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>CAD8A6ED55FA7EE28DB30DCDEFC9EE38</key>
+		<key>CAE885F292D26436346497608F858F09</key>
 		<dict>
 			<key>includeInIndex</key>
 			<string>1</string>
 			<key>isa</key>
 			<string>PBXFileReference</string>
 			<key>lastKnownFileType</key>
-			<string>sourcecode.c.h</string>
+			<string>sourcecode.c.objc</string>
 			<key>name</key>
-			<string>Analytics-Module.h</string>
+			<string>NetAssociation.m</string>
 			<key>path</key>
-			<string>Headers/ModuleHeaders/Analytics-Module.h</string>
+			<string>ios-ntp-lib/NetAssociation.m</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
-		<key>CC434BDBAA12D7A00A51BFF2576297F9</key>
+		<key>CB8114BBBA06ABED34FD9F55D258B055</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.objc</string>
+			<key>name</key>
+			<string>SCReachabilityScheduler.m</string>
+			<key>path</key>
+			<string>Classes/Private/SCReachabilityScheduler.m</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>CC9ECD31AD40D739BCD74842E7E1CEF1</key>
 		<dict>
 			<key>includeInIndex</key>
 			<string>1</string>
@@ -3915,9 +3684,9 @@
 			<key>lastKnownFileType</key>
 			<string>archive.ar</string>
 			<key>name</key>
-			<string>libOpenInChrome.a</string>
+			<string>libGTM_SystemVersion.a</string>
 			<key>path</key>
-			<string>Libraries/libOpenInChrome.a</string>
+			<string>Libraries/libGTM_SystemVersion.a</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
@@ -3948,7 +3717,7 @@
 		<key>CDEDF658D080A31FA8069A40C399FE48</key>
 		<dict>
 			<key>fileRef</key>
-			<string>3FF21E0C188EDE2099863F405C9D1B58</string>
+			<string>5137801B3337A3A8CF931A32670BA319</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 		</dict>
@@ -3966,25 +3735,10 @@
 			<key>runOnlyForDeploymentPostprocessing</key>
 			<string>0</string>
 		</dict>
-		<key>CF2372DD31B47FBB8535D3C1D8EE7503</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.h</string>
-			<key>name</key>
-			<string>mosquitto.h</string>
-			<key>path</key>
-			<string>libmosquitto/mosquitto.h</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
 		<key>CF2B54BBC95C6F8B8C60D75E2DCC865A</key>
 		<dict>
 			<key>fileRef</key>
-			<string>22B6D5C25E2830E1C6DA20F63BB3E926</string>
+			<string>7C7643AB3A0DD2E3BFD228455E1364FB</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 			<key>settings</key>
@@ -4013,7 +3767,7 @@
 		<key>D0AA7859787CF3EC266380C200790A18</key>
 		<dict>
 			<key>fileRef</key>
-			<string>7E1BB193616EDEE13A912D9623822C89</string>
+			<string>A81AA86671E1025A4ED523E14A0F9115</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 			<key>settings</key>
@@ -4024,7 +3778,7 @@
 				</array>
 			</dict>
 		</dict>
-		<key>D1620CAC9D7EC6074F478E250F8E1C08</key>
+		<key>D1A043C9608019F2D606B84BAB20D4BC</key>
 		<dict>
 			<key>includeInIndex</key>
 			<string>1</string>
@@ -4033,9 +3787,22 @@
 			<key>lastKnownFileType</key>
 			<string>sourcecode.c.h</string>
 			<key>name</key>
-			<string>NetAssociation.h</string>
+			<string>dummypthread.h</string>
 			<key>path</key>
-			<string>ios-ntp-lib/NetAssociation.h</string>
+			<string>libmosquitto/dummypthread.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>D1E0DC32F7BC24123E426F81161F02B0</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>path</key>
+			<string>ios-ntp-prefix.pch</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
@@ -4109,71 +3876,58 @@
 				<string>4CBB6AC178EF19521FF258BED8DEEB83</string>
 			</array>
 		</dict>
-		<key>D475983FC1E7E8EED2E39FD7E1C7A7A9</key>
-		<dict>
-			<key>children</key>
-			<array>
-				<string>904F48AA0528AB7FE86EC6851F16CCDA</string>
-				<string>8CB010461F772B22B375A7C9D092DBF7</string>
-				<string>24D665324AECB27D9D64D6B5672247B6</string>
-				<string>1AD2DF027C6973B9B162AF6AD7AAA300</string>
-				<string>840BDD747E289F32DF8FFA8E13150A53</string>
-				<string>B3197837327EEC995EE41E00751366A1</string>
-				<string>B082DD0A06CD89771598835B90E3547B</string>
-				<string>206487E9F5D6D04FD9FDA8FDA95F0913</string>
-				<string>B20C159E5E90D880B3A4CFB60DF9AA98</string>
-				<string>691EFB89168F486679B741E84C6E261F</string>
-			</array>
-			<key>isa</key>
-			<string>PBXGroup</string>
-			<key>name</key>
-			<string>CocoaAsyncSocket</string>
-			<key>path</key>
-			<string>CocoaAsyncSocket</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
 		<key>D4D6F57F3269747A64AE41C41DAAA237</key>
 		<dict>
 			<key>fileRef</key>
-			<string>26452D0E38BBF28C51AA2EF5118036DF</string>
+			<string>9D712586E6953B9535C53478C4141503</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 		</dict>
-		<key>D5C740E6491A1240E272934D77A787C0</key>
+		<key>D5537479CE1E706FE9E210EDF54E8920</key>
 		<dict>
 			<key>includeInIndex</key>
 			<string>1</string>
 			<key>isa</key>
 			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.objc</string>
 			<key>name</key>
-			<string>SCNetworkReachability.m</string>
+			<string>thread_mosq.c</string>
 			<key>path</key>
-			<string>Classes/Public/SCNetworkReachability.m</string>
+			<string>libmosquitto/thread_mosq.c</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
-		<key>D62E67278FCE010C98F94C4027913D84</key>
+		<key>D5566D0C3B893FEAA137357D76DE9E89</key>
 		<dict>
 			<key>includeInIndex</key>
 			<string>1</string>
 			<key>isa</key>
 			<string>PBXFileReference</string>
 			<key>lastKnownFileType</key>
-			<string>archive.ar</string>
+			<string>sourcecode.c.h</string>
 			<key>name</key>
-			<string>libGTM_core.a</string>
+			<string>CocoaAsyncSocket.h</string>
 			<key>path</key>
-			<string>Libraries/libGTM_core.a</string>
+			<string>Source/CocoaAsyncSocket.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>D6E5C5BDFDBCDAE09C23660773DB8285</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>name</key>
+			<string>send_client_mosq.c</string>
+			<key>path</key>
+			<string>libmosquitto/send_client_mosq.c</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
 		<key>D7088DE007F6FD51BE04D87799C76EB5</key>
 		<dict>
 			<key>baseConfigurationReference</key>
-			<string>F547FBE4C5697569D8E436FA862A96CA</string>
+			<string>86BFE8D5FF44570CACBC06618947B73E</string>
 			<key>buildSettings</key>
 			<dict>
 				<key>ENABLE_STRICT_OBJC_MSGSEND</key>
@@ -4204,6 +3958,21 @@
 			<key>name</key>
 			<string>Debug</string>
 		</dict>
+		<key>D8E9124112E67D067329491B8B37468B</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>name</key>
+			<string>Core-Module.h</string>
+			<key>path</key>
+			<string>Headers/ModuleHeaders/Core-Module.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
 		<key>D91845B9A3699CC87398F59ADAC12500</key>
 		<dict>
 			<key>includeInIndex</key>
@@ -4217,30 +3986,60 @@
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
-		<key>E11822DC7A91E814DED9300C4A3CFE71</key>
+		<key>DA3772CDE02EF08B52811748658BE920</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>E2E20F01DE5FE788549AF9A205DB5D0C</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>name</key>
+			<string>Frameworks</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>DFB9C95074EDAB73D0D2C4D1E320801E</key>
 		<dict>
 			<key>includeInIndex</key>
 			<string>1</string>
 			<key>isa</key>
 			<string>PBXFileReference</string>
 			<key>lastKnownFileType</key>
-			<string>sourcecode.c.objc</string>
+			<string>sourcecode.c.h</string>
+			<key>name</key>
+			<string>SCReachabilityRefBuilder.h</string>
 			<key>path</key>
-			<string>MQTTKit-dummy.m</string>
+			<string>Classes/Private/SCReachabilityRefBuilder.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>E0F7127AA2AF73C80AA002E5A2587E70</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>name</key>
+			<string>read_handle.h</string>
+			<key>path</key>
+			<string>libmosquitto/read_handle.h</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
 		<key>E1329092383DC02C6B7502337556F917</key>
 		<dict>
 			<key>fileRef</key>
-			<string>4D45365F58F5DC5AA75EE0EF123163FF</string>
+			<string>39A1DD32076A9D8236D75AD9E2B2638D</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 		</dict>
 		<key>E18F00D7D1DD05B7C16F46B5FF77F234</key>
 		<dict>
 			<key>fileRef</key>
-			<string>8CB010461F772B22B375A7C9D092DBF7</string>
+			<string>34011DC154AC999C2FE094BC094E077C</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 			<key>settings</key>
@@ -4252,9 +4051,49 @@
 		<key>E1AF4C08E2D4F5585181885BAB4289A9</key>
 		<dict>
 			<key>fileRef</key>
-			<string>C3D311312BF5203FD998B87AAC6CEC63</string>
+			<string>42ABED2213FDC590A3D9A486328C16B6</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
+		</dict>
+		<key>E28D3EC694323E2545C2CD96BF3EF0FA</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>70C777D312A85276A716866ACF233744</string>
+				<string>A672BDE15DE56661C86E0A8A74E0EFBD</string>
+				<string>8A3035043B63C5F4E561F3C5334BC8BA</string>
+				<string>ACE64353DCADB2FD393D033FF480461E</string>
+				<string>9FE99A3B9640B4069C103C7063865D4E</string>
+				<string>D8E9124112E67D067329491B8B37468B</string>
+				<string>81BAE613BC4864115EAECDD8FFF56F7D</string>
+				<string>E8F15CC9983DB203747A286F4D6099EF</string>
+				<string>168ABB1DA7E0AD22DB92AFC0B0015FF9</string>
+				<string>C07CB45B89421084A926596D24A3DEFC</string>
+				<string>FE81529B01A692B4E74AAF77B189B289</string>
+				<string>8BBA85F3F44DCAFF324CBCC1275E60A6</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>name</key>
+			<string>Core</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>E2927AFA22E5A81E6F63AEE05A60E2CF</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>6CE0803F1C1E2B2C7FC68B94B2B9D89A</string>
+				<string>05E06C9883621E20955AB3754CF3BA5E</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>name</key>
+			<string>SCNetworkReachability</string>
+			<key>path</key>
+			<string>SCNetworkReachability</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
 		</dict>
 		<key>E2A65BE579DBA189B6D9985DD10CF492</key>
 		<dict>
@@ -4263,17 +4102,32 @@
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 		</dict>
+		<key>E2E20F01DE5FE788549AF9A205DB5D0C</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>archive.ar</string>
+			<key>name</key>
+			<string>libProtocolBuffers.a</string>
+			<key>path</key>
+			<string>Libraries/libProtocolBuffers.a</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
 		<key>E4B726C4C77C91F40B65BA123468A08B</key>
 		<dict>
 			<key>fileRef</key>
-			<string>2BB2170F0CD364FFA6DDEA0760C46E96</string>
+			<string>8D22365F3E6F453DCFDCA3388B304F71</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 		</dict>
 		<key>E4ED52BE75F1191E119E354A91E1CD29</key>
 		<dict>
 			<key>fileRef</key>
-			<string>ADAF61E39F67222F535FDEDAA424124D</string>
+			<string>621C497B579F487F7F64DECD8842A8AD</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 			<key>settings</key>
@@ -4297,18 +4151,48 @@
 			<key>remoteInfo</key>
 			<string>CocoaAsyncSocket</string>
 		</dict>
-		<key>E57C5B358535B9016277DD4AAD80A35E</key>
+		<key>E63D896227641A2978446670C280D2F3</key>
 		<dict>
 			<key>includeInIndex</key>
 			<string>1</string>
 			<key>isa</key>
 			<string>PBXFileReference</string>
 			<key>lastKnownFileType</key>
-			<string>archive.ar</string>
+			<string>sourcecode.c.h</string>
 			<key>name</key>
-			<string>libGTMOAuth2_external.a</string>
+			<string>SCReachabilityFlagsParser.h</string>
 			<key>path</key>
-			<string>Libraries/libGTMOAuth2_external.a</string>
+			<string>Classes/Private/SCReachabilityFlagsParser.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>E8F15CC9983DB203747A286F4D6099EF</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>name</key>
+			<string>GGLContext.h</string>
+			<key>path</key>
+			<string>Headers/GGLCore/Public/GGLContext.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>EB615CAEA362E6F07B2750C7E3D2B2F8</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>name</key>
+			<string>SCNetworkReachability.h</string>
+			<key>path</key>
+			<string>Classes/Public/SCNetworkReachability.h</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
@@ -4319,20 +4203,7 @@
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 		</dict>
-		<key>EBD77E3D4BE567D5DF54F22FED01104A</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>name</key>
-			<string>tls_mosq.c</string>
-			<key>path</key>
-			<string>libmosquitto/tls_mosq.c</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>EC304D33C9453364B732B42D32DB0284</key>
+		<key>EC4D34269F1D3E74E5DA665D33E8EB48</key>
 		<dict>
 			<key>includeInIndex</key>
 			<string>1</string>
@@ -4341,16 +4212,16 @@
 			<key>lastKnownFileType</key>
 			<string>sourcecode.c.h</string>
 			<key>name</key>
-			<string>GIDGoogleUser.h</string>
+			<string>SCReachabilityScheduler.h</string>
 			<key>path</key>
-			<string>Headers/Public/GIDGoogleUser.h</string>
+			<string>Classes/Private/SCReachabilityScheduler.h</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
 		<key>ECB8C505EB62B639F6719347FBAB865F</key>
 		<dict>
 			<key>fileRef</key>
-			<string>9B9D9ED74C972D4684F4E4236276DE35</string>
+			<string>CB8114BBBA06ABED34FD9F55D258B055</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 			<key>settings</key>
@@ -4358,6 +4229,21 @@
 				<key>COMPILER_FLAGS</key>
 				<string>-DOS_OBJECT_USE_OBJC=0</string>
 			</dict>
+		</dict>
+		<key>ECBA70D35E69F597285E4E7E5EBA2BC8</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>archive.ar</string>
+			<key>name</key>
+			<string>libGTM_core.a</string>
+			<key>path</key>
+			<string>Libraries/libGTM_core.a</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
 		</dict>
 		<key>ECFE0958DDB7FEC79B3AA1C9337BC941</key>
 		<dict>
@@ -4391,25 +4277,10 @@
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 		</dict>
-		<key>EEB96EE04F534ED5B4910C86E7CEDBBE</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.objc</string>
-			<key>name</key>
-			<string>NSDate+NetworkClock.m</string>
-			<key>path</key>
-			<string>ios-ntp-lib/NSDate+NetworkClock.m</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
 		<key>EF41339F12A09172DB0F101DB347D37E</key>
 		<dict>
 			<key>fileRef</key>
-			<string>5E539514A873153CAE1B22E745060581</string>
+			<string>90693B9205ABFDF36A54CF9AF94FA8FD</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 		</dict>
@@ -4427,7 +4298,22 @@
 			<key>runOnlyForDeploymentPostprocessing</key>
 			<string>0</string>
 		</dict>
-		<key>F0AFF5F9C890A393E849DA120C76DC5D</key>
+		<key>F0C084E42C7944A6BF5E77D3A0C6529A</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>name</key>
+			<string>GCDAsyncUdpSocket.h</string>
+			<key>path</key>
+			<string>Source/GCD/GCDAsyncUdpSocket.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>F154C5936AEB4244C517FE6DE16EE602</key>
 		<dict>
 			<key>includeInIndex</key>
 			<string>1</string>
@@ -4436,23 +4322,53 @@
 			<key>lastKnownFileType</key>
 			<string>archive.ar</string>
 			<key>name</key>
-			<string>libGTM_NSStringHTML.a</string>
+			<string>libGTM_NSScannerJSON.a</string>
 			<key>path</key>
-			<string>Libraries/libGTM_NSStringHTML.a</string>
+			<string>Libraries/libGTM_NSScannerJSON.a</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>F3DC24645C90697FF5F47143A23C17E0</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>name</key>
+			<string>AsyncSocket.h</string>
+			<key>path</key>
+			<string>Source/RunLoop/AsyncSocket.h</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
 		<key>F44699170973F30D69A7186436DFC108</key>
 		<dict>
 			<key>fileRef</key>
-			<string>033E7A28EED29FF6E3BDA69AB06F6C7C</string>
+			<string>07E95EC9E0BE25CA7BC7B02934B9660F</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
+		</dict>
+		<key>F4A33298F85EB89F5AEB17A3C87877A4</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.objc</string>
+			<key>name</key>
+			<string>SCNetworkReachability.m</string>
+			<key>path</key>
+			<string>Classes/Public/SCNetworkReachability.m</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
 		</dict>
 		<key>F4C939A2793BE48660A5A1DE56325AD2</key>
 		<dict>
 			<key>fileRef</key>
-			<string>840BDD747E289F32DF8FFA8E13150A53</string>
+			<string>D5566D0C3B893FEAA137357D76DE9E89</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 			<key>settings</key>
@@ -4463,59 +4379,31 @@
 				</array>
 			</dict>
 		</dict>
-		<key>F547FBE4C5697569D8E436FA862A96CA</key>
+		<key>F5AA3F0B544383C3BE160A34088EA3CD</key>
 		<dict>
 			<key>includeInIndex</key>
 			<string>1</string>
 			<key>isa</key>
 			<string>PBXFileReference</string>
 			<key>lastKnownFileType</key>
-			<string>text.xcconfig</string>
-			<key>path</key>
-			<string>SCNetworkReachability.xcconfig</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>F61305FDB33E96F9F01C17F47B995D3E</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.h</string>
+			<string>archive.ar</string>
 			<key>name</key>
-			<string>GIDProfileData.h</string>
+			<string>libGTM_KVO.a</string>
 			<key>path</key>
-			<string>Headers/Public/GIDProfileData.h</string>
+			<string>Libraries/libGTM_KVO.a</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
-		<key>F621D824465BA343FA52D82CCB598710</key>
+		<key>F8FDB14F49F6AB16BBA5E4C82F27F182</key>
 		<dict>
 			<key>includeInIndex</key>
 			<string>1</string>
 			<key>isa</key>
 			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.h</string>
 			<key>name</key>
-			<string>UIViewController+SignIn.h</string>
+			<string>read_handle_client.c</string>
 			<key>path</key>
-			<string>Headers/Public/UIViewController+SignIn.h</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>F6250273A9B8477052C4FEC6DE9F7055</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.h</string>
-			<key>path</key>
-			<string>ios-ntp-prefix.pch</string>
+			<string>libmosquitto/read_handle_client.c</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
@@ -4551,18 +4439,46 @@
 			<key>name</key>
 			<string>Release</string>
 		</dict>
-		<key>FB507E7915B36E2236E20C42658D7403</key>
+		<key>F9B8F556E7D08BA357784950CA9992FE</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>name</key>
+			<string>read_handle.c</string>
+			<key>path</key>
+			<string>libmosquitto/read_handle.c</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>FD26418D47CCD4A529CD236FE486EEE8</key>
 		<dict>
 			<key>includeInIndex</key>
 			<string>1</string>
 			<key>isa</key>
 			<string>PBXFileReference</string>
 			<key>lastKnownFileType</key>
-			<string>archive.ar</string>
+			<string>sourcecode.c.h</string>
 			<key>name</key>
-			<string>libGTM_DebugUtils.a</string>
+			<string>NSDate+NetworkClock.h</string>
 			<key>path</key>
-			<string>Libraries/libGTM_DebugUtils.a</string>
+			<string>ios-ntp-lib/NSDate+NetworkClock.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>FE81529B01A692B4E74AAF77B189B289</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>name</key>
+			<string>SignIn-Module.h</string>
+			<key>path</key>
+			<string>Headers/ModuleHeaders/SignIn-Module.h</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
@@ -4576,21 +4492,6 @@
 			<string>PBXGroup</string>
 			<key>name</key>
 			<string>Targets Support Files</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>FEB8177CAA850243ED0FA3E299C58C80</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.h</string>
-			<key>name</key>
-			<string>NetworkClock.h</string>
-			<key>path</key>
-			<string>ios-ntp-lib/NetworkClock.h</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>

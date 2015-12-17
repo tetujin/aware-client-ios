@@ -28,14 +28,6 @@ Updated and maintained by Deusty LLC and the Apple development community.
 		</dict>
 		<dict>
 			<key>FooterText</key>
-			<string>Copyright 2015 DeployGate Inc. All rights reserved.</string>
-			<key>Title</key>
-			<string>DeployGateSDK</string>
-			<key>Type</key>
-			<string>PSGroupSpecifier</string>
-		</dict>
-		<dict>
-			<key>FooterText</key>
 			<string>Copyright 2015 Google Inc.</string>
 			<key>Title</key>
 			<string>Google</string>
