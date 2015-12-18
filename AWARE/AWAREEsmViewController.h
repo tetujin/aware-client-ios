@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "AWAREScheduleManager.h"
 
 extern NSString* const KEY_ESM_TYPE;
 extern NSString* const KEY_ESM_TITLE;
@@ -36,5 +37,6 @@ extern NSString* const KEY_ESM_SCALE_STEP;
 
 @property (weak, nonatomic) IBOutlet UIScrollView *mainScrollView;
 @property(nonatomic, strong) UITapGestureRecognizer *singleTap;
+@property (weak, nonatomic) IBOutlet AWAREScheduleManager* scheduleManager;
 
 @end

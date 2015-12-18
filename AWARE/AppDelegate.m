@@ -63,8 +63,6 @@
     
     [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
     
-//    [[DeployGateSDK sharedInstance] launchApplicationWithAuthor:@"tetujin" key:@"2741cd90ae47212ad345d40c87f9fd31ee49195a"];
-//    [[DeployGateSDK sharedInstance] launchApplicationWithAuthor:@"tetujin" key:@"2741cd90ae47212ad345d40c87f9fd31ee49195a" userInfomationEnabled:YES];
     return YES;
 }
 
@@ -140,6 +138,7 @@
 
 - (void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
+    NSLog(@"This is background fetch result!");
     completionHandler(UIBackgroundFetchResultNewData);
 }
 
@@ -163,7 +162,7 @@ handleEventsForBackgroundURLSession:(NSString *)identifier
 }
 
 
-// DeviceToken受信成功
+// Success to get a DeviceToken
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
     
     NSString *token = deviceToken.description;
@@ -178,17 +177,35 @@ handleEventsForBackgroundURLSession:(NSString *)identifier
     NSLog(@"deviceToken: %@", token);
 }
 
-// DeviceToken受信失敗
+// Faile to get a DeviceToken
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
     NSLog(@"deviceToken error: %@", [error description]);
 }
 
 
-// 通常のPush通知の受信
+// Get normal push alert
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
     NSLog(@"pushInfo: %@", [userInfo description]);
 }
 
+
+
+- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
+{
+    if (notification != nil) {
+        NSLog(@"Nofication was selected!!: %@", notification.category);
+        NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+        [defaults setObject:notification.category forKey:@"schedule_id"];
+    } else {
+        NSLog(@"-------");
+    }
+    
+//    NSLog(@"Stop background task of AWARE....");
+//    AppDelegate *appDelegate;
+//    appDelegate = (AppDelegate*)[[UIApplication sharedApplication] delegate];
+//    singleView.text = appDelegate.singleString;
+    
+}
 
 #pragma mark - Core Data stack
 
@@ -315,6 +332,22 @@ didDisconnectWithUser:(GIDGoogleUser *)user
     // Perform any operations when the user disconnects from app here.
     // ...
     NSLog(@"Google login error..");
+}
+
+- (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forRemoteNotification:(NSDictionary *)userInfo completionHandler:(void (^)())completionHandler {
+    
+    if ([identifier isEqualToString:NotificationActionOneIdent]) {
+        
+        NSLog(@"You chose action 1.");
+    }
+    else if ([identifier isEqualToString:NotificationActionTwoIdent]) {
+        
+        NSLog(@"You chose action 2.");
+    }
+    if (completionHandler) {
+        
+        completionHandler();
+    }
 }
 
 @end

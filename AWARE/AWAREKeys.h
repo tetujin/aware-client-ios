@@ -69,7 +69,9 @@ extern NSString* const SENSOR_PLUGIN_SCHEDULER;
 //extern NSString* const SENSOR_
 //extern NSString* const SENSOR_
 
-
+extern NSString * const NotificationCategoryIdent;
+extern NSString * const NotificationActionOneIdent;
+extern NSString * const NotificationActionTwoIdent;
 
 @interface AWAREKeys: NSObject
 

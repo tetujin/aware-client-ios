@@ -441,6 +441,15 @@
         NSURLSessionDataTask* dataTask = [session dataTaskWithRequest:request];
         [dataTask resume];
 //    }
+    
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"title" message:@"message" delegate:self cancelButtonTitle:@"cancel" otherButtonTitles:@"OK",@"hello",@"hoge",@"hoge", nil];
+//        [alert show];
+//        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Filename" message:@"Enter the file name:" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Ok", nil];
+//        alertView.alertViewStyle = UIAlertViewStylePlainTextInput;
+//        //    UITextField *passwordTextField = [alertView textFieldAtIndex:0];
+//        [alertView show];
+//    });
 }
 
 - (void)URLSession:(NSURLSession *)session
@@ -743,7 +752,8 @@ didReceiveResponse:(NSURLResponse *)response
                 }] resume];
 }
 
-- (BOOL)clearTable{
+- (BOOL) clearTable
+{
     NSLog(@"%@",[self getCreateTableUrl:[self getSensorName]]);
     NSString *post = nil;
     NSData *postData = nil;
@@ -838,8 +848,50 @@ didReceiveResponse:(NSURLResponse *)response
     if(soundFlag) {
         localNotification.soundName = UILocalNotificationDefaultSoundName;
     }
+    localNotification.hasAction = YES;
+//    localNotification.alertAction = @"hoge";
+//    [self registerForNotification];
     [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
 }
+
+
+
+- (void)registerForNotification {
+    
+    UIMutableUserNotificationAction *action1;
+    action1 = [[UIMutableUserNotificationAction alloc] init];
+    [action1 setActivationMode:UIUserNotificationActivationModeBackground];
+    [action1 setTitle:@"Action 1"];
+    [action1 setIdentifier:NotificationActionOneIdent];
+    [action1 setDestructive:NO];
+    [action1 setAuthenticationRequired:NO];
+    
+    UIMutableUserNotificationAction *action2;
+    action2 = [[UIMutableUserNotificationAction alloc] init];
+    [action2 setActivationMode:UIUserNotificationActivationModeBackground];
+    [action2 setTitle:@"Action 2"];
+    [action2 setIdentifier:NotificationActionTwoIdent];
+    [action2 setDestructive:NO];
+    [action2 setAuthenticationRequired:NO];
+    
+    UIMutableUserNotificationCategory *actionCategory;
+    actionCategory = [[UIMutableUserNotificationCategory alloc] init];
+    [actionCategory setIdentifier:NotificationCategoryIdent];
+    [actionCategory setActions:@[action1, action2]
+                    forContext:UIUserNotificationActionContextDefault];
+    
+    NSSet *categories = [NSSet setWithObject:actionCategory];
+    UIUserNotificationType types = (UIUserNotificationTypeAlert|
+                                    UIUserNotificationTypeSound|
+                                    UIUserNotificationTypeBadge);
+    
+    UIUserNotificationSettings *settings;
+    settings = [UIUserNotificationSettings settingsForTypes:types
+                                                 categories:categories];
+    
+    [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
+}
+
 
 
 - (void)connection:(NSURLConnection *)connection

@@ -9,6 +9,7 @@
 #import "AWAREEsmViewController.h"
 #import "ESM.h"
 #import "AWAREKeys.h"
+#import "ViewController.h"
 
 NSString* const KEY_ESM_TYPE = @"esm_type";
 NSString* const KEY_ESM_TITLE = @"esm_title";
@@ -124,11 +125,15 @@ NSString* const KEY_ESM_SCALE_STEP = @"esm_scale_step";
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-    NSLog(@"hello");
-}
+//- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+//    // Get the new view controller using [segue destinationViewController].
+//    // Pass the selected object to the new view controller.
+////    NSLog(@"hello");
+//    if ([[segue identifier] isEqualToString:@"selectRow"]) {
+//        CustomViewController *vcntl = [segue destinationViewController];    // <- 1
+//        vcntl.rowNumber = [self.tableView indexPathForSelectedRow].row;    // <- 2
+//    }
+//}
 
 
 - (void)viewDidAppear:(BOOL)animated{
@@ -137,88 +142,27 @@ NSString* const KEY_ESM_SCALE_STEP = @"esm_scale_step";
     [_mainScrollView setScrollEnabled:YES];
     [_mainScrollView setFrame:self.view.frame];
     
-    
     if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
         self.navigationController.interactivePopGestureRecognizer.delegate = self;
     }
+
+    
+    
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSString* scheduleId = [defaults objectForKey:@"schedule_id"];
+    if (scheduleId) {
+        [defaults removeObjectForKey:@"schedule_id"];
+    }
+    
+    [_scheduleManager showScheduleIds];
     
     uiElements = [[NSMutableArray alloc] init];
     
-    // free text
-    NSMutableDictionary *dicForJson = [[NSMutableDictionary alloc] init];
-    [dicForJson setObject:@1 forKey:KEY_ESM_TYPE];
-    [dicForJson setObject:@"ESM Freetext" forKey:KEY_ESM_TITLE];
-    [dicForJson setObject:@"The user can answer an open ended question." forKey:KEY_ESM_INSTRUCTIONS];
-    [dicForJson setObject:@"next" forKey:KEY_ESM_SUBMIT];
-    [dicForJson setObject:@60 forKey:KEY_ESM_EXPIRATION_THRESHOLD];
-    [dicForJson setObject:@"AWARE Tester" forKey:KEY_ESM_TRIGGER];
-    
-    // radio
-    NSMutableDictionary *dicRadio = [[NSMutableDictionary alloc] init];
-    [dicRadio setObject:@2 forKey:KEY_ESM_TYPE];
-    [dicRadio setObject:@"ESM Radio" forKey:KEY_ESM_TITLE];
-    [dicRadio setObject:@"he user can only choose one option" forKey:KEY_ESM_INSTRUCTIONS];
-    [dicRadio setObject:[NSArray arrayWithObjects:@"Aston Martin", @"Lotus", @"Jaguar", nil] forKey:KEY_ESM_RADIOS];
-    [dicRadio setObject:@"Next" forKey:KEY_ESM_SUBMIT];
-    [dicRadio setObject:@60 forKey:KEY_ESM_EXPIRATION_THRESHOLD];
-    [dicRadio setObject:@"AWARE Tester" forKey:KEY_ESM_TRIGGER];
-    
-    // check box
-    NSMutableDictionary *dicCheckBox = [[NSMutableDictionary alloc] init];
-    [dicCheckBox setObject:@3 forKey:KEY_ESM_TYPE];
-    [dicCheckBox setObject:@"ESM Checkbox" forKey:KEY_ESM_TITLE];
-    [dicCheckBox setObject:@"The user can choose multiple options" forKey:KEY_ESM_INSTRUCTIONS];
-    [dicCheckBox setObject:[NSArray arrayWithObjects:@"One", @"Two", @"Three", nil] forKey:KEY_ESM_CHECKBOXES];
-    [dicCheckBox setObject:@"Next" forKey:KEY_ESM_SUBMIT];
-    [dicCheckBox setObject:@60 forKey:KEY_ESM_EXPIRATION_THRESHOLD];
-    [dicCheckBox setObject:@"AWARE Tester" forKey:KEY_ESM_TRIGGER];
-    
-    
-    // Likert scale
-    NSMutableDictionary *dicLikert = [[NSMutableDictionary alloc] init];
-    [dicLikert  setObject:@4 forKey:KEY_ESM_TYPE];
-    [dicLikert  setObject:@"ESM Likert" forKey:KEY_ESM_TITLE];
-    [dicLikert  setObject:@"User rating 1 to 5 or 7 at 1 step increments" forKey:KEY_ESM_INSTRUCTIONS];
-    [dicLikert setObject:@5 forKey:KEY_ESM_LIKERT_MAX];
-    [dicLikert setObject:@"Great" forKey:KEY_ESM_LIKERT_MAX_LABEL];
-    [dicLikert setObject:@"Bad" forKey:KEY_ESM_LIKERT_MIN_LABEL];
-    [dicLikert setObject:@1 forKey:KEY_ESM_LIKERT_STEP];
-    [dicLikert  setObject:@"Next" forKey:KEY_ESM_SUBMIT];
-    [dicLikert  setObject:@60 forKey:KEY_ESM_EXPIRATION_THRESHOLD];
-    [dicLikert  setObject:@"AWARE Tester" forKey:KEY_ESM_TRIGGER];
-
-    // quick
-    NSMutableDictionary *dicQuick = [[NSMutableDictionary alloc] init];
-    [dicQuick  setObject:@5 forKey:KEY_ESM_TYPE];
-    [dicQuick  setObject:@"ESM Quick Answer" forKey:KEY_ESM_TITLE];
-    [dicQuick  setObject:@"One touch answer" forKey:KEY_ESM_INSTRUCTIONS];
-    [dicQuick  setObject:[NSArray arrayWithObjects:@"Yes", @"No", @"Maybe", nil] forKey:KEY_ESM_QUICK_ANSWERS];
-    [dicQuick  setObject:@60 forKey:KEY_ESM_EXPIRATION_THRESHOLD];
-    [dicQuick  setObject:@"AWARE Tester" forKey:KEY_ESM_TRIGGER];
-
-    
-    // scale
-    NSMutableDictionary *dicScale = [[NSMutableDictionary alloc] init];
-    [dicScale  setObject:@6 forKey:KEY_ESM_TYPE];
-    [dicScale  setObject:@"ESM Scale" forKey:KEY_ESM_TITLE];
-    [dicScale  setObject:@"Between 0 and 10 with 2 increments" forKey:KEY_ESM_INSTRUCTIONS];
-    [dicScale  setObject:@0 forKey:KEY_ESM_SCALE_MIN];
-    [dicScale  setObject:@10 forKey:KEY_ESM_SCALE_MAX];
-    [dicScale  setObject:@0 forKey:KEY_ESM_SCALE_START];
-    [dicScale setObject:@"10" forKey:KEY_ESM_SCALE_MAX_LABEL];
-    [dicScale setObject:@"0" forKey:KEY_ESM_SCALE_MIN_LABEL];
-    [dicScale setObject:@2 forKey:KEY_ESM_SCALE_STEP];
-    [dicScale setObject:@"OK" forKey:KEY_ESM_SUBMIT];
-    [dicScale  setObject:@60 forKey:KEY_ESM_EXPIRATION_THRESHOLD];
-    [dicScale  setObject:@"AWARE Tester" forKey:KEY_ESM_TRIGGER];
-
-    
-    arrayForJson = [[NSArray alloc] initWithObjects:dicForJson, dicRadio, dicCheckBox,dicLikert, dicQuick, dicScale, nil];
-//    arrayForJson = [[NSArray alloc] initWithObjects: dicForJson, dicRadio,  nil];
-    NSData *data = [NSJSONSerialization dataWithJSONObject:arrayForJson options:0 error:nil];
-    NSString* jsonStr =  [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    [self addEsm:jsonStr];
-    
+    AWARESchedule * schedule = [_scheduleManager getScheduleByScheduleId:scheduleId];
+    if (schedule != nil) {
+        NSLog(@"[json]: %@", schedule.esmStr);
+        [self addEsm:schedule.esmStr];
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -622,7 +566,15 @@ NSString* const KEY_ESM_SCALE_STEP = @"esm_scale_step";
         [esm performSelector:@selector(syncAwareDB) withObject:0 afterDelay:5];
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Thank for submitting your answer!" message:@"" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [alert show];
-        [self.navigationController popToRootViewControllerAnimated:YES];
+        
+        CGFloat currentVersion = [[[UIDevice currentDevice] systemVersion] floatValue];
+        if (currentVersion >= 9.0) {
+//            [self.navigationController.navigationBar setDelegate:self];
+            [self.navigationController popToRootViewControllerAnimated:YES];
+        } else{
+            [self dismissViewControllerAnimated:YES completion:nil];
+        }
+       
     } else {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"AWARE can not save your answer" message:@"Please push submit button again." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [alert show];
@@ -706,7 +658,12 @@ NSString* const KEY_ESM_SCALE_STEP = @"esm_scale_step";
 - (void) pushedCancelButton:(id) senser
 {
     NSLog(@"Cancel button was pushed!");
-    [self.navigationController popToRootViewControllerAnimated:YES];
+    CGFloat currentVersion = [[[UIDevice currentDevice] systemVersion] floatValue];
+    if (currentVersion >= 9.0) {
+        [self.navigationController popToRootViewControllerAnimated:YES];
+    } else{
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }
 }
 
 

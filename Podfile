@@ -9,6 +9,8 @@ pod 'SCNetworkReachability'
 pod 'Google/SignIn'
 #pod 'DeployGateSDK'
 pod 'ios-ntp'
+pod 'LMAlertView'
+pod 'Google-API-Client'
 end
 
 target 'AWARETests' do

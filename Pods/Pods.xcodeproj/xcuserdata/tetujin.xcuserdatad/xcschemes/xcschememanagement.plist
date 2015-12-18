@@ -4,7 +4,22 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>CAAnimationBlocks.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>CocoaAsyncSocket.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Google-API-Client.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>LMAlertView.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -19,7 +34,22 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>RBBAnimation.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>SCNetworkReachability.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>gtm-http-fetcher.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>gtm-oauth2.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -32,7 +62,22 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>4CBB6AC178EF19521FF258BED8DEEB83</key>
+		<key>137D9ACF58C97E923FC9604F5398140B</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>283EDF53486191EB84AF40F47A4C7631</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>2DC675527E13A319011526305AA81ADF</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>580787BAE4AF0786626C42AAE3E9CE14</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -42,17 +87,32 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>7411C03843BA534022FA35124FD32006</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
 		<key>74CD2F578138157E0B27CCEE08C069EF</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
+		<key>9F8251397B63FCE573AC7F8BFE35ECD3</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>C603EFE4AB12127AFC95861855B07DD5</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>C7E0B1280890458CA2F63E0FDC2005DC</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>ECFE0958DDB7FEC79B3AA1C9337BC941</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>FDC4981285617666BFB83C856ED23F94</key>
 		<dict>
 			<key>primary</key>
 			<true/>
