@@ -8,7 +8,7 @@
 
 #import "MSBand.h"
 
-@implementation MSBand{
+@implementation MSBand {
     NSTimer* uploadTimer;
 //    NSTimer* sensingTimer;
     NSString* PLUGIN_MSBAND_SENSORS_CALORIES;
@@ -24,11 +24,10 @@
     NSString* PLUGIN_MSBAND_SENSORS_GYRO;
     NSString* PLUGIN_MSBAND_SENSORS_ALTIMETER;
     NSString* PLUGIN_MSBAND_SENSORS_BAROMETER;
-    
 }
 
-- (instancetype)initWithSensorName:(NSString *)sensorName{
-    self = [super initWithSensorName:sensorName];
+- (instancetype)initWithPluginName:(NSString *)pluginName deviceId:(NSString *)deviceId {
+    self = [super initWithPluginName:pluginName deviceId:deviceId];
     if (self) {
         PLUGIN_MSBAND_SENSORS_ACC = @"plugin_msband_sensors_accelerometer";
         PLUGIN_MSBAND_SENSORS_GYRO = @"plugin_msband_sensors_gyroscope";
@@ -66,14 +65,14 @@ didFailToConnectWithError:(NSError *)error{
 }
 
 
-/** 
- * AWARESensor Delegate
- */
-- (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
+- (BOOL) stopAllSensors{
+    [self stopMSBSensors];
+    return YES;
+}
+
+- (BOOL) startAllSensors:(double)upInterval withSettings:(NSArray *)settings {
     NSLog(@"Start MSBand Sensor!");
     
-    //    // Setup View
-    //    [self markSampleReady:NO];
     // Setup Band
     [MSBClientManager sharedManager].delegate = self;
     NSArray	*clients = [[MSBClientManager sharedManager] attachedClients];
@@ -85,24 +84,24 @@ didFailToConnectWithError:(NSError *)error{
     [[MSBClientManager sharedManager] connectClient:self.client];
     NSLog(@"%@",[NSString stringWithFormat:@"Please wait. Connecting to Band <%@>", self.client.name]);
     
-    [self performSelector:@selector(startMSBSensors) withObject:0 afterDelay:5];
-    
-     uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval target:self selector:@selector(syncAllMSBSensors) userInfo:nil repeats:YES];
+//    [self performSelector:@selector(startMSBSensors) withObject:0 afterDelay:5];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+//        [awareSensor startSensor:uploadTime withSettings:settings];
+        [self startMSBSensors:upInterval withSettings:settings];
+    });
     
     return YES;
 }
 
+- (void)startMSBSensors:(double)upInterval withSettings:(NSArray *)settings{
+    [super addAnAwareSensor:[self getCalorieSensor]];
+    [super addAnAwareSensor:[self getDistanceSensor]];
+    [super addAnAwareSensor:[self getGSRSensor]]; //x
+    [super addAnAwareSensor:[self getHRSensor]];
+    [super addAnAwareSensor:[self getSkinTempSensor]];
+    [super addAnAwareSensor:[self getUVSensor]];
+    [super addAnAwareSensor:[self getBatteryGaugeSensor]];
 
-- (void)startMSBSensors{
-    
-    [self startCalories];
-    [self startDistance];
-    [self startGSR]; //x
-    [self startHeartRate];
-    [self startSkinTemp];
-    [self startUV];
-    [self batteryGauge];
-    
     //    [self startAccelerometer];
     //    [self startAltimeter]; //x
     //    [self startAmbientLight]; //x
@@ -110,139 +109,43 @@ didFailToConnectWithError:(NSError *)error{
     //    [self startPedometer];
     //    [self startRRInterval];
     //    [self startGyroscope];
+    
+    [super startAllSensors:upInterval withSettings:settings];
 }
 
-
-- (void) startAccelerometer {
-    NSString *query = [[NSString alloc] init];
-    query = @"_id integer primary key autoincrement,"
-    "timestamp real default 0,"
-    "device_id text default '',"
-    "double_values_0 real default 0,"
-    "double_values_1 real default 0,"
-    "double_values_2 real default 0,"
-    "accuracy integer default 0,"
-    "label text default '',"
-    "UNIQUE (timestamp,device_id)";
-    [super createTable:query withTableName:PLUGIN_MSBAND_SENSORS_ACC];
-    
-    NSLog(@"Start an Accelerometer Sensor!");
-    void (^accelerometerHandler)(MSBSensorAccelerometerData *, NSError *) = ^(MSBSensorAccelerometerData *accelerometerData, NSError *error){
-        NSString* data = [NSString stringWithFormat:@"X = %5.2f Y = %5.2f Z = %5.2f",
-                          accelerometerData.x,
-                          accelerometerData.y,
-                          accelerometerData.z];
-        NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
-        NSNumber* unixtime = [NSNumber numberWithDouble:timeStamp];
-        NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-        [dic setObject:unixtime forKey:@"timestamp"];
-        [dic setObject:[self getDeviceId] forKey:@"device_id"];
-        [dic setObject:[NSNumber numberWithDouble:accelerometerData.x] forKey:@"double_values_0"];
-        [dic setObject:[NSNumber numberWithDouble:accelerometerData.y] forKey:@"double_values_1"];
-        [dic setObject:[NSNumber numberWithDouble:accelerometerData.z] forKey:@"double_values_2"];
-        [dic setObject:@0 forKey:@"accuracy"];
-        [dic setObject:@"" forKey:@"label"];
-        [self setLatestValue:data];
-        [self saveData:dic toLocalFile:PLUGIN_MSBAND_SENSORS_ACC];
-
-    };
-    NSError *stateError;
-    //    //Start accelerometer sensor on a MSBand.
-    if (![self.client.sensorManager startAccelerometerUpdatesToQueue:nil errorRef:&stateError withHandler:accelerometerHandler]) {
-        NSLog(@"Accelerometer is faild: %@", stateError.description);
-    }
-}
-
-- (void) startAltimeter {
-    NSString *query = [[NSString alloc] init];
-    query = @"_id integer primary key autoincrement,"
-    "timestamp real default 0,"
-    "device_id text default '',"
-    "elevation_stepping integer default 0,"
-    "elevation_other_means integer default 0,"
-    "accuracy integer default 0,"
-    "label text default '',"
-    "UNIQUE (timestamp,device_id)";
-    [super createTable:query withTableName:PLUGIN_MSBAND_SENSORS_ALTIMETER];
-    
-    NSLog(@"Start an Altimeter Sensor!");
-    void (^altimeterHandler)(MSBSensorAltimeterData *, NSError *) = ^(MSBSensorAltimeterData *altimeterData, NSError *error){
-        NSString* data  = [NSString stringWithFormat:
-                           @"Elevation gained by stepping (cm)   : %u\n"
-                           @"Elevation gained by other means (cm): %u\n",
-                           (unsigned int)altimeterData.steppingGain,
-                           (unsigned int)(altimeterData.totalGain - altimeterData.steppingGain)];
-        //        NSLog(@"Altimeter: %@",data);
-        NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
-        NSNumber* unixtime = [NSNumber numberWithDouble:timeStamp];
-        NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-        [dic setObject:unixtime forKey:@"timestamp"];
-        [dic setObject:[self getDeviceId] forKey:@"device_id"];
-        [dic setObject:[NSNumber numberWithDouble:altimeterData.steppingGain] forKey:@"elevation_stepping"];
-        [dic setObject:[NSNumber numberWithDouble:(altimeterData.totalGain - altimeterData.steppingGain)] forKey:@"elevation_other_means"];
-        [dic setObject:@0 forKey:@"accuracy"];
-        [dic setObject:@"" forKey:@"label"];
-        [self setLatestValue:data];
-        [self saveData:dic toLocalFile:PLUGIN_MSBAND_SENSORS_ALTIMETER];
-    };
-    
-    NSError *stateError;
-    //Start altieter sensor on a MSBand.
-    if (![self.client.sensorManager startAltimeterUpdatesToQueue:nil errorRef:&stateError withHandler:altimeterHandler]){
-        NSLog(@"Altimeter sensor is faild: %@", stateError.description);
-    }
-}
-
-- (void) startDeviceContact{
-    
-}
-
-- (void) startBarometer{
-    NSString *query = [[NSString alloc] init];
-    query = @"_id integer primary key autoincrement,"
-    "timestamp real default 0,"
-    "device_id text default '',"
-    "airpressure real default 0,"
-    "temperature real default 0,"
-    "accuracy integer default 0,"
-    "label text default '',"
-    "UNIQUE (timestamp,device_id)";
-    [super createTable:query withTableName:PLUGIN_MSBAND_SENSORS_BAROMETER];
-    
-    NSLog(@"Start a Barometer Sensor!");
-    void (^barometerHandler)(MSBSensorBarometerData *, NSError *) = ^(MSBSensorBarometerData *barometerData, NSError *error) {
-        NSString* data =[NSString stringWithFormat:@"%5.2f hPa, %2.1f°C", barometerData.airPressure, barometerData.temperature];
-        //        NSLog(@"Barometer: %@",data);
-        NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
-        NSNumber* unixtime = [NSNumber numberWithDouble:timeStamp];
-        NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-        [dic setObject:unixtime forKey:@"timestamp"];
-        [dic setObject:[self getDeviceId] forKey:@"device_id"];
-        [dic setObject:[NSNumber numberWithDouble:barometerData.airPressure] forKey:@"airpressure"];
-        [dic setObject:[NSNumber numberWithDouble:barometerData.temperature] forKey:@"temperature"];
-        [dic setObject:@0 forKey:@"accuracy"];
-        [dic setObject:@"" forKey:@"label"];
-        [self setLatestValue:data];
-        [self saveData:dic toLocalFile:PLUGIN_MSBAND_SENSORS_BAROMETER];
-    };
-    NSError *stateError;
-    
-    //start barometer sensor
-    if (![self.client.sensorManager startBarometerUpdatesToQueue:nil errorRef:&stateError withHandler:barometerHandler]) {
-        NSLog(@"Barometer sensor is faild: %@", stateError.description);
-    }
+- (void) stopMSBSensors {
+    [super stopAndRemoveAllSensors];
+    NSLog(@"Stop all sensors on the MS Band.");
+    [self.client.sensorManager stopAccelerometerUpdatesErrorRef:nil];
+    [self.client.sensorManager stopAltimeterUpdatesErrorRef:nil]; //x
+    [self.client.sensorManager stopAmbientLightUpdatesErrorRef:nil]; //x
+    [self.client.sensorManager stopBandContactUpdatesErrorRef:nil];
+    [self.client.sensorManager stopCaloriesUpdatesErrorRef:nil];
+    [self.client.sensorManager stopDistanceUpdatesErrorRef:nil];
+    [self.client.sensorManager stopGSRUpdatesErrorRef:nil]; //x
+    [self.client.sensorManager stopGyroscopeUpdatesErrorRef:nil];
+    [self.client.sensorManager stopHeartRateUpdatesErrorRef:nil]; //x
+    [self.client.sensorManager stopPedometerUpdatesErrorRef:nil];
+    [self.client.sensorManager stopRRIntervalUpdatesErrorRef:nil];
+    [self.client.sensorManager stopSkinTempUpdatesErrorRef:nil];
+    [self.client.sensorManager stopUVUpdatesErrorRef:nil];
 }
 
 
 
-- (void) startCalories{
+
+
+- (AWARESensor *) getCalorieSensor{
+    
+    AWARESensor *calSensor = [[AWARESensor alloc] initWithSensorName:PLUGIN_MSBAND_SENSORS_CALORIES];
+    
     NSString *query = [[NSString alloc] init];
     query = @"_id integer primary key autoincrement,"
     "timestamp real default 0,"
     "device_id text default '',"
     "calories integer default 0,"
     "UNIQUE (timestamp,device_id)";
-    [super createTable:query withTableName:PLUGIN_MSBAND_SENSORS_CALORIES];
+    [calSensor createTable:query withTableName:PLUGIN_MSBAND_SENSORS_CALORIES];
     
     NSLog(@"Start a Cal sensor!");
     void (^calHandler)(MSBSensorCaloriesData *, NSError *) = ^(MSBSensorCaloriesData *calData, NSError *error) {
@@ -254,19 +157,22 @@ didFailToConnectWithError:(NSError *)error{
         [dic setObject:unixtime forKey:@"timestamp"];
         [dic setObject:[self getDeviceId] forKey:@"device_id"];
         [dic setObject:[NSNumber numberWithInteger:calData.calories] forKey:@"calories"];
-        [self setLatestValue:data];
-        [self saveData:dic toLocalFile:PLUGIN_MSBAND_SENSORS_CALORIES];
-//        calories
+        [calSensor setLatestValue:data];
+        [calSensor saveData:dic];
     };
     NSError *stateError;
     if (![self.client.sensorManager startCaloriesUpdatesToQueue:nil errorRef:&stateError withHandler:calHandler]) {
         NSLog(@"Cal sensor is faild: %@", stateError.description);
     }
+    return calSensor;
 }
 
 
 
-- (void) startDistance{
+- (AWARESensor *) getDistanceSensor{
+    
+    AWARESensor *distanceSensor = [[AWARESensor alloc] initWithSensorName:PLUGIN_MSBAND_SENSORS_DISTANCE];
+    
     NSString *query = [[NSString alloc] init];
     query = @"_id integer primary key autoincrement,"
     "timestamp real default 0,"
@@ -274,7 +180,7 @@ didFailToConnectWithError:(NSError *)error{
     "distance integer default 0,"
     "motiontype texte default '',"
     "UNIQUE (timestamp,device_id)";
-    [super createTable:query withTableName:PLUGIN_MSBAND_SENSORS_DISTANCE];
+    [distanceSensor createTable:query withTableName:PLUGIN_MSBAND_SENSORS_DISTANCE];
     
     NSLog(@"Start a Distance Sensor!");
     void (^distanceHandler)(MSBSensorDistanceData *, NSError *) = ^(MSBSensorDistanceData *distanceData, NSError *error) {
@@ -313,56 +219,35 @@ didFailToConnectWithError:(NSError *)error{
         [dic setObject:[self getDeviceId] forKey:@"device_id"];
         [dic setObject:[NSNumber numberWithInteger:distanceData.totalDistance] forKey:@"distance"];
         [dic setObject:motionType forKey:@"motiontype"];
-        [self setLatestValue:data];
-        [self saveData:dic toLocalFile:PLUGIN_MSBAND_SENSORS_DISTANCE];
+        [distanceSensor setLatestValue:data];
+        [distanceSensor saveData:dic];
     };
     NSError *stateError;
     if (![self.client.sensorManager startDistanceUpdatesToQueue:nil errorRef:&stateError withHandler:distanceHandler]) {
         NSLog(@"Distance sensor is faild: %@", stateError.description);
     }
-
+    return distanceSensor;
 }
 
-
-
-- (void) startGyroscope{
-    NSString *query = [[NSString alloc] init];
-    query = @"_id integer primary key autoincrement,"
-    "timestamp real default 0,"
-    "device_id text default '',"
-    "double_values_0 real default 0,"
-    "double_values_1 real default 0,"
-    "double_values_2 real default 0,"
-    "accuracy integer default 0,"
-    "label text default '',"
-    "UNIQUE (timestamp,device_id)";
-    [super createTable:query withTableName:PLUGIN_MSBAND_SENSORS_GYRO];
-    
-    NSLog(@"Start a Gyro Sensor!");
-    void (^gyroHandler)(MSBSensorGyroscopeData *, NSError *) = ^(MSBSensorGyroscopeData *gyroData, NSError *error) {
-        NSString *data = [NSString stringWithFormat:@"%f, %f, %f", gyroData.x, gyroData.y, gyroData.z];
-        //        NSLog(@"%@",data);
-        NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
-        NSNumber* unixtime = [NSNumber numberWithDouble:timeStamp];
-        NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-        [dic setObject:unixtime forKey:@"timestamp"];
-        [dic setObject:[self getDeviceId] forKey:@"device_id"];
-        [dic setObject:[NSNumber numberWithDouble:gyroData.x] forKey:@"double_values_0"];
-        [dic setObject:[NSNumber numberWithDouble:gyroData.y] forKey:@"double_values_1"];
-        [dic setObject:[NSNumber numberWithDouble:gyroData.z] forKey:@"double_values_2"];
-        [dic setObject:@0 forKey:@"accuracy"];
-        [dic setObject:@"" forKey:@"label"];
-        [self setLatestValue:data];
-        [self saveData:dic toLocalFile:PLUGIN_MSBAND_SENSORS_ACC];
+- (AWARESensor *) getGSRSensor { //x
+    AWARESensor * gsrSensor = [[AWARESensor alloc] initWithSensorName:PLUGIN_MSBAND_SENSORS_GSR];
+    NSLog(@"Start a GSR Sensor!");
+    void (^gsrHandler)(MSBSensorGSRData *, NSError *error) = ^(MSBSensorGSRData *gsrData, NSError *error){
+        NSString *data = [NSString stringWithFormat:@"%8u kOhm", (unsigned int)gsrData.resistance];
+        //        NSLog(@"GSR: %@",data);
     };
     NSError *stateError;
-    if (![self.client.sensorManager startGyroscopeUpdatesToQueue:nil errorRef:&stateError withHandler:gyroHandler]) {
-        NSLog(@"Gyro sensor is faild: %@", stateError.description);
+    if (![self.client.sensorManager startGSRUpdatesToQueue:nil errorRef:&stateError withHandler:gsrHandler]) {
+        NSLog(@"GSE sensor is faild: %@", stateError.description);
     }
-
+    return gsrSensor;
 }
 
-- (void) startHeartRate{
+
+- (AWARESensor *) getHRSensor {
+    
+    AWARESensor *hrSensor = [[AWARESensor alloc] initWithSensorName:PLUGIN_MSBAND_SENSORS_HEARTRATE];
+
     NSString *query = [[NSString alloc] init];
     query = @"_id integer primary key autoincrement,"
     "timestamp real default 0,"
@@ -370,7 +255,7 @@ didFailToConnectWithError:(NSError *)error{
     "heartrate integer default 0,"
     "heartrate_quality text default '',"
     "UNIQUE (timestamp,device_id)";
-    [super createTable:query withTableName:PLUGIN_MSBAND_SENSORS_HEARTRATE];
+    [hrSensor createTable:query withTableName:PLUGIN_MSBAND_SENSORS_HEARTRATE];
     
     NSLog(@"Start a HeartRate Sensor!");
     [self.client.sensorManager requestHRUserConsentWithCompletion:^(BOOL userConsent, NSError *error) {
@@ -399,9 +284,10 @@ didFailToConnectWithError:(NSError *)error{
                 [dic setObject:[self getDeviceId] forKey:@"device_id"];
                 [dic setObject:[NSNumber numberWithDouble:heartRateData.heartRate] forKey:@"heartrate"];
                 [dic setObject:quality forKey:@"heartrate_quality"];
-                [self setLatestValue:data];
-                [self saveData:dic toLocalFile:PLUGIN_MSBAND_SENSORS_HEARTRATE];
-                
+                [hrSensor setLatestValue:data];
+                [hrSensor saveData:dic toLocalFile:PLUGIN_MSBAND_SENSORS_HEARTRATE];
+                NSLog(@"%@", data);
+                [super setLatestValue:data]; //TODO
             };
             NSError *stateError;
             if (![self.client.sensorManager startHeartRateUpdatesToQueue:nil errorRef:&stateError withHandler:hrHandler]) {
@@ -411,47 +297,19 @@ didFailToConnectWithError:(NSError *)error{
             NSLog(@"User consent declined.");
         }
     }];
+    return hrSensor;
 }
 
 
-- (void) startSkinTemp{
-    NSString *query = [[NSString alloc] init];
-    query = @"_id integer primary key autoincrement,"
-    "timestamp real default 0,"
-    "device_id text default '',"
-    "skintemp real default 0,"
-    "UNIQUE (timestamp,device_id)";
-    [super createTable:query withTableName:PLUGIN_MSBAND_SENSORS_SKINTEMP];
-    NSLog(@"Start a Skin Teamperature Sensor!");
-    void (^skinHandler)(MSBSensorSkinTemperatureData *, NSError *) = ^(MSBSensorSkinTemperatureData *skinData,  NSError *error){
-        NSString *data = [NSString stringWithFormat:@" interval (s): %.2f", skinData.temperature];
-        //        NSLog(@"Skin: %@",data);
-        NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
-        NSNumber* unixtime = [NSNumber numberWithDouble:timeStamp];
-        NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-        [dic setObject:unixtime forKey:@"timestamp"];
-        [dic setObject:[self getDeviceId] forKey:@"device_id"];
-        [dic setObject:[NSNumber numberWithDouble:skinData.temperature] forKey:@"skintemp"];
-        [self setLatestValue:data];
-        [self saveData:dic toLocalFile:PLUGIN_MSBAND_SENSORS_SKINTEMP];
-        
-    };
-    NSError *stateError;
-    if (![self.client.sensorManager startSkinTempUpdatesToQueue:nil errorRef:&stateError withHandler:skinHandler]) {
-        NSLog(@"Skin sensor is faild: %@", stateError.description);
-    }
-}
-
-
-
-- (void) startUV{
+- (AWARESensor *) getUVSensor {
+    AWARESensor *uvSensor = [[AWARESensor alloc] initWithSensorName:PLUGIN_MSBAND_SENSORS_UV];
     NSString *query = [[NSString alloc] init];
     query = @"_id integer primary key autoincrement,"
     "timestamp real default 0,"
     "device_id text default '',"
     "uv real default 0,"
     "UNIQUE (timestamp,device_id)";
-    [super createTable:query withTableName:PLUGIN_MSBAND_SENSORS_UV];
+    [uvSensor createTable:query withTableName:PLUGIN_MSBAND_SENSORS_UV];
     NSLog(@"Start a UV sensor!");
     void (^uvHandler)(MSBSensorUVData *, NSError *) = ^(MSBSensorUVData *uvData,  NSError *error){
         NSString *data = [NSString stringWithFormat:@" interval (s): %ld", uvData.uvIndexLevel];
@@ -462,99 +320,264 @@ didFailToConnectWithError:(NSError *)error{
         [dic setObject:unixtime forKey:@"timestamp"];
         [dic setObject:[self getDeviceId] forKey:@"device_id"];
         [dic setObject:[NSNumber numberWithDouble:uvData.uvIndexLevel] forKey:@"uv"];
-        [self setLatestValue:data];
-        [self saveData:dic toLocalFile:PLUGIN_MSBAND_SENSORS_UV];
+        [uvSensor setLatestValue:data];
+        [uvSensor saveData:dic];
     };
     NSError *stateError;
     if (![self.client.sensorManager startUVUpdatesToQueue:nil errorRef:&stateError withHandler:uvHandler]) {
         NSLog(@"UV sensor is faild: %@", stateError.description);
     }
-
+    return uvSensor;
 }
 
-- (void) batteryGauge{
-    
-}
-
-- (void) startPedometer{
-    
+- (AWARESensor *) getBatteryGaugeSensor {
+    AWARESensor * batteryGaugeSensor = [[AWARESensor alloc] initWithSensorName:PLUGIN_MSBAND_SENSORS_BATTERYGAUGE];
+    return batteryGaugeSensor;
 }
 
 
+- (AWARESensor *) getSkinTempSensor {
+    AWARESensor *skinTempSensor = [[AWARESensor alloc] initWithSensorName:PLUGIN_MSBAND_SENSORS_SKINTEMP];
+    NSString *query = [[NSString alloc] init];
+    query = @"_id integer primary key autoincrement,"
+    "timestamp real default 0,"
+    "device_id text default '',"
+    "skintemp real default 0,"
+    "UNIQUE (timestamp,device_id)";
+    [skinTempSensor createTable:query withTableName:PLUGIN_MSBAND_SENSORS_SKINTEMP];
+    NSLog(@"Start a Skin Teamperature Sensor!");
+    void (^skinHandler)(MSBSensorSkinTemperatureData *, NSError *) = ^(MSBSensorSkinTemperatureData *skinData,  NSError *error){
+        NSString *data = [NSString stringWithFormat:@" interval (s): %.2f", skinData.temperature];
+        //        NSLog(@"Skin: %@",data);
+        NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
+        NSNumber* unixtime = [NSNumber numberWithDouble:timeStamp];
+        NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+        [dic setObject:unixtime forKey:@"timestamp"];
+        [dic setObject:[self getDeviceId] forKey:@"device_id"];
+        [dic setObject:[NSNumber numberWithDouble:skinData.temperature] forKey:@"skintemp"];
+        [skinTempSensor setLatestValue:data];
+        [skinTempSensor saveData:dic];
 
-
-
-
-
-- (void) startAmbientLight {//x
-    
-    NSLog(@"Start an AmbientLight Sensor!");
-    void (^ambientLightHandler)(MSBSensorAmbientLightData *, NSError *) = ^(MSBSensorAmbientLightData *ambientLightData, NSError *error){
-        NSString* data = [NSString stringWithFormat:@"AmbientLight: %5d lx", ambientLightData.brightness];
-        //        NSLog(@"Ambient: %@",data);
     };
     NSError *stateError;
-    if (![self.client.sensorManager startAmbientLightUpdatesToQueue:nil errorRef:&stateError withHandler:ambientLightHandler]) {
-        NSLog(@"Ambient light sensor is faild: %@", stateError.description);
+    if (![self.client.sensorManager startSkinTempUpdatesToQueue:nil errorRef:&stateError withHandler:skinHandler]) {
+        NSLog(@"Skin sensor is faild: %@", stateError.description);
     }
+    return skinTempSensor;
 }
 
-- (void) startGSR{ //x
-    NSLog(@"Start a GSR Sensor!");
-    void (^gsrHandler)(MSBSensorGSRData *, NSError *error) = ^(MSBSensorGSRData *gsrData, NSError *error){
-        NSString *data = [NSString stringWithFormat:@"%8u kOhm", (unsigned int)gsrData.resistance];
-        //        NSLog(@"GSR: %@",data);
+
+
+
+
+
+
+
+/**
+ * ========================================
+ * Following methods are not compleated yet
+ * ========================================
+ */
+
+- (AWARESensor *) getAccSensor {
+    AWARESensor *accSensor = [[AWARESensor alloc] initWithSensorName:PLUGIN_MSBAND_SENSORS_ACC];
+    
+    NSString *query = [[NSString alloc] init];
+    query = @"_id integer primary key autoincrement,"
+    "timestamp real default 0,"
+    "device_id text default '',"
+    "double_values_0 real default 0,"
+    "double_values_1 real default 0,"
+    "double_values_2 real default 0,"
+    "accuracy integer default 0,"
+    "label text default '',"
+    "UNIQUE (timestamp,device_id)";
+    [accSensor createTable:query withTableName:PLUGIN_MSBAND_SENSORS_ACC];
+    
+    NSLog(@"Start an Accelerometer Sensor!");
+    void (^accelerometerHandler)(MSBSensorAccelerometerData *, NSError *) = ^(MSBSensorAccelerometerData *accelerometerData, NSError *error){
+        NSString* data = [NSString stringWithFormat:@"X = %5.2f Y = %5.2f Z = %5.2f",
+                          accelerometerData.x,
+                          accelerometerData.y,
+                          accelerometerData.z];
+        NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
+        NSNumber* unixtime = [NSNumber numberWithDouble:timeStamp];
+        NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+        [dic setObject:unixtime forKey:@"timestamp"];
+        [dic setObject:[self getDeviceId] forKey:@"device_id"];
+        [dic setObject:[NSNumber numberWithDouble:accelerometerData.x] forKey:@"double_values_0"];
+        [dic setObject:[NSNumber numberWithDouble:accelerometerData.y] forKey:@"double_values_1"];
+        [dic setObject:[NSNumber numberWithDouble:accelerometerData.z] forKey:@"double_values_2"];
+        [dic setObject:@0 forKey:@"accuracy"];
+        [dic setObject:@"" forKey:@"label"];
+        [accSensor setLatestValue:data];
+        [accSensor saveData:dic];
     };
     NSError *stateError;
-    if (![self.client.sensorManager startGSRUpdatesToQueue:nil errorRef:&stateError withHandler:gsrHandler]) {
-        NSLog(@"GSE sensor is faild: %@", stateError.description);
+    //    //Start accelerometer sensor on a MSBand.
+    if (![self.client.sensorManager startAccelerometerUpdatesToQueue:nil errorRef:&stateError withHandler:accelerometerHandler]) {
+        NSLog(@"Accelerometer is faild: %@", stateError.description);
     }
-
+    return accSensor;
 }
 
-- (void) startRRInterval{
-    
-}
+//- (void) startAltimeter {
+//    NSString *query = [[NSString alloc] init];
+//    query = @"_id integer primary key autoincrement,"
+//    "timestamp real default 0,"
+//    "device_id text default '',"
+//    "elevation_stepping integer default 0,"
+//    "elevation_other_means integer default 0,"
+//    "accuracy integer default 0,"
+//    "label text default '',"
+//    "UNIQUE (timestamp,device_id)";
+//    [super createTable:query withTableName:PLUGIN_MSBAND_SENSORS_ALTIMETER];
+//    
+//    NSLog(@"Start an Altimeter Sensor!");
+//    void (^altimeterHandler)(MSBSensorAltimeterData *, NSError *) = ^(MSBSensorAltimeterData *altimeterData, NSError *error){
+//        NSString* data  = [NSString stringWithFormat:
+//                           @"Elevation gained by stepping (cm)   : %u\n"
+//                           @"Elevation gained by other means (cm): %u\n",
+//                           (unsigned int)altimeterData.steppingGain,
+//                           (unsigned int)(altimeterData.totalGain - altimeterData.steppingGain)];
+//        //        NSLog(@"Altimeter: %@",data);
+//        NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
+//        NSNumber* unixtime = [NSNumber numberWithDouble:timeStamp];
+//        NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+//        [dic setObject:unixtime forKey:@"timestamp"];
+//        [dic setObject:[self getDeviceId] forKey:@"device_id"];
+//        [dic setObject:[NSNumber numberWithDouble:altimeterData.steppingGain] forKey:@"elevation_stepping"];
+//        [dic setObject:[NSNumber numberWithDouble:(altimeterData.totalGain - altimeterData.steppingGain)] forKey:@"elevation_other_means"];
+//        [dic setObject:@0 forKey:@"accuracy"];
+//        [dic setObject:@"" forKey:@"label"];
+//        [self setLatestValue:data];
+//        [self saveData:dic toLocalFile:PLUGIN_MSBAND_SENSORS_ALTIMETER];
+//    };
+//    
+//    NSError *stateError;
+//    //Start altieter sensor on a MSBand.
+//    if (![self.client.sensorManager startAltimeterUpdatesToQueue:nil errorRef:&stateError withHandler:altimeterHandler]){
+//        NSLog(@"Altimeter sensor is faild: %@", stateError.description);
+//    }
+//}
+//
+//- (void) startDeviceContact{
+//    
+//}
+//
+//- (void) startBarometer {
+//    NSString *query = [[NSString alloc] init];
+//    query = @"_id integer primary key autoincrement,"
+//    "timestamp real default 0,"
+//    "device_id text default '',"
+//    "airpressure real default 0,"
+//    "temperature real default 0,"
+//    "accuracy integer default 0,"
+//    "label text default '',"
+//    "UNIQUE (timestamp,device_id)";
+//    [super createTable:query withTableName:PLUGIN_MSBAND_SENSORS_BAROMETER];
+//    
+//    NSLog(@"Start a Barometer Sensor!");
+//    void (^barometerHandler)(MSBSensorBarometerData *, NSError *) = ^(MSBSensorBarometerData *barometerData, NSError *error) {
+//        NSString* data =[NSString stringWithFormat:@"%5.2f hPa, %2.1f°C", barometerData.airPressure, barometerData.temperature];
+//        //        NSLog(@"Barometer: %@",data);
+//        NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
+//        NSNumber* unixtime = [NSNumber numberWithDouble:timeStamp];
+//        NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+//        [dic setObject:unixtime forKey:@"timestamp"];
+//        [dic setObject:[self getDeviceId] forKey:@"device_id"];
+//        [dic setObject:[NSNumber numberWithDouble:barometerData.airPressure] forKey:@"airpressure"];
+//        [dic setObject:[NSNumber numberWithDouble:barometerData.temperature] forKey:@"temperature"];
+//        [dic setObject:@0 forKey:@"accuracy"];
+//        [dic setObject:@"" forKey:@"label"];
+//        [self setLatestValue:data];
+//        [self saveData:dic toLocalFile:PLUGIN_MSBAND_SENSORS_BAROMETER];
+//    };
+//    NSError *stateError;
+//    
+//    //start barometer sensor
+//    if (![self.client.sensorManager startBarometerUpdatesToQueue:nil errorRef:&stateError withHandler:barometerHandler]) {
+//        NSLog(@"Barometer sensor is faild: %@", stateError.description);
+//    }
+//}
+//
+//
+//
+//
+//
+//
+//- (void) startGyroscope{
+//    NSString *query = [[NSString alloc] init];
+//    query = @"_id integer primary key autoincrement,"
+//    "timestamp real default 0,"
+//    "device_id text default '',"
+//    "double_values_0 real default 0,"
+//    "double_values_1 real default 0,"
+//    "double_values_2 real default 0,"
+//    "accuracy integer default 0,"
+//    "label text default '',"
+//    "UNIQUE (timestamp,device_id)";
+//    [super createTable:query withTableName:PLUGIN_MSBAND_SENSORS_GYRO];
+//    
+//    NSLog(@"Start a Gyro Sensor!");
+//    void (^gyroHandler)(MSBSensorGyroscopeData *, NSError *) = ^(MSBSensorGyroscopeData *gyroData, NSError *error) {
+//        NSString *data = [NSString stringWithFormat:@"%f, %f, %f", gyroData.x, gyroData.y, gyroData.z];
+//        //        NSLog(@"%@",data);
+//        NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
+//        NSNumber* unixtime = [NSNumber numberWithDouble:timeStamp];
+//        NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+//        [dic setObject:unixtime forKey:@"timestamp"];
+//        [dic setObject:[self getDeviceId] forKey:@"device_id"];
+//        [dic setObject:[NSNumber numberWithDouble:gyroData.x] forKey:@"double_values_0"];
+//        [dic setObject:[NSNumber numberWithDouble:gyroData.y] forKey:@"double_values_1"];
+//        [dic setObject:[NSNumber numberWithDouble:gyroData.z] forKey:@"double_values_2"];
+//        [dic setObject:@0 forKey:@"accuracy"];
+//        [dic setObject:@"" forKey:@"label"];
+//        [self setLatestValue:data];
+//        [self saveData:dic toLocalFile:PLUGIN_MSBAND_SENSORS_ACC];
+//    };
+//    NSError *stateError;
+//    if (![self.client.sensorManager startGyroscopeUpdatesToQueue:nil errorRef:&stateError withHandler:gyroHandler]) {
+//        NSLog(@"Gyro sensor is faild: %@", stateError.description);
+//    }
+//
+//}
+//
+//
+//
+//
+//
+//
+//
+//
+//- (void) startPedometer{
+//    
+//}
+//
+//
+//
+//
+//
+//
+//
+//- (void) startAmbientLight {//x
+//    
+//    NSLog(@"Start an AmbientLight Sensor!");
+//    void (^ambientLightHandler)(MSBSensorAmbientLightData *, NSError *) = ^(MSBSensorAmbientLightData *ambientLightData, NSError *error){
+//        NSString* data = [NSString stringWithFormat:@"AmbientLight: %5d lx", ambientLightData.brightness];
+//        //        NSLog(@"Ambient: %@",data);
+//    };
+//    NSError *stateError;
+//    if (![self.client.sensorManager startAmbientLightUpdatesToQueue:nil errorRef:&stateError withHandler:ambientLightHandler]) {
+//        NSLog(@"Ambient light sensor is faild: %@", stateError.description);
+//    }
+//}
+//
+//
+//
+//- (void) startRRInterval{
+//    
+//}
 
-
-- (void) syncAllMSBSensors {
-    NSArray *sensors =
-        [[NSArray alloc] initWithObjects:
-            PLUGIN_MSBAND_SENSORS_CALORIES,
-            PLUGIN_MSBAND_SENSORS_DEVICECONTACT,
-            PLUGIN_MSBAND_SENSORS_DISTANCE,
-            PLUGIN_MSBAND_SENSORS_HEARTRATE,
-            PLUGIN_MSBAND_SENSORS_PEDOMETER,
-            PLUGIN_MSBAND_SENSORS_SKINTEMP,
-            PLUGIN_MSBAND_SENSORS_UV,
-            PLUGIN_MSBAND_SENSORS_BATTERYGAUGE,
-            PLUGIN_MSBAND_SENSORS_GSR,
-            PLUGIN_MSBAND_SENSORS_ACC,
-            PLUGIN_MSBAND_SENSORS_GYRO,
-            PLUGIN_MSBAND_SENSORS_ALTIMETER,
-            PLUGIN_MSBAND_SENSORS_BAROMETER,
-            nil];
-    for (NSString * sensorName in sensors) {
-        [self syncAwareDBWithSensorName:sensorName];
-    }
-}
-
-
-- (void) stopMSBSensors {
-    NSLog(@"Stop all sensors on the MS Band.");
-    [self.client.sensorManager stopAccelerometerUpdatesErrorRef:nil];
-    [self.client.sensorManager stopAltimeterUpdatesErrorRef:nil]; //x
-    [self.client.sensorManager stopAmbientLightUpdatesErrorRef:nil]; //x
-    [self.client.sensorManager stopBandContactUpdatesErrorRef:nil];
-    [self.client.sensorManager stopCaloriesUpdatesErrorRef:nil];
-    [self.client.sensorManager stopDistanceUpdatesErrorRef:nil];
-    [self.client.sensorManager stopGSRUpdatesErrorRef:nil]; //x
-    [self.client.sensorManager stopGyroscopeUpdatesErrorRef:nil];
-    [self.client.sensorManager stopHeartRateUpdatesErrorRef:nil]; //x
-    [self.client.sensorManager stopPedometerUpdatesErrorRef:nil];
-    [self.client.sensorManager stopRRIntervalUpdatesErrorRef:nil];
-    [self.client.sensorManager stopSkinTempUpdatesErrorRef:nil];
-    [self.client.sensorManager stopUVUpdatesErrorRef:nil];
-}
 
 @end

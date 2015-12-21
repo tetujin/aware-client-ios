@@ -7,8 +7,10 @@
 //
 
 #import "AWARESensor.h"
+#import <EventKit/EventKit.h>
+#import <EventKitUI/EventKitUI.h>
+#import <CoreLocation/CoreLocation.h>
 
-
-@interface GoogleCal : AWARESensor
+@interface GoogleCal : AWARESensor <AWARESensorDelegate, CLLocationManagerDelegate>
 
 @end

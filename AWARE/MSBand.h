@@ -6,11 +6,12 @@
 //  Copyright © 2015 Yuuki NISHIYAMA. All rights reserved.
 //
 
-#import "AWARESensor.h"
-#import "AWARESensorManager.h"
+//#import "AWARESensor.h"
+#import "AWAREPlugin.h"
+//#import "AWARESensorManager.h"
 #import <MicrosoftBandKit_iOS/MicrosoftBandKit_iOS.h>
 
-@interface MSBand : AWARESensor <AWARESensorDelegate, MSBClientManagerDelegate >
+@interface MSBand : AWAREPlugin <MSBClientManagerDelegate >
 
 @property (nonatomic, weak) MSBClient *client;
 

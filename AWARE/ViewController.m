@@ -9,12 +9,11 @@
 #import "ViewController.h"
 #import "AWAREKeys.h"
 #import "GoogleLoginViewController.h"
-#import "Accelerometer.h"
-#import "AmbientNoise.h"
 #import "ActivityRecognition.h"
-#import "MSBand.h"
 #import "AWAREEsmViewController.h"
 
+#import "MSBand.h"
+#import "GoogleCal.h"
 
 @interface ViewController () {
     NSString *KEY_CEL_TITLE;
@@ -330,10 +329,15 @@
     [_sensors addObject:[self getCelContent:@"Sync only wifi" desc:wifiOnly image:@"" key:@"STUDY_CELL_WIFI"]]; //ic_action_mqtt
 
     //for test
-//    AWARESensor *msBand = [[MSBand alloc] initWithSensorName:SENSOR_PLUGIN_MSBAND];
-//    [msBand startSensor:60.0f withSettings:nil];
-//    [_sensorManager addNewSensor:msBand];
+    AWARESensor *msBand = [[MSBand alloc] initWithPluginName:SENSOR_PLUGIN_MSBAND deviceId:deviceId];
+    [msBand startSensor:60.0f withSettings:nil];
+    [_sensorManager addNewSensor:msBand];
 
+    
+    AWARESensor* googleCal = [[GoogleCal alloc] initWithSensorName:@"google_cal"];
+    [googleCal startSensor:60.0f withSettings:nil];
+    [_sensorManager addNewSensor:googleCal];
+    
 }
 
 

@@ -8,6 +8,7 @@
 
 #import "AWARESensorManager.h"
 #import "AWAREKeys.h"
+#import "AWAREPlugin.h"
 #import "Accelerometer.h"
 #import "Gyroscope.h"
 #import "Magnetometer.h"
@@ -45,6 +46,14 @@
                          settings:(NSArray*)settings
                           plugins:(NSArray*)plugins
                    uploadInterval:(double) uploadTime{
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString* deviceId = [userDefaults objectForKey:KEY_MQTT_USERNAME];
+    if (deviceId == NULL) {
+        NSLog(@"[Error] You did not have a StudyID. Please check your study configuration.");
+        return @"";
+    }
+    
 //    double uploadTime = 10.0f;
     NSLog(@"[%@] Upload interval is %f.", key, uploadTime);
     AWARESensor* awareSensor = nil;
@@ -141,7 +150,7 @@
                         awareSensor = [[NTPTime alloc] initWithSensorName:SENSOR_PLUGIN_NTPTIME];
                         [awareSensor startSensor:uploadTime withSettings:settings];
                     }else if([key isEqualToString:SENSOR_PLUGIN_MSBAND]){
-                        awareSensor = [[MSBand alloc] initWithSensorName:SENSOR_PLUGIN_MSBAND];
+                        awareSensor = [[MSBand alloc] initWithPluginName:SENSOR_PLUGIN_MSBAND deviceId:deviceId];
                         [awareSensor startSensor:uploadTime withSettings:settings];
                     }
                 }
