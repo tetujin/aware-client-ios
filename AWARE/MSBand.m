@@ -10,7 +10,6 @@
 
 @implementation MSBand {
     NSTimer* uploadTimer;
-//    NSTimer* sensingTimer;
     NSString* PLUGIN_MSBAND_SENSORS_CALORIES;
     NSString* PLUGIN_MSBAND_SENSORS_DEVICECONTACT;
     NSString* PLUGIN_MSBAND_SENSORS_DISTANCE;

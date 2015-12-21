@@ -11,6 +11,7 @@
 
 @implementation AWAREPlugin {
     NSMutableArray* awareSensors;
+    NSMutableArray* awareTimers;
 }
 
 /**
@@ -22,6 +23,7 @@
         _pluginName = pluginName;
         _deviceId = deviceId;
         awareSensors = [[NSMutableArray alloc] init];
+        awareTimers = [[ NSMutableArray alloc] init];
     }
     return self;
 }
@@ -34,6 +36,7 @@
         _pluginName = sensorName;
         _deviceId = [self getDeviceId];
         awareSensors = [[NSMutableArray alloc] init];
+        awareTimers = [[ NSMutableArray alloc] init];
     }
     return self;
 }
@@ -52,17 +55,23 @@
 - (void) addAnAwareSensor:(AWARESensor *) sensor {
     [awareSensors addObject:sensor];
 }
+//
+//
+///**
+// * Stop and Remove an AWARE sensor
+// */
+//- (void) stopAndRemoveAnAwareSensor:(NSString *) sensorName {
+//    for ( AWARESensor *sensor in awareSensors ) {
+//        if ([sensorName isEqualToString:[sensor getSensorName]]) {
+//            [awareSensors removeObject:sensor];
+//            
+//        }
+//    }
+//}
 
-
-/**
- * Stop and Remove an AWARE sensor
- */
-- (void) stopAndRemoveAnAwareSensor:(NSString *) sensorName {
-    for ( AWARESensor *sensor in awareSensors ) {
-        if ([sensorName isEqualToString:[sensor getSensorName]]) {
-            [awareSensors removeObject:sensor];
-        }
-    }
+- (BOOL) startSensor:(double)upInterval withSettings:(NSArray *)settings{
+    [self startAllSensors:upInterval withSettings:settings];
+    return YES;
 }
 
 /**
@@ -71,14 +80,15 @@
 - (BOOL)startAllSensors:(double)upInterval
            withSettings:(NSArray *)settings{
     for (AWARESensor* sensor in awareSensors) {
-        [sensor startSensor:upInterval withSettings:settings];
+//        [sensor startSensor:upInterval withSettings:settings];
+        NSTimer* timer = [NSTimer scheduledTimerWithTimeInterval:upInterval
+                                                          target:sensor
+                                                        selector:@selector(syncAwareDB)
+                                                        userInfo:nil
+                                                         repeats:YES];
+        [timer fire];
+        [awareTimers addObject:timer];
     }
-    return YES;
-}
-
-
-- (BOOL) startSensor:(double)upInterval withSettings:(NSArray *)settings{
-    [self startAllSensors:upInterval withSettings:settings];
     return YES;
 }
 
@@ -86,10 +96,16 @@
  * Stop and remove all sensors
  */
 - (BOOL)stopAndRemoveAllSensors {
+    for (NSTimer* timer in awareTimers) {
+        [timer invalidate];
+    }
+    [awareTimers removeAllObjects];
+    
     for (AWARESensor* sensor in awareSensors) {
         [sensor stopSensor];
     }
     [awareSensors removeAllObjects];
+    
     return NO;
 }
 

@@ -34,10 +34,10 @@
 - (void) addAnAwareSensor:(AWARESensor *) sensor ;
 
 
-/**
- * Stop and Remove an AWARE sensor
- */
-- (void) stopAndRemoveAnAwareSensor:(NSString *) sensorName;
+///**
+// * Stop and Remove an AWARE sensor
+// */
+//- (void) stopAndRemoveAnAwareSensor:(NSString *) sensorName;
 
 /**
  * Start All sensors
