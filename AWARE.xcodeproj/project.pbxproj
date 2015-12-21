@@ -70,7 +70,11 @@
 		16D810241C06242500605DE2 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16D810231C06242500605DE2 /* CFNetwork.framework */; };
 		16D810261C06242F00605DE2 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16D810251C06242F00605DE2 /* Security.framework */; };
 		16D8102D1C06671500605DE2 /* ExternalAccessory.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16D8102C1C06671500605DE2 /* ExternalAccessory.framework */; };
+		16E155331C252B4D00316321 /* AWAREPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 16E155321C252B4D00316321 /* AWAREPlugin.m */; };
 		16F09B221C249C5F005C1EB8 /* GoogleCal.m in Sources */ = {isa = PBXBuildFile; fileRef = 16F09B211C249C5F005C1EB8 /* GoogleCal.m */; };
+		16F09B261C24A584005C1EB8 /* libGoogle-API-Client.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 16F09B231C24A584005C1EB8 /* libGoogle-API-Client.a */; };
+		16F09B271C24A584005C1EB8 /* libgtm-http-fetcher.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 16F09B241C24A584005C1EB8 /* libgtm-http-fetcher.a */; };
+		16F09B281C24A584005C1EB8 /* libgtm-oauth2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 16F09B251C24A584005C1EB8 /* libgtm-oauth2.a */; };
 		16FCE2771BFE9326005FC71A /* AWARESensorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 16FCE2761BFE9326005FC71A /* AWARESensorManager.m */; };
 		FC2AF85D761397B784DECBD3 /* libPods-AWARE.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9ED04F29ED60F3FCC960F6CD /* libPods-AWARE.a */; };
 /* End PBXBuildFile section */
@@ -218,8 +222,13 @@
 		16D810231C06242500605DE2 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		16D810251C06242F00605DE2 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		16D8102C1C06671500605DE2 /* ExternalAccessory.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ExternalAccessory.framework; path = System/Library/Frameworks/ExternalAccessory.framework; sourceTree = SDKROOT; };
+		16E155311C252B4D00316321 /* AWAREPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AWAREPlugin.h; sourceTree = "<group>"; };
+		16E155321C252B4D00316321 /* AWAREPlugin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AWAREPlugin.m; sourceTree = "<group>"; };
 		16F09B201C249C5F005C1EB8 /* GoogleCal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GoogleCal.h; sourceTree = "<group>"; };
 		16F09B211C249C5F005C1EB8 /* GoogleCal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GoogleCal.m; sourceTree = "<group>"; };
+		16F09B231C24A584005C1EB8 /* libGoogle-API-Client.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libGoogle-API-Client.a"; path = "Pods/../build/Debug-iphoneos/libGoogle-API-Client.a"; sourceTree = "<group>"; };
+		16F09B241C24A584005C1EB8 /* libgtm-http-fetcher.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libgtm-http-fetcher.a"; path = "Pods/../build/Debug-iphoneos/libgtm-http-fetcher.a"; sourceTree = "<group>"; };
+		16F09B251C24A584005C1EB8 /* libgtm-oauth2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libgtm-oauth2.a"; path = "Pods/../build/Debug-iphoneos/libgtm-oauth2.a"; sourceTree = "<group>"; };
 		16FCE2751BFE9326005FC71A /* AWARESensorManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AWARESensorManager.h; sourceTree = "<group>"; };
 		16FCE2761BFE9326005FC71A /* AWARESensorManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AWARESensorManager.m; sourceTree = "<group>"; };
 		9B5BAD09F1FBEE0838867ACF /* Pods-AWARE.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AWARE.release.xcconfig"; path = "Pods/Target Support Files/Pods-AWARE/Pods-AWARE.release.xcconfig"; sourceTree = "<group>"; };
@@ -240,6 +249,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				16F09B261C24A584005C1EB8 /* libGoogle-API-Client.a in Frameworks */,
+				16F09B271C24A584005C1EB8 /* libgtm-http-fetcher.a in Frameworks */,
+				16F09B281C24A584005C1EB8 /* libgtm-oauth2.a in Frameworks */,
 				164DD66A1C1FC1F900ADA92B /* MapKit.framework in Frameworks */,
 				168683031C07C43600CB4266 /* AudioToolbox.framework in Frameworks */,
 				16D810261C06242F00605DE2 /* Security.framework in Frameworks */,
@@ -279,15 +291,10 @@
 				1607944B1C19274C0021816F /* AWAREStudy.m */,
 				1623CEB21BFD659000EFAD72 /* AWAREKeys.h */,
 				1623CEB31BFD659000EFAD72 /* AWAREKeys.m */,
-				16FCE2751BFE9326005FC71A /* AWARESensorManager.h */,
-				16FCE2761BFE9326005FC71A /* AWARESensorManager.m */,
-				1607944F1C1A4E380021816F /* AWAREMqtt.h */,
-				160794501C1A4E380021816F /* AWAREMqtt.m */,
-				16228A4C1C22E6150081C839 /* AWAREScheduleManager.h */,
-				16228A4D1C22E6150081C839 /* AWAREScheduleManager.m */,
-				16228A4F1C22E9FE0081C839 /* AWARESchedule.h */,
-				16228A501C22E9FE0081C839 /* AWARESchedule.m */,
-				168683011C07922100CB4266 /* AWARESensors */,
+				16E155361C25B6AE00316321 /* Scheduler */,
+				16E155351C25B68700316321 /* MQTT */,
+				16E155341C252B5B00316321 /* Plugins */,
+				168683011C07922100CB4266 /* Sensors */,
 			);
 			name = AWAREFramework;
 			sourceTree = "<group>";
@@ -380,9 +387,11 @@
 			path = AWAREUITests;
 			sourceTree = "<group>";
 		};
-		168683011C07922100CB4266 /* AWARESensors */ = {
+		168683011C07922100CB4266 /* Sensors */ = {
 			isa = PBXGroup;
 			children = (
+				16FCE2751BFE9326005FC71A /* AWARESensorManager.h */,
+				16FCE2761BFE9326005FC71A /* AWARESensorManager.m */,
 				1623CEB51BFE175F00EFAD72 /* AWARESensor.h */,
 				1623CEB61BFE175F00EFAD72 /* AWARESensor.m */,
 				1623CEBA1BFE390600EFAD72 /* Accelerometer.h */,
@@ -436,12 +445,44 @@
 				16F09B201C249C5F005C1EB8 /* GoogleCal.h */,
 				16F09B211C249C5F005C1EB8 /* GoogleCal.m */,
 			);
-			name = AWARESensors;
+			name = Sensors;
+			sourceTree = "<group>";
+		};
+		16E155341C252B5B00316321 /* Plugins */ = {
+			isa = PBXGroup;
+			children = (
+				16E155311C252B4D00316321 /* AWAREPlugin.h */,
+				16E155321C252B4D00316321 /* AWAREPlugin.m */,
+			);
+			name = Plugins;
+			sourceTree = "<group>";
+		};
+		16E155351C25B68700316321 /* MQTT */ = {
+			isa = PBXGroup;
+			children = (
+				1607944F1C1A4E380021816F /* AWAREMqtt.h */,
+				160794501C1A4E380021816F /* AWAREMqtt.m */,
+			);
+			name = MQTT;
+			sourceTree = "<group>";
+		};
+		16E155361C25B6AE00316321 /* Scheduler */ = {
+			isa = PBXGroup;
+			children = (
+				16228A4C1C22E6150081C839 /* AWAREScheduleManager.h */,
+				16228A4D1C22E6150081C839 /* AWAREScheduleManager.m */,
+				16228A4F1C22E9FE0081C839 /* AWARESchedule.h */,
+				16228A501C22E9FE0081C839 /* AWARESchedule.m */,
+			);
+			name = Scheduler;
 			sourceTree = "<group>";
 		};
 		2A3CA9F5620967BACB187EB7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				16F09B231C24A584005C1EB8 /* libGoogle-API-Client.a */,
+				16F09B241C24A584005C1EB8 /* libgtm-http-fetcher.a */,
+				16F09B251C24A584005C1EB8 /* libgtm-oauth2.a */,
 				164DD6691C1FC1F900ADA92B /* MapKit.framework */,
 				1607944D1C1A240F0021816F /* AudioUnit.framework */,
 				169384EF1C17C39300A17F2C /* MicrosoftBandKit_iOS.framework */,
@@ -729,6 +770,7 @@
 				168683061C07C48900CB4266 /* AmbientNoise.m in Sources */,
 				164810401C20ECC300B830D9 /* AWAREEsmViewController.m in Sources */,
 				16228A4E1C22E6150081C839 /* AWAREScheduleManager.m in Sources */,
+				16E155331C252B4D00316321 /* AWAREPlugin.m in Sources */,
 				164DD6681C1FBA9100ADA92B /* Timezone.m in Sources */,
 				169384F31C17C3D300A17F2C /* MSBand.m in Sources */,
 				16228A511C22E9FE0081C839 /* AWARESchedule.m in Sources */,
@@ -957,6 +999,10 @@
 				INFOPLIST_FILE = AWARE/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/build/Debug-iphoneos",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = jp.ac.keio.sfc.ht.tetujin.AWARE;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -979,6 +1025,10 @@
 				INFOPLIST_FILE = AWARE/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/build/Debug-iphoneos",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = jp.ac.keio.sfc.ht.tetujin.AWARE;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";

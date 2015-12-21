@@ -29,6 +29,7 @@
 #import "Proximity.h"
 #import "Timezone.h"
 #import "ESM.h"
+#import "MSBand.h"
 
 @implementation AWARESensorManager
 
@@ -138,6 +139,9 @@
                         [awareSensor startSensor:uploadTime withSettings:settings];
                     }else if([key isEqualToString:SENSOR_PLUGIN_NTPTIME]){
                         awareSensor = [[NTPTime alloc] initWithSensorName:SENSOR_PLUGIN_NTPTIME];
+                        [awareSensor startSensor:uploadTime withSettings:settings];
+                    }else if([key isEqualToString:SENSOR_PLUGIN_MSBAND]){
+                        awareSensor = [[MSBand alloc] initWithSensorName:SENSOR_PLUGIN_MSBAND];
                         [awareSensor startSensor:uploadTime withSettings:settings];
                     }
                 }

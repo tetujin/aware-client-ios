@@ -61,6 +61,8 @@
 - (bool) saveDataWithArray:(NSArray*) array;
 
 - (void) syncAwareDB;
+- (void) syncAwareDBWithSensorName:(NSString*) sensorName;
+
 - (BOOL) syncAwareDBWithData:(NSDictionary *) dictionary;
 
 // get latest sensor data -> for debug
@@ -69,6 +71,7 @@
 - (double) getSensorSetting:(NSArray *)settings withKey:(NSString *)key;
 
 // create new table in the database
+- (void) createTable:(NSString *)query withTableName:(NSString*) tableName;
 - (void) createTable:(NSString *)query;
 
 // clear the table in the database

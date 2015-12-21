@@ -1,5 +1,4 @@
 PODS:
-  - CAAnimationBlocks (0.0.1)
   - CocoaAsyncSocket (7.4.2)
   - Google-API-Client (1.0.422):
     - Google-API-Client/AdSense (= 1.0.422)
@@ -183,12 +182,8 @@ PODS:
     - gtm-http-fetcher (~> 1.0.141)
   - ios-ntp (1.1.1):
     - CocoaAsyncSocket (~> 7.4.1)
-  - LMAlertView (1.1.0):
-    - CAAnimationBlocks (~> 0.0.1)
-    - RBBAnimation (~> 0.3.0)
   - macros_blocks (0.0.1)
   - MQTTKit (0.1.0-next)
-  - RBBAnimation (0.3.0)
   - SCNetworkReachability (2.0.4):
     - SCNetworkReachability/Core (= 2.0.4)
   - SCNetworkReachability/Core (2.0.4):
@@ -198,7 +193,6 @@ DEPENDENCIES:
   - Google-API-Client
   - Google/SignIn
   - ios-ntp
-  - LMAlertView
   - MQTTKit (from `https://github.com/mobile-web-messaging/MQTTKit.git`)
   - SCNetworkReachability
 
@@ -212,7 +206,6 @@ CHECKOUT OPTIONS:
     :git: https://github.com/mobile-web-messaging/MQTTKit.git
 
 SPEC CHECKSUMS:
-  CAAnimationBlocks: 1aaca5fb6447a95d83b20cc786992956ef46e4ee
   CocoaAsyncSocket: f5783bdedd232d91b89769bc4b5a1580aed518ad
   Google: 97618e118111b998cce1d8dd1bd98b82301d72db
   Google-API-Client: cb712cf122f1d7fda966de4c2bc551324573366c
@@ -226,10 +219,8 @@ SPEC CHECKSUMS:
   gtm-http-fetcher: 6d4617e7d343b6e4c082b777541c334eb6f5d81e
   gtm-oauth2: 2a18b824e4f8a02df6cfe987beb59ae9d9697f9d
   ios-ntp: 5f2f4fecf0432169b358eb3b564f12b94157108f
-  LMAlertView: fa4589ea2cb540b888636ff6739fc39b16ac1e4b
   macros_blocks: da2106a0975514e16f3669f2f50a02efaff642cf
   MQTTKit: 513ffc31464db7adeffefac986e228fdf6cd87e5
-  RBBAnimation: cb6cb419f511434ce932f7d0fabf369612fafb4e
   SCNetworkReachability: 4d836180e9ef916da4ef68a34fec748f88950712
 
 COCOAPODS: 0.39.0

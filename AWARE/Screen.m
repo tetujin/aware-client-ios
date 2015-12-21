@@ -18,6 +18,8 @@
 
 @implementation Screen {
     NSTimer * uploadTimer;
+    int _notifyTokenForDidChangeLockStatus;
+    int _notifyTokenForDidChangeDisplayStatus;
 }
 
 - (instancetype)initWithSensorName:(NSString *)sensorName{
@@ -53,15 +55,15 @@
     return YES;
 }
 
-- (BOOL)stopSensor{
+- (BOOL) stopSensor {
+    [self unregisterAppforDetectDisplayStatus];
+    [self unregisterAppforDetectLockState];
     [uploadTimer invalidate];
     return YES;
 }
 
 -(void)registerAppforDetectLockState {
-    
-    int notify_token;
-    notify_register_dispatch("com.apple.springboard.lockstate", &notify_token,dispatch_get_main_queue(), ^(int token) {
+    notify_register_dispatch("com.apple.springboard.lockstate", &_notifyTokenForDidChangeLockStatus,dispatch_get_main_queue(), ^(int token) {
         
         uint64_t state = UINT64_MAX;
         notify_get_state(token, &state);
@@ -86,24 +88,12 @@
         [dic setObject:[NSNumber numberWithInt:awareScreenState] forKey:@"screen_status"]; // int
         [self setLatestValue:[NSString stringWithFormat:@"%@", [NSNumber numberWithInt:awareScreenState]]];
         [self saveData:dic];
-        
-//        UILocalNotification *notification = [[UILocalNotification alloc]init];
-//        notification.repeatInterval = NSDayCalendarUnit;
-//        [notification setAlertBody:@"Hello world!! I come becoz you lock/unlock your device :)"];
-//        notification.alertAction = @"View";
-//        notification.alertAction = @"Yes";
-//        [notification setFireDate:[NSDate dateWithTimeIntervalSinceNow:1]];
-//        notification.soundName = UILocalNotificationDefaultSoundName;
-//        [notification setTimeZone:[NSTimeZone  defaultTimeZone]];
-//        [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
-        
     });
 }
 
 
 - (void) registerAppforDetectDisplayStatus {
-    int notify_token;
-    notify_register_dispatch("com.apple.iokit.hid.displayStatus", &notify_token,dispatch_get_main_queue(), ^(int token) {
+    notify_register_dispatch("com.apple.iokit.hid.displayStatus", &_notifyTokenForDidChangeDisplayStatus,dispatch_get_main_queue(), ^(int token) {
         
         uint64_t state = UINT64_MAX;
         notify_get_state(token, &state);
@@ -128,6 +118,28 @@
         [self saveData:dic];
         
     });
+}
+
+
+-(void) unregisterAppforDetectLockState {
+//    notify_suspend(_notifyTokenForDidChangeLockStatus);
+    uint32_t result = notify_cancel(_notifyTokenForDidChangeLockStatus);
+
+    if (result == NOTIFY_STATUS_OK) {
+        NSLog(@"[screen] OK --> %d", result);
+    } else {
+        NSLog(@"[screen] NO --> %d", result);
+    }
+}
+
+- (void) unregisterAppforDetectDisplayStatus {
+//    notify_suspend(_notifyTokenForDidChangeDisplayStatus);
+    uint32_t result = notify_cancel(_notifyTokenForDidChangeDisplayStatus);
+    if (result == NOTIFY_STATUS_OK) {
+        NSLog(@"[screen] OK ==> %d", result);
+    } else {
+        NSLog(@"[screen] NO ==> %d", result);
+    }
 }
 
 

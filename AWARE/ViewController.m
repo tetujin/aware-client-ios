@@ -15,8 +15,6 @@
 #import "MSBand.h"
 #import "AWAREEsmViewController.h"
 
-//test
-#import "LMAlertView.h"
 
 @interface ViewController () {
     NSString *KEY_CEL_TITLE;
@@ -95,13 +93,15 @@
     listUpdateTimer = [NSTimer scheduledTimerWithTimeInterval:0.1f target:self.tableView selector:@selector(reloadData) userInfo:nil repeats:YES];
     
     
-    NSLog(@"===========> add scheduler");
-    scheduleManager = [[AWAREScheduleManager alloc] initWithViewController:self];
-    [self scheduleTest];
+//    NSLog(@"===========> add scheduler");
+//    scheduleManager = [[AWAREScheduleManager alloc] initWithViewController:self];
+//    [self scheduleTest];
 }
 
 
-
+/**
+ * This is for EMS test
+ */
 - (void)scheduleTest
 {
     //     free text
@@ -201,15 +201,6 @@
     }
 }
 
-//- (void)viewWillAppear:(BOOL)animated {
-//    [super viewWillAppear:animated];
-//    NSLog(@"view will appear");
-//}
-//
-//- (void)viewDidAppear:(BOOL)animated {
-//    [super viewDidAppear:animated];
-//    NSLog(@"view did appear");
-//}
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
@@ -222,16 +213,6 @@
     }
 //    }
 }
-
-//- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
-//{
-//    if (buttonIndex == 0) {
-//    } else if (buttonIndex == 1) {
-//    } else if (buttonIndex == 2) {
-//    }
-//}
-
-
 
 
 - (void) initLocationSensor{
@@ -336,11 +317,12 @@
 //    [_sensors addObject:[self getCelContent:@"Direction (iOS)" desc:@"Device's direction (0-360)" image:@"safari_copyrighted" key:SENSOR_DIRECTION]];
 //    [_sensors addObject:[self getCelContent:@"Rotation (iOS)" desc:@"Orientation of the device" image:@"ic_action_rotation" key:SENSOR_ROTATION]];
     
-    [_sensors addObject:[self getCelContent:@"Ambient Noise" desc:@"Anbient noise sensing by using a microphone on a smartphone." image:@"" key:SENSOR_AMBIENT_NOISE]];
-    [_sensors addObject:[self getCelContent:@"Activity Recognition" desc:@"iOS Activity Recognition" image:@"" key:SENSOR_PLUGIN_GOOGLE_ACTIVITY_RECOGNITION]];
-    [_sensors addObject:[self getCelContent:@"Device Usage" desc:@"This plugin measures how much you use your device" image:@"" key:SENSOR_PLUGIN_DEVICE_USAGE]];
-    [_sensors addObject:[self getCelContent:@"Open Weather" desc:@"Weather information by OpenWeatherMap API." image:@"" key:SENSOR_PLUGIN_OPEN_WEATHER]];
-    [_sensors addObject:[self getCelContent:@"NTPTime" desc:@"Measure device's clock drift from an NTP server." image:@"" key:SENSOR_PLUGIN_NTPTIME]];
+    [_sensors addObject:[self getCelContent:@"Ambient Noise" desc:@"Anbient noise sensing by using a microphone on a smartphone." image:@"ic_action_ambient_noise" key:SENSOR_AMBIENT_NOISE]];
+    [_sensors addObject:[self getCelContent:@"Activity Recognition" desc:@"iOS Activity Recognition" image:@"ic_action_running" key:SENSOR_PLUGIN_GOOGLE_ACTIVITY_RECOGNITION]];
+    [_sensors addObject:[self getCelContent:@"Device Usage" desc:@"This plugin measures how much you use your device" image:@"ic_action_device_usage" key:SENSOR_PLUGIN_DEVICE_USAGE]];
+    [_sensors addObject:[self getCelContent:@"Open Weather" desc:@"Weather information by OpenWeatherMap API." image:@"ic_action_openweather" key:SENSOR_PLUGIN_OPEN_WEATHER]];
+    [_sensors addObject:[self getCelContent:@"NTPTime" desc:@"Measure device's clock drift from an NTP server." image:@"ic_action_ntptime" key:SENSOR_PLUGIN_NTPTIME]];
+    [_sensors addObject:[self getCelContent:@"Micrsoft Band" desc:@"Wearable sensor data (such as Heart Rate, UV, and Skin Temperature) from Microsoft Band." image:@"ic_action_msband" key:SENSOR_PLUGIN_MSBAND]];
     
     [_sensors addObject:[self getCelContent:@"Settings" desc:@"" image:@"" key:@"TITLE_CELL_VIEW"]];
     [_sensors addObject:[self getCelContent:@"Debug" desc:debugState image:@"" key:@"STUDY_CELL_DEBUG"]]; //ic_action_mqtt
@@ -348,9 +330,9 @@
     [_sensors addObject:[self getCelContent:@"Sync only wifi" desc:wifiOnly image:@"" key:@"STUDY_CELL_WIFI"]]; //ic_action_mqtt
 
     //for test
-    AWARESensor *msBand = [[MSBand alloc] initWithSensorName:SENSOR_PLUGIN_MSBAND];
-    [msBand startSensor:60.0f withSettings:nil];
-    [_sensorManager addNewSensor:msBand];
+//    AWARESensor *msBand = [[MSBand alloc] initWithSensorName:SENSOR_PLUGIN_MSBAND];
+//    [msBand startSensor:60.0f withSettings:nil];
+//    [_sensorManager addNewSensor:msBand];
 
 }
 
@@ -552,11 +534,11 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
 {
     NSLog(@"Back button is pressed!");
     [self.navigationController popToRootViewControllerAnimated:YES];
-    [_sensorManager stopAllSensors];
-    NSLog(@"Remove all sensors");
-    [self initList];
-    [self.tableView reloadData];
-    [self connectMqttServer];
+//    [_sensorManager stopAllSensors];
+//    NSLog(@"Remove all sensors");
+//    [self initList];
+//    [self.tableView reloadData];
+//    [self connectMqttServer];
     return YES;
 }
 

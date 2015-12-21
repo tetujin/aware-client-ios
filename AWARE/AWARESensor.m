@@ -330,9 +330,13 @@
 }
 
 
+- (void) syncAwareDB {
+    [self syncAwareDBWithSensorName:[self getSensorName]];
+}
+
 
 /** Sync with AWARE database */
-- (void) syncAwareDB {
+- (void) syncAwareDBWithSensorName:(NSString*) sensorName {
     if (!wifiState) {
         NSLog(@"You need wifi network to upload sensor data.");
         return;
@@ -352,7 +356,7 @@
     NSMutableURLRequest *request = nil;
     __weak NSURLSession *session = nil;
     NSString *postLength = nil;
-    NSString *sensorName = [self getSensorName];
+//    NSString *sensorName = [self getSensorName];
     NSString *deviceId = [self getDeviceId];
     NSString *url = [self getInsertUrl:sensorName];
     lineCount = 0;
@@ -693,10 +697,14 @@ didReceiveResponse:(NSURLResponse *)response
 }
 
 
+- (void) createTable:(NSString*) query {
+    [self createTable:query withTableName:[self getSensorName]];
+}
 
-- (void) createTable:(NSString *)query{
+
+- (void) createTable:(NSString *)query withTableName:(NSString*) tableName {
     
-    NSLog(@"%@",[self getCreateTableUrl:[self getSensorName]]);
+    NSLog(@"%@",[self getCreateTableUrl:tableName]);
     
     NSString *post = nil;
     NSData *postData = nil;
@@ -708,7 +716,7 @@ didReceiveResponse:(NSURLResponse *)response
     postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
     postLength = [NSString stringWithFormat:@"%ld", [postData length]];
     request = [[NSMutableURLRequest alloc] init];
-    [request setURL:[NSURL URLWithString:[self getCreateTableUrl:[self getSensorName]]]];
+    [request setURL:[NSURL URLWithString:[self getCreateTableUrl:tableName]]];
     [request setHTTPMethod:@"POST"];
     [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
     [request setHTTPBody:postData];
@@ -731,12 +739,12 @@ didReceiveResponse:(NSURLResponse *)response
                     int responseCode = (int)[httpResponse statusCode];
                     
                     NSString* newStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-                    NSLog(@"[%@] Response----> %d, %@", [self getSensorName],responseCode, newStr);
+                    NSLog(@"[%@] Response----> %d, %@", tableName,responseCode, newStr);
                     
                     if(responseCode == 200){
 //                        [self removeFile:[self getSensorName]];
 //                        //                            [self createNewFile:[self getSensorName]];
-                        NSString *message = [NSString stringWithFormat:@"[%@] Sucess to create new table on AWARE server.", [self getSensorName]];
+                        NSString *message = [NSString stringWithFormat:@"[%@] Sucess to create new table on AWARE server.", tableName];
                         NSLog(@"%@", message);
 //                        [self sendLocalNotificationForMessage:message soundFlag:NO];
                     }

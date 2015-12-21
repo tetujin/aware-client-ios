@@ -6,6 +6,10 @@
 //  Copyright © 2015 Yuuki NISHIYAMA. All rights reserved.
 //
 
+/**
+ * How about save events via Apple Calender
+ */
+
 #import "GoogleCal.h"
 #import "AWAREKeys.h"
 

@@ -38,7 +38,7 @@
     
     NSLog(@"[%@] Start Device Usage Sensor", [self getSensorName]);
 
-    double frequency = [self getSensorSetting:settings withKey:@"frequency_accelerometer"];
+    double frequency = [self getSensorSetting:settings withKey:@"frequency_timezone"];
     if (frequency == -1) {
         frequency = 60*60;//3600 sec = 1 hour
     }

@@ -12,6 +12,7 @@
 @implementation DeviceUsage {
     NSTimer * uploadTimer;
     double lastTime;
+    int _notifyTokenForDidChangeDisplayStatus;
 }
 
 - (instancetype)initWithSensorName:(NSString *)sensorName{
@@ -49,13 +50,14 @@
 }
 
 - (BOOL)stopSensor{
+    [self unregisterAppforDetectDisplayStatus];
     [uploadTimer invalidate];
     return YES;
 }
 
 - (void) registerAppforDetectDisplayStatus {
-    int notify_token;
-    notify_register_dispatch("com.apple.iokit.hid.displayStatus", &notify_token,dispatch_get_main_queue(), ^(int token) {
+//    int notify_token;
+    notify_register_dispatch("com.apple.iokit.hid.displayStatus", &_notifyTokenForDidChangeDisplayStatus,dispatch_get_main_queue(), ^(int token) {
         
         NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
         NSNumber* unixtime = [NSNumber numberWithDouble:timeStamp];
@@ -87,6 +89,18 @@
         
     });
 }
+
+- (void) unregisterAppforDetectDisplayStatus {
+    //    notify_suspend(_notifyTokenForDidChangeDisplayStatus);
+    uint32_t result = notify_cancel(_notifyTokenForDidChangeDisplayStatus);
+    if (result == NOTIFY_STATUS_OK) {
+        NSLog(@"[screen] OK ==> %d", result);
+    } else {
+        NSLog(@"[screen] NO ==> %d", result);
+    }
+}
+
+
 
 
 //-(void)registerAppforDetectLockState {
