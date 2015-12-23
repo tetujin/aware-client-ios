@@ -285,7 +285,7 @@ didFailToConnectWithError:(NSError *)error{
                 [dic setObject:quality forKey:@"heartrate_quality"];
                 [hrSensor setLatestValue:data];
                 [hrSensor saveData:dic toLocalFile:PLUGIN_MSBAND_SENSORS_HEARTRATE];
-                NSLog(@"%@", data);
+//                NSLog(@"%@", data);
                 [super setLatestValue:data]; //TODO
             };
             NSError *stateError;

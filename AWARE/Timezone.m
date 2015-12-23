@@ -62,7 +62,7 @@
 
 - (void) getTimezone {
     [NSTimeZone localTimeZone];
-    NSLog(@"Timezone: %@", [[NSTimeZone localTimeZone] description]);
+//    NSLog(@"Timezone: %@", [[NSTimeZone localTimeZone] description]);
     NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
     NSNumber* unixtime = [NSNumber numberWithDouble:timeStamp];
     NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];

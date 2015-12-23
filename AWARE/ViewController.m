@@ -93,15 +93,16 @@
     
     
 //    NSLog(@"===========> add scheduler");
-//    scheduleManager = [[AWAREScheduleManager alloc] initWithViewController:self];
-//    [self scheduleTest];
+    scheduleManager = [[AWAREScheduleManager alloc] initWithViewController:self];
+    [scheduleManager removeAllSchedules];
+    [scheduleManager addSchedule:[self getScheduleForTest]];
 }
 
 
 /**
  * This is for EMS test
  */
-- (void)scheduleTest
+- (AWARESchedule *)getScheduleForTest
 {
     //     free text
     NSMutableDictionary *dicForJson = [[NSMutableDictionary alloc] init];
@@ -183,9 +184,7 @@
                                     title:@"This is a notification for an ESM."
                                      body:@"Hello!"
                                identifier:@"---"];
-    [scheduleManager removeAllSchedules];
-    [scheduleManager addSchedule:schedule];
-
+    return schedule;
 }
 
 - (void)appDidBecomeActive:(NSNotification *)notification {
@@ -322,6 +321,7 @@
     [_sensors addObject:[self getCelContent:@"Open Weather" desc:@"Weather information by OpenWeatherMap API." image:@"ic_action_openweather" key:SENSOR_PLUGIN_OPEN_WEATHER]];
     [_sensors addObject:[self getCelContent:@"NTPTime" desc:@"Measure device's clock drift from an NTP server." image:@"ic_action_ntptime" key:SENSOR_PLUGIN_NTPTIME]];
     [_sensors addObject:[self getCelContent:@"Micrsoft Band" desc:@"Wearable sensor data (such as Heart Rate, UV, and Skin Temperature) from Microsoft Band." image:@"ic_action_msband" key:SENSOR_PLUGIN_MSBAND]];
+    [_sensors addObject:[self getCelContent:@"Google Calendar" desc:@"This plugin stores your Google Calendar events." image:@"ic_action_google_cal" key:SENSOR_PLUGIN_GOOGLE_CAL]];
     
     [_sensors addObject:[self getCelContent:@"Settings" desc:@"" image:@"" key:@"TITLE_CELL_VIEW"]];
     [_sensors addObject:[self getCelContent:@"Debug" desc:debugState image:@"" key:@"STUDY_CELL_DEBUG"]]; //ic_action_mqtt
@@ -330,17 +330,15 @@
 
     //for test
     AWARESensor *msBand = [[MSBand alloc] initWithPluginName:SENSOR_PLUGIN_MSBAND deviceId:deviceId];
-    [msBand startSensor:60.0f withSettings:nil];
+    [msBand startSensor:60.0f * 15.0f withSettings:nil];
     [_sensorManager addNewSensor:msBand];
 
     
-    AWARESensor* googleCal = [[GoogleCal alloc] initWithSensorName:@"google_cal"];
+    AWARESensor* googleCal = [[GoogleCal alloc] initWithSensorName:SENSOR_PLUGIN_GOOGLE_CAL];
     [googleCal startSensor:60.0f withSettings:nil];
     [_sensorManager addNewSensor:googleCal];
     
 }
-
-
 
 
 - (NSMutableDictionary *) getCelContent:(NSString *)title
@@ -389,6 +387,9 @@
         [self performSegueWithIdentifier:@"esmView" sender:self];
     }else if([key isEqualToString:SENSOR_PLUGIN_SCHEDULER]){
         // [TODO] For making new schedule.
+    }else if ([key isEqualToString:SENSOR_PLUGIN_GOOGLE_CAL]) {
+        GoogleCal* googleCal = [[GoogleCal alloc] initWithSensorName:SENSOR_PLUGIN_GOOGLE_CAL];
+        [googleCal showSelectPrimaryGoogleCalView];
     }
 }
 
@@ -435,8 +436,6 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
             NSLog(@"Cancel");
         }
     }
-    
-
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{

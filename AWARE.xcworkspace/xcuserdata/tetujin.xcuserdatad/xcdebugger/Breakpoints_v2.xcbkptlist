@@ -22,64 +22,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "AWARE/MSBand.m"
-            timestampString = "472433913.65396"
+            filePath = "AWARE/GoogleCal.m"
+            timestampString = "472497710.530427"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "86"
-            endingLineNumber = "86"
-            landmarkName = "-startAllSensors:withSettings:"
-            landmarkType = "5">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "-[MSBand startAllSensors:withSettings:]"
-                  moduleName = "AWARE"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/tetujin/Dropbox/tokuda_Lab/codes/objective-c/AWARE/AWARE/MSBand.m"
-                  timestampString = "472434521.116653"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "88"
-                  endingLineNumber = "88"
-                  offsetFromSymbolStart = "744">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "__39-[MSBand startAllSensors:withSettings:]_block_invoke"
-                  moduleName = "AWARE"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/tetujin/Dropbox/tokuda_Lab/codes/objective-c/AWARE/AWARE/MSBand.m"
-                  timestampString = "472434521.11705"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "88"
-                  endingLineNumber = "88"
-                  offsetFromSymbolStart = "24">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "AWARE/MSBand.m"
-            timestampString = "472433917.980134"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "113"
-            endingLineNumber = "113"
-            landmarkName = "-startMSBSensors:withSettings:"
+            startingLineNumber = "167"
+            endingLineNumber = "167"
+            landmarkName = "-isAwareCal"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

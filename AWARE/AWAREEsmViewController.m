@@ -147,7 +147,6 @@ NSString* const KEY_ESM_SCALE_STEP = @"esm_scale_step";
     }
 
     
-    
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     NSString* scheduleId = [defaults objectForKey:@"schedule_id"];
     if (scheduleId) {
@@ -267,7 +266,6 @@ NSString* const KEY_ESM_SCALE_STEP = @"esm_scale_step";
         [self addCancelButtonWithText:@"Cancel"];
         [self addNullElement];
     }
-    
     return YES;
 }
 
@@ -298,12 +296,12 @@ NSString* const KEY_ESM_SCALE_STEP = @"esm_scale_step";
 }
 
 // add Check Box Element
-- (void) addCheckBoxElement:(NSDictionary *) dic
-{
+- (void) addCheckBoxElement:(NSDictionary *) dic {
     [self addCommonContents:dic];
     NSMutableArray *elements = [[NSMutableArray alloc] init];
     for (NSString* checkBoxItem in [dic objectForKey:KEY_ESM_CHECKBOXES]) {
         UISwitch *s = [[UISwitch alloc] initWithFrame:CGRectMake(mainContentRect.origin.x + 30 , totalHight, 49, 31)];
+        [s addTarget:self action:@selector(changeSwitch:) forControlEvents:UIControlEventValueChanged];
         UILabel * label = [[UILabel alloc] initWithFrame:CGRectMake(mainContentRect.origin.x + 30 + 60, totalHight, mainContentRect.size.width - 60, 31)];
         [label setText:checkBoxItem];
         [_mainScrollView addSubview:s];
@@ -313,6 +311,31 @@ NSString* const KEY_ESM_SCALE_STEP = @"esm_scale_step";
         [elements addObject:s];
     }
     [uiElements addObject:elements];
+}
+
+- (IBAction)changeSwitch:(id)sender{
+    UISwitch * s = (UISwitch*)sender;
+    if([sender isOn]){
+        NSLog(@"Switch is ON");
+        s.onImage = [UIImage imageNamed:@"checked_box"];
+    } else{
+        NSLog(@"Switch is OFF");
+        s.offImage = [UIImage imageNamed:@"unchecked_box"];
+    }
+}
+
+
+- (IBAction)changeButton:(id)sender{
+    UIButton * btn = (UIButton*)sender;
+    if([sender isSelected]){
+        [btn setImage:[UIImage imageNamed:@"checked_box"] forState:UIControlStateSelected | UIControlStateHighlighted];
+        NSLog(@"Button is ON");
+//        .onImage = [UIImage imageNamed:@"checked_box"];
+    } else{
+        [btn setImage:[UIImage imageNamed:@"unchecked_box"] forState:UIControlStateNormal];
+        NSLog(@"Button is OFF");
+//        btn.offImage = [UIImage imageNamed:@"unchecked_box"];
+    }
 }
 
 // add Likert Scale Element
@@ -344,8 +367,7 @@ NSString* const KEY_ESM_SCALE_STEP = @"esm_scale_step";
 }
 
 // add Quick Answer Element
-- (void) addQuickAnswerElement:(NSDictionary *) dic
-{
+- (void) addQuickAnswerElement:(NSDictionary *) dic {
     [self addCommonContents:dic];
     NSMutableArray *elements = [[NSMutableArray alloc] init];
     for (NSString* answers in [dic objectForKey:KEY_ESM_QUICK_ANSWERS]) {
@@ -356,9 +378,13 @@ NSString* const KEY_ESM_SCALE_STEP = @"esm_scale_step";
         [_mainScrollView addSubview:button];
         [self setContentSizeWithAdditionalHeight:buttonRect.size.height + 5];
         [elements addObject:button];
+        
+        [button addTarget:self action:@selector(changeButton:) forControlEvents:UIControlEventValueChanged];
+    
     }
     [uiElements addObject:elements];
 }
+
 
 - (void) pushedQuickAnswerButtons:(id) sender
 {
@@ -386,8 +412,7 @@ NSString* const KEY_ESM_SCALE_STEP = @"esm_scale_step";
 }
 
 //add Scale Element
-- (void) addScaleElement:(NSDictionary *) dic
-{
+- (void) addScaleElement:(NSDictionary *) dic {
     [self addCommonContents:dic];
     UILabel *maxLabel = [[UILabel alloc] initWithFrame:CGRectMake(mainContentRect.origin.x,totalHight, 60, 31)];
     UISlider *slider = [[UISlider alloc] initWithFrame:CGRectMake(mainContentRect.origin.x+60, totalHight, mainContentRect.size.width-120, 31)];
@@ -416,16 +441,14 @@ NSString* const KEY_ESM_SCALE_STEP = @"esm_scale_step";
 }
 
 
-- (void) addNullElement
-{
+- (void) addNullElement {
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, totalHight, WIDTH_VIEW, HIGHT_SPACE)];
 //    [view setBackgroundColor:[UIColor grayColor]];
     [_mainScrollView addSubview:view];
     [self setContentSizeWithAdditionalHeight:HIGHT_SPACE];
 }
 
-- (void) addLineElement
-{
+- (void) addLineElement {
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(lineRect.origin.x, totalHight, lineRect.size.width, lineRect.size.height)];
     [view setBackgroundColor:[UIColor lightTextColor]];
     [_mainScrollView addSubview:view];
@@ -435,15 +458,13 @@ NSString* const KEY_ESM_SCALE_STEP = @"esm_scale_step";
 /**
  * Add common contents in the ESM view
  */
-- (void) addCommonContents:(NSDictionary *) dic
-{
+- (void) addCommonContents:(NSDictionary *) dic {
     //  make each content
     [self addTitleWithText:[dic objectForKey:KEY_ESM_TITLE]];
     [self addInstructionsWithText:[dic objectForKey:KEY_ESM_INSTRUCTIONS]];
 }
 
-- (void) addTitleWithText:(NSString *) title
-{
+- (void) addTitleWithText:(NSString *) title {
 //    NSLog(@"%d  %d", WIDTH_VIEW, HIGHT_TITLE);
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(titleRect.origin.x, totalHight, titleRect.size.width, titleRect.size.height)];
     [titleLabel setText:title];
@@ -453,8 +474,7 @@ NSString* const KEY_ESM_SCALE_STEP = @"esm_scale_step";
     [self setContentSizeWithAdditionalHeight:HIGHT_TITLE];
 }
 
-- (void) addInstructionsWithText:(NSString*) text
-{
+- (void) addInstructionsWithText:(NSString*) text {
     UILabel *instructionsLabel = [[UILabel alloc] initWithFrame:CGRectMake(instructionRect.origin.x, totalHight, instructionRect.size.width, instructionRect.size.height)];
     [instructionsLabel setText:text];
 //    [instructionsLabel setBackgroundColor:[UIColor redColor]];
@@ -463,8 +483,9 @@ NSString* const KEY_ESM_SCALE_STEP = @"esm_scale_step";
     [self setContentSizeWithAdditionalHeight:HIGHT_INSTRUCTION];
 }
 
-- (void) addCancelButtonWithText:(NSString*)text
-{
+
+
+- (void) addCancelButtonWithText:(NSString*)text {
     UIButton *cancelBtn = [[UIButton alloc] initWithFrame:CGRectMake(buttonRect.origin.x, totalHight, buttonRect.size.width, buttonRect.size.height)];
     [cancelBtn setTitle:text forState:UIControlStateNormal];
 //    [cancelBtn setBackgroundColor:[UIColor grayColor]];
@@ -475,8 +496,9 @@ NSString* const KEY_ESM_SCALE_STEP = @"esm_scale_step";
     [cancelBtn addTarget:self action:@selector(pushedCancelButton:) forControlEvents:UIControlEventTouchUpInside];
 }
 
-- (void) pushedSubmitButton:(id) senser
-{
+
+
+- (void) pushedSubmitButton:(id) senser {
     NSLog(@"Submit button was pushed!");
     
     NSMutableArray *array = [[NSMutableArray alloc] init];
