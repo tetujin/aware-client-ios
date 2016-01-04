@@ -226,7 +226,7 @@
 - (bool) saveDataWithArray:(NSArray*) array {
     NSError*error=nil;
     for (NSDictionary *dic in array) {
-        NSLog(@"%f", [dic objectForKey:@"timestamp"]);
+        NSLog(@"%@", [dic objectForKey:@"timestamp"]);
         NSData*d=[NSJSONSerialization dataWithJSONObject:dic options:2 error:&error];
         NSString* jsonstr = [[NSString alloc] init];
         // TODO: error hundling of nill in NSDictionary.
@@ -474,7 +474,7 @@ didReceiveResponse:(NSURLResponse *)response
     // If the data is null, this method is not called.
     NSLog(@"[%@] Data is coming!", [self getSensorName]);
     NSString * result = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    NSLog(@"[%@] response => %@", result);
+    NSLog(@"[%@] response => %@", [self getSensorName], result);
     
     [session finishTasksAndInvalidate];
     [session invalidateAndCancel];

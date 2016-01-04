@@ -10,8 +10,8 @@
 #import <MQTTKit/MQTTKit.h>
 #import <CoreLocation/CoreLocation.h>
 #import "AWARESensorManager.h"
-#import "AWAREScheduleManager.h"
-#import "AWARESchedule.h"
+//#import "AWAREScheduleManager.h"
+//#import "AWARESchedule.h"
 
 
 @interface ViewController : UITableViewController <UITableViewDelegate, UITableViewDataSource, UITabBarControllerDelegate, UINavigationBarDelegate, CLLocationManagerDelegate, UIAlertViewDelegate>

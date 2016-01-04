@@ -8,6 +8,13 @@
 //
 
 #import "AWARESchedule.h"
+#import "MultiESMObject.h"
+
+//NSString * const SCHEDULE_KEY_WEEK = @"week";
+//NSString * const SCHEDULE_KEY_MONTH = @"month";
+//NSString * const SCHEDULE_KEY_TYPE = @"type";
+//NSString * const SCHEDULE_KEY_INTERVAL = @"interval";
+//NSString * const SCHEFULE_KEY_ACTION_TYPE = @"actionType";
 
 
 NSString * const SCHEDULE_WEEK_SUNDAY = @"Sunday";
@@ -44,14 +51,12 @@ NSString * const SCHEDULE_ACTION_TYPE_BROADCAST = @"SCHEDULE_ACTION_TYPE_BROADCA
 NSString * const SCHEDULE_ACTION_TYPE_ACTIVITY = @"SCHEDULE_ACTION_TYPE_ACTIVITY";
 NSString * const SCHEDULE_ACTION_TYPE_SERVICE = @"SCHEDULE_ACTION_TYPE_SERVICE";
 
-@implementation AWARESchedule
-{
+@implementation AWARESchedule {
 //    NSInteger interval;
-    NSCalendarUnit interval;
+//    NSCalendarUnit interval;
 }
 
-- (instancetype) initWithScheduleId:(NSString* ) scheduleId
-{
+- (instancetype) initWithScheduleId:(NSString* ) scheduleId {
     self = [super init];
     if (self) {
         _scheduleId = scheduleId;
@@ -65,23 +70,22 @@ NSString * const SCHEDULE_ACTION_TYPE_SERVICE = @"SCHEDULE_ACTION_TYPE_SERVICE";
         _actionClass = @"";
         _key = @"";
         _esmStr = @"";
-        interval = NSHourCalendarUnit;
+//        interval = NSHourCalendarUnit;
+        _interval = @0;
     }
     return self;
 }
 
-- (NSCalendarUnit) getInterval
-{
-    return interval;
-}
+//- (NSCalendarUnit) getInterval {
+//    return interval;
+//}
 
 - (void) setScheduleAsNormalWithDate:(NSDate *)date
                         intervalType:(NSString *)intervalType
                                  esm:(NSString *)esm
                                title:(NSString*)title
                                 body:(NSString*)body
-                          identifier:(NSString*)identifier
-{
+                          identifier:(NSString*)identifier {
     _scheduleType = SCHEDULE_TYPE_NORMAL;
     _schedule = date;
     _esmStr = esm;
@@ -89,54 +93,28 @@ NSString * const SCHEDULE_ACTION_TYPE_SERVICE = @"SCHEDULE_ACTION_TYPE_SERVICE";
     _body = body;
 
     if ([intervalType isEqualToString:SCHEDULE_INTERVAL_TEST]) {
-//        _interval = [NSNumber numberWithInt:60];
-        interval = NSMinuteCalendarUnit;
+        _interval = [NSNumber numberWithInt:60];
+//        interval = NSMinuteCalendarUnit;
     } else if ([intervalType isEqualToString:SCHEDULE_INTERVAL_HOUR]) {
-//        _interval = [NSNumber numberWithInt:60*60];//hour
-        interval = NSHourCalendarUnit;
+        _interval = [NSNumber numberWithInt:60*60];//hour
+//        interval = NSHourCalendarUnit;
     } else if ([intervalType isEqualToString:SCHEDULE_INTERVAL_DAY]) {
-//        _interval = [NSNumber numberWithInt:arc4random() % 60*60*24];//day
-        interval = NSDayCalendarUnit;
+        _interval = [NSNumber numberWithInt:arc4random() % 60*60*24];//day
+//        interval = NSDayCalendarUnit;
     } else if ([intervalType isEqualToString:SCHEDULE_INTERVAL_WEEK]) {
-//        _interval = [NSNumber numberWithInt:arc4random() % 60*60*24*7];//week
-        interval = NSWeekCalendarUnit;
+        _interval = [NSNumber numberWithInt:arc4random() % 60*60*24*7];//week
+//        interval = NSWeekCalendarUnit;
     } else if ([intervalType isEqualToString:SCHEDULE_INTERVAL_MONTH]) {
-//        _interval = [NSNumber numberWithInt:arc4random() % 60*60*24*31];
-        interval = NSMonthCalendarUnit;
+        _interval = [NSNumber numberWithInt:arc4random() % 60*60*24*31];
+//        interval = NSMonthCalendarUnit;
     } else {
-//        _interval = [NSNumber numberWithInt:arc4random() % 60*60*24];//day
-        interval = NSDayCalendarUnit;
+        _interval = [NSNumber numberWithInt:arc4random() % 60*60*24];//day
+//        interval = NSDayCalendarUnit;
     }
     
-//    NSEraCalendarUnit
-//    NSYearCalendarUnit
-//    NSMonthCalendarUnit
-//    NSDayCalendarUnit
-//    NSHourCalendarUnit
-//    NSMinuteCalendarUnit
-//    NSSecondCalendarUnit
-//    NSWeekCalendarUnit
-//    NSWeekdayCalendarUnit
-//    NSWeekdayOrdinalCalendarUnit
-//    NSQuarterCalendarUnit
-    
-    //case 1:
-    //    localNotification.repeatInterval = NSMinuteCalendarUnit;
-    //    break;
-    //case 2:
-    //    localNotification.repeatInterval = NSHourCalendarUnit;
-    //    break;
-    //case 3:
-    //    localNotification.repeatInterval = NSDayCalendarUnit;
-    //    break;
-    //case 4:
-    //    localNotification.repeatInterval = NSWeekCalendarUnit;
-    //    break;
-    //default:
-    //    localNotification.repeatInterval = 0;
-    //    break;
-    //}
-
+    if (esm != nil) {
+        _esmObject = [[MultiESMObject alloc] initWithEsmText:esm];
+    }
 }
 
 
@@ -144,8 +122,7 @@ NSString * const SCHEDULE_ACTION_TYPE_SERVICE = @"SCHEDULE_ACTION_TYPE_SERVICE";
                                  esm:(NSString *)esm
                                title:(NSString*)title
                                 body:(NSString*)body
-                          identifier:(NSString*)identifier
-{
+                          identifier:(NSString*)identifier {
     _scheduleType = SCHEDULE_TYPE_RANDOM;
     NSDate *date = [NSDate new];
     double now = [date timeIntervalSince1970];
@@ -161,6 +138,7 @@ NSString * const SCHEDULE_ACTION_TYPE_SERVICE = @"SCHEDULE_ACTION_TYPE_SERVICE";
     } else {
         gap = arc4random() % 60*60*24;//day
     }
+    _interval = [NSNumber numberWithDouble:gap];
     
 //    if ([intervalType isEqualToString:SCHEDULE_INTERVAL_TEST]) {
 //        _interval = [NSNumber numberWithInteger:NSMinuteCalendarUnit];
@@ -188,8 +166,7 @@ NSString * const SCHEDULE_ACTION_TYPE_SERVICE = @"SCHEDULE_ACTION_TYPE_SERVICE";
                                          esm:(NSString *)esm
                                        title:(NSString*)title
                                         body:(NSString*)body
-                                  identifier:(NSString*)identifier
-{
+                                  identifier:(NSString*)identifier {
     _scheduleType = SCHEDULE_TYPE_CONTEXT;
     _esmStr = esm;
     _title = title;
@@ -199,51 +176,42 @@ NSString * const SCHEDULE_ACTION_TYPE_SERVICE = @"SCHEDULE_ACTION_TYPE_SERVICE";
 
 
 // Defining the trigger
-- (void) addHour: (int) hour
-{
+- (void) addHour: (int) hour {
     _hour = [NSNumber numberWithInt:hour];
 }
 
-- (void) addWeekday: (NSString *) weekday
-{
+- (void) addWeekday: (NSString *) weekday {
     _weekday = weekday;
 }
 
-- (void) addMonth: (NSString *) month
-{
+- (void) addMonth: (NSString *) month {
     _month = month;
 }
 
-- (void) addTimer: (NSDate *) date
-{
+- (void) addTimer: (NSDate *) date {
      _schedule = date;
 }
 
-- (void) addContext: (NSString *) context
-{
+- (void) addContext: (NSString *) context {
     _context = context;
 }
 
     
-- (void) randomize: (NSString *) randomize
-{
+- (void) randomize: (NSString *) randomize {
     _randomize = randomize;
 }
 
 
 // Defining the action
-- (void) setActiongType:(NSString *) actionType
-{
+- (void) setActiongType:(NSString *) actionType {
     _actionType = actionType;
 }
 
-- (void) setActionClass:(NSString *) actionClass
-{
+- (void) setActionClass:(NSString *) actionClass {
     _actionClass = actionClass;
 }
 
-- (void) setActionExtra:(NSString *) key value:(NSString*) value
-{
+- (void) setActionExtra:(NSString *) key value:(NSString*) value {
     _key = key;
     _esmStr = value;
 }

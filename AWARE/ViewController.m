@@ -14,6 +14,9 @@
 
 #import "MSBand.h"
 #import "GoogleCal.h"
+#import "Scheduler.h"
+#import "SingleESMObject.h"
+#import "ESMStorageHelper.h"
 
 @interface ViewController () {
     NSString *KEY_CEL_TITLE;
@@ -33,7 +36,7 @@
     NSTimer *listUpdateTimer;
     double uploadInterval;
     NSTimer* testTimer;
-    AWAREScheduleManager* scheduleManager;
+//    AWAREScheduleManager* scheduleManager;
 }
 
 @end
@@ -90,112 +93,28 @@
     [self initList];
     
     listUpdateTimer = [NSTimer scheduledTimerWithTimeInterval:0.1f target:self.tableView selector:@selector(reloadData) userInfo:nil repeats:YES];
-    
-    
-//    NSLog(@"===========> add scheduler");
-    scheduleManager = [[AWAREScheduleManager alloc] initWithViewController:self];
-    [scheduleManager removeAllSchedules];
-    [scheduleManager addSchedule:[self getScheduleForTest]];
-}
-
-
-/**
- * This is for EMS test
- */
-- (AWARESchedule *)getScheduleForTest
-{
-    //     free text
-    NSMutableDictionary *dicForJson = [[NSMutableDictionary alloc] init];
-    [dicForJson setObject:@1 forKey:KEY_ESM_TYPE];
-    [dicForJson setObject:@"ESM Freetext" forKey:KEY_ESM_TITLE];
-    [dicForJson setObject:@"The user can answer an open ended question." forKey:KEY_ESM_INSTRUCTIONS];
-    [dicForJson setObject:@"next" forKey:KEY_ESM_SUBMIT];
-    [dicForJson setObject:@60 forKey:KEY_ESM_EXPIRATION_THRESHOLD];
-    [dicForJson setObject:@"AWARE Tester" forKey:KEY_ESM_TRIGGER];
-
-    // radio
-    NSMutableDictionary *dicRadio = [[NSMutableDictionary alloc] init];
-    [dicRadio setObject:@2 forKey:KEY_ESM_TYPE];
-    [dicRadio setObject:@"ESM Radio" forKey:KEY_ESM_TITLE];
-    [dicRadio setObject:@"he user can only choose one option" forKey:KEY_ESM_INSTRUCTIONS];
-    [dicRadio setObject:[NSArray arrayWithObjects:@"Aston Martin", @"Lotus", @"Jaguar", nil] forKey:KEY_ESM_RADIOS];
-    [dicRadio setObject:@"Next" forKey:KEY_ESM_SUBMIT];
-    [dicRadio setObject:@60 forKey:KEY_ESM_EXPIRATION_THRESHOLD];
-    [dicRadio setObject:@"AWARE Tester" forKey:KEY_ESM_TRIGGER];
-
-    // check box
-    NSMutableDictionary *dicCheckBox = [[NSMutableDictionary alloc] init];
-    [dicCheckBox setObject:@3 forKey:KEY_ESM_TYPE];
-    [dicCheckBox setObject:@"ESM Checkbox" forKey:KEY_ESM_TITLE];
-    [dicCheckBox setObject:@"The user can choose multiple options" forKey:KEY_ESM_INSTRUCTIONS];
-    [dicCheckBox setObject:[NSArray arrayWithObjects:@"One", @"Two", @"Three", nil] forKey:KEY_ESM_CHECKBOXES];
-    [dicCheckBox setObject:@"Next" forKey:KEY_ESM_SUBMIT];
-    [dicCheckBox setObject:@60 forKey:KEY_ESM_EXPIRATION_THRESHOLD];
-    [dicCheckBox setObject:@"AWARE Tester" forKey:KEY_ESM_TRIGGER];
-
-
-    // Likert scale
-    NSMutableDictionary *dicLikert = [[NSMutableDictionary alloc] init];
-    [dicLikert  setObject:@4 forKey:KEY_ESM_TYPE];
-    [dicLikert  setObject:@"ESM Likert" forKey:KEY_ESM_TITLE];
-    [dicLikert  setObject:@"User rating 1 to 5 or 7 at 1 step increments" forKey:KEY_ESM_INSTRUCTIONS];
-    [dicLikert setObject:@5 forKey:KEY_ESM_LIKERT_MAX];
-    [dicLikert setObject:@"Great" forKey:KEY_ESM_LIKERT_MAX_LABEL];
-    [dicLikert setObject:@"Bad" forKey:KEY_ESM_LIKERT_MIN_LABEL];
-    [dicLikert setObject:@1 forKey:KEY_ESM_LIKERT_STEP];
-    [dicLikert  setObject:@"Next" forKey:KEY_ESM_SUBMIT];
-    [dicLikert  setObject:@60 forKey:KEY_ESM_EXPIRATION_THRESHOLD];
-    [dicLikert  setObject:@"AWARE Tester" forKey:KEY_ESM_TRIGGER];
-
-    // quick
-    NSMutableDictionary *dicQuick = [[NSMutableDictionary alloc] init];
-    [dicQuick  setObject:@5 forKey:KEY_ESM_TYPE];
-    [dicQuick  setObject:@"ESM Quick Answer" forKey:KEY_ESM_TITLE];
-    [dicQuick  setObject:@"One touch answer" forKey:KEY_ESM_INSTRUCTIONS];
-    [dicQuick  setObject:[NSArray arrayWithObjects:@"Yes", @"No", @"Maybe", nil] forKey:KEY_ESM_QUICK_ANSWERS];
-    [dicQuick  setObject:@60 forKey:KEY_ESM_EXPIRATION_THRESHOLD];
-    [dicQuick  setObject:@"AWARE Tester" forKey:KEY_ESM_TRIGGER];
-
-
-    // scale
-    NSMutableDictionary *dicScale = [[NSMutableDictionary alloc] init];
-    [dicScale  setObject:@6 forKey:KEY_ESM_TYPE];
-    [dicScale  setObject:@"ESM Scale" forKey:KEY_ESM_TITLE];
-    [dicScale  setObject:@"Between 0 and 10 with 2 increments" forKey:KEY_ESM_INSTRUCTIONS];
-    [dicScale  setObject:@0 forKey:KEY_ESM_SCALE_MIN];
-    [dicScale  setObject:@10 forKey:KEY_ESM_SCALE_MAX];
-    [dicScale  setObject:@0 forKey:KEY_ESM_SCALE_START];
-    [dicScale setObject:@"10" forKey:KEY_ESM_SCALE_MAX_LABEL];
-    [dicScale setObject:@"0" forKey:KEY_ESM_SCALE_MIN_LABEL];
-    [dicScale setObject:@2 forKey:KEY_ESM_SCALE_STEP];
-    [dicScale setObject:@"OK" forKey:KEY_ESM_SUBMIT];
-    [dicScale  setObject:@60 forKey:KEY_ESM_EXPIRATION_THRESHOLD];
-    [dicScale  setObject:@"AWARE Tester" forKey:KEY_ESM_TRIGGER];
-
-
-    NSArray* arrayForJson = [[NSArray alloc] initWithObjects:dicForJson, dicRadio, dicCheckBox,dicLikert, dicQuick, dicScale, nil];
-    NSData *data = [NSJSONSerialization dataWithJSONObject:arrayForJson options:0 error:nil];
-    NSString* jsonStr =  [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-
-    AWARESchedule * schedule = [[AWARESchedule alloc] initWithScheduleId:@"SOME SPECIAL ID"];
-    [schedule setScheduleAsNormalWithDate:[NSDate new]
-                             intervalType:SCHEDULE_INTERVAL_HOUR
-                                      esm:jsonStr
-                                    title:@"This is a notification for an ESM."
-                                     body:@"Hello!"
-                               identifier:@"---"];
-    return schedule;
 }
 
 - (void)appDidBecomeActive:(NSNotification *)notification {
     NSLog(@"did become active notification");
+//    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+//    NSString* scheduleId = [defaults objectForKey:@"schedule_id"];
+//    if (scheduleId != nil) {
+//        [self performSegueWithIdentifier:@"esmView" sender:self];
+//    } else {
+//        NSLog(@"-------");
+//    }
     
-    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-    NSString* scheduleId = [defaults objectForKey:@"schedule_id"];
-    if (scheduleId != nil) {
-        [self performSegueWithIdentifier:@"esmView" sender:self];
-    } else {
-        NSLog(@"-------");
+//    AWAREScheduleManager * manager = [[AWAREScheduleManager alloc] init];
+//    NSArray * esms = [manager getEsmObjects];
+    ESMStorageHelper * helper = [[ESMStorageHelper alloc] init];
+    NSArray * storedEsms = [helper getEsmTexts];
+    if(storedEsms != nil){
+        if (storedEsms.count > 0) {
+            [self performSegueWithIdentifier:@"esmView" sender:self];
+        }
+    }else{
+        NSLog(@"----------");
     }
 }
 
@@ -207,7 +126,7 @@
 //    if ([[segue identifier] isEqualToString:@"selectRow"]) {
     if ([segue.identifier isEqualToString:@"esmView"]) {
         AWAREEsmViewController *esmView = [segue destinationViewController];    // <- 1
-        esmView.scheduleManager = scheduleManager;    // <- 2
+//        esmView.scheduleManager = scheduleManager;    // <- 2
     }
 //    }
 }
@@ -337,6 +256,10 @@
     AWARESensor* googleCal = [[GoogleCal alloc] initWithSensorName:SENSOR_PLUGIN_GOOGLE_CAL];
     [googleCal startSensor:60.0f withSettings:nil];
     [_sensorManager addNewSensor:googleCal];
+    
+    AWARESensor* scheduler = [[Scheduler alloc] initWithSensorName:SENSOR_SCHEDULER];
+    [scheduler startSensor:60.0f withSettings:nil];
+    [_sensorManager addNewSensor:scheduler];
     
 }
 

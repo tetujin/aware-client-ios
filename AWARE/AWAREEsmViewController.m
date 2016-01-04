@@ -10,29 +10,8 @@
 #import "ESM.h"
 #import "AWAREKeys.h"
 #import "ViewController.h"
-
-NSString* const KEY_ESM_TYPE = @"esm_type";
-NSString* const KEY_ESM_TITLE = @"esm_title";
-NSString* const KEY_ESM_SUBMIT = @"esm_submit";
-NSString* const KEY_ESM_INSTRUCTIONS = @"esm_instructions";
-NSString* const KEY_ESM_RADIOS = @"esm_radios";
-NSString* const KEY_ESM_CHECKBOXES = @"esm_checkboxes";
-NSString* const KEY_ESM_LIKERT_MAX = @"esm_likert_max";
-NSString* const KEY_ESM_LIKERT_MAX_LABEL = @"esm_likert_max_label";
-NSString* const KEY_ESM_LIKERT_MIN_LABEL = @"esm_likert_min_label";
-NSString* const KEY_ESM_LIKERT_STEP = @"esm_likert_step";
-NSString* const KEY_ESM_QUICK_ANSWERS = @"esm_quick_answers";
-NSString* const KEY_ESM_EXPIRATION_THRESHOLD = @"esm_expiration_threshold";
-NSString* const KEY_ESM_STATUS = @"esm_status";
-NSString* const KEY_DOUBLE_ESM_USER_ANSWER_TIMESTAMP = @"double_esm_user_answer_timestamp";
-NSString* const KEY_ESM_USER_ANSWER = @"esm_user_answer";
-NSString* const KEY_ESM_TRIGGER = @"esm_trigger";
-NSString* const KEY_ESM_SCALE_MIN = @"esm_scale_min";
-NSString* const KEY_ESM_SCALE_MAX = @"esm_scale_max";
-NSString* const KEY_ESM_SCALE_START = @"esm_scale_start";
-NSString* const KEY_ESM_SCALE_MAX_LABEL = @"esm_scale_max_label";
-NSString* const KEY_ESM_SCALE_MIN_LABEL = @"esm_scale_min_label";
-NSString* const KEY_ESM_SCALE_STEP = @"esm_scale_step";
+#import "SingleESMObject.h"
+#import "ESMStorageHelper.h"
 
 @interface AWAREEsmViewController ()
 
@@ -56,12 +35,22 @@ NSString* const KEY_ESM_SCALE_STEP = @"esm_scale_step";
     CGRect spaceRect;
     CGRect lineRect;
     NSMutableArray* freeTextViews;
-    NSArray *arrayForJson;
+//    NSArray *arrayForJson;
     NSMutableArray *uiElements;
+    
+    NSString * currentTextOfEsm;
+    
+    NSString* KEY_ELEMENT;
+    NSString* KEY_TAG;
+    NSString* KEY_TYPE;
+    NSString* KEY_LABLES;
+    NSString* KEY_OBJECT;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    currentTextOfEsm = @"";
     
     WIDTH_VIEW = self.view.frame.size.width;
     HIGHT_TITLE = 40;
@@ -93,6 +82,12 @@ NSString* const KEY_ESM_SCALE_STEP = @"esm_scale_step";
     [self.view addGestureRecognizer:self.singleTap];
     
     freeTextViews = [[NSMutableArray alloc] init];
+    
+    KEY_ELEMENT = @"KEY_ELEMENTS";
+    KEY_TAG = @"KEY_TAG";
+    KEY_TYPE = @"KEY_TYPE";
+    KEY_LABLES = @"KEY_LABELS";
+    KEY_OBJECT = @"KEY_OBJECT";
 }
 
 -(void)onSingleTap:(UITapGestureRecognizer *)recognizer {
@@ -142,25 +137,18 @@ NSString* const KEY_ESM_SCALE_STEP = @"esm_scale_step";
     [_mainScrollView setScrollEnabled:YES];
     [_mainScrollView setFrame:self.view.frame];
     
+    uiElements = [[NSMutableArray alloc] init];
+    
     if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
         self.navigationController.interactivePopGestureRecognizer.delegate = self;
     }
 
-    
-    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-    NSString* scheduleId = [defaults objectForKey:@"schedule_id"];
-    if (scheduleId) {
-        [defaults removeObjectForKey:@"schedule_id"];
-    }
-    
-    [_scheduleManager showScheduleIds];
-    
-    uiElements = [[NSMutableArray alloc] init];
-    
-    AWARESchedule * schedule = [_scheduleManager getScheduleByScheduleId:scheduleId];
-    if (schedule != nil) {
-        NSLog(@"[json]: %@", schedule.esmStr);
-        [self addEsm:schedule.esmStr];
+    ESMStorageHelper *helper = [[ESMStorageHelper alloc] init];
+    NSArray* esms = [helper getEsmTexts];
+    for (NSString *esm in esms) {
+        [self addEsm:esm];
+        currentTextOfEsm = esm;
+        break;
     }
 }
 
@@ -180,32 +168,11 @@ NSString* const KEY_ESM_SCALE_STEP = @"esm_scale_step";
 }
 
 
-
-/**
- * View control element
- */
-- (void) showEsm
-{
-    
-}
-
-- (void) hidenEsm
-{
-    
-}
-
-- (void) removeEmss
-{
-    
-}
-
-
 /**
  * Add ESM elements
  */
 // add ESM Elements by using JSON text
-- (bool) addEsm:(NSString*) jsonStrOfAwareEsm
-{
+- (bool) addEsm:(NSString*) jsonStrOfAwareEsm {
     NSData *data = [jsonStrOfAwareEsm dataUsingEncoding:NSUTF8StringEncoding];
     NSError *error = nil;
     id object = [NSJSONSerialization
@@ -219,59 +186,65 @@ NSString* const KEY_ESM_SCALE_STEP = @"esm_scale_step";
     }
     
     NSArray *results = object;
-    bool quick = NO;
+//    bool quick = NO;
+    int tag = 0;
     NSLog(@"====== Hello ESM !! =======");
     for (NSDictionary *dic in results) {
         //the ESM type (1-free text, 2-radio, 3-checkbox, 4-likert, 5-quick, 6-scale)
         NSNumber* type = [dic objectForKey:KEY_ESM_TYPE];
         switch ([type intValue]) {
             case 1: // free text
-            NSLog(@"Add free text");
-            [self addFreeTextElement:dic];
-            break;
+                NSLog(@"Add free text");
+                [self addFreeTextElement:dic withTag:tag];
+                break;
             case 2: // radio
-            NSLog(@"Add radio");
-            [self addRadioElement:dic];
-            break;
+                NSLog(@"Add radio");
+                [self addRadioElement:dic withTag:tag];
+                break;
             case 3: // checkbox
-            NSLog(@"Add check box");
-            [self addCheckBoxElement:dic];
-            break;
+                NSLog(@"Add check box");
+                [self addCheckBoxElement:dic withTag:tag];
+                break;
             case 4: // likert
-            NSLog(@"Add likert");
-            [self addLikertScaleElement:dic];
-            break;
+                NSLog(@"Add likert");
+                [self addLikertScaleElement:dic withTag:tag];
+                break;
             case 5: // quick
-            NSLog(@"Add quick");
-            quick = YES;
-            [self addQuickAnswerElement:dic];
-            break;
+                NSLog(@"Add quick");
+//                quick = YES;
+                [self addQuickAnswerElement:dic withTag:tag];
+                break;
             case 6: // scale
-            NSLog(@"Add scale");
-            [self addScaleElement:dic];
-            break;
+                NSLog(@"Add scale");
+                [self addScaleElement:dic withTag:tag];
+                break;
+            case 7: //timepicker
+                NSLog(@"Timer Picker");
+                [self addTimePickerElement:dic withTag:tag];
+                break;
             default:
             break;
         }
         [self addNullElement];
         [self addLineElement];
+        tag++;
     }
     
-    if (results.count == 1 && quick){
+//    if (results.count == 1 && quick){
     
-    } else {
+//    } else {
         [self addNullElement];
         [self addSubmitButtonWithText:@"Submit"];
         [self addNullElement];
         [self addCancelButtonWithText:@"Cancel"];
         [self addNullElement];
-    }
+//    }
     return YES;
 }
 
 
 // add Free Text
-- (void) addFreeTextElement:(NSDictionary *) dic
+- (void) addFreeTextElement:(NSDictionary *) dic withTag:(int) tag
 {
     [self addCommonContents:dic];
     UITextView * textView = [[UITextView alloc] initWithFrame:CGRectMake(mainContentRect.origin.x, totalHight, mainContentRect.size.width, mainContentRect.size.height)];
@@ -280,143 +253,320 @@ NSString* const KEY_ESM_SCALE_STEP = @"esm_scale_step";
     [textView setDelegate:self];
     
     [freeTextViews addObject:textView];
-    [uiElements addObject:textView];
+    
+    
+//    [uiElements addObject:textView];
+    NSMutableDictionary * uiElement = [[NSMutableDictionary alloc] init];
+    [uiElement setObject:[NSNumber numberWithInt:tag] forKey:KEY_TAG];
+    [uiElement setObject:@1 forKey:KEY_TYPE];
+    NSArray * contents = [[NSArray alloc] initWithObjects:textView, nil];
+    [uiElement setObject:contents forKey:KEY_ELEMENT];
+    [uiElement setObject:[[NSArray alloc] init] forKey:KEY_LABLES];
+    [uiElement setObject:dic forKey:KEY_OBJECT];
+    
+    [uiElements addObject:uiElement];
 }
 
 // add Radio Element
-- (void) addRadioElement:(NSDictionary *) dic
+- (void) addRadioElement:(NSDictionary *) dic withTag:(int) tag
 {
     [self addCommonContents:dic];
-    UISegmentedControl *segmentView = [[UISegmentedControl alloc] initWithItems:[dic objectForKey:KEY_ESM_RADIOS]];
-    [segmentView setFrame:CGRectMake(mainContentRect.origin.x, totalHight, mainContentRect.size.width, mainContentRect.size.height)];
-    [_mainScrollView addSubview:segmentView];
-    [self setContentSizeWithAdditionalHeight:mainContentRect.size.height];
     
-    [uiElements addObject:segmentView];
+    NSMutableArray *elements = [[NSMutableArray alloc] init];
+    NSMutableArray *labels = [[NSMutableArray alloc] init];
+    for (NSString* buttonBoxItem in [dic objectForKey:KEY_ESM_RADIOS]) {
+        UIButton *s = [[UIButton alloc] initWithFrame:CGRectMake(mainContentRect.origin.x + 10, totalHight, 30, 30)];
+        [s setImage:[UIImage imageNamed:@"unselected_circle"] forState:UIControlStateNormal];
+        UILabel * label = [[UILabel alloc] initWithFrame:CGRectMake(mainContentRect.origin.x + 10 + 60,
+                                                                    totalHight,
+                                                                    mainContentRect.size.width - 90,
+                                                                    30)];
+        label.tag = totalHight;
+        label.adjustsFontSizeToFitWidth = YES;
+        [s addTarget:self action:@selector(btnSendCommentPressed:) forControlEvents:UIControlEventTouchUpInside];
+        [label setText:buttonBoxItem];
+        [_mainScrollView addSubview:s];
+        [_mainScrollView addSubview:label];
+        [self setContentSizeWithAdditionalHeight:31+9]; // 9 is buffer.
+        
+        [s setTag:tag];
+        
+        [elements addObject:s];
+        [labels addObject:label];
+    }
+    
+    NSMutableDictionary * uiElement = [[NSMutableDictionary alloc] init];
+    [uiElement setObject:[NSNumber numberWithInt:tag] forKey:KEY_TAG];
+    [uiElement setObject:@2 forKey:KEY_TYPE];
+    [uiElement setObject:elements forKey:KEY_ELEMENT];
+    [uiElement setObject:labels forKey:KEY_LABLES];
+    [uiElement setObject:dic forKey:KEY_OBJECT];
+    
+    [uiElements addObject:uiElement];
+    
 }
 
+- (void)btnSendCommentPressed:(UIButton *) sender {
+    NSInteger tag = sender.tag;
+    for (NSDictionary * dic in uiElements) {
+        NSNumber * tagNumber = [dic objectForKey:KEY_TAG];
+        if ([tagNumber integerValue] == tag) {
+            NSArray* boxes = [dic objectForKey:KEY_ELEMENT];
+            for (UIButton * button in boxes) {
+                [button setSelected:NO];
+            }
+        }
+    }
+    
+    NSLog(@"button pushed!");
+    if ([sender isSelected]) {
+        [sender setImage:[UIImage imageNamed:@"unselected_circle"] forState:UIControlStateNormal];
+        [sender setSelected:NO];
+    } else {
+        [sender setImage:[UIImage imageNamed:@"selected_circle"] forState:UIControlStateSelected];
+        [sender setSelected:YES];
+    }
+
+    
+    for (NSDictionary * dic in uiElements) {
+        NSNumber * tagNumber = [dic objectForKey:KEY_TAG];
+        if ([tagNumber integerValue] == tag) {
+            NSArray* labels = [dic objectForKey:KEY_LABLES];
+            for (UILabel * label in labels) {
+                NSLog(@"%@ %f", label.text, label.frame.origin.y);
+                // selected button's y
+                double selectedButtonY = sender.frame.origin.y;
+                double labelY = label.frame.origin.y;
+                NSError *error = nil;
+                NSString *pattern = @"Other*";
+                NSRegularExpression *regexp = [NSRegularExpression regularExpressionWithPattern:pattern options:0 error:&error];
+                NSTextCheckingResult *match = [regexp firstMatchInString:label.text options:0 range:NSMakeRange(0, label.text.length)];
+                NSString *matchedText = @"";
+                if (match.numberOfRanges > 0) {
+                    NSLog(@"matched text: %@", [label.text substringWithRange:[match rangeAtIndex:0]]);
+                    matchedText = [label.text substringWithRange:[match rangeAtIndex:0]];
+                }
+                
+                if (selectedButtonY == labelY && [matchedText isEqualToString:@"Other"]) {
+                    UIAlertView *av = [[UIAlertView alloc]initWithTitle:@""
+                                                                message:@"Please write your original option."
+                                                               delegate:self
+                                                      cancelButtonTitle:@"Cancel"
+                                                      otherButtonTitles:@"OK", nil];
+                    av.alertViewStyle = UIAlertViewStylePlainTextInput;
+                    av.tag = tag;
+                    [av textFieldAtIndex:0].delegate = self;
+                    [av show];
+                }
+            }
+        }
+    }
+//
+
+    
+}
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    NSLog(@"%@",[alertView textFieldAtIndex:0].text);
+    NSInteger tag = alertView.tag;
+    NSString * inputText = [alertView textFieldAtIndex:0].text;
+    for (NSDictionary * dic in uiElements) {
+        NSNumber * tagNumber = [dic objectForKey:KEY_TAG];
+        if ([tagNumber integerValue] == tag) {
+            NSArray* labels = [dic objectForKey:KEY_LABLES];
+            for (UILabel * label in labels) {
+//                NSLog(@"%@ %f", label.text, label.frame.origin.y);
+                // selected button's y
+                NSError *error = nil;
+                NSString *pattern = @"Other*";
+                NSRegularExpression *regexp = [NSRegularExpression regularExpressionWithPattern:pattern options:0 error:&error];
+                NSTextCheckingResult *match = [regexp firstMatchInString:label.text options:0 range:NSMakeRange(0, label.text.length)];
+                NSString *matchedText = @"";
+                if (match.numberOfRanges > 0) {
+                    NSLog(@"matched text: %@", [label.text substringWithRange:[match rangeAtIndex:0]]);
+                    matchedText = [label.text substringWithRange:[match rangeAtIndex:0]];
+                }
+                if ([matchedText isEqualToString:@"Other"]) {
+                    label.text = [NSString stringWithFormat:@"Other: %@", inputText];
+                }
+            }
+        }
+    }
+
+}
+
+
+
 // add Check Box Element
-- (void) addCheckBoxElement:(NSDictionary *) dic {
+- (void) addCheckBoxElement:(NSDictionary *) dic withTag:(int) tag{
     [self addCommonContents:dic];
     NSMutableArray *elements = [[NSMutableArray alloc] init];
+    NSMutableArray *labels = [[NSMutableArray alloc] init];
     for (NSString* checkBoxItem in [dic objectForKey:KEY_ESM_CHECKBOXES]) {
-        UISwitch *s = [[UISwitch alloc] initWithFrame:CGRectMake(mainContentRect.origin.x + 30 , totalHight, 49, 31)];
-        [s addTarget:self action:@selector(changeSwitch:) forControlEvents:UIControlEventValueChanged];
-        UILabel * label = [[UILabel alloc] initWithFrame:CGRectMake(mainContentRect.origin.x + 30 + 60, totalHight, mainContentRect.size.width - 60, 31)];
+        UIButton *s = [[UIButton alloc] initWithFrame:CGRectMake(mainContentRect.origin.x + 10 , totalHight, 30, 30)];
+        [s setImage:[UIImage imageNamed:@"unchecked_box"] forState:UIControlStateNormal];
+        UILabel * label = [[UILabel alloc] initWithFrame:CGRectMake(mainContentRect.origin.x + 10 + 60, totalHight, mainContentRect.size.width - 90, 30)];
+        label.adjustsFontSizeToFitWidth = YES;
+        [labels addObject:label];
+        [s addTarget:self
+              action:@selector(pushedCheckBox:)
+    forControlEvents:UIControlEventTouchUpInside];
+        [s setTag:tag];
         [label setText:checkBoxItem];
         [_mainScrollView addSubview:s];
         [_mainScrollView addSubview:label];
-        [self setContentSizeWithAdditionalHeight:31+9];
+        [self setContentSizeWithAdditionalHeight:31+9]; // 9 is buffer.
         
         [elements addObject:s];
     }
-    [uiElements addObject:elements];
+    
+    NSMutableDictionary * uiElement = [[NSMutableDictionary alloc] init];
+    [uiElement setObject:[NSNumber numberWithInt:tag] forKey:KEY_TAG];
+    [uiElement setObject:@3 forKey:KEY_TYPE];
+    [uiElement setObject:elements forKey:KEY_ELEMENT];
+    [uiElement setObject:labels forKey:KEY_LABLES];
+    [uiElement setObject:dic forKey:KEY_OBJECT];
+    
+    [uiElements addObject:uiElement];
 }
 
-- (IBAction)changeSwitch:(id)sender{
-    UISwitch * s = (UISwitch*)sender;
-    if([sender isOn]){
-        NSLog(@"Switch is ON");
-        s.onImage = [UIImage imageNamed:@"checked_box"];
-    } else{
-        NSLog(@"Switch is OFF");
-        s.offImage = [UIImage imageNamed:@"unchecked_box"];
+
+
+- (void) pushedCheckBox:(UIButton *) sender {
+    NSLog(@"button pushed!");
+    if ([sender isSelected]) {
+        [sender setImage:[UIImage imageNamed:@"unchecked_box"] forState:UIControlStateNormal];
+        [sender setSelected:NO];
+    } else {
+        [sender setImage:[UIImage imageNamed:@"checked_box"] forState:UIControlStateSelected];
+        [sender setSelected:YES];
     }
 }
 
-
-- (IBAction)changeButton:(id)sender{
-    UIButton * btn = (UIButton*)sender;
-    if([sender isSelected]){
-        [btn setImage:[UIImage imageNamed:@"checked_box"] forState:UIControlStateSelected | UIControlStateHighlighted];
-        NSLog(@"Button is ON");
-//        .onImage = [UIImage imageNamed:@"checked_box"];
-    } else{
-        [btn setImage:[UIImage imageNamed:@"unchecked_box"] forState:UIControlStateNormal];
-        NSLog(@"Button is OFF");
-//        btn.offImage = [UIImage imageNamed:@"unchecked_box"];
-    }
-}
 
 // add Likert Scale Element
-- (void) addLikertScaleElement:(NSDictionary *) dic
-{
+- (void) addLikertScaleElement:(NSDictionary *) dic withTag:(int) tag {
     [self addCommonContents:dic];
-    UILabel *maxLabel = [[UILabel alloc] initWithFrame:CGRectMake(mainContentRect.origin.x,totalHight, 60, 31)];
+    
+    NSMutableArray* elements = [[NSMutableArray alloc] init];
+    NSMutableArray* labels = [[NSMutableArray alloc] init];
+    
+//    UILabel *minLabel = [[UILabel alloc] initWithFrame:CGRectMake(mainContentRect.origin.x,totalHight, 60, 31)];
     UISlider *slider = [[UISlider alloc] initWithFrame:CGRectMake(mainContentRect.origin.x+60, totalHight, mainContentRect.size.width-120, 31)];
-    UILabel *minLabel = [[UILabel alloc] initWithFrame:CGRectMake(mainContentRect.origin.x+mainContentRect.size.width -60, totalHight, 30, 31)];
+    UILabel *maxLabel = [[UILabel alloc] initWithFrame:CGRectMake(mainContentRect.origin.x+mainContentRect.size.width -60, totalHight, 30, 31)];
+    // We use a Y location as an unique ID; //TODO
+    maxLabel.tag = totalHight;
     
     NSNumber *max = [dic objectForKey:KEY_ESM_LIKERT_MAX];
 //    NSNumber *step = [dic objectForKey:KEY_ESM_LIKERT_STEP];
     [slider setMaximumValue: [max floatValue]];
+    [slider setMinimumValue: 1];
+    double curentValue = [max doubleValue] / 2.0f;
+    [slider setValue:roundf(curentValue)];
 //    [slider setValue:[start floatValue]];
     
     [maxLabel setText:[dic objectForKey:KEY_ESM_LIKERT_MAX_LABEL]];
-    [minLabel setText:[dic objectForKey:KEY_ESM_LIKERT_MIN_LABEL]];
+//    [minLabel setText:[dic objectForKey:KEY_ESM_LIKERT_MIN_LABEL]];
     
-    maxLabel.textAlignment = UITextAlignmentLeft;
-    minLabel.textAlignment = UITextAlignmentRight;
+//    maxLabel.textAlignment = UITextAlignmentLeft;
+//    minLabel.textAlignment = UITextAlignmentRight;
     
     [_mainScrollView addSubview:slider];
     [_mainScrollView addSubview:maxLabel];
-    [_mainScrollView addSubview:minLabel];
+//    [_mainScrollView addSubview:minLabel];
     
     [self setContentSizeWithAdditionalHeight:31];
     
-    [uiElements addObject:slider];
+    
+    [elements addObject:slider];
+    [labels addObject:maxLabel];
+    
+    NSMutableDictionary * uiElement = [[NSMutableDictionary alloc] init];
+    [uiElement setObject:[NSNumber numberWithInt:tag] forKey:KEY_TAG];
+    [uiElement setObject:@4 forKey:KEY_TYPE];
+    [uiElement setObject:elements forKey:KEY_ELEMENT];
+    [uiElement setObject:labels forKey:KEY_LABLES];
+    [uiElement setObject:dic forKey:KEY_OBJECT];
+    
+    
+    [uiElements addObject:uiElement];
+    // add uislder event
+    
+    [slider addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
 }
 
+
+- (IBAction)sliderValueChanged:(UISlider *)sender {
+//    NSLog(@"slider value = %f", sender.value);
+    int intValue = sender.value;
+    [sender setValue:intValue];
+    UILabel * label = [_mainScrollView viewWithTag:sender.frame.origin.y];
+    [label setText:[NSString stringWithFormat:@"%d", intValue]];
+}
+
+
 // add Quick Answer Element
-- (void) addQuickAnswerElement:(NSDictionary *) dic {
+- (void) addQuickAnswerElement:(NSDictionary *) dic withTag:(int) tag{
     [self addCommonContents:dic];
     NSMutableArray *elements = [[NSMutableArray alloc] init];
+    NSMutableArray *labels = [[NSMutableArray alloc] init];
+    
     for (NSString* answers in [dic objectForKey:KEY_ESM_QUICK_ANSWERS]) {
         UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(mainContentRect.origin.x, totalHight, buttonRect.size.width, buttonRect.size.height)];
         [button setTitle:answers forState:UIControlStateNormal];
         [button setBackgroundColor:[UIColor lightGrayColor]];
-        [button addTarget:self action:@selector(pushedQuickAnswerButtons:) forControlEvents:UIControlEventTouchUpInside];
+//        [button addTarget:self action:@selector(pushedQuickAnswerButtons:) forControlEvents:UIControlEventTouchUpInside];
         [_mainScrollView addSubview:button];
         [self setContentSizeWithAdditionalHeight:buttonRect.size.height + 5];
         [elements addObject:button];
+        [labels addObject:answers];
         
-        [button addTarget:self action:@selector(changeButton:) forControlEvents:UIControlEventValueChanged];
+//        [button addTarget:self action:@selector(changeButton:) forControlEvents:UIControlEventValueChanged];
     
     }
-    [uiElements addObject:elements];
+    
+    NSMutableDictionary * uiElement = [[NSMutableDictionary alloc] init];
+    [uiElement setObject:[NSNumber numberWithInt:tag] forKey:KEY_TAG];
+    [uiElement setObject:@5 forKey:KEY_TYPE];
+    [uiElement setObject:elements forKey:KEY_ELEMENT];
+    [uiElement setObject:labels forKey:KEY_LABLES];
+    [uiElement setObject:dic forKey:KEY_OBJECT];
+    
+    [uiElements addObject:uiElement];
 }
 
 
-- (void) pushedQuickAnswerButtons:(id) sender
-{
-    UIButton *resultButton = (UIButton *) sender;
-    NSString *title = resultButton.currentTitle;
-    
-    ESM *esm = [[ESM alloc] initWithSensorName:SENSOR_ESMS];
-    for (NSDictionary *esmDic in arrayForJson) {
-        int type = [[esmDic objectForKey:KEY_ESM_TYPE] intValue];
-        if ( type == 5 ) {
-            NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
-            NSNumber* unixtime = [NSNumber numberWithDouble:timeStamp];
-            NSMutableDictionary *dic = [self getEsmFormatDictionary:(NSMutableDictionary *)esmDic
-                                                       withTimesmap:unixtime
-                                                            devieId:[esm getDeviceId]];
-            [dic setObject:title forKey:KEY_ESM_USER_ANSWER];
-            [esm saveData:dic];
-            [esm performSelector:@selector(syncAwareDB) withObject:0 afterDelay:5];
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Thank for submitting your answer!" message:@"" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-            [alert show];
-            [self.navigationController popToRootViewControllerAnimated:YES];
-            break;
-        }
-    }
-}
+//- (void) pushedQuickAnswerButtons:(id) sender {
+//    UIButton *resultButton = (UIButton *) sender;
+//    NSString *title = resultButton.currentTitle;
+//    
+//    ESM *esm = [[ESM alloc] initWithSensorName:SENSOR_ESMS];
+//    for (NSDictionary *esmDic in arrayForJson) {
+//        int type = [[esmDic objectForKey:KEY_ESM_TYPE] intValue];
+//        if ( type == 5 ) {
+//            NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
+//            NSNumber* unixtime = [NSNumber numberWithDouble:timeStamp];
+//            NSMutableDictionary *dic = [self getEsmFormatDictionary:(NSMutableDictionary *)esmDic
+//                                                       withTimesmap:unixtime
+//                                                            devieId:[esm getDeviceId]];
+//            [dic setObject:title forKey:KEY_ESM_USER_ANSWER];
+//            [esm saveData:dic];
+//            [esm performSelector:@selector(syncAwareDB) withObject:0 afterDelay:5];
+//            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Thank for submitting your answer!" message:@"" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+//            [alert show];
+//            [self.navigationController popToRootViewControllerAnimated:YES];
+//            break;
+//        }
+//    }
+//}
+
 
 //add Scale Element
-- (void) addScaleElement:(NSDictionary *) dic {
+- (void) addScaleElement:(NSDictionary *) dic withTag:(int) tag{
     [self addCommonContents:dic];
-    UILabel *maxLabel = [[UILabel alloc] initWithFrame:CGRectMake(mainContentRect.origin.x,totalHight, 60, 31)];
+//    UILabel *minLabel = [[UILabel alloc] initWithFrame:CGRectMake(mainContentRect.origin.x,totalHight, 60, 31)];
     UISlider *slider = [[UISlider alloc] initWithFrame:CGRectMake(mainContentRect.origin.x+60, totalHight, mainContentRect.size.width-120, 31)];
-    UILabel *minLabel = [[UILabel alloc] initWithFrame:CGRectMake(mainContentRect.origin.x+mainContentRect.size.width -60, totalHight, 30, 31)];
+    UILabel *maxLabel = [[UILabel alloc] initWithFrame:CGRectMake(mainContentRect.origin.x+mainContentRect.size.width -60, totalHight, 30, 31)];
+    [maxLabel setTag:totalHight];
     
     NSNumber *max = [dic objectForKey:KEY_ESM_SCALE_MAX];
     NSNumber *min = [dic objectForKey:KEY_ESM_SCALE_MIN];
@@ -426,19 +576,64 @@ NSString* const KEY_ESM_SCALE_STEP = @"esm_scale_step";
     [slider setValue:[start floatValue]];
     
     [maxLabel setText:[dic objectForKey:KEY_ESM_SCALE_MAX_LABEL]];
-    [minLabel setText:[dic objectForKey:KEY_ESM_SCALE_MIN_LABEL]];
+//    [minLabel setText:[dic objectForKey:KEY_ESM_SCALE_MIN_LABEL]];
     
-    maxLabel.textAlignment = UITextAlignmentLeft;
-    minLabel.textAlignment = UITextAlignmentRight;
+//    maxLabel.textAlignment = UITextAlignmentLeft;
+//    minLabel.textAlignment = UITextAlignmentRight;
     
     [_mainScrollView addSubview:slider];
     [_mainScrollView addSubview:maxLabel];
-    [_mainScrollView addSubview:minLabel];
+//    [_mainScrollView addSubview:minLabel];
     
     [self setContentSizeWithAdditionalHeight:31];
     
-    [uiElements addObject:slider];
+    NSMutableArray * elements = [[NSMutableArray alloc] init];
+    NSMutableArray * labels = [[NSMutableArray alloc] init];
+    NSMutableDictionary * uiElement = [[NSMutableDictionary alloc] init];
+    [elements addObject:slider];
+//    [labels addObject:minLabel];
+    [labels addObject:maxLabel];
+    [uiElement setObject:[NSNumber numberWithInt:tag] forKey:KEY_TAG];
+    [uiElement setObject:@6 forKey:KEY_TYPE];
+    [uiElement setObject:elements forKey:KEY_ELEMENT];
+    [uiElement setObject:labels forKey:KEY_LABLES];
+    [uiElement setObject:dic forKey:KEY_OBJECT];
+    
+    [uiElements addObject:uiElement];
+    [slider addTarget:self action:@selector(sliderChanged:) forControlEvents:UIControlEventValueChanged];
 }
+
+
+- (IBAction)sliderChanged:(UISlider *)sender {
+//    NSLog(@"slider value = %f", sender.value);
+    int intValue = sender.value;
+    [sender setValue:intValue];
+    UILabel * label = [_mainScrollView viewWithTag:sender.frame.origin.y];
+    [label setText:[NSString stringWithFormat:@"%d", intValue]];
+}
+
+// TODO
+- (void) addTimePickerElement:(NSDictionary *)dic withTag:(int) tag{
+    [self addCommonContents:dic];
+    UIDatePicker * datePicker = [[UIDatePicker alloc] initWithFrame:CGRectMake(mainContentRect.origin.x, totalHight, mainContentRect.size.width, 100)];
+    datePicker.datePickerMode = UIDatePickerModeTime;
+    [_mainScrollView addSubview:datePicker];
+    [self setContentSizeWithAdditionalHeight:100];
+    
+    NSMutableArray * elements = [[NSMutableArray alloc] init];
+    NSMutableArray * labels = [[NSMutableArray alloc] init];
+    [elements addObject:datePicker];
+    NSMutableDictionary * uiElement = [[NSMutableDictionary alloc] init];
+    [uiElement setObject:[NSNumber numberWithInt:tag] forKey:KEY_TAG];
+    [uiElement setObject:@7 forKey:KEY_TYPE];
+    [uiElement setObject:elements forKey:KEY_ELEMENT];
+    [uiElement setObject:labels forKey:KEY_LABLES];
+    [uiElement setObject:dic forKey:KEY_OBJECT];
+    
+    [uiElements addObject:uiElement];
+}
+
+
 
 
 - (void) addNullElement {
@@ -470,6 +665,8 @@ NSString* const KEY_ESM_SCALE_STEP = @"esm_scale_step";
     [titleLabel setText:title];
 //    [titleLabel setBackgroundColor:[UIColor blueColor]];
     titleLabel.font = [titleLabel.font fontWithSize:25];
+    titleLabel.numberOfLines = 3;
+    titleLabel.adjustsFontSizeToFitWidth = YES;
     [_mainScrollView addSubview:titleLabel];
     [self setContentSizeWithAdditionalHeight:HIGHT_TITLE];
 }
@@ -479,6 +676,7 @@ NSString* const KEY_ESM_SCALE_STEP = @"esm_scale_step";
     [instructionsLabel setText:text];
 //    [instructionsLabel setBackgroundColor:[UIColor redColor]];
     instructionsLabel.numberOfLines = 3;
+    instructionsLabel.adjustsFontSizeToFitWidth = YES;
     [_mainScrollView addSubview:instructionsLabel];
     [self setContentSizeWithAdditionalHeight:HIGHT_INSTRUCTION];
 }
@@ -502,92 +700,87 @@ NSString* const KEY_ESM_SCALE_STEP = @"esm_scale_step";
     NSLog(@"Submit button was pushed!");
     
     NSMutableArray *array = [[NSMutableArray alloc] init];
-    
     ESM *esm = [[ESM alloc] initWithSensorName:SENSOR_ESMS];
+    
     NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
     NSNumber* unixtime = [NSNumber numberWithDouble:timeStamp];
-    for (int i=0; i<arrayForJson.count; i++) {
-        NSDictionary *esmDic = [arrayForJson objectAtIndex:i];
+    
+    for (int i=0; i<uiElements.count; i++) {
+        NSDictionary *esmDic = [[uiElements objectAtIndex:i] objectForKey:KEY_OBJECT];
+        NSArray * contents = [[uiElements objectAtIndex:i] objectForKey:KEY_ELEMENT];
+        NSArray * labels = [[uiElements objectAtIndex:i] objectForKey:KEY_LABLES];
         
         NSMutableDictionary *dic = [self getEsmFormatDictionary:(NSMutableDictionary *)esmDic
                                                    withTimesmap:unixtime
                                                         devieId:[esm getDeviceId]];
-        // add common data to dic
-        [dic setObject:[esmDic objectForKey:KEY_ESM_TITLE] forKey:KEY_ESM_TITLE];
-        [dic setObject:[esmDic objectForKey:KEY_ESM_INSTRUCTIONS] forKey:KEY_ESM_INSTRUCTIONS];
-        [dic setObject:[esmDic objectForKey:KEY_ESM_TYPE] forKey:KEY_ESM_TYPE];
-        [dic setObject:[esmDic objectForKey:KEY_ESM_EXPIRATION_THRESHOLD] forKey:KEY_ESM_EXPIRATION_THRESHOLD];
-        [dic setObject:[esmDic objectForKey:KEY_ESM_TRIGGER] forKey:KEY_ESM_TRIGGER];
-//        [dic setObject:[esmDic objectForKey:KEY_ESM_SUBMIT] forKey:KEY_ESM_SUBMIT];
         // add special data to dic from each uielements
         NSNumber* type = [esmDic objectForKey:KEY_ESM_TYPE];
+        // save each data to the dictionary
         if ([type isEqualToNumber:@1]) {
             NSLog(@"Get free text data.");
-            UITextView *view = [uiElements objectAtIndex:i];
-            if (view.text != nil) {
-                [dic setObject:view.text forKey:KEY_ESM_USER_ANSWER];
+            for (UITextView * textView  in contents) {
+                [dic setObject:textView.text forKey:KEY_ESM_USER_ANSWER];
+                NSLog(@"Value is = %@", textView.text);
             }
-            NSLog(view.text);
         } else if ([type isEqualToNumber:@2]) {
             NSLog(@"Get radio data.");
-            UISegmentedControl * radioButton = [uiElements objectAtIndex:i];
-            NSUInteger selected =  radioButton.selectedSegmentIndex;
-            if (selected != -1) {
-                NSArray * buttons = [esmDic objectForKey:KEY_ESM_RADIOS];
-                NSString * selecteButtonName = [buttons objectAtIndex:radioButton.selectedSegmentIndex];
-                [dic setObject:selecteButtonName forKey:KEY_ESM_USER_ANSWER];
-//                NSLog(@"---> The button name is %@", selecteButtonName);
+            if (contents != nil) {
+                for (int i=0; i<contents.count; i++) {
+                    UIButton * button = [contents objectAtIndex:i];
+                    UILabel * label = [labels objectAtIndex:i];
+                    if(button.selected) {
+                        [dic setObject:label.text forKey:KEY_ESM_USER_ANSWER];
+                    }
+                }
             }
         } else if ([type isEqualToNumber:@3]) {
             NSLog(@"Get check box data.");
-            NSArray * checkBoxs = [uiElements objectAtIndex:i];
-            NSArray * names = [esmDic objectForKey:KEY_ESM_CHECKBOXES];
-//            NSMutableArray *selectedNames = [[NSMutableArray alloc] init];
-            NSMutableString* selectedNames = [[NSMutableString alloc] init];
-            for (int si=0; si<checkBoxs.count; si++) {
-                UISwitch * s = [checkBoxs objectAtIndex:si];
-                bool state = s.on;
-                if (state) {
-                    [selectedNames appendString:[names objectAtIndex:si]];
-                    [selectedNames appendString:@","];
+            if (contents != nil) {
+                NSString *result = @"";
+                for (int i=0; i<contents.count; i++) {
+                    UIButton * button = [contents objectAtIndex:i];
+                    UILabel * label = [labels objectAtIndex:i];
+                    if (button.selected) {
+                        result = [NSString stringWithFormat:@"%@,%@", result , label.text];
+                    }
                 }
+                [dic setObject:result forKey:KEY_ESM_USER_ANSWER];
             }
-            NSRange rangeOfExtraText = [selectedNames rangeOfString:@"," options:NSBackwardsSearch];
-            if (rangeOfExtraText.location == NSNotFound) {
-                //            NSLog(@"[TAIL] There is no extra text");
-            }else{
-                //            NSLog(@"[TAIL] There is some extra text!");
-                NSRange deleteRange = NSMakeRange(rangeOfExtraText.location, selectedNames.length-rangeOfExtraText.location);
-//                NSLog(@"Before: %@", selectedNames);
-                [selectedNames deleteCharactersInRange:deleteRange];
-//                NSLog(@"After: %@", selectedNames);
-            }
-            
-            [dic setObject:selectedNames forKey:KEY_ESM_USER_ANSWER];
-//            NSLog(@"%@", dic);
         } else if ([type isEqualToNumber:@4]) {
             NSLog(@"Get likert data");
-            UISlider * slider = [uiElements objectAtIndex:i];
-            int value = (int) slider.value;
-            [dic setObject:[NSString stringWithFormat:@"%d", value]  forKey:KEY_ESM_USER_ANSWER];
+            if (contents != nil) {
+                for (UISlider * slider in contents) {
+                    [dic setObject:[NSNumber numberWithFloat:slider.value] forKey:KEY_ESM_USER_ANSWER];
+                }
+            }
         } else if ([type isEqualToNumber:@5]) {
             NSLog(@"Get Quick button data");
         } else if ([type isEqualToNumber:@6]) {
             NSLog(@"Get Scale data");
-            UISlider * slider = [uiElements objectAtIndex:i];
-            int value = (int)slider.value;
-            [dic setObject:[NSString stringWithFormat:@"%d", value] forKey:KEY_ESM_USER_ANSWER];
+            if (contents != nil) {
+                for (UISlider * slider in contents) {
+                    NSNumber * number = [NSNumber numberWithFloat:slider.value];
+                    NSLog(@"%@", number);
+                    [dic setObject:number forKey:KEY_ESM_USER_ANSWER];
+                }
+            }
         } else {
-            
+
         }
         [array addObject:dic];
     }
-    
+
     bool result = [esm saveDataWithArray:array];
+    
     if ( result ) {
         [esm performSelector:@selector(syncAwareDB) withObject:0 afterDelay:5];
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Thank for submitting your answer!" message:@"" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [alert show];
+        
+        
+        ESMStorageHelper * helper = [[ESMStorageHelper alloc] init];
+        [helper removeEsmWithText:currentTextOfEsm];
+        
         
         CGFloat currentVersion = [[[UIDevice currentDevice] systemVersion] floatValue];
         if (currentVersion >= 9.0) {
@@ -607,34 +800,16 @@ NSString* const KEY_ESM_SCALE_STEP = @"esm_scale_step";
 - (NSMutableDictionary *) getEsmFormatDictionary:(NSMutableDictionary *)originalDic
                                     withTimesmap:(NSNumber *)unixtime
                                          devieId:(NSString*) deviceId{
-    NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-    [dic setObject:unixtime forKey:@"timestamp"];
-    [dic setObject:deviceId forKey:@"device_id"];
-    [dic setObject:@0 forKey:KEY_ESM_TYPE];
-    [dic setObject:@"" forKey:KEY_ESM_TITLE];
-    [dic setObject:@"" forKey:KEY_ESM_SUBMIT];
-    [dic setObject:@"" forKey:KEY_ESM_INSTRUCTIONS];
-    [dic setObject:@"" forKey:KEY_ESM_RADIOS];
-    [dic setObject:@"" forKey:KEY_ESM_CHECKBOXES];
-    [dic setObject:@0 forKey:KEY_ESM_LIKERT_MAX];
-    [dic setObject:@"" forKey:KEY_ESM_LIKERT_MAX_LABEL];
-    [dic setObject:@"" forKey:KEY_ESM_LIKERT_MIN_LABEL];
-    [dic setObject:@0 forKey:KEY_ESM_LIKERT_STEP];
-    [dic  setObject:@"" forKey:KEY_ESM_QUICK_ANSWERS];
-    [dic setObject:@0 forKey:KEY_ESM_EXPIRATION_THRESHOLD];
-    [dic setObject:@"" forKey:KEY_ESM_STATUS];
-    //        "double_esm_user_answer_timestamp default 0,"
-    [dic setObject:unixtime forKey:KEY_DOUBLE_ESM_USER_ANSWER_TIMESTAMP];
-    //        "esm_user_answer text default '',"
-    [dic setObject:@"" forKey:KEY_ESM_USER_ANSWER];
-    [dic setObject:@"" forKey:KEY_ESM_TRIGGER];
-    [dic  setObject:@0 forKey:KEY_ESM_SCALE_MIN];
-    [dic  setObject:@0 forKey:KEY_ESM_SCALE_MAX];
-    [dic  setObject:@0 forKey:KEY_ESM_SCALE_START];
-    [dic setObject:@"" forKey:KEY_ESM_SCALE_MAX_LABEL];
-    [dic setObject:@"" forKey:KEY_ESM_SCALE_MIN_LABEL];
-    [dic setObject:@0 forKey:KEY_ESM_SCALE_STEP];
-    
+    // make base dictionary from SingleEsmObject with device ID and timestamp
+    SingleESMObject *singleObject = [[SingleESMObject alloc] init];
+    NSMutableDictionary * dic = [singleObject getEsmDictionaryWithDeviceId:deviceId
+                                                                 timestamp:[unixtime doubleValue]
+                                                                      type:@0
+                                                                     title:@""
+                                                              instructions:@""
+                                                       expirationThreshold:@0
+                                                                   trigger:@""];
+    // add existing data to base dictionary of an esm
     for (id key in [originalDic keyEnumerator]) {
         NSLog(@"Key: %@ => Value:%@" , key, [originalDic objectForKey:key]);
         if([key isEqualToString:KEY_ESM_RADIOS]){
@@ -644,14 +819,20 @@ NSString* const KEY_ESM_SCALE_STEP = @"esm_scale_step";
         }else if([key isEqualToString:KEY_ESM_QUICK_ANSWERS]){
             [dic setObject:[self convertArrayToCSVFormat:[originalDic objectForKey:key]] forKey:KEY_ESM_QUICK_ANSWERS];
         }else{
-            [dic setObject:[originalDic objectForKey:key] forKey:key];
+            NSObject *object = [originalDic objectForKey:key];
+            if (object == nil) {
+                object = @"";
+            }
+            [dic setObject:object forKey:key];
         }
     }
     return dic;
 }
 
-- (NSString* ) convertArrayToCSVFormat:(NSArray *) array
-{
+- (NSString* ) convertArrayToCSVFormat:(NSArray *) array {
+    if (array == nil || array.count == 0){
+        return @"";
+    }
     NSMutableString* csvStr = [[NSMutableString alloc] init];
     for (NSString * item in array) {
         [csvStr appendString:item];
@@ -662,6 +843,9 @@ NSString* const KEY_ESM_SCALE_STEP = @"esm_scale_step";
     }else{
         NSRange deleteRange = NSMakeRange(rangeOfExtraText.location, csvStr.length-rangeOfExtraText.location);
         [csvStr deleteCharactersInRange:deleteRange];
+    }
+    if (csvStr == nil) {
+        return @"";
     }
     return csvStr;
 }

@@ -9,6 +9,7 @@
 #import "AppDelegate.h"
 #import "ViewController.h"
 #import "AWAREKeys.h"
+
 //#import "DeployGateSDK/DeployGateSDK.h"
 
 //#define NSLog DGSLog
@@ -190,12 +191,17 @@ handleEventsForBackgroundURLSession:(NSString *)identifier
 
 
 
-- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
-{
+- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
     if (notification != nil) {
         NSLog(@"Nofication was selected!!: %@", notification.category);
-        NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-        [defaults setObject:notification.category forKey:@"schedule_id"];
+//        NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+//        [defaults setObject:notification.category forKey:@"schedule_id"];
+        // Get category id -> "category id is schdule_id"
+//        NSString * scheduleId = notification.category;
+//        AWAREScheduleManager *scheduleManager = [[AWAREScheduleManager alloc] init];
+//        AWARESchedule *schedule = [scheduleManager getScheduleByScheduleId:scheduleId];
+//        NSLog(@"--> %@", schedule.title);
+//        [scheduleManager addEsmObject:schedule.esmObject];
     } else {
         NSLog(@"-------");
     }

@@ -7,7 +7,6 @@
 //
 
 #import <sys/utsname.h>
-//#import "UIDevice+IdentifierAddition.h"
 #import "QRCodeViewController.h"
 #import "AWAREKeys.h"
 #import "AWAREStudy.h"
@@ -16,17 +15,6 @@
 @interface QRCodeViewController (){
     NSString *crtUrl;
     AWAREStudy *study;
-//    NSString *deviceId;
-//    
-//    NSString *mqttPassword;
-//    NSString *mqttUsername;
-//    NSString *studyId;
-//    NSString *mqttServer;
-//    NSString *webserviceServer;
-//    int mqttPort;
-//    int mqttKeepAlive;
-//    int mqttQos;
-//    
     bool readingState;
 }
 @end
@@ -52,10 +40,6 @@
     
     [self configureCameraForHighestFrameRate:device];
     [self configureCameraForLowestFrameRate:device];
-//    [device lockForConfiguration:nil];
-//    [device setActiveVideoMaxFrameDuration:CMTimeMake(1,4)];
-//    [device setActiveVideoMinFrameDuration:CMTimeMake(1,4)];
-//    [device unlockForConfiguration];
     
     NSError *error = nil;
     AVCaptureDeviceInput *input = [AVCaptureDeviceInput deviceInputWithDevice:device
@@ -73,16 +57,6 @@
     
     NSLog(@"%@", output.availableMetadataObjectTypes);
     NSLog(@"%@", output.metadataObjectTypes);
-    
-//    AVCaptureConnection *conn = [output connectionWithMediaType:AVMediaTypeVideo];
-//    int CAPTURE_FRAMES_PER_SECOND = 4;
-//    if ([conn isVideoMaxFrameDurationSupported] && [conn isVideoMinFrameDurationSupported]) {
-//        [conn setVideoMinFrameDuration:CMTimeMake(1, CAPTURE_FRAMES_PER_SECOND)];
-//        [conn setVideoMaxFrameDuration:CMTimeMake(1, CAPTURE_FRAMES_PER_SECOND)];
-//    } else {
-//        NSLog(@"Setting Max and/or Min frame duration is unsupported");
-//    }
-    
     
     [self.session startRunning];
     

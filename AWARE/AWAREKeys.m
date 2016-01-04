@@ -56,6 +56,7 @@ NSString* const SENSOR_GRAVITY = @"gravity";
 NSString* const SENSOR_LINEAR_ACCELEROMETER = @"linear_accelerometer";
 NSString* const SENSOR_TIMEZONE = @"timezone";
 NSString* const SENSOR_AMBIENT_NOISE = @"plugin_ambient_noise";
+NSString* const SENSOR_SCHEDULER = @"scheduler";
 NSString* const SENSOR_PLUGIN_GOOGLE_ACTIVITY_RECOGNITION = @"plugin_google_activity_recognition";
 NSString* const SENSOR_PLUGIN_OPEN_WEATHER = @"plugin_openweather";
 NSString* const SENSOR_PLUGIN_MSBAND = @"plugin_msband";

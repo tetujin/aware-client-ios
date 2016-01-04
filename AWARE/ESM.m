@@ -88,9 +88,8 @@
 //}
 
 
-- (BOOL)stopSensor{
+- (BOOL) stopSensor {
     [uploadTimer invalidate];
-//    [sensingTimer invalidate];
     return YES;
 }
 @end

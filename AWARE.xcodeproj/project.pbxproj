@@ -16,7 +16,6 @@
 		16228A401C22DAE20081C839 /* TodayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 16228A3F1C22DAE20081C839 /* TodayViewController.m */; };
 		16228A431C22DAE20081C839 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 16228A411C22DAE20081C839 /* MainInterface.storyboard */; };
 		16228A471C22DAE20081C839 /* AWARE-Widget.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 16228A3A1C22DAE20081C839 /* AWARE-Widget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		16228A4E1C22E6150081C839 /* AWAREScheduleManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 16228A4D1C22E6150081C839 /* AWAREScheduleManager.m */; };
 		16228A511C22E9FE0081C839 /* AWARESchedule.m in Sources */ = {isa = PBXBuildFile; fileRef = 16228A501C22E9FE0081C839 /* AWARESchedule.m */; };
 		1623CE6B1BFD1B2C00EFAD72 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1623CE6A1BFD1B2C00EFAD72 /* main.m */; };
 		1623CE6E1BFD1B2C00EFAD72 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1623CE6D1BFD1B2C00EFAD72 /* AppDelegate.m */; };
@@ -48,6 +47,9 @@
 		165A8B741C03C0B300898C6C /* GoogleLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 165A8B731C03C0B300898C6C /* GoogleLoginViewController.m */; };
 		165A8B751C03C0B300898C6C /* GoogleLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 165A8B731C03C0B300898C6C /* GoogleLoginViewController.m */; };
 		165A8B761C03C0B300898C6C /* GoogleLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 165A8B731C03C0B300898C6C /* GoogleLoginViewController.m */; };
+		1663BB801C2C94C3003F03DF /* ESMStorageHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 1663BB7F1C2C94C3003F03DF /* ESMStorageHelper.m */; };
+		1677AF2E1C2B109A00F7C482 /* SingleESMObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 1677AF2D1C2B109A00F7C482 /* SingleESMObject.m */; };
+		1677AF321C2B4BDE00F7C482 /* MultiESMObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 1677AF311C2B4BDE00F7C482 /* MultiESMObject.m */; };
 		168683031C07C43600CB4266 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 168683021C07C43600CB4266 /* AudioToolbox.framework */; };
 		168683061C07C48900CB4266 /* AmbientNoise.m in Sources */ = {isa = PBXBuildFile; fileRef = 168683051C07C48900CB4266 /* AmbientNoise.m */; };
 		168683091C08050100CB4266 /* ActivityRecognition.m in Sources */ = {isa = PBXBuildFile; fileRef = 168683081C08050100CB4266 /* ActivityRecognition.m */; };
@@ -136,8 +138,6 @@
 		16228A3F1C22DAE20081C839 /* TodayViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TodayViewController.m; sourceTree = "<group>"; };
 		16228A421C22DAE20081C839 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		16228A441C22DAE20081C839 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		16228A4C1C22E6150081C839 /* AWAREScheduleManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AWAREScheduleManager.h; sourceTree = "<group>"; };
-		16228A4D1C22E6150081C839 /* AWAREScheduleManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AWAREScheduleManager.m; sourceTree = "<group>"; };
 		16228A4F1C22E9FE0081C839 /* AWARESchedule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AWARESchedule.h; sourceTree = "<group>"; };
 		16228A501C22E9FE0081C839 /* AWARESchedule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AWARESchedule.m; sourceTree = "<group>"; };
 		1623CE661BFD1B2C00EFAD72 /* AWARE.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AWARE.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -188,6 +188,12 @@
 		165A8B6E1C03B90500898C6C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
 		165A8B721C03C0B300898C6C /* GoogleLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GoogleLoginViewController.h; sourceTree = "<group>"; };
 		165A8B731C03C0B300898C6C /* GoogleLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GoogleLoginViewController.m; sourceTree = "<group>"; };
+		1663BB7E1C2C94C3003F03DF /* ESMStorageHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESMStorageHelper.h; sourceTree = "<group>"; };
+		1663BB7F1C2C94C3003F03DF /* ESMStorageHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ESMStorageHelper.m; sourceTree = "<group>"; };
+		1677AF2C1C2B109A00F7C482 /* SingleESMObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SingleESMObject.h; sourceTree = "<group>"; };
+		1677AF2D1C2B109A00F7C482 /* SingleESMObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SingleESMObject.m; sourceTree = "<group>"; };
+		1677AF301C2B4BDE00F7C482 /* MultiESMObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MultiESMObject.h; sourceTree = "<group>"; };
+		1677AF311C2B4BDE00F7C482 /* MultiESMObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MultiESMObject.m; sourceTree = "<group>"; };
 		168683021C07C43600CB4266 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		168683041C07C48900CB4266 /* AmbientNoise.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AmbientNoise.h; sourceTree = "<group>"; };
 		168683051C07C48900CB4266 /* AmbientNoise.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AmbientNoise.m; sourceTree = "<group>"; };
@@ -299,7 +305,7 @@
 				1623CEB31BFD659000EFAD72 /* AWAREKeys.m */,
 				16FCE2751BFE9326005FC71A /* AWARESensorManager.h */,
 				16FCE2761BFE9326005FC71A /* AWARESensorManager.m */,
-				16E155361C25B6AE00316321 /* Scheduler */,
+				1677AF2F1C2B4BB500F7C482 /* ESM */,
 				16E155351C25B68700316321 /* MQTT */,
 				16E155341C252B5B00316321 /* Plugins */,
 				168683011C07922100CB4266 /* Sensors */,
@@ -395,6 +401,21 @@
 			path = AWAREUITests;
 			sourceTree = "<group>";
 		};
+		1677AF2F1C2B4BB500F7C482 /* ESM */ = {
+			isa = PBXGroup;
+			children = (
+				16228A4F1C22E9FE0081C839 /* AWARESchedule.h */,
+				16228A501C22E9FE0081C839 /* AWARESchedule.m */,
+				1677AF2C1C2B109A00F7C482 /* SingleESMObject.h */,
+				1677AF2D1C2B109A00F7C482 /* SingleESMObject.m */,
+				1677AF301C2B4BDE00F7C482 /* MultiESMObject.h */,
+				1677AF311C2B4BDE00F7C482 /* MultiESMObject.m */,
+				1663BB7E1C2C94C3003F03DF /* ESMStorageHelper.h */,
+				1663BB7F1C2C94C3003F03DF /* ESMStorageHelper.m */,
+			);
+			name = ESM;
+			sourceTree = "<group>";
+		};
 		168683011C07922100CB4266 /* Sensors */ = {
 			isa = PBXGroup;
 			children = (
@@ -470,17 +491,6 @@
 				160794501C1A4E380021816F /* AWAREMqtt.m */,
 			);
 			name = MQTT;
-			sourceTree = "<group>";
-		};
-		16E155361C25B6AE00316321 /* Scheduler */ = {
-			isa = PBXGroup;
-			children = (
-				16228A4C1C22E6150081C839 /* AWAREScheduleManager.h */,
-				16228A4D1C22E6150081C839 /* AWAREScheduleManager.m */,
-				16228A4F1C22E9FE0081C839 /* AWARESchedule.h */,
-				16228A501C22E9FE0081C839 /* AWARESchedule.m */,
-			);
-			name = Scheduler;
 			sourceTree = "<group>";
 		};
 		2A3CA9F5620967BACB187EB7 /* Frameworks */ = {
@@ -776,8 +786,8 @@
 				169A7B3B1BFFC8B100A7C06D /* Wifi.m in Sources */,
 				164DD65C1C1F762000ADA92B /* Screen.m in Sources */,
 				168683061C07C48900CB4266 /* AmbientNoise.m in Sources */,
+				1677AF2E1C2B109A00F7C482 /* SingleESMObject.m in Sources */,
 				164810401C20ECC300B830D9 /* AWAREEsmViewController.m in Sources */,
-				16228A4E1C22E6150081C839 /* AWAREScheduleManager.m in Sources */,
 				16E155331C252B4D00316321 /* AWAREPlugin.m in Sources */,
 				164DD6681C1FBA9100ADA92B /* Timezone.m in Sources */,
 				169384F31C17C3D300A17F2C /* MSBand.m in Sources */,
@@ -800,8 +810,10 @@
 				168683091C08050100CB4266 /* ActivityRecognition.m in Sources */,
 				169A7B2A1BFF1C2300A7C06D /* Battery.m in Sources */,
 				1623CE771BFD1B2C00EFAD72 /* AWARE.xcdatamodeld in Sources */,
+				1677AF321C2B4BDE00F7C482 /* MultiESMObject.m in Sources */,
 				1623CEBC1BFE390600EFAD72 /* Accelerometer.m in Sources */,
 				164810851C21C08C00B830D9 /* ESM.m in Sources */,
+				1663BB801C2C94C3003F03DF /* ESMStorageHelper.m in Sources */,
 				164DD6621C1FA72D00ADA92B /* NTPTime.m in Sources */,
 				169A7B431BFFDE8F00A7C06D /* Rotation.m in Sources */,
 				1643959F1C22EEC40039E113 /* Scheduler.m in Sources */,
@@ -1005,7 +1017,7 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = AWARE/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1031,7 +1043,7 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = AWARE/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",

@@ -240,9 +240,9 @@
 
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings {
     
-    if ([self getPrimaryGoogleCal] == nil) {
-        [self showSelectPrimaryGoogleCalView];
-    }
+//    if ([self getPrimaryGoogleCal] == nil) {
+//        [self showSelectPrimaryGoogleCalView];
+//    }
     NSLog(@"[%@] Create table", [self getSensorName]);
     [self createTable];
     [self setAllEvents];

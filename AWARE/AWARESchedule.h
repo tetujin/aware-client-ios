@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import "MultiESMObject.h"
 
 extern NSString * const SCHEDULE_WEEK_SUNDAY;
 extern NSString * const SCHEDULE_WEEK_MONDAY;
@@ -58,6 +59,8 @@ extern NSString * const SCHEDULE_ACTION_TYPE_SERVICE;
 
 - (NSCalendarUnit) getInterval;
 
+//- (NSDictionary *) getScheduleAsDictionary;
+
 // set schedule as x
 - (void) setScheduleAsNormalWithDate:(NSDate *)date
                         intervalType:(NSString *)intervalType
@@ -85,6 +88,7 @@ extern NSString * const SCHEDULE_ACTION_TYPE_SERVICE;
 @property (nonatomic,strong) IBOutlet NSString* weekday;
 @property (nonatomic,strong) IBOutlet NSDate* schedule;
 @property (nonatomic,strong) IBOutlet NSString* scheduleType;
+@property (nonatomic,strong) IBOutlet NSNumber* interval;
 
 @property (nonatomic,strong) IBOutlet NSString* title;
 @property (nonatomic,strong) IBOutlet NSString* body;
@@ -97,5 +101,7 @@ extern NSString * const SCHEDULE_ACTION_TYPE_SERVICE;
 @property (nonatomic,strong) IBOutlet NSString* actionClass;
 @property (nonatomic,strong) IBOutlet NSString* key;
 @property (nonatomic,strong) IBOutlet NSString* esmStr;
+
+@property (nonatomic, strong) IBOutlet MultiESMObject* esmObject;
 
 @end
