@@ -18,6 +18,8 @@ NSString* const KEY_SENSORS = @"sensors";
 NSString* const KEY_PLUGINS = @"plugins";
 NSString* const KEY_PLUGIN = @"plugin";
 
+NSString* const KEY_STUDY_QR_CODE = @"study_qr_code";
+
 NSString* const KEY_MQTT_PASS = @"mqtt_password";
 NSString* const KEY_MQTT_USERNAME = @"mqtt_username";
 NSString* const KEY_MQTT_SERVER = @"mqtt_server";

@@ -20,11 +20,13 @@
     SCNetworkReachability* reachability;
     NSMutableString *tempData;
     NSMutableString *bufferStr;
-    bool wifiState;
     NSTimer* writeAbleTimer;
+    bool wifiState;
     bool writeAble;
     int marker;
     int errorPosts;
+    
+//    bool uploading;
 }
 
 @end
@@ -388,6 +390,7 @@
     
     if ( data.length < length ) {
         // more post = 0
+        previusUploadingState = NO;
         marker = 0;
     } else {
         // more post += 1
@@ -397,19 +400,9 @@
 
     // Set session configuration
     NSURLSessionConfiguration *sessionConfig = nil;
-//    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-//    BOOL foreground = [defaults boolForKey:@"APP_STATE"];
-//    foreground = NO;
-//    
-//    if (foreground) {
-        // If the app in the foreground, we will make a default session
-//        sessionConfig = [NSURLSessionConfiguration defaultSessionConfiguration];
-//    } else {
-//        // If the app in the background, we will make a background session with identifier.
-        NSDate *now = [NSDate date];
-        NSString* identifier = [NSString stringWithFormat:@"%@_%f", sensorName, [now timeIntervalSince1970]];
-        sessionConfig = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:identifier];
-//    }
+    NSDate *now = [NSDate date];
+    NSString* identifier = [NSString stringWithFormat:@"%@_%f", sensorName, [now timeIntervalSince1970]];
+    sessionConfig = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:identifier];
     sessionConfig.timeoutIntervalForRequest = 120.0;
     sessionConfig.HTTPMaximumConnectionsPerHost = 60;
     sessionConfig.timeoutIntervalForResource = 60; //60*60*24; // 1 day
@@ -428,32 +421,11 @@
     [request setHTTPMethod:@"POST"];
     [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
     [request setHTTPBody:postData];
-    
-//    if (foreground) {
-//        NSLog(@"--- This is a foreground task----");
-//        session = [NSURLSession sessionWithConfiguration:sessionConfig];
-//        [[session dataTaskWithRequest:request
-//                    completionHandler:^(NSData * _Nullable data,
-//                                        NSURLResponse * _Nullable response,
-//                                        NSError * _Nullable error) {
-//                        
-//                        [self receivedResponseFromServer:response withData:data error:error];
-//                    }] resume];
-//    }else {
-        NSLog(@"--- This is background task ----");
-        session = [NSURLSession sessionWithConfiguration:sessionConfig delegate:self delegateQueue:nil];
-        NSURLSessionDataTask* dataTask = [session dataTaskWithRequest:request];
-        [dataTask resume];
-//    }
-    
-//    dispatch_async(dispatch_get_main_queue(), ^{
-//        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"title" message:@"message" delegate:self cancelButtonTitle:@"cancel" otherButtonTitles:@"OK",@"hello",@"hoge",@"hoge", nil];
-//        [alert show];
-//        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Filename" message:@"Enter the file name:" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Ok", nil];
-//        alertView.alertViewStyle = UIAlertViewStylePlainTextInput;
-//        //    UITextField *passwordTextField = [alertView textFieldAtIndex:0];
-//        [alertView show];
-//    });
+
+    NSLog(@"--- This is background task ----");
+    session = [NSURLSession sessionWithConfiguration:sessionConfig delegate:self delegateQueue:nil];
+    NSURLSessionDataTask* dataTask = [session dataTaskWithRequest:request];
+    [dataTask resume];
 }
 
 - (void)URLSession:(NSURLSession *)session
@@ -471,11 +443,11 @@ didReceiveResponse:(NSURLResponse *)response
 -(void)URLSession:(NSURLSession *)session
          dataTask:(NSURLSessionDataTask *)dataTask
    didReceiveData:(NSData *)data {
+    
     // If the data is null, this method is not called.
     NSLog(@"[%@] Data is coming!", [self getSensorName]);
     NSString * result = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     NSLog(@"[%@] response => %@", [self getSensorName], result);
-    
     [session finishTasksAndInvalidate];
     [session invalidateAndCancel];
 }
@@ -493,19 +465,18 @@ didReceiveResponse:(NSURLResponse *)response
         if (debugState) {
             [self sendLocalNotificationForMessage:[NSString stringWithFormat:@"[%@] Retry - %d (%d)", [self getSensorName], marker, errorPosts] soundFlag:NO];
         }
-//        [self downLimit];
         if (errorPosts < 3) { //TODO
             [self syncAwareDB];
         } else {
             errorPosts = 0;
+            previusUploadingState = NO;
         }
     } else {
         NSLog(@"[%@] Session task finished correctly.", [self getSensorName]);
-//        [self upLimit];
         errorPosts = 0;
     }
     NSLog(@"%@", task.description);
-    previusUploadingState = NO;
+//    previusUploadingState = NO;//TODO
     [session finishTasksAndInvalidate];
     [session invalidateAndCancel];
 //    completionHandler(NSURLSessionResponseAllow);
@@ -534,8 +505,10 @@ didReceiveResponse:(NSURLResponse *)response
 
 
 - (void)URLSession:(NSURLSession *)session didBecomeInvalidWithError:(NSError *)error{
-//    NSLog(@"[%@] error.... then this session is canceled.: %@", [self getSensorName], error.debugDescription);
-    previusUploadingState = NO;
+    if (error != nil) {
+        NSLog(@"[%@] the session did become invaild with error: %@", [self getSensorName], error.debugDescription);
+    }
+//    previusUploadingState = NO;
     [session invalidateAndCancel];
     [session finishTasksAndInvalidate];
 }
@@ -601,13 +574,10 @@ didReceiveResponse:(NSURLResponse *)response
         // send notification
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         bool debugState = [userDefaults boolForKey:SETTING_DEBUG_STATE];
-//        debugState = YES;
         if (debugState) {
             [self sendLocalNotificationForMessage:message soundFlag:NO];
         }
     }
-    
-    previusUploadingState = NO;
     
     data = nil;
     response = nil;
@@ -624,9 +594,9 @@ didReceiveResponse:(NSURLResponse *)response
         }else{
             if(responseCode == 200){
                 [self removeFile:[self getSensorName]];
-                //                                NSLog(@"[%@] File is removed.", [self getSensorName]);
+                // NSLog(@"[%@] File is removed.", [self getSensorName]);
             }
-            //                            previusUploadingState = NO;
+            // previusUploadingState = NO;
         }
     });
 }

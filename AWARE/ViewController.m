@@ -7,16 +7,17 @@
 //
 
 #import "ViewController.h"
-#import "AWAREKeys.h"
 #import "GoogleLoginViewController.h"
-#import "ActivityRecognition.h"
 #import "AWAREEsmViewController.h"
+#import "AWAREStudy.h"
+#import "AWAREKeys.h"
+//#import "ActivityRecognition.h"
 
 #import "MSBand.h"
-#import "GoogleCalPull.h"
 #import "Scheduler.h"
 #import "SingleESMObject.h"
 #import "ESMStorageHelper.h"
+#import "GoogleCalPull.h"
 #import "GoogleCalPush.h"
 
 @interface ViewController () {
@@ -394,8 +395,7 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView
-         cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
+         cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     @autoreleasepool {
         static NSString *MyIdentifier = @"MyReuseIdentifier";
         
@@ -404,16 +404,6 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
         if (cell == nil) {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle  reuseIdentifier:MyIdentifier];
         }
-        
-//        if([[item objectForKey:KEY_CEL_SENSOR_NAME] isEqualToString:@"TITLE_CELL_VIEW"]){
-////            [cell.textLabel setTextColor:self.view.tintColor];
-//            [cell.textLabel setTextColor:[UIColor grayColor]];
-//        }
-//        
-//        if([[item objectForKey:KEY_CEL_SENSOR_NAME] isEqualToString:@"STUDY_CELL_VIEW"]){
-//            [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
-//        }
-        
         
         cell.textLabel.text = [item objectForKey:KEY_CEL_TITLE];
         cell.detailTextLabel.text = [item objectForKey:KEY_CEL_DESC];
@@ -447,6 +437,8 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
 
 
 - (IBAction)pushedStudyRefreshButton:(id)sender {
+    AWAREStudy *awareStudy = [[AWAREStudy alloc] init];
+    [awareStudy refreshStudy];
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"AWARE Study"
                                                     message:@"AWARE Study was refreshed!"
                                                    delegate:nil

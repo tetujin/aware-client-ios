@@ -13,6 +13,7 @@
 @interface AWAREStudy : NSObject
 
 - (BOOL) setStudyInformationWithURL:(NSString*)url;
+- (BOOL) refreshStudy;
 
 // for check
 - (BOOL) isAvailable;

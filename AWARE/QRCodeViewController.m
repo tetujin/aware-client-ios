@@ -24,7 +24,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    crtUrl = @"http://www.awareframework.com/awareframework.crt";
+//    crtUrl = @"http://www.awareframework.com/awareframework.crt";
     
     readingState = YES;
     _session = [[AVCaptureSession alloc] init];

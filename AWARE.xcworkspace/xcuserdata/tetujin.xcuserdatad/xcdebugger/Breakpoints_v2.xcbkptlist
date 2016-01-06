@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AWARE/AWARESensor.m"
-            timestampString = "472194957.816616"
+            timestampString = "473749801.332801"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "490"
-            endingLineNumber = "490"
+            startingLineNumber = "462"
+            endingLineNumber = "462"
             landmarkName = "-URLSession:task:didCompleteWithError:"
             landmarkType = "5">
          </BreakpointContent>
@@ -106,11 +106,11 @@
                   moduleName = "AWARE"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/tetujin/Dropbox/tokuda_Lab/codes/objective-c/AWARE/AWARE/AWAREEsmViewController.m"
-                  timestampString = "473729967.325381"
+                  timestampString = "473785498.308105"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "400"
-                  endingLineNumber = "400"
+                  startingLineNumber = "396"
+                  endingLineNumber = "396"
                   offsetFromSymbolStart = "1740">
                </Location>
                <Location
@@ -121,11 +121,11 @@
                   moduleName = "AWARE"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/tetujin/Dropbox/tokuda_Lab/codes/objective-c/AWARE/AWARE/AWAREEsmViewController.m"
-                  timestampString = "473729967.325517"
+                  timestampString = "473785498.308323"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "400"
-                  endingLineNumber = "400"
+                  startingLineNumber = "396"
+                  endingLineNumber = "396"
                   offsetFromSymbolStart = "1832">
                </Location>
             </Locations>
@@ -160,22 +160,6 @@
             startingLineNumber = "150"
             endingLineNumber = "150"
             landmarkName = "-checkAllEvents:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "AWARE/AWAREEsmViewController.m"
-            timestampString = "473730127.224766"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "138"
-            endingLineNumber = "138"
-            landmarkName = "-viewDidAppear:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

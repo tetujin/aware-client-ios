@@ -18,6 +18,8 @@ extern NSString* const KEY_SENSORS;
 extern NSString* const KEY_PLUGINS;
 extern NSString* const KEY_PLUGIN;
 
+extern NSString* const KEY_STUDY_QR_CODE;
+
 extern NSString* const KEY_MQTT_PASS;
 extern NSString* const KEY_MQTT_USERNAME;
 extern NSString* const KEY_MQTT_SERVER;
