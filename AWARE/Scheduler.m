@@ -50,9 +50,11 @@
     emotionTwo.schedule = [self getTargetTimeAsNSDate:now hour:13];
     emotionThree.schedule = [self getTargetTimeAsNSDate:now hour:17];
     emotionFour.schedule = [self getTargetTimeAsNSDate:now hour:21];
+    [emotionFour setScheduleType:SCHEDULE_INTERVAL_TEST];
     
-//    drinkTwo.schedule =[self getTargetTimeAsNSDate:now hour:18 minute:55 second:0];
-//    emotionFour.schedule = [self getTargetTimeAsNSDate:now hour:18 minute:55 second:0];
+//    drinkTwo.schedule =[self getTargetTimeAsNSDate:now hour:13 minute:5 second:0];
+//    emotionFour.schedule = [NSDate new];//[self getTargetTimeAsNSDate:now hour:13 minute:5 second:0];
+//    [emotionFour setScheduleType:SCHEDULE_INTERVAL_TEST];
     
     // Add maked schedules to schedules
     // Set a New ESMSchedule to a SchduleManager
@@ -240,7 +242,10 @@
 
 - (AWARESchedule *) getEmotionSchedule{
     //    // Likert scale
-    NSString * title = @"In the past couple hours, I have been feeling: (Scale: 1=Not at all; 2=A litle bit; 3=somewhat; 4=very much; 5=extremely)";
+    NSString * title = @"During the past hour, I would describe myself as..."
+    "(Scale: 1=Disagree strongly; 2=Disagree slightly; 3=Neither agree nor disagree; 4=Agree slightly; 5=Agree strongly)";
+    NSString *title2 = @"During the past hour, I have been..."
+    "(Scale: 1=Not at all; 2=Slightly; 3=Somewhat; 4=Very; 5=Extremely)";
     NSString * deviceId = @"";
     NSString * submit = @"Next";
     double timestamp = 0;
@@ -252,11 +257,11 @@
     NSNumber *likertStep = @0;
     SingleESMObject *esmObject = [[SingleESMObject alloc] init];
     
-//    _____ Happy, joyful, satisfied, loved
-    NSDictionary * happyLikert = [esmObject getEsmDictionaryAsLikertScaleWithDeviceId:deviceId
+
+    NSDictionary * quietLikert = [esmObject getEsmDictionaryAsLikertScaleWithDeviceId:deviceId
                                                                       timestamp:timestamp
                                                                           title:title
-                                                                   instructions:@"Happy, joyful, satisfied, loved"
+                                                                   instructions:@"Quiet, reserved"
                                                                          submit:submit
                                                             expirationThreshold:exprationThreshold
                                                                         trigger:trigger
@@ -265,11 +270,11 @@
                                                                  likertMinLabel:likertMinLabel
                                                                      likertStep:likertStep];
     
-//    _____ Stressed, overwhelmed
-    NSDictionary * stressedLikert = [esmObject getEsmDictionaryAsLikertScaleWithDeviceId:deviceId
+
+    NSDictionary * compassionateLikert = [esmObject getEsmDictionaryAsLikertScaleWithDeviceId:deviceId
                                                                             timestamp:timestamp
                                                                                 title:@""
-                                                                         instructions:@"Stressed, overwhelmed"
+                                                                         instructions:@"Compassionate, has a soft heart"
                                                                                submit:submit
                                                                   expirationThreshold:exprationThreshold
                                                                               trigger:trigger
@@ -277,12 +282,11 @@
                                                                        likertMaxLabel:likertMaxLabel
                                                                        likertMinLabel:likertMinLabel
                                                                            likertStep:likertStep];
-//    
-//    _____ Hopeful, optimistic, Enthusiastic
-    NSDictionary * hopefulLikert = [esmObject getEsmDictionaryAsLikertScaleWithDeviceId:deviceId
+
+    NSDictionary * disorganizedLikert = [esmObject getEsmDictionaryAsLikertScaleWithDeviceId:deviceId
                                                                                timestamp:timestamp
                                                                                    title:@""
-                                                                            instructions:@"Hopeful, optimistic, Enthusiastic"
+                                                                            instructions:@"Disorganized, indifferent"
                                                                                   submit:submit
                                                                      expirationThreshold:exprationThreshold
                                                                                  trigger:trigger
@@ -291,12 +295,11 @@
                                                                           likertMinLabel:likertMinLabel
                                                                               likertStep:likertStep];
     
-//    
-//    _____ Tired, slow, exhausted
-    NSDictionary * tiredLikert = [esmObject getEsmDictionaryAsLikertScaleWithDeviceId:deviceId
+
+    NSDictionary * emotionallyLikert = [esmObject getEsmDictionaryAsLikertScaleWithDeviceId:deviceId
                                                                               timestamp:timestamp
                                                                                   title:@""
-                                                                           instructions:@"Tired, slow, exhausted"
+                                                                           instructions:@"Emotionally stable, not easily upset"
                                                                                  submit:submit
                                                                     expirationThreshold:exprationThreshold
                                                                                 trigger:trigger
@@ -304,13 +307,12 @@
                                                                          likertMaxLabel:likertMaxLabel
                                                                          likertMinLabel:likertMinLabel
                                                                              likertStep:likertStep];
+
     
-//
-//    _____ Sad, depressed, lonely, miserable
-    NSDictionary * sadLikert = [esmObject getEsmDictionaryAsLikertScaleWithDeviceId:deviceId
+    NSDictionary * interestLikert = [esmObject getEsmDictionaryAsLikertScaleWithDeviceId:deviceId
                                                                             timestamp:timestamp
                                                                                 title:@""
-                                                                         instructions:@"Sad, depressed, lonely, miserable"
+                                                                         instructions:@"Having little interest in abstract ideas"
                                                                                submit:submit
                                                                   expirationThreshold:exprationThreshold
                                                                               trigger:trigger
@@ -319,12 +321,12 @@
                                                                        likertMinLabel:likertMinLabel
                                                                            likertStep:likertStep];
     
-//
-//    _____ Calm, relieved
-    NSDictionary * calmLikert = [esmObject getEsmDictionaryAsLikertScaleWithDeviceId:deviceId
+    
+
+    NSDictionary * stressedLikert = [esmObject getEsmDictionaryAsLikertScaleWithDeviceId:deviceId
                                                                           timestamp:timestamp
-                                                                              title:@""
-                                                                       instructions:@"Calm, relieved"
+                                                                              title:title2
+                                                                       instructions:@"Stressed, overwhelmed"
                                                                              submit:submit
                                                                 expirationThreshold:exprationThreshold
                                                                             trigger:trigger
@@ -333,12 +335,11 @@
                                                                      likertMinLabel:likertMinLabel
                                                                          likertStep:likertStep];
     
-//
-//    _____ Bored
-    NSDictionary * boredLikert = [esmObject getEsmDictionaryAsLikertScaleWithDeviceId:deviceId
+
+    NSDictionary * productiveLikert = [esmObject getEsmDictionaryAsLikertScaleWithDeviceId:deviceId
                                                                            timestamp:timestamp
                                                                                title:@""
-                                                                        instructions:@"Bored"
+                                                                        instructions:@"Productive, curious, focused, attentive"
                                                                               submit:submit
                                                                  expirationThreshold:exprationThreshold
                                                                              trigger:trigger
@@ -347,12 +348,11 @@
                                                                       likertMinLabel:likertMinLabel
                                                                           likertStep:likertStep];
     
-//    
-//    _____ Creative
-    NSDictionary * creativeLikert = [esmObject getEsmDictionaryAsLikertScaleWithDeviceId:deviceId
+
+    NSDictionary * boredLikert = [esmObject getEsmDictionaryAsLikertScaleWithDeviceId:deviceId
                                                                             timestamp:timestamp
                                                                                 title:@""
-                                                                         instructions:@"Creative"
+                                                                         instructions:@"Bored"
                                                                                submit:submit
                                                                   expirationThreshold:exprationThreshold
                                                                               trigger:trigger
@@ -360,175 +360,27 @@
                                                                        likertMaxLabel:likertMaxLabel
                                                                        likertMinLabel:likertMinLabel
                                                                            likertStep:likertStep];
-//    
-//    _____ Reserved, quiet
-    NSDictionary * reservedLikert = [esmObject getEsmDictionaryAsLikertScaleWithDeviceId:deviceId
-                                                                            timestamp:timestamp
-                                                                                title:@""
-                                                                         instructions:@"Reserved, quiet"
-                                                                               submit:submit
-                                                                  expirationThreshold:exprationThreshold
-                                                                              trigger:trigger
-                                                                            likertMax:likertMax
-                                                                       likertMaxLabel:likertMaxLabel
-                                                                       likertMinLabel:likertMinLabel
-                                                                           likertStep:likertStep];
+                 
     
-//    
-//    _____ Jealous, envious
-    NSDictionary * jealousLikert = [esmObject getEsmDictionaryAsLikertScaleWithDeviceId:deviceId
-                                                                            timestamp:timestamp
-                                                                                title:@""
-                                                                         instructions:@"Jealous, envious"
-                                                                               submit:submit
-                                                                  expirationThreshold:exprationThreshold
-                                                                              trigger:trigger
-                                                                            likertMax:likertMax
-                                                                       likertMaxLabel:likertMaxLabel
-                                                                       likertMinLabel:likertMinLabel
-                                                                           likertStep:likertStep];
-//    
-//    _____ Anxious, upset, hurt, disappointed
-    NSDictionary * anxiousLikert = [esmObject getEsmDictionaryAsLikertScaleWithDeviceId:deviceId
-                                                                            timestamp:timestamp
-                                                                                title:@""
-                                                                         instructions:@"Anxious, upset, hurt, disappointed"
-                                                                               submit:submit
-                                                                  expirationThreshold:exprationThreshold
-                                                                              trigger:trigger
-                                                                            likertMax:likertMax
-                                                                       likertMaxLabel:likertMaxLabel
-                                                                       likertMinLabel:likertMinLabel
-                                                                           likertStep:likertStep];
+    NSDictionary * havingRadio = [esmObject getEsmDictionaryAsRadioWithDeviceId:deviceId
+                                                                       timestamp:timestamp
+                                                                           title:@"Arousal and Positive/Negative Affect"
+                                                                    instructions:@"During the past hour, I have been having..."
+                                                                          submit:submit
+                                                             expirationThreshold:exprationThreshold
+                                                                         trigger:trigger
+                                                                          radios: [[NSArray alloc] initWithObjects:@"Low energy", @"Somewhat low energy", @"Neutral", @"Somewhat high energy", @"High Energy", nil]];
     
-//    
-//    _____ Sympathetic, warm, thoughtful, loving
-    NSDictionary * sympatheticLikert = [esmObject getEsmDictionaryAsLikertScaleWithDeviceId:deviceId
-                                                                              timestamp:timestamp
-                                                                                  title:@""
-                                                                           instructions:@"Sympathetic, warm, thoughtful, loving"
-                                                                                 submit:submit
-                                                                    expirationThreshold:exprationThreshold
-                                                                                trigger:trigger
-                                                                              likertMax:likertMax
-                                                                         likertMaxLabel:likertMaxLabel
-                                                                         likertMinLabel:likertMinLabel
-                                                                             likertStep:likertStep];
+    NSDictionary * feeringRadio = [esmObject getEsmDictionaryAsRadioWithDeviceId:deviceId
+                                                                       timestamp:timestamp
+                                                                           title:@""
+                                                                    instructions:@"During the past hour, I have been feeling..."
+                                                                          submit:submit
+                                                             expirationThreshold:exprationThreshold
+                                                                         trigger:trigger
+                                                                          radios: [[NSArray alloc] initWithObjects:@"Negative", @"Somewhat negative", @"Neutral", @"Somewhat positive", @"Positive", nil]];
     
-//    
-//    _____ Disorganized, careless, indifferent
-    NSDictionary * disorganizedLikert = [esmObject getEsmDictionaryAsLikertScaleWithDeviceId:deviceId
-                                                                                  timestamp:timestamp
-                                                                                      title:@""
-                                                                               instructions:@"Disorganized, careless, indifferent"
-                                                                                     submit:submit
-                                                                        expirationThreshold:exprationThreshold
-                                                                                    trigger:trigger
-                                                                                  likertMax:likertMax
-                                                                             likertMaxLabel:likertMaxLabel
-                                                                             likertMinLabel:likertMinLabel
-                                                                                 likertStep:likertStep];
-    
-//    
-//    _____ Confident, dependable, self-disciplined, determined
-    NSDictionary * confidentLikert = [esmObject getEsmDictionaryAsLikertScaleWithDeviceId:deviceId
-                                                                                   timestamp:timestamp
-                                                                                       title:@""
-                                                                                instructions:@"Confident, dependable, self-disciplined, determined"
-                                                                                      submit:submit
-                                                                         expirationThreshold:exprationThreshold
-                                                                                     trigger:trigger
-                                                                                   likertMax:likertMax
-                                                                              likertMaxLabel:likertMaxLabel
-                                                                              likertMinLabel:likertMinLabel
-                                                                                  likertStep:likertStep];
-    
-//    
-//    _____ Critical, quarrelsome, stubborn
-    NSDictionary * criticalLikert = [esmObject getEsmDictionaryAsLikertScaleWithDeviceId:deviceId
-                                                                                timestamp:timestamp
-                                                                                    title:@""
-                                                                             instructions:@"Critical, quarrelsome, stubborn"
-                                                                                   submit:submit
-                                                                      expirationThreshold:exprationThreshold
-                                                                                  trigger:trigger
-                                                                                likertMax:likertMax
-                                                                           likertMaxLabel:likertMaxLabel
-                                                                           likertMinLabel:likertMinLabel
-                                                                               likertStep:likertStep];
-//
-//    _____ Alert, focused, productive
-    NSDictionary * alertLikert = [esmObject getEsmDictionaryAsLikertScaleWithDeviceId:deviceId
-                                                                               timestamp:timestamp
-                                                                                   title:@""
-                                                                            instructions:@"Alert, focused, productive"
-                                                                                  submit:submit
-                                                                     expirationThreshold:exprationThreshold
-                                                                                 trigger:trigger
-                                                                               likertMax:likertMax
-                                                                          likertMaxLabel:likertMaxLabel
-                                                                          likertMinLabel:likertMinLabel
-                                                                              likertStep:likertStep];
-    
-//
-//    _____ Conventional, uncreative
-    NSDictionary * conventionalLikert = [esmObject getEsmDictionaryAsLikertScaleWithDeviceId:deviceId
-                                                                            timestamp:timestamp
-                                                                                title:@""
-                                                                         instructions:@"Conventional, uncreative"
-                                                                               submit:submit
-                                                                  expirationThreshold:exprationThreshold
-                                                                              trigger:trigger
-                                                                            likertMax:likertMax
-                                                                       likertMaxLabel:likertMaxLabel
-                                                                       likertMinLabel:likertMinLabel
-                                                                           likertStep:likertStep];
-    
-//
-//    _____ Confused, frustrated, unfocused, puzzled
-    NSDictionary * confusedLikert = [esmObject getEsmDictionaryAsLikertScaleWithDeviceId:deviceId
-                                                                                   timestamp:timestamp
-                                                                                       title:@""
-                                                                                instructions:@"Confused, frustrated, unfocused, puzzled"
-                                                                                      submit:submit
-                                                                         expirationThreshold:exprationThreshold
-                                                                                     trigger:trigger
-                                                                                   likertMax:likertMax
-                                                                              likertMaxLabel:likertMaxLabel
-                                                                              likertMinLabel:likertMinLabel
-                                                                                  likertStep:likertStep];
-    
-//    
-//    _____ Guilty, ashamed, embarrassed, regretful
-    NSDictionary * guiltyLikert = [esmObject getEsmDictionaryAsLikertScaleWithDeviceId:deviceId
-                                                                               timestamp:timestamp
-                                                                                   title:@""
-                                                                            instructions:@"Guilty, ashamed, embarrassed, regretful"
-                                                                                  submit:submit
-                                                                     expirationThreshold:exprationThreshold
-                                                                                 trigger:trigger
-                                                                               likertMax:likertMax
-                                                                          likertMaxLabel:likertMaxLabel
-                                                                          likertMinLabel:likertMinLabel
-                                                                              likertStep:likertStep];
-    
-//
-//    _____ extravert, talkative
-    NSDictionary * extravertLikert = [esmObject getEsmDictionaryAsLikertScaleWithDeviceId:deviceId
-                                                                             timestamp:timestamp
-                                                                                 title:@""
-                                                                          instructions:@"extravert, talkative"
-                                                                                submit:submit
-                                                                   expirationThreshold:exprationThreshold
-                                                                               trigger:trigger
-                                                                             likertMax:likertMax
-                                                                        likertMaxLabel:likertMaxLabel
-                                                                        likertMinLabel:likertMinLabel
-                                                                            likertStep:likertStep];
-    
-    
-    
-    NSArray* arrayForJson = [[NSArray alloc] initWithObjects:happyLikert, stressedLikert, hopefulLikert, tiredLikert, sadLikert, calmLikert, boredLikert, creativeLikert, reservedLikert, jealousLikert, anxiousLikert, sympatheticLikert,disorganizedLikert,confidentLikert, criticalLikert, alertLikert, conventionalLikert, confusedLikert, guiltyLikert, extravertLikert, nil];
+    NSArray* arrayForJson = [[NSArray alloc] initWithObjects:quietLikert, compassionateLikert, disorganizedLikert,emotionallyLikert, interestLikert, stressedLikert, productiveLikert, boredLikert, havingRadio, feeringRadio, nil];
     NSData *data = [NSJSONSerialization dataWithJSONObject:arrayForJson options:0 error:nil];
     NSString* jsonStr =  [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     

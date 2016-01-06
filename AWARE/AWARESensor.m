@@ -115,7 +115,7 @@
     latestSensorValue = valueStr;
 }
 
-- (NSString *)getLatestValue{
+- (NSString *)getLatestValue {
     return latestSensorValue;
 }
 
@@ -657,13 +657,22 @@ didReceiveResponse:(NSURLResponse *)response
     NSData *resData = [NSURLConnection sendSynchronousRequest:request
                                             returningResponse:&response error:&error];
     NSString* newStr = [[NSString alloc] initWithData:resData encoding:NSUTF8StringEncoding];
-//    NSLog(@"%@", newStr);
     int responseCode = (int)[response statusCode];
     if(responseCode == 200){
         NSLog(@"UPLOADED SENSOR DATA TO A SERVER");
         return newStr;
     }
     return @"";
+}
+
+- (bool) isFirstAccess {
+    NSString * url = [self getLatestDataUrl:[self getSensorName]];
+    NSString * value = [self getLatestSensorData:[self getSensorName] withUrl:url];
+    if ([value isEqualToString:@"[]"] || value == nil) {
+        return YES;
+    }else{
+        return  NO;
+    }
 }
 
 
@@ -673,9 +682,14 @@ didReceiveResponse:(NSURLResponse *)response
 
 
 - (void) createTable:(NSString *)query withTableName:(NSString*) tableName {
-    
     NSLog(@"%@",[self getCreateTableUrl:tableName]);
     
+    // check isFirstAccess
+    if (![self isFirstAccess]) {
+        return;
+    }
+    
+    // create table
     NSString *post = nil;
     NSData *postData = nil;
     NSMutableURLRequest *request = nil;
@@ -730,8 +744,7 @@ didReceiveResponse:(NSURLResponse *)response
                 }] resume];
 }
 
-- (BOOL) clearTable
-{
+- (BOOL) clearTable {
     NSLog(@"%@",[self getCreateTableUrl:[self getSensorName]]);
     NSString *post = nil;
     NSData *postData = nil;

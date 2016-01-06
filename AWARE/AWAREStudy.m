@@ -52,7 +52,9 @@
 
 
 - (NSString *)getSystemUUID {
-   return [[[UIDevice currentDevice] identifierForVendor] UUIDString];
+    NSString * uuid = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
+    uuid = [uuid lowercaseString];
+    return uuid;
 }
 
 - (BOOL) setStudyInformationWithURL:(NSString*)url {
@@ -119,8 +121,12 @@
                 }
             }
             
-            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
             // if Study ID is new, AWARE adds new Device ID to the AWARE server.
+//            if (![self isFirstAccess:url withDeviceId:uuid]) {
+//                [self addNewDeviceToAwareServer:url withDeviceId:uuid];
+//            }
+            
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
             NSString * oldStudyId = [userDefaults objectForKey:KEY_STUDY_ID];
             if(![oldStudyId isEqualToString:studyId]){
                 NSLog(@"Add new device ID to the AWARE server.");
@@ -150,6 +156,10 @@
 }
 
 - (bool) addNewDeviceToAwareServer:(NSString *)url withDeviceId:(NSString *) uuid {
+    
+    [self createTable:url withDeviceId:uuid];
+    
+    // preparing for insert device information
     url = [NSString stringWithFormat:@"%@/aware_device/insert", url];
     NSMutableDictionary *jsonQuery = [[NSMutableDictionary alloc] init];
     NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
@@ -226,6 +236,132 @@
         });
     });
     return true;
+}
+
+- (bool) createTable:(NSString *)url withDeviceId:(NSString *) uuid{
+        // preparing for insert device information
+        url = [NSString stringWithFormat:@"%@/aware_device/create_table", url];
+    NSString *query = [[NSString alloc] init];
+    query = @"_id integer primary key autoincrement,"
+    "timestamp real default 0,"
+    "device_id text default '',"
+    
+    "board text default '',"
+    "brand text default '',"
+    "device text default '',"
+    "build_id text default '',"
+    "hardware text default '',"
+    "manufacturer text default '',"
+    "model text default '',"
+    "product text default '',"
+    "serial text default '',"
+    "release text default '',"
+    "release_type text default '',"
+    "sdk text default '',"
+    "label text default '',"
+    "UNIQUE (timestamp,device_id)";
+
+//        [jsonQuery setValue:manufacturer forKey:@"board"];//    board	TEXT	Manufacturer’s board name
+//        [jsonQuery setValue:model forKey:@"brand"];//    brand	TEXT	Manufacturer’s brand name
+//        [jsonQuery setValue:manufacturer forKey:@"device"];//    device	TEXT	Manufacturer’s device name
+//        [jsonQuery setValue:code forKey:@"build_id"];//    build_id	TEXT	Android OS build ID
+//        [jsonQuery setValue:manufacturer forKey:@"hardware"];//    hardware	TEXT	Hardware codename
+//        [jsonQuery setValue:manufacturer forKey:@"manufacturer"];//    manufacturer	TEXT	Device’s manufacturer
+//        [jsonQuery setValue:[self deviceName] forKey:@"model"];//    model	TEXT	Device’s model
+//        [jsonQuery setValue:manufacturer forKey:@"product"];//    product	TEXT	Device’s product name
+//        [jsonQuery setValue:identifier forKey:@"serial"];//    serial	TEXT	Manufacturer’s device serial, not unique
+//        [jsonQuery setValue:systemVersion forKey:@"release"];//    release	TEXT	Android’s release
+//        [jsonQuery setValue:@"user" forKey:@"release_type"];//    release_type	TEXT	Android’s type of release (e.g., user, userdebug, eng)
+//        [jsonQuery setValue:systemVersion forKey:@"sdk"];//    sdk	INTEGER	Android’s SDK level
+//        [jsonQuery setValue:name forKey:@"label"];
+    
+        //    [[UIDevice currentDevice] platformType]   // ex: UIDevice4GiPhone
+        //    [[UIDevice currentDevice] platformString] // ex: @"iPhone 4G"
+    
+//        }
+    NSString *post = [NSString stringWithFormat:@"data=%@&device_id=%@", query, uuid];
+    NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
+    NSString *postLength = [NSString stringWithFormat:@"%ld", [postData length]];
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+    [request setURL:[NSURL URLWithString:url]];
+    [request setHTTPMethod:@"POST"];
+    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+    //[request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+    [request setHTTPBody:postData];
+    
+    //    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+//        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+    NSError *error = nil;
+    NSHTTPURLResponse *response = nil;
+    NSData *resData = [NSURLConnection sendSynchronousRequest:request
+                                            returningResponse:&response error:&error];
+    NSString * resultDate = [[NSString alloc] initWithData:resData encoding:NSUTF8StringEncoding];
+    NSLog(@"%@", resultDate);
+    int responseCode = (int)[response statusCode];
+//            dispatch_async(dispatch_get_main_queue(), ^{
+    if(responseCode == 200){
+        NSLog(@"UPLOADED SENSOR DATA TO A SERVER");
+        return YES;
+    }else{
+        NSLog(@"ERROR");
+        return NO;
+    }
+//            });
+//        });
+    return NO;
+}
+
+
+- (BOOL) isFirstAccess:(NSString* ) url withDeviceId:(NSString *) uuid {
+    // check latest record
+    // https://api.awareframework.com/index.php/webservice/index/STUDYID/APIKEY/accelerometer/latest
+    NSString * latestDataURL = [NSString stringWithFormat:@"%@/aware_device_/latest", url];
+    NSLog(@"%@", latestDataURL);
+    
+//    NSMutableDictionary *query = [[NSMutableDictionary alloc] init];
+//    NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
+//    NSNumber* unixtime = [NSNumber numberWithDouble:timeStamp];
+//    [query setValue:uuid  forKey:@"device_id"];
+//    [query setValue:unixtime forKey:@"timestamp"];
+    
+//    NSError *error;
+//    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:query
+//                                                       options:NSJSONWritingPrettyPrinted // Pass 0 if you don't care about the readability of the generated string
+//                                                         error:&error];
+//    NSString *jsonString = @"";
+//    if (! jsonData) {
+//        NSLog(@"Got an error: %@", error);
+//    } else {
+//        jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+//        NSLog(@"%@",jsonString);
+//    }
+    NSString *post = [NSString stringWithFormat:@"device_id=%@", uuid];
+    NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
+    NSString *postLength = [NSString stringWithFormat:@"%ld", [postData length]];
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+    [request setURL:[NSURL URLWithString:latestDataURL]];
+    [request setHTTPMethod:@"POST"];
+    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+    //[request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+    [request setHTTPBody:postData];
+    
+    NSError *error = nil;
+    NSHTTPURLResponse *response = nil;
+    NSData *resData = [NSURLConnection sendSynchronousRequest:request
+                                            returningResponse:&response error:&error];
+    int responseCode = (int)[response statusCode];
+    if(responseCode == 200){
+        NSString* resultString = [[NSString alloc] initWithData:resData encoding:NSUTF8StringEncoding];
+//        NSLog(@"UPLOADED SENSOR DATA TO A SERVER");
+        NSLog(@"Result: %@", resultString);
+        if ([resultString isEqualToString:@"[]"]) {
+            return YES;
+        }
+        return NO;
+    }else{
+        NSLog(@"ERROR");
+        return NO;
+    }
 }
 
 - (BOOL)refreshStudy {

@@ -33,6 +33,7 @@
 #import "MSBand.h"
 #import "GoogleCalPull.h"
 #import "GoogleCalPush.h"
+#import "GoogleLogin.h"
 
 @implementation AWARESensorManager
 
@@ -156,6 +157,9 @@
                         [awareSensor startSensor:uploadTime withSettings:settings];
                     }else if([key isEqualToString:SENSOR_PLUGIN_GOOGLE_CAL_PULL]){
                         awareSensor = [[GoogleCalPull alloc] initWithSensorName:SENSOR_PLUGIN_GOOGLE_CAL_PULL];
+                        [awareSensor startSensor:uploadTime withSettings:settings];
+                    }else if([key isEqualToString:SENSOR_PLUGIN_GOOGLE_LOGIN]){
+                        awareSensor = [[GoogleLogin alloc] initWithSensorName:SENSOR_PLUGIN_GOOGLE_LOGIN];
                         [awareSensor startSensor:uploadTime withSettings:settings];
                     }
                 }

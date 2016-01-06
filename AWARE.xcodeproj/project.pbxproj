@@ -77,6 +77,7 @@
 		16E155391C27C2AC00316321 /* EventKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16E155371C27C2AC00316321 /* EventKit.framework */; };
 		16E1553A1C27C2AC00316321 /* EventKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16E155381C27C2AC00316321 /* EventKitUI.framework */; };
 		16E7AF841C3D54D4005C9EDC /* SSLManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 16E7AF831C3D54D4005C9EDC /* SSLManager.m */; };
+		16E7AF901C3DB8E5005C9EDC /* GoogleLogin.m in Sources */ = {isa = PBXBuildFile; fileRef = 16E7AF8F1C3DB8E5005C9EDC /* GoogleLogin.m */; };
 		16F09B221C249C5F005C1EB8 /* GoogleCalPull.m in Sources */ = {isa = PBXBuildFile; fileRef = 16F09B211C249C5F005C1EB8 /* GoogleCalPull.m */; };
 		16F09B261C24A584005C1EB8 /* libGoogle-API-Client.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 16F09B231C24A584005C1EB8 /* libGoogle-API-Client.a */; };
 		16F09B271C24A584005C1EB8 /* libgtm-http-fetcher.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 16F09B241C24A584005C1EB8 /* libgtm-http-fetcher.a */; };
@@ -240,6 +241,8 @@
 		16E155381C27C2AC00316321 /* EventKitUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKitUI.framework; path = System/Library/Frameworks/EventKitUI.framework; sourceTree = SDKROOT; };
 		16E7AF821C3D54D4005C9EDC /* SSLManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSLManager.h; sourceTree = "<group>"; };
 		16E7AF831C3D54D4005C9EDC /* SSLManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSLManager.m; sourceTree = "<group>"; };
+		16E7AF8E1C3DB8E5005C9EDC /* GoogleLogin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GoogleLogin.h; sourceTree = "<group>"; };
+		16E7AF8F1C3DB8E5005C9EDC /* GoogleLogin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GoogleLogin.m; sourceTree = "<group>"; };
 		16F09B201C249C5F005C1EB8 /* GoogleCalPull.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GoogleCalPull.h; sourceTree = "<group>"; };
 		16F09B211C249C5F005C1EB8 /* GoogleCalPull.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GoogleCalPull.m; sourceTree = "<group>"; };
 		16F09B231C24A584005C1EB8 /* libGoogle-API-Client.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libGoogle-API-Client.a"; path = "Pods/../build/Debug-iphoneos/libGoogle-API-Client.a"; sourceTree = "<group>"; };
@@ -427,8 +430,6 @@
 				1623CEB61BFE175F00EFAD72 /* AWARESensor.m */,
 				1623CEBA1BFE390600EFAD72 /* Accelerometer.h */,
 				1623CEBB1BFE390600EFAD72 /* Accelerometer.m */,
-				168683041C07C48900CB4266 /* AmbientNoise.h */,
-				168683051C07C48900CB4266 /* AmbientNoise.m */,
 				169A7B221BFF16E700A7C06D /* Gyroscope.h */,
 				169A7B231BFF16E700A7C06D /* Gyroscope.m */,
 				169A7B251BFF193C00A7C06D /* Magnetometer.h */,
@@ -453,16 +454,8 @@
 				169A7B481C00591A00A7C06D /* LinearAccelerometer.m */,
 				160EE9BB1C050B4C00015688 /* Bluetooth.h */,
 				160EE9BC1C050B4C00015688 /* Bluetooth.m */,
-				160EE9C11C052DAA00015688 /* OpenWeather.h */,
-				160EE9C21C052DAA00015688 /* OpenWeather.m */,
-				168683071C08050100CB4266 /* ActivityRecognition.h */,
-				168683081C08050100CB4266 /* ActivityRecognition.m */,
 				164DD65A1C1F762000ADA92B /* Screen.h */,
 				164DD65B1C1F762000ADA92B /* Screen.m */,
-				164DD65D1C1F9F1900ADA92B /* DeviceUsage.h */,
-				164DD65E1C1F9F1900ADA92B /* DeviceUsage.m */,
-				164DD6601C1FA72D00ADA92B /* NTPTime.h */,
-				164DD6611C1FA72D00ADA92B /* NTPTime.m */,
 				164DD6631C1FB1A400ADA92B /* Proximity.h */,
 				164DD6641C1FB1A400ADA92B /* Proximity.m */,
 				164DD6661C1FBA9100ADA92B /* Timezone.h */,
@@ -471,10 +464,6 @@
 				164810841C21C08C00B830D9 /* ESM.m */,
 				1643959D1C22EEC40039E113 /* Scheduler.h */,
 				1643959E1C22EEC40039E113 /* Scheduler.m */,
-				16F09B201C249C5F005C1EB8 /* GoogleCalPull.h */,
-				16F09B211C249C5F005C1EB8 /* GoogleCalPull.m */,
-				1671A5D61C3B583C00C41F44 /* GoogleCalPush.h */,
-				1671A5D71C3B583C00C41F44 /* GoogleCalPush.m */,
 			);
 			name = Sensors;
 			sourceTree = "<group>";
@@ -484,8 +473,14 @@
 			children = (
 				16E155311C252B4D00316321 /* AWAREPlugin.h */,
 				16E155321C252B4D00316321 /* AWAREPlugin.m */,
-				169384F11C17C3D300A17F2C /* MSBand.h */,
-				169384F21C17C3D300A17F2C /* MSBand.m */,
+				16E7AF911C3DB9D4005C9EDC /* GoogleLogin */,
+				16E7AF871C3DB716005C9EDC /* GoogleCalendar */,
+				16E7AF881C3DB726005C9EDC /* MSBand */,
+				16E7AF891C3DB72D005C9EDC /* OpenWeather */,
+				16E7AF8A1C3DB7B1005C9EDC /* AmbientNoise */,
+				16E7AF8B1C3DB7BF005C9EDC /* ActivityRecognition */,
+				16E7AF8C1C3DB7D0005C9EDC /* NTPTime */,
+				16E7AF8D1C3DB7DA005C9EDC /* DeviceUsage */,
 			);
 			name = Plugins;
 			sourceTree = "<group>";
@@ -517,6 +512,80 @@
 				1607944B1C19274C0021816F /* AWAREStudy.m */,
 			);
 			name = Study;
+			sourceTree = "<group>";
+		};
+		16E7AF871C3DB716005C9EDC /* GoogleCalendar */ = {
+			isa = PBXGroup;
+			children = (
+				16F09B201C249C5F005C1EB8 /* GoogleCalPull.h */,
+				16F09B211C249C5F005C1EB8 /* GoogleCalPull.m */,
+				1671A5D61C3B583C00C41F44 /* GoogleCalPush.h */,
+				1671A5D71C3B583C00C41F44 /* GoogleCalPush.m */,
+			);
+			name = GoogleCalendar;
+			sourceTree = "<group>";
+		};
+		16E7AF881C3DB726005C9EDC /* MSBand */ = {
+			isa = PBXGroup;
+			children = (
+				169384F11C17C3D300A17F2C /* MSBand.h */,
+				169384F21C17C3D300A17F2C /* MSBand.m */,
+			);
+			name = MSBand;
+			sourceTree = "<group>";
+		};
+		16E7AF891C3DB72D005C9EDC /* OpenWeather */ = {
+			isa = PBXGroup;
+			children = (
+				160EE9C11C052DAA00015688 /* OpenWeather.h */,
+				160EE9C21C052DAA00015688 /* OpenWeather.m */,
+			);
+			name = OpenWeather;
+			sourceTree = "<group>";
+		};
+		16E7AF8A1C3DB7B1005C9EDC /* AmbientNoise */ = {
+			isa = PBXGroup;
+			children = (
+				168683041C07C48900CB4266 /* AmbientNoise.h */,
+				168683051C07C48900CB4266 /* AmbientNoise.m */,
+			);
+			name = AmbientNoise;
+			sourceTree = "<group>";
+		};
+		16E7AF8B1C3DB7BF005C9EDC /* ActivityRecognition */ = {
+			isa = PBXGroup;
+			children = (
+				168683071C08050100CB4266 /* ActivityRecognition.h */,
+				168683081C08050100CB4266 /* ActivityRecognition.m */,
+			);
+			name = ActivityRecognition;
+			sourceTree = "<group>";
+		};
+		16E7AF8C1C3DB7D0005C9EDC /* NTPTime */ = {
+			isa = PBXGroup;
+			children = (
+				164DD6601C1FA72D00ADA92B /* NTPTime.h */,
+				164DD6611C1FA72D00ADA92B /* NTPTime.m */,
+			);
+			name = NTPTime;
+			sourceTree = "<group>";
+		};
+		16E7AF8D1C3DB7DA005C9EDC /* DeviceUsage */ = {
+			isa = PBXGroup;
+			children = (
+				164DD65D1C1F9F1900ADA92B /* DeviceUsage.h */,
+				164DD65E1C1F9F1900ADA92B /* DeviceUsage.m */,
+			);
+			name = DeviceUsage;
+			sourceTree = "<group>";
+		};
+		16E7AF911C3DB9D4005C9EDC /* GoogleLogin */ = {
+			isa = PBXGroup;
+			children = (
+				16E7AF8E1C3DB8E5005C9EDC /* GoogleLogin.h */,
+				16E7AF8F1C3DB8E5005C9EDC /* GoogleLogin.m */,
+			);
+			name = GoogleLogin;
 			sourceTree = "<group>";
 		};
 		2A3CA9F5620967BACB187EB7 /* Frameworks */ = {
@@ -823,6 +892,7 @@
 				169A7B271BFF193C00A7C06D /* Magnetometer.m in Sources */,
 				1623CEAF1BFD407900EFAD72 /* QRCodeViewController.m in Sources */,
 				160794511C1A4E380021816F /* AWAREMqtt.m in Sources */,
+				16E7AF901C3DB8E5005C9EDC /* GoogleLogin.m in Sources */,
 				1623CE711BFD1B2C00EFAD72 /* ViewController.m in Sources */,
 				16E7AF841C3D54D4005C9EDC /* SSLManager.m in Sources */,
 				160EE9BD1C050B4C00015688 /* Bluetooth.m in Sources */,

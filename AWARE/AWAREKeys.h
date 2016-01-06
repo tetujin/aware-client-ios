@@ -68,6 +68,7 @@ extern NSString* const SENSOR_PLUGIN_NTPTIME;
 extern NSString* const SENSOR_PLUGIN_SCHEDULER;
 extern NSString* const SENSOR_PLUGIN_GOOGLE_CAL_PULL;
 extern NSString* const SENSOR_PLUGIN_GOOGLE_CAL_PUSH;
+extern NSString* const SENSOR_PLUGIN_GOOGLE_LOGIN;
 
 //extern NSString* const SENSOR_
 //extern NSString* const SENSOR_

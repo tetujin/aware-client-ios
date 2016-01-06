@@ -9,6 +9,7 @@
 #import "AppDelegate.h"
 #import "ViewController.h"
 #import "AWAREKeys.h"
+#import "GoogleLogin.h"
 
 //#import "DeployGateSDK/DeployGateSDK.h"
 
@@ -27,7 +28,6 @@
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     //[defaults setInteger:[[self.fps text] integerValue] forKey:KEY_FPS];
     [defaults setBool:YES forKey:@"APP_STATE"];
-    
     
     [application unregisterForRemoteNotifications];
     
@@ -311,6 +311,8 @@ didSignInForUser:(GIDGoogleUser *)user
     NSLog(@"email is %@", email);
     NSLog(@"idToken is %@", idToken);
     
+    GoogleLogin * googleLogin = [[GoogleLogin alloc] initWithSensorName:SENSOR_PLUGIN_GOOGLE_LOGIN];
+    [googleLogin saveName:name withEmail:email];
     
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     [defaults setObject:userId forKey:@"GOOGLE_ID"];

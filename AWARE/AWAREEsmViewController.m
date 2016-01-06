@@ -53,12 +53,12 @@
     currentTextOfEsm = @"";
     
     WIDTH_VIEW = self.view.frame.size.width;
-    HIGHT_TITLE = 40;
-    HIGHT_INSTRUCTION = 80;
+    HIGHT_TITLE = 100;
+    HIGHT_INSTRUCTION = 40;
     HIGHT_MAIN_CONTENT = 100;
     HIGHT_BUTTON = 60;
     HIGHT_SPACE = 20;
-    HIGHT_LINE = 2;
+    HIGHT_LINE = 1;
     
     totalHight = 0;
     int buffer = 10;
@@ -583,9 +583,6 @@
     [maxLabel setText:[dic objectForKey:KEY_ESM_SCALE_MAX_LABEL]];
 //    [minLabel setText:[dic objectForKey:KEY_ESM_SCALE_MIN_LABEL]];
     
-//    maxLabel.textAlignment = UITextAlignmentLeft;
-//    minLabel.textAlignment = UITextAlignmentRight;
-    
     [_mainScrollView addSubview:slider];
     [_mainScrollView addSubview:maxLabel];
 //    [_mainScrollView addSubview:minLabel];
@@ -596,7 +593,6 @@
     NSMutableArray * labels = [[NSMutableArray alloc] init];
     NSMutableDictionary * uiElement = [[NSMutableDictionary alloc] init];
     [elements addObject:slider];
-//    [labels addObject:minLabel];
     [labels addObject:maxLabel];
     [uiElement setObject:[NSNumber numberWithInt:tag] forKey:KEY_TAG];
     [uiElement setObject:@6 forKey:KEY_TYPE];
@@ -651,6 +647,7 @@
 - (void) addLineElement {
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(lineRect.origin.x, totalHight, lineRect.size.width, lineRect.size.height)];
     [view setBackgroundColor:[UIColor lightTextColor]];
+//    [view setBackgroundColor:[UIColor lightGrayColor]];
     [_mainScrollView addSubview:view];
     [self setContentSizeWithAdditionalHeight:lineRect.size.height];
 }
@@ -665,25 +662,27 @@
 }
 
 - (void) addTitleWithText:(NSString *) title {
-//    NSLog(@"%d  %d", WIDTH_VIEW, HIGHT_TITLE);
-    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(titleRect.origin.x, totalHight, titleRect.size.width, titleRect.size.height)];
-    [titleLabel setText:title];
-//    [titleLabel setBackgroundColor:[UIColor blueColor]];
-    titleLabel.font = [titleLabel.font fontWithSize:25];
-    titleLabel.numberOfLines = 3;
-    titleLabel.adjustsFontSizeToFitWidth = YES;
-    [_mainScrollView addSubview:titleLabel];
-    [self setContentSizeWithAdditionalHeight:HIGHT_TITLE];
+    if (![title isEqualToString:@""]) {
+        UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(titleRect.origin.x, totalHight, titleRect.size.width, titleRect.size.height)];
+        [titleLabel setText:title];
+        titleLabel.font = [titleLabel.font fontWithSize:25];
+        titleLabel.numberOfLines = 5;
+        titleLabel.adjustsFontSizeToFitWidth = YES;
+        [_mainScrollView addSubview:titleLabel];
+        [self setContentSizeWithAdditionalHeight:HIGHT_TITLE];
+    }
 }
 
 - (void) addInstructionsWithText:(NSString*) text {
-    UILabel *instructionsLabel = [[UILabel alloc] initWithFrame:CGRectMake(instructionRect.origin.x, totalHight, instructionRect.size.width, instructionRect.size.height)];
-    [instructionsLabel setText:text];
-//    [instructionsLabel setBackgroundColor:[UIColor redColor]];
-    instructionsLabel.numberOfLines = 3;
-    instructionsLabel.adjustsFontSizeToFitWidth = YES;
-    [_mainScrollView addSubview:instructionsLabel];
-    [self setContentSizeWithAdditionalHeight:HIGHT_INSTRUCTION];
+    if (![text isEqualToString:@""]) {
+        UILabel *instructionsLabel = [[UILabel alloc] initWithFrame:CGRectMake(instructionRect.origin.x, totalHight, instructionRect.size.width, instructionRect.size.height)];
+        [instructionsLabel setText:text];
+        //    [instructionsLabel setBackgroundColor:[UIColor redColor]];
+        instructionsLabel.numberOfLines = 5;
+        instructionsLabel.adjustsFontSizeToFitWidth = YES;
+        [_mainScrollView addSubview:instructionsLabel];
+        [self setContentSizeWithAdditionalHeight:HIGHT_INSTRUCTION];
+    }
 }
 
 
