@@ -133,6 +133,11 @@
 
 - (void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
+    // Remove all UIView contents from super view (_mainScrollView).
+    for (UIView * view in _mainScrollView.subviews) {
+        [view removeFromSuperview];
+    }
+    totalHight = 0;
     [_mainScrollView setDelegate:self];
     [_mainScrollView setScrollEnabled:YES];
     [_mainScrollView setFrame:self.view.frame];
@@ -781,6 +786,11 @@
         ESMStorageHelper * helper = [[ESMStorageHelper alloc] init];
         [helper removeEsmWithText:currentTextOfEsm];
         
+        if([helper getEsmTexts].count > 0){
+//            [self viewDidLoad] //TODO
+            [self viewDidAppear:NO];
+            return ;
+        }
         
         CGFloat currentVersion = [[[UIDevice currentDevice] systemVersion] floatValue];
         if (currentVersion >= 9.0) {

@@ -83,4 +83,6 @@
 
 - (NSString *) getSensorName;
 
+- (void)sendLocalNotificationForMessage:(NSString *)message soundFlag:(BOOL)soundFlag;
+
 @end

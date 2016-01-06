@@ -48,6 +48,7 @@
 		165A8B751C03C0B300898C6C /* GoogleLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 165A8B731C03C0B300898C6C /* GoogleLoginViewController.m */; };
 		165A8B761C03C0B300898C6C /* GoogleLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 165A8B731C03C0B300898C6C /* GoogleLoginViewController.m */; };
 		1663BB801C2C94C3003F03DF /* ESMStorageHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 1663BB7F1C2C94C3003F03DF /* ESMStorageHelper.m */; };
+		1671A5D81C3B583C00C41F44 /* GoogleCalPush.m in Sources */ = {isa = PBXBuildFile; fileRef = 1671A5D71C3B583C00C41F44 /* GoogleCalPush.m */; };
 		1677AF2E1C2B109A00F7C482 /* SingleESMObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 1677AF2D1C2B109A00F7C482 /* SingleESMObject.m */; };
 		1677AF321C2B4BDE00F7C482 /* MultiESMObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 1677AF311C2B4BDE00F7C482 /* MultiESMObject.m */; };
 		168683031C07C43600CB4266 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 168683021C07C43600CB4266 /* AudioToolbox.framework */; };
@@ -75,7 +76,7 @@
 		16E155331C252B4D00316321 /* AWAREPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 16E155321C252B4D00316321 /* AWAREPlugin.m */; };
 		16E155391C27C2AC00316321 /* EventKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16E155371C27C2AC00316321 /* EventKit.framework */; };
 		16E1553A1C27C2AC00316321 /* EventKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16E155381C27C2AC00316321 /* EventKitUI.framework */; };
-		16F09B221C249C5F005C1EB8 /* GoogleCal.m in Sources */ = {isa = PBXBuildFile; fileRef = 16F09B211C249C5F005C1EB8 /* GoogleCal.m */; };
+		16F09B221C249C5F005C1EB8 /* GoogleCalPull.m in Sources */ = {isa = PBXBuildFile; fileRef = 16F09B211C249C5F005C1EB8 /* GoogleCalPull.m */; };
 		16F09B261C24A584005C1EB8 /* libGoogle-API-Client.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 16F09B231C24A584005C1EB8 /* libGoogle-API-Client.a */; };
 		16F09B271C24A584005C1EB8 /* libgtm-http-fetcher.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 16F09B241C24A584005C1EB8 /* libgtm-http-fetcher.a */; };
 		16F09B281C24A584005C1EB8 /* libgtm-oauth2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 16F09B251C24A584005C1EB8 /* libgtm-oauth2.a */; };
@@ -190,6 +191,8 @@
 		165A8B731C03C0B300898C6C /* GoogleLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GoogleLoginViewController.m; sourceTree = "<group>"; };
 		1663BB7E1C2C94C3003F03DF /* ESMStorageHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESMStorageHelper.h; sourceTree = "<group>"; };
 		1663BB7F1C2C94C3003F03DF /* ESMStorageHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ESMStorageHelper.m; sourceTree = "<group>"; };
+		1671A5D61C3B583C00C41F44 /* GoogleCalPush.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GoogleCalPush.h; sourceTree = "<group>"; };
+		1671A5D71C3B583C00C41F44 /* GoogleCalPush.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GoogleCalPush.m; sourceTree = "<group>"; };
 		1677AF2C1C2B109A00F7C482 /* SingleESMObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SingleESMObject.h; sourceTree = "<group>"; };
 		1677AF2D1C2B109A00F7C482 /* SingleESMObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SingleESMObject.m; sourceTree = "<group>"; };
 		1677AF301C2B4BDE00F7C482 /* MultiESMObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MultiESMObject.h; sourceTree = "<group>"; };
@@ -234,8 +237,8 @@
 		16E155321C252B4D00316321 /* AWAREPlugin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AWAREPlugin.m; sourceTree = "<group>"; };
 		16E155371C27C2AC00316321 /* EventKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKit.framework; path = System/Library/Frameworks/EventKit.framework; sourceTree = SDKROOT; };
 		16E155381C27C2AC00316321 /* EventKitUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKitUI.framework; path = System/Library/Frameworks/EventKitUI.framework; sourceTree = SDKROOT; };
-		16F09B201C249C5F005C1EB8 /* GoogleCal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GoogleCal.h; sourceTree = "<group>"; };
-		16F09B211C249C5F005C1EB8 /* GoogleCal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GoogleCal.m; sourceTree = "<group>"; };
+		16F09B201C249C5F005C1EB8 /* GoogleCalPull.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GoogleCalPull.h; sourceTree = "<group>"; };
+		16F09B211C249C5F005C1EB8 /* GoogleCalPull.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GoogleCalPull.m; sourceTree = "<group>"; };
 		16F09B231C24A584005C1EB8 /* libGoogle-API-Client.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libGoogle-API-Client.a"; path = "Pods/../build/Debug-iphoneos/libGoogle-API-Client.a"; sourceTree = "<group>"; };
 		16F09B241C24A584005C1EB8 /* libgtm-http-fetcher.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libgtm-http-fetcher.a"; path = "Pods/../build/Debug-iphoneos/libgtm-http-fetcher.a"; sourceTree = "<group>"; };
 		16F09B251C24A584005C1EB8 /* libgtm-oauth2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libgtm-oauth2.a"; path = "Pods/../build/Debug-iphoneos/libgtm-oauth2.a"; sourceTree = "<group>"; };
@@ -467,8 +470,10 @@
 				164810841C21C08C00B830D9 /* ESM.m */,
 				1643959D1C22EEC40039E113 /* Scheduler.h */,
 				1643959E1C22EEC40039E113 /* Scheduler.m */,
-				16F09B201C249C5F005C1EB8 /* GoogleCal.h */,
-				16F09B211C249C5F005C1EB8 /* GoogleCal.m */,
+				16F09B201C249C5F005C1EB8 /* GoogleCalPull.h */,
+				16F09B211C249C5F005C1EB8 /* GoogleCalPull.m */,
+				1671A5D61C3B583C00C41F44 /* GoogleCalPush.h */,
+				1671A5D71C3B583C00C41F44 /* GoogleCalPush.m */,
 			);
 			name = Sensors;
 			sourceTree = "<group>";
@@ -620,6 +625,7 @@
 					};
 					1623CE651BFD1B2C00EFAD72 = {
 						CreatedOnToolsVersion = 7.1;
+						DevelopmentTeam = FH352PYMNC;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
 								enabled = 0;
@@ -806,8 +812,9 @@
 				16FCE2771BFE9326005FC71A /* AWARESensorManager.m in Sources */,
 				169A7B2D1BFF219500A7C06D /* Barometer.m in Sources */,
 				169A7B401BFFD55A00A7C06D /* Processor.m in Sources */,
-				16F09B221C249C5F005C1EB8 /* GoogleCal.m in Sources */,
+				16F09B221C249C5F005C1EB8 /* GoogleCalPull.m in Sources */,
 				168683091C08050100CB4266 /* ActivityRecognition.m in Sources */,
+				1671A5D81C3B583C00C41F44 /* GoogleCalPush.m in Sources */,
 				169A7B2A1BFF1C2300A7C06D /* Battery.m in Sources */,
 				1623CE771BFD1B2C00EFAD72 /* AWARE.xcdatamodeld in Sources */,
 				1677AF321C2B4BDE00F7C482 /* MultiESMObject.m in Sources */,

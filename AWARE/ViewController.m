@@ -13,10 +13,11 @@
 #import "AWAREEsmViewController.h"
 
 #import "MSBand.h"
-#import "GoogleCal.h"
+#import "GoogleCalPull.h"
 #import "Scheduler.h"
 #import "SingleESMObject.h"
 #import "ESMStorageHelper.h"
+#import "GoogleCalPush.h"
 
 @interface ViewController () {
     NSString *KEY_CEL_TITLE;
@@ -240,7 +241,7 @@
     [_sensors addObject:[self getCelContent:@"Open Weather" desc:@"Weather information by OpenWeatherMap API." image:@"ic_action_openweather" key:SENSOR_PLUGIN_OPEN_WEATHER]];
     [_sensors addObject:[self getCelContent:@"NTPTime" desc:@"Measure device's clock drift from an NTP server." image:@"ic_action_ntptime" key:SENSOR_PLUGIN_NTPTIME]];
     [_sensors addObject:[self getCelContent:@"Micrsoft Band" desc:@"Wearable sensor data (such as Heart Rate, UV, and Skin Temperature) from Microsoft Band." image:@"ic_action_msband" key:SENSOR_PLUGIN_MSBAND]];
-    [_sensors addObject:[self getCelContent:@"Google Calendar" desc:@"This plugin stores your Google Calendar events." image:@"ic_action_google_cal" key:SENSOR_PLUGIN_GOOGLE_CAL]];
+    [_sensors addObject:[self getCelContent:@"Google Calendar" desc:@"This plugin stores your Google Calendar events." image:@"ic_action_google_cal" key:SENSOR_PLUGIN_GOOGLE_CAL_PULL]];
     
     [_sensors addObject:[self getCelContent:@"Settings" desc:@"" image:@"" key:@"TITLE_CELL_VIEW"]];
     [_sensors addObject:[self getCelContent:@"Debug" desc:debugState image:@"" key:@"STUDY_CELL_DEBUG"]]; //ic_action_mqtt
@@ -253,13 +254,19 @@
     [_sensorManager addNewSensor:msBand];
 
     
-    AWARESensor* googleCal = [[GoogleCal alloc] initWithSensorName:SENSOR_PLUGIN_GOOGLE_CAL];
-    [googleCal startSensor:60.0f withSettings:nil];
-    [_sensorManager addNewSensor:googleCal];
+    AWARESensor* googleCalPull = [[GoogleCalPull alloc] initWithSensorName:SENSOR_PLUGIN_GOOGLE_CAL_PULL];
+    [googleCalPull startSensor:60.0f* 15.0f  withSettings:nil];
+    [_sensorManager addNewSensor:googleCalPull];
+    
+    AWARESensor* googleCalPush = [[GoogleCalPush alloc] initWithSensorName:SENSOR_PLUGIN_GOOGLE_CAL_PUSH];
+    [googleCalPush startSensor:60.0f* 15.0f  withSettings:nil];
+    [_sensorManager addNewSensor:googleCalPush];
+    
     
     AWARESensor* scheduler = [[Scheduler alloc] initWithSensorName:SENSOR_SCHEDULER];
-    [scheduler startSensor:60.0f withSettings:nil];
+    [scheduler startSensor:60.0f*15.0f  withSettings:nil];
     [_sensorManager addNewSensor:scheduler];
+    
     
 }
 
@@ -310,9 +317,9 @@
         [self performSegueWithIdentifier:@"esmView" sender:self];
     }else if([key isEqualToString:SENSOR_PLUGIN_SCHEDULER]){
         // [TODO] For making new schedule.
-    }else if ([key isEqualToString:SENSOR_PLUGIN_GOOGLE_CAL]) {
-        GoogleCal* googleCal = [[GoogleCal alloc] initWithSensorName:SENSOR_PLUGIN_GOOGLE_CAL];
-        [googleCal showSelectPrimaryGoogleCalView];
+    }else if ([key isEqualToString:SENSOR_PLUGIN_GOOGLE_CAL_PULL]) {
+        GoogleCalPull* googleCalPull = [[GoogleCalPull alloc] initWithSensorName:SENSOR_PLUGIN_GOOGLE_CAL_PULL];
+        [googleCalPull showSelectPrimaryGoogleCalView];
     }
 }
 

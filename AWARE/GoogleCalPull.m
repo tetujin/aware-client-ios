@@ -10,11 +10,11 @@
  * How about save events via Apple Calender
  */
 
-#import "GoogleCal.h"
+#import "GoogleCalPull.h"
 #import "AWAREKeys.h"
 #import <CoreData/CoreData.h>
 
-@implementation GoogleCal {
+@implementation GoogleCalPull {
     // for calendar events
     EKEventStore *store;
     EKSource *awareCalSource;
@@ -247,7 +247,10 @@
     [self createTable];
     [self setAllEvents];
 
-    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval target:self selector:@selector(syncAwareDB) userInfo:nil repeats:YES];
+    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval
+                                                   target:self
+                                                 selector:@selector(syncAwareDB)
+                                                 userInfo:nil repeats:YES];
 
     // [TODO] This is test code
     [self setDailyNotification];
@@ -453,8 +456,13 @@
     NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
     [dic setObject:unixtime forKey:@"timestamp"];
     [dic setObject:[self getDeviceId] forKey:@"device_id"];
-    [dic setObject:event.calendarItemIdentifier forKey:CAL_ID];
     
+    if(event.calendarItemIdentifier != nil){
+        [dic setObject:event.calendarItemIdentifier forKey:CAL_ID];
+    }else{
+        [dic setObject:@"" forKey:CAL_ID];
+    }
+
     if (event.calendar.source != nil) {
         [dic setObject:event.calendar.source.title forKey:ACCOUNT_NAME];
     } else {
@@ -474,8 +482,11 @@
     }
     [dic setObject:colorAsString forKey:CAL_COLOR];
     
-
-    [dic setObject:event.eventIdentifier forKey: EVENT_ID];
+    if (event.eventIdentifier != nil) {
+        [dic setObject:event.eventIdentifier forKey: EVENT_ID];
+    }else{
+        [dic setObject:@"" forKey:EVENT_ID];
+    }
     [dic setObject:event.title forKey: TITLE];
     [dic setObject:event.location forKey: LOCATION];
     // Note

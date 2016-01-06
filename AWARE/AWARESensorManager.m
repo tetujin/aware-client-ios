@@ -31,7 +31,8 @@
 #import "Timezone.h"
 #import "ESM.h"
 #import "MSBand.h"
-#import "GoogleCal.h"
+#import "GoogleCalPull.h"
+#import "GoogleCalPush.h"
 
 @implementation AWARESensorManager
 
@@ -153,8 +154,8 @@
                     }else if([key isEqualToString:SENSOR_PLUGIN_MSBAND]){
                         awareSensor = [[MSBand alloc] initWithPluginName:SENSOR_PLUGIN_MSBAND deviceId:deviceId];
                         [awareSensor startSensor:uploadTime withSettings:settings];
-                    }else if([key isEqualToString:SENSOR_PLUGIN_GOOGLE_CAL]){
-                        awareSensor = [[GoogleCal alloc] initWithSensorName:SENSOR_PLUGIN_GOOGLE_CAL];
+                    }else if([key isEqualToString:SENSOR_PLUGIN_GOOGLE_CAL_PULL]){
+                        awareSensor = [[GoogleCalPull alloc] initWithSensorName:SENSOR_PLUGIN_GOOGLE_CAL_PULL];
                         [awareSensor startSensor:uploadTime withSettings:settings];
                     }
                 }

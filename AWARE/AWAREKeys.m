@@ -63,7 +63,8 @@ NSString* const SENSOR_PLUGIN_MSBAND = @"plugin_msband";
 NSString* const SENSOR_PLUGIN_DEVICE_USAGE = @"plugin_device_usage";
 NSString* const SENSOR_PLUGIN_NTPTIME = @"plugin_ntptime";
 NSString* const SENSOR_PLUGIN_SCHEDULER = @"scheduler";
-NSString* const SENSOR_PLUGIN_GOOGLE_CAL = @"plugin_google_cal"; // there are two data base in the plugin 
+NSString* const SENSOR_PLUGIN_GOOGLE_CAL_PULL = @"plugin_google_cal_pull"; // there are two data base in the plugin
+NSString* const SENSOR_PLUGIN_GOOGLE_CAL_PUSH = @"plugin_google_cal_push";
 
 
 NSString * const NotificationCategoryIdent  = @"ACTIONABLE";

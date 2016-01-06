@@ -20,7 +20,7 @@
 - (instancetype)initWithSensorName:(NSString *)sensorName {
     self = [super initWithSensorName:@"scheduler"];
     if (self) {
-        //        [super setSensorName:sensorName];
+//                [super setSensorName:sensorName];
         scheduleManager = [[NSMutableArray alloc] init];
         KEY_SCHEDULE = @"key_schedule";
         KEY_TIMER = @"key_timer";
@@ -33,27 +33,87 @@
     ESMStorageHelper *helper = [[ESMStorageHelper alloc] init];
     [helper removeEsmTexts];
     
+    // Make schdules
+    //    [schedules addObject:[self getScheduleForTest]];
+    AWARESchedule * drinkOne = [self getDringSchedule];
+    AWARESchedule * drinkTwo = [self getDringSchedule];
+    AWARESchedule * emotionOne = [self getEmotionSchedule];
+    AWARESchedule * emotionTwo = [self getEmotionSchedule];
+    AWARESchedule * emotionThree = [self getEmotionSchedule];
+    AWARESchedule * emotionFour = [self getEmotionSchedule];
+    
+    // Set Notification Time using -getTargetTimeAsNSDate:hour:minute:second method.
+    NSDate * now = [NSDate new];
+    drinkOne.schedule = [self getTargetTimeAsNSDate:now hour:9];
+    drinkTwo.schedule = [self getTargetTimeAsNSDate:now hour:1];
+    emotionOne.schedule = [self getTargetTimeAsNSDate:now hour:9];
+    emotionTwo.schedule = [self getTargetTimeAsNSDate:now hour:13];
+    emotionThree.schedule = [self getTargetTimeAsNSDate:now hour:17];
+    emotionFour.schedule = [self getTargetTimeAsNSDate:now hour:21];
+    
+//    drinkTwo.schedule =[self getTargetTimeAsNSDate:now hour:18 minute:55 second:0];
+//    emotionFour.schedule = [self getTargetTimeAsNSDate:now hour:18 minute:55 second:0];
+    
+    // Add maked schedules to schedules
     // Set a New ESMSchedule to a SchduleManager
-    NSMutableArray *schedules = [[NSMutableArray alloc] init];
-//    [schedules addObject:[self getScheduleForTest]];
-    [schedules addObject:[self getDringSchedule]];
-    [schedules addObject:[self getEmotionSchedule]];
+    NSMutableArray *schedules = [[NSMutableArray alloc] init]
+    ;
+    [schedules addObject:drinkOne];
+    [schedules addObject:drinkTwo];
+    [schedules addObject:emotionOne];
+    [schedules addObject:emotionTwo];
+    [schedules addObject:emotionThree];
+    [schedules addObject:emotionFour];
+    
     for (AWARESchedule * s in schedules) {
+        NSTimer * notificationTimer = [[NSTimer alloc] initWithFireDate:s.schedule
+                                                               interval:[s.interval doubleValue]
+                                                                 target:self
+                                                               selector:@selector(scheduleAction:)
+                                                               userInfo:s.scheduleId
+                                                                repeats:YES];
+        //https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/Timers/Articles/usingTimers.html
+        NSRunLoop *runLoop = [NSRunLoop currentRunLoop];
+        [runLoop addTimer:notificationTimer forMode:NSDefaultRunLoopMode];
         
-        NSTimer * notificationTimer = [NSTimer scheduledTimerWithTimeInterval:[s.interval doubleValue]
-                                                                       target:self
-                                                                     selector:@selector(scheduleAction:)
-                                                                     userInfo:s.scheduleId
-                                                                      repeats:YES];
-        [notificationTimer fire];
         NSMutableDictionary * dic = [[NSMutableDictionary alloc] init];
         [dic setObject:s forKey:KEY_SCHEDULE];
         [dic setObject:notificationTimer forKey:KEY_TIMER];
         [scheduleManager addObject:dic];
-        
 //        [self scheduleAction:s.scheduleId];
     }
     return NO;
+}
+
+- (NSDate *) getTargetTimeAsNSDate:(NSDate *) nsDate
+                              hour:(int) hour {
+    return [self getTargetTimeAsNSDate:nsDate hour:hour minute:0 second:0];
+}
+
+- (NSDate *) getTargetTimeAsNSDate:(NSDate *) nsDate
+                              hour:(int) hour
+                            minute:(int) minute
+                            second:(int) second {
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSDateComponents *dateComps = [calendar components:NSYearCalendarUnit |
+                                   NSMonthCalendarUnit  |
+                                   NSDayCalendarUnit    |
+                                   NSHourCalendarUnit   |
+                                   NSMinuteCalendarUnit |
+                                   NSSecondCalendarUnit fromDate:nsDate];
+    [dateComps setDay:dateComps.day];
+    [dateComps setHour:hour];
+    [dateComps setMinute:minute];
+    [dateComps setSecond:second];
+    NSDate * targetNSDate = [calendar dateFromComponents:dateComps];
+    // If the maked target day is newer than now, Aware remakes the target day as same time tomorrow.
+    if ([targetNSDate timeIntervalSince1970] < [nsDate timeIntervalSince1970]) {
+        [dateComps setDay:dateComps.day + 1];
+        NSDate * tomorrowNSDate = [calendar dateFromComponents:dateComps];
+        return tomorrowNSDate;
+    }else{
+        return targetNSDate;
+    }
 }
 
 
@@ -168,10 +228,10 @@
 
     AWARESchedule * schedule = [[AWARESchedule alloc] initWithScheduleId:@"drink"];
     [schedule setScheduleAsNormalWithDate:[NSDate new]
-                             intervalType:SCHEDULE_INTERVAL_HOUR
+                             intervalType:SCHEDULE_INTERVAL_DAY
                                       esm:jsonStr
-                                    title:@"You have a ESM!"
-                                     body:@"Please answer a ESM. Thank you."
+                                    title:@"BlancedCampus Question"
+                                     body:@"Tap to answer."
                                identifier:@"---"];
     return schedule;
 }
@@ -473,11 +533,12 @@
     NSString* jsonStr =  [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     
     AWARESchedule * schedule = [[AWARESchedule alloc] initWithScheduleId:@"emotion"];
+    
     [schedule setScheduleAsNormalWithDate:[NSDate new]
-                             intervalType:SCHEDULE_INTERVAL_HOUR
+                             intervalType:SCHEDULE_INTERVAL_DAY
                                       esm:jsonStr
-                                    title:@"You have a ESM!"
-                                     body:@"Please answer a ESM. Thank you."
+                                    title:@"BlancedCampus Question"
+                                     body:@"Tap to answer."
                                identifier:@"---"];
     return schedule;
 }

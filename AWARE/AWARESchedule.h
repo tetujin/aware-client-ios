@@ -57,7 +57,7 @@ extern NSString * const SCHEDULE_ACTION_TYPE_SERVICE;
 - (void) setActionClass:(NSString *) actionClass;
 - (void) setActionExtra:(NSString *) key value:(NSString*) value;
 
-- (NSCalendarUnit) getInterval;
+//- (NSCalendarUnit) getInterval;
 
 //- (NSDictionary *) getScheduleAsDictionary;
 

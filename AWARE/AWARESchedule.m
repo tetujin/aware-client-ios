@@ -80,8 +80,50 @@ NSString * const SCHEDULE_ACTION_TYPE_SERVICE = @"SCHEDULE_ACTION_TYPE_SERVICE";
 //    return interval;
 //}
 
+
+
+
 - (void) setScheduleAsNormalWithDate:(NSDate *)date
                         intervalType:(NSString *)intervalType
+                                 esm:(NSString *)esm
+                               title:(NSString*)title
+                                body:(NSString*)body
+                          identifier:(NSString*)identifier {
+    double intervalValue = 0;
+    if ([intervalType isEqualToString:SCHEDULE_INTERVAL_TEST]) {
+        intervalValue = 60;
+//        interval = NSMinuteCalendarUnit;
+    } else if ([intervalType isEqualToString:SCHEDULE_INTERVAL_HOUR]) {
+        intervalValue = 60*60;//hour
+//        interval = NSHourCalendarUnit;
+    } else if ([intervalType isEqualToString:SCHEDULE_INTERVAL_DAY]) {
+        intervalValue = 60*60*24;//day
+//        interval = NSDayCalendarUnit;
+    } else if ([intervalType isEqualToString:SCHEDULE_INTERVAL_WEEK]) {
+        intervalValue = 60*60*24*7;//week
+//        interval = NSWeekCalendarUnit;
+    } else if ([intervalType isEqualToString:SCHEDULE_INTERVAL_MONTH]) {
+        intervalValue = 60*60*24*31;
+//        interval = NSMonthCalendarUnit;
+    } else {
+        intervalValue = 60*60*24;//day
+//        interval = NSDayCalendarUnit;
+    }
+    
+    if (esm != nil) {
+        _esmObject = [[MultiESMObject alloc] initWithEsmText:esm];
+    }
+    
+    [self setScheduleAsNormalWithDate:date
+                             interval:intervalValue
+                                  esm:esm
+                                title:title
+                                 body:body
+                           identifier:identifier];
+}
+
+- (void) setScheduleAsNormalWithDate:(NSDate *)date
+                            interval:(double) interval
                                  esm:(NSString *)esm
                                title:(NSString*)title
                                 body:(NSString*)body
@@ -91,27 +133,7 @@ NSString * const SCHEDULE_ACTION_TYPE_SERVICE = @"SCHEDULE_ACTION_TYPE_SERVICE";
     _esmStr = esm;
     _title = title;
     _body = body;
-
-    if ([intervalType isEqualToString:SCHEDULE_INTERVAL_TEST]) {
-        _interval = [NSNumber numberWithInt:60];
-//        interval = NSMinuteCalendarUnit;
-    } else if ([intervalType isEqualToString:SCHEDULE_INTERVAL_HOUR]) {
-        _interval = [NSNumber numberWithInt:60*60];//hour
-//        interval = NSHourCalendarUnit;
-    } else if ([intervalType isEqualToString:SCHEDULE_INTERVAL_DAY]) {
-        _interval = [NSNumber numberWithInt:arc4random() % 60*60*24];//day
-//        interval = NSDayCalendarUnit;
-    } else if ([intervalType isEqualToString:SCHEDULE_INTERVAL_WEEK]) {
-        _interval = [NSNumber numberWithInt:arc4random() % 60*60*24*7];//week
-//        interval = NSWeekCalendarUnit;
-    } else if ([intervalType isEqualToString:SCHEDULE_INTERVAL_MONTH]) {
-        _interval = [NSNumber numberWithInt:arc4random() % 60*60*24*31];
-//        interval = NSMonthCalendarUnit;
-    } else {
-        _interval = [NSNumber numberWithInt:arc4random() % 60*60*24];//day
-//        interval = NSDayCalendarUnit;
-    }
-    
+    _interval = [NSNumber numberWithDouble:interval];
     if (esm != nil) {
         _esmObject = [[MultiESMObject alloc] initWithEsmText:esm];
     }

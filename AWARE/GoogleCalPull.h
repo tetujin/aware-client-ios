@@ -11,7 +11,7 @@
 #import <EventKitUI/EventKitUI.h>
 #import <CoreLocation/CoreLocation.h>
 
-@interface GoogleCal : AWARESensor <AWARESensorDelegate, CLLocationManagerDelegate, UIAlertViewDelegate>
+@interface GoogleCalPull : AWARESensor <AWARESensorDelegate, CLLocationManagerDelegate, UIAlertViewDelegate>
 
 - (BOOL) showSelectPrimaryGoogleCalView;
 
