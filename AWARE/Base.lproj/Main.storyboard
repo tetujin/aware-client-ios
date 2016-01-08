@@ -19,7 +19,7 @@
                                 <rect key="frame" x="0.0" y="92" width="600" height="95"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Jlv-Hb-QNm" id="9JS-s5-0aB">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="94.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="95"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>
@@ -32,7 +32,8 @@
                     <navigationItem key="navigationItem" title="AWARE" id="tQb-LZ-vWa">
                         <barButtonItem key="leftBarButtonItem" image="user_male_circle" id="9xQ-aR-t9x">
                             <connections>
-                                <segue destination="Civ-lf-EA0" kind="show" id="M26-Sm-zjK"/>
+                                <action selector="pushedGoogleLogin:" destination="68D-Qb-jCP" id="yYo-5p-SGp"/>
+                                <segue destination="Civ-lf-EA0" kind="push" id="cpt-8w-Epg"/>
                             </connections>
                         </barButtonItem>
                         <rightBarButtonItems>

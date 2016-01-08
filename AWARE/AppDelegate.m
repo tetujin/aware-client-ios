@@ -10,8 +10,7 @@
 #import "ViewController.h"
 #import "AWAREKeys.h"
 #import "GoogleLogin.h"
-
-//#import "DeployGateSDK/DeployGateSDK.h"
+#import "DeployGateSDK/DeployGateSDK.h"
 
 //#define NSLog DGSLog
 
@@ -60,6 +59,9 @@
     [[GGLContext sharedInstance] configureWithError: &configureError];
     NSAssert(!configureError, @"Error configuring Google services: %@", configureError);
     [GIDSignIn sharedInstance].delegate = self;
+    
+    
+    [[DeployGateSDK sharedInstance] launchApplicationWithAuthor:@"tetujin" key:@"b268f60ae48ecfca7352c0a01918c86a7bd4bc74"];
     
     
     [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
@@ -132,6 +134,7 @@
             openURL:(NSURL *)url
   sourceApplication:(NSString *)sourceApplication
          annotation:(id)annotation {
+    
     return [[GIDSignIn sharedInstance] handleURL:url
                                sourceApplication:sourceApplication
                                       annotation:annotation];
@@ -312,26 +315,15 @@ didSignInForUser:(GIDGoogleUser *)user
     NSLog(@"idToken is %@", idToken);
     
     GoogleLogin * googleLogin = [[GoogleLogin alloc] initWithSensorName:SENSOR_PLUGIN_GOOGLE_LOGIN];
-    [googleLogin saveName:name withEmail:email];
-    
-    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setObject:userId forKey:@"GOOGLE_ID"];
-    [defaults setObject:name forKey:@"GOOGLE_NAME"];
-    [defaults setObject:email forKey:@"GOOGLE_EMAIL"];
-    [defaults setObject:idToken forKey:@"GOOGLE_ID_TOKEN"];
-    
-//    ViewController *secondVC = [[ViewController alloc] init];
-//    UIViewController *viewController;
-//    if(isFirst){
-//        viewController = [storyboard instantiateViewControllerWithIdentifier@"initial view controller storyboard id"];
-//    }else{
-//        viewController = [storyboard instantiateViewControllerWithIdentifier@"main view controller storyboard id"];
-//    }
-    
-//    self.window.rootViewController = secondVC;
-//    [self.window makeKeyAndVisible];
-    
-//    [self presentViewController:secondVC animated:YES completion: nil];
+    if (name != nil ) {
+        [googleLogin saveName:name withEmail:email];
+        NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+        [defaults setObject:userId forKey:@"GOOGLE_ID"];
+        [defaults setObject:name forKey:@"GOOGLE_NAME"];
+        [defaults setObject:email forKey:@"GOOGLE_EMAIL"];
+        [defaults setObject:idToken forKey:@"GOOGLE_ID_TOKEN"];
+    }
+
 }
 
 - (void)signIn:(GIDSignIn *)signIn

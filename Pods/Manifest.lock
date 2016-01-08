@@ -1,5 +1,6 @@
 PODS:
   - CocoaAsyncSocket (7.4.2)
+  - DeployGateSDK (1.0.7)
   - Google-API-Client (1.0.422):
     - Google-API-Client/AdSense (= 1.0.422)
     - Google-API-Client/Analytics (= 1.0.422)
@@ -190,6 +191,7 @@ PODS:
     - macros_blocks (= 0.0.1)
 
 DEPENDENCIES:
+  - DeployGateSDK
   - Google-API-Client
   - Google/SignIn
   - ios-ntp
@@ -207,6 +209,7 @@ CHECKOUT OPTIONS:
 
 SPEC CHECKSUMS:
   CocoaAsyncSocket: f5783bdedd232d91b89769bc4b5a1580aed518ad
+  DeployGateSDK: df3d5838db7e35c05a711c35a3bdeef3c2b016ba
   Google: 97618e118111b998cce1d8dd1bd98b82301d72db
   Google-API-Client: cb712cf122f1d7fda966de4c2bc551324573366c
   GoogleAppUtilities: c01c6a5671e9da8b9d690fdaec5959d6c2aac699

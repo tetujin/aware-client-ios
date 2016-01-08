@@ -26,6 +26,8 @@
 - (IBAction)pushedStudyRefreshButton:(id)sender;
 
 
+- (IBAction)pushedGoogleLogin:(id)sender;
+
 
 @property MQTTClient *client;
 

@@ -467,6 +467,7 @@
     [slider setMinimumValue: 1];
     double curentValue = [max doubleValue] / 2.0f;
     [slider setValue:roundf(curentValue)];
+    [slider setValue:0];
 //    [slider setValue:[start floatValue]];
     
     [maxLabel setText:[dic objectForKey:KEY_ESM_LIKERT_MAX_LABEL]];

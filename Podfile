@@ -7,7 +7,7 @@ target 'AWARE' do
 pod 'MQTTKit', :git => 'https://github.com/mobile-web-messaging/MQTTKit.git'
 pod 'SCNetworkReachability'
 pod 'Google/SignIn'
-#pod 'DeployGateSDK'
+pod 'DeployGateSDK'
 pod 'ios-ntp'
 pod 'Google-API-Client'
 end

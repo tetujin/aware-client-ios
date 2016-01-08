@@ -81,6 +81,14 @@
                                             returningResponse:&response error:&error];
     int responseCode = (int)[response statusCode];
     NSLog(@"%d",responseCode);
+    
+    
+    // Change to background https mode.
+    
+    
+    
+    
+    
     if(responseCode == 0){
         // Install CRT file for SSL
         SSLManager *sslManager = [[SSLManager alloc] init];

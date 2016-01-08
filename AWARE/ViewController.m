@@ -38,6 +38,7 @@
     NSTimer *listUpdateTimer;
     double uploadInterval;
     NSTimer* testTimer;
+    NSTimer * dailyUpdateTimer;
 //    AWAREScheduleManager* scheduleManager;
 }
 
@@ -66,6 +67,10 @@
     mqttQos = @2;
     
     uploadInterval = 60*15;
+    
+    
+//    [NSTimer alloc] initWithFireDate:<#(nonnull NSDate *)#>
+//interval:<#(NSTimeInterval)#> target:<#(nonnull id)#> selector:<#(nonnull SEL)#> userInfo:<#(nullable id)#> repeats:<#(BOOL)#>
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
 //    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillEnterForeground:) name:UIApplicationWillEnterForegroundNotification object:nil];
@@ -252,11 +257,11 @@
 
     
     //for test
-    AWARESensor *msBand = [[MSBand alloc] initWithPluginName:SENSOR_PLUGIN_MSBAND deviceId:deviceId];
-    [msBand startSensor:60.0f * 15.0f withSettings:nil];
-    [_sensorManager addNewSensor:msBand];
-
-    
+//    AWARESensor *msBand = [[MSBand alloc] initWithPluginName:SENSOR_PLUGIN_MSBAND deviceId:deviceId];
+//    [msBand startSensor:60.0f * 15.0f withSettings:nil];
+//    [_sensorManager addNewSensor:msBand];
+//
+//    
     AWARESensor* googleCalPull = [[GoogleCalPull alloc] initWithSensorName:SENSOR_PLUGIN_GOOGLE_CAL_PULL];
     [googleCalPull startSensor:60.0f* 15.0f  withSettings:nil];
     [_sensorManager addNewSensor:googleCalPull];
@@ -264,7 +269,7 @@
     AWARESensor* googleCalPush = [[GoogleCalPush alloc] initWithSensorName:SENSOR_PLUGIN_GOOGLE_CAL_PUSH];
     [googleCalPush startSensor:60.0f* 15.0f  withSettings:nil];
     [_sensorManager addNewSensor:googleCalPush];
-    
+
     
     AWARESensor* scheduler = [[Scheduler alloc] initWithSensorName:SENSOR_SCHEDULER];
     [scheduler startSensor:60.0f*15.0f  withSettings:nil];
@@ -454,6 +459,9 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
     [self initList];
     [self.tableView reloadData];
     [self connectMqttServer];
+}
+
+- (IBAction)pushedGoogleLogin:(id)sender {
 }
 
 

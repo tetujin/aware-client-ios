@@ -685,9 +685,9 @@ didReceiveResponse:(NSURLResponse *)response
     NSLog(@"%@",[self getCreateTableUrl:tableName]);
     
     // check isFirstAccess
-    if (![self isFirstAccess]) {
-        return;
-    }
+//    if (![self isFirstAccess]) {
+//        return;
+//    }
     
     // create table
     NSString *post = nil;

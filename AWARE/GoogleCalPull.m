@@ -24,7 +24,7 @@
     
     // for locations
     double miniDistrance;
-    IBOutlet CLLocationManager *locationManager;
+//    IBOutlet CLLocationManager *locationManager;
 
     // for AWARE sensor
     NSTimer* uploadTimer;
@@ -254,62 +254,61 @@
 
     // [TODO] This is test code
     [self setDailyNotification];
-    [self startLocationSensor];
-    
+//    [self startLocationSensor];
 
     return YES;
 }
 
 
-- (void) startLocationSensor{
-    if (nil == locationManager){
-        locationManager = [[CLLocationManager alloc] init];
-        locationManager.delegate = self;
-        //    locationManager.desiredAccuracy = kCLLocationAccuracyKilometer;
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest;
-        locationManager.pausesLocationUpdatesAutomatically = NO;
-        CGFloat currentVersion = [[[UIDevice currentDevice] systemVersion] floatValue];
-        NSLog(@"OS:%f", currentVersion);
-        if (currentVersion >= 9.0) {
-            //        _homeLocationManager.allowsBackgroundLocationUpdates = YES; //This variable is an important method for background sensing
-            locationManager.allowsBackgroundLocationUpdates = YES; //This variable is an important method for background sensing after iOS9
-        }
-        locationManager.activityType = CLActivityTypeFitness;
-        if ([locationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
-            [locationManager requestAlwaysAuthorization];
-        }
-        // Set a movement threshold for new events.
-        locationManager.distanceFilter = miniDistrance; // meters
-        [locationManager startUpdatingLocation];
-        //    [_locationManager startMonitoringVisits]; // This method calls didVisit.
-        [locationManager startUpdatingHeading];
-        //    _location = [[CLLocation alloc] init];
-        //        if(interval > 0){
-        //            locationTimer = [NSTimer scheduledTimerWithTimeInterval:interval
-        //                                                             target:self
-        //                                                           selector:@selector(getGpsData:)
-        //                                                           userInfo:nil
-        //                                                            repeats:YES];
-        //        }
-    }
-}
+//- (void) startLocationSensor{
+//    if (nil == locationManager){
+//        locationManager = [[CLLocationManager alloc] init];
+//        locationManager.delegate = self;
+//        //    locationManager.desiredAccuracy = kCLLocationAccuracyKilometer;
+//        locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+//        locationManager.pausesLocationUpdatesAutomatically = NO;
+//        CGFloat currentVersion = [[[UIDevice currentDevice] systemVersion] floatValue];
+//        NSLog(@"OS:%f", currentVersion);
+//        if (currentVersion >= 9.0) {
+//            //        _homeLocationManager.allowsBackgroundLocationUpdates = YES; //This variable is an important method for background sensing
+//            locationManager.allowsBackgroundLocationUpdates = YES; //This variable is an important method for background sensing after iOS9
+//        }
+//        locationManager.activityType = CLActivityTypeFitness;
+//        if ([locationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
+//            [locationManager requestAlwaysAuthorization];
+//        }
+//        // Set a movement threshold for new events.
+//        locationManager.distanceFilter = miniDistrance; // meters
+//        [locationManager startUpdatingLocation];
+//        //    [_locationManager startMonitoringVisits]; // This method calls didVisit.
+//        [locationManager startUpdatingHeading];
+//        //    _location = [[CLLocation alloc] init];
+//        //        if(interval > 0){
+//        //            locationTimer = [NSTimer scheduledTimerWithTimeInterval:interval
+//        //                                                             target:self
+//        //                                                           selector:@selector(getGpsData:)
+//        //                                                           userInfo:nil
+//        //                                                            repeats:YES];
+//        //        }
+//    }
+//}
 
-- (void)locationManager:(CLLocationManager *)manager
-       didUpdateHeading:(CLHeading *)newHeading {
-    if (newHeading.headingAccuracy < 0)
-        return;
-    //    CLLocationDirection  theHeading = ((newHeading.trueHeading > 0) ?
-    //                                       newHeading.trueHeading : newHeading.magneticHeading);
-    //    [sdManager addSensorDataMagx:newHeading.x magy:newHeading.y magz:newHeading.z];
-    //    [sdManager addHeading: theHeading];
-}
+//- (void)locationManager:(CLLocationManager *)manager
+//       didUpdateHeading:(CLHeading *)newHeading {
+//    if (newHeading.headingAccuracy < 0)
+//        return;
+//    //    CLLocationDirection  theHeading = ((newHeading.trueHeading > 0) ?
+//    //                                       newHeading.trueHeading : newHeading.magneticHeading);
+//    //    [sdManager addSensorDataMagx:newHeading.x magy:newHeading.y magz:newHeading.z];
+//    //    [sdManager addHeading: theHeading];
+//}
 
 
-- (void) locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations{
-    for (CLLocation* location in locations) {
-//        [self saveLocation:location];
-    }
-}
+//- (void) locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations{
+//    for (CLLocation* location in locations) {
+////        [self saveLocation:location];
+//    }
+//}
 
 
 - (BOOL) stopSensor {

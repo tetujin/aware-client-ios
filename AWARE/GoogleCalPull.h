@@ -9,9 +9,9 @@
 #import "AWARESensor.h"
 #import <EventKit/EventKit.h>
 #import <EventKitUI/EventKitUI.h>
-#import <CoreLocation/CoreLocation.h>
+//#import <CoreLocation/CoreLocation.h>
 
-@interface GoogleCalPull : AWARESensor <AWARESensorDelegate, CLLocationManagerDelegate, UIAlertViewDelegate>
+@interface GoogleCalPull : AWARESensor <AWARESensorDelegate, UIAlertViewDelegate>
 
 - (BOOL) showSelectPrimaryGoogleCalView;
 
