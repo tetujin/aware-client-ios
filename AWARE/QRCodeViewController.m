@@ -127,15 +127,21 @@
                 readingState = NO;
                 NSLog(@"%@", qrcode);
                 AWAREStudy *study = [[AWAREStudy alloc] init];
-                bool result = [study setStudyInformationWithURL:qrcode];
+//                bool result =
+                [study setStudyInformationWithURL:qrcode];
+                [self moveToTopPage];
 //                [self getStudyInformation:qrcode withDeviceId:deviceId];
-                if (result) {
-                    [self.navigationController popToRootViewControllerAnimated:YES];
-                }
+//                if (result) {
+//                [self performSelector:@selector(moveToTopPage) withObject:0 afterDelay:3];
+//                }
 //                readingState = YES;
             }
         }
     }
+}
+
+- (void) moveToTopPage {
+    [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 @end

@@ -19,68 +19,36 @@
 - (BOOL) stopSensor;
 @end
 
-@interface AWARESensor : NSObject <AWARESensorDelegate, NSURLSessionDataDelegate, NSURLSessionTaskDelegate> //NSURLSessionDelegate, NSURLSessionDataDelegate,
+@interface AWARESensor : NSObject <AWARESensorDelegate, NSURLSessionDataDelegate, NSURLSessionTaskDelegate>
 
 - (instancetype) initWithSensorName:(NSString *) sensorName;
 
+@property (strong, nonatomic) NSString * syncDataQueryIdentifier;
+@property (strong, nonatomic) NSString * createTableQueryIdentifier;
+
 - (void) setBufferLimit:(int) limit;
-
 - (void) startWriteAbleTimer;
-
 - (void) stopWriteableTimer;
-
--(void) setLatestValue:(NSString *) valueStr;
-
--(NSString *) getLatestValue;
-
--(NSString *) getDeviceId;
-
-// get generate URL for insert
+- (void) setLatestValue:(NSString *) valueStr;
+- (NSString *) getLatestValue;
+- (NSString *) getDeviceId;
 - (NSString *) getInsertUrl:(NSString *)sensorName;
-
-// get latest sensor data URL
 - (NSString *) getLatestDataUrl:(NSString *)sensorName;
-
-// get create table URL
 - (NSString *) getCreateTableUrl:(NSString*) sensorName;
-
-// get clear table URL
 - (NSString *) getClearTableUrl:(NSString*) sensorName;
-
-//- (NSString *) saveData:(NSDictionary*)data toLocalFile:(NSString*)fileName;
-//
-//- (NSString *) getData:(NSString*)fileName withJsonArrayFormat:(bool)jsonArrayFormat;
-
-// insert sensor data
-//- (BOOL) insertSensorData:(NSString*)data withDeviceId:(NSString*)deviceId url:(NSString*)url;
-
 - (bool) saveData:(NSDictionary *) data;
-
 - (bool) saveData:(NSDictionary *) data toLocalFile:(NSString*) fileName;
-
 - (bool) saveDataWithArray:(NSArray*) array;
-
 - (void) syncAwareDB;
 - (void) syncAwareDBWithSensorName:(NSString*) sensorName;
-
 - (BOOL) syncAwareDBWithData:(NSDictionary *) dictionary;
-
-// get latest sensor data -> for debug
 - (NSString *) getLatestSensorData:(NSString*)deviceId withUrl:(NSString*) url;
-
 - (double) getSensorSetting:(NSArray *)settings withKey:(NSString *)key;
-
-// create new table in the database
 - (void) createTable:(NSString *)query withTableName:(NSString*) tableName;
 - (void) createTable:(NSString *)query;
-
-// clear the table in the database
 - (BOOL) clearTable;
-
 - (void) setSensorName:(NSString *) sensorName;
-
 - (double) convertMotionSensorFrequecyFromAndroid:(double)frequency;
-
 - (NSString *) getSensorName;
 
 - (void)sendLocalNotificationForMessage:(NSString *)message soundFlag:(BOOL)soundFlag;

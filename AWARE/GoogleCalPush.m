@@ -65,8 +65,8 @@
                                    NSMinuteCalendarUnit |
                                    NSSecondCalendarUnit fromDate:date];
     [dateComps setDay:dateComps.day];
-    [dateComps setHour:16];
-    [dateComps setMinute:22];
+    [dateComps setHour:23];
+    [dateComps setMinute:23];
     [dateComps setSecond:0];
     
     NSDate * elevenOClock  = [calendar dateFromComponents:dateComps];

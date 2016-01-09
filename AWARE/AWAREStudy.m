@@ -25,6 +25,10 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
+        _getSettingIdentifier = @"set_setting_identifier";
+        _addDeviceTableIdentifier = @"add_device_table_identifier";
+        _makeDeviceTableIdentifier = @"make_device_table_identifier";
+        
         mqttPassword = @"";
         mqttUsername = @"";
         studyId = @"";
@@ -66,6 +70,16 @@
 }
 
 - (bool) setStudyInformation:(NSString *)url withDeviceId:(NSString *) uuid {
+    __weak NSURLSession *session = nil;
+    // Set session configuration
+    NSURLSessionConfiguration *sessionConfig = nil;
+    sessionConfig = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:_getSettingIdentifier];
+    sessionConfig.timeoutIntervalForRequest = 120.0;
+    sessionConfig.HTTPMaximumConnectionsPerHost = 60;
+    sessionConfig.timeoutIntervalForResource = 60; //60*60*24; // 1 day
+    sessionConfig.allowsCellularAccess = NO;
+    sessionConfig.discretionary = YES;
+    
     NSString *post = [NSString stringWithFormat:@"device_id=%@", uuid];
     NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
     NSString *postLength = [NSString stringWithFormat:@"%ld", [postData length]];
@@ -75,93 +89,122 @@
     [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
     [request setHTTPBody:postData];
     
-    NSError *error = nil;
-    NSHTTPURLResponse *response = nil;
-    NSData *resData = [NSURLConnection sendSynchronousRequest:request
-                                            returningResponse:&response error:&error];
-    int responseCode = (int)[response statusCode];
-    NSLog(@"%d",responseCode);
-    
-    
-    // Change to background https mode.
-    
-    
-    
-    
-    
-    if(responseCode == 0){
-        // Install CRT file for SSL
-        SSLManager *sslManager = [[SSLManager alloc] init];
-        [sslManager installCRTWithTextOfQRCode:url];
-    }else{
-        // CRT file was installed to this device
-        NSArray *mqttArray = [NSJSONSerialization JSONObjectWithData:resData options:NSJSONReadingMutableContainers error:nil];
-        id obj = [NSJSONSerialization JSONObjectWithData:resData options:NSJSONReadingMutableContainers error:nil];
-        NSData *data = [NSJSONSerialization dataWithJSONObject:obj options:0 error:nil];
-        NSLog(@"%@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
-        
-        if(responseCode == 200){
-            NSLog(@"GET Study Information");
-            NSArray * array = [[mqttArray objectAtIndex:0] objectForKey:@"sensors"];
-            NSArray * plugins = [[mqttArray objectAtIndex:0] objectForKey:KEY_PLUGINS];
-            for (int i=0; i<[array count]; i++) {
-                NSDictionary *settingElement = [array objectAtIndex:i];
-                NSString *setting = [settingElement objectForKey:@"setting"];
-                NSString *value = [settingElement objectForKey:@"value"];
-                if([setting isEqualToString:@"mqtt_password"]){
-                    mqttPassword = value;
-                }else if([setting isEqualToString:@"mqtt_username"]){
-                    mqttUsername = value;
-                }else if([setting isEqualToString:@"mqtt_server"]){
-                    mqttServer = value;
-                }else if([setting isEqualToString:@"mqtt_server"]){
-                    mqttServer = value;
-                }else if([setting isEqualToString:@"mqtt_port"]){
-                    mqttPort = [value intValue];
-                }else if([setting isEqualToString:@"mqtt_keep_alive"]){
-                    mqttKeepAlive = [value intValue];
-                }else if([setting isEqualToString:@"mqtt_qos"]){
-                    mqttQos = [value intValue];
-                }else if([setting isEqualToString:@"study_id"]){
-                    studyId = value;
-                }else if([setting isEqualToString:@"webservice_server"]){
-                    webserviceServer = value;
-                }
-            }
-            
-            // if Study ID is new, AWARE adds new Device ID to the AWARE server.
-//            if (![self isFirstAccess:url withDeviceId:uuid]) {
-//                [self addNewDeviceToAwareServer:url withDeviceId:uuid];
-//            }
-            
-            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-            NSString * oldStudyId = [userDefaults objectForKey:KEY_STUDY_ID];
-            if(![oldStudyId isEqualToString:studyId]){
-                NSLog(@"Add new device ID to the AWARE server.");
-                [self addNewDeviceToAwareServer:url withDeviceId:uuid];
-            }else{
-                NSLog(@"This device ID is already regited to the AWARE server.");
-            }
-            [userDefaults setObject:mqttServer forKey:KEY_MQTT_SERVER];
-            [userDefaults setObject:mqttPassword forKey:KEY_MQTT_PASS];
-            [userDefaults setObject:mqttUsername forKey:KEY_MQTT_USERNAME];
-            [userDefaults setObject:[NSNumber numberWithInt:mqttPort] forKey:KEY_MQTT_PORT];
-            [userDefaults setObject:[NSNumber numberWithInt:mqttKeepAlive] forKey:KEY_MQTT_KEEP_ALIVE];
-            [userDefaults setObject:[NSNumber numberWithInt:mqttQos] forKey:KEY_MQTT_QOS];
-            [userDefaults setObject:studyId forKey:KEY_STUDY_ID];
-            [userDefaults setObject:webserviceServer forKey:KEY_WEBSERVICE_SERVER];
-            [userDefaults synchronize];
-            
-            [userDefaults setObject:array forKey:KEY_SENSORS];
-            [userDefaults setObject:plugins forKey:KEY_PLUGINS];
-            
-            readingState = YES;
-        }else{
-            NSLog(@"AWARE cannot get study information from AWARE server.");
-        }
-    }
+    NSLog(@"--- This is background task ----");
+    session = [NSURLSession sessionWithConfiguration:sessionConfig delegate:self delegateQueue:nil];
+    NSURLSessionDataTask* dataTask = [session dataTaskWithRequest:request];
+    [dataTask resume];
+
     return YES;
 }
+
+
+- (void)URLSession:(NSURLSession *)session
+          dataTask:(NSURLSessionDataTask *)dataTask
+didReceiveResponse:(NSURLResponse *)response
+ completionHandler:(void (^)(NSURLSessionResponseDisposition disposition))completionHandler {
+    NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
+    int responseCode = (int)[httpResponse statusCode];
+    NSLog(@"%d",responseCode);
+    [session finishTasksAndInvalidate];
+    [session invalidateAndCancel];
+    completionHandler(NSURLSessionResponseAllow);
+}
+
+
+-(void)URLSession:(NSURLSession *)session
+         dataTask:(NSURLSessionDataTask *)dataTask
+   didReceiveData:(NSData *)data {
+
+    if ([session.configuration.identifier isEqualToString:_getSettingIdentifier]) {
+        // CRT file was installed to this device
+        [self setStudySettings:data];
+    }
+    [session finishTasksAndInvalidate];
+    [session invalidateAndCancel];
+}
+
+
+- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error {
+    if (error != nil) {
+        NSLog(@"ERROR: %@ %ld", error.debugDescription , error.code);
+        if ([session.configuration.identifier isEqualToString:_getSettingIdentifier] && error.code == -1202) {
+            // Install CRT file for SSL
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+            NSString* url = [userDefaults objectForKey:KEY_STUDY_QR_CODE];
+            SSLManager *sslManager = [[SSLManager alloc] init];
+            [sslManager installCRTWithTextOfQRCode:url];
+        }
+    }
+    [session finishTasksAndInvalidate];
+    [session invalidateAndCancel];
+}
+
+
+- (void) setStudySettings:(NSData *) resData {// withResponseCode:(int) responseCode{
+    NSArray *mqttArray = [NSJSONSerialization JSONObjectWithData:resData options:NSJSONReadingMutableContainers error:nil];
+    id obj = [NSJSONSerialization JSONObjectWithData:resData options:NSJSONReadingMutableContainers error:nil];
+    NSData *data = [NSJSONSerialization dataWithJSONObject:obj options:0 error:nil];
+    NSLog(@"%@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+    
+    //    if(responseCode == 200){
+    NSLog(@"GET Study Information");
+    NSArray * array = [[mqttArray objectAtIndex:0] objectForKey:@"sensors"];
+    NSArray * plugins = [[mqttArray objectAtIndex:0] objectForKey:KEY_PLUGINS];
+    for (int i=0; i<[array count]; i++) {
+        NSDictionary *settingElement = [array objectAtIndex:i];
+        NSString *setting = [settingElement objectForKey:@"setting"];
+        NSString *value = [settingElement objectForKey:@"value"];
+        if([setting isEqualToString:@"mqtt_password"]){
+            mqttPassword = value;
+        }else if([setting isEqualToString:@"mqtt_username"]){
+            mqttUsername = value;
+        }else if([setting isEqualToString:@"mqtt_server"]){
+            mqttServer = value;
+        }else if([setting isEqualToString:@"mqtt_server"]){
+            mqttServer = value;
+        }else if([setting isEqualToString:@"mqtt_port"]){
+            mqttPort = [value intValue];
+        }else if([setting isEqualToString:@"mqtt_keep_alive"]){
+            mqttKeepAlive = [value intValue];
+        }else if([setting isEqualToString:@"mqtt_qos"]){
+            mqttQos = [value intValue];
+        }else if([setting isEqualToString:@"study_id"]){
+            studyId = value;
+        }else if([setting isEqualToString:@"webservice_server"]){
+            webserviceServer = value;
+        }
+    }
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString * oldStudyId = [userDefaults objectForKey:KEY_STUDY_ID];
+    if(![oldStudyId isEqualToString:studyId]){
+        NSLog(@"Add new device ID to the AWARE server.");
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        NSString* url =  [userDefaults objectForKey:KEY_STUDY_QR_CODE];
+        NSString * uuid = [self getSystemUUID];
+        [self addNewDeviceToAwareServer:url withDeviceId:uuid];
+    }else{
+        NSLog(@"This device ID is already regited to the AWARE server.");
+    }
+    [userDefaults setObject:mqttServer forKey:KEY_MQTT_SERVER];
+    [userDefaults setObject:mqttPassword forKey:KEY_MQTT_PASS];
+    [userDefaults setObject:mqttUsername forKey:KEY_MQTT_USERNAME];
+    [userDefaults setObject:[NSNumber numberWithInt:mqttPort] forKey:KEY_MQTT_PORT];
+    [userDefaults setObject:[NSNumber numberWithInt:mqttKeepAlive] forKey:KEY_MQTT_KEEP_ALIVE];
+    [userDefaults setObject:[NSNumber numberWithInt:mqttQos] forKey:KEY_MQTT_QOS];
+    [userDefaults setObject:studyId forKey:KEY_STUDY_ID];
+    [userDefaults setObject:webserviceServer forKey:KEY_WEBSERVICE_SERVER];
+    [userDefaults synchronize];
+    
+    [userDefaults setObject:array forKey:KEY_SENSORS];
+    [userDefaults setObject:plugins forKey:KEY_PLUGINS];
+    
+    readingState = YES;
+    //    }else{
+    //        NSLog(@"AWARE cannot get study information from AWARE server.");
+    //    }
+}
+
 
 - (bool) addNewDeviceToAwareServer:(NSString *)url withDeviceId:(NSString *) uuid {
     
@@ -268,25 +311,7 @@
     "sdk text default '',"
     "label text default '',"
     "UNIQUE (timestamp,device_id)";
-
-//        [jsonQuery setValue:manufacturer forKey:@"board"];//    board	TEXT	Manufacturer’s board name
-//        [jsonQuery setValue:model forKey:@"brand"];//    brand	TEXT	Manufacturer’s brand name
-//        [jsonQuery setValue:manufacturer forKey:@"device"];//    device	TEXT	Manufacturer’s device name
-//        [jsonQuery setValue:code forKey:@"build_id"];//    build_id	TEXT	Android OS build ID
-//        [jsonQuery setValue:manufacturer forKey:@"hardware"];//    hardware	TEXT	Hardware codename
-//        [jsonQuery setValue:manufacturer forKey:@"manufacturer"];//    manufacturer	TEXT	Device’s manufacturer
-//        [jsonQuery setValue:[self deviceName] forKey:@"model"];//    model	TEXT	Device’s model
-//        [jsonQuery setValue:manufacturer forKey:@"product"];//    product	TEXT	Device’s product name
-//        [jsonQuery setValue:identifier forKey:@"serial"];//    serial	TEXT	Manufacturer’s device serial, not unique
-//        [jsonQuery setValue:systemVersion forKey:@"release"];//    release	TEXT	Android’s release
-//        [jsonQuery setValue:@"user" forKey:@"release_type"];//    release_type	TEXT	Android’s type of release (e.g., user, userdebug, eng)
-//        [jsonQuery setValue:systemVersion forKey:@"sdk"];//    sdk	INTEGER	Android’s SDK level
-//        [jsonQuery setValue:name forKey:@"label"];
     
-        //    [[UIDevice currentDevice] platformType]   // ex: UIDevice4GiPhone
-        //    [[UIDevice currentDevice] platformString] // ex: @"iPhone 4G"
-    
-//        }
     NSString *post = [NSString stringWithFormat:@"data=%@&device_id=%@", query, uuid];
     NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
     NSString *postLength = [NSString stringWithFormat:@"%ld", [postData length]];

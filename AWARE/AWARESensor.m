@@ -36,6 +36,8 @@
 - (instancetype) initWithSensorName:(NSString *)sensorName {
     if (self = [super init]) {
         NSLog(@"[%@] Initialize an AWARESensor as '%@' ", sensorName, sensorName);
+        _syncDataQueryIdentifier = [NSString stringWithFormat:@"sync_data_query_identifier_%@", sensorName];
+        _createTableQueryIdentifier = [NSString stringWithFormat:@"create_table_query_identifier_%@",  sensorName];
         awareSensorName = sensorName;
         bufferLimit = 0;
         previusUploadingState = NO;
@@ -195,6 +197,7 @@
     }
     return deviceId;
 }
+
 
 
 - (bool) saveData:(NSDictionary *)data{
@@ -358,7 +361,6 @@
     NSMutableURLRequest *request = nil;
     __weak NSURLSession *session = nil;
     NSString *postLength = nil;
-//    NSString *sensorName = [self getSensorName];
     NSString *deviceId = [self getDeviceId];
     NSString *url = [self getInsertUrl:sensorName];
     lineCount = 0;
@@ -400,9 +402,10 @@
 
     // Set session configuration
     NSURLSessionConfiguration *sessionConfig = nil;
-    NSDate *now = [NSDate date];
-    NSString* identifier = [NSString stringWithFormat:@"%@_%f", sensorName, [now timeIntervalSince1970]];
-    sessionConfig = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:identifier];
+//    NSDate *now = [NSDate date];
+//    NSString* identifier = [NSString stringWithFormat:@"%@_%f", sensorName, [now timeIntervalSince1970]];
+//    NSString* identifier = [NSString stringWithFormat:@"%@%@", _syncDataQueryIdentifier, sensorName];
+    sessionConfig = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:_syncDataQueryIdentifier];
     sessionConfig.timeoutIntervalForRequest = 120.0;
     sessionConfig.HTTPMaximumConnectionsPerHost = 60;
     sessionConfig.timeoutIntervalForResource = 60; //60*60*24; // 1 day
@@ -432,75 +435,79 @@
           dataTask:(NSURLSessionDataTask *)dataTask
 didReceiveResponse:(NSURLResponse *)response
  completionHandler:(void (^)(NSURLSessionResponseDisposition disposition))completionHandler {
-    NSLog(@"[%@] Get response from the server.", [self getSensorName]);
-    [self receivedResponseFromServer:dataTask.response withData:nil error:nil];
+    
+    if ([session.configuration.identifier isEqualToString:_syncDataQueryIdentifier]) {
+        NSLog(@"[%@] Get response from the server.", [self getSensorName]);
+        [self receivedResponseFromServer:dataTask.response withData:nil error:nil];
+    } else if ( [session.configuration.identifier isEqualToString:_createTableQueryIdentifier] ){
+        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
+        int responseCode = (int)[httpResponse statusCode];
+        if (responseCode == 200) {
+            NSString *message = [NSString stringWithFormat:@"[%@] Sucess to create new table on AWARE server.", [self getSensorName]];
+            NSLog(@"%@", message);
+        }
+    } else {
+        
+    }
+    [session finishTasksAndInvalidate];
+    [session invalidateAndCancel];
     completionHandler(NSURLSessionResponseAllow);
-//    [session finishTasksAndInvalidate];
-//    [session invalidateAndCancel];
 }
 
 
 -(void)URLSession:(NSURLSession *)session
          dataTask:(NSURLSessionDataTask *)dataTask
    didReceiveData:(NSData *)data {
+    if ([session.configuration.identifier isEqualToString:_syncDataQueryIdentifier]) {
+        // If the data is null, this method is not called.
+        NSString * result = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+        NSLog(@"[%@] Data is coming! => %@", [self getSensorName], result);
+    } else if ([session.configuration.identifier isEqualToString:_createTableQueryIdentifier]){
+        NSString* newStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+        NSLog(@"[%@] %@",[self getSensorName], newStr);
+    }
+    [session finishTasksAndInvalidate];
+    [session invalidateAndCancel];
+}
+
+
+- (void)URLSession:(NSURLSession *)session
+              task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error {
     
-    // If the data is null, this method is not called.
-    NSLog(@"[%@] Data is coming!", [self getSensorName]);
-    NSString * result = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    NSLog(@"[%@] response => %@", [self getSensorName], result);
-    [session finishTasksAndInvalidate];
-    [session invalidateAndCancel];
-}
-
-
-- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error {
-    if (error) {
-        NSLog(@"[%@] Session task finished with error. %@", [self getSensorName], error.debugDescription);
-        if ( marker > 0 ) {
-            marker = marker - 1;
-        }
-        errorPosts++;
-        NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-        bool debugState = [defaults boolForKey:SETTING_DEBUG_STATE];
-        if (debugState) {
-            [self sendLocalNotificationForMessage:[NSString stringWithFormat:@"[%@] Retry - %d (%d)", [self getSensorName], marker, errorPosts] soundFlag:NO];
-        }
-        if (errorPosts < 3) { //TODO
-            [self syncAwareDB];
+    
+    if ([session.configuration.identifier isEqualToString:_syncDataQueryIdentifier]) {
+        if (error) {
+            NSLog(@"[%@] Session task finished with error. %@", [self getSensorName], error.debugDescription);
+            if ( marker > 0 ) {
+                marker = marker - 1;
+            }
+            errorPosts++;
+            NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+            bool debugState = [defaults boolForKey:SETTING_DEBUG_STATE];
+            if (debugState) {
+                [self sendLocalNotificationForMessage:[NSString stringWithFormat:@"[%@] Retry - %d (%d)", [self getSensorName], marker, errorPosts] soundFlag:NO];
+            }
+            if (errorPosts < 3) { //TODO
+                [self syncAwareDB];
+            } else {
+                errorPosts = 0;
+                previusUploadingState = NO;
+            }
         } else {
+            NSLog(@"[%@] Session task finished correctly.", [self getSensorName]);
             errorPosts = 0;
-            previusUploadingState = NO;
         }
+        NSLog(@"%@", task.description);
+        //    completionHandler(NSURLSessionResponseAllow);
+    } else if ([session.configuration.identifier isEqualToString:_createTableQueryIdentifier]){
+        
     } else {
-        NSLog(@"[%@] Session task finished correctly.", [self getSensorName]);
-        errorPosts = 0;
+        
     }
-    NSLog(@"%@", task.description);
-//    previusUploadingState = NO;//TODO
     [session finishTasksAndInvalidate];
     [session invalidateAndCancel];
-//    completionHandler(NSURLSessionResponseAllow);
-}
+    
 
-
-- (void) downLimit {
-    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-    NSInteger length = [defaults integerForKey:KEY_MAX_DATA_SIZE];
-    // 1000 * 100; //100KB
-    if( length > 1000*100 && lineCount == length ){
-        length = length/5;
-        [defaults setInteger:length forKey:KEY_MAX_DATA_SIZE];
-    }
-}
-
-- (void) upLimit {
-    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-    NSInteger length = [defaults integerForKey:KEY_MAX_DATA_SIZE];
-    // 1000 * 1000 * 5; //5MB
-    if(length < 1000*1000*5 && lineCount == length ){
-        length = length*5;
-        [defaults setInteger:length forKey:KEY_MAX_DATA_SIZE];
-    }
 }
 
 
@@ -508,22 +515,19 @@ didReceiveResponse:(NSURLResponse *)response
     if (error != nil) {
         NSLog(@"[%@] the session did become invaild with error: %@", [self getSensorName], error.debugDescription);
     }
-//    previusUploadingState = NO;
     [session invalidateAndCancel];
     [session finishTasksAndInvalidate];
 }
 
-
 - (NSMutableString *) fixJsonFormat:(NSMutableString *) clipedText {
     // head
     if ([clipedText hasPrefix:@"{"]) {
-//        NSLog(@"HEAD => correct!");
     }else{
         NSRange rangeOfExtraText = [clipedText rangeOfString:@"{"];
         if (rangeOfExtraText.location == NSNotFound) {
-//            NSLog(@"[HEAD] There is no extra text");
+            // NSLog(@"[HEAD] There is no extra text");
         }else{
-//            NSLog(@"[HEAD] There is some extra text!");
+            // NSLog(@"[HEAD] There is some extra text!");
             NSRange deleteRange = NSMakeRange(0, rangeOfExtraText.location);
             [clipedText deleteCharactersInRange:deleteRange];
         }
@@ -531,15 +535,13 @@ didReceiveResponse:(NSURLResponse *)response
     
     // tail
     if ([clipedText hasSuffix:@"}"]){
-//        NSLog(@"TAIL => correct!");
     }else{
         NSRange rangeOfExtraText = [clipedText rangeOfString:@"}" options:NSBackwardsSearch];
         if (rangeOfExtraText.location == NSNotFound) {
-//            NSLog(@"[TAIL] There is no extra text");
+            // NSLog(@"[TAIL] There is no extra text");
         }else{
-//            NSLog(@"[TAIL] There is some extra text!");
+            // NSLog(@"[TAIL] There is some extra text!");
             NSRange deleteRange = NSMakeRange(rangeOfExtraText.location+1, clipedText.length-rangeOfExtraText.location-1);
-            //                NSLog(@"%@", clipedText);
             [clipedText deleteCharactersInRange:deleteRange];
         }
     }
@@ -584,19 +586,12 @@ didReceiveResponse:(NSURLResponse *)response
     error = nil;
     httpResponse = nil;
     dispatch_async(dispatch_get_main_queue(), ^{
-        CGFloat currentVersion = [[[UIDevice currentDevice] systemVersion] floatValue];
-        if (currentVersion >= 9.0) {
-//            [session finishTasksAndInvalidate];
-//            [session invalidateAndCancel];
-        }
         if (marker != 0) {
             [self syncAwareDB];
         }else{
             if(responseCode == 200){
                 [self removeFile:[self getSensorName]];
-                // NSLog(@"[%@] File is removed.", [self getSensorName]);
             }
-            // previusUploadingState = NO;
         }
     });
 }
@@ -643,6 +638,17 @@ didReceiveResponse:(NSURLResponse *)response
 }
 
 
+- (bool) isFirstAccess {
+    NSString * url = [self getLatestDataUrl:[self getSensorName]];
+    NSString * value = [self getLatestSensorData:[self getSensorName] withUrl:url];
+    if ([value isEqualToString:@"[]"] || value == nil) {
+        return YES;
+    }else{
+        return  NO;
+    }
+}
+
+
 - (NSString *)getLatestSensorData:(NSString *)deviceId withUrl:(NSString *)url{
     NSString *post = [NSString stringWithFormat:@"device_id=%@", deviceId];
     NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
@@ -665,16 +671,10 @@ didReceiveResponse:(NSURLResponse *)response
     return @"";
 }
 
-- (bool) isFirstAccess {
-    NSString * url = [self getLatestDataUrl:[self getSensorName]];
-    NSString * value = [self getLatestSensorData:[self getSensorName] withUrl:url];
-    if ([value isEqualToString:@"[]"] || value == nil) {
-        return YES;
-    }else{
-        return  NO;
-    }
-}
 
+- (BOOL)clearTable{
+    return NO;
+}
 
 - (void) createTable:(NSString*) query {
     [self createTable:query withTableName:[self getSensorName]];
@@ -683,11 +683,6 @@ didReceiveResponse:(NSURLResponse *)response
 
 - (void) createTable:(NSString *)query withTableName:(NSString*) tableName {
     NSLog(@"%@",[self getCreateTableUrl:tableName]);
-    
-    // check isFirstAccess
-//    if (![self isFirstAccess]) {
-//        return;
-//    }
     
     // create table
     NSString *post = nil;
@@ -705,101 +700,40 @@ didReceiveResponse:(NSURLResponse *)response
     [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
     [request setHTTPBody:postData];
     
-    NSURLSessionConfiguration *sessionConfig =
-    [NSURLSessionConfiguration defaultSessionConfiguration];
-    //        sessionConfig.allowsCellularAccess = NO;
-    //        [sessionConfig setHTTPAdditionalHeaders:
-    //         @{@"Accept": @"application/json"}];
-    sessionConfig.timeoutIntervalForRequest = 180.0;
-    sessionConfig.timeoutIntervalForResource = 300.0;
-    sessionConfig.HTTPMaximumConnectionsPerHost = 30;
+    
+    NSURLSessionConfiguration *sessionConfig = nil;
+    sessionConfig = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:_createTableQueryIdentifier];
+    sessionConfig.timeoutIntervalForRequest = 120.0;
+    sessionConfig.HTTPMaximumConnectionsPerHost = 60;
+    sessionConfig.timeoutIntervalForResource = 60; //60*60*24; // 1 day
+    sessionConfig.allowsCellularAccess = NO;
+    sessionConfig.discretionary = YES;
 
-    session = [NSURLSession sessionWithConfiguration:sessionConfig];
-    [[session dataTaskWithRequest:request
-                completionHandler:^(NSData * _Nullable data,
-                                    NSURLResponse * _Nullable response,
-                                    NSError * _Nullable error) {
-                    NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
-                    int responseCode = (int)[httpResponse statusCode];
-                    
-                    NSString* newStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-                    NSLog(@"[%@] Response----> %d, %@", tableName,responseCode, newStr);
-                    
-                    if(responseCode == 200){
-//                        [self removeFile:[self getSensorName]];
-//                        //                            [self createNewFile:[self getSensorName]];
-                        NSString *message = [NSString stringWithFormat:@"[%@] Sucess to create new table on AWARE server.", tableName];
-                        NSLog(@"%@", message);
-//                        [self sendLocalNotificationForMessage:message soundFlag:NO];
-                    }
-//                    previusUploadingState = NO;
-                    data = nil;
-                    response = nil;
-                    error = nil;
-                    httpResponse = nil;
-//                    dispatch_async(dispatch_get_main_queue(), ^{
-//                        [session finishTasksAndInvalidate];
-//                        [session invalidateAndCancel];
-//                    });
-                }] resume];
+    NSLog(@"--- This is background task ----");
+    session = [NSURLSession sessionWithConfiguration:sessionConfig delegate:self delegateQueue:nil];
+    NSURLSessionDataTask* dataTask = [session dataTaskWithRequest:request];
+    [dataTask resume];
+    
+//    [[session dataTaskWithRequest:request
+//                completionHandler:^(NSData * _Nullable data,
+//                                    NSURLResponse * _Nullable response,
+//                                    NSError * _Nullable error) {
+//                    NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
+//                    int responseCode = (int)[httpResponse statusCode];
+//                    
+//                    NSString* newStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+//                    NSLog(@"[%@] Response----> %d, %@", tableName,responseCode, newStr);
+//                    if(responseCode == 200){
+//                        NSString *message = [NSString stringWithFormat:@"[%@] Sucess to create new table on AWARE server.", tableName];
+//                        NSLog(@"%@", message);
+//                    }
+//                    data = nil;
+//                    response = nil;
+//                    error = nil;
+//                    httpResponse = nil;
+//                }] resume];
 }
 
-- (BOOL) clearTable {
-    NSLog(@"%@",[self getCreateTableUrl:[self getSensorName]]);
-    NSString *post = nil;
-    NSData *postData = nil;
-    NSMutableURLRequest *request = nil;
-    __weak NSURLSession *session = nil;
-    NSString *postLength = nil;
-    post = [NSString stringWithFormat:@"device_id=%@", [self getDeviceId]];
-    NSLog(@"%@", post);
-    postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
-    postLength = [NSString stringWithFormat:@"%ld", [postData length]];
-    request = [[NSMutableURLRequest alloc] init];
-    [request setURL:[NSURL URLWithString:[self getClearTableUrl:[self getSensorName]]]];
-    [request setHTTPMethod:@"POST"];
-    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
-    [request setHTTPBody:postData];
-    
-    NSURLSessionConfiguration *sessionConfig =
-    [NSURLSessionConfiguration defaultSessionConfiguration];
-    //        sessionConfig.allowsCellularAccess = NO;
-    //        [sessionConfig setHTTPAdditionalHeaders:
-    //         @{@"Accept": @"application/json"}];
-    sessionConfig.timeoutIntervalForRequest = 180.0;
-    sessionConfig.timeoutIntervalForResource = 300.0;
-    sessionConfig.HTTPMaximumConnectionsPerHost = 30;
-    
-    session = [NSURLSession sessionWithConfiguration:sessionConfig];
-    [[session dataTaskWithRequest:request
-                completionHandler:^(NSData * _Nullable data,
-                                    NSURLResponse * _Nullable response,
-                                    NSError * _Nullable error) {
-                    NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
-                    int responseCode = (int)[httpResponse statusCode];
-                    
-                    NSString* newStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-                    NSLog(@"[%@] Response----> %d, %@", [self getSensorName],responseCode, newStr);
-                    
-                    if(responseCode == 200){
-                        //                        [self removeFile:[self getSensorName]];
-                        //                        //                            [self createNewFile:[self getSensorName]];
-                        NSString *message = [NSString stringWithFormat:@"[%@] Sucess to clear table on AWARE server.", [self getSensorName]];
-                        NSLog(@"%@", message);
-                        //                        [self sendLocalNotificationForMessage:message soundFlag:NO];
-                    }
-                    //                    previusUploadingState = NO;
-                    data = nil;
-                    response = nil;
-                    error = nil;
-                    httpResponse = nil;
-                    //                    dispatch_async(dispatch_get_main_queue(), ^{
-                    //                        [session finishTasksAndInvalidate];
-                    //                        [session invalidateAndCancel];
-                    //                    });
-                }] resume];
-    return NO;
-}
 
 - (void)uploadSensorData{
     
@@ -840,105 +774,8 @@ didReceiveResponse:(NSURLResponse *)response
         localNotification.soundName = UILocalNotificationDefaultSoundName;
     }
     localNotification.hasAction = YES;
-//    localNotification.alertAction = @"hoge";
-//    [self registerForNotification];
     [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
 }
 
-
-
-- (void)registerForNotification {
-    
-    UIMutableUserNotificationAction *action1;
-    action1 = [[UIMutableUserNotificationAction alloc] init];
-    [action1 setActivationMode:UIUserNotificationActivationModeBackground];
-    [action1 setTitle:@"Action 1"];
-    [action1 setIdentifier:NotificationActionOneIdent];
-    [action1 setDestructive:NO];
-    [action1 setAuthenticationRequired:NO];
-    
-    UIMutableUserNotificationAction *action2;
-    action2 = [[UIMutableUserNotificationAction alloc] init];
-    [action2 setActivationMode:UIUserNotificationActivationModeBackground];
-    [action2 setTitle:@"Action 2"];
-    [action2 setIdentifier:NotificationActionTwoIdent];
-    [action2 setDestructive:NO];
-    [action2 setAuthenticationRequired:NO];
-    
-    UIMutableUserNotificationCategory *actionCategory;
-    actionCategory = [[UIMutableUserNotificationCategory alloc] init];
-    [actionCategory setIdentifier:NotificationCategoryIdent];
-    [actionCategory setActions:@[action1, action2]
-                    forContext:UIUserNotificationActionContextDefault];
-    
-    NSSet *categories = [NSSet setWithObject:actionCategory];
-    UIUserNotificationType types = (UIUserNotificationTypeAlert|
-                                    UIUserNotificationTypeSound|
-                                    UIUserNotificationTypeBadge);
-    
-    UIUserNotificationSettings *settings;
-    settings = [UIUserNotificationSettings settingsForTypes:types
-                                                 categories:categories];
-    
-    [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
-}
-
-
-
-- (void)connection:(NSURLConnection *)connection
-didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge {
-    NSLog(@"-------------------");
-    if ([[[challenge protectionSpace] authenticationMethod] isEqualToString: NSURLAuthenticationMethodServerTrust]){
-        
-        do {
-            SecTrustRef serverTrust = [[challenge protectionSpace] serverTrust];
-            if (serverTrust == nil)
-                break; // failed
-            
-            SecTrustResultType trustResult;
-            OSStatus status = SecTrustEvaluate(serverTrust, &trustResult);
-            if (!(errSecSuccess == status))
-                break; // fatal error in trust evaluation -> failed
-            
-            if (!((trustResult == kSecTrustResultProceed)
-                  || (trustResult == kSecTrustResultUnspecified)))
-            {
-                break; // see "Certificate, Key, and Trust Services Reference"
-                // for explanation of result codes.
-            }
-            
-            SecCertificateRef serverCertificate = SecTrustGetCertificateAtIndex(serverTrust, 0);
-            if (serverCertificate == nil)
-                break; // failed
-            
-            CFDataRef serverCertificateData = SecCertificateCopyData(serverCertificate);
-            if (serverCertificateData == nil)
-                break; // failed
-            
-            const UInt8* const data = CFDataGetBytePtr(serverCertificateData);
-            const CFIndex size = CFDataGetLength(serverCertificateData);
-            NSData* server_cert = [NSData dataWithBytes:data length:(NSUInteger)size];
-            CFRelease(serverCertificateData);
-            
-            NSString* file = [[NSBundle mainBundle] pathForResource:@"awareframework"
-                                                             ofType:@"der"];
-            NSData* my_cert = [NSData dataWithContentsOfFile:file];
-            
-            if (server_cert == nil || my_cert == nil)
-                break; // failed
-            
-            const BOOL equal = [server_cert isEqualToData:my_cert];
-            if (!equal)
-                break; // failed
-            
-            // Athentication succeeded:
-            return [[challenge sender] useCredential:[NSURLCredential credentialForTrust:serverTrust]
-                          forAuthenticationChallenge:challenge];
-        } while (0);
-        
-        // Authentication failed:
-        return [[challenge sender] cancelAuthenticationChallenge:challenge];
-    }
-}
 
 @end

@@ -10,7 +10,11 @@
 #import <UIKit/UIKit.h>
 #import <sys/utsname.h>
 
-@interface AWAREStudy : NSObject
+@interface AWAREStudy : NSObject <NSURLSessionDataDelegate, NSURLSessionTaskDelegate>
+
+@property (strong, nonatomic) NSString* getSettingIdentifier;
+@property (strong, nonatomic) NSString* makeDeviceTableIdentifier;
+@property (strong, nonatomic) NSString* addDeviceTableIdentifier;
 
 - (BOOL) setStudyInformationWithURL:(NSString*)url;
 - (BOOL) refreshStudy;

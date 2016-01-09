@@ -68,9 +68,17 @@
     
     uploadInterval = 60*15;
     
+    // daily study update
+    NSDate* dailyUpdateTime = [self getTargetTimeAsNSDate:[NSDate date] hour:3 minute:0 second:0];
+    dailyUpdateTimer = [[NSTimer alloc] initWithFireDate:dailyUpdateTime
+                             interval:60*60*24
+                               target:self selector:@selector(pushedStudyRefreshButton:) userInfo:nil
+                              repeats:YES];
+//    [dailyUpdateTimer fire];
+    NSRunLoop *runLoop = [NSRunLoop currentRunLoop];
+    [runLoop addTimer:dailyUpdateTimer forMode:NSDefaultRunLoopMode];// NSRunLoopCommonModes];//
     
-//    [NSTimer alloc] initWithFireDate:<#(nonnull NSDate *)#>
-//interval:<#(NSTimeInterval)#> target:<#(nonnull id)#> selector:<#(nonnull SEL)#> userInfo:<#(nullable id)#> repeats:<#(BOOL)#>
+    
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
 //    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillEnterForeground:) name:UIApplicationWillEnterForegroundNotification object:nil];
@@ -446,12 +454,17 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
 - (IBAction)pushedStudyRefreshButton:(id)sender {
     AWAREStudy *awareStudy = [[AWAREStudy alloc] init];
     [awareStudy refreshStudy];
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"AWARE Study"
-                                                    message:@"AWARE Study was refreshed!"
-                                                   delegate:nil
-                                          cancelButtonTitle:@"OK"
-                                          otherButtonTitles:nil];
-    [alert show];
+    
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    bool front = [defaults boolForKey:@"APP_STATE"];
+    if (front) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"AWARE Study"
+                                                        message:@"AWARE Study was refreshed!"
+                                                       delegate:nil
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
+        [alert show];
+    }
     @autoreleasepool {
         [_sensorManager stopAllSensors];
         NSLog(@"remove all sensors");
@@ -621,20 +634,31 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
     [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
 }
 
-//- (void)locationManager:(CLLocationManager *)manager didUpdateHeading:(CLHeading *)newHeading {
-//    if (newHeading.headingAccuracy < 0)
-//        return;
-//    //    CLLocationDirection  theHeading = ((newHeading.trueHeading > 0) ?
-//    //                                       newHeading.trueHeading : newHeading.magneticHeading);
-//    //    [sdManager addSensorDataMagx:newHeading.x magy:newHeading.y magz:newHeading.z];
-//    //    [sdManager addHeading: theHeading];
-//}
 
-//- (void) locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations{
-//    for (CLLocation* location in locations) {
-//        [self saveLocation:location];
-//    }
-//}
-
+- (NSDate *) getTargetTimeAsNSDate:(NSDate *) nsDate
+                              hour:(int) hour
+                            minute:(int) minute
+                            second:(int) second {
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSDateComponents *dateComps = [calendar components:NSYearCalendarUnit |
+                                   NSMonthCalendarUnit  |
+                                   NSDayCalendarUnit    |
+                                   NSHourCalendarUnit   |
+                                   NSMinuteCalendarUnit |
+                                   NSSecondCalendarUnit fromDate:nsDate];
+    [dateComps setDay:dateComps.day];
+    [dateComps setHour:hour];
+    [dateComps setMinute:minute];
+    [dateComps setSecond:second];
+    NSDate * targetNSDate = [calendar dateFromComponents:dateComps];
+    // If the maked target day is newer than now, Aware remakes the target day as same time tomorrow.
+    if ([targetNSDate timeIntervalSince1970] < [nsDate timeIntervalSince1970]) {
+        [dateComps setDay:dateComps.day + 1];
+        NSDate * tomorrowNSDate = [calendar dateFromComponents:dateComps];
+        return tomorrowNSDate;
+    }else{
+        return targetNSDate;
+    }
+}
 
 @end
