@@ -311,8 +311,8 @@ didReceiveResponse:(NSURLResponse *)response
     "sdk text default '',"
     "label text default '',"
     "UNIQUE (timestamp,device_id)";
-    
-    NSString *post = [NSString stringWithFormat:@"data=%@&device_id=%@", query, uuid];
+  
+    NSString *post = [NSString stringWithFormat:@"device_id=%@&fields=%@", uuid, query];
     NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
     NSString *postLength = [NSString stringWithFormat:@"%ld", [postData length]];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
@@ -329,7 +329,7 @@ didReceiveResponse:(NSURLResponse *)response
     NSData *resData = [NSURLConnection sendSynchronousRequest:request
                                             returningResponse:&response error:&error];
     NSString * resultDate = [[NSString alloc] initWithData:resData encoding:NSUTF8StringEncoding];
-    NSLog(@"%@", resultDate);
+    NSLog(@"==> %@", resultDate);
     int responseCode = (int)[response statusCode];
 //            dispatch_async(dispatch_get_main_queue(), ^{
     if(responseCode == 200){

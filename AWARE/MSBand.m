@@ -131,9 +131,6 @@ didFailToConnectWithError:(NSError *)error{
 }
 
 
-
-
-
 - (AWARESensor *) getCalorieSensor{
     
     AWARESensor *calSensor = [[AWARESensor alloc] initWithSensorName:PLUGIN_MSBAND_SENSORS_CALORIES];

@@ -21,6 +21,7 @@
     return self;
 }
 
+//http://stackoverflow.com/questions/9515479/monitor-and-detect-if-the-iphone-is-plugged-in-and-charging-wifi-connected-when
 
 - (void) createTable{
     NSString *query = [[NSString alloc] init];

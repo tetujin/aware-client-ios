@@ -265,22 +265,22 @@
 
     
     //for test
-//    AWARESensor *msBand = [[MSBand alloc] initWithPluginName:SENSOR_PLUGIN_MSBAND deviceId:deviceId];
-//    [msBand startSensor:60.0f * 15.0f withSettings:nil];
-//    [_sensorManager addNewSensor:msBand];
-//
-//    
-//    AWARESensor* googleCalPull = [[GoogleCalPull alloc] initWithSensorName:SENSOR_PLUGIN_GOOGLE_CAL_PULL];
-//    [googleCalPull startSensor:60.0f* 15.0f  withSettings:nil];
-//    [_sensorManager addNewSensor:googleCalPull];
-//    
-//    AWARESensor* googleCalPush = [[GoogleCalPush alloc] initWithSensorName:SENSOR_PLUGIN_GOOGLE_CAL_PUSH];
-//    [googleCalPush startSensor:60.0f* 15.0f  withSettings:nil];
-//    [_sensorManager addNewSensor:googleCalPush];
+    AWARESensor *msBand = [[MSBand alloc] initWithPluginName:SENSOR_PLUGIN_MSBAND deviceId:deviceId];
+    [msBand startSensor:60.0f * 15.0f withSettings:nil];
+    [_sensorManager addNewSensor:msBand];
 
-//    AWARESensor* scheduler = [[Scheduler alloc] initWithSensorName:SENSOR_SCHEDULER];
-//    [scheduler startSensor:60.0f*15.0f  withSettings:nil];
-//    [_sensorManager addNewSensor:scheduler];
+    
+    AWARESensor* googleCalPull = [[GoogleCalPull alloc] initWithSensorName:SENSOR_PLUGIN_GOOGLE_CAL_PULL];
+    [googleCalPull startSensor:60.0f* 15.0f  withSettings:nil];
+    [_sensorManager addNewSensor:googleCalPull];
+    
+    AWARESensor* googleCalPush = [[GoogleCalPush alloc] initWithSensorName:SENSOR_PLUGIN_GOOGLE_CAL_PUSH];
+    [googleCalPush startSensor:60.0f* 15.0f  withSettings:nil];
+    [_sensorManager addNewSensor:googleCalPush];
+
+    AWARESensor* scheduler = [[Scheduler alloc] initWithSensorName:SENSOR_SCHEDULER];
+    [scheduler startSensor:60.0f*15.0f  withSettings:nil];
+    [_sensorManager addNewSensor:scheduler];
 }
 
 
@@ -449,14 +449,13 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
 
 
 - (IBAction)pushedStudyRefreshButton:(id)sender {
-    AWAREStudy *awareStudy = [[AWAREStudy alloc] init];
-    [awareStudy refreshStudy];
-    
-    
     @autoreleasepool {
         [_sensorManager stopAllSensors];
         NSLog(@"remove all sensors");
     }
+    
+    AWAREStudy *awareStudy = [[AWAREStudy alloc] init];
+    [awareStudy refreshStudy];
     
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     bool front = [defaults boolForKey:@"APP_STATE"];
@@ -467,12 +466,11 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
                                               cancelButtonTitle:@"OK"
                                               otherButtonTitles:nil];
         [alert show];
-        [self initList];
     } else {
         [self sendLocalNotificationForMessage:@"AWARE Configuration was refreshed in the background!" soundFlag:NO];
-        [self performSelector:@selector(initList) withObject:0 afterDelay:5];
     }
-
+    [self performSelector:@selector(initList) withObject:0 afterDelay:1];
+//    [self initList];
     [self.tableView reloadData];
     [self connectMqttServer];
 }
