@@ -8,6 +8,8 @@
 
 #import "AWARESensor.h"
 
-@interface Scheduler : AWARESensor <AWARESensorDelegate>
+@interface Scheduler : AWARESensor <AWARESensorDelegate, NSURLSessionDataDelegate, NSURLSessionTaskDelegate>
+
+@property (nonatomic, strong) NSString * getConfigFileIdentifier;
 
 @end

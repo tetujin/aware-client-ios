@@ -33,7 +33,7 @@ extern NSString* const KEY_ESM_SCALE_STEP;
 
 @interface SingleESMObject : NSObject
 
-- (instancetype)initWithEsm:(NSDictionary* )esm;
+- (instancetype)initWithEsm:(NSDictionary* )esmObject;
 
 //extern NSString* const KEY_ESM_TYPE;
 @property (strong, nonatomic) IBOutlet NSNumber* type;
