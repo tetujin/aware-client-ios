@@ -81,7 +81,6 @@
     //https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/Timers/Articles/usingTimers.html
     NSRunLoop *runLoop = [NSRunLoop currentRunLoop];
     [runLoop addTimer:calendarUpdateTimer forMode:NSDefaultRunLoopMode];
-
 }
 
 - (void) checkAllEvents:(id) sender {
@@ -127,7 +126,6 @@
 //        NSLog(@"count %@", ekEvent);
     }];
     
-    NSString * questions = @"\n\n - - - - - - \n This is sample.";
     
     // == Make new events (Aware Events), and Get Null events ==
     NSMutableArray * nullTimes = [[NSMutableArray alloc] init];
@@ -140,7 +138,7 @@
         NSLog(@"%@", event.notes);
         EKEvent * awareEvent = [EKEvent eventWithEventStore:store];
         // Add questions to a note of aware events
-        awareEvent.notes = [NSString stringWithFormat:@"%@%@", event.notes, questions];
+        awareEvent.notes = event.notes; //[NSString stringWithFormat:@"%@%@", event.notes, questions];
         awareEvent.title = event.title;
         awareEvent.startDate = event.startDate;
         awareEvent.endDate = event.endDate;
@@ -196,7 +194,7 @@
                     EKEvent *preEvent = [EKEvent eventWithEventStore:store];
                     preEvent.title = name;
                     preEvent.location = name;
-                    preEvent.notes = questions;
+//                    preEvent.notes = questions;
                     preEvent.startDate = [[NSDate alloc] initWithTimeIntervalSince1970:arrival];
                     preEvent.endDate = [[NSDate alloc] initWithTimeIntervalSince1970:departure];
                     preEvent.calendar = awareCal;
@@ -252,8 +250,8 @@
         NSDate * nullEnd = [times objectAtIndex:1];
         EKEvent * awareEvent = [EKEvent eventWithEventStore:store];
         // Add questions to a note of aware events
-        awareEvent.notes = [NSString stringWithFormat:@"%@%@", @"Empty", questions];
-        awareEvent.title = @"Empty";
+//        awareEvent.notes = [NSString stringWithFormat:@"%@%@", @"Empty", questions];
+        awareEvent.title = @"#event_category #Location #brief_description";
         awareEvent.startDate = nullStart;
         awareEvent.endDate = nullEnd;
         awareEvent.calendar = awareCal;

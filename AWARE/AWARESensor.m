@@ -23,10 +23,9 @@
     NSTimer* writeAbleTimer;
     bool wifiState;
     bool writeAble;
+    bool blancerState;
     int marker;
     int errorPosts;
-    
-//    bool uploading;
 }
 
 @end
@@ -41,6 +40,7 @@
         awareSensorName = sensorName;
         bufferLimit = 0;
         previusUploadingState = NO;
+        blancerState = NO;
         awareSensorName = sensorName;
         latestSensorValue = @"";
         errorPosts = 0;
@@ -101,11 +101,14 @@
                                                      selector:@selector(setWriteableYES)
                                                      userInfo:nil repeats:YES];
     [writeAbleTimer fire];
+    blancerState = YES;
+    
 }
 
 - (void) stopWriteableTimer{
     if (!writeAbleTimer) {
         [writeAbleTimer invalidate];
+        blancerState = NO;
     }
 }
 
@@ -220,10 +223,13 @@
     }
     [bufferStr appendString:jsonstr];
     [bufferStr appendFormat:@","];
-    if (writeAble) {
+    
+    if ( writeAble || !blancerState ) {
         [self appendLine:bufferStr path:fileName];
         [bufferStr setString:@""];
         [self setWriteableNO];
+    }else{
+        NSLog(@"[%@] writable time is false.", [self getSensorName]);
     }
     return YES;
 }

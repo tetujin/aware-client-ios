@@ -274,13 +274,13 @@
 //    [googleCalPull startSensor:60.0f* 15.0f  withSettings:nil];
 //    [_sensorManager addNewSensor:googleCalPull];
 //    
-//    AWARESensor* googleCalPush = [[GoogleCalPush alloc] initWithSensorName:SENSOR_PLUGIN_GOOGLE_CAL_PUSH];
-//    [googleCalPush startSensor:60.0f* 15.0f  withSettings:nil];
-//    [_sensorManager addNewSensor:googleCalPush];
-//
-//    AWARESensor* scheduler = [[Scheduler alloc] initWithSensorName:SENSOR_SCHEDULER];
-//    [scheduler startSensor:60.0f*15.0f  withSettings:nil];
-//    [_sensorManager addNewSensor:scheduler];
+    AWARESensor* googleCalPush = [[GoogleCalPush alloc] initWithSensorName:SENSOR_PLUGIN_GOOGLE_CAL_PUSH];
+    [googleCalPush startSensor:60.0f* 15.0f  withSettings:nil];
+    [_sensorManager addNewSensor:googleCalPush];
+
+    AWARESensor* scheduler = [[Scheduler alloc] initWithSensorName:SENSOR_SCHEDULER];
+    [scheduler startSensor:60.0f*15.0f  withSettings:nil];
+    [_sensorManager addNewSensor:scheduler];
 }
 
 

@@ -29,8 +29,8 @@
         NSString* configUrl = @"http://www.ht.sfc.keio.ac.jp/~tetujin/aware/test.json";
         NSMutableDictionary * dic = [[NSMutableDictionary alloc] init];
         [dic setObject:configUrl forKey:@"configUrl"];
-        dailyQuestionUpdateTimer = [[NSTimer alloc] initWithFireDate:[self getTargetTimeAsNSDate:[NSDate new] hour:19 minute:0 second:0]
-                                                            interval:60*60*24
+        dailyQuestionUpdateTimer = [[NSTimer alloc] initWithFireDate:[self getTargetTimeAsNSDate:[NSDate new] hour:17 minute:15 second:0]
+                                                            interval:60 //*60*24
                                                             target:self
                                                             selector:@selector(setConfigFile:)
                                                             userInfo:dic
@@ -98,7 +98,6 @@ didReceiveResponse:(NSURLResponse *)response
 //            [self.tableView reloadData];
             [self setEsmSchedulesWithJSONData:data];
         });
-        
     }
     [session finishTasksAndInvalidate];
     [session invalidateAndCancel];
@@ -127,10 +126,11 @@ didReceiveResponse:(NSURLResponse *)response
     
     NSMutableArray * awareSchedules = [[NSMutableArray alloc] init];
     
-//    NSDate * testFireDate = [self getTargetTimeAsNSDate:[NSDate new] hour:22 minute:17 second:0];
-//    AWARESchedule * awareSchedule = [self getDringSchedule];
-//    awareSchedule.schedule = testFireDate;
-//    [awareSchedules addObject:awareSchedule];
+//    NSDate * testFireDate = [self getTargetTimeAsNSDate:[NSDate new] hour:17 minute:15 second:0];
+    AWARESchedule * awareSchedule = [self getDringSchedule];
+    awareSchedule.schedule = [NSDate new];
+    [awareSchedule setScheduleType:SCHEDULE_INTERVAL_TEST];
+    [awareSchedules addObject:awareSchedule];
     
     for (NSDictionary * schedule in schedules) {
         NSString * notificationTitle = @"BlancedCampus Question";
@@ -200,11 +200,11 @@ didReceiveResponse:(NSURLResponse *)response
 //    emotionTwo.schedule = [self getTargetTimeAsNSDate:now hour:13];
 //    emotionThree.schedule = [self getTargetTimeAsNSDate:now hour:17];
 //    emotionFour.schedule = [self getTargetTimeAsNSDate:now hour:21];
-//    [emotionFour setScheduleType:SCHEDULE_INTERVAL_TEST];
+////    [emotionFour setScheduleType:SCHEDULE_INTERVAL_TEST];
 //    
 //    test.schedule = now;
-//    drinkTwo.schedule = now; //[self getTargetTimeAsNSDate:now hour:21 minute:52 second:0];
-//    emotionFour.schedule = now;//[self getTargetTimeAsNSDate:now hour:13 minute:5 second:0];
+////    drinkTwo.schedule = now; //[self getTargetTimeAsNSDate:now hour:21 minute:52 second:0];
+////    emotionFour.schedule = now;//[self getTargetTimeAsNSDate:now hour:13 minute:5 second:0];
 ////    [emotionFour setScheduleType:SCHEDULE_INTERVAL_TEST];
 //    
 //    // Add maked schedules to schedules
@@ -622,7 +622,7 @@ didReceiveResponse:(NSURLResponse *)response
                                                                                    submit:submit
                                                                       expirationThreshold:exprationThreshold
                                                                                   trigger:trigger
-                                                                                likertMax:@5
+                                                                                likertMax:@7
                                                                            likertMaxLabel:@"3"
                                                                            likertMinLabel:@""
                                                                                likertStep:@1];

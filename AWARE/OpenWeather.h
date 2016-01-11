@@ -10,8 +10,7 @@
 #import <CoreLocation/CoreLocation.h>
 #import "AWARESensor.h"
 
-@interface OpenWeather : AWARESensor <AWARESensorDelegate, CLLocationManagerDelegate>
-{
+@interface OpenWeather : AWARESensor <AWARESensorDelegate, CLLocationManagerDelegate, NSURLSessionDataDelegate, NSURLSessionTaskDelegate> {
 //    NSString* deviceOrientation;
 //    NSString* proximity;
     NSDictionary* jsonWeatherData;
