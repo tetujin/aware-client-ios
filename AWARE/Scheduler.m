@@ -29,7 +29,7 @@
         NSString* configUrl = @"http://www.ht.sfc.keio.ac.jp/~tetujin/aware/test.json";
         NSMutableDictionary * dic = [[NSMutableDictionary alloc] init];
         [dic setObject:configUrl forKey:@"configUrl"];
-        dailyQuestionUpdateTimer = [[NSTimer alloc] initWithFireDate:[self getTargetTimeAsNSDate:[NSDate new] hour:3 minute:0 second:0]
+        dailyQuestionUpdateTimer = [[NSTimer alloc] initWithFireDate:[self getTargetTimeAsNSDate:[NSDate new] hour:19 minute:0 second:0]
                                                             interval:60*60*24
                                                             target:self
                                                             selector:@selector(setConfigFile:)
@@ -194,7 +194,6 @@ didReceiveResponse:(NSURLResponse *)response
 //    
 //    // Set Notification Time using -getTargetTimeAsNSDate:hour:minute:second method.
 //    NSDate * now = [NSDate new];
-//    test.schedule = now;
 //    drinkOne.schedule = [self getTargetTimeAsNSDate:now hour:9];
 //    drinkTwo.schedule = [self getTargetTimeAsNSDate:now hour:1];
 //    emotionOne.schedule = [self getTargetTimeAsNSDate:now hour:9];
@@ -203,9 +202,10 @@ didReceiveResponse:(NSURLResponse *)response
 //    emotionFour.schedule = [self getTargetTimeAsNSDate:now hour:21];
 //    [emotionFour setScheduleType:SCHEDULE_INTERVAL_TEST];
 //    
+//    test.schedule = now;
 //    drinkTwo.schedule = now; //[self getTargetTimeAsNSDate:now hour:21 minute:52 second:0];
-//    emotionFour.schedule = [NSDate new];//[self getTargetTimeAsNSDate:now hour:13 minute:5 second:0];
-//    [emotionFour setScheduleType:SCHEDULE_INTERVAL_TEST];
+//    emotionFour.schedule = now;//[self getTargetTimeAsNSDate:now hour:13 minute:5 second:0];
+////    [emotionFour setScheduleType:SCHEDULE_INTERVAL_TEST];
 //    
 //    // Add maked schedules to schedules
 //    // Set a New ESMSchedule to a SchduleManager
@@ -218,7 +218,7 @@ didReceiveResponse:(NSURLResponse *)response
 //    [schedules addObject:emotionTwo];
 //    [schedules addObject:emotionThree];
 //    [schedules addObject:emotionFour];
-    
+//    
 //    [self startSchedules:schedules];
     
     return NO;

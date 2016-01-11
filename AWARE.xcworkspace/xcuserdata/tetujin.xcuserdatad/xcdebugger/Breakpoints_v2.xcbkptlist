@@ -166,16 +166,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "AWARE/AWAREStudy.m"
-            timestampString = "474118651.64136"
+            filePath = "AWARE/Screen.m"
+            timestampString = "474166221.797069"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "334"
-            endingLineNumber = "334"
-            landmarkName = "-createTable:withDeviceId:"
+            startingLineNumber = "102"
+            endingLineNumber = "102"
+            landmarkName = "-registerAppforDetectDisplayStatus"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

@@ -344,6 +344,7 @@
 - (void) syncAwareDBWithSensorName:(NSString*) sensorName {
     if (!wifiState) {
         NSLog(@"You need wifi network to upload sensor data.");
+        previusUploadingState = NO;
         return;
     }
     

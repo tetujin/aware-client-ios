@@ -139,29 +139,30 @@
                 if (pluginState) {
                     if ([key isEqualToString:SENSOR_PLUGIN_GOOGLE_ACTIVITY_RECOGNITION]) {
                         awareSensor = [[ActivityRecognition alloc] initWithSensorName:SENSOR_PLUGIN_GOOGLE_ACTIVITY_RECOGNITION];
-                        [awareSensor startSensor:uploadTime withSettings:settings];
+                        [awareSensor startSensor:uploadTime withSettings:pluginSettings];
                     }else if([key isEqualToString:SENSOR_AMBIENT_NOISE]){
                         awareSensor = [[AmbientNoise alloc] initWithSensorName:SENSOR_AMBIENT_NOISE];
-                        [awareSensor startSensor:uploadTime withSettings:settings];
+                        [awareSensor startSensor:uploadTime withSettings:pluginSettings];
                     }else if([key isEqualToString:SENSOR_PLUGIN_OPEN_WEATHER]){
                         awareSensor = [[OpenWeather alloc] initWithSensorName:SENSOR_PLUGIN_OPEN_WEATHER];
-                        [awareSensor startSensor:uploadTime withSettings:settings];
+                        [awareSensor startSensor:uploadTime withSettings:pluginSettings];
                     }else if([key isEqualToString:SENSOR_PLUGIN_DEVICE_USAGE]){
                         awareSensor = [[DeviceUsage alloc] initWithSensorName:SENSOR_PLUGIN_DEVICE_USAGE];
-                        [awareSensor startSensor:uploadTime withSettings:settings];
+                        [awareSensor startSensor:uploadTime withSettings:pluginSettings];
                     }else if([key isEqualToString:SENSOR_PLUGIN_NTPTIME]){
                         awareSensor = [[NTPTime alloc] initWithSensorName:SENSOR_PLUGIN_NTPTIME];
-                        [awareSensor startSensor:uploadTime withSettings:settings];
+                        [awareSensor startSensor:uploadTime withSettings:pluginSettings];
                     }else if([key isEqualToString:SENSOR_PLUGIN_MSBAND]){
                         awareSensor = [[MSBand alloc] initWithPluginName:SENSOR_PLUGIN_MSBAND deviceId:deviceId];
-                        [awareSensor startSensor:uploadTime withSettings:settings];
+                        [awareSensor startSensor:uploadTime withSettings:pluginSettings];
                     }else if([key isEqualToString:SENSOR_PLUGIN_GOOGLE_CAL_PULL]){
                         awareSensor = [[GoogleCalPull alloc] initWithSensorName:SENSOR_PLUGIN_GOOGLE_CAL_PULL];
-                        [awareSensor startSensor:uploadTime withSettings:settings];
+                        [awareSensor startSensor:uploadTime withSettings:pluginSettings];
                     }else if([key isEqualToString:SENSOR_PLUGIN_GOOGLE_LOGIN]){
                         awareSensor = [[GoogleLogin alloc] initWithSensorName:SENSOR_PLUGIN_GOOGLE_LOGIN];
-                        [awareSensor startSensor:uploadTime withSettings:settings];
+                        [awareSensor startSensor:uploadTime withSettings:pluginSettings];
                     }
+                    break;
                 }
             }
         }
@@ -182,6 +183,7 @@
 
 - (void)stopAllSensors{
     for (AWARESensor* sensor in awareSensors) {
+        NSLog(@"Stop %@ sensor.", [sensor getSensorName]);
         [sensor stopSensor];
     }
     awareSensors = [[NSMutableArray alloc] init];

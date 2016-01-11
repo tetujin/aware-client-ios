@@ -352,10 +352,9 @@
             }
         }
     }
-//
-
-    
 }
+
+
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
     NSLog(@"%@",[alertView textFieldAtIndex:0].text);
     NSInteger tag = alertView.tag;
@@ -457,22 +456,13 @@
          forControlEvents:UIControlEventTouchUpInside];
     [maxLabel setText: [NSString stringWithFormat:@"%d", (int)roundf(curentValue) ]];
 
-    
     // for N/A option
-//    UISlider *slider = [[UISlider alloc] initWithFrame:CGRectMake(mainContentRect.origin.x+60, totalHight, mainContentRect.size.width-120, 31)];
-//    UIButton * naCheckBox = [[UIButton alloc] initWithFrame:CGRectMake(mainContentRect.origin.x,
-//                                                                       totalHight+30,
-//                                                                       30, 30)];
-//    [naCheckBox setImage:[UIImage imageNamed:@"checked_box"] forState:UIControlStateNormal];
-//    naCheckBox.tag = tag;
-//    UILabel * label = [[UILabel alloc] initWithFrame:CGRectMake(mainContentRect.origin.x+40,
-//                                                                totalHight+30,
-//                                                                mainContentRect.size.width-90, 30)];
     UIButton * naCheckBox = [[UIButton alloc] initWithFrame:CGRectMake(mainContentRect.origin.x,
                                                                        totalHight+30,
                                                                        30, 30)];
     [naCheckBox setImage:[UIImage imageNamed:@"checked_box"] forState:UIControlStateNormal];
     naCheckBox.tag = tag;
+    naCheckBox.selected = YES;
     UILabel * label = [[UILabel alloc] initWithFrame:CGRectMake(mainContentRect.origin.x+10+40,
                                                                 totalHight+30,
                                                                 mainContentRect.size.width-90,
@@ -602,16 +592,16 @@
 //add Scale Element
 - (void) addScaleElement:(NSDictionary *) dic withTag:(int) tag{
     [self addCommonContents:dic];
-    UILabel *minLabel = [[UILabel alloc] initWithFrame:CGRectMake(mainContentRect.origin.x,totalHight, 60, 31)];
+//    UILabel *minLabel = [[UILabel alloc] initWithFrame:CGRectMake(mainContentRect.origin.x,totalHight, 60, 31)];
     UISlider *slider = [[UISlider alloc] initWithFrame:CGRectMake(mainContentRect.origin.x+60, totalHight, mainContentRect.size.width-120, 31)];
     UILabel *maxLabel = [[UILabel alloc] initWithFrame:CGRectMake(mainContentRect.origin.x+mainContentRect.size.width -60, totalHight, 30, 31)];
     [maxLabel setTag:totalHight];
     
     NSNumber *max = [dic objectForKey:KEY_ESM_SCALE_MAX];
-    NSNumber *min = [dic objectForKey:KEY_ESM_SCALE_MIN];
+//    NSNumber *min = [dic objectForKey:KEY_ESM_SCALE_MIN];
     NSNumber *start = [dic objectForKey:KEY_ESM_SCALE_START];
     [slider setMaximumValue: [max floatValue] ];
-    [slider setMinimumValue: [min floatValue] ];
+//    [slider setMinimumValue: [min floatValue] ];
     [slider setValue:[start floatValue]];
     slider.tag = tag;
     [slider addTarget:self
@@ -619,7 +609,7 @@
      forControlEvents:UIControlEventTouchUpInside];
     
     [maxLabel setText:[dic objectForKey:KEY_ESM_SCALE_MAX_LABEL]];
-    [minLabel setText:[dic objectForKey:KEY_ESM_SCALE_MIN_LABEL]];
+//    [minLabel setText:[dic objectForKey:KEY_ESM_SCALE_MIN_LABEL]];
 //    [_mainScrollView addSubview:minLabel];
     
 //    UIButton * naCheckBox = [[UIButton alloc] initWithFrame:CGRectMake(mainContentRect.origin.x+60, totalHight+30+10, 30 , 30 )];
@@ -632,6 +622,7 @@
                                                                        30, 30)];
     [naCheckBox setImage:[UIImage imageNamed:@"checked_box"] forState:UIControlStateNormal];
     naCheckBox.tag = tag;
+    naCheckBox.selected = YES;
     UILabel * label = [[UILabel alloc] initWithFrame:CGRectMake(mainContentRect.origin.x+10+40,
                                                                 totalHight+30+10,
                                                                 mainContentRect.size.width-90,
@@ -648,7 +639,7 @@
     
     [_mainScrollView addSubview:slider];
     [_mainScrollView addSubview:maxLabel];
-    [_mainScrollView addSubview:minLabel];
+//    [_mainScrollView addSubview:minLabel];
     [_mainScrollView addSubview:naCheckBox];
     [_mainScrollView addSubview:label];
     
@@ -692,14 +683,15 @@
                action:@selector(setNaBoxFolse:)
      forControlEvents:UIControlEventValueChanged];
     
-    
+    int datePickerHight = datePicker.frame.size.height;
     UIButton * naCheckBox = [[UIButton alloc] initWithFrame:CGRectMake(mainContentRect.origin.x,
-                                                                       totalHight+100+10,
+                                                                       totalHight+datePickerHight+10,
                                                                        30, 30)];
     [naCheckBox setImage:[UIImage imageNamed:@"checked_box"] forState:UIControlStateNormal];
     naCheckBox.tag = tag;
+    naCheckBox.selected = YES;
     UILabel * label = [[UILabel alloc] initWithFrame:CGRectMake(mainContentRect.origin.x+10+40,
-                                                                totalHight+100+10,
+                                                                totalHight+datePickerHight +10,
                                                                 mainContentRect.size.width-90,
                                                                 30)];
     label.adjustsFontSizeToFitWidth = YES;
@@ -712,7 +704,7 @@
     [_mainScrollView addSubview:datePicker];
     [_mainScrollView addSubview:naCheckBox];
     [_mainScrollView addSubview:label];
-    [self setContentSizeWithAdditionalHeight:100 + 10 + 30];
+    [self setContentSizeWithAdditionalHeight:datePickerHight + 10 + 30];
     
     
     NSMutableArray * elements = [[NSMutableArray alloc] init];
@@ -803,15 +795,19 @@
     
     NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
     NSNumber* unixtime = [NSNumber numberWithDouble:timeStamp];
+    NSString * deviceId = [esm getDeviceId];
     
     for (int i=0; i<uiElements.count; i++) {
         NSDictionary *esmDic = [[uiElements objectAtIndex:i] objectForKey:KEY_OBJECT];
         NSArray * contents = [[uiElements objectAtIndex:i] objectForKey:KEY_ELEMENT];
         NSArray * labels = [[uiElements objectAtIndex:i] objectForKey:KEY_LABLES];
-        
         NSMutableDictionary *dic = [self getEsmFormatDictionary:(NSMutableDictionary *)esmDic
                                                    withTimesmap:unixtime
-                                                        devieId:[esm getDeviceId]];
+                                                        devieId:deviceId];
+        [dic setObject:unixtime forKey:@"timestamp"];
+        [dic setObject:unixtime forKey:KEY_ESM_USER_ANSWER_TIMESTAMP];
+        [dic setObject:deviceId forKey:@"device_id"];
+        [dic setObject:@0 forKey:KEY_ESM_STATUS]; // 0:new 1:dismiss -> Defualt is zero(0).
         // add special data to dic from each uielements
         NSNumber* type = [esmDic objectForKey:KEY_ESM_TYPE];
         // save each data to the dictionary
@@ -943,6 +939,7 @@
             [self.navigationController popToRootViewControllerAnimated:YES];
         } else{
             [self dismissViewControllerAnimated:YES completion:nil];
+            [self viewDidAppear:NO];
         }
        
     } else {
@@ -1015,14 +1012,58 @@
     [submitBtn addTarget:self action:@selector(pushedSubmitButton:) forControlEvents:UIControlEventTouchUpInside];
 }
 
+
+
 - (void) pushedCancelButton:(id) senser {
     NSLog(@"Cancel button was pushed!");
+    
+    // If the local esm storage stored some esms,(1)AWARE iOS save the answer as cancel(dismiss). In addition, (2)UI view moves to a next stored esm.
+    // Answers object
+    NSMutableArray *answers = [[NSMutableArray alloc] init];
+    
+    // Create
+    ESM *esm = [[ESM alloc] initWithSensorName:SENSOR_ESMS];
+    NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
+    NSNumber* unixtime = [NSNumber numberWithDouble:timeStamp];
+    NSString *deviceId = [esm getDeviceId];
+    for (int i=0; i<uiElements.count; i++) {
+        NSDictionary *esmDic = [[uiElements objectAtIndex:i] objectForKey:KEY_OBJECT];
+        NSMutableDictionary *dic = [self getEsmFormatDictionary:(NSMutableDictionary *)esmDic
+                                                   withTimesmap:unixtime
+                                                        devieId:deviceId];
+        [dic setObject:unixtime forKey:@"timestamp"];
+        [dic setObject:deviceId forKey:@"device_id"];
+        // set answerd timestamp with KEY_ESM_USER_ANSWER_TIMESTAMP
+        [dic setObject:unixtime forKey:KEY_ESM_USER_ANSWER_TIMESTAMP];
+        // Set "dismiss" status to KEY_ESM_STATUS. //TODO: Check!
+        [dic setObject:@1 forKey:KEY_ESM_STATUS];
+        // Add the esm to answer object.
+        [answers addObject:dic];
+    }
+    // Save the answers to the local storage.
+    [esm saveDataWithArray:answers];
+    // Sync with AWARE database immediately
+    [esm performSelector:@selector(syncAwareDB) withObject:0 afterDelay:5];
+    
+    // Remove the answerd ESM from local storage.
+    ESMStorageHelper * helper = [[ESMStorageHelper alloc] init];
+    [helper removeEsmWithText:currentTextOfEsm];
+    
+    // If the local esm storage is empty, the UIView move to the top-page.
+    if([helper getEsmTexts].count > 0){
+        [self viewDidAppear:NO];
+        return ;
+    }
+    
     CGFloat currentVersion = [[[UIDevice currentDevice] systemVersion] floatValue];
     if (currentVersion >= 9.0) {
+        //            [self.navigationController.navigationBar setDelegate:self];
         [self.navigationController popToRootViewControllerAnimated:YES];
     } else{
         [self dismissViewControllerAnimated:YES completion:nil];
+        [self viewDidAppear:NO];
     }
+ 
 }
 
 

@@ -265,22 +265,22 @@
 
     
     //for test
-    AWARESensor *msBand = [[MSBand alloc] initWithPluginName:SENSOR_PLUGIN_MSBAND deviceId:deviceId];
-    [msBand startSensor:60.0f * 15.0f withSettings:nil];
-    [_sensorManager addNewSensor:msBand];
-
-    
-    AWARESensor* googleCalPull = [[GoogleCalPull alloc] initWithSensorName:SENSOR_PLUGIN_GOOGLE_CAL_PULL];
-    [googleCalPull startSensor:60.0f* 15.0f  withSettings:nil];
-    [_sensorManager addNewSensor:googleCalPull];
-    
-    AWARESensor* googleCalPush = [[GoogleCalPush alloc] initWithSensorName:SENSOR_PLUGIN_GOOGLE_CAL_PUSH];
-    [googleCalPush startSensor:60.0f* 15.0f  withSettings:nil];
-    [_sensorManager addNewSensor:googleCalPush];
-
-    AWARESensor* scheduler = [[Scheduler alloc] initWithSensorName:SENSOR_SCHEDULER];
-    [scheduler startSensor:60.0f*15.0f  withSettings:nil];
-    [_sensorManager addNewSensor:scheduler];
+//    AWARESensor *msBand = [[MSBand alloc] initWithPluginName:SENSOR_PLUGIN_MSBAND deviceId:deviceId];
+//    [msBand startSensor:60.0f * 15.0f withSettings:nil];
+//    [_sensorManager addNewSensor:msBand];
+//
+//    
+//    AWARESensor* googleCalPull = [[GoogleCalPull alloc] initWithSensorName:SENSOR_PLUGIN_GOOGLE_CAL_PULL];
+//    [googleCalPull startSensor:60.0f* 15.0f  withSettings:nil];
+//    [_sensorManager addNewSensor:googleCalPull];
+//    
+//    AWARESensor* googleCalPush = [[GoogleCalPush alloc] initWithSensorName:SENSOR_PLUGIN_GOOGLE_CAL_PUSH];
+//    [googleCalPush startSensor:60.0f* 15.0f  withSettings:nil];
+//    [_sensorManager addNewSensor:googleCalPush];
+//
+//    AWARESensor* scheduler = [[Scheduler alloc] initWithSensorName:SENSOR_SCHEDULER];
+//    [scheduler startSensor:60.0f*15.0f  withSettings:nil];
+//    [_sensorManager addNewSensor:scheduler];
 }
 
 
