@@ -46,7 +46,8 @@ NSString* const KEY_ESM_SCALE_STEP = @"esm_scale_step";
 - (void) setEsm:(NSDictionary *) esmObject {
     
     NSDictionary * esm = [esmObject objectForKey:@"esm"];
-    
+    _esmObjectWithKey = [[NSMutableDictionary alloc] initWithDictionary:esmObject];
+    _esmObject = [[NSMutableDictionary alloc] initWithDictionary:esm];
     _type = [NSNumber numberWithInteger:[[esm objectForKey:KEY_ESM_TYPE] integerValue]];
     _title = [esm objectForKey:KEY_ESM_TITLE];
     _submit = [esm objectForKey:KEY_ESM_SUBMIT];

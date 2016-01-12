@@ -317,6 +317,7 @@
     return YES;
 }
 
+
 - (void) storeChanged:(NSNotification *) notification {
     NSLog(@"Cal event id updated !!!");
     
@@ -450,7 +451,7 @@
     
 //    NSString* seek = @"";
     
-    NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
+    NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970] * 10000;
     NSNumber* unixtime = [NSNumber numberWithDouble:timeStamp];
     NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
     [dic setObject:unixtime forKey:@"timestamp"];

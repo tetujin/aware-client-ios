@@ -229,7 +229,9 @@
         [bufferStr setString:@""];
         [self setWriteableNO];
     }else{
-        NSLog(@"[%@] writable time is false.", [self getSensorName]);
+        if (!blancerState) {
+            NSLog(@"[%@] writable time is false.", [self getSensorName]);
+        }
     }
     return YES;
 }

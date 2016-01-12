@@ -213,7 +213,7 @@ didReceiveResponse:(NSURLResponse *)response
     // preparing for insert device information
     url = [NSString stringWithFormat:@"%@/aware_device/insert", url];
     NSMutableDictionary *jsonQuery = [[NSMutableDictionary alloc] init];
-    NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
+    NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970] * 10000;
     NSNumber* unixtime = [NSNumber numberWithDouble:timeStamp] ;
     struct utsname systemInfo;
     uname(&systemInfo);

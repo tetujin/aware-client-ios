@@ -80,8 +80,13 @@ extern NSString* const KEY_ESM_SCALE_STEP;
 //extern NSString* const KEY_ESM_SCALE_STEP;
 @property (strong, nonatomic) IBOutlet NSNumber * scaleStep;
 
+@property (strong, nonatomic) IBOutlet NSMutableDictionary * esmObject;
+@property (strong, nonatomic) IBOutlet NSMutableDictionary * esmObjectWithKey;
+
+
 - (bool) isSingleEsm;
 //- (NSMutableDictionary*) getEsmDictionaryWithDeviceId:(NSString*)deviceId timestamp:(double) timestamp;
+
 
 - (NSMutableDictionary*) getEsmDictionaryWithDeviceId:(NSString*)deviceId
                                             timestamp:(double) timestamp

@@ -55,7 +55,7 @@
                                                NSNumber *pressure_value = altitudeData.pressure;
                                                double pressure_f = [pressure_value doubleValue];
 //                                               self.pressureLabel.text = [NSString stringWithFormat:@"%.2f [hPa]", pressure_f*10];
-                                               NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
+                                               NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970] * 10000;
                                                NSNumber* unixtime = [NSNumber numberWithDouble:timeStamp];
                                                NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
                                                [dic setObject:unixtime forKey:@"timestamp"];

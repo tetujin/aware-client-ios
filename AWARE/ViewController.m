@@ -71,9 +71,11 @@
     // daily study update
     NSDate* dailyUpdateTime = [self getTargetTimeAsNSDate:[NSDate date] hour:3 minute:0 second:0];
     dailyUpdateTimer = [[NSTimer alloc] initWithFireDate:dailyUpdateTime
-                             interval:60*60*24
-                               target:self selector:@selector(pushedStudyRefreshButton:) userInfo:nil
-                              repeats:YES];
+                                                interval:60*60*24
+                                                  target:self
+                                                selector:@selector(pushedStudyRefreshButton:)
+                                                userInfo:nil
+                                                 repeats:YES];
 //    [dailyUpdateTimer fire];
     NSRunLoop *runLoop = [NSRunLoop currentRunLoop];
     [runLoop addTimer:dailyUpdateTimer forMode:NSDefaultRunLoopMode];// NSRunLoopCommonModes];//
@@ -112,16 +114,6 @@
 
 - (void)appDidBecomeActive:(NSNotification *)notification {
     NSLog(@"did become active notification");
-//    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-//    NSString* scheduleId = [defaults objectForKey:@"schedule_id"];
-//    if (scheduleId != nil) {
-//        [self performSegueWithIdentifier:@"esmView" sender:self];
-//    } else {
-//        NSLog(@"-------");
-//    }
-    
-//    AWAREScheduleManager * manager = [[AWAREScheduleManager alloc] init];
-//    NSArray * esms = [manager getEsmObjects];
     ESMStorageHelper * helper = [[ESMStorageHelper alloc] init];
     NSArray * storedEsms = [helper getEsmTexts];
     if(storedEsms != nil){
@@ -143,7 +135,6 @@
         AWAREEsmViewController *esmView = [segue destinationViewController];    // <- 1
 //        esmView.scheduleManager = scheduleManager;    // <- 2
     }
-//    }
 }
 
 
@@ -273,14 +264,14 @@
 //    AWARESensor* googleCalPull = [[GoogleCalPull alloc] initWithSensorName:SENSOR_PLUGIN_GOOGLE_CAL_PULL];
 //    [googleCalPull startSensor:60.0f* 15.0f  withSettings:nil];
 //    [_sensorManager addNewSensor:googleCalPull];
-//    
-    AWARESensor* googleCalPush = [[GoogleCalPush alloc] initWithSensorName:SENSOR_PLUGIN_GOOGLE_CAL_PUSH];
-    [googleCalPush startSensor:60.0f* 15.0f  withSettings:nil];
-    [_sensorManager addNewSensor:googleCalPush];
-
-    AWARESensor* scheduler = [[Scheduler alloc] initWithSensorName:SENSOR_SCHEDULER];
-    [scheduler startSensor:60.0f*15.0f  withSettings:nil];
-    [_sensorManager addNewSensor:scheduler];
+//
+//    AWARESensor* googleCalPush = [[GoogleCalPush alloc] initWithSensorName:SENSOR_PLUGIN_GOOGLE_CAL_PUSH];
+//    [googleCalPush startSensor:60.0f* 15.0f  withSettings:nil];
+//    [_sensorManager addNewSensor:googleCalPush];
+//
+//    AWARESensor* scheduler = [[Scheduler alloc] initWithSensorName:SENSOR_SCHEDULER];
+//    [scheduler startSensor:60.0f*15.0f  withSettings:nil];
+//    [_sensorManager addNewSensor:scheduler];
 }
 
 

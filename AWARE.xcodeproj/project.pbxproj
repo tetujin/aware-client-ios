@@ -12,10 +12,6 @@
 		160EE9BD1C050B4C00015688 /* Bluetooth.m in Sources */ = {isa = PBXBuildFile; fileRef = 160EE9BC1C050B4C00015688 /* Bluetooth.m */; };
 		160EE9BF1C050B9000015688 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 160EE9BE1C050B9000015688 /* CoreBluetooth.framework */; };
 		160EE9C31C052DAA00015688 /* OpenWeather.m in Sources */ = {isa = PBXBuildFile; fileRef = 160EE9C21C052DAA00015688 /* OpenWeather.m */; };
-		16228A3C1C22DAE20081C839 /* NotificationCenter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16228A3B1C22DAE20081C839 /* NotificationCenter.framework */; };
-		16228A401C22DAE20081C839 /* TodayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 16228A3F1C22DAE20081C839 /* TodayViewController.m */; };
-		16228A431C22DAE20081C839 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 16228A411C22DAE20081C839 /* MainInterface.storyboard */; };
-		16228A471C22DAE20081C839 /* AWARE-Widget.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 16228A3A1C22DAE20081C839 /* AWARE-Widget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		16228A511C22E9FE0081C839 /* AWARESchedule.m in Sources */ = {isa = PBXBuildFile; fileRef = 16228A501C22E9FE0081C839 /* AWARESchedule.m */; };
 		1623CE6B1BFD1B2C00EFAD72 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1623CE6A1BFD1B2C00EFAD72 /* main.m */; };
 		1623CE6E1BFD1B2C00EFAD72 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1623CE6D1BFD1B2C00EFAD72 /* AppDelegate.m */; };
@@ -87,13 +83,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		16228A451C22DAE20081C839 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 1623CE5E1BFD1B2C00EFAD72 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 16228A391C22DAE20081C839;
-			remoteInfo = "AWARE-Widget";
-		};
 		1623CE831BFD1B2C00EFAD72 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 1623CE5E1BFD1B2C00EFAD72 /* Project object */;
@@ -117,7 +106,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				16228A471C22DAE20081C839 /* AWARE-Widget.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -135,7 +123,6 @@
 		160EE9BE1C050B9000015688 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
 		160EE9C11C052DAA00015688 /* OpenWeather.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenWeather.h; sourceTree = "<group>"; };
 		160EE9C21C052DAA00015688 /* OpenWeather.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenWeather.m; sourceTree = "<group>"; };
-		16228A3A1C22DAE20081C839 /* AWARE-Widget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "AWARE-Widget.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		16228A3B1C22DAE20081C839 /* NotificationCenter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NotificationCenter.framework; path = System/Library/Frameworks/NotificationCenter.framework; sourceTree = SDKROOT; };
 		16228A3E1C22DAE20081C839 /* TodayViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TodayViewController.h; sourceTree = "<group>"; };
 		16228A3F1C22DAE20081C839 /* TodayViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TodayViewController.m; sourceTree = "<group>"; };
@@ -259,14 +246,6 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		16228A371C22DAE20081C839 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				16228A3C1C22DAE20081C839 /* NotificationCenter.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		1623CE631BFD1B2C00EFAD72 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -352,7 +331,6 @@
 				1623CE661BFD1B2C00EFAD72 /* AWARE.app */,
 				1623CE821BFD1B2C00EFAD72 /* AWARETests.xctest */,
 				1623CE8D1BFD1B2C00EFAD72 /* AWAREUITests.xctest */,
-				16228A3A1C22DAE20081C839 /* AWARE-Widget.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -633,23 +611,6 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		16228A391C22DAE20081C839 /* AWARE-Widget */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 16228A4A1C22DAE20081C839 /* Build configuration list for PBXNativeTarget "AWARE-Widget" */;
-			buildPhases = (
-				16228A361C22DAE20081C839 /* Sources */,
-				16228A371C22DAE20081C839 /* Frameworks */,
-				16228A381C22DAE20081C839 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = "AWARE-Widget";
-			productName = "AWARE-Widget";
-			productReference = 16228A3A1C22DAE20081C839 /* AWARE-Widget.appex */;
-			productType = "com.apple.product-type.app-extension";
-		};
 		1623CE651BFD1B2C00EFAD72 /* AWARE */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1623CE961BFD1B2C00EFAD72 /* Build configuration list for PBXNativeTarget "AWARE" */;
@@ -665,7 +626,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				16228A461C22DAE20081C839 /* PBXTargetDependency */,
 			);
 			name = AWARE;
 			productName = AWARE;
@@ -717,10 +677,6 @@
 				LastUpgradeCheck = 0710;
 				ORGANIZATIONNAME = "Yuuki NISHIYAMA";
 				TargetAttributes = {
-					16228A391C22DAE20081C839 = {
-						CreatedOnToolsVersion = 7.1;
-						DevelopmentTeam = FH352PYMNC;
-					};
 					1623CE651BFD1B2C00EFAD72 = {
 						CreatedOnToolsVersion = 7.1;
 						DevelopmentTeam = FH352PYMNC;
@@ -780,20 +736,11 @@
 				1623CE651BFD1B2C00EFAD72 /* AWARE */,
 				1623CE811BFD1B2C00EFAD72 /* AWARETests */,
 				1623CE8C1BFD1B2C00EFAD72 /* AWAREUITests */,
-				16228A391C22DAE20081C839 /* AWARE-Widget */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		16228A381C22DAE20081C839 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				16228A431C22DAE20081C839 /* MainInterface.storyboard in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		1623CE641BFD1B2C00EFAD72 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -873,14 +820,6 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		16228A361C22DAE20081C839 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				16228A401C22DAE20081C839 /* TodayViewController.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		1623CE621BFD1B2C00EFAD72 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -953,11 +892,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		16228A461C22DAE20081C839 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 16228A391C22DAE20081C839 /* AWARE-Widget */;
-			targetProxy = 16228A451C22DAE20081C839 /* PBXContainerItemProxy */;
-		};
 		1623CE841BFD1B2C00EFAD72 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 1623CE651BFD1B2C00EFAD72 /* AWARE */;
@@ -998,37 +932,6 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		16228A481C22DAE20081C839 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				INFOPLIST_FILE = "AWARE-Widget/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "jp.ac.keio.sfc.ht.tetujin.AWARE.AWARE-Widget";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				SKIP_INSTALL = YES;
-			};
-			name = Debug;
-		};
-		16228A491C22DAE20081C839 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				INFOPLIST_FILE = "AWARE-Widget/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "jp.ac.keio.sfc.ht.tetujin.AWARE.AWARE-Widget";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				SKIP_INSTALL = YES;
-			};
-			name = Release;
-		};
 		1623CE941BFD1B2C00EFAD72 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1214,15 +1117,6 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		16228A4A1C22DAE20081C839 /* Build configuration list for PBXNativeTarget "AWARE-Widget" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				16228A481C22DAE20081C839 /* Debug */,
-				16228A491C22DAE20081C839 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		1623CE611BFD1B2C00EFAD72 /* Build configuration list for PBXProject "AWARE" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

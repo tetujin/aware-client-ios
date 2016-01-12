@@ -29,7 +29,7 @@
         [self managedObjectContext];
         [self managedObjectModel];
         [self persistentStoreCoordinator];
-        AWARE_CAL_NAME = @"AWARE Calendar";
+        AWARE_CAL_NAME = @"BalancedCampusJournal";
         miniDistrance = 15;
         interval = 60;
         store = [[EKEventStore alloc] init];
@@ -48,7 +48,7 @@
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings {
     
     [self setDailyNotification];
-    [self startLocationSensor];
+//    [self startLocationSensor];
 
     return YES;
 }
@@ -81,6 +81,9 @@
     //https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/Timers/Articles/usingTimers.html
     NSRunLoop *runLoop = [NSRunLoop currentRunLoop];
     [runLoop addTimer:calendarUpdateTimer forMode:NSDefaultRunLoopMode];
+    
+    
+//    [self checkAllEvents:nil];
 }
 
 - (void) checkAllEvents:(id) sender {
@@ -91,7 +94,7 @@
     // Get the aware calendar in Google Calendars
     for (EKCalendar * cal in [store calendarsForEntityType:EKEntityTypeEvent]) {
         NSLog(@"[%@] %@", cal.title, cal.calendarIdentifier );
-        if ([cal.title isEqualToString:@"AWARE Calendar"]) {
+        if ([cal.title isEqualToString:AWARE_CAL_NAME]) {
             awareCal = cal;
         }
     }
@@ -125,7 +128,7 @@
         }
 //        NSLog(@"count %@", ekEvent);
     }];
-    
+
     
     // == Make new events (Aware Events), and Get Null events ==
     NSMutableArray * nullTimes = [[NSMutableArray alloc] init];
@@ -134,7 +137,7 @@
     lastEvent.endDate   = [self getTargetTimeAsNSDate:[NSDate date] hour:0 minute:0 second:0];
     
     NSMutableArray * awareEvents = [[NSMutableArray alloc] initWithArray:currentEvents];
-    for (EKEvent * event in awareEvents) {
+    for ( EKEvent * event in awareEvents ) {
         NSLog(@"%@", event.notes);
         EKEvent * awareEvent = [EKEvent eventWithEventStore:store];
         // Add questions to a note of aware events
@@ -161,6 +164,7 @@
         lastEvent = event;
     }
     
+    // Add last NSDate to NullEvents
     NSDate * endOfTimeToday = [self getTargetTimeAsNSDate:[NSDate date] hour:24 minute:0 second:0];
     NSDate * lastEventEndDate = lastEvent.endDate;
     double gap = [endOfTimeToday timeIntervalSince1970] - [lastEventEndDate timeIntervalSince1970];
@@ -168,97 +172,170 @@
         [nullTimes addObject:[[NSArray alloc] initWithObjects:lastEventEndDate,endOfTimeToday,nil]];
     }
     
+    NSMutableArray *hours = [[NSMutableArray alloc] init];
+    for (int i=0; i<25; i++) {
+        NSDate * today = [NSDate date];
+        [hours addObject:[self getTargetTimeAsNSDate:today hour:i minute:0 second:0]];
+    }
     
-    // == Make pre-determinate events from visit events, and add events to aware calendars ==
     for (NSArray * times in nullTimes) {
         NSDate * nullStart = [times objectAtIndex:0];
         NSDate * nullEnd = [times objectAtIndex:1];
-        
-        //Get Visit Information
-        NSFetchRequest *searchRequest = [[NSFetchRequest alloc] init];
-        [searchRequest setEntity:[NSEntityDescription entityForName:@"Visit" inManagedObjectContext:_managedObjectContext]];
-        [searchRequest setIncludesPropertyValues:NO];
-        NSError *error = nil;
-        NSArray *results = [_managedObjectContext executeFetchRequest:searchRequest error:&error];
-        NSLog(@"Number of location data: %ld", results.count);
-        
-        for (NSManagedObject *visit in results) {
-//            NSDictionary * visit = (NSDictionary *)data;//[_managedObjectContext objectWithID:data.objectID];
-            if (visit != nil) {
-                double departure = [[visit valueForKey:@"departure"] doubleValue];
-                double arrival = [[visit valueForKey:@"arrival"] doubleValue];
-                NSString * name = [visit valueForKey:@"name"];
-                
-                // If there are visit events in the database during nullEvents, the plugin add visit events as a pre-determinate event.
-                if ([nullStart timeIntervalSince1970] > arrival || [nullEnd timeIntervalSince1970] < departure ) {
-                    EKEvent *preEvent = [EKEvent eventWithEventStore:store];
-                    preEvent.title = name;
-                    preEvent.location = name;
-//                    preEvent.notes = questions;
-                    preEvent.startDate = [[NSDate alloc] initWithTimeIntervalSince1970:arrival];
-                    preEvent.endDate = [[NSDate alloc] initWithTimeIntervalSince1970:departure];
-                    preEvent.calendar = awareCal;
-                    [store saveEvent:preEvent span:EKSpanThisEvent error:nil];
+        NSDate * tempNullTime = nullStart;
+        for (int i=0; i<hours.count; i++) {
+            NSDate * currentHour = [hours objectAtIndex:i];
+            //set start date
+            NSLog(@"%@",currentHour);
+            if (tempNullTime < currentHour ){
+                if (nullEnd >= currentHour) {
+                    EKEvent * event = [EKEvent eventWithEventStore:store];
+                    event.title = @"#event_category #Location #brief_description"; //@"#event_category #Location #brief_description"
+                    event.calendar  = awareCal;
+//                    NSLog(@"-->  %@", currentHour);
+                    double gap = [nullEnd timeIntervalSince1970] - [currentHour timeIntervalSince1970];
+//                    NSLog(@"gap: %f", gap);
+                    if ( gap < 60*60) {
+                        NSLog(@"start:%@  end:%@", tempNullTime, nullEnd );
+                        event.startDate = tempNullTime;
+                        event.endDate   = nullEnd;
+                    } else{
+                        NSLog(@"start:%@  end:%@", tempNullTime, currentHour);
+                        event.startDate = tempNullTime;
+                        event.endDate   = currentHour;
+                    }
+                    NSError * error;
+                    // save events to the aware calendar
+                    [store saveEvent:event span:EKSpanThisEvent commit:YES error:&error];
+                    
+                    tempNullTime = currentHour;
                 }
             }
         }
     }
+    //set end date
+
+    
+    
+    //make a calendar by one hour
+//    for (int i=0; i<23; i++) {
+//        EKEvent * event = [EKEvent eventWithEventStore:store];
+//        NSDate * today = [NSDate date];
+//        event.title = [NSString stringWithFormat:@"%d", i];
+//        event.startDate = [self getTargetTimeAsNSDate:today hour:i minute:0 second:0];
+//        event.endDate   = [self getTargetTimeAsNSDate:today hour:i+1 minute:0 second:0];
+//        event.calendar = awareCal;
+//        NSError * error;
+//        // save events to the aware calendar
+//        for (EKEvent * existingEvent in awareEvents) {
+//            existingEvent.startDate;
+//            existingEvent.endDate;
+//        }
+//        [store saveEvent:event span:EKSpanThisEvent commit:YES error:&error];
+//        NSLog(@"error: %@", error.debugDescription);
+//    }
+    
+    
+    // Make and add pre-determinate events to AWARE Calendar
+//    for (NSArray * times in nullTimes) {
+//        NSDate * nullStart = [times objectAtIndex:0];
+//        NSDate * nullEnd = [times objectAtIndex:1];
+//        while (true) {
+//            
+//        }
+//    }
+    
+    
+    // == Make pre-determinate events from visit events, and add events to aware calendars ==
+//    for (NSArray * times in nullTimes) {
+//        NSDate * nullStart = [times objectAtIndex:0];
+//        NSDate * nullEnd = [times objectAtIndex:1];
+//        
+//        //Get Visit Information
+//        NSFetchRequest *searchRequest = [[NSFetchRequest alloc] init];
+//        [searchRequest setEntity:[NSEntityDescription entityForName:@"Visit" inManagedObjectContext:_managedObjectContext]];
+//        [searchRequest setIncludesPropertyValues:NO];
+//        NSError *error = nil;
+//        NSArray *results = [_managedObjectContext executeFetchRequest:searchRequest error:&error];
+//        NSLog(@"Number of location data: %ld", results.count);
+//        
+//        for (NSManagedObject *visit in results) {
+////            NSDictionary * visit = (NSDictionary *)data;//[_managedObjectContext objectWithID:data.objectID];
+//            if (visit != nil) {
+//                double departure = [[visit valueForKey:@"departure"] doubleValue];
+//                double arrival = [[visit valueForKey:@"arrival"] doubleValue];
+//                NSString * name = [visit valueForKey:@"name"];
+//                
+//                // If there are visit events in the database during nullEvents, the plugin add visit events as a pre-determinate event.
+//                if ([nullStart timeIntervalSince1970] > arrival || [nullEnd timeIntervalSince1970] < departure ) {
+//                    EKEvent *preEvent = [EKEvent eventWithEventStore:store];
+//                    preEvent.title = name;
+//                    preEvent.location = name;
+////                    preEvent.notes = questions;
+//                    preEvent.startDate = [[NSDate alloc] initWithTimeIntervalSince1970:arrival];
+//                    preEvent.endDate = [[NSDate alloc] initWithTimeIntervalSince1970:departure];
+//                    preEvent.calendar = awareCal;
+//                    [store saveEvent:preEvent span:EKSpanThisEvent error:nil];
+//                }
+//            }
+//        }
+//    }
     
     
     // get today's events from AWARE Calendar
-    NSMutableArray* currentAwareEvents = [[NSMutableArray alloc] init];
-    predicate = [store predicateForEventsWithStartDate:startDate
-                                                            endDate:endDate
-                                                          calendars:nil];
-    [store enumerateEventsMatchingPredicate:predicate usingBlock:^(EKEvent *ekEvent, BOOL *stop) {
-        // Check this event against each ekObjectID in notification
-        if(!ekEvent.allDay){
-            if(ekEvent.calendar == awareCal){
-                [currentAwareEvents addObject:ekEvent];
-            }
-        }
-    }];
+//    NSMutableArray* currentAwareEvents = [[NSMutableArray alloc] init];
+//    predicate = [store predicateForEventsWithStartDate:startDate
+//                                                            endDate:endDate
+//                                                          calendars:nil];
+//    [store enumerateEventsMatchingPredicate:predicate usingBlock:^(EKEvent *ekEvent, BOOL *stop) {
+//        // Check this event against each ekObjectID in notification
+//        if(!ekEvent.allDay){
+//            if(ekEvent.calendar == awareCal){
+//                [currentAwareEvents addObject:ekEvent];
+//            }
+//        }
+//    }];
+//    
+//    lastEvent = [EKEvent eventWithEventStore:store];
+//    lastEvent.startDate = [self getTargetTimeAsNSDate:[NSDate date] hour:0 minute:0 second:0];
+//    lastEvent.endDate   = [self getTargetTimeAsNSDate:[NSDate date] hour:0 minute:0 second:0];
+//    NSMutableArray * awareNullTimes = [[NSMutableArray alloc] init];
+//    for (EKEvent * event in currentAwareEvents) {
+//        EKEvent * awareEvent = [EKEvent eventWithEventStore:store];
+//        awareEvent.startDate = event.startDate;
+//        awareEvent.endDate = event.endDate;
+//        // startDate - endDate
+//        if (lastEvent != nil) {
+//            NSDate * nullStart = lastEvent.endDate;
+//            NSDate * nullEnd = event.startDate;
+//            int gap = [nullEnd timeIntervalSince1970] - [nullStart timeIntervalSince1970];
+//            if (gap > 0) {
+//                [awareNullTimes addObject:[[NSArray alloc] initWithObjects:nullStart, nullEnd, nil]];
+//            }
+//        }
+//        lastEvent = event;
+//    }
+//    endOfTimeToday = [self getTargetTimeAsNSDate:[NSDate date] hour:24 minute:0 second:0];
+//    lastEventEndDate = lastEvent.endDate;
+//    gap = [endOfTimeToday timeIntervalSince1970] - [lastEventEndDate timeIntervalSince1970];
+//    if (gap > 0) {
+//        [awareNullTimes addObject:[[NSArray alloc] initWithObjects:lastEventEndDate,endOfTimeToday,nil]];
+//    }
+//
+//    for (NSArray * times in awareNullTimes) {
+//        NSDate * nullStart = [times objectAtIndex:0];
+//        NSDate * nullEnd = [times objectAtIndex:1];
+//        EKEvent * awareEvent = [EKEvent eventWithEventStore:store];
+//        // Add questions to a note of aware events
+////        awareEvent.notes = [NSString stringWithFormat:@"%@%@", @"Empty", questions];
+//        awareEvent.title = @"#event_category #Location #brief_description";
+//        awareEvent.startDate = nullStart;
+//        awareEvent.endDate = nullEnd;
+//        awareEvent.calendar = awareCal;
+//        NSError * error;
+//        // save events to the aware calendar
+//        [store saveEvent:awareEvent span:EKSpanThisEvent commit:YES error:&error];
+//    }
     
-    lastEvent = [EKEvent eventWithEventStore:store];
-    lastEvent.startDate = [self getTargetTimeAsNSDate:[NSDate date] hour:0 minute:0 second:0];
-    lastEvent.endDate   = [self getTargetTimeAsNSDate:[NSDate date] hour:0 minute:0 second:0];
-    NSMutableArray * awareNullTimes = [[NSMutableArray alloc] init];
-    for (EKEvent * event in currentAwareEvents) {
-        EKEvent * awareEvent = [EKEvent eventWithEventStore:store];
-        awareEvent.startDate = event.startDate;
-        awareEvent.endDate = event.endDate;
-        // startDate - endDate
-        if (lastEvent != nil) {
-            NSDate * nullStart = lastEvent.endDate;
-            NSDate * nullEnd = event.startDate;
-            int gap = [nullEnd timeIntervalSince1970] - [nullStart timeIntervalSince1970];
-            if (gap > 0) {
-                [awareNullTimes addObject:[[NSArray alloc] initWithObjects:nullStart, nullEnd, nil]];
-            }
-        }
-        lastEvent = event;
-    }
-    endOfTimeToday = [self getTargetTimeAsNSDate:[NSDate date] hour:24 minute:0 second:0];
-    lastEventEndDate = lastEvent.endDate;
-    gap = [endOfTimeToday timeIntervalSince1970] - [lastEventEndDate timeIntervalSince1970];
-    if (gap > 0) {
-        [awareNullTimes addObject:[[NSArray alloc] initWithObjects:lastEventEndDate,endOfTimeToday,nil]];
-    }
-
-    for (NSArray * times in awareNullTimes) {
-        NSDate * nullStart = [times objectAtIndex:0];
-        NSDate * nullEnd = [times objectAtIndex:1];
-        EKEvent * awareEvent = [EKEvent eventWithEventStore:store];
-        // Add questions to a note of aware events
-//        awareEvent.notes = [NSString stringWithFormat:@"%@%@", @"Empty", questions];
-        awareEvent.title = @"#event_category #Location #brief_description";
-        awareEvent.startDate = nullStart;
-        awareEvent.endDate = nullEnd;
-        awareEvent.calendar = awareCal;
-        NSError * error;
-        // save events to the aware calendar
-        [store saveEvent:awareEvent span:EKSpanThisEvent commit:YES error:&error];
-    }
 //    endOfTimeToday = [self getTargetTimeAsNSDate:[NSDate date] hour:24 minute:0 second:0];
 //    gap = [endOfTimeToday timeIntervalSince1970] - [lastEvent.endDate timeIntervalSince1970];
 //    if (gap > 0) {
@@ -511,7 +588,7 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 //    [uploadTimer invalidate];
     [calendarUpdateTimer invalidate];
-    [locationTimer invalidate];
+//    [locationTimer invalidate];
     calendarUpdateTimer = nil;
     return YES;
 }

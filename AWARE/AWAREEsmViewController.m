@@ -940,7 +940,7 @@
         [dic setObject:unixtime forKey:@"timestamp"];
         [dic setObject:unixtime forKey:KEY_ESM_USER_ANSWER_TIMESTAMP];
         [dic setObject:deviceId forKey:@"device_id"];
-        [dic setObject:@0 forKey:KEY_ESM_STATUS]; // 0:new 1:dismiss -> Defualt is zero(0).
+        [dic setObject:@2 forKey:KEY_ESM_STATUS]; // the status of the ESM (0-new, 1-dismissed, 2-answered, 3-expired) -> Defualt is zero(0).
         // add special data to dic from each uielements
         NSNumber* type = [esmDic objectForKey:KEY_ESM_TYPE];
         // save each data to the dictionary
@@ -952,37 +952,40 @@
                     [dic setObject:textView.text forKey:KEY_ESM_USER_ANSWER];
                     NSLog(@"Value is = %@", textView.text);
                     UIButton * naButton = [contents objectAtIndex:1];
-                    if (naButton.selected) {
+                    if ([textView.text isEqualToString:@""] && !naButton.selected) {
                         [dic setObject:@1 forKey:KEY_ESM_STATUS];
+                    }
+                    if (naButton.selected) {
+                        [dic setObject:@"N/A" forKey:KEY_ESM_USER_ANSWER];
                     }
                 }
             }
         } else if ([type isEqualToNumber:@2]) {
             NSLog(@"Get radio data.");
-            bool na = true;
+            bool skip = true;
             if (contents != nil) {
                 for (int i=0; i<contents.count; i++) {
                     UIButton * button = [contents objectAtIndex:i];
                     UILabel * label = [labels objectAtIndex:i];
                     if(button.selected) {
                         [dic setObject:label.text forKey:KEY_ESM_USER_ANSWER];
-                        na = false;
+                        skip = false;
                     }
-                    if (i == contents.count-1) {
-                        if (button.selected) {
-                            [dic setObject:@1 forKey:KEY_ESM_STATUS];
-                        }
-                    }
+//                    if (i == contents.count-1) {
+//                        if (button.selected) {
+//                            [dic setObject:@4 forKey:KEY_ESM_STATUS];
+//                        }
+//                    }
                 }
             }
-            if(na){
+            if(skip){
                 [dic setObject:@1 forKey:KEY_ESM_STATUS];
             }else{
-                [dic setObject:@0 forKey:KEY_ESM_STATUS];
+                [dic setObject:@2 forKey:KEY_ESM_STATUS];
             }
         } else if ([type isEqualToNumber:@3]) {
             NSLog(@"Get check box data.");
-            bool na = true;
+            bool skip = true;
             if (contents != nil) {
                 NSString *result = @"";
                 for (int i=0; i<contents.count; i++) {
@@ -990,25 +993,22 @@
                     UILabel * label = [labels objectAtIndex:i];
                     if (button.selected) {
                         result = [NSString stringWithFormat:@"%@,%@", result , label.text];
-                        na = false;
+                        skip = false;
                     }
-                    if (i == contents.count-1) {
-                        if (button.selected) {
-                            [dic setObject:@1 forKey:KEY_ESM_STATUS];
-                        }
-                    }
+//                    if (i == contents.count-1) {
+//                        if (button.selected) {
+//                            [dic setObject:@1 forKey:KEY_ESM_STATUS];
+//                        }
+//                    }
                 }
                 [dic setObject:result forKey:KEY_ESM_USER_ANSWER];
             }
-            if(na){
+            if(skip){
                 [dic setObject:@1 forKey:KEY_ESM_STATUS];
-            }else{
-                [dic setObject:@0 forKey:KEY_ESM_STATUS];
             }
         } else if ([type isEqualToNumber:@4]) {
             NSLog(@"Get likert data");
             if (contents != nil) {
-                [dic setObject:@0 forKey:KEY_ESM_STATUS];
                 if ( contents.count > 1) {
                     int selectedOption = -1;
                     for (int i = 0; i<contents.count; i++) {
@@ -1031,9 +1031,7 @@
             NSLog(@"Get Scale data");
             if (contents != nil) {
                 if ( contents.count > 1) {
-                    // Slider value
-//                    UISlider * slider = [contents objectAtIndex:0];
-//                    [dic setObject:[NSNumber numberWithFloat:slider.value] forKey:KEY_ESM_USER_ANSWER];
+                    
                     UILabel * label = [contents objectAtIndex:0];
                     if ([label.text isEqualToString:@"---"]) {
                         [dic setObject:@1 forKey:KEY_ESM_STATUS];
@@ -1043,26 +1041,18 @@
                     }
                     
                     // Get N/A button value and set N/A condition
-                    UIButton* naButton = [contents objectAtIndex:1];
-                    if(naButton.selected){
-                        [dic setObject:@1 forKey:KEY_ESM_STATUS];
-                    }else{
-                        [dic setObject:@0 forKey:KEY_ESM_STATUS];
-                    }
+//                    UIButton* naButton = [contents objectAtIndex:1];
+//                    if(naButton.selected){
+//                        [dic setObject:@1 forKey:KEY_ESM_STATUS];
+//                    }else{
+//                        [dic setObject:@0 forKey:KEY_ESM_STATUS];
+//                    }
                 }
             }
         } else if ([type isEqual:@7]){
             NSLog(@"Get Date Picker");
             if (contents != nil) {
                 if ( contents.count > 1) {
-                    // Get N/A button value and set N/A condition
-                    UIButton* naButton = [contents objectAtIndex:1];
-                    if(naButton.selected){
-                        [dic setObject:@1 forKey:KEY_ESM_STATUS];
-                    }else{
-                        [dic setObject:@0 forKey:KEY_ESM_STATUS];
-                    }
-                    
                     // DatePicker Value
                     NSNumber *zero = @0;
                     if ( [contents objectAtIndex:0] != zero ){
@@ -1073,6 +1063,12 @@
                     }else{
                         [dic setObject:@"0" forKey:KEY_ESM_USER_ANSWER];
                         [dic setObject:@1 forKey:KEY_ESM_STATUS];
+                    }
+                    
+                    // Get N/A button value and set N/A condition
+                    UIButton* naButton = [contents objectAtIndex:1];
+                    if(naButton.selected){
+                        [dic setObject:@"N/A" forKey:KEY_ESM_USER_ANSWER];
                     }
                 }
             }
@@ -1129,7 +1125,7 @@
                                                                    trigger:@""];
     // add existing data to base dictionary of an esm
     for (id key in [originalDic keyEnumerator]) {
-        NSLog(@"Key: %@ => Value:%@" , key, [originalDic objectForKey:key]);
+//        NSLog(@"Key: %@ => Value:%@" , key, [originalDic objectForKey:key]);
         if([key isEqualToString:KEY_ESM_RADIOS]){
             [dic setObject:[self convertArrayToCSVFormat:[originalDic objectForKey:key]] forKey:KEY_ESM_RADIOS];
         }else if([key isEqualToString:KEY_ESM_CHECKBOXES]){
@@ -1189,7 +1185,7 @@
     
     // Create
     ESM *esm = [[ESM alloc] initWithSensorName:SENSOR_ESMS];
-    NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
+    NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970] * 10000 ;
     NSNumber* unixtime = [NSNumber numberWithDouble:timeStamp];
     NSString *deviceId = [esm getDeviceId];
     for (int i=0; i<uiElements.count; i++) {

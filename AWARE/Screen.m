@@ -80,7 +80,7 @@
         
         NSLog(@"com.apple.springboard.lockstate = %llu", state);
         
-        NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
+        NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970] * 10000;
         NSNumber* unixtime = [NSNumber numberWithDouble:timeStamp];
         NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
         [dic setObject:unixtime forKey:@"timestamp"];
@@ -108,7 +108,7 @@
             awareScreenState = 1;
         }
         
-        NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
+        NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970] * 10000;
         NSNumber* unixtime = [NSNumber numberWithDouble:timeStamp];
         NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
         [dic setObject:unixtime forKey:@"timestamp"];

@@ -64,7 +64,7 @@
     NetworkClock * nc = [NetworkClock sharedNetworkClock];
     NSDate * nt = nc.networkTime;
     double offset = nc.networkOffset;
-    NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
+    NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970] * 10000;
     NSNumber* unixtime = [NSNumber numberWithDouble:timeStamp];
     NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
     [dic setObject:unixtime forKey:@"timestamp"];

@@ -71,7 +71,7 @@
         [motionManager startDeviceMotionUpdatesToQueue:[NSOperationQueue new]
                                            withHandler:^(CMDeviceMotion *motion, NSError *error){
                                                // Save sensor data to the local database.
-                                               NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
+                                               NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970] * 10000;
                                                NSNumber* unixtime = [NSNumber numberWithDouble:timeStamp];
                                                NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
                                                [dic setObject:unixtime forKey:@"timestamp"];

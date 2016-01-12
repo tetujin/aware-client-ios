@@ -256,7 +256,7 @@ int ONE_HOUR = 60*60;
                         };
 //                        jsonWeatherData = [[NSDictionary alloc] init];
                         NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-                        NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
+                        NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970] * 10000;
                         NSNumber* unixtime = [NSNumber numberWithDouble:timeStamp];
                         [dic setObject:unixtime forKey:@"timestamp"];
                         [dic setObject:[self getDeviceId] forKey:@"device_id"];

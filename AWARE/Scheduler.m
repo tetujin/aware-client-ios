@@ -10,12 +10,16 @@
 #import "AWARESchedule.h"
 #import "ESMStorageHelper.h"
 #import "SingleESMObject.h"
+#import "AWAREKeys.h"
+#import "ESM.h"
 
 @implementation Scheduler {
     NSMutableArray * scheduleManager; // This variable manages NSTimers.
     NSString * KEY_SCHEDULE;
     NSString * KEY_TIMER;
+    NSString * KEY_PREVIOUS_SCHEDULE_JSON;
     NSTimer * dailyQuestionUpdateTimer;
+    NSString* CONFIG_URL;
 }
 
 - (instancetype)initWithSensorName:(NSString *)sensorName {
@@ -26,18 +30,9 @@
         _getConfigFileIdentifier = @"get_config_file_identifier";
         KEY_SCHEDULE = @"key_schedule";
         KEY_TIMER = @"key_timer";
-        NSString* configUrl = @"http://www.ht.sfc.keio.ac.jp/~tetujin/aware/test.json";
-        NSMutableDictionary * dic = [[NSMutableDictionary alloc] init];
-        [dic setObject:configUrl forKey:@"configUrl"];
-        dailyQuestionUpdateTimer = [[NSTimer alloc] initWithFireDate:[self getTargetTimeAsNSDate:[NSDate new] hour:17 minute:15 second:0]
-                                                            interval:60 //*60*24
-                                                            target:self
-                                                            selector:@selector(setConfigFile:)
-                                                            userInfo:dic
-                                                             repeats:YES];
-        NSRunLoop *runLoop = [NSRunLoop currentRunLoop];
-        [runLoop addTimer:dailyQuestionUpdateTimer forMode:NSDefaultRunLoopMode];// NSRunLoopCommonModes];//
-    
+        KEY_PREVIOUS_SCHEDULE_JSON = @"key_previous_schedule_json";
+        CONFIG_URL = @"http://r2d2.hcii.cs.cmu.edu/esm/e0cfa02d-a68e-4c70-9efc-34e0604d6170/latest.json";
+//        CONFIG_URL = [NSString stringWithFormat:@"http://r2d2.hcii.cs.cmu.edu/esm/%@/esm_setting_ios.text", [self getDeviceId]];
     }
     return self;
 }
@@ -116,7 +111,11 @@ didReceiveResponse:(NSURLResponse *)response
 - (void) setEsmSchedulesWithJSONData:(NSData *)data {
     
     NSError * error = nil;
+    NSString * text = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    NSLog(@"==> %@",text);
     NSArray *schedules = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
+    
+    NSLog(@"%@", error.debugDescription);
     
     if (error != nil) {
         return;
@@ -127,10 +126,10 @@ didReceiveResponse:(NSURLResponse *)response
     NSMutableArray * awareSchedules = [[NSMutableArray alloc] init];
     
 //    NSDate * testFireDate = [self getTargetTimeAsNSDate:[NSDate new] hour:17 minute:15 second:0];
-    AWARESchedule * awareSchedule = [self getDringSchedule];
-    awareSchedule.schedule = [NSDate new];
-    [awareSchedule setScheduleType:SCHEDULE_INTERVAL_TEST];
-    [awareSchedules addObject:awareSchedule];
+//    AWARESchedule * awareSchedule = [self getDringSchedule];
+//    awareSchedule.schedule = [NSDate new];
+//    [awareSchedule setScheduleType:SCHEDULE_INTERVAL_TEST];
+//    [awareSchedules addObject:awareSchedule];
     
     for (NSDictionary * schedule in schedules) {
         NSString * notificationTitle = @"BlancedCampus Question";
@@ -143,22 +142,19 @@ didReceiveResponse:(NSURLResponse *)response
         NSString * esmsStr = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
         NSLog(@"%@", esmsStr);
         
-        
         for (NSNumber * hour in hours) {
             int intHour = [hour intValue];
             NSLog(@"%d", intHour);
-//            NSDate * fireDate = [self getTargetTimeAsNSDate:[NSDate new] hour:23 minute:19 second:0];
             NSDate * fireDate = [self getTargetTimeAsNSDate:[NSDate new] hour:intHour];
             AWARESchedule * schedule = [[AWARESchedule alloc] initWithScheduleId:identifier];
             [schedule setScheduleAsNormalWithDate:fireDate
-                                     intervalType:SCHEDULE_INTERVAL_TEST //DAY
+                                     intervalType:SCHEDULE_INTERVAL_DAY
                                               esm:esmsStr
                                             title:notificationTitle
                                              body:body
                                        identifier:@"---"];
             schedule.schedule = fireDate;
             [awareSchedules addObject:schedule];
-            break;
         }
     }
     [self startSchedules:awareSchedules];
@@ -169,6 +165,17 @@ didReceiveResponse:(NSURLResponse *)response
     
     ESMStorageHelper *helper = [[ESMStorageHelper alloc] init];
     [helper removeEsmTexts];
+
+    NSMutableDictionary * dic = [[NSMutableDictionary alloc] init];
+    [dic setObject:CONFIG_URL forKey:@"configUrl"];
+    dailyQuestionUpdateTimer = [[NSTimer alloc] initWithFireDate:[NSDate new] //[self getTargetTimeAsNSDate:[NSDate new] hour:6 minute:0 second:0]
+                                                        interval:60*60*24
+                                                          target:self
+                                                        selector:@selector(setConfigFile:)
+                                                        userInfo:dic
+                                                         repeats:YES];
+    NSRunLoop *runLoop = [NSRunLoop currentRunLoop];
+    [runLoop addTimer:dailyQuestionUpdateTimer forMode:NSDefaultRunLoopMode];// NSRunLoopCommonModes];//
     
     // init scheduler
 //    NSString* configUrl = @"http://www.ht.sfc.keio.ac.jp/~tetujin/aware/test.json";
@@ -256,38 +263,6 @@ didReceiveResponse:(NSURLResponse *)response
 }
 
 
-- (NSDate *) getTargetTimeAsNSDate:(NSDate *) nsDate
-                              hour:(int) hour {
-    return [self getTargetTimeAsNSDate:nsDate hour:hour minute:0 second:0];
-}
-
-- (NSDate *) getTargetTimeAsNSDate:(NSDate *) nsDate
-                              hour:(int) hour
-                            minute:(int) minute
-                            second:(int) second {
-    NSCalendar *calendar = [NSCalendar currentCalendar];
-    NSDateComponents *dateComps = [calendar components:NSYearCalendarUnit |
-                                   NSMonthCalendarUnit  |
-                                   NSDayCalendarUnit    |
-                                   NSHourCalendarUnit   |
-                                   NSMinuteCalendarUnit |
-                                   NSSecondCalendarUnit fromDate:nsDate];
-    [dateComps setDay:dateComps.day];
-    [dateComps setHour:hour];
-    [dateComps setMinute:minute];
-    [dateComps setSecond:second];
-    NSDate * targetNSDate = [calendar dateFromComponents:dateComps];
-    // If the maked target day is newer than now, Aware remakes the target day as same time tomorrow.
-    if ([targetNSDate timeIntervalSince1970] < [nsDate timeIntervalSince1970]) {
-        [dateComps setDay:dateComps.day + 1];
-        NSDate * tomorrowNSDate = [calendar dateFromComponents:dateComps];
-        return tomorrowNSDate;
-    }else{
-        return targetNSDate;
-    }
-}
-
-
 - (void) scheduleAction: (NSTimer *) sender {
     // Get a schedule ID
     NSMutableDictionary * userInfo = sender.userInfo;
@@ -303,10 +278,89 @@ didReceiveResponse:(NSURLResponse *)response
             ESMStorageHelper * helper = [[ESMStorageHelper alloc] init];
             [helper addEsmText:esmStr];
             [self sendLocalNotificationWithSchedule:schedule soundFlag:YES];
+            
+            // Save ESM
+            [self saveEsmObjects:schedule];
             break;
         }
     }
 }
+
+
+
+- (void) saveEsmObjects:(AWARESchedule *) schedule{
+    // ESM Objects
+    ESM *esm = [[ESM alloc] initWithSensorName:SENSOR_ESMS];
+    NSMutableArray* mulitEsm = schedule.esmObject.esms;
+    NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970] * 10000;
+    NSNumber* unixtime = [NSNumber numberWithDouble:timeStamp];
+    NSString * deviceId = [esm getDeviceId];
+    
+    for (SingleESMObject * singleEsm in mulitEsm) {
+        NSMutableDictionary *dic = [self getEsmFormatDictionary:(NSMutableDictionary *)singleEsm.esmObject
+                                                   withTimesmap:unixtime
+                                                        devieId:deviceId];
+        [dic setObject:deviceId forKey:@"device_id"];
+        [dic setObject:unixtime forKey:@"timestamp"];
+        [dic setObject:@"0" forKey:KEY_ESM_STATUS]; // status is new
+        [esm saveData:dic];
+    }
+}
+
+- (NSMutableDictionary *) getEsmFormatDictionary:(NSMutableDictionary *)originalDic
+                                    withTimesmap:(NSNumber *)unixtime
+                                         devieId:(NSString*) deviceId{
+    // make base dictionary from SingleEsmObject with device ID and timestamp
+    SingleESMObject *singleObject = [[SingleESMObject alloc] init];
+    NSMutableDictionary * dic = [singleObject getEsmDictionaryWithDeviceId:deviceId
+                                                                 timestamp:[unixtime doubleValue]
+                                                                      type:@0
+                                                                     title:@""
+                                                              instructions:@""
+                                                       expirationThreshold:@0
+                                                                   trigger:@""];
+    // add existing data to base dictionary of an esm
+    for (id key in [originalDic keyEnumerator]) {
+        NSLog(@"Key: %@ => Value:%@" , key, [originalDic objectForKey:key]);
+        if([key isEqualToString:KEY_ESM_RADIOS]){
+            [dic setObject:[self convertArrayToCSVFormat:[originalDic objectForKey:key]] forKey:KEY_ESM_RADIOS];
+        }else if([key isEqualToString:KEY_ESM_CHECKBOXES]){
+            [dic setObject:[self convertArrayToCSVFormat:[originalDic objectForKey:key]] forKey:KEY_ESM_CHECKBOXES];
+        }else if([key isEqualToString:KEY_ESM_QUICK_ANSWERS]){
+            [dic setObject:[self convertArrayToCSVFormat:[originalDic objectForKey:key]] forKey:KEY_ESM_QUICK_ANSWERS];
+        }else{
+            NSObject *object = [originalDic objectForKey:key];
+            if (object == nil) {
+                object = @"";
+            }
+            [dic setObject:object forKey:key];
+        }
+    }
+    return dic;
+}
+
+
+- (NSString* ) convertArrayToCSVFormat:(NSArray *) array {
+    if (array == nil || array.count == 0){
+        return @"";
+    }
+    NSMutableString* csvStr = [[NSMutableString alloc] init];
+    for (NSString * item in array) {
+        [csvStr appendString:item];
+        [csvStr appendString:@","];
+    }
+    NSRange rangeOfExtraText = [csvStr rangeOfString:@"," options:NSBackwardsSearch];
+    if (rangeOfExtraText.location == NSNotFound) {
+    }else{
+        NSRange deleteRange = NSMakeRange(rangeOfExtraText.location, csvStr.length-rangeOfExtraText.location);
+        [csvStr deleteCharactersInRange:deleteRange];
+    }
+    if (csvStr == nil) {
+        return @"";
+    }
+    return csvStr;
+}
+
 
 - (BOOL)stopSensor {
     for (NSDictionary * dic in scheduleManager) {
@@ -345,6 +399,37 @@ didReceiveResponse:(NSURLResponse *)response
     [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
 }
 
+
+- (NSDate *) getTargetTimeAsNSDate:(NSDate *) nsDate
+                              hour:(int) hour {
+    return [self getTargetTimeAsNSDate:nsDate hour:hour minute:0 second:0];
+}
+
+- (NSDate *) getTargetTimeAsNSDate:(NSDate *) nsDate
+                              hour:(int) hour
+                            minute:(int) minute
+                            second:(int) second {
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSDateComponents *dateComps = [calendar components:NSYearCalendarUnit |
+                                   NSMonthCalendarUnit  |
+                                   NSDayCalendarUnit    |
+                                   NSHourCalendarUnit   |
+                                   NSMinuteCalendarUnit |
+                                   NSSecondCalendarUnit fromDate:nsDate];
+    [dateComps setDay:dateComps.day];
+    [dateComps setHour:hour];
+    [dateComps setMinute:minute];
+    [dateComps setSecond:second];
+    NSDate * targetNSDate = [calendar dateFromComponents:dateComps];
+    // If the maked target day is newer than now, Aware remakes the target day as same time tomorrow.
+    if ([targetNSDate timeIntervalSince1970] < [nsDate timeIntervalSince1970]) {
+        [dateComps setDay:dateComps.day + 1];
+        NSDate * tomorrowNSDate = [calendar dateFromComponents:dateComps];
+        return tomorrowNSDate;
+    }else{
+        return targetNSDate;
+    }
+}
 
 - (AWARESchedule *) getDringSchedule{
     SingleESMObject *esmObject = [[SingleESMObject alloc] init];
