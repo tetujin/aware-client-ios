@@ -63,8 +63,8 @@
 - (void) getTimezone {
     [NSTimeZone localTimeZone];
 //    NSLog(@"Timezone: %@", [[NSTimeZone localTimeZone] description]);
-    NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970] * 10000;
-    NSNumber* unixtime = [NSNumber numberWithDouble:timeStamp];
+    double timeStamp = [[NSDate date] timeIntervalSince1970] * 1000;
+    NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
     NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
     [dic setObject:unixtime forKey:@"timestamp"];
     [dic setObject:[self getDeviceId] forKey:@"device_id"];

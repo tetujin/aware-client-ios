@@ -14,6 +14,7 @@
     NSString* KEY_GOOGLE_NAME;
     NSString* KEY_GOOGLE_EMAIL;
     NSString* KEY_GOOGLE_BLOB_PICTURE;
+    NSString* KEY_GOOGLE_PHONENUMBER;
 }
 
 - (instancetype)initWithSensorName:(NSString *)sensorName {
@@ -22,6 +23,7 @@
         KEY_GOOGLE_NAME = @"name";
         KEY_GOOGLE_EMAIL = @"email";
         KEY_GOOGLE_BLOB_PICTURE = @"blob_picture";
+        KEY_GOOGLE_PHONENUMBER = @"phonenumber";
     }
     return self;
 }
@@ -34,6 +36,7 @@
     
     [query appendFormat:@"%@ text default '',", KEY_GOOGLE_NAME];
     [query appendFormat:@"%@ text default '',", KEY_GOOGLE_EMAIL];
+    [query appendFormat:@"%@ text default '',", KEY_GOOGLE_PHONENUMBER];
     [query appendFormat:@"%@ blob ", KEY_GOOGLE_BLOB_PICTURE];
     
     [query appendString:@"UNIQUE (timestamp,device_id)"];
@@ -54,14 +57,19 @@
     return NO;
 }
 
-- (void) saveName:(NSString* )name withEmail:(NSString *)email {
-    NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970] * 10000;
-    NSNumber* unixtime = [NSNumber numberWithDouble:timeStamp];
+- (void) saveName:(NSString* )name
+        withEmail:(NSString *)email
+      phoneNumber:(NSString*) phonenumber {
+
     NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+    
+    double timeStamp = [[NSDate date] timeIntervalSince1970] * 1000;
+    NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
     [dic setObject:unixtime forKey:@"timestamp"];
     [dic setObject:[self getDeviceId] forKey:@"device_id"];
     [dic setObject:name forKey:KEY_GOOGLE_NAME];
     [dic setObject:email forKey:KEY_GOOGLE_EMAIL];
+    [dic setObject:phonenumber forKey:KEY_GOOGLE_PHONENUMBER];
     [dic setObject:[NSNull null] forKey:KEY_GOOGLE_BLOB_PICTURE];
     [self saveData:dic];
     [self performSelector:@selector(syncAwareDB) withObject:0 afterDelay:5];
@@ -69,6 +77,7 @@
 }
 
 - (BOOL)stopSensor {
+    [uploadTimer invalidate];
     return YES;
 }
 

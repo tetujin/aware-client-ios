@@ -9,5 +9,7 @@
 #import "AWARESensor.h"
 
 @interface GoogleLogin : AWARESensor <AWARESensorDelegate>
-- (void) saveName:(NSString* )name withEmail:(NSString *)email;
+- (void) saveName:(NSString* )name
+        withEmail:(NSString *)email
+      phoneNumber:(NSString*) phonenumber;
 @end

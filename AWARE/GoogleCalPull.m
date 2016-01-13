@@ -319,7 +319,7 @@
 
 
 - (void) storeChanged:(NSNotification *) notification {
-    NSLog(@"Cal event id updated !!!");
+    NSLog(@"A calendar event is updated!");
     
     EKEventStore *ekEventStore = notification.object;
     
@@ -363,13 +363,16 @@
     }
     
     if ( isDeleteOrOther ) {
-        NSLog(@"%@", AWARE_CAL_EVENT_DELETE);
+//        NSLog(@"%@", AWARE_CAL_EVENT_DELETE);
         EKEvent* deletedEvent = [self getDeletedEKEvent:currentEvents];
         if (deletedEvent) {
-            NSLog(@"AWARE detect a deleted event !!!");
+//            NSLog(@"AWARE detect a deleted event !!!");
+            NSLog(@"%@", AWARE_CAL_EVENT_DELETE);
             [self saveCalEvent:deletedEvent withEventType:AWARE_CAL_EVENT_DELETE];
         } else {
-            NSLog(@"AWARE can not find a deleted event.");
+//            NSLog(@"AWARE can not find a deleted event."); //TODO
+            NSLog(@"%@", AWARE_CAL_EVENT_UPDATE);
+            [self saveCalEvent:targetEvent withEventType:AWARE_CAL_EVENT_UPDATE];
         }
     } else {
         if( [self isAdd:targetEvent] ){ // add event
@@ -451,8 +454,8 @@
     
 //    NSString* seek = @"";
     
-    NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970] * 10000;
-    NSNumber* unixtime = [NSNumber numberWithDouble:timeStamp];
+    double timeStamp = [[NSDate date] timeIntervalSince1970] * 1000;
+    NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
     NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
     [dic setObject:unixtime forKey:@"timestamp"];
     [dic setObject:[self getDeviceId] forKey:@"device_id"];
@@ -553,7 +556,7 @@
         }
         if ( deletedFlag ) {
             deletedEKEvent = oldEvent;
-            NSLog(@"%@", oldEvent.description);
+//            NSLog(@"%@", oldEvent.description);
             break;
         }
     }
@@ -561,7 +564,7 @@
 }
 
 - (void) setAllEvents {
-    NSLog(@"= Get All Events =");
+//    NSLog(@"= Get All Events =");
     
     [allEvents removeAllObjects];
     

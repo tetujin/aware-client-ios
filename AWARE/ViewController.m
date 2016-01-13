@@ -106,7 +106,7 @@
     if (currentVersion >= 9.0) {
         [self.navigationController.navigationBar setDelegate:self];
     }
-    [self connectMqttServer];
+//    [self connectMqttServer];
     [self initList];
     
     listUpdateTimer = [NSTimer scheduledTimerWithTimeInterval:0.1f target:self.tableView selector:@selector(reloadData) userInfo:nil repeats:YES];
@@ -246,21 +246,23 @@
     [_sensors addObject:[self getCelContent:@"Open Weather" desc:@"Weather information by OpenWeatherMap API." image:@"ic_action_openweather" key:SENSOR_PLUGIN_OPEN_WEATHER]];
     [_sensors addObject:[self getCelContent:@"NTPTime" desc:@"Measure device's clock drift from an NTP server." image:@"ic_action_ntptime" key:SENSOR_PLUGIN_NTPTIME]];
     [_sensors addObject:[self getCelContent:@"Micrsoft Band" desc:@"Wearable sensor data (such as Heart Rate, UV, and Skin Temperature) from Microsoft Band." image:@"ic_action_msband" key:SENSOR_PLUGIN_MSBAND]];
-    [_sensors addObject:[self getCelContent:@"Google Calendar" desc:@"This plugin stores your Google Calendar events." image:@"ic_action_google_cal" key:SENSOR_PLUGIN_GOOGLE_CAL_PULL]];
+//    [_sensors addObject:[self getCelContent:@"Google Calendar" desc:@"This plugin stores your Google Calendar events." image:@"ic_action_google_cal" key:SENSOR_PLUGIN_GOOGLE_CAL_PULL]];
     [_sensors addObject:[self getCelContent:@"Google Login" desc:@"Multi-device management using Google Account." image:@"google_logo" key:SENSOR_PLUGIN_GOOGLE_LOGIN]];
+    [_sensors addObject:[self getCelContent:@"Blanced Campus Calendar" desc:@"This plugin gathers calendar events from all Google Calendars from the phone." image:@"ic_action_google_cal_grab" key:SENSOR_PLUGIN_GOOGLE_CAL_PULL]];
+    [_sensors addObject:[self getCelContent:@"Blanced Campus Journal" desc:@"This plugin creates new events in the journal calendar and sends a reminder email to the user to update the journal." image:@"ic_action_google_cal_push" key:SENSOR_PLUGIN_GOOGLE_CAL_PUSH]];
+    
     
     [_sensors addObject:[self getCelContent:@"Settings" desc:@"" image:@"" key:@"TITLE_CELL_VIEW"]];
     [_sensors addObject:[self getCelContent:@"Debug" desc:debugState image:@"" key:@"STUDY_CELL_DEBUG"]]; //ic_action_mqtt
     [_sensors addObject:[self getCelContent:@"Sync Interval to AWARE Server (min)" desc:syncInterval image:@"" key:@"STUDY_CELL_SYNC"]]; //ic_action_mqtt
     [_sensors addObject:[self getCelContent:@"Sync only wifi" desc:wifiOnly image:@"" key:@"STUDY_CELL_WIFI"]]; //ic_action_mqtt
 
-    
+
     //for test
 //    AWARESensor *msBand = [[MSBand alloc] initWithPluginName:SENSOR_PLUGIN_MSBAND deviceId:deviceId];
 //    [msBand startSensor:60.0f * 15.0f withSettings:nil];
 //    [_sensorManager addNewSensor:msBand];
 //
-//    
 //    AWARESensor* googleCalPull = [[GoogleCalPull alloc] initWithSensorName:SENSOR_PLUGIN_GOOGLE_CAL_PULL];
 //    [googleCalPull startSensor:60.0f* 15.0f  withSettings:nil];
 //    [_sensorManager addNewSensor:googleCalPull];
@@ -269,9 +271,9 @@
 //    [googleCalPush startSensor:60.0f* 15.0f  withSettings:nil];
 //    [_sensorManager addNewSensor:googleCalPush];
 //
-//    AWARESensor* scheduler = [[Scheduler alloc] initWithSensorName:SENSOR_SCHEDULER];
-//    [scheduler startSensor:60.0f*15.0f  withSettings:nil];
-//    [_sensorManager addNewSensor:scheduler];
+    AWARESensor* scheduler = [[Scheduler alloc] initWithSensorName:SENSOR_SCHEDULER];
+    [scheduler startSensor:60.0f*15.0f  withSettings:nil];
+    [_sensorManager addNewSensor:scheduler];
 }
 
 
@@ -463,7 +465,7 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
     [self performSelector:@selector(initList) withObject:0 afterDelay:1];
 //    [self initList];
     [self.tableView reloadData];
-    [self connectMqttServer];
+//    [self connectMqttServer];
 }
 
 - (IBAction)pushedGoogleLogin:(id)sender {

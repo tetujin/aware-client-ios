@@ -158,6 +158,9 @@
                     }else if([key isEqualToString:SENSOR_PLUGIN_GOOGLE_CAL_PULL]){
                         awareSensor = [[GoogleCalPull alloc] initWithSensorName:SENSOR_PLUGIN_GOOGLE_CAL_PULL];
                         [awareSensor startSensor:uploadTime withSettings:pluginSettings];
+                    }else if([key isEqualToString:SENSOR_PLUGIN_GOOGLE_CAL_PUSH]){
+                        awareSensor = [[GoogleCalPush alloc] initWithSensorName:SENSOR_PLUGIN_GOOGLE_CAL_PUSH];
+                        [awareSensor startSensor:uploadTime withSettings:pluginSettings];
                     }else if([key isEqualToString:SENSOR_PLUGIN_GOOGLE_LOGIN]){
                         awareSensor = [[GoogleLogin alloc] initWithSensorName:SENSOR_PLUGIN_GOOGLE_LOGIN];
                         [awareSensor startSensor:uploadTime withSettings:pluginSettings];

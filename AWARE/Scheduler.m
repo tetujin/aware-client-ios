@@ -31,8 +31,8 @@
         KEY_SCHEDULE = @"key_schedule";
         KEY_TIMER = @"key_timer";
         KEY_PREVIOUS_SCHEDULE_JSON = @"key_previous_schedule_json";
-        CONFIG_URL = @"http://r2d2.hcii.cs.cmu.edu/esm/e0cfa02d-a68e-4c70-9efc-34e0604d6170/latest.json";
-//        CONFIG_URL = [NSString stringWithFormat:@"http://r2d2.hcii.cs.cmu.edu/esm/%@/esm_setting_ios.text", [self getDeviceId]];
+//        CONFIG_URL = @"http://r2d2.hcii.cs.cmu.edu/esm/c2083190-ecdd-49ad-ab88-5b0496cf3aed/setting_esm_ios.json";
+        CONFIG_URL = [NSString stringWithFormat:@"http://r2d2.hcii.cs.cmu.edu/esm/%@/esm_setting_ios.text", [self getDeviceId]];
     }
     return self;
 }
@@ -115,9 +115,8 @@ didReceiveResponse:(NSURLResponse *)response
     NSLog(@"==> %@",text);
     NSArray *schedules = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
     
-    NSLog(@"%@", error.debugDescription);
-    
     if (error != nil) {
+        NSLog(@"%@", error.debugDescription);
         return;
     }
     
@@ -125,8 +124,7 @@ didReceiveResponse:(NSURLResponse *)response
     
     NSMutableArray * awareSchedules = [[NSMutableArray alloc] init];
     
-//    NSDate * testFireDate = [self getTargetTimeAsNSDate:[NSDate new] hour:17 minute:15 second:0];
-//    AWARESchedule * awareSchedule = [self getDringSchedule];
+//    AWARESchedule * awareSchedule = [self getScheduleForTest];
 //    awareSchedule.schedule = [NSDate new];
 //    [awareSchedule setScheduleType:SCHEDULE_INTERVAL_TEST];
 //    [awareSchedules addObject:awareSchedule];
@@ -140,7 +138,7 @@ didReceiveResponse:(NSURLResponse *)response
         NSError *writeError = nil;
         NSData *jsonData = [NSJSONSerialization dataWithJSONObject:esmsDic options:0 error:&writeError];
         NSString * esmsStr = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-        NSLog(@"%@", esmsStr);
+//        NSLog(@"%@", esmsStr);
         
         for (NSNumber * hour in hours) {
             int intHour = [hour intValue];
@@ -178,17 +176,6 @@ didReceiveResponse:(NSURLResponse *)response
     [runLoop addTimer:dailyQuestionUpdateTimer forMode:NSDefaultRunLoopMode];// NSRunLoopCommonModes];//
     
     // init scheduler
-//    NSString* configUrl = @"http://www.ht.sfc.keio.ac.jp/~tetujin/aware/test.json";
-//    NSMutableDictionary * dic = [[NSMutableDictionary alloc] init];
-//    [dic setObject:configUrl forKey:@"configUrl"];
-//    NSTimer * timer = [[NSTimer alloc] initWithFireDate:[NSDate date]
-//                                               interval:0
-//                                                 target:self
-//                                               selector:@selector(setConfigFile:)
-//                                               userInfo:dic
-//                                                repeats:NO];
-//    [self setConfigFile:timer];
-    
     
     // Make schdules
 //    AWARESchedule * test = [self getScheduleForTest];
@@ -292,8 +279,8 @@ didReceiveResponse:(NSURLResponse *)response
     // ESM Objects
     ESM *esm = [[ESM alloc] initWithSensorName:SENSOR_ESMS];
     NSMutableArray* mulitEsm = schedule.esmObject.esms;
-    NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970] * 10000;
-    NSNumber* unixtime = [NSNumber numberWithDouble:timeStamp];
+    double timeStamp = [[NSDate date] timeIntervalSince1970] * 1000;
+    NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
     NSString * deviceId = [esm getDeviceId];
     
     for (SingleESMObject * singleEsm in mulitEsm) {
@@ -321,7 +308,7 @@ didReceiveResponse:(NSURLResponse *)response
                                                                    trigger:@""];
     // add existing data to base dictionary of an esm
     for (id key in [originalDic keyEnumerator]) {
-        NSLog(@"Key: %@ => Value:%@" , key, [originalDic objectForKey:key]);
+//        NSLog(@"Key: %@ => Value:%@" , key, [originalDic objectForKey:key]);
         if([key isEqualToString:KEY_ESM_RADIOS]){
             [dic setObject:[self convertArrayToCSVFormat:[originalDic objectForKey:key]] forKey:KEY_ESM_RADIOS];
         }else if([key isEqualToString:KEY_ESM_CHECKBOXES]){

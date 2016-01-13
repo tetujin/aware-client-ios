@@ -63,14 +63,16 @@
 - (void) getNTPTime {
     NetworkClock * nc = [NetworkClock sharedNetworkClock];
     NSDate * nt = nc.networkTime;
-    double offset = nc.networkOffset;
-    NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970] * 10000;
-    NSNumber* unixtime = [NSNumber numberWithDouble:timeStamp];
+    double offset = nc.networkOffset * 1000;
+    double timeStamp = [[NSDate date] timeIntervalSince1970] * 1000;
+    NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
+    double ntpTimestamp = [nt timeIntervalSince1970] * 1000;
+    NSNumber* ntpUnixtime = [NSNumber numberWithLong:ntpTimestamp];
     NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
     [dic setObject:unixtime forKey:@"timestamp"];
     [dic setObject:[self getDeviceId] forKey:@"device_id"];
     [dic setObject:[NSNumber numberWithDouble:offset] forKey:@"drift"]; // real
-    [dic setObject:[NSNumber numberWithDouble:nt.timeIntervalSince1970] forKey:@"ntp_time"]; // real
+    [dic setObject:ntpUnixtime forKey:@"ntp_time"]; // real
     [self setLatestValue:[NSString stringWithFormat:@"[%f] %@",offset, nt ]];
     [self saveData:dic];
 }

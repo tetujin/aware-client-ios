@@ -60,8 +60,8 @@
                                       if( error ) {
                                           NSLog(@"%@:%ld", [error domain], [error code] );
                                       } else {
-                                              NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970] * 10000;
-                                              NSNumber* unixtime = [NSNumber numberWithDouble:timeStamp];
+                                              double timeStamp = [[NSDate date] timeIntervalSince1970] * 1000;
+                                              NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
                                               NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
                                               [dic setObject:unixtime forKey:@"timestamp"];
                                               [dic setObject:[self getDeviceId] forKey:@"device_id"];
@@ -69,7 +69,7 @@
                                               [dic setObject:[NSNumber numberWithDouble:accelerometerData.acceleration.y] forKey:@"double_values_1"];
                                               [dic setObject:[NSNumber numberWithDouble:accelerometerData.acceleration.z] forKey:@"double_values_2"];
                                               [dic setObject:@0 forKey:@"accuracy"];
-                                              [dic setObject:@"text" forKey:@"label"];
+                                              [dic setObject:@"" forKey:@"label"];
                                               [self setLatestValue:[NSString stringWithFormat:
                                                                     @"%f, %f, %f",
                                                                     accelerometerData.acceleration.x,

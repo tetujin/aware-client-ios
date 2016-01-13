@@ -92,6 +92,12 @@ didFailToConnectWithError:(NSError *)error{
     return YES;
 }
 
+- (NSNumber *) getUnixTime {
+    double timeStamp = [[NSDate date] timeIntervalSince1970] * 1000;
+    NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
+    return unixtime;
+}
+
 - (void)startMSBSensors:(double)upInterval withSettings:(NSArray *)settings{
     [super addAnAwareSensor:[self getCalorieSensor]];
     [super addAnAwareSensor:[self getDistanceSensor]];
@@ -147,8 +153,7 @@ didFailToConnectWithError:(NSError *)error{
     void (^calHandler)(MSBSensorCaloriesData *, NSError *) = ^(MSBSensorCaloriesData *calData, NSError *error) {
         NSString* data =[NSString stringWithFormat:@"%ld", calData.calories];
         //        NSLog(@"Cal: %@",data);
-        NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970] * 10000;
-        NSNumber* unixtime = [NSNumber numberWithDouble:timeStamp];
+        NSNumber* unixtime = [self getUnixTime];
         NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
         [dic setObject:unixtime forKey:@"timestamp"];
         [dic setObject:[self getDeviceId] forKey:@"device_id"];
@@ -208,8 +213,8 @@ didFailToConnectWithError:(NSError *)error{
                 break;
         }
         
-        NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970] * 10000;
-        NSNumber* unixtime = [NSNumber numberWithDouble:timeStamp];
+//        NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970] * 10000;
+        NSNumber* unixtime = [self getUnixTime];//[NSNumber numberWithDouble:timeStamp];
         NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
         [dic setObject:unixtime forKey:@"timestamp"];
         [dic setObject:[self getDeviceId] forKey:@"device_id"];
@@ -273,8 +278,8 @@ didFailToConnectWithError:(NSError *)error{
                         quality = @"Unkonwn";
                         break;
                 }
-                NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970] * 10000;
-                NSNumber* unixtime = [NSNumber numberWithDouble:timeStamp];
+//                NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970] * 10000;
+                NSNumber* unixtime = [self getUnixTime]; //[NSNumber numberWithDouble:timeStamp];
                 NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
                 [dic setObject:unixtime forKey:@"timestamp"];
                 [dic setObject:[self getDeviceId] forKey:@"device_id"];
@@ -310,8 +315,8 @@ didFailToConnectWithError:(NSError *)error{
     void (^uvHandler)(MSBSensorUVData *, NSError *) = ^(MSBSensorUVData *uvData,  NSError *error){
         NSString *data = [NSString stringWithFormat:@" interval (s): %ld", uvData.uvIndexLevel];
         //        NSLog(@"UV: %@",data);
-        NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970] * 10000;
-        NSNumber* unixtime = [NSNumber numberWithDouble:timeStamp];
+//        NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970] * 10000;
+        NSNumber* unixtime = [self getUnixTime];//[NSNumber numberWithDouble:timeStamp];
         NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
         [dic setObject:unixtime forKey:@"timestamp"];
         [dic setObject:[self getDeviceId] forKey:@"device_id"];
@@ -345,8 +350,8 @@ didFailToConnectWithError:(NSError *)error{
     void (^skinHandler)(MSBSensorSkinTemperatureData *, NSError *) = ^(MSBSensorSkinTemperatureData *skinData,  NSError *error){
         NSString *data = [NSString stringWithFormat:@" interval (s): %.2f", skinData.temperature];
         //        NSLog(@"Skin: %@",data);
-        NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970] * 10000;
-        NSNumber* unixtime = [NSNumber numberWithDouble:timeStamp];
+//        NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970] * 10000;
+        NSNumber* unixtime = [self getUnixTime]; //[NSNumber numberWithDouble:timeStamp];
         NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
         [dic setObject:unixtime forKey:@"timestamp"];
         [dic setObject:[self getDeviceId] forKey:@"device_id"];
@@ -396,8 +401,8 @@ didFailToConnectWithError:(NSError *)error{
                           accelerometerData.x,
                           accelerometerData.y,
                           accelerometerData.z];
-        NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970] * 10000;
-        NSNumber* unixtime = [NSNumber numberWithDouble:timeStamp];
+        NSNumber* unixtime = [self getUnixTime];
+        
         NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
         [dic setObject:unixtime forKey:@"timestamp"];
         [dic setObject:[self getDeviceId] forKey:@"device_id"];

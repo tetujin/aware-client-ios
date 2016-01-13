@@ -85,6 +85,15 @@ dismissViewController:(UIViewController *)viewController {
     [defaults removeObjectForKey:@"GOOGLE_NAME"];
     [defaults removeObjectForKey:@"GOOGLE_EMAIL"];
     [defaults removeObjectForKey:@"GOOGLE_ID_TOKEN"];
+    [defaults removeObjectForKey:@"GOOGLE_PHONE"];
+    
+    UIAlertView *av = [[UIAlertView alloc]initWithTitle:@"Success"
+                                                message:nil
+                                               delegate:self
+                                      cancelButtonTitle:nil
+                                      otherButtonTitles:@"OK", nil];
+//    av.alertViewStyle = UIAlertViewStylePlainTextInput;
+    [av show];
     
     _account.text = @"";
 }

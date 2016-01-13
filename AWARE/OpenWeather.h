@@ -10,16 +10,7 @@
 #import <CoreLocation/CoreLocation.h>
 #import "AWARESensor.h"
 
-@interface OpenWeather : AWARESensor <AWARESensorDelegate, CLLocationManagerDelegate, NSURLSessionDataDelegate, NSURLSessionTaskDelegate> {
-//    NSString* deviceOrientation;
-//    NSString* proximity;
-    NSDictionary* jsonWeatherData;
-    NSDate* thisDate;
-    double thisLat;
-    double thisLon;
-    
-    //bool weatherState;
-}
+@interface OpenWeather : AWARESensor <AWARESensorDelegate, CLLocationManagerDelegate, NSURLSessionDataDelegate, NSURLSessionTaskDelegate> 
 
 //- (id) initWithDate:(NSDate *)date Lat:(double)lat Lon:(double)lon;
 //- (void) updateWeatherData:(NSDate *)date Lat:(double)lat Lon:(double)lon;

@@ -61,13 +61,14 @@ NSString* const SENSOR_AMBIENT_NOISE = @"plugin_ambient_noise";
 NSString* const SENSOR_SCHEDULER = @"scheduler";
 NSString* const SENSOR_PLUGIN_GOOGLE_ACTIVITY_RECOGNITION = @"plugin_google_activity_recognition";
 NSString* const SENSOR_PLUGIN_OPEN_WEATHER = @"plugin_openweather";
-NSString* const SENSOR_PLUGIN_MSBAND = @"plugin_msband";
+NSString* const SENSOR_PLUGIN_MSBAND = @"plugin_msband_sensors";
 NSString* const SENSOR_PLUGIN_DEVICE_USAGE = @"plugin_device_usage";
 NSString* const SENSOR_PLUGIN_NTPTIME = @"plugin_ntptime";
 NSString* const SENSOR_PLUGIN_SCHEDULER = @"scheduler";
-NSString* const SENSOR_PLUGIN_GOOGLE_CAL_PULL = @"plugin_google_cal_pull"; // there are two data base in the plugin
-NSString* const SENSOR_PLUGIN_GOOGLE_CAL_PUSH = @"plugin_google_cal_push";
+NSString* const SENSOR_PLUGIN_GOOGLE_CAL_PULL = @"plugin_balancedcampuscalendar"; // there are two data base in the plugin
+NSString* const SENSOR_PLUGIN_GOOGLE_CAL_PUSH = @"plugin_balancedcampusjournal";
 NSString* const SENSOR_PLUGIN_GOOGLE_LOGIN = @"plugin_google_login";
+NSString* const SENSOR_PLUGIN_STUDENTLIFE_AUDIO = @"plugin_studentlife_audio";
 
 
 NSString * const NotificationCategoryIdent  = @"ACTIONABLE";

@@ -288,6 +288,168 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1602ADB81C45B021002B3121 /* Accelerometer */ = {
+			isa = PBXGroup;
+			children = (
+				1623CEBA1BFE390600EFAD72 /* Accelerometer.h */,
+				1623CEBB1BFE390600EFAD72 /* Accelerometer.m */,
+			);
+			name = Accelerometer;
+			sourceTree = "<group>";
+		};
+		1602ADB91C45B030002B3121 /* Gyroscope */ = {
+			isa = PBXGroup;
+			children = (
+				169A7B221BFF16E700A7C06D /* Gyroscope.h */,
+				169A7B231BFF16E700A7C06D /* Gyroscope.m */,
+			);
+			name = Gyroscope;
+			sourceTree = "<group>";
+		};
+		1602ADBA1C45B03A002B3121 /* Magnetometer */ = {
+			isa = PBXGroup;
+			children = (
+				169A7B251BFF193C00A7C06D /* Magnetometer.h */,
+				169A7B261BFF193C00A7C06D /* Magnetometer.m */,
+			);
+			name = Magnetometer;
+			sourceTree = "<group>";
+		};
+		1602ADBB1C45B063002B3121 /* Battery */ = {
+			isa = PBXGroup;
+			children = (
+				169A7B281BFF1C2300A7C06D /* Battery.h */,
+				169A7B291BFF1C2300A7C06D /* Battery.m */,
+			);
+			name = Battery;
+			sourceTree = "<group>";
+		};
+		1602ADBC1C45B06C002B3121 /* Barometter */ = {
+			isa = PBXGroup;
+			children = (
+				169A7B2B1BFF219500A7C06D /* Barometer.h */,
+				169A7B2C1BFF219500A7C06D /* Barometer.m */,
+			);
+			name = Barometter;
+			sourceTree = "<group>";
+		};
+		1602ADBD1C45B089002B3121 /* Locations */ = {
+			isa = PBXGroup;
+			children = (
+				169A7B2E1BFF280C00A7C06D /* Locations.h */,
+				169A7B2F1BFF280C00A7C06D /* Locations.m */,
+			);
+			name = Locations;
+			sourceTree = "<group>";
+		};
+		1602ADBE1C45B090002B3121 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				169A7B331BFFB67800A7C06D /* Network.h */,
+				169A7B341BFFB67800A7C06D /* Network.m */,
+			);
+			name = Network;
+			sourceTree = "<group>";
+		};
+		1602ADBF1C45B099002B3121 /* Wifi */ = {
+			isa = PBXGroup;
+			children = (
+				169A7B391BFFC8B100A7C06D /* Wifi.h */,
+				169A7B3A1BFFC8B100A7C06D /* Wifi.m */,
+			);
+			name = Wifi;
+			sourceTree = "<group>";
+		};
+		1602ADC01C45B09F002B3121 /* Processor */ = {
+			isa = PBXGroup;
+			children = (
+				169A7B3E1BFFD55A00A7C06D /* Processor.h */,
+				169A7B3F1BFFD55A00A7C06D /* Processor.m */,
+			);
+			name = Processor;
+			sourceTree = "<group>";
+		};
+		1602ADC11C45B0B0002B3121 /* Rotation */ = {
+			isa = PBXGroup;
+			children = (
+				169A7B411BFFDE8F00A7C06D /* Rotation.h */,
+				169A7B421BFFDE8F00A7C06D /* Rotation.m */,
+			);
+			name = Rotation;
+			sourceTree = "<group>";
+		};
+		1602ADC21C45B0B8002B3121 /* Gravity */ = {
+			isa = PBXGroup;
+			children = (
+				169A7B441C0052F800A7C06D /* Gravity.h */,
+				169A7B451C0052F800A7C06D /* Gravity.m */,
+			);
+			name = Gravity;
+			sourceTree = "<group>";
+		};
+		1602ADC31C45B0CD002B3121 /* LinearAccelerometer */ = {
+			isa = PBXGroup;
+			children = (
+				169A7B471C00591A00A7C06D /* LinearAccelerometer.h */,
+				169A7B481C00591A00A7C06D /* LinearAccelerometer.m */,
+			);
+			name = LinearAccelerometer;
+			sourceTree = "<group>";
+		};
+		1602ADC41C45B0D1002B3121 /* Bluetooth */ = {
+			isa = PBXGroup;
+			children = (
+				160EE9BB1C050B4C00015688 /* Bluetooth.h */,
+				160EE9BC1C050B4C00015688 /* Bluetooth.m */,
+			);
+			name = Bluetooth;
+			sourceTree = "<group>";
+		};
+		1602ADC51C45B0D8002B3121 /* Screen */ = {
+			isa = PBXGroup;
+			children = (
+				164DD65A1C1F762000ADA92B /* Screen.h */,
+				164DD65B1C1F762000ADA92B /* Screen.m */,
+			);
+			name = Screen;
+			sourceTree = "<group>";
+		};
+		1602ADC61C45B0E2002B3121 /* Proximity */ = {
+			isa = PBXGroup;
+			children = (
+				164DD6631C1FB1A400ADA92B /* Proximity.h */,
+				164DD6641C1FB1A400ADA92B /* Proximity.m */,
+			);
+			name = Proximity;
+			sourceTree = "<group>";
+		};
+		1602ADC71C45B0EB002B3121 /* Timezone */ = {
+			isa = PBXGroup;
+			children = (
+				164DD6661C1FBA9100ADA92B /* Timezone.h */,
+				164DD6671C1FBA9100ADA92B /* Timezone.m */,
+			);
+			name = Timezone;
+			sourceTree = "<group>";
+		};
+		1602ADC81C45B0F0002B3121 /* ESM */ = {
+			isa = PBXGroup;
+			children = (
+				164810831C21C08C00B830D9 /* ESM.h */,
+				164810841C21C08C00B830D9 /* ESM.m */,
+			);
+			name = ESM;
+			sourceTree = "<group>";
+		};
+		1602ADC91C45B0FD002B3121 /* Scheduler */ = {
+			isa = PBXGroup;
+			children = (
+				1643959D1C22EEC40039E113 /* Scheduler.h */,
+				1643959E1C22EEC40039E113 /* Scheduler.m */,
+			);
+			name = Scheduler;
+			sourceTree = "<group>";
+		};
 		160794491C1926840021816F /* AWAREFramework */ = {
 			isa = PBXGroup;
 			children = (
@@ -406,46 +568,26 @@
 		168683011C07922100CB4266 /* Sensors */ = {
 			isa = PBXGroup;
 			children = (
-				16FCE2751BFE9326005FC71A /* AWARESensorManager.h */,
-				16FCE2761BFE9326005FC71A /* AWARESensorManager.m */,
 				1623CEB51BFE175F00EFAD72 /* AWARESensor.h */,
 				1623CEB61BFE175F00EFAD72 /* AWARESensor.m */,
-				1623CEBA1BFE390600EFAD72 /* Accelerometer.h */,
-				1623CEBB1BFE390600EFAD72 /* Accelerometer.m */,
-				169A7B221BFF16E700A7C06D /* Gyroscope.h */,
-				169A7B231BFF16E700A7C06D /* Gyroscope.m */,
-				169A7B251BFF193C00A7C06D /* Magnetometer.h */,
-				169A7B261BFF193C00A7C06D /* Magnetometer.m */,
-				169A7B281BFF1C2300A7C06D /* Battery.h */,
-				169A7B291BFF1C2300A7C06D /* Battery.m */,
-				169A7B2B1BFF219500A7C06D /* Barometer.h */,
-				169A7B2C1BFF219500A7C06D /* Barometer.m */,
-				169A7B2E1BFF280C00A7C06D /* Locations.h */,
-				169A7B2F1BFF280C00A7C06D /* Locations.m */,
-				169A7B331BFFB67800A7C06D /* Network.h */,
-				169A7B341BFFB67800A7C06D /* Network.m */,
-				169A7B391BFFC8B100A7C06D /* Wifi.h */,
-				169A7B3A1BFFC8B100A7C06D /* Wifi.m */,
-				169A7B3E1BFFD55A00A7C06D /* Processor.h */,
-				169A7B3F1BFFD55A00A7C06D /* Processor.m */,
-				169A7B411BFFDE8F00A7C06D /* Rotation.h */,
-				169A7B421BFFDE8F00A7C06D /* Rotation.m */,
-				169A7B441C0052F800A7C06D /* Gravity.h */,
-				169A7B451C0052F800A7C06D /* Gravity.m */,
-				169A7B471C00591A00A7C06D /* LinearAccelerometer.h */,
-				169A7B481C00591A00A7C06D /* LinearAccelerometer.m */,
-				160EE9BB1C050B4C00015688 /* Bluetooth.h */,
-				160EE9BC1C050B4C00015688 /* Bluetooth.m */,
-				164DD65A1C1F762000ADA92B /* Screen.h */,
-				164DD65B1C1F762000ADA92B /* Screen.m */,
-				164DD6631C1FB1A400ADA92B /* Proximity.h */,
-				164DD6641C1FB1A400ADA92B /* Proximity.m */,
-				164DD6661C1FBA9100ADA92B /* Timezone.h */,
-				164DD6671C1FBA9100ADA92B /* Timezone.m */,
-				164810831C21C08C00B830D9 /* ESM.h */,
-				164810841C21C08C00B830D9 /* ESM.m */,
-				1643959D1C22EEC40039E113 /* Scheduler.h */,
-				1643959E1C22EEC40039E113 /* Scheduler.m */,
+				1602ADB81C45B021002B3121 /* Accelerometer */,
+				1602ADB91C45B030002B3121 /* Gyroscope */,
+				1602ADBA1C45B03A002B3121 /* Magnetometer */,
+				1602ADBB1C45B063002B3121 /* Battery */,
+				1602ADBC1C45B06C002B3121 /* Barometter */,
+				1602ADBD1C45B089002B3121 /* Locations */,
+				1602ADBE1C45B090002B3121 /* Network */,
+				1602ADBF1C45B099002B3121 /* Wifi */,
+				1602ADC01C45B09F002B3121 /* Processor */,
+				1602ADC11C45B0B0002B3121 /* Rotation */,
+				1602ADC21C45B0B8002B3121 /* Gravity */,
+				1602ADC31C45B0CD002B3121 /* LinearAccelerometer */,
+				1602ADC41C45B0D1002B3121 /* Bluetooth */,
+				1602ADC51C45B0D8002B3121 /* Screen */,
+				1602ADC61C45B0E2002B3121 /* Proximity */,
+				1602ADC71C45B0EB002B3121 /* Timezone */,
+				1602ADC81C45B0F0002B3121 /* ESM */,
+				1602ADC91C45B0FD002B3121 /* Scheduler */,
 			);
 			name = Sensors;
 			sourceTree = "<group>";
@@ -492,6 +634,8 @@
 			children = (
 				1607944A1C19274C0021816F /* AWAREStudy.h */,
 				1607944B1C19274C0021816F /* AWAREStudy.m */,
+				16FCE2751BFE9326005FC71A /* AWARESensorManager.h */,
+				16FCE2761BFE9326005FC71A /* AWARESensorManager.m */,
 			);
 			name = Study;
 			sourceTree = "<group>";

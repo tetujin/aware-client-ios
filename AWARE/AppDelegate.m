@@ -54,14 +54,14 @@
         [application registerForRemoteNotificationTypes:remoteNotificationType];
     }
     
-    // For Google Auth API
+    // For Google Auth API d
     NSError* configureError;
     [[GGLContext sharedInstance] configureWithError: &configureError];
     NSAssert(!configureError, @"Error configuring Google services: %@", configureError);
     [GIDSignIn sharedInstance].delegate = self;
     
     
-    [[DeployGateSDK sharedInstance] launchApplicationWithAuthor:@"tetujin" key:@"b268f60ae48ecfca7352c0a01918c86a7bd4bc74"];
+//    [[DeployGateSDK sharedInstance] launchApplicationWithAuthor:@"tetujin" key:@"b268f60ae48ecfca7352c0a01918c86a7bd4bc74"];
     
     
     [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
@@ -314,16 +314,58 @@ didSignInForUser:(GIDGoogleUser *)user
     NSLog(@"email is %@", email);
     NSLog(@"idToken is %@", idToken);
     
-    GoogleLogin * googleLogin = [[GoogleLogin alloc] initWithSensorName:SENSOR_PLUGIN_GOOGLE_LOGIN];
+
     if (name != nil ) {
-        [googleLogin saveName:name withEmail:email];
         NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
         [defaults setObject:userId forKey:@"GOOGLE_ID"];
         [defaults setObject:name forKey:@"GOOGLE_NAME"];
         [defaults setObject:email forKey:@"GOOGLE_EMAIL"];
         [defaults setObject:idToken forKey:@"GOOGLE_ID_TOKEN"];
+        
+        NSString* phoneNumber = [defaults objectForKey:@"GOOGLE_PHONE"];
+        
+        UIAlertView *av = [[UIAlertView alloc]initWithTitle:@"Please write your phonenumber"
+                                                    message:nil
+                                                   delegate:self
+                                          cancelButtonTitle:@"Cancel"
+                                          otherButtonTitles:@"OK", nil];
+        av.alertViewStyle = UIAlertViewStylePlainTextInput;
+        [av textFieldAtIndex:0].delegate = self;
+        if (phoneNumber != nil) {
+            [av textFieldAtIndex:0].text = phoneNumber;
+        }
+        UITextField* tf = [av textFieldAtIndex:0];
+        tf.keyboardType = UIKeyboardTypeNumberPad;
+        [av show];
+        
+
     }
 
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    NSLog(@"%@",[alertView textFieldAtIndex:0].text);
+    if (buttonIndex != 0) {
+        NSString * phonenumber = [alertView textFieldAtIndex:0].text;
+        GoogleLogin * googleLogin = [[GoogleLogin alloc] initWithSensorName:SENSOR_PLUGIN_GOOGLE_LOGIN];
+
+        NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+//        NSString *userId = [defaults objectForKey:@"GOOGLE_ID"];                  // For client-side use only!
+//        NSString *idToken = [defaults objectForKey:@"GOOGLE_ID_TOKEN"]; // Safe to send to the server
+        NSString *name = [defaults objectForKey:@"GOOGLE_NAME"];
+        NSString *email = [defaults objectForKey:@"GOOGLE_EMAIL"];
+        [defaults setObject:phonenumber forKey:@"GOOGLE_PHONE"];
+        
+        [googleLogin saveName:name withEmail:email phoneNumber:phonenumber];
+        
+        
+        UIAlertView *av = [[UIAlertView alloc]initWithTitle:@"Success"
+                                                    message:@"Please go back to the toppage"
+                                                   delegate:self
+                                          cancelButtonTitle:nil
+                                          otherButtonTitles:@"OK", nil];
+        [av show];
+    }
 }
 
 - (void)signIn:(GIDSignIn *)signIn

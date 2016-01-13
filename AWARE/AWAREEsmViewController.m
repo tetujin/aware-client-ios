@@ -290,13 +290,14 @@
     
 //    for (NSString* buttonBoxItem in [dic objectForKey:KEY_ESM_RADIOS]) {
     NSArray * radios = [dic objectForKey:KEY_ESM_RADIOS];
-    for (int i=0; i<radios.count+1 ; i++) {
+    for (int i=0; i<radios.count ; i++) {
         NSString * labelText = @"";
-        if (i == radios.count) {
-            labelText = @"N/A";
-        }else{
-            labelText = [radios objectAtIndex:i];
-        }
+        labelText = [radios objectAtIndex:i];
+//        if (i == radios.count) {
+//            labelText = @"N/A";
+//        }else{
+//            labelText = [radios objectAtIndex:i];
+//        }
         UIButton *s = [[UIButton alloc] initWithFrame:CGRectMake(mainContentRect.origin.x + 10, totalHight, 30, 30)];
         [s setImage:[UIImage imageNamed:@"unselected_circle"] forState:UIControlStateNormal];
         UILabel * label = [[UILabel alloc] initWithFrame:CGRectMake(mainContentRect.origin.x + 10 + 60,
@@ -423,13 +424,13 @@
     NSMutableArray *elements = [[NSMutableArray alloc] init];
     NSMutableArray *labels = [[NSMutableArray alloc] init];
     NSArray * checkBoxItems = [dic objectForKey:KEY_ESM_CHECKBOXES];
-    for (int i=0; i<checkBoxItems.count+1; i++) {
+    for (int i=0; i<checkBoxItems.count; i++) {
         NSString* checkBoxItem  = @"";
-        if ( i == checkBoxItems.count ) {
-            checkBoxItem = @"N/A";
-        } else {
-            checkBoxItem = [checkBoxItems objectAtIndex:i];
-        }
+//        if ( i == checkBoxItems.count ) {
+//            checkBoxItem = @"N/A";
+//        } else {
+        checkBoxItem = [checkBoxItems objectAtIndex:i];
+//        }
         UIButton *s = [[UIButton alloc] initWithFrame:CGRectMake(mainContentRect.origin.x + 10 , totalHight, 30, 30)];
         [s setImage:[UIImage imageNamed:@"unchecked_box"] forState:UIControlStateNormal];
         [s addTarget:self action:@selector(pushedCheckBox:) forControlEvents:UIControlEventTouchUpInside];
@@ -845,9 +846,9 @@
     NSArray * elements = [uiElement objectForKey:KEY_ELEMENT];
     
     NSMutableArray * array = [[NSMutableArray alloc] initWithArray:elements];
-    double unixtime = [sender.date timeIntervalSince1970];
-    NSNumber *datetime = [[NSNumber alloc] initWithDouble:unixtime];
-    [array setObject:datetime atIndexedSubscript:0];
+    double timeStamp = [[NSDate date] timeIntervalSince1970] * 1000;
+    NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
+    [array setObject:unixtime atIndexedSubscript:0];
     
     [uiElement setObject:array forKey:KEY_ELEMENT];
     [uiElements insertObject:uiElement atIndex:tag];
@@ -926,8 +927,8 @@
     NSMutableArray *array = [[NSMutableArray alloc] init];
     ESM *esm = [[ESM alloc] initWithSensorName:SENSOR_ESMS];
     
-    NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
-    NSNumber* unixtime = [NSNumber numberWithDouble:timeStamp];
+    double timeStamp = [[NSDate date] timeIntervalSince1970] * 1000;
+    NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
     NSString * deviceId = [esm getDeviceId];
     
     for (int i=0; i<uiElements.count; i++) {
@@ -971,11 +972,6 @@
                         [dic setObject:label.text forKey:KEY_ESM_USER_ANSWER];
                         skip = false;
                     }
-//                    if (i == contents.count-1) {
-//                        if (button.selected) {
-//                            [dic setObject:@4 forKey:KEY_ESM_STATUS];
-//                        }
-//                    }
                 }
             }
             if(skip){
@@ -995,11 +991,6 @@
                         result = [NSString stringWithFormat:@"%@,%@", result , label.text];
                         skip = false;
                     }
-//                    if (i == contents.count-1) {
-//                        if (button.selected) {
-//                            [dic setObject:@1 forKey:KEY_ESM_STATUS];
-//                        }
-//                    }
                 }
                 [dic setObject:result forKey:KEY_ESM_USER_ANSWER];
             }
@@ -1039,14 +1030,6 @@
                     }else{
                         [dic setObject:label.text forKey:KEY_ESM_USER_ANSWER];
                     }
-                    
-                    // Get N/A button value and set N/A condition
-//                    UIButton* naButton = [contents objectAtIndex:1];
-//                    if(naButton.selected){
-//                        [dic setObject:@1 forKey:KEY_ESM_STATUS];
-//                    }else{
-//                        [dic setObject:@0 forKey:KEY_ESM_STATUS];
-//                    }
                 }
             }
         } else if ([type isEqual:@7]){
@@ -1185,8 +1168,8 @@
     
     // Create
     ESM *esm = [[ESM alloc] initWithSensorName:SENSOR_ESMS];
-    NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970] * 10000 ;
-    NSNumber* unixtime = [NSNumber numberWithDouble:timeStamp];
+    double timeStamp = [[NSDate date] timeIntervalSince1970] * 1000;
+    NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
     NSString *deviceId = [esm getDeviceId];
     for (int i=0; i<uiElements.count; i++) {
         NSDictionary *esmDic = [[uiElements objectAtIndex:i] objectForKey:KEY_OBJECT];

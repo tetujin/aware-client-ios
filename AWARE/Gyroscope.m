@@ -28,9 +28,9 @@
     query = @"_id integer primary key autoincrement,"
     "timestamp real default 0,"
     "device_id text default '',"
-    "double_values_x real default 0,"
-    "double_values_y real default 0,"
-    "double_values_z real default 0,"
+    "axis_x real default 0,"
+    "axis_y real default 0,"
+    "axis_z real default 0,"
     "accuracy integer default 0,"
     "label text default '',"
     "UNIQUE (timestamp,device_id)";
@@ -45,12 +45,12 @@
     NSLog(@"[%@] Start Gyro Sensor", [self getSensorName]);
     gTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval target:self selector:@selector(syncAwareDB) userInfo:nil repeats:YES];
     
-    [self setBufferLimit:10000];
+//    [self setBufferLimit:10000];
     [self startWriteAbleTimer];
     
     double frequency = [self getSensorSetting:settings withKey:@"frequency_gyroscope"];
     if(frequency != -1){
-        NSLog(@"Accelerometer's frequency is %f !!", frequency);
+        NSLog(@"Gyroscope's frequency is %f !!", frequency);
         double iOSfrequency = [self convertMotionSensorFrequecyFromAndroid:frequency];
         gyroManager.gyroUpdateInterval = iOSfrequency;
     }else{
@@ -62,8 +62,8 @@
         if( error ) {
             NSLog(@"%@:%ld", [error domain], [error code] );
         } else {
-            NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970] * 10000;
-            NSNumber* unixtime = [NSNumber numberWithDouble:timeStamp];
+            double timeStamp = [[NSDate date] timeIntervalSince1970] * 1000;
+            NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
             NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
             [dic setObject:unixtime forKey:@"timestamp"];
             [dic setObject:[self getDeviceId] forKey:@"device_id"];
@@ -71,7 +71,7 @@
             [dic setObject:[NSNumber numberWithDouble:gyroData.rotationRate.y] forKey:@"axis_y"];
             [dic setObject:[NSNumber numberWithDouble:gyroData.rotationRate.z] forKey:@"axis_z"];
             [dic setObject:@0 forKey:@"accuracy"];
-            [dic setObject:@"text" forKey:@"label"];
+            [dic setObject:@"" forKey:@"label"];
             [self setLatestValue:[NSString stringWithFormat:@"%f, %f, %f",gyroData.rotationRate.x,gyroData.rotationRate.y,gyroData.rotationRate.z]];
 //            [self saveData:dic toLocalFile:SENSOR_GYROSCOPE];
             [self saveData:dic];

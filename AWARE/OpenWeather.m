@@ -13,6 +13,11 @@
     IBOutlet CLLocationManager *locationManager;
     NSTimer* syncTimer;
     NSTimer* sensingTimer;
+    NSDictionary* jsonWeatherData;
+    NSDate* thisDate;
+    double thisLat;
+    double thisLon;
+    NSString* identificationForOpenWeather;
 }
 /** api */
 NSString* OPEN_WEATHER_API = @"http://api.openweathermap.org/data/2.5/weather?lat=%d&lon=%d&APPID=54e5dee2e6a2479e0cc963cf20f233cc";
@@ -50,7 +55,6 @@ NSString* ELE_ALL         = @"all";
 NSString* KEY_NAME        = @"name";
 
 NSString* ZERO            = @"0";
-
     
 int ONE_HOUR = 60*60;
 
@@ -68,6 +72,7 @@ int ONE_HOUR = 60*60;
     if (self) {
         locationManager = nil;
         NSDate *date = [NSDate new];
+        identificationForOpenWeather = @"http_for_open_weather_";
         [self updateWeatherData:date Lat:0 Lon:0];
     }
     return self;
@@ -214,12 +219,13 @@ int ONE_HOUR = 60*60;
     NSString *postLength = nil;
     
     // Set settion configu and HTTP/POST body.
-    NSURLSessionConfiguration *sessionConfig =
-    [NSURLSessionConfiguration defaultSessionConfiguration];
+    NSURLSessionConfiguration *sessionConfig = nil;
+    sessionConfig = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:identificationForOpenWeather];
     sessionConfig.timeoutIntervalForRequest = 180.0;
-    sessionConfig.timeoutIntervalForResource = 300.0;
+    sessionConfig.timeoutIntervalForResource = 60.0;
     sessionConfig.HTTPMaximumConnectionsPerHost = 30;
-    
+//    sessionConfig.allowsCellularAccess = NO;
+    sessionConfig.discretionary = YES;
     
     NSString *url = [NSString stringWithFormat:OPEN_WEATHER_API, (int)lat, (int)lon];
     request = [[NSMutableURLRequest alloc] init];
@@ -227,66 +233,100 @@ int ONE_HOUR = 60*60;
     [request setHTTPMethod:@"GET"];
     [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
     
-    session = [NSURLSession sessionWithConfiguration:sessionConfig];
-    [[session dataTaskWithRequest:request
-                completionHandler:^(NSData * _Nullable data,
-                                    NSURLResponse * _Nullable response,
-                                    NSError * _Nullable error) {
-                    NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
-                    int responseCode = (int)[httpResponse statusCode];
-                    NSLog(@"response code : %d", responseCode);
+    // set HTTP/POST body information
+    NSLog(@"--- [%@] This is background task ----", [self getSensorName] );
+    session = [NSURLSession sessionWithConfiguration:sessionConfig delegate:self delegateQueue:nil];
+    NSURLSessionDataTask* dataTask = [session dataTaskWithRequest:request];
+    [dataTask resume];
 
-                    if (error != nil) {
-                        NSLog(@"Error!");
-                        NSLog(@"%@",[error description]);
-                        return;
-                    }else{
-                        NSLog(@"Got Weather Information from API!");
-                    }
-                    
-                    if (responseCode == 200) {
-                        NSError *e = nil;
-                        jsonWeatherData = [NSJSONSerialization JSONObjectWithData:data
-                                                                          options:NSJSONReadingAllowFragments
-                                                                            error:&e];
-                        
-//                        NSLog(@"%@", jsonWeatherData);
-                        if (jsonWeatherData == nil) {
-                            return;
-                        };
-//                        jsonWeatherData = [[NSDictionary alloc] init];
-                        NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-                        NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970] * 10000;
-                        NSNumber* unixtime = [NSNumber numberWithDouble:timeStamp];
-                        [dic setObject:unixtime forKey:@"timestamp"];
-                        [dic setObject:[self getDeviceId] forKey:@"device_id"];
-                        [dic setObject:[self getCountry] forKey:@"city"];
-                        [dic setObject:[self getTemp] forKey:@"temperature"];
-                        [dic setObject:[self getTempMax] forKey:@"temperature_max"];
-                        [dic setObject:[self getTempMax] forKey:@"temperature_min"];
-                        [dic setObject:@"" forKey:@"unit"];
-                        [dic setObject:[self getHumidity] forKey:@"humidity"];
-                        [dic setObject:[self getPressure] forKey:@"pressure"];
-                        [dic setObject:[self getWindSpeed] forKey:@"wind_speed"];
-                        [dic setObject:[self getWindDeg] forKey:@"wind_degrees"];
-                        [dic setObject:[self getClouds] forKey:@"cloudiness"];
-                        [dic setObject:[self getWeatherIcon] forKey:@"weather_icon_id"];
-                        [dic setObject:[self getWeatherDescription] forKey:@"weather_description"];
-                        [dic setObject:[self getRain] forKey:@"rain"];
-                        [dic setObject:[self getSnow] forKey:@"snow"];
-                        [dic setObject:[self getSunRise] forKey:@"sunrise"];
-                        [dic setObject:[self getSunSet] forKey:@"sunset"];
-                        [self setLatestValue:[NSString stringWithFormat:@"%@: %@", [self getWeather], [self getWeatherDescription]]];
-                        [self saveData:dic];
-                        
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            [session finishTasksAndInvalidate];
-                            [session invalidateAndCancel];
-                        });
-                    }
-                   
-                }] resume];
 }
+
+
+
+- (void)URLSession:(NSURLSession *)session
+          dataTask:(NSURLSessionDataTask *)dataTask
+didReceiveResponse:(NSURLResponse *)response
+ completionHandler:(void (^)(NSURLSessionResponseDisposition disposition))completionHandler {
+    
+    [session finishTasksAndInvalidate];
+    [session invalidateAndCancel];
+    
+    NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
+    int responseCode = (int)[httpResponse statusCode];
+    if (responseCode == 200) {
+        NSLog(@"[%@] Got Weather Information from API!", [self getSensorName]);
+    }
+
+    completionHandler(NSURLSessionResponseAllow);
+}
+
+
+-(void)URLSession:(NSURLSession *)session
+         dataTask:(NSURLSessionDataTask *)dataTask
+   didReceiveData:(NSData *)data {
+    if(data != nil){
+        NSError *e = nil;
+        jsonWeatherData = [NSJSONSerialization JSONObjectWithData:data
+                                                          options:NSJSONReadingAllowFragments
+                                                            error:&e];
+        
+        // NSLog(@"%@", jsonWeatherData);
+        if ( jsonWeatherData == nil) {
+            NSLog( @"%@", e.debugDescription );
+            return;
+        };
+        
+        NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+        double timeStamp = [[NSDate date] timeIntervalSince1970] * 1000;
+        NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
+        [dic setObject:unixtime forKey:@"timestamp"];
+        [dic setObject:[self getDeviceId] forKey:@"device_id"];
+        [dic setObject:[self getName] forKey:@"city"];
+        [dic setObject:[self getTemp] forKey:@"temperature"];
+        [dic setObject:[self getTempMax] forKey:@"temperature_max"];
+        [dic setObject:[self getTempMax] forKey:@"temperature_min"];
+        [dic setObject:@"" forKey:@"unit"];
+        [dic setObject:[self getHumidity] forKey:@"humidity"];
+        [dic setObject:[self getPressure] forKey:@"pressure"];
+        [dic setObject:[self getWindSpeed] forKey:@"wind_speed"];
+        [dic setObject:[self getWindDeg] forKey:@"wind_degrees"];
+        [dic setObject:[self getClouds] forKey:@"cloudiness"];
+        [dic setObject:[self getWeatherIcon] forKey:@"weather_icon_id"];
+        [dic setObject:[self getWeatherDescription] forKey:@"weather_description"];
+        [dic setObject:[self getRain] forKey:@"rain"];
+        [dic setObject:[self getSnow] forKey:@"snow"];
+        [dic setObject:[self getSunRise] forKey:@"sunrise"];
+        [dic setObject:[self getSunSet] forKey:@"sunset"];
+
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self setLatestValue:[NSString stringWithFormat:@"%@: %@", [self getWeather], [self getWeatherDescription]]];
+            [self saveData:dic];
+        });
+    }
+
+    [session finishTasksAndInvalidate];
+    [session invalidateAndCancel];
+}
+
+
+- (void)URLSession:(NSURLSession *)session
+              task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error {
+    [session finishTasksAndInvalidate];
+    [session invalidateAndCancel];
+    
+    
+}
+
+
+- (void)URLSession:(NSURLSession *)session didBecomeInvalidWithError:(NSError *)error{
+    if (error != nil) {
+        NSLog(@"[%@] the session did become invaild with error: %@", [self getSensorName], error.debugDescription);
+    }
+    [session invalidateAndCancel];
+    [session finishTasksAndInvalidate];
+}
+
+
 
 - (NSString *) getCountry
 {

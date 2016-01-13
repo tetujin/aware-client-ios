@@ -12,7 +12,7 @@
 #import "AWAREKeys.h"
 
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate, GIDSignInDelegate>
+@interface AppDelegate : UIResponder <UIApplicationDelegate, GIDSignInDelegate,  UIAlertViewDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 

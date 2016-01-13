@@ -26,6 +26,7 @@
     bool blancerState;
     int marker;
     int errorPosts;
+//    NSMutableArray *httpIdentifiers;
 }
 
 @end
@@ -86,6 +87,7 @@
     }
     return self;
 }
+
 
 - (void) setWriteableYES{
     writeAble = YES;
@@ -357,9 +359,9 @@
     }
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-//    NSInteger marker = [userDefaults integerForKey:KEY_MARK];
+    //    NSInteger marker = [userDefaults integerForKey:KEY_MARK];
     NSInteger length = [userDefaults integerForKey:KEY_MAX_DATA_SIZE];
-//    NSUInteger length = 1000 * 1000 * 5; //5MB
+    //    NSUInteger length = 1000 * 1000 * 5; //5MB
     NSUInteger seek = marker * length;
     
     previusUploadingState = YES;
@@ -408,12 +410,12 @@
         marker += 1;
     }
     data = [self fixJsonFormat:data];
-
+    
     // Set session configuration
     NSURLSessionConfiguration *sessionConfig = nil;
-//    NSDate *now = [NSDate date];
-//    NSString* identifier = [NSString stringWithFormat:@"%@_%f", sensorName, [now timeIntervalSince1970]];
-//    NSString* identifier = [NSString stringWithFormat:@"%@%@", _syncDataQueryIdentifier, sensorName];
+    //    NSDate *now = [NSDate date];
+    //    NSString* identifier = [NSString stringWithFormat:@"%@_%f", sensorName, [now timeIntervalSince1970]];
+    //    NSString* identifier = [NSString stringWithFormat:@"%@%@", _syncDataQueryIdentifier, sensorName];
     sessionConfig = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:_syncDataQueryIdentifier];
     sessionConfig.timeoutIntervalForRequest = 120.0;
     sessionConfig.HTTPMaximumConnectionsPerHost = 60;
@@ -423,7 +425,7 @@
     //        [sessionConfig setHTTPAdditionalHeaders:
     //         @{@"Accept": @"application/json"}];
     //    sessionConfig.timeoutIntervalForResource = 300.0;
-
+    
     // set HTTP/POST body information
     post = [NSString stringWithFormat:@"device_id=%@&data=%@", deviceId, data];
     postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
@@ -433,7 +435,7 @@
     [request setHTTPMethod:@"POST"];
     [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
     [request setHTTPBody:postData];
-
+    
     NSLog(@"--- This is background task ----");
     session = [NSURLSession sessionWithConfiguration:sessionConfig delegate:self delegateQueue:nil];
     NSURLSessionDataTask* dataTask = [session dataTaskWithRequest:request];
@@ -516,7 +518,7 @@ didReceiveResponse:(NSURLResponse *)response
     [session finishTasksAndInvalidate];
     [session invalidateAndCancel];
     
-
+    
 }
 
 
