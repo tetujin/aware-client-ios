@@ -80,8 +80,6 @@
     NSRunLoop *runLoop = [NSRunLoop currentRunLoop];
     [runLoop addTimer:dailyUpdateTimer forMode:NSDefaultRunLoopMode];// NSRunLoopCommonModes];//
     
-    
-    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
 //    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillEnterForeground:) name:UIApplicationWillEnterForegroundNotification object:nil];
     
@@ -93,9 +91,10 @@
         [userDefaults setDouble:uploadInterval forKey:SETTING_SYNC_INT];
         [userDefaults setBool:YES forKey:@"aware_inited"];
         [userDefaults setInteger:0 forKey:KEY_MARK];
-        [userDefaults setInteger:1000 * 1000 * 5 forKey:KEY_MAX_DATA_SIZE]; // 5MB
+//        [userDefaults setInteger:1000 * 1000 * 5 forKey:KEY_MAX_DATA_SIZE]; // 5MB
+        [userDefaults setInteger:1000 * 100 forKey:KEY_MAX_DATA_SIZE]; // 1MB
     }
-
+    
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     
@@ -106,7 +105,6 @@
     if (currentVersion >= 9.0) {
         [self.navigationController.navigationBar setDelegate:self];
     }
-//    [self connectMqttServer];
     [self initList];
     
     listUpdateTimer = [NSTimer scheduledTimerWithTimeInterval:0.1f target:self.tableView selector:@selector(reloadData) userInfo:nil repeats:YES];
@@ -178,14 +176,18 @@
     NSString *deviceId = [userDefaults objectForKey:KEY_MQTT_USERNAME];
     NSString *awareStudyId = [userDefaults objectForKey:KEY_STUDY_ID];
     NSString *mqttServerName = [userDefaults objectForKey:KEY_MQTT_SERVER];
+    NSInteger maximumFileSize = [userDefaults integerForKey:KEY_MAX_DATA_SIZE];
     [userDefaults synchronize];
+    
     NSString *email = [userDefaults objectForKey:@"GOOGLE_EMAIL"];
     NSString *name = [userDefaults objectForKey:@"GOOGLE_NAME"];
     NSString *accountInfo = [NSString stringWithFormat:@"%@ (%@)", name, email];
+
     if(name == nil) accountInfo = @"";
     if(deviceId == nil) deviceId = @"";
     if(awareStudyId == nil) awareStudyId = @"";
     if(mqttServerName == nil) mqttServerName = @"";
+
     
     NSString* debugState = @"OFF";
     if ([userDefaults boolForKey:SETTING_DEBUG_STATE]) {
@@ -202,6 +204,11 @@
     }else{
         wifiOnly = @"NO";
     }
+    
+    if (maximumFileSize > 0 ) {
+        maximumFileSize = maximumFileSize/1000;
+    }
+    NSString *maximumFileSizeDesc = [NSString stringWithFormat:@"%ld (KB)", maximumFileSize];
     
     
     [_sensors addObject:[self getCelContent:@"Study" desc:@"" image:@"" key:@"TITLE_CELL_VIEW"]];
@@ -250,13 +257,14 @@
     [_sensors addObject:[self getCelContent:@"Google Login" desc:@"Multi-device management using Google Account." image:@"google_logo" key:SENSOR_PLUGIN_GOOGLE_LOGIN]];
     [_sensors addObject:[self getCelContent:@"Blanced Campus Calendar" desc:@"This plugin gathers calendar events from all Google Calendars from the phone." image:@"ic_action_google_cal_grab" key:SENSOR_PLUGIN_GOOGLE_CAL_PULL]];
     [_sensors addObject:[self getCelContent:@"Blanced Campus Journal" desc:@"This plugin creates new events in the journal calendar and sends a reminder email to the user to update the journal." image:@"ic_action_google_cal_push" key:SENSOR_PLUGIN_GOOGLE_CAL_PUSH]];
+    [_sensors addObject:[self getCelContent:@"Blanced Campus ESMs" desc:@"ESM Plugin" image:@"ic_action_campus" key:SENSOR_PLUGIN_CAMPUS]];
     
     
     [_sensors addObject:[self getCelContent:@"Settings" desc:@"" image:@"" key:@"TITLE_CELL_VIEW"]];
     [_sensors addObject:[self getCelContent:@"Debug" desc:debugState image:@"" key:@"STUDY_CELL_DEBUG"]]; //ic_action_mqtt
     [_sensors addObject:[self getCelContent:@"Sync Interval to AWARE Server (min)" desc:syncInterval image:@"" key:@"STUDY_CELL_SYNC"]]; //ic_action_mqtt
     [_sensors addObject:[self getCelContent:@"Sync only wifi" desc:wifiOnly image:@"" key:@"STUDY_CELL_WIFI"]]; //ic_action_mqtt
-
+    [_sensors addObject:[self getCelContent:@"Maximum file size" desc:maximumFileSizeDesc image:@"" key:@"STUDY_CELL_MAX_FILE_SIZE"]]; //ic_action_mqtt
 
     //for test
 //    AWARESensor *msBand = [[MSBand alloc] initWithPluginName:SENSOR_PLUGIN_MSBAND deviceId:deviceId];
@@ -271,9 +279,9 @@
 //    [googleCalPush startSensor:60.0f* 15.0f  withSettings:nil];
 //    [_sensorManager addNewSensor:googleCalPush];
 //
-    AWARESensor* scheduler = [[Scheduler alloc] initWithSensorName:SENSOR_SCHEDULER];
-    [scheduler startSensor:60.0f*15.0f  withSettings:nil];
-    [_sensorManager addNewSensor:scheduler];
+//    AWARESensor* scheduler = [[Scheduler alloc] initWithSensorName:SENSOR_SCHEDULER];
+//    [scheduler startSensor:60.0f*15.0f  withSettings:nil];
+//    [_sensorManager addNewSensor:scheduler];
 }
 
 
@@ -318,6 +326,20 @@
     }else if([key isEqualToString:@"STUDY_CELL_WIFI"]){ //wifi
         UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Sync Statement" message:@"Do you want to sync your data only WiFi enviroment?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"YES",@"NO",nil];
         [alert show];
+    }else if([key isEqualToString:@"STUDY_CELL_MAX_FILE_SIZE"]){ //max file size
+        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Maximum Size of Post Data(KB)" message:@"Please input a maximum file size for uploading sensor data." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Done",nil];
+        alert.alertViewStyle = UIAlertViewStylePlainTextInput;
+        
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        NSInteger maximumFileValue =  [userDefaults integerForKey:KEY_MAX_DATA_SIZE];
+        if (maximumFileValue > 0 ) {
+            maximumFileValue = maximumFileValue/1000;
+        }
+        NSString *maximumFileSizeDesc = [NSString stringWithFormat:@"%ld", maximumFileValue];
+        [[alert textFieldAtIndex:0] setKeyboardType:UIKeyboardTypeNumberPad];
+        [[alert textFieldAtIndex:0] becomeFirstResponder];
+        [alert textFieldAtIndex:0].text = maximumFileSizeDesc;
+        [alert show];
     }else if([key isEqualToString:SENSOR_ESMS]){
         // [TODO] For testing ESM Module...
         [self performSegueWithIdentifier:@"esmView" sender:self];
@@ -326,6 +348,10 @@
     }else if ([key isEqualToString:SENSOR_PLUGIN_GOOGLE_CAL_PULL]) {
         GoogleCalPull* googleCalPull = [[GoogleCalPull alloc] initWithSensorName:SENSOR_PLUGIN_GOOGLE_CAL_PULL];
         [googleCalPull showSelectPrimaryGoogleCalView];
+    }else if([key isEqualToString:SENSOR_PLUGIN_CAMPUS]){
+        NSString* schedules = [_sensorManager getLatestSensorData:SENSOR_PLUGIN_CAMPUS];
+         UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Current ESM Schedules" message:schedules delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alert show];
     }
 }
 
@@ -371,6 +397,19 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
         } else {
             NSLog(@"Cancel");
         }
+    }else if([title isEqualToString:@"Maximum Size of Post Data(KB)"]){
+        if ( buttonIndex == [alertView cancelButtonIndex]){
+            NSLog(@"Cancel");
+            return;
+        }
+        NSString *maximumValueStr = [alertView textFieldAtIndex:0].text;
+        if ([maximumValueStr isEqualToString:@""] || [maximumValueStr isEqualToString:@"0"]) {
+            return;
+        }
+        NSInteger maximumValue = [maximumValueStr integerValue] * 1000;
+        [userDefaults setObject:[NSNumber numberWithInteger:maximumValue] forKey:KEY_MAX_DATA_SIZE];
+        [self pushedStudyRefreshButton:nil];
+        [self initList];
     }
 }
 
@@ -462,8 +501,8 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
     } else {
         [self sendLocalNotificationForMessage:@"AWARE Configuration was refreshed in the background!" soundFlag:NO];
     }
-    [self performSelector:@selector(initList) withObject:0 afterDelay:1];
-//    [self initList];
+//    [self performSelector:@selector(initList) withObject:0 afterDelay:1];
+    [self initList];
     [self.tableView reloadData];
 //    [self connectMqttServer];
 }

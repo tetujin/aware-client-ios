@@ -23,7 +23,7 @@
 }
 
 - (instancetype)initWithSensorName:(NSString *)sensorName {
-    self = [super initWithSensorName:@"scheduler"];
+    self = [super initWithSensorName:SENSOR_PLUGIN_CAMPUS];
     if (self) {
 //                [super setSensorName:sensorName];
         scheduleManager = [[NSMutableArray alloc] init];
@@ -31,8 +31,8 @@
         KEY_SCHEDULE = @"key_schedule";
         KEY_TIMER = @"key_timer";
         KEY_PREVIOUS_SCHEDULE_JSON = @"key_previous_schedule_json";
-//        CONFIG_URL = @"http://r2d2.hcii.cs.cmu.edu/esm/c2083190-ecdd-49ad-ab88-5b0496cf3aed/setting_esm_ios.json";
-        CONFIG_URL = [NSString stringWithFormat:@"http://r2d2.hcii.cs.cmu.edu/esm/%@/esm_setting_ios.text", [self getDeviceId]];
+        CONFIG_URL = @"http://r2d2.hcii.cs.cmu.edu/esm/master.json";
+//        CONFIG_URL = [NSString stringWithFormat:@"http://r2d2.hcii.cs.cmu.edu/esm/%@/esm_setting.json", [self getDeviceId]];
     }
     return self;
 }
@@ -44,7 +44,6 @@
     NSString *url = [dic objectForKey:@"configUrl"];
     NSLog(@"--> %@", url);
     
-    //
     __weak NSURLSession *session = nil;
     NSURLSessionConfiguration *sessionConfig = nil;
     sessionConfig = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:_getConfigFileIdentifier];
@@ -63,7 +62,7 @@
     [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
     [request setHTTPBody:postData];
     
-    NSLog(@"--- This is background task ----");
+    NSLog(@"--- This is background task for %@ ----", [self getSensorName] );
     session = [NSURLSession sessionWithConfiguration:sessionConfig delegate:self delegateQueue:nil];
     NSURLSessionDataTask* dataTask = [session dataTaskWithRequest:request];
     [dataTask resume];
@@ -116,7 +115,7 @@ didReceiveResponse:(NSURLResponse *)response
     NSArray *schedules = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
     
     if (error != nil) {
-        NSLog(@"%@", error.debugDescription);
+        NSLog(@"JSON FORMAT ERROR: %@", error.debugDescription);
         return;
     }
     
@@ -129,6 +128,8 @@ didReceiveResponse:(NSURLResponse *)response
 //    [awareSchedule setScheduleType:SCHEDULE_INTERVAL_TEST];
 //    [awareSchedules addObject:awareSchedule];
     
+    NSString* currentSchedules = @"";//[[NSString alloc] init];
+    int i = 0;
     for (NSDictionary * schedule in schedules) {
         NSString * notificationTitle = @"BlancedCampus Question";
         NSString * body = @"Tap to answer.";
@@ -138,12 +139,16 @@ didReceiveResponse:(NSURLResponse *)response
         NSError *writeError = nil;
         NSData *jsonData = [NSJSONSerialization dataWithJSONObject:esmsDic options:0 error:&writeError];
         NSString * esmsStr = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-//        NSLog(@"%@", esmsStr);
-        
         for (NSNumber * hour in hours) {
+            i++;
             int intHour = [hour intValue];
-            NSLog(@"%d", intHour);
-            NSDate * fireDate = [self getTargetTimeAsNSDate:[NSDate new] hour:intHour];
+            NSDate * fireDate = [NSDate new];//[self getTargetTimeAsNSDate:[NSDate new] hour:intHour];
+            NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
+//            [dateFormatter setDateFormat:@"yyyy-MM-dd 'at' h:mm a"];
+            [dateFormatter setDateFormat:@"h:mm a"];
+            NSString* fireDateString = [dateFormatter stringFromDate:fireDate];
+            NSString * currentSchedule = [NSString stringWithFormat:@"'%@' at '[%@]'\n", identifier, fireDateString];
+            currentSchedules = [NSString stringWithFormat:@"%@%@", currentSchedules, currentSchedule];
             AWARESchedule * schedule = [[AWARESchedule alloc] initWithScheduleId:identifier];
             [schedule setScheduleAsNormalWithDate:fireDate
                                      intervalType:SCHEDULE_INTERVAL_DAY
@@ -155,6 +160,8 @@ didReceiveResponse:(NSURLResponse *)response
             [awareSchedules addObject:schedule];
         }
     }
+    NSLog(@"%@", currentSchedules);
+    [self setLatestValue:[NSString stringWithFormat:@"You have %d ESM schedules per one day.\n%@",i, currentSchedules]];
     [self startSchedules:awareSchedules];
 }
 
@@ -291,6 +298,7 @@ didReceiveResponse:(NSURLResponse *)response
         [dic setObject:unixtime forKey:@"timestamp"];
         [dic setObject:@"0" forKey:KEY_ESM_STATUS]; // status is new
         [esm saveData:dic];
+        NSLog(@"%@",dic);
     }
 }
 
@@ -306,6 +314,11 @@ didReceiveResponse:(NSURLResponse *)response
                                                               instructions:@""
                                                        expirationThreshold:@0
                                                                    trigger:@""];
+    // init array objects to NSString object
+    [dic setObject:@"" forKey:KEY_ESM_RADIOS];
+    [dic setObject:@"" forKey:KEY_ESM_CHECKBOXES];
+    [dic setObject:@"" forKey:KEY_ESM_QUICK_ANSWERS];
+    
     // add existing data to base dictionary of an esm
     for (id key in [originalDic keyEnumerator]) {
 //        NSLog(@"Key: %@ => Value:%@" , key, [originalDic objectForKey:key]);

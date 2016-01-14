@@ -29,7 +29,7 @@
     @"_id integer primary key autoincrement,"
     "timestamp real default 0,"
     "device_id text default '',"
-    "esm_type integer default NULL,"
+    "esm_type integer default 0,"
     "esm_title text default '',"
     "esm_submit text default '',"
     "esm_instructions text default '',"
@@ -50,8 +50,8 @@
     "esm_scale_start integer default 0,"
     "esm_scale_max_label text default '',"
     "esm_scale_min_label text default '',"
-    "esm_scale_step integer default 0,"
-    "UNIQUE (timestamp,device_id)";
+    "esm_scale_step integer default 0";
+//    "UNIQUE (timestamp,device_id)";
     [super createTable:query];
 }
 

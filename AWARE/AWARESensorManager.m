@@ -34,6 +34,7 @@
 #import "GoogleCalPull.h"
 #import "GoogleCalPush.h"
 #import "GoogleLogin.h"
+#import "Scheduler.h"
 
 @implementation AWARESensorManager
 
@@ -44,6 +45,7 @@
     }
     return self;
 }
+
 
 -(bool)addNewSensorWithSensorName:(NSString *)key
                          settings:(NSArray*)settings
@@ -163,6 +165,9 @@
                         [awareSensor startSensor:uploadTime withSettings:pluginSettings];
                     }else if([key isEqualToString:SENSOR_PLUGIN_GOOGLE_LOGIN]){
                         awareSensor = [[GoogleLogin alloc] initWithSensorName:SENSOR_PLUGIN_GOOGLE_LOGIN];
+                        [awareSensor startSensor:uploadTime withSettings:pluginSettings];
+                    }else if([key isEqualToString:SENSOR_PLUGIN_CAMPUS]){
+                        awareSensor = [[Scheduler alloc] initWithSensorName:SENSOR_PLUGIN_CAMPUS];
                         [awareSensor startSensor:uploadTime withSettings:pluginSettings];
                     }
                     break;

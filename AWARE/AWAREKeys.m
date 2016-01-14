@@ -69,6 +69,7 @@ NSString* const SENSOR_PLUGIN_GOOGLE_CAL_PULL = @"plugin_balancedcampuscalendar"
 NSString* const SENSOR_PLUGIN_GOOGLE_CAL_PUSH = @"plugin_balancedcampusjournal";
 NSString* const SENSOR_PLUGIN_GOOGLE_LOGIN = @"plugin_google_login";
 NSString* const SENSOR_PLUGIN_STUDENTLIFE_AUDIO = @"plugin_studentlife_audio";
+NSString* const SENSOR_PLUGIN_CAMPUS = @"plugin_campus";
 
 
 NSString * const NotificationCategoryIdent  = @"ACTIONABLE";

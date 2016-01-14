@@ -12,21 +12,27 @@
 #import "SCNetworkReachability.h"
 
 @interface AWARESensor () {
+    
     int bufferLimit;
-    BOOL previusUploadingState;
-    NSString * awareSensorName;
-    NSString *latestSensorValue;
+    int lostedTextLength;
     int lineCount;
-    SCNetworkReachability* reachability;
-    NSMutableString *tempData;
-    NSMutableString *bufferStr;
-    NSTimer* writeAbleTimer;
+    int marker;
+    int errorPosts;
+    
+    BOOL previusUploadingState;
     bool wifiState;
     bool writeAble;
     bool blancerState;
-    int marker;
-    int errorPosts;
-//    NSMutableArray *httpIdentifiers;
+    
+    NSString * awareSensorName;
+    NSString *latestSensorValue;
+    
+    NSMutableString *tempData;
+    NSMutableString *bufferStr;
+    
+    NSTimer* writeAbleTimer;
+
+    SCNetworkReachability* reachability;
 }
 
 @end
@@ -40,6 +46,7 @@
         _createTableQueryIdentifier = [NSString stringWithFormat:@"create_table_query_identifier_%@",  sensorName];
         awareSensorName = sensorName;
         bufferLimit = 0;
+        lostedTextLength = 0;
         previusUploadingState = NO;
         blancerState = NO;
         awareSensorName = sensorName;
@@ -353,15 +360,13 @@
 /** Sync with AWARE database */
 - (void) syncAwareDBWithSensorName:(NSString*) sensorName {
     if (!wifiState) {
-        NSLog(@"You need wifi network to upload sensor data.");
+        NSLog(@"[%@] Wifi is not availabe.", [self getSensorName]);
         previusUploadingState = NO;
         return;
     }
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    //    NSInteger marker = [userDefaults integerForKey:KEY_MARK];
     NSInteger length = [userDefaults integerForKey:KEY_MAX_DATA_SIZE];
-    //    NSUInteger length = 1000 * 1000 * 5; //5MB
     NSUInteger seek = marker * length;
     
     previusUploadingState = YES;
@@ -388,7 +393,13 @@
         previusUploadingState = NO;
         return;
     }
-    [fileHandle seekToFileOffset:seek];
+    
+    if (seek > lostedTextLength) {
+        [fileHandle seekToFileOffset:seek-lostedTextLength];
+    }else{
+        [fileHandle seekToFileOffset:seek];
+    }
+
     NSData *clipedData = [fileHandle readDataOfLength:length];
     [fileHandle closeFile];
     
@@ -417,26 +428,26 @@
     //    NSString* identifier = [NSString stringWithFormat:@"%@_%f", sensorName, [now timeIntervalSince1970]];
     //    NSString* identifier = [NSString stringWithFormat:@"%@%@", _syncDataQueryIdentifier, sensorName];
     sessionConfig = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:_syncDataQueryIdentifier];
-    sessionConfig.timeoutIntervalForRequest = 120.0;
+    sessionConfig.timeoutIntervalForRequest = 60 * 5;
     sessionConfig.HTTPMaximumConnectionsPerHost = 60;
-    sessionConfig.timeoutIntervalForResource = 60; //60*60*24; // 1 day
+    sessionConfig.timeoutIntervalForResource = 300.0;
     sessionConfig.allowsCellularAccess = NO;
     sessionConfig.discretionary = YES;
     //        [sessionConfig setHTTPAdditionalHeaders:
     //         @{@"Accept": @"application/json"}];
-    //    sessionConfig.timeoutIntervalForResource = 300.0;
     
     // set HTTP/POST body information
     post = [NSString stringWithFormat:@"device_id=%@&data=%@", deviceId, data];
     postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
     postLength = [NSString stringWithFormat:@"%ld", [postData length]];
+    NSLog(@"Data Length: %@", postLength);
     request = [[NSMutableURLRequest alloc] init];
     [request setURL:[NSURL URLWithString:url]];
     [request setHTTPMethod:@"POST"];
     [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
     [request setHTTPBody:postData];
     
-    NSLog(@"--- This is background task ----");
+    NSLog(@"[%@] This is background task for upload sensor data", [self getSensorName]);
     session = [NSURLSession sessionWithConfiguration:sessionConfig delegate:self delegateQueue:nil];
     NSURLSessionDataTask* dataTask = [session dataTaskWithRequest:request];
     [dataTask resume];
@@ -447,6 +458,7 @@
 didReceiveResponse:(NSURLResponse *)response
  completionHandler:(void (^)(NSURLSessionResponseDisposition disposition))completionHandler {
     
+
     if ([session.configuration.identifier isEqualToString:_syncDataQueryIdentifier]) {
         NSLog(@"[%@] Get response from the server.", [self getSensorName]);
         [self receivedResponseFromServer:dataTask.response withData:nil error:nil];
@@ -460,15 +472,18 @@ didReceiveResponse:(NSURLResponse *)response
     } else {
         
     }
+    
     [session finishTasksAndInvalidate];
     [session invalidateAndCancel];
     completionHandler(NSURLSessionResponseAllow);
+    
 }
 
 
 -(void)URLSession:(NSURLSession *)session
          dataTask:(NSURLSessionDataTask *)dataTask
    didReceiveData:(NSData *)data {
+    
     if ([session.configuration.identifier isEqualToString:_syncDataQueryIdentifier]) {
         // If the data is null, this method is not called.
         NSString * result = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
@@ -477,9 +492,12 @@ didReceiveResponse:(NSURLResponse *)response
         NSString* newStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
         NSLog(@"[%@] %@",[self getSensorName], newStr);
     }
+    
     [session finishTasksAndInvalidate];
     [session invalidateAndCancel];
+
 }
+
 
 
 - (void)URLSession:(NSURLSession *)session
@@ -488,7 +506,7 @@ didReceiveResponse:(NSURLResponse *)response
     
     if ([session.configuration.identifier isEqualToString:_syncDataQueryIdentifier]) {
         if (error) {
-            NSLog(@"[%@] Session task finished with error. %@", [self getSensorName], error.debugDescription);
+            NSLog(@"[%@] Session task is finished with error. %@", [self getSensorName], error.debugDescription);
             if ( marker > 0 ) {
                 marker = marker - 1;
             }
@@ -497,10 +515,16 @@ didReceiveResponse:(NSURLResponse *)response
             bool debugState = [defaults boolForKey:SETTING_DEBUG_STATE];
             if (debugState) {
                 [self sendLocalNotificationForMessage:[NSString stringWithFormat:@"[%@] Retry - %d (%d)", [self getSensorName], marker, errorPosts] soundFlag:NO];
+                [self sendLocalNotificationForMessage:[NSString stringWithFormat:@"[%@] error log", error.debugDescription]soundFlag:NO];
             }
             if (errorPosts < 3) { //TODO
+                [session finishTasksAndInvalidate];
+                [session invalidateAndCancel];
                 [self syncAwareDB];
+//                [task resume];
             } else {
+                [session finishTasksAndInvalidate];
+                [session invalidateAndCancel];
                 errorPosts = 0;
                 previusUploadingState = NO;
             }
@@ -509,26 +533,26 @@ didReceiveResponse:(NSURLResponse *)response
             errorPosts = 0;
         }
         NSLog(@"%@", task.description);
+//        NSLog(@"%@", error.debugDescription);
+        return;
+
         //    completionHandler(NSURLSessionResponseAllow);
     } else if ([session.configuration.identifier isEqualToString:_createTableQueryIdentifier]){
-        
-    } else {
         
     }
     [session finishTasksAndInvalidate];
     [session invalidateAndCancel];
-    
-    
 }
-
 
 - (void)URLSession:(NSURLSession *)session didBecomeInvalidWithError:(NSError *)error{
     if (error != nil) {
         NSLog(@"[%@] the session did become invaild with error: %@", [self getSensorName], error.debugDescription);
+        [self sendLocalNotificationForMessage:error.debugDescription soundFlag:NO];
     }
     [session invalidateAndCancel];
     [session finishTasksAndInvalidate];
 }
+
 
 - (NSMutableString *) fixJsonFormat:(NSMutableString *) clipedText {
     // head
@@ -536,11 +560,13 @@ didReceiveResponse:(NSURLResponse *)response
     }else{
         NSRange rangeOfExtraText = [clipedText rangeOfString:@"{"];
         if (rangeOfExtraText.location == NSNotFound) {
-            // NSLog(@"[HEAD] There is no extra text");
+             NSLog(@"[HEAD] There is no extra text");
+            lostedTextLength = 0;
         }else{
-            // NSLog(@"[HEAD] There is some extra text!");
+            NSLog(@"[HEAD] There is some extra text!");
             NSRange deleteRange = NSMakeRange(0, rangeOfExtraText.location);
             [clipedText deleteCharactersInRange:deleteRange];
+            lostedTextLength = (int)deleteRange.length;
         }
     }
     
@@ -571,7 +597,7 @@ didReceiveResponse:(NSURLResponse *)response
     int responseCode = (int)[httpResponse statusCode];
     NSString* newStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     NSLog(@"[%@] %d  Response =====> %@",[self getSensorName], responseCode, newStr);
-    if(responseCode == 200){
+    if ( responseCode == 200 ) {
         NSString *bytes = @"";
         if (lineCount >= 1000*1000) { //MB
             bytes = [NSString stringWithFormat:@"%.2f MB", (double)lineCount/(double)(1000*1000)];
@@ -693,8 +719,7 @@ didReceiveResponse:(NSURLResponse *)response
 
 
 - (void) createTable:(NSString *)query withTableName:(NSString*) tableName {
-    NSLog(@"%@",[self getCreateTableUrl:tableName]);
-    
+//    NSLog(@"%@",[self getCreateTableUrl:tableName]);
     // create table
     NSString *post = nil;
     NSData *postData = nil;
@@ -720,29 +745,10 @@ didReceiveResponse:(NSURLResponse *)response
     sessionConfig.allowsCellularAccess = NO;
     sessionConfig.discretionary = YES;
 
-    NSLog(@"--- This is background task ----");
+    NSLog(@"--- [%@] This is background task for create table ----", [self getSensorName]);
     session = [NSURLSession sessionWithConfiguration:sessionConfig delegate:self delegateQueue:nil];
     NSURLSessionDataTask* dataTask = [session dataTaskWithRequest:request];
     [dataTask resume];
-    
-//    [[session dataTaskWithRequest:request
-//                completionHandler:^(NSData * _Nullable data,
-//                                    NSURLResponse * _Nullable response,
-//                                    NSError * _Nullable error) {
-//                    NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
-//                    int responseCode = (int)[httpResponse statusCode];
-//                    
-//                    NSString* newStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-//                    NSLog(@"[%@] Response----> %d, %@", tableName,responseCode, newStr);
-//                    if(responseCode == 200){
-//                        NSString *message = [NSString stringWithFormat:@"[%@] Sucess to create new table on AWARE server.", tableName];
-//                        NSLog(@"%@", message);
-//                    }
-//                    data = nil;
-//                    response = nil;
-//                    error = nil;
-//                    httpResponse = nil;
-//                }] resume];
 }
 
 

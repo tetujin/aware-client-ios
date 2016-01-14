@@ -469,6 +469,43 @@
         [sender setImage:[UIImage imageNamed:@"checked_box"] forState:UIControlStateSelected];
         [sender setSelected:YES];
     }
+    
+    if ([sender isSelected]) {
+        NSInteger tag = sender.tag;
+        for (NSDictionary * dic in uiElements) {
+            NSNumber * tagNumber = [dic objectForKey:KEY_TAG];
+            if ([tagNumber integerValue] == tag) {
+                NSArray* labels = [dic objectForKey:KEY_LABLES];
+                for (UILabel * label in labels) {
+                    NSLog(@"%@ %f", label.text, label.frame.origin.y);
+                    // selected button's y
+                    double selectedButtonY = sender.frame.origin.y;
+                    double labelY = label.frame.origin.y;
+                    NSError *error = nil;
+                    NSString *pattern = @"Other*";
+                    NSRegularExpression *regexp = [NSRegularExpression regularExpressionWithPattern:pattern options:0 error:&error];
+                    NSTextCheckingResult *match = [regexp firstMatchInString:label.text options:0 range:NSMakeRange(0, label.text.length)];
+                    NSString *matchedText = @"";
+                    if (match.numberOfRanges > 0) {
+                        NSLog(@"matched text: %@", [label.text substringWithRange:[match rangeAtIndex:0]]);
+                        matchedText = [label.text substringWithRange:[match rangeAtIndex:0]];
+                    }
+                    
+                    if (selectedButtonY == labelY && [matchedText isEqualToString:@"Other"]) {
+                        UIAlertView *av = [[UIAlertView alloc]initWithTitle:@""
+                                                                    message:@"Please write your original option."
+                                                                   delegate:self
+                                                          cancelButtonTitle:@"Cancel"
+                                                          otherButtonTitles:@"OK", nil];
+                        av.alertViewStyle = UIAlertViewStylePlainTextInput;
+                        av.tag = tag;
+                        [av textFieldAtIndex:0].delegate = self;
+                        [av show];
+                    }
+                }
+            }
+        }
+    }
 }
 
 
@@ -718,11 +755,23 @@
 
 //add Scale Element
 - (void) addScaleElement:(NSDictionary *) dic withTag:(int) tag{
+    int valueLabelH = 30;
+    int mainContentH = 30;
+    int naH = 30;
+    int spaceH = 10;
     [self addCommonContents:dic];
-//    UILabel *minLabel = [[UILabel alloc] initWithFrame:CGRectMake(mainContentRect.origin.x,totalHight, 60, 31)];
-    UISlider *slider = [[UISlider alloc] initWithFrame:CGRectMake(mainContentRect.origin.x+60, totalHight, mainContentRect.size.width-120, 31)];
-    UILabel *maxLabel = [[UILabel alloc] initWithFrame:CGRectMake(mainContentRect.origin.x+mainContentRect.size.width -60, totalHight, 30, 31)];
-    [maxLabel setTag:totalHight];
+    // Add a value label
+    UILabel *valueLabel = [[UILabel alloc] initWithFrame:CGRectMake(mainContentRect.origin.x+60, totalHight, mainContentRect.size.width-120, valueLabelH)];
+    // Add  min/max/slider value
+    UILabel *minLabel = [[UILabel alloc] initWithFrame:CGRectMake(mainContentRect.origin.x,
+                                                                  totalHight+valueLabelH,
+                                                                  60, mainContentH)];
+    UISlider *slider = [[UISlider alloc] initWithFrame:CGRectMake(mainContentRect.origin.x+60,
+                                                                  totalHight+valueLabelH,
+                                                                  mainContentRect.size.width-120, mainContentH)];
+    UILabel *maxLabel = [[UILabel alloc] initWithFrame:CGRectMake(mainContentRect.origin.x+mainContentRect.size.width -60,
+                                                                  totalHight+valueLabelH,
+                                                                  60, mainContentH)];
     
     NSNumber *max = [dic objectForKey:KEY_ESM_SCALE_MAX];
     NSNumber *min = [dic objectForKey:KEY_ESM_SCALE_MIN];
@@ -734,37 +783,45 @@
     [slider addTarget:self
                action:@selector(setNaBoxFolse:)
      forControlEvents:UIControlEventTouchUpInside];
-    maxLabel.text = @"---";
+    
+    valueLabel.text = @"---";
+    valueLabel.tag = totalHight;
+    minLabel.text = [dic objectForKey:KEY_ESM_SCALE_MIN_LABEL];
+    maxLabel.text = [dic objectForKey:KEY_ESM_SCALE_MAX_LABEL];
+    
+    valueLabel.textAlignment = NSTextAlignmentCenter;
+    minLabel.textAlignment = NSTextAlignmentCenter;
+    maxLabel.textAlignment = NSTextAlignmentCenter;
     
     UIButton * naCheckBox = [[UIButton alloc] initWithFrame:CGRectMake(mainContentRect.origin.x,
-                                                                       totalHight+30+10,
-                                                                       30, 30)];
+                                                                       totalHight+valueLabelH+mainContentH+spaceH,
+                                                                       30, naH)];
     [naCheckBox setImage:[UIImage imageNamed:@"unchecked_box"] forState:UIControlStateNormal];
     naCheckBox.tag = tag;
     naCheckBox.selected = NO;
     UILabel * label = [[UILabel alloc] initWithFrame:CGRectMake(mainContentRect.origin.x+10+40,
-                                                                totalHight+30+10,
-                                                                mainContentRect.size.width-90,
-                                                                30)];
+                                                                totalHight+valueLabelH+mainContentH+spaceH,
+                                                                mainContentRect.size.width-90, naH)];
     label.adjustsFontSizeToFitWidth = YES;
     label.text = @"N/A";
     [naCheckBox addTarget:self
                    action:@selector(pushedNaBox:)
          forControlEvents:UIControlEventTouchUpInside];
 
+    [_mainScrollView addSubview:valueLabel];
     [_mainScrollView addSubview:slider];
     [_mainScrollView addSubview:maxLabel];
-//    [_mainScrollView addSubview:minLabel];
+    [_mainScrollView addSubview:minLabel];
     [_mainScrollView addSubview:naCheckBox];
     [_mainScrollView addSubview:label];
     
-    [self setContentSizeWithAdditionalHeight:31+10+30];
+    [self setContentSizeWithAdditionalHeight:valueLabelH + mainContentH + spaceH + naH];
     
     NSMutableArray * elements = [[NSMutableArray alloc] init];
     NSMutableArray * labels = [[NSMutableArray alloc] init];
     NSMutableDictionary * uiElement = [[NSMutableDictionary alloc] init];
 //    [elements addObject:slider];
-    [elements addObject:maxLabel]; // for detect
+    [elements addObject:valueLabel]; // for detect
     [elements addObject:naCheckBox];
     [labels addObject:maxLabel];
     [labels addObject:label];
@@ -783,7 +840,7 @@
 //    NSLog(@"slider value = %f", sender.value);
     int intValue = sender.value;
     [sender setValue:intValue];
-    UILabel * label = [_mainScrollView viewWithTag:sender.frame.origin.y];
+    UILabel * label = [_mainScrollView viewWithTag:sender.frame.origin.y-30];
     [label setText:[NSString stringWithFormat:@"%d", intValue]];
 }
 
@@ -1061,13 +1118,19 @@
         [array addObject:dic];
     }
 
+    // Check stored ESM data
+    NSLog(@"%@", array.debugDescription );
+    
     bool result = [esm saveDataWithArray:array];
     
     if ( result ) {
         [esm performSelector:@selector(syncAwareDB) withObject:0 afterDelay:5];
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Thank for submitting your answer!" message:@"" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Thank for submitting your answer!"
+                                                        message:@""
+                                                       delegate:nil
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
         [alert show];
-        
         
         ESMStorageHelper * helper = [[ESMStorageHelper alloc] init];
         [helper removeEsmWithText:currentTextOfEsm];
@@ -1106,6 +1169,10 @@
                                                               instructions:@""
                                                        expirationThreshold:@0
                                                                    trigger:@""];
+    
+    [dic setObject:@"" forKey:KEY_ESM_RADIOS];
+    [dic setObject:@"" forKey:KEY_ESM_CHECKBOXES];
+    [dic setObject:@"" forKey:KEY_ESM_QUICK_ANSWERS];
     // add existing data to base dictionary of an esm
     for (id key in [originalDic keyEnumerator]) {
 //        NSLog(@"Key: %@ => Value:%@" , key, [originalDic objectForKey:key]);

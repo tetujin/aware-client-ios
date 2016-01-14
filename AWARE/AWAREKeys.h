@@ -70,7 +70,7 @@ extern NSString* const SENSOR_PLUGIN_GOOGLE_CAL_PULL;
 extern NSString* const SENSOR_PLUGIN_GOOGLE_CAL_PUSH;
 extern NSString* const SENSOR_PLUGIN_GOOGLE_LOGIN;
 extern NSString* const SENSOR_PLUGIN_STUDENTLIFE_AUDIO;
-
+extern NSString* const SENSOR_PLUGIN_CAMPUS;
 
 extern NSString * const NotificationCategoryIdent;
 extern NSString * const NotificationActionOneIdent;

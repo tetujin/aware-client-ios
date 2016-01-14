@@ -587,7 +587,6 @@
 				1602ADC61C45B0E2002B3121 /* Proximity */,
 				1602ADC71C45B0EB002B3121 /* Timezone */,
 				1602ADC81C45B0F0002B3121 /* ESM */,
-				1602ADC91C45B0FD002B3121 /* Scheduler */,
 			);
 			name = Sensors;
 			sourceTree = "<group>";
@@ -605,6 +604,7 @@
 				16E7AF8B1C3DB7BF005C9EDC /* ActivityRecognition */,
 				16E7AF8C1C3DB7D0005C9EDC /* NTPTime */,
 				16E7AF8D1C3DB7DA005C9EDC /* DeviceUsage */,
+				1602ADC91C45B0FD002B3121 /* Scheduler */,
 			);
 			name = Plugins;
 			sourceTree = "<group>";
