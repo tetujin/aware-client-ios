@@ -65,9 +65,12 @@
     for (int i=0; i<settings.count; i++) {
         NSString *setting = [[settings objectAtIndex:i] objectForKey:@"setting"];
         NSString *settingKey = [NSString stringWithFormat:@"status_%@",key];
+//        NSLog(@"[%d] %@ %@", i, setting, key);
+        
         if ([setting isEqualToString:settingKey]) {
             NSString * value = [[settings objectAtIndex:i] objectForKey:@"value"];
-            if ([value isEqualToString:@"true"]) {
+            bool exit = [self isExist:key];
+            if ([value isEqualToString:@"true"] && !exit) {
 //                [_sensorManager addNewSensorWithSensorName:key settings:(NSArray*)sensors];
                 if ([key isEqualToString:SENSOR_ACCELEROMETER]) {
                     awareSensor= [[Accelerometer alloc] initWithSensorName:SENSOR_ACCELEROMETER];
@@ -126,9 +129,12 @@
 //                    [self addNewSensor:awareSensor];
 ////                    return YES;
 //                }
+                break;
             }
         }
     }
+    
+//    awareSensor = nil;
     
     for (int i=0; i<plugins.count; i++) {
         NSDictionary *plugin = [plugins objectAtIndex:i];
@@ -184,6 +190,16 @@
     return NO;
 }
 
+- (BOOL) isExist :(NSString *) key {
+    NSLog(@"--> %@", key);
+    for (AWARESensor* sensor in awareSensors) {
+        NSLog(@"-- %@", [sensor getSensorName]);
+        if([[sensor getSensorName] isEqualToString:key]){
+            return YES;
+        }
+    }
+    return NO;
+}
 
 - (void)addNewSensor:(AWARESensor *)sensor{
     [awareSensors addObject:sensor];

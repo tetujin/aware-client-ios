@@ -8,13 +8,11 @@
 
 #import "ESM.h"
 
-@implementation ESM
-{
+@implementation ESM {
     NSTimer * uploadTimer;
 }
 
-- (instancetype)initWithSensorName:(NSString *)sensorName
-{
+- (instancetype)initWithSensorName:(NSString *)sensorName {
     self = [super initWithSensorName:@"esms"];
     if (self) {
 //        [super setSensorName:sensorName];
@@ -22,8 +20,7 @@
     return self;
 }
 
-- (void) createTable
-{
+- (void) createTable {
     NSString *query = [[NSString alloc] init];
     query =
     @"_id integer primary key autoincrement,"
@@ -63,7 +60,7 @@
     NSLog(@"[%@] Create Table", [self getSensorName]);
     [self createTable];
     
-    NSLog(@"[%@] Start Device Usage Sensor", [self getSensorName]);
+    NSLog(@"[%@] Start ESM uploader", [self getSensorName]);
     
     // set sync timer
     uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval
@@ -90,6 +87,7 @@
 
 - (BOOL) stopSensor {
     [uploadTimer invalidate];
+    uploadTimer = nil;
     return YES;
 }
 @end

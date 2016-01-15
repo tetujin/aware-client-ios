@@ -1173,7 +1173,6 @@
     [dic setObject:@"" forKey:KEY_ESM_RADIOS];
     [dic setObject:@"" forKey:KEY_ESM_CHECKBOXES];
     [dic setObject:@"" forKey:KEY_ESM_QUICK_ANSWERS];
-    // add existing data to base dictionary of an esm
     for (id key in [originalDic keyEnumerator]) {
 //        NSLog(@"Key: %@ => Value:%@" , key, [originalDic objectForKey:key]);
         if([key isEqualToString:KEY_ESM_RADIOS]){

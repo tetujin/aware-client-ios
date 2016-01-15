@@ -18,6 +18,7 @@
     int lineCount;
     int marker;
     int errorPosts;
+    int postThreads;
     
     BOOL previusUploadingState;
     bool wifiState;
@@ -52,6 +53,7 @@
         awareSensorName = sensorName;
         latestSensorValue = @"";
         errorPosts = 0;
+        postThreads = 0;
         tempData = [[NSMutableString alloc] init];
         bufferStr = [[NSMutableString alloc] init];
         reachability = [[SCNetworkReachability alloc] initWithHost:@"www.google.com"];
@@ -361,9 +363,18 @@
 - (void) syncAwareDBWithSensorName:(NSString*) sensorName {
     if (!wifiState) {
         NSLog(@"[%@] Wifi is not availabe.", [self getSensorName]);
-        previusUploadingState = NO;
+//        previusUploadingState = NO;
+//        [self dataSyncIsFinishedCorrectoly];
         return;
     }
+    
+    if(previusUploadingState){
+        NSLog(@"[%@] Now sendsor data is uploading.", [self getSensorName]);
+        return;
+    }
+    
+    postThreads++;
+    NSLog(@"[%@] Post Threads: %d", [self getSensorName], postThreads);
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSInteger length = [userDefaults integerForKey:KEY_MAX_DATA_SIZE];
@@ -395,11 +406,10 @@
     }
     
     if (seek > lostedTextLength) {
-        [fileHandle seekToFileOffset:seek-lostedTextLength];
+        [fileHandle seekToFileOffset:seek-(NSInteger)lostedTextLength];
     }else{
         [fileHandle seekToFileOffset:seek];
     }
-
     NSData *clipedData = [fileHandle readDataOfLength:length];
     [fileHandle closeFile];
     
@@ -407,15 +417,16 @@
     lineCount = (int)data.length;
     NSLog(@"[%@] Line lenght is %ld", [self getSensorName], (unsigned long)data.length);
     if (data.length == 0) {
-        previusUploadingState = NO;
+//        previusUploadingState = NO;
         marker = 0;
+        [self dataSyncIsFinishedCorrectoly];
         return;
     }
     
     if ( data.length < length ) {
         // more post = 0
-        previusUploadingState = NO;
         marker = 0;
+        [self dataSyncIsFinishedCorrectoly];
     } else {
         // more post += 1
         marker += 1;
@@ -440,7 +451,7 @@
     post = [NSString stringWithFormat:@"device_id=%@&data=%@", deviceId, data];
     postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
     postLength = [NSString stringWithFormat:@"%ld", [postData length]];
-    NSLog(@"Data Length: %@", postLength);
+//    NSLog(@"Data Length: %@", postLength);
     request = [[NSMutableURLRequest alloc] init];
     [request setURL:[NSURL URLWithString:url]];
     [request setHTTPMethod:@"POST"];
@@ -453,30 +464,32 @@
     [dataTask resume];
 }
 
+
+
 - (void)URLSession:(NSURLSession *)session
           dataTask:(NSURLSessionDataTask *)dataTask
 didReceiveResponse:(NSURLResponse *)response
  completionHandler:(void (^)(NSURLSessionResponseDisposition disposition))completionHandler {
     
 
-    if ([session.configuration.identifier isEqualToString:_syncDataQueryIdentifier]) {
-        NSLog(@"[%@] Get response from the server.", [self getSensorName]);
-        [self receivedResponseFromServer:dataTask.response withData:nil error:nil];
-    } else if ( [session.configuration.identifier isEqualToString:_createTableQueryIdentifier] ){
-        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
-        int responseCode = (int)[httpResponse statusCode];
-        if (responseCode == 200) {
-            NSString *message = [NSString stringWithFormat:@"[%@] Sucess to create new table on AWARE server.", [self getSensorName]];
-            NSLog(@"%@", message);
-        }
-    } else {
-        
-    }
     
     [session finishTasksAndInvalidate];
     [session invalidateAndCancel];
     completionHandler(NSURLSessionResponseAllow);
     
+    if ([session.configuration.identifier isEqualToString:_syncDataQueryIdentifier]) {
+        NSLog(@"[%@] Get response from the server.", [self getSensorName]);
+        [self receivedResponseFromServer:dataTask.response withData:nil error:nil];
+        
+    } else if ( [session.configuration.identifier isEqualToString:_createTableQueryIdentifier] ){
+        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
+        int responseCode = (int)[httpResponse statusCode];
+        if (responseCode == 200) {
+            NSLog(@"[%@] Sucess to create new table on AWARE server.", [self getSensorName]);
+        }
+    } else {
+        
+    }
 }
 
 
@@ -493,8 +506,8 @@ didReceiveResponse:(NSURLResponse *)response
         NSLog(@"[%@] %@",[self getSensorName], newStr);
     }
     
-    [session finishTasksAndInvalidate];
-    [session invalidateAndCancel];
+//    [session finishTasksAndInvalidate];
+//    [session invalidateAndCancel];
 
 }
 
@@ -503,6 +516,8 @@ didReceiveResponse:(NSURLResponse *)response
 - (void)URLSession:(NSURLSession *)session
               task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error {
     
+    [session finishTasksAndInvalidate];
+    [session invalidateAndCancel];
     
     if ([session.configuration.identifier isEqualToString:_syncDataQueryIdentifier]) {
         if (error) {
@@ -514,23 +529,15 @@ didReceiveResponse:(NSURLResponse *)response
             NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
             bool debugState = [defaults boolForKey:SETTING_DEBUG_STATE];
             if (debugState) {
-                [self sendLocalNotificationForMessage:[NSString stringWithFormat:@"[%@] Retry - %d (%d)", [self getSensorName], marker, errorPosts] soundFlag:NO];
-                [self sendLocalNotificationForMessage:[NSString stringWithFormat:@"[%@] error log", error.debugDescription]soundFlag:NO];
+                [self sendLocalNotificationForMessage:[NSString stringWithFormat:@"[%@] Retry - %d (%d): %@", [self getSensorName], marker, errorPosts, error.debugDescription] soundFlag:NO];
             }
             if (errorPosts < 3) { //TODO
-                [session finishTasksAndInvalidate];
-                [session invalidateAndCancel];
                 [self syncAwareDB];
-//                [task resume];
             } else {
-                [session finishTasksAndInvalidate];
-                [session invalidateAndCancel];
-                errorPosts = 0;
-                previusUploadingState = NO;
+                [self dataSyncIsFinishedCorrectoly];
             }
         } else {
-            NSLog(@"[%@] Session task finished correctly.", [self getSensorName]);
-            errorPosts = 0;
+            [self dataSyncIsFinishedCorrectoly];
         }
         NSLog(@"%@", task.description);
 //        NSLog(@"%@", error.debugDescription);
@@ -540,8 +547,13 @@ didReceiveResponse:(NSURLResponse *)response
     } else if ([session.configuration.identifier isEqualToString:_createTableQueryIdentifier]){
         
     }
-    [session finishTasksAndInvalidate];
-    [session invalidateAndCancel];
+}
+
+- (void) dataSyncIsFinishedCorrectoly {
+    postThreads = postThreads - 1;
+    previusUploadingState = NO;
+    NSLog(@"[%@] Session task finished correctly.", [self getSensorName]);
+    errorPosts = 0;
 }
 
 - (void)URLSession:(NSURLSession *)session didBecomeInvalidWithError:(NSError *)error{
@@ -560,13 +572,11 @@ didReceiveResponse:(NSURLResponse *)response
     }else{
         NSRange rangeOfExtraText = [clipedText rangeOfString:@"{"];
         if (rangeOfExtraText.location == NSNotFound) {
-             NSLog(@"[HEAD] There is no extra text");
-            lostedTextLength = 0;
+//             NSLog(@"[HEAD] There is no extra text");
         }else{
-            NSLog(@"[HEAD] There is some extra text!");
+//            NSLog(@"[HEAD] There is some extra text!");
             NSRange deleteRange = NSMakeRange(0, rangeOfExtraText.location);
             [clipedText deleteCharactersInRange:deleteRange];
-            lostedTextLength = (int)deleteRange.length;
         }
     }
     
@@ -575,11 +585,13 @@ didReceiveResponse:(NSURLResponse *)response
     }else{
         NSRange rangeOfExtraText = [clipedText rangeOfString:@"}" options:NSBackwardsSearch];
         if (rangeOfExtraText.location == NSNotFound) {
-            // NSLog(@"[TAIL] There is no extra text");
+//             NSLog(@"[TAIL] There is no extra text");
+            lostedTextLength = 0;
         }else{
-            // NSLog(@"[TAIL] There is some extra text!");
+//             NSLog(@"[TAIL] There is some extra text!");
             NSRange deleteRange = NSMakeRange(rangeOfExtraText.location+1, clipedText.length-rangeOfExtraText.location-1);
             [clipedText deleteCharactersInRange:deleteRange];
+            lostedTextLength = (int)deleteRange.length;
         }
     }
     [clipedText insertString:@"[" atIndex:0];

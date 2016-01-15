@@ -31,7 +31,8 @@
         KEY_SCHEDULE = @"key_schedule";
         KEY_TIMER = @"key_timer";
         KEY_PREVIOUS_SCHEDULE_JSON = @"key_previous_schedule_json";
-        CONFIG_URL = @"http://r2d2.hcii.cs.cmu.edu/esm/master.json";
+//        CONFIG_URL = @"http://r2d2.hcii.cs.cmu.edu/esm/master.json";
+        CONFIG_URL = @"http://r2d2.hcii.cs.cmu.edu/esm/master_ios.json";
 //        CONFIG_URL = [NSString stringWithFormat:@"http://r2d2.hcii.cs.cmu.edu/esm/%@/esm_setting.json", [self getDeviceId]];
     }
     return self;
@@ -142,7 +143,8 @@ didReceiveResponse:(NSURLResponse *)response
         for (NSNumber * hour in hours) {
             i++;
             int intHour = [hour intValue];
-            NSDate * fireDate = [NSDate new];//[self getTargetTimeAsNSDate:[NSDate new] hour:intHour];
+//            NSDate * fireDate = [NSDate new];//[self getTargetTimeAsNSDate:[NSDate new] hour:intHour];
+            NSDate * fireDate = [self getTargetTimeAsNSDate:[NSDate new] hour:intHour];
             NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
 //            [dateFormatter setDateFormat:@"yyyy-MM-dd 'at' h:mm a"];
             [dateFormatter setDateFormat:@"h:mm a"];
@@ -298,7 +300,7 @@ didReceiveResponse:(NSURLResponse *)response
         [dic setObject:unixtime forKey:@"timestamp"];
         [dic setObject:@"0" forKey:KEY_ESM_STATUS]; // status is new
         [esm saveData:dic];
-        NSLog(@"%@",dic);
+//        NSLog(@"%@",dic);
     }
 }
 
