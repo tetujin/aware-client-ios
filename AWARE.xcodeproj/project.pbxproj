@@ -76,6 +76,7 @@
 		16E7AF941C3DF7A0005C9EDC /* LocationModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 16E7AF921C3DF7A0005C9EDC /* LocationModel.xcdatamodeld */; };
 		16E7AF961C3DF8A9005C9EDC /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16E7AF951C3DF8A9005C9EDC /* CoreData.framework */; };
 		16EB1E5A1C4A930500966A07 /* LocalTextStorageHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 16EB1E591C4A930500966A07 /* LocalTextStorageHelper.m */; };
+		16EB1E5D1C4AC12500966A07 /* CalEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 16EB1E5C1C4AC12500966A07 /* CalEvent.m */; };
 		16F09B221C249C5F005C1EB8 /* GoogleCalPull.m in Sources */ = {isa = PBXBuildFile; fileRef = 16F09B211C249C5F005C1EB8 /* GoogleCalPull.m */; };
 		16F09B271C24A584005C1EB8 /* libgtm-http-fetcher.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 16F09B241C24A584005C1EB8 /* libgtm-http-fetcher.a */; };
 		16F09B281C24A584005C1EB8 /* libgtm-oauth2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 16F09B251C24A584005C1EB8 /* libgtm-oauth2.a */; };
@@ -236,6 +237,8 @@
 		16E7AF951C3DF8A9005C9EDC /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		16EB1E581C4A930500966A07 /* LocalTextStorageHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalTextStorageHelper.h; sourceTree = "<group>"; };
 		16EB1E591C4A930500966A07 /* LocalTextStorageHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalTextStorageHelper.m; sourceTree = "<group>"; };
+		16EB1E5B1C4AC12500966A07 /* CalEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CalEvent.h; sourceTree = "<group>"; };
+		16EB1E5C1C4AC12500966A07 /* CalEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CalEvent.m; sourceTree = "<group>"; };
 		16F09B201C249C5F005C1EB8 /* GoogleCalPull.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GoogleCalPull.h; sourceTree = "<group>"; };
 		16F09B211C249C5F005C1EB8 /* GoogleCalPull.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GoogleCalPull.m; sourceTree = "<group>"; };
 		16F09B231C24A584005C1EB8 /* libGoogle-API-Client.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libGoogle-API-Client.a"; path = "Pods/../build/Debug-iphoneos/libGoogle-API-Client.a"; sourceTree = "<group>"; };
@@ -558,6 +561,8 @@
 			children = (
 				16F09B201C249C5F005C1EB8 /* GoogleCalPull.h */,
 				16F09B211C249C5F005C1EB8 /* GoogleCalPull.m */,
+				16EB1E5B1C4AC12500966A07 /* CalEvent.h */,
+				16EB1E5C1C4AC12500966A07 /* CalEvent.m */,
 			);
 			name = BalancedCampusCalendar;
 			sourceTree = "<group>";
@@ -1020,6 +1025,7 @@
 				164810851C21C08C00B830D9 /* ESM.m in Sources */,
 				1663BB801C2C94C3003F03DF /* ESMStorageHelper.m in Sources */,
 				164DD6621C1FA72D00ADA92B /* NTPTime.m in Sources */,
+				16EB1E5D1C4AC12500966A07 /* CalEvent.m in Sources */,
 				169A7B431BFFDE8F00A7C06D /* Rotation.m in Sources */,
 				1643959F1C22EEC40039E113 /* Scheduler.m in Sources */,
 				1623CEB41BFD659000EFAD72 /* AWAREKeys.m in Sources */,

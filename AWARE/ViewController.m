@@ -46,8 +46,7 @@
 
 @implementation ViewController
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
     
     KEY_CEL_TITLE = @"title";
@@ -501,8 +500,8 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
     } else {
         [self sendLocalNotificationForMessage:@"AWARE Configuration was refreshed in the background!" soundFlag:NO];
     }
-//    [self performSelector:@selector(initList) withObject:0 afterDelay:1];
-    [self initList];
+    [self performSelector:@selector(initList) withObject:0 afterDelay:1];
+//    [self initList];
     [self.tableView reloadData];
 //    [self connectMqttServer];
 }
