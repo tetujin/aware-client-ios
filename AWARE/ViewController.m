@@ -346,8 +346,8 @@
     }else if([key isEqualToString:SENSOR_PLUGIN_SCHEDULER]){
         // [TODO] For making new schedule.
     }else if ([key isEqualToString:SENSOR_PLUGIN_GOOGLE_CAL_PULL]) {
-        GoogleCalPull* googleCalPull = [[GoogleCalPull alloc] initWithSensorName:SENSOR_PLUGIN_GOOGLE_CAL_PULL];
-        [googleCalPull showSelectPrimaryGoogleCalView];
+//        GoogleCalPull* googleCalPull = [[GoogleCalPull alloc] initWithSensorName:SENSOR_PLUGIN_GOOGLE_CAL_PULL];
+//        [googleCalPull showSelectPrimaryGoogleCalView];
     }else if([key isEqualToString:SENSOR_PLUGIN_CAMPUS]){
         NSString* schedules = [_sensorManager getLatestSensorData:SENSOR_PLUGIN_CAMPUS];
          UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Current ESM Schedules" message:schedules delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
@@ -515,11 +515,6 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
 {
     NSLog(@"Back button is pressed!");
     [self.navigationController popToRootViewControllerAnimated:YES];
-//    [_sensorManager stopAllSensors];
-//    NSLog(@"Remove all sensors");
-//    [self initList];
-//    [self.tableView reloadData];
-//    [self connectMqttServer];
     return YES;
 }
 

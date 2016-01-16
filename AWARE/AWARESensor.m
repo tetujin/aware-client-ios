@@ -353,58 +353,33 @@
     return NO;
 }
 
+- (NSMutableString *) getSensorDataForPost {
 
-- (void) syncAwareDB {
-    [self syncAwareDBWithSensorName:[self getSensorName]];
-}
-
-
-/** Sync with AWARE database */
-- (void) syncAwareDBWithSensorName:(NSString*) sensorName {
-    if (!wifiState) {
-        NSLog(@"[%@] Wifi is not availabe.", [self getSensorName]);
-//        previusUploadingState = NO;
-//        [self dataSyncIsFinishedCorrectoly];
-        return;
-    }
-    
-    if(previusUploadingState){
-        NSLog(@"[%@] Now sendsor data is uploading.", [self getSensorName]);
-        return;
-    }
-    
-    postThreads++;
-    NSLog(@"[%@] Post Threads: %d", [self getSensorName], postThreads);
-    
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSInteger length = [userDefaults integerForKey:KEY_MAX_DATA_SIZE];
     NSUInteger seek = marker * length;
-    
-    previusUploadingState = YES;
-    
-    // init variables
-    NSString *post = nil;
-    NSData *postData = nil;
-    NSMutableURLRequest *request = nil;
-    __weak NSURLSession *session = nil;
-    NSString *postLength = nil;
-    NSString *deviceId = [self getDeviceId];
-    NSString *url = [self getInsertUrl:sensorName];
+
+//    // init variables
+//    NSString *post = nil;
+//    NSData *postData = nil;
+//    NSMutableURLRequest *request = nil;
+//    __weak NSURLSession *session = nil;
+//    NSString *postLength = nil;
     lineCount = 0;
     
     // get sensor data from file
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
-    NSString * path = [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.dat",sensorName]];
+    NSString * path = [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.dat",[self getSensorName]]];
     NSMutableString *data = nil;
     NSFileHandle *fileHandle = [NSFileHandle fileHandleForReadingAtPath:path];
     if (!fileHandle) {
-        NSLog(@"[%@] AWARE can not handle the file.", sensorName);
-        [self createNewFile:sensorName];
+        NSLog(@"[%@] AWARE can not handle the file.", [self getSensorName]);
+        [self createNewFile:[self getSensorName]];
         previusUploadingState = NO;
-        return;
+        return Nil;
     }
-    
+    NSLog(@"--> %ld", seek);
     if (seek > lostedTextLength) {
         [fileHandle seekToFileOffset:seek-(NSInteger)lostedTextLength];
     }else{
@@ -417,51 +392,93 @@
     lineCount = (int)data.length;
     NSLog(@"[%@] Line lenght is %ld", [self getSensorName], (unsigned long)data.length);
     if (data.length == 0) {
-//        previusUploadingState = NO;
         marker = 0;
         [self dataSyncIsFinishedCorrectoly];
-        return;
+        return Nil;
     }
     
     if ( data.length < length ) {
-        // more post = 0
         marker = 0;
         [self dataSyncIsFinishedCorrectoly];
     } else {
-        // more post += 1
         marker += 1;
     }
-    data = [self fixJsonFormat:data];
+    return data;
+}
+
+
+
+- (void) syncAwareDB {
+    [self syncAwareDBWithSensorName:[self getSensorName]];
+}
+
+/** Sync with AWARE database */
+// This is main syncmethod from AWARESensor thread
+- (void) syncAwareDBWithSensorName:(NSString*) sensorName {
+    
+    if(previusUploadingState){
+        NSLog(@"[%@] Now sendsor data is uploading.", [self getSensorName]);
+        return;
+    }
+    
+    if (!wifiState) {
+        NSLog(@"[%@] Wifi is not availabe.", [self getSensorName]);
+        return;
+    }
+    
+    previusUploadingState = YES;
+    
+    postThreads++;
+    NSLog(@"Post Threads: %d", postThreads);
+    
+    [self postSensorDataWithSensorName:sensorName session:nil];
+}
+
+- (void) postSensorDataWithSensorName:(NSString* )sensorName session:(NSURLSession *)oursession {
+    
+    NSString *deviceId = [self getDeviceId];
+    NSString *url = [self getInsertUrl:sensorName];
+    
+    NSMutableString* sensorData = [self getSensorDataForPost];
+    NSString* formatedSensorData = [self fixJsonFormat:sensorData];
     
     // Set session configuration
     NSURLSessionConfiguration *sessionConfig = nil;
-    //    NSDate *now = [NSDate date];
-    //    NSString* identifier = [NSString stringWithFormat:@"%@_%f", sensorName, [now timeIntervalSince1970]];
-    //    NSString* identifier = [NSString stringWithFormat:@"%@%@", _syncDataQueryIdentifier, sensorName];
+    double unxtime = [[NSDate new] timeIntervalSince1970];
+    _syncDataQueryIdentifier = [NSString stringWithFormat:@"%@%f", _syncDataQueryIdentifier, unxtime];
     sessionConfig = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:_syncDataQueryIdentifier];
     sessionConfig.timeoutIntervalForRequest = 60 * 5;
     sessionConfig.HTTPMaximumConnectionsPerHost = 60;
     sessionConfig.timeoutIntervalForResource = 300.0;
     sessionConfig.allowsCellularAccess = NO;
-    sessionConfig.discretionary = YES;
-    //        [sessionConfig setHTTPAdditionalHeaders:
-    //         @{@"Accept": @"application/json"}];
     
     // set HTTP/POST body information
-    post = [NSString stringWithFormat:@"device_id=%@&data=%@", deviceId, data];
-    postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
-    postLength = [NSString stringWithFormat:@"%ld", [postData length]];
-//    NSLog(@"Data Length: %@", postLength);
-    request = [[NSMutableURLRequest alloc] init];
+    NSString* post = [NSString stringWithFormat:@"device_id=%@&data=%@", deviceId, formatedSensorData];
+    NSData* postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
+    NSString* postLength = [NSString stringWithFormat:@"%ld", [postData length]];
+    //    NSLog(@"Data Length: %@", postLength);
+    NSMutableURLRequest* request = [[NSMutableURLRequest alloc] init];
     [request setURL:[NSURL URLWithString:url]];
     [request setHTTPMethod:@"POST"];
     [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
     [request setHTTPBody:postData];
     
     NSLog(@"[%@] This is background task for upload sensor data", [self getSensorName]);
-    session = [NSURLSession sessionWithConfiguration:sessionConfig delegate:self delegateQueue:nil];
+    NSURLSession* session = oursession;
+    if (session == nil) {
+        session = [NSURLSession sessionWithConfiguration:sessionConfig delegate:self delegateQueue:nil];
+    }
     NSURLSessionDataTask* dataTask = [session dataTaskWithRequest:request];
+    
+    [session getTasksWithCompletionHandler:^(NSArray* dataTasks, NSArray* uploadTasks, NSArray* downloadTasks){
+        NSLog(@"Currently suspended tasks");
+        for (NSURLSessionDownloadTask* task in dataTasks) {
+            NSLog(@"Task: %@",[task description]);
+        }
+    }];
+    
     [dataTask resume];
+
 }
 
 
@@ -471,7 +488,6 @@
 didReceiveResponse:(NSURLResponse *)response
  completionHandler:(void (^)(NSURLSessionResponseDisposition disposition))completionHandler {
     
-
     
     [session finishTasksAndInvalidate];
     [session invalidateAndCancel];
@@ -511,14 +527,12 @@ didReceiveResponse:(NSURLResponse *)response
 
 }
 
-
-
 - (void)URLSession:(NSURLSession *)session
               task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error {
     
     [session finishTasksAndInvalidate];
     [session invalidateAndCancel];
-    
+
     if ([session.configuration.identifier isEqualToString:_syncDataQueryIdentifier]) {
         if (error) {
             NSLog(@"[%@] Session task is finished with error. %@", [self getSensorName], error.debugDescription);
@@ -529,15 +543,22 @@ didReceiveResponse:(NSURLResponse *)response
             NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
             bool debugState = [defaults boolForKey:SETTING_DEBUG_STATE];
             if (debugState) {
-                [self sendLocalNotificationForMessage:[NSString stringWithFormat:@"[%@] Retry - %d (%d): %@", [self getSensorName], marker, errorPosts, error.debugDescription] soundFlag:NO];
+                [self sendLocalNotificationForMessage:[NSString stringWithFormat:
+                                                       @"[%@] Retry - %d (%d): %@",
+                                                       [self getSensorName],
+                                                       marker,
+                                                       errorPosts,
+                                                       error.debugDescription]
+                                            soundFlag:NO];
             }
             if (errorPosts < 3) { //TODO
-                [self syncAwareDB];
+                [self postSensorDataWithSensorName:[self getSensorName] session:session];
+//                [task resume];
             } else {
                 [self dataSyncIsFinishedCorrectoly];
             }
         } else {
-            [self dataSyncIsFinishedCorrectoly];
+//            [self dataSyncIsFinishedCorrectoly];
         }
         NSLog(@"%@", task.description);
 //        NSLog(@"%@", error.debugDescription);
@@ -564,6 +585,8 @@ didReceiveResponse:(NSURLResponse *)response
     [session invalidateAndCancel];
     [session finishTasksAndInvalidate];
 }
+
+
 
 
 - (NSMutableString *) fixJsonFormat:(NSMutableString *) clipedText {
@@ -634,15 +657,16 @@ didReceiveResponse:(NSURLResponse *)response
     response = nil;
     error = nil;
     httpResponse = nil;
-    dispatch_async(dispatch_get_main_queue(), ^{
+//    dispatch_async(dispatch_get_main_queue(), ^{
         if (marker != 0) {
-            [self syncAwareDB];
+//            [self syncAwareDB];
+            [self postSensorDataWithSensorName:[self getSensorName] session:nil];
         }else{
             if(responseCode == 200){
                 [self removeFile:[self getSensorName]];
             }
         }
-    });
+//    });
 }
 
 

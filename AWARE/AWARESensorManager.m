@@ -164,7 +164,7 @@
                         awareSensor = [[MSBand alloc] initWithPluginName:SENSOR_PLUGIN_MSBAND deviceId:deviceId];
                         [awareSensor startSensor:uploadTime withSettings:pluginSettings];
                     }else if([key isEqualToString:SENSOR_PLUGIN_GOOGLE_CAL_PULL]){
-                        awareSensor = [[GoogleCalPull alloc] initWithSensorName:SENSOR_PLUGIN_GOOGLE_CAL_PULL];
+                        awareSensor = [[GoogleCalPull alloc] initWithPluginName:SENSOR_PLUGIN_GOOGLE_CAL_PULL deviceId:deviceId];
                         [awareSensor startSensor:uploadTime withSettings:pluginSettings];
                     }else if([key isEqualToString:SENSOR_PLUGIN_GOOGLE_CAL_PUSH]){
                         awareSensor = [[GoogleCalPush alloc] initWithSensorName:SENSOR_PLUGIN_GOOGLE_CAL_PUSH];

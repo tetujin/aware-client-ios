@@ -550,6 +550,25 @@
 			path = AWAREUITests;
 			sourceTree = "<group>";
 		};
+		164B1A9D1C4923FC0047BB85 /* BalancedCampusCalendar */ = {
+			isa = PBXGroup;
+			children = (
+				16F09B201C249C5F005C1EB8 /* GoogleCalPull.h */,
+				16F09B211C249C5F005C1EB8 /* GoogleCalPull.m */,
+			);
+			name = BalancedCampusCalendar;
+			sourceTree = "<group>";
+		};
+		164B1A9E1C49240F0047BB85 /* BalancedCampusJournal */ = {
+			isa = PBXGroup;
+			children = (
+				1671A5D61C3B583C00C41F44 /* GoogleCalPush.h */,
+				1671A5D71C3B583C00C41F44 /* GoogleCalPush.m */,
+				16E7AF921C3DF7A0005C9EDC /* LocationModel.xcdatamodeld */,
+			);
+			name = BalancedCampusJournal;
+			sourceTree = "<group>";
+		};
 		1677AF2F1C2B4BB500F7C482 /* ESM */ = {
 			isa = PBXGroup;
 			children = (
@@ -597,7 +616,8 @@
 				16E155311C252B4D00316321 /* AWAREPlugin.h */,
 				16E155321C252B4D00316321 /* AWAREPlugin.m */,
 				16E7AF911C3DB9D4005C9EDC /* GoogleLogin */,
-				16E7AF871C3DB716005C9EDC /* GoogleCalendar */,
+				164B1A9D1C4923FC0047BB85 /* BalancedCampusCalendar */,
+				164B1A9E1C49240F0047BB85 /* BalancedCampusJournal */,
 				16E7AF881C3DB726005C9EDC /* MSBand */,
 				16E7AF891C3DB72D005C9EDC /* OpenWeather */,
 				16E7AF8A1C3DB7B1005C9EDC /* AmbientNoise */,
@@ -638,18 +658,6 @@
 				16FCE2761BFE9326005FC71A /* AWARESensorManager.m */,
 			);
 			name = Study;
-			sourceTree = "<group>";
-		};
-		16E7AF871C3DB716005C9EDC /* GoogleCalendar */ = {
-			isa = PBXGroup;
-			children = (
-				16F09B201C249C5F005C1EB8 /* GoogleCalPull.h */,
-				16F09B211C249C5F005C1EB8 /* GoogleCalPull.m */,
-				1671A5D61C3B583C00C41F44 /* GoogleCalPush.h */,
-				1671A5D71C3B583C00C41F44 /* GoogleCalPush.m */,
-				16E7AF921C3DF7A0005C9EDC /* LocationModel.xcdatamodeld */,
-			);
-			name = GoogleCalendar;
 			sourceTree = "<group>";
 		};
 		16E7AF881C3DB726005C9EDC /* MSBand */ = {

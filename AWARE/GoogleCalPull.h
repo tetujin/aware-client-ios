@@ -6,12 +6,13 @@
 //  Copyright © 2015 Yuuki NISHIYAMA. All rights reserved.
 //
 
-#import "AWARESensor.h"
+//#import "AWARESensor.h"
+#import "AWAREPlugin.h"
 #import <EventKit/EventKit.h>
 #import <EventKitUI/EventKitUI.h>
 //#import <CoreLocation/CoreLocation.h>
 
-@interface GoogleCalPull : AWARESensor <AWARESensorDelegate, UIAlertViewDelegate>
+@interface GoogleCalPull : AWAREPlugin <UIAlertViewDelegate>
 
 - (BOOL) showSelectPrimaryGoogleCalView;
 
