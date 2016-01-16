@@ -433,6 +433,38 @@
             endingLineNumber = "121"
             landmarkName = "-addNewSensorWithSensorName:settings:plugins:uploadInterval:"
             landmarkType = "5">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "-[AWARESensorManager addNewSensorWithSensorName:settings:plugins:uploadInterval:]"
+                  moduleName = "AWARE"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/tetujin/Dropbox/tokuda_Lab/codes/objective-c/AWARE/AWARE/AWARESensorManager.m"
+                  timestampString = "474651473.805865"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "124"
+                  endingLineNumber = "124"
+                  offsetFromSymbolStart = "3076">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "__81-[AWARESensorManager addNewSensorWithSensorName:settings:plugins:uploadInterval:]_block_invoke"
+                  moduleName = "AWARE"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/tetujin/Dropbox/tokuda_Lab/codes/objective-c/AWARE/AWARE/AWARESensorManager.m"
+                  timestampString = "474651473.806066"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "124"
+                  endingLineNumber = "124"
+                  offsetFromSymbolStart = "24">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

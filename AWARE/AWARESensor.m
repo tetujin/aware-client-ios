@@ -10,6 +10,7 @@
 #import "AWARESensor.h"
 #import "AWAREKeys.h"
 #import "SCNetworkReachability.h"
+#import "LocalTextStorageHelper.h"
 
 @interface AWARESensor () {
     
@@ -442,6 +443,11 @@
     NSMutableString* sensorData = [self getSensorDataForPost];
     NSString* formatedSensorData = [self fixJsonFormat:sensorData];
     
+    if (sensorData.length == 0) {
+        NSLog(@"[%@] Data length is zero => %ld", [self getSensorName], sensorData.length);
+        return;
+    }
+    
     // Set session configuration
     NSURLSessionConfiguration *sessionConfig = nil;
     double unxtime = [[NSDate new] timeIntervalSince1970];
@@ -552,8 +558,7 @@ didReceiveResponse:(NSURLResponse *)response
                                             soundFlag:NO];
             }
             if (errorPosts < 3) { //TODO
-                [self postSensorDataWithSensorName:[self getSensorName] session:session];
-//                [task resume];
+                [self postSensorDataWithSensorName:[self getSensorName] session:nil];
             } else {
                 [self dataSyncIsFinishedCorrectoly];
             }

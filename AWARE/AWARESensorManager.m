@@ -59,7 +59,6 @@
         return @"";
     }
     
-//    double uploadTime = 10.0f;
     NSLog(@"[%@] Upload interval is %f.", key, uploadTime);
     AWARESensor* awareSensor = nil;
     for (int i=0; i<settings.count; i++) {
