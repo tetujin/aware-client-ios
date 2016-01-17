@@ -30,6 +30,10 @@
     NSString* AWARE_CAL_NAME;
     NSString* PRIMARY_GOOGLE_ACCOUNT_NAME;
     NSString* KEY_AWARE_CAL_FIRST_ACCESS;
+    
+//    BOOL isAddOrUpdate;
+//    EKEvent* targetEvent;
+//    CalEvent * deletedEvent;
 }
 
 
@@ -176,9 +180,10 @@
     EKEventStore *ekEventStore = notification.object;
     
     NSArray *ekEventStoreChangedObjectIDArray = [notification.userInfo objectForKey:@"EKEventStoreChangedObjectIDsUserInfoKey"];
-//    NSPredicate *predicate = [ekEventStore    predicateForEventsWithStartDate:startDate
-//                                                                      endDate:endDate
-//                                                                    calendars:nil];
+
+    //    NSPredicate *predicate = [ekEventStore    predicateForEventsWithStartDate:startDate
+    //                                                                      endDate:endDate
+    //                                                                    calendars:nil];
     NSMutableArray * currentEvents = [[NSMutableArray alloc] init];
     NSMutableArray * ids = [[NSMutableArray alloc] init];
     
@@ -193,7 +198,7 @@
     
     BOOL isDeleteOrOther = YES;
     EKEvent* targetEvent;
-//    for (EKEvent * ekEvent in currentEvents) {
+    //    for (EKEvent * ekEvent in currentEvents) {
     for (int i=0; i<currentEvents.count; i++){
         EKEvent* ekEvent = [currentEvents objectAtIndex:i];
         for (NSString* ekEventStoreChangedObjectID in ids) {
@@ -231,7 +236,7 @@
             [self saveCalEvent:event];
         }
     }
-    
+
     [self updateExistingEvents];
 }
 
@@ -241,7 +246,7 @@
     NSMutableDictionary * dic = [calEvent getCalEventAsDictionaryWithDeviceId:[self getDeviceId]
                                                                     timestamp:[self getUnixtimeWithNSDate:[NSDate date]]];
     [self saveData:dic toLocalFile:googleCalPullSensorName];
-    NSLog(@"%@", dic);
+//    NSLog(@"%@", dic);
 }
 
 
@@ -255,7 +260,7 @@
 }
 
 - (CalEvent *) getDeletedCalEvent:(NSMutableArray *) currentEvents{
-//    EKEvent * deletedEKEvent = nil;
+    //    EKEvent * deletedEKEvent = nil;
     CalEvent * deletedCalEvent = nil;
     for (CalEvent* oldCalEvent in allEvents) {
         bool deletedFlag = YES;
@@ -265,7 +270,7 @@
             }
         }
         if ( deletedFlag ) {
-//            deletedEKEvent = oldCalEvent;
+            //            deletedEKEvent = oldCalEvent;
             deletedCalEvent = oldCalEvent;
             NSLog(@"%@", oldCalEvent.description);
             break;

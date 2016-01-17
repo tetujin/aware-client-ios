@@ -67,6 +67,14 @@
     
     uploadInterval = 60*15;
     
+//    NSTimer* testaTimer = [NSTimer scheduledTimerWithTimeInterval:60*10
+//                                                 target:self
+//                                               selector:@selector(pushedStudyRefreshButton:)
+//                                               userInfo:nil
+//                                                repeats:YES];
+//    [testaTimer fire];
+    
+    
     // daily study update
     NSDate* dailyUpdateTime = [self getTargetTimeAsNSDate:[NSDate date] hour:3 minute:0 second:0];
     dailyUpdateTimer = [[NSTimer alloc] initWithFireDate:dailyUpdateTime
@@ -75,7 +83,6 @@
                                                 selector:@selector(pushedStudyRefreshButton:)
                                                 userInfo:nil
                                                  repeats:YES];
-//    [dailyUpdateTimer fire];
     NSRunLoop *runLoop = [NSRunLoop currentRunLoop];
     [runLoop addTimer:dailyUpdateTimer forMode:NSDefaultRunLoopMode];// NSRunLoopCommonModes];//
     
@@ -500,7 +507,7 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
     } else {
         [self sendLocalNotificationForMessage:@"AWARE Configuration was refreshed in the background!" soundFlag:NO];
     }
-    [self performSelector:@selector(initList) withObject:0 afterDelay:1];
+    [self performSelector:@selector(initList) withObject:0 afterDelay:3];
 //    [self initList];
     [self.tableView reloadData];
 //    [self connectMqttServer];

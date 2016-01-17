@@ -51,8 +51,12 @@
     
     __weak NSURLSession *session = nil;
     NSURLSessionConfiguration *sessionConfig = nil;
+    
+    
+    double unxtime = [[NSDate new] timeIntervalSince1970];
+    _getConfigFileIdentifier = [NSString stringWithFormat:@"%@%f", _getConfigFileIdentifier, unxtime];
     sessionConfig = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:_getConfigFileIdentifier];
-    sessionConfig.timeoutIntervalForRequest = 120.0;
+    sessionConfig.timeoutIntervalForRequest = 180.0;
     sessionConfig.HTTPMaximumConnectionsPerHost = 60;
     sessionConfig.timeoutIntervalForResource = 60; //60*60*24; // 1 day
     sessionConfig.allowsCellularAccess = NO;

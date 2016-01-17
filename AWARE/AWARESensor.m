@@ -779,8 +779,11 @@ didReceiveResponse:(NSURLResponse *)response
     
     
     NSURLSessionConfiguration *sessionConfig = nil;
+    
+    double unxtime = [[NSDate new] timeIntervalSince1970];
+    _createTableQueryIdentifier = [NSString stringWithFormat:@"%@%f", _createTableQueryIdentifier, unxtime];
     sessionConfig = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:_createTableQueryIdentifier];
-    sessionConfig.timeoutIntervalForRequest = 120.0;
+    sessionConfig.timeoutIntervalForRequest = 180.0;
     sessionConfig.HTTPMaximumConnectionsPerHost = 60;
     sessionConfig.timeoutIntervalForResource = 60; //60*60*24; // 1 day
     sessionConfig.allowsCellularAccess = NO;

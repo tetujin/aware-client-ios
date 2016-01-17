@@ -8,6 +8,7 @@
 
 #import "AWARESensor.h"
 #import "AWAREKeys.h"
+//#import "AWAREPlugin.h"
 
 @interface Battery : AWARESensor <AWARESensorDelegate>
 
