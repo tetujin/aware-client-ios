@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface LocalTextStorageHelper : NSObject
+@interface LocalFileStorageHelper : NSObject
 
 - (instancetype) initWithStorageName:(NSString *) storageName;
 - (NSString *) getStorageName;

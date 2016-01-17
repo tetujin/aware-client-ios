@@ -30,6 +30,7 @@ extern NSString* const KEY_ESM_SCALE_START;
 extern NSString* const KEY_ESM_SCALE_MAX_LABEL;
 extern NSString* const KEY_ESM_SCALE_MIN_LABEL;
 extern NSString* const KEY_ESM_SCALE_STEP;
+extern NSString* const KEY_ESM_IOS;
 
 @interface SingleESMObject : NSObject
 
@@ -79,6 +80,7 @@ extern NSString* const KEY_ESM_SCALE_STEP;
 @property (strong, nonatomic) IBOutlet NSString * scaleMinLabel;
 //extern NSString* const KEY_ESM_SCALE_STEP;
 @property (strong, nonatomic) IBOutlet NSNumber * scaleStep;
+//@property (strong, nonatomic) IBOutlet NSNumber * esmiOS;
 
 @property (strong, nonatomic) IBOutlet NSMutableDictionary * esmObject;
 @property (strong, nonatomic) IBOutlet NSMutableDictionary * esmObjectWithKey;

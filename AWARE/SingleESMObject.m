@@ -30,6 +30,7 @@ NSString* const KEY_ESM_SCALE_START = @"esm_scale_start";
 NSString* const KEY_ESM_SCALE_MAX_LABEL = @"esm_scale_max_label";
 NSString* const KEY_ESM_SCALE_MIN_LABEL = @"esm_scale_min_label";
 NSString* const KEY_ESM_SCALE_STEP = @"esm_scale_step";
+//NSString* const KEY_ESM_IOS = @"esm_ios";
 
 @implementation SingleESMObject
 
@@ -70,6 +71,7 @@ NSString* const KEY_ESM_SCALE_STEP = @"esm_scale_step";
     _scaleMaxLabel = [esm objectForKey:KEY_ESM_SCALE_MAX_LABEL];
     _scaleMinLabel = [esm objectForKey:KEY_ESM_SCALE_MIN_LABEL];
     _scaleStep = [NSNumber numberWithInteger:[[esm objectForKey:KEY_ESM_SCALE_STEP] integerValue]];
+//    _esmiOS = [NSNumber numberWithInteger:[[esm objectForKey:KEY_ESM_IOS] integerValue]];
 }
 
 - (bool)isSingleEsm{

@@ -176,7 +176,10 @@
         return NO;
     }
     
-    NSArray *results = object;
+//    NSArray *results = object;
+    NSMutableArray * results = [[NSMutableArray alloc] initWithArray:object];
+    
+    
 //    bool quick = NO;
     int tag = 0;
     NSLog(@"====== Hello ESM !! =======");
@@ -1086,6 +1089,11 @@
                         [dic setObject:@"" forKey:KEY_ESM_USER_ANSWER];
                     }else{
                         [dic setObject:label.text forKey:KEY_ESM_USER_ANSWER];
+                    }
+                    
+                    UIButton * naButton = [contents objectAtIndex:1];
+                    if(naButton.selected){
+                        [dic setObject:@"NA" forKey:KEY_ESM_USER_ANSWER];
                     }
                 }
             }

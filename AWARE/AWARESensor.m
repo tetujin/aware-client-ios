@@ -10,7 +10,7 @@
 #import "AWARESensor.h"
 #import "AWAREKeys.h"
 #import "SCNetworkReachability.h"
-#import "LocalTextStorageHelper.h"
+#import "LocalFileStorageHelper.h"
 
 @interface AWARESensor () {
     

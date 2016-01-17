@@ -6,9 +6,9 @@
 //  Copyright © 2016 Yuuki NISHIYAMA. All rights reserved.
 //
 
-#import "LocalTextStorageHelper.h"
+#import "LocalFileStorageHelper.h"
 
-@implementation LocalTextStorageHelper {
+@implementation LocalFileStorageHelper {
     NSString * storageName;
     NSMutableString* tempData;
     NSMutableString* bufferStr;

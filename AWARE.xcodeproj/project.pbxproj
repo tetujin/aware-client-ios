@@ -75,7 +75,7 @@
 		16E7AF901C3DB8E5005C9EDC /* GoogleLogin.m in Sources */ = {isa = PBXBuildFile; fileRef = 16E7AF8F1C3DB8E5005C9EDC /* GoogleLogin.m */; };
 		16E7AF941C3DF7A0005C9EDC /* LocationModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 16E7AF921C3DF7A0005C9EDC /* LocationModel.xcdatamodeld */; };
 		16E7AF961C3DF8A9005C9EDC /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16E7AF951C3DF8A9005C9EDC /* CoreData.framework */; };
-		16EB1E5A1C4A930500966A07 /* LocalTextStorageHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 16EB1E591C4A930500966A07 /* LocalTextStorageHelper.m */; };
+		16EB1E5A1C4A930500966A07 /* LocalFileStorageHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 16EB1E591C4A930500966A07 /* LocalFileStorageHelper.m */; };
 		16EB1E5D1C4AC12500966A07 /* CalEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 16EB1E5C1C4AC12500966A07 /* CalEvent.m */; };
 		16F09B221C249C5F005C1EB8 /* GoogleCalPull.m in Sources */ = {isa = PBXBuildFile; fileRef = 16F09B211C249C5F005C1EB8 /* GoogleCalPull.m */; };
 		16F09B271C24A584005C1EB8 /* libgtm-http-fetcher.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 16F09B241C24A584005C1EB8 /* libgtm-http-fetcher.a */; };
@@ -235,8 +235,8 @@
 		16E7AF8F1C3DB8E5005C9EDC /* GoogleLogin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GoogleLogin.m; sourceTree = "<group>"; };
 		16E7AF931C3DF7A0005C9EDC /* LocationModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = LocationModel.xcdatamodel; sourceTree = "<group>"; };
 		16E7AF951C3DF8A9005C9EDC /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
-		16EB1E581C4A930500966A07 /* LocalTextStorageHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalTextStorageHelper.h; sourceTree = "<group>"; };
-		16EB1E591C4A930500966A07 /* LocalTextStorageHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalTextStorageHelper.m; sourceTree = "<group>"; };
+		16EB1E581C4A930500966A07 /* LocalFileStorageHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalFileStorageHelper.h; sourceTree = "<group>"; };
+		16EB1E591C4A930500966A07 /* LocalFileStorageHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalFileStorageHelper.m; sourceTree = "<group>"; };
 		16EB1E5B1C4AC12500966A07 /* CalEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CalEvent.h; sourceTree = "<group>"; };
 		16EB1E5C1C4AC12500966A07 /* CalEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CalEvent.m; sourceTree = "<group>"; };
 		16F09B201C249C5F005C1EB8 /* GoogleCalPull.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GoogleCalPull.h; sourceTree = "<group>"; };
@@ -653,8 +653,8 @@
 				1623CEB31BFD659000EFAD72 /* AWAREKeys.m */,
 				16E7AF821C3D54D4005C9EDC /* SSLManager.h */,
 				16E7AF831C3D54D4005C9EDC /* SSLManager.m */,
-				16EB1E581C4A930500966A07 /* LocalTextStorageHelper.h */,
-				16EB1E591C4A930500966A07 /* LocalTextStorageHelper.m */,
+				16EB1E581C4A930500966A07 /* LocalFileStorageHelper.h */,
+				16EB1E591C4A930500966A07 /* LocalFileStorageHelper.m */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -1009,7 +1009,7 @@
 				169A7B461C0052F800A7C06D /* Gravity.m in Sources */,
 				169A7B241BFF16E700A7C06D /* Gyroscope.m in Sources */,
 				160EE9C31C052DAA00015688 /* OpenWeather.m in Sources */,
-				16EB1E5A1C4A930500966A07 /* LocalTextStorageHelper.m in Sources */,
+				16EB1E5A1C4A930500966A07 /* LocalFileStorageHelper.m in Sources */,
 				1623CE6E1BFD1B2C00EFAD72 /* AppDelegate.m in Sources */,
 				1607944C1C19274C0021816F /* AWAREStudy.m in Sources */,
 				16FCE2771BFE9326005FC71A /* AWARESensorManager.m in Sources */,

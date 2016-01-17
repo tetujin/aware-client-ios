@@ -20,11 +20,13 @@
     NSString * KEY_PREVIOUS_SCHEDULE_JSON;
     NSTimer * dailyQuestionUpdateTimer;
     NSString* CONFIG_URL;
+    NSMutableData* resultData;
 }
 
 - (instancetype)initWithSensorName:(NSString *)sensorName {
     self = [super initWithSensorName:SENSOR_PLUGIN_CAMPUS];
     if (self) {
+        resultData = [[NSMutableData alloc] init];
 //                [super setSensorName:sensorName];
         scheduleManager = [[NSMutableArray alloc] init];
         _getConfigFileIdentifier = @"get_config_file_identifier";
@@ -41,6 +43,8 @@
 
 - (void) setConfigFile:(id) sender {
     // Get Config URL from NSTimer of userInfo.
+    resultData = [[NSMutableData alloc] init];
+    
     NSDictionary *dic = [(NSTimer *) sender userInfo];
     NSString *url = [dic objectForKey:@"configUrl"];
     NSLog(@"--> %@", url);
@@ -89,10 +93,12 @@ didReceiveResponse:(NSURLResponse *)response
     NSLog(@"--> %@", session.configuration.identifier);
     if ([session.configuration.identifier isEqualToString:_getConfigFileIdentifier]) {
         // NOTE: For registrate a NSTimer in the backgroung, we have to set it in the main thread!
-        dispatch_async(dispatch_get_main_queue(), ^{
+//        dispatch_async(dispatch_get_main_queue(), ^{
 //            [self.tableView reloadData];
-            [self setEsmSchedulesWithJSONData:data];
-        });
+        [resultData appendData:data];
+        
+//        [self setEsmSchedulesWithJSONData:data];
+//        });
     }
     [session finishTasksAndInvalidate];
     [session invalidateAndCancel];
@@ -100,8 +106,14 @@ didReceiveResponse:(NSURLResponse *)response
 
 
 - (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error {
+    NSLog(@"--> finish");
     if (error != nil) {
         NSLog(@"ERROR: %@ %ld", error.debugDescription , error.code);
+    }else{
+        // NOTE: For registrate a NSTimer in the backgroung, we have to set it in the main thread!
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self setEsmSchedulesWithJSONData:resultData];
+        });
     }
     [session finishTasksAndInvalidate];
     [session invalidateAndCancel];
@@ -136,13 +148,17 @@ didReceiveResponse:(NSURLResponse *)response
         NSString * body = @"Tap to answer.";
         NSString * identifier = [schedule objectForKey:@"schedule_id"];
         NSArray * hours = [schedule objectForKey:@"hours"];
-        NSDictionary * esmsDic = [schedule objectForKey:@"esms"];
+        NSArray * esmsDic = [schedule objectForKey:@"esms"];
+        // check esm_ios
+        if (esmsDic != nil) {
+            esmsDic = [self checkEsmIOS:esmsDic];
+        }
         NSError *writeError = nil;
         NSData *jsonData = [NSJSONSerialization dataWithJSONObject:esmsDic options:0 error:&writeError];
         NSString * esmsStr = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
         for (NSNumber * hour in hours) {
             i++;
-            int intHour = [hour intValue];
+            int intHour = [hour intValue]; //TODO
 //            NSDate * fireDate = [NSDate new];//[self getTargetTimeAsNSDate:[NSDate new] hour:intHour];
             NSDate * fireDate = [self getTargetTimeAsNSDate:[NSDate new] hour:intHour];
             NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
@@ -151,6 +167,7 @@ didReceiveResponse:(NSURLResponse *)response
             NSString* fireDateString = [dateFormatter stringFromDate:fireDate];
             NSString * currentSchedule = [NSString stringWithFormat:@"'%@' at '[%@]'\n", identifier, fireDateString];
             currentSchedules = [NSString stringWithFormat:@"%@%@", currentSchedules, currentSchedule];
+            
             AWARESchedule * schedule = [[AWARESchedule alloc] initWithScheduleId:identifier];
             [schedule setScheduleAsNormalWithDate:fireDate
                                      intervalType:SCHEDULE_INTERVAL_DAY
@@ -168,6 +185,39 @@ didReceiveResponse:(NSURLResponse *)response
 }
 
 
+- (NSArray *)checkEsmIOS:esmsDic{
+//    NSMutableDictionary esm = [[NSMutableDictionary alloc] initWithDictionary:esmsDic];
+    NSMutableArray *newArray = [[NSMutableArray alloc] init];
+    for (NSDictionary* esm in esmsDic) {
+        NSMutableDictionary* newEsm = [[NSMutableDictionary alloc] initWithDictionary:esm];
+        NSMutableDictionary* e = [newEsm objectForKey:@"esm"];
+        NSNumber* iosModel = [e objectForKey:@"esm_ios"];
+        if ([iosModel intValue] == 1) {
+            NSString* iosInstruction = [e objectForKey:@"esm_ios_instruction"];
+            NSString* iosTitle = [e objectForKey:@"esm_ios_title"];
+            if (iosInstruction) {
+                [e setValue:iosInstruction forKey:KEY_ESM_INSTRUCTIONS];
+            }else{
+                [e setValue:@"" forKey:KEY_ESM_INSTRUCTIONS];
+            }
+            if (iosTitle) {
+                [e setValue:iosTitle forKey:KEY_ESM_TITLE];
+            }else{
+                [e setValue:@"" forKey:KEY_ESM_TITLE];
+            }
+            [e setValue:@4 forKey:KEY_ESM_TYPE];
+            // remove additional object
+            [e removeObjectForKey:@"esm_ios"];
+            [e removeObjectForKey:@"esm_ios_instruction"];
+            [e removeObjectForKey:@"esm_ios_title"];
+        }
+        [newArray addObject:newEsm]; // TODO: test
+    }
+    
+    return newArray;
+}
+
+
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
     
     ESMStorageHelper *helper = [[ESMStorageHelper alloc] init];
@@ -175,7 +225,7 @@ didReceiveResponse:(NSURLResponse *)response
 
     NSMutableDictionary * dic = [[NSMutableDictionary alloc] init];
     [dic setObject:CONFIG_URL forKey:@"configUrl"];
-    dailyQuestionUpdateTimer = [[NSTimer alloc] initWithFireDate:[NSDate new] //[self getTargetTimeAsNSDate:[NSDate new] hour:6 minute:0 second:0]
+    dailyQuestionUpdateTimer = [[NSTimer alloc] initWithFireDate:[self getTargetTimeAsNSDate:[NSDate new] hour:6 minute:0 second:0]
                                                         interval:60*60*24
                                                           target:self
                                                         selector:@selector(setConfigFile:)
@@ -184,6 +234,7 @@ didReceiveResponse:(NSURLResponse *)response
     NSRunLoop *runLoop = [NSRunLoop currentRunLoop];
     [runLoop addTimer:dailyQuestionUpdateTimer forMode:NSDefaultRunLoopMode];// NSRunLoopCommonModes];//
     
+    [dailyQuestionUpdateTimer fire];
     // init scheduler
     
     // Make schdules
