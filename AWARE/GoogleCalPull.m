@@ -196,7 +196,7 @@
         [ids addObject:ekEventStoreChangedObjectID];
     }];
     
-    BOOL isDeleteOrOther = YES;
+//    BOOL isDeleteOrOther = YES;
 //    EKEvent* targetEvent;
     //    for (EKEvent * ekEvent in currentEvents) {
     NSMutableArray * deletedEventIds = [[NSMutableArray alloc] init];

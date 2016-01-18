@@ -71,6 +71,7 @@
 		16E155331C252B4D00316321 /* AWAREPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 16E155321C252B4D00316321 /* AWAREPlugin.m */; };
 		16E155391C27C2AC00316321 /* EventKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16E155371C27C2AC00316321 /* EventKit.framework */; };
 		16E1553A1C27C2AC00316321 /* EventKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16E155381C27C2AC00316321 /* EventKitUI.framework */; };
+		16E47ECA1C4D8BF5005B7932 /* FusedLocations.m in Sources */ = {isa = PBXBuildFile; fileRef = 16E47EC91C4D8BF5005B7932 /* FusedLocations.m */; };
 		16E7AF841C3D54D4005C9EDC /* SSLManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 16E7AF831C3D54D4005C9EDC /* SSLManager.m */; };
 		16E7AF901C3DB8E5005C9EDC /* GoogleLogin.m in Sources */ = {isa = PBXBuildFile; fileRef = 16E7AF8F1C3DB8E5005C9EDC /* GoogleLogin.m */; };
 		16E7AF941C3DF7A0005C9EDC /* LocationModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 16E7AF921C3DF7A0005C9EDC /* LocationModel.xcdatamodeld */; };
@@ -229,6 +230,8 @@
 		16E155321C252B4D00316321 /* AWAREPlugin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AWAREPlugin.m; sourceTree = "<group>"; };
 		16E155371C27C2AC00316321 /* EventKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKit.framework; path = System/Library/Frameworks/EventKit.framework; sourceTree = SDKROOT; };
 		16E155381C27C2AC00316321 /* EventKitUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKitUI.framework; path = System/Library/Frameworks/EventKitUI.framework; sourceTree = SDKROOT; };
+		16E47EC81C4D8BF5005B7932 /* FusedLocations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FusedLocations.h; sourceTree = "<group>"; };
+		16E47EC91C4D8BF5005B7932 /* FusedLocations.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FusedLocations.m; sourceTree = "<group>"; };
 		16E7AF821C3D54D4005C9EDC /* SSLManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSLManager.h; sourceTree = "<group>"; };
 		16E7AF831C3D54D4005C9EDC /* SSLManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSLManager.m; sourceTree = "<group>"; };
 		16E7AF8E1C3DB8E5005C9EDC /* GoogleLogin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GoogleLogin.h; sourceTree = "<group>"; };
@@ -623,6 +626,7 @@
 			children = (
 				16E155311C252B4D00316321 /* AWAREPlugin.h */,
 				16E155321C252B4D00316321 /* AWAREPlugin.m */,
+				16E47ECB1C4D8C05005B7932 /* FusedLocations */,
 				16E7AF911C3DB9D4005C9EDC /* GoogleLogin */,
 				164B1A9D1C4923FC0047BB85 /* BalancedCampusCalendar */,
 				164B1A9E1C49240F0047BB85 /* BalancedCampusJournal */,
@@ -644,6 +648,15 @@
 				160794501C1A4E380021816F /* AWAREMqtt.m */,
 			);
 			name = MQTT;
+			sourceTree = "<group>";
+		};
+		16E47ECB1C4D8C05005B7932 /* FusedLocations */ = {
+			isa = PBXGroup;
+			children = (
+				16E47EC81C4D8BF5005B7932 /* FusedLocations.h */,
+				16E47EC91C4D8BF5005B7932 /* FusedLocations.m */,
+			);
+			name = FusedLocations;
 			sourceTree = "<group>";
 		};
 		16E7AF851C3D54E0005C9EDC /* Utils */ = {
@@ -1011,6 +1024,7 @@
 				160EE9BD1C050B4C00015688 /* Bluetooth.m in Sources */,
 				169A7B461C0052F800A7C06D /* Gravity.m in Sources */,
 				169A7B241BFF16E700A7C06D /* Gyroscope.m in Sources */,
+				16E47ECA1C4D8BF5005B7932 /* FusedLocations.m in Sources */,
 				160EE9C31C052DAA00015688 /* OpenWeather.m in Sources */,
 				16EB1E5A1C4A930500966A07 /* LocalFileStorageHelper.m in Sources */,
 				1623CE6E1BFD1B2C00EFAD72 /* AppDelegate.m in Sources */,

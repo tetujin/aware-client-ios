@@ -35,6 +35,7 @@
 #import "GoogleCalPush.h"
 #import "GoogleLogin.h"
 #import "Scheduler.h"
+#import "FusedLocations.h"
 
 @implementation AWARESensorManager
 
@@ -141,15 +142,17 @@
         for (NSDictionary* pluginSetting in pluginSettings) {
             NSString *pluginStateKey = [NSString stringWithFormat:@"status_%@",key];
             NSString *pluginStateName = [pluginSetting objectForKey:@"setting"];
-            if ([pluginStateKey isEqualToString:pluginStateName]) {
+//            NSLog(@"%@", pluginStateName);
+            if ([pluginStateKey isEqualToString:pluginStateName] || [pluginStateName isEqual:@"status_google_fused_location"]) {
                 bool pluginState = [pluginSetting objectForKey:@"value"];
                 if (pluginState) {
+                    NSLog(@"--> %@", key);
                     if ([key isEqualToString:SENSOR_PLUGIN_GOOGLE_ACTIVITY_RECOGNITION]) {
                         awareSensor = [[ActivityRecognition alloc] initWithSensorName:SENSOR_PLUGIN_GOOGLE_ACTIVITY_RECOGNITION];
                         [awareSensor startSensor:uploadTime withSettings:pluginSettings];
                     }else if([key isEqualToString:SENSOR_AMBIENT_NOISE]){
-                        awareSensor = [[AmbientNoise alloc] initWithSensorName:SENSOR_AMBIENT_NOISE];
-                        [awareSensor startSensor:uploadTime withSettings:pluginSettings];
+//                        awareSensor = [[AmbientNoise alloc] initWithSensorName:SENSOR_AMBIENT_NOISE];
+//                        [awareSensor startSensor:uploadTime withSettings:pluginSettings];
                     }else if([key isEqualToString:SENSOR_PLUGIN_OPEN_WEATHER]){
                         awareSensor = [[OpenWeather alloc] initWithSensorName:SENSOR_PLUGIN_OPEN_WEATHER];
                         [awareSensor startSensor:uploadTime withSettings:pluginSettings];
@@ -173,6 +176,10 @@
                         [awareSensor startSensor:uploadTime withSettings:pluginSettings];
                     }else if([key isEqualToString:SENSOR_PLUGIN_CAMPUS]){
                         awareSensor = [[Scheduler alloc] initWithSensorName:SENSOR_PLUGIN_CAMPUS];
+                        [awareSensor startSensor:uploadTime withSettings:pluginSettings];
+                    }else if([key isEqualToString:SENSOR_GOOGLE_FUSED_LOCATION]){
+//                        awareSensor = [[Locations alloc] initWithSensorName:SENSOR_GOOGLE_FUSED_LOCATION];
+                        awareSensor = [[FusedLocations alloc] initWithSensorName:SENSOR_GOOGLE_FUSED_LOCATION];
                         [awareSensor startSensor:uploadTime withSettings:pluginSettings];
                     }
                     break;

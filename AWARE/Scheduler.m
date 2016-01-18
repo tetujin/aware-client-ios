@@ -21,6 +21,7 @@
     NSTimer * dailyQuestionUpdateTimer;
     NSString* CONFIG_URL;
     NSMutableData* resultData;
+    NSDate* dailyUpdate;
 }
 
 - (instancetype)initWithSensorName:(NSString *)sensorName {
@@ -29,6 +30,7 @@
         resultData = [[NSMutableData alloc] init];
 //                [super setSensorName:sensorName];
         scheduleManager = [[NSMutableArray alloc] init];
+        dailyUpdate = [self getTargetTimeAsNSDate:[NSDate new] hour:6 minute:0 second:0];
         _getConfigFileIdentifier = @"get_config_file_identifier";
         KEY_SCHEDULE = @"key_schedule";
         KEY_TIMER = @"key_timer";
@@ -229,7 +231,7 @@ didReceiveResponse:(NSURLResponse *)response
 
     NSMutableDictionary * dic = [[NSMutableDictionary alloc] init];
     [dic setObject:CONFIG_URL forKey:@"configUrl"];
-    dailyQuestionUpdateTimer = [[NSTimer alloc] initWithFireDate:[self getTargetTimeAsNSDate:[NSDate new] hour:6 minute:0 second:0]
+    dailyQuestionUpdateTimer = [[NSTimer alloc] initWithFireDate:dailyUpdate
                                                         interval:60*60*24
                                                           target:self
                                                         selector:@selector(setConfigFile:)

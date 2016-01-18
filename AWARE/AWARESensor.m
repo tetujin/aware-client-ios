@@ -35,6 +35,8 @@
     NSTimer* writeAbleTimer;
 
     SCNetworkReachability* reachability;
+    
+    double httpStart;
 }
 
 @end
@@ -47,6 +49,7 @@
         _syncDataQueryIdentifier = [NSString stringWithFormat:@"sync_data_query_identifier_%@", sensorName];
         _createTableQueryIdentifier = [NSString stringWithFormat:@"create_table_query_identifier_%@",  sensorName];
         awareSensorName = sensorName;
+        httpStart = 0;
         bufferLimit = 0;
         lostedTextLength = 0;
         previusUploadingState = NO;
@@ -454,7 +457,7 @@
     _syncDataQueryIdentifier = [NSString stringWithFormat:@"%@%f", _syncDataQueryIdentifier, unxtime];
     sessionConfig = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:_syncDataQueryIdentifier];
     sessionConfig.timeoutIntervalForRequest = 60 * 5;
-    sessionConfig.HTTPMaximumConnectionsPerHost = 60;
+    sessionConfig.HTTPMaximumConnectionsPerHost = 60 * 5;
     sessionConfig.timeoutIntervalForResource = 300.0;
     sessionConfig.allowsCellularAccess = NO;
     
@@ -484,7 +487,8 @@
     }];
     
     [dataTask resume];
-
+    // test
+    httpStart = [[NSDate new] timeIntervalSince1970];
 }
 
 
@@ -493,7 +497,9 @@
           dataTask:(NSURLSessionDataTask *)dataTask
 didReceiveResponse:(NSURLResponse *)response
  completionHandler:(void (^)(NSURLSessionResponseDisposition disposition))completionHandler {
-    
+    // test: httpend
+    double serverPerformace = [[NSDate new] timeIntervalSince1970] - httpStart;
+    NSLog(@"[%@] %f", [self getSensorName], serverPerformace);
     
     [session finishTasksAndInvalidate];
     [session invalidateAndCancel];
@@ -624,6 +630,8 @@ didReceiveResponse:(NSURLResponse *)response
     }
     [clipedText insertString:@"[" atIndex:0];
     [clipedText appendString:@"]"];
+    
+//    NSLog(@"%@", clipedText);
     
     return clipedText;
 }

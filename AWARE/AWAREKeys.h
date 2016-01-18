@@ -61,6 +61,7 @@ extern NSString* const SENSOR_TIMEZONE;
 extern NSString* const SENSOR_AMBIENT_NOISE;
 extern NSString* const SENSOR_SCHEDULER;
 extern NSString* const SENSOR_PLUGIN_GOOGLE_ACTIVITY_RECOGNITION;
+extern NSString* const SENSOR_GOOGLE_FUSED_LOCATION;
 extern NSString* const SENSOR_PLUGIN_OPEN_WEATHER;
 extern NSString* const SENSOR_PLUGIN_MSBAND;
 extern NSString* const SENSOR_PLUGIN_DEVICE_USAGE;

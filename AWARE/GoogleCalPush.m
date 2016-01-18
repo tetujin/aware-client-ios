@@ -8,7 +8,7 @@
 
 #import "GoogleCalPush.h"
 
-@implementation GoogleCalPush{
+@implementation GoogleCalPush {
     // for calendar events
     EKEventStore *store;
     
@@ -16,6 +16,7 @@
     NSTimer * calendarUpdateTimer;
     NSString* AWARE_CAL_NAME;
     
+    NSDate * fireDate;
     // for locations
 //    double miniDistrance;
 //    IBOutlet CLLocationManager *locationManager;
@@ -29,9 +30,10 @@
 //        [self managedObjectContext];
 //        [self managedObjectModel];
 //        [self persistentStoreCoordinator];
+        NSDate* date = [NSDate date];
+        fireDate  = [self getTargetTimeAsNSDate:date hour:23 minute:0 second:0 nextDay:YES];
+        NSLog(@"date: %@", fireDate );
         AWARE_CAL_NAME = @"BalancedCampusJournal";
-//        miniDistrance = 15;
-//        interval = 60;
         store = [[EKEventStore alloc] init];
         [store requestAccessToEntityType:EKEntityTypeEvent completion:^(BOOL granted, NSError *error){
             if(granted){
@@ -56,10 +58,7 @@
 
 - (void) setDailyNotification {
     // Get fix time
-    NSDate* date = [NSDate date];
-    NSDate * elevenOClock  = [self getTargetTimeAsNSDate:date hour:13 minute:40 second:0 nextDay:YES];
-    NSLog(@"date: %@", elevenOClock );
-    calendarUpdateTimer = [[NSTimer alloc] initWithFireDate:elevenOClock
+    calendarUpdateTimer = [[NSTimer alloc] initWithFireDate:fireDate
                                                    interval:60*60*24
                                                      target:self
                                                    selector:@selector(checkAllEvents:)
@@ -69,7 +68,6 @@
     //https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/Timers/Articles/usingTimers.html
     NSRunLoop *runLoop = [NSRunLoop currentRunLoop];
     [runLoop addTimer:calendarUpdateTimer forMode:NSDefaultRunLoopMode];
-    
     
 //    [self checkAllEvents:nil];
 }
@@ -98,7 +96,8 @@
     [components setHour:-[components hour]];
     [components setMinute:-[components minute]];
     [components setSecond:-[components second]];
-    NSDate *startDate = [cal dateByAddingComponents:components toDate:[[NSDate alloc] init] options:0]; //This variable should now be pointing at a date object that is the start of today (midnight);
+    NSDate *startDate = [cal dateByAddingComponents:components toDate:[[NSDate alloc] init] options:0];
+    //This variable should now be pointing at a date object that is the start of today (midnight);
     
     [components setDay:1];
     NSDate *endDate = [cal dateByAddingComponents:components toDate:[[NSDate alloc] init] options:0];
@@ -109,12 +108,11 @@
                                                              calendars:nil];
     [store enumerateEventsMatchingPredicate:predicate usingBlock:^(EKEvent *ekEvent, BOOL *stop) {
         // Check this event against each ekObjectID in notification
-        if(!ekEvent.allDay){
+        if (!ekEvent.allDay) {
             if(ekEvent.calendar != awareCal){
                 [currentEvents addObject:ekEvent];
             }
         }
-//        NSLog(@"count %@", ekEvent);
     }];
 
     
