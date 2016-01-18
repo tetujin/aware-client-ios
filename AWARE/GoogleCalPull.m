@@ -197,49 +197,58 @@
     }];
     
     BOOL isDeleteOrOther = YES;
-    EKEvent* targetEvent;
+//    EKEvent* targetEvent;
     //    for (EKEvent * ekEvent in currentEvents) {
-    for (int i=0; i<currentEvents.count; i++){
-        EKEvent* ekEvent = [currentEvents objectAtIndex:i];
-        for (NSString* ekEventStoreChangedObjectID in ids) {
+    NSMutableArray * deletedEventIds = [[NSMutableArray alloc] init];
+    for (NSString* ekEventStoreChangedObjectID in ids) {
+        BOOL deletedFlag = YES;
+        for (int i=0; i<currentEvents.count; i++){
+            EKEvent* ekEvent = [currentEvents objectAtIndex:i];
             NSObject *ekObjectID = [(NSManagedObject *)ekEvent objectID];
             if ([ekEventStoreChangedObjectID isEqual:ekObjectID]) {
+                deletedFlag = NO;
                 // Log the event we found and stop (each event should only exist once in store)
                 NSLog(@"calendarChanged(): Event Changed: title:%@", ekEvent.title);
                 NSLog(@"%@",ekEvent.eventIdentifier);
-                targetEvent = ekEvent;
-                isDeleteOrOther = NO;
-                break;
+                if( [self isAdd:ekEvent] ){
+                    NSLog(@"add");
+                    CalEvent * event = [[CalEvent alloc] initWithEKEvent:ekEvent eventType:CalEventTypeAdd];
+                    [self saveCalEvent:event];
+                } else {
+                    NSLog(@"update");
+                    CalEvent * event = [[CalEvent alloc] initWithEKEvent:ekEvent eventType:CalEventTypeUpdate];
+                    [self saveCalEvent:event];
+                }
             }
+        }
+        if (deletedFlag) {
+            [deletedEventIds addObject:ekEventStoreChangedObjectID];
         }
     }
     
-    if ( isDeleteOrOther ) {
-        CalEvent* deletedEvent = [self getDeletedCalEvent:currentEvents];
-        if (deletedEvent) {
+    for (NSObject* deletedEventId in deletedEventIds) {
+        CalEvent* deletedEvent = [self getDeletedCalEventWithManageId:deletedEventId];
+        [deletedEvent setCalendarEventType:CalEventTypeDelete];
+        if(deletedEvent != nil){
             NSLog(@"delete");
-            [deletedEvent setCalendarEventType:CalEventTypeDelete];
             [self saveCalEvent:deletedEvent];
-        } else {
-            NSLog(@"update?");
-            CalEvent * event = [[CalEvent alloc] initWithEKEvent:targetEvent eventType:CalEventTypeUnknown];
-            [self saveCalEvent:event];
-        }
-    }else{
-        if( [self isAdd:targetEvent] ){
-            NSLog(@"add");
-            CalEvent * event = [[CalEvent alloc] initWithEKEvent:targetEvent eventType:CalEventTypeAdd];
-            [self saveCalEvent:event];
-        } else {
-            NSLog(@"update");
-            CalEvent * event = [[CalEvent alloc] initWithEKEvent:targetEvent eventType:CalEventTypeUpdate];
-            [self saveCalEvent:event];
+        }else{
+            NSLog(@"unkown");
         }
     }
 
     [self updateExistingEvents];
 }
 
+
+- (CalEvent *) getDeletedCalEventWithManageId:(NSObject*) manageId {
+    for (CalEvent* calEvent in allEvents) {
+        if([calEvent.objectManageId isEqual:manageId]){
+            return calEvent;
+        }
+    }
+    return nil;
+}
 
 - (void) saveCalEvent:(CalEvent *)calEvent{
 //    CalEvent *calEvent = [[CalEvent alloc] initWithEKEvent:event eventType:eventType];

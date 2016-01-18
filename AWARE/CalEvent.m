@@ -7,6 +7,9 @@
 //
 
 #import "CalEvent.h"
+#import <CoreData/CoreData.h>
+#import <EventKit/EventKit.h>
+#import <EventKitUI/EventKitUI.h>
 
 @implementation CalEvent{
     NSString* AWARE_CAL_EVENT_UNKNOWN;
@@ -97,13 +100,15 @@
 
 }
 
-- (void) setCalendarEvent:(EKEvent *) event eventType:(CalEventType)eventType{
+- (void) setCalendarEvent:(EKEvent *)event eventType:(CalEventType)eventType{
     
     if (event == NULL) {
         NSLog(@"Event is null");
         return;
     }
-
+    
+    _objectManageId = [(NSManagedObject *)event objectID];
+    
     // ekEvent
     _ekEvent = event;
     

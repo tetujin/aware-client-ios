@@ -26,6 +26,8 @@ typedef NS_ENUM(NSInteger, CalEventType) {
 - (void) setCalendarEventType: (CalEventType) eventType;
 - (NSString *) getCreateTableQuery;
 
+@property (nonatomic, strong) IBOutlet NSObject* objectManageId;
+
 @property (nonatomic, strong) IBOutlet NSString *eventType;
 
 @property (nonatomic, strong) IBOutlet EKEvent * ekEvent;

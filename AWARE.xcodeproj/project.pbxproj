@@ -870,6 +870,9 @@
 							com.apple.WAC = {
 								enabled = 1;
 							};
+							com.apple.iCloud = {
+								enabled = 0;
+							};
 						};
 					};
 					1623CE811BFD1B2C00EFAD72 = {
