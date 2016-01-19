@@ -128,8 +128,11 @@
 
 
 - (BOOL)stopSensor{
-    [uploadTimer invalidate];
-//    [motionManager stopDeviceMotionUpdates];
+    if (uploadTimer) {
+        [uploadTimer invalidate];
+        uploadTimer = nil;
+    }
+    [motionActivityManager stopActivityUpdates];
     [self stopWriteableTimer];
     return YES;
 }

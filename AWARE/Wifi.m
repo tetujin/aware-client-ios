@@ -55,14 +55,13 @@
     
     uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval target:self selector:@selector(syncAwareDB) userInfo:nil repeats:YES];
     sensingTimer = [NSTimer scheduledTimerWithTimeInterval:interval target:self selector:@selector(getSensorData) userInfo:nil repeats:YES];
+    [sensingTimer fire];
     return YES;
 }
 
 - (void) getSensorData{
     // Get wifi information
-    NSString *bssid = @"";
-    NSString *ssid = @"";
-    
+
     
     //http://www.heapoverflow.me/question-how-to-get-wifi-ssid-in-ios9-after-captivenetwork-is-depracted-and-calls-for-wif-31555640
 //    NSArray * networkInterfaces = [NEHotspotHelper supportedNetworkInterfaces];
@@ -75,54 +74,63 @@
 //        double signalStrength = hotspotNetwork.signalStrength;
 //    }
     
+//    CFArrayRef myArray = CNCopySupportedInterfaces();
+//    CFDictionaryRef captiveNetWork = CNCopyCurrentNetworkInfo(CFArrayGetValueAtIndex(myArray, 0));
+//    NSLog(@"Connected at : %@", captiveNetWork);
+//    NSDictionary *myDictionnary = (__bridge NSDictionary *)captiveNetWork;
+//    NSString *bssid = [myDictionnary objectForKey:@"BSSID"];
+//    NSLog(@"BSSID : %@", bssid);
+    
+    
     NSArray *ifs = (__bridge_transfer id)CNCopySupportedInterfaces();
     for (NSString *ifnam in ifs) {
         NSDictionary *info = (__bridge_transfer id)CNCopyCurrentNetworkInfo((__bridge CFStringRef)ifnam);
-//        NSLog(@"info:%@",info);
+        NSLog(@"info:%@",info);
+        NSString *bssid = @"";
+        NSString *ssid = @"";
+        
         if (info[@"BSSID"]) {
             bssid = info[@"BSSID"];
         }
         if(info[@"SSID"]){
             ssid = info[@"SSID"];
         }
-    }
-    
-
-    
-    NSMutableString *finalBSSID = [[NSMutableString alloc] init];
-    NSArray *arrayOfBssid = [bssid componentsSeparatedByString:@":"];
-    for(int i=0; i<arrayOfBssid.count; i++){
-        NSString *element = [arrayOfBssid objectAtIndex:i];
-        if(element.length == 1){
-            [finalBSSID appendString:[NSString stringWithFormat:@"0%@:",element]];
-        }else if(element.length == 2){
-            [finalBSSID appendString:[NSString stringWithFormat:@"%@:",element]];
-        }else{
-//            NSLog(@"error");
+        
+        NSMutableString *finalBSSID = [[NSMutableString alloc] init];
+        NSArray *arrayOfBssid = [bssid componentsSeparatedByString:@":"];
+        for(int i=0; i<arrayOfBssid.count; i++){
+            NSString *element = [arrayOfBssid objectAtIndex:i];
+            if(element.length == 1){
+                [finalBSSID appendString:[NSString stringWithFormat:@"0%@:",element]];
+            }else if(element.length == 2){
+                [finalBSSID appendString:[NSString stringWithFormat:@"%@:",element]];
+            }else{
+                //            NSLog(@"error");
+            }
         }
+        if (finalBSSID.length > 0) {
+            //        NSLog(@"%@",finalBSSID);
+            [finalBSSID deleteCharactersInRange:NSMakeRange([finalBSSID length]-1, 1)];
+        } else{
+            //        NSLog(@"error");
+        }
+        
+        // Save sensor data to the local database.
+        double timeStamp = [[NSDate date] timeIntervalSince1970] * 1000;
+        NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
+        NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+        [dic setObject:unixtime forKey:@"timestamp"];
+        [dic setObject:[self getDeviceId] forKey:@"device_id"];
+        [dic setObject:finalBSSID forKey:@"bssid"]; //text
+        [dic setObject:ssid forKey:@"ssid"]; //text
+        [dic setObject:@"" forKey:@"security"]; //text
+        [dic setObject:@0 forKey:@"frequency"];//int
+        [dic setObject:@0 forKey:@"rssi"]; //int
+        [dic setObject:@"" forKey:@"label"]; //text
+        [self setLatestValue:[NSString stringWithFormat:@"%@ (%@)",ssid, finalBSSID]];
+        [self saveData:dic toLocalFile:SENSOR_WIFI];
+        
     }
-    if (finalBSSID.length > 0) {
-//        NSLog(@"%@",finalBSSID);
-        [finalBSSID deleteCharactersInRange:NSMakeRange([finalBSSID length]-1, 1)];
-    } else{
-//        NSLog(@"error");
-    }
-    
-    
-    // Save sensor data to the local database.
-    double timeStamp = [[NSDate date] timeIntervalSince1970] * 1000;
-    NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
-    NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-    [dic setObject:unixtime forKey:@"timestamp"];
-    [dic setObject:[self getDeviceId] forKey:@"device_id"];
-    [dic setObject:finalBSSID forKey:@"bssid"]; //text
-    [dic setObject:ssid forKey:@"ssid"]; //text
-    [dic setObject:@"" forKey:@"security"]; //text
-    [dic setObject:@0 forKey:@"frequency"];//int
-    [dic setObject:@0 forKey:@"rssi"]; //int
-    [dic setObject:@"" forKey:@"label"]; //text
-    [self setLatestValue:[NSString stringWithFormat:@"%@ (%@)",ssid, finalBSSID]];
-    [self saveData:dic toLocalFile:SENSOR_WIFI];
 }
 
 

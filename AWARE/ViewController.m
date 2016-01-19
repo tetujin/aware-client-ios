@@ -11,14 +11,8 @@
 #import "AWAREEsmViewController.h"
 #import "AWAREStudy.h"
 #import "AWAREKeys.h"
-//#import "ActivityRecognition.h"
-
-#import "MSBand.h"
-#import "Scheduler.h"
-#import "SingleESMObject.h"
 #import "ESMStorageHelper.h"
-#import "GoogleCalPull.h"
-#import "GoogleCalPush.h"
+
 
 @interface ViewController () {
     NSString *KEY_CEL_TITLE;
@@ -87,7 +81,6 @@
     [runLoop addTimer:dailyUpdateTimer forMode:NSDefaultRunLoopMode];// NSRunLoopCommonModes];//
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillEnterForeground:) name:UIApplicationWillEnterForegroundNotification object:nil];
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     // Get default information from local storage
@@ -96,9 +89,10 @@
         [userDefaults setBool:YES forKey:SETTING_SYNC_WIFI_ONLY];
         [userDefaults setDouble:uploadInterval forKey:SETTING_SYNC_INT];
         [userDefaults setBool:YES forKey:@"aware_inited"];
+        [userDefaults setBool:NO forKey:KEY_APP_TERMINATED];
         [userDefaults setInteger:0 forKey:KEY_MARK];
 //        [userDefaults setInteger:1000 * 1000 * 5 forKey:KEY_MAX_DATA_SIZE]; // 5MB
-        [userDefaults setInteger:1000 * 100 forKey:KEY_MAX_DATA_SIZE]; // 1MB
+        [userDefaults setInteger:1000 * 100 forKey:KEY_MAX_DATA_SIZE]; // 100 KB
     }
     
     self.tableView.delegate = self;
@@ -144,11 +138,10 @@
 
 - (void) initLocationSensor{
     NSLog(@"start location sensing!");
-    if (nil == _homeLocationManager){
+    if ( nil == _homeLocationManager ) {
         _homeLocationManager = [[CLLocationManager alloc] init];
         _homeLocationManager.delegate = self;
-        // locationManager.desiredAccuracy = kCLLocationAccuracyKilometer;
-        _homeLocationManager.desiredAccuracy = kCLLocationAccuracyBest;
+        _homeLocationManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers;
         _homeLocationManager.pausesLocationUpdatesAutomatically = NO;
         CGFloat currentVersion = [[[UIDevice currentDevice] systemVersion] floatValue];
         NSLog(@"OS:%f", currentVersion);
@@ -160,13 +153,38 @@
             [_homeLocationManager requestAlwaysAuthorization];
         }
         // Set a movement threshold for new events.
-        _homeLocationManager.distanceFilter = 150; // meters
+        _homeLocationManager.distanceFilter = 300; // meters
         [_homeLocationManager startUpdatingLocation];
-        //    [_locationManager startMonitoringVisits]; // This method calls didVisit.
         [_homeLocationManager startUpdatingHeading];
+        //    [_locationManager startMonitoringVisits]; // This method calls didVisit.
     }
 }
 
+- (void)locationManager:(CLLocationManager *)manager didUpdateHeading:(CLHeading *)newHeading {
+    if (newHeading.headingAccuracy < 0)
+        return;
+    //    CLLocationDirection  theHeading = ((newHeading.trueHeading > 0) ?
+    //                                       newHeading.trueHeading : newHeading.magneticHeading);
+    //    [sdManager addSensorDataMagx:newHeading.x magy:newHeading.y magz:newHeading.z];
+    //    [sdManager addHeading: theHeading];
+}
+
+
+- (void) locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations{
+//    [self sendLocalNotificationForMessage:@"Location data is comming!" soundFlag:YES];
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    bool appTerminated = [userDefaults boolForKey:KEY_APP_TERMINATED];
+    if (appTerminated) {
+        [self sendLocalNotificationForMessage:@"AWARE iOS is rebooted!" soundFlag:YES];
+//        [self pushedStudyRefreshButton:nil];
+        [userDefaults setBool:NO forKey:KEY_APP_TERMINATED];
+    }else{
+//        [self sendLocalNotificationForMessage:@"" soundFlag:YES];
+    }
+//    for (CLLocation* location in locations) {
+////        [self saveLocation:location];
+//    }
+}
 
 
 - (void)didReceiveMemoryWarning {
@@ -271,23 +289,6 @@
     [_sensors addObject:[self getCelContent:@"Sync Interval to AWARE Server (min)" desc:syncInterval image:@"" key:@"STUDY_CELL_SYNC"]]; //ic_action_mqtt
     [_sensors addObject:[self getCelContent:@"Sync only wifi" desc:wifiOnly image:@"" key:@"STUDY_CELL_WIFI"]]; //ic_action_mqtt
     [_sensors addObject:[self getCelContent:@"Maximum file size" desc:maximumFileSizeDesc image:@"" key:@"STUDY_CELL_MAX_FILE_SIZE"]]; //ic_action_mqtt
-
-    //for test
-//    AWARESensor *msBand = [[MSBand alloc] initWithPluginName:SENSOR_PLUGIN_MSBAND deviceId:deviceId];
-//    [msBand startSensor:60.0f * 15.0f withSettings:nil];
-//    [_sensorManager addNewSensor:msBand];
-//
-//    AWARESensor* googleCalPull = [[GoogleCalPull alloc] initWithSensorName:SENSOR_PLUGIN_GOOGLE_CAL_PULL];
-//    [googleCalPull startSensor:60.0f* 15.0f  withSettings:nil];
-//    [_sensorManager addNewSensor:googleCalPull];
-//
-//    AWARESensor* googleCalPush = [[GoogleCalPush alloc] initWithSensorName:SENSOR_PLUGIN_GOOGLE_CAL_PUSH];
-//    [googleCalPush startSensor:60.0f* 15.0f  withSettings:nil];
-//    [_sensorManager addNewSensor:googleCalPush];
-//
-//    AWARESensor* scheduler = [[Scheduler alloc] initWithSensorName:SENSOR_SCHEDULER];
-//    [scheduler startSensor:60.0f*15.0f  withSettings:nil];
-//    [_sensorManager addNewSensor:scheduler];
 }
 
 
@@ -370,11 +371,11 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
         NSLog(@"%ld", buttonIndex);
         if (buttonIndex == 1){ //yes
             [userDefaults setBool:YES forKey:SETTING_DEBUG_STATE];
-            [self pushedStudyRefreshButton:nil];
+            [self pushedStudyRefreshButton:alertView];
         } else if (buttonIndex == 2){ // no
             //reset clicked
             [userDefaults setBool:NO forKey:SETTING_DEBUG_STATE];
-            [self pushedStudyRefreshButton:nil];
+            [self pushedStudyRefreshButton:alertView];
         } else {
             NSLog(@"Cancel");
         }
@@ -390,16 +391,16 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
         }
         double syncInterval = [interval doubleValue] * 60.0f;
         [userDefaults setObject:[NSNumber numberWithDouble:syncInterval] forKey:SETTING_SYNC_INT];
-        [self pushedStudyRefreshButton:nil];
+        [self pushedStudyRefreshButton:alertView];
     }else if([title isEqualToString:@"Sync Statement"]){
         NSLog(@"%ld", buttonIndex);
         if (buttonIndex == 1){ //yes
             [userDefaults setBool:YES forKey:SETTING_SYNC_WIFI_ONLY];
-            [self pushedStudyRefreshButton:nil];
+            [self pushedStudyRefreshButton:alertView];
         } else if (buttonIndex == 2){ // no
             //reset clicked
             [userDefaults setBool:NO forKey:SETTING_SYNC_WIFI_ONLY];
-            [self pushedStudyRefreshButton:nil];
+            [self pushedStudyRefreshButton:alertView];
         } else {
             NSLog(@"Cancel");
         }
@@ -414,7 +415,7 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
         }
         NSInteger maximumValue = [maximumValueStr integerValue] * 1000;
         [userDefaults setObject:[NSNumber numberWithInteger:maximumValue] forKey:KEY_MAX_DATA_SIZE];
-        [self pushedStudyRefreshButton:nil];
+        [self pushedStudyRefreshButton:alertView];
         [self initList];
     }
 }
@@ -495,9 +496,9 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
     AWAREStudy *awareStudy = [[AWAREStudy alloc] init];
     [awareStudy refreshStudy];
     
-    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-    bool front = [defaults boolForKey:@"APP_STATE"];
-    if (front) {
+//    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+//    bool front = [defaults boolForKey:@"APP_STATE"];
+    if (sender) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"AWARE Study"
                                                         message:@"AWARE Study was refreshed!"
                                                        delegate:nil
@@ -509,7 +510,7 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
     }
     [self performSelector:@selector(initList) withObject:0 afterDelay:3];
 //    [self initList];
-    [self.tableView reloadData];
+    [self.tableView performSelector:@selector(reloadData) withObject:0 afterDelay:3];
 //    [self connectMqttServer];
 }
 

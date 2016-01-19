@@ -143,7 +143,10 @@
             NSString *pluginStateKey = [NSString stringWithFormat:@"status_%@",key];
             NSString *pluginStateName = [pluginSetting objectForKey:@"setting"];
 //            NSLog(@"%@", pluginStateName);
-            if ([pluginStateKey isEqualToString:pluginStateName] || [pluginStateName isEqual:@"status_google_fused_location"]) {
+//            if([pluginStateName isEqual:@"status_google_fused_location"]){
+//                
+//            }
+            if ([pluginStateKey isEqualToString:pluginStateName]) {
                 bool pluginState = [pluginSetting objectForKey:@"value"];
                 if (pluginState) {
                     NSLog(@"--> %@", key);

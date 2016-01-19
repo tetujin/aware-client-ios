@@ -214,10 +214,12 @@
                     NSLog(@"add");
                     CalEvent * event = [[CalEvent alloc] initWithEKEvent:ekEvent eventType:CalEventTypeAdd];
                     [self saveCalEvent:event];
+                    [self setLatestValueWithEvent:event ];
                 } else {
                     NSLog(@"update");
                     CalEvent * event = [[CalEvent alloc] initWithEKEvent:ekEvent eventType:CalEventTypeUpdate];
                     [self saveCalEvent:event];
+                    [self setLatestValueWithEvent:event];
                 }
             }
         }
@@ -232,6 +234,7 @@
         if(deletedEvent != nil){
             NSLog(@"delete");
             [self saveCalEvent:deletedEvent];
+            [self setLatestValueWithEvent:deletedEvent];
         }else{
             NSLog(@"unkown");
         }
@@ -240,6 +243,13 @@
     [self updateExistingEvents];
 }
 
+- (void) setLatestValueWithEvent:(CalEvent *) event {
+    // update latest updated sensor value.
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"YYYY-MM-dd HH:mm"];
+    NSString *formattedDateString = [dateFormatter stringFromDate:[NSDate new]];
+    [super setLatestValue:[NSString stringWithFormat:@"[%@] %@ (%@)", event.status, event.title, formattedDateString]];
+}
 
 - (CalEvent *) getDeletedCalEventWithManageId:(NSObject*) manageId {
     for (CalEvent* calEvent in allEvents) {

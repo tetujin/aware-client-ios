@@ -27,11 +27,13 @@
 - (instancetype)initWithSensorName:(NSString *)sensorName {
     self = [super initWithSensorName:sensorName];
     if (self) {
-//        [self managedObjectContext];
-//        [self managedObjectModel];
-//        [self persistentStoreCoordinator];
         NSDate* date = [NSDate date];
-        fireDate  = [self getTargetTimeAsNSDate:date hour:23 minute:0 second:0 nextDay:YES];
+        fireDate  = [self getTargetTimeAsNSDate:date hour:21 minute:0 second:0 nextDay:YES];
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+//        [dateFormatter setDateFormat:@"yyyy-MM-dd 'at' HH:mm"];
+        [dateFormatter setDateFormat:@"HH:mm"];
+        NSString *formattedDateString = [dateFormatter stringFromDate:fireDate];
+        [super setLatestValue:[NSString stringWithFormat:@"Next Calendar Update: %@", formattedDateString]];
         NSLog(@"date: %@", fireDate );
         AWARE_CAL_NAME = @"BalancedCampusJournal";
         store = [[EKEventStore alloc] init];

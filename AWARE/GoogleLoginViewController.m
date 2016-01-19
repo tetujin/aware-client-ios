@@ -51,9 +51,6 @@
     
 //    ViewController *secondVC = [[ViewController alloc] init];
 //    [self presentViewController:secondVC animated:YES completion: nil];
-    
-    
-
 }
 
 // Present a view that prompts the user to sign in with Google

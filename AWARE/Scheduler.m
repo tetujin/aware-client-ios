@@ -36,8 +36,8 @@
         KEY_TIMER = @"key_timer";
         KEY_PREVIOUS_SCHEDULE_JSON = @"key_previous_schedule_json";
 //        CONFIG_URL = @"http://r2d2.hcii.cs.cmu.edu/esm/master.json";
-        CONFIG_URL = @"http://r2d2.hcii.cs.cmu.edu/esm/master_ios.json";
-//        CONFIG_URL = [NSString stringWithFormat:@"http://r2d2.hcii.cs.cmu.edu/esm/%@/esm_setting.json", [self getDeviceId]];
+//        CONFIG_URL = @"http://r2d2.hcii.cs.cmu.edu/esm/master_ios.json";
+        CONFIG_URL = [NSString stringWithFormat:@"http://r2d2.hcii.cs.cmu.edu/esm/%@/master.json", [self getDeviceId]];
     }
     return self;
 }
@@ -288,7 +288,7 @@ didReceiveResponse:(NSURLResponse *)response
     for (AWARESchedule * s in schedules) {
         NSMutableDictionary * userInfo = [[NSMutableDictionary alloc] init];
         [userInfo setObject:s.scheduleId forKey:@"schedule_id"];
-        NSTimer * notificationTimer = [[NSTimer alloc] initWithFireDate:s.schedule
+        NSTimer * notificationTimer = [[NSTimer alloc] initWithFireDate:s.schedule //TODO
                                                                interval:[s.interval doubleValue]
                                                                  target:self
                                                                selector:@selector(scheduleAction:)
@@ -454,6 +454,7 @@ didReceiveResponse:(NSURLResponse *)response
     if(soundFlag) {
         localNotification.soundName = UILocalNotificationDefaultSoundName;
     }
+    localNotification.applicationIconBadgeNumber = 1; //TODO
     localNotification.hasAction = YES;
     [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
 }

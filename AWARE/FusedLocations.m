@@ -167,6 +167,11 @@
     [locationManager stopUpdatingHeading];
     [locationManager stopUpdatingLocation];
     [uploadTimer invalidate];
+    uploadTimer = nil;
+    if (locationTimer != nil) {
+        [locationTimer invalidate];
+        locationTimer = nil;
+    }
     return YES;
 }
 

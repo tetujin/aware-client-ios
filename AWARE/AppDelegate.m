@@ -119,6 +119,7 @@
         [[UIApplication sharedApplication] scheduleLocalNotification:notification];
     }
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setBool:YES forKey:KEY_APP_TERMINATED];
     
     [defaults setBool:NO forKey:@"APP_STATE"];
     NSLog(@"Stop background task of AWARE....");
