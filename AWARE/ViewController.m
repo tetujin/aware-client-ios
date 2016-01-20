@@ -12,7 +12,8 @@
 #import "AWAREStudy.h"
 #import "AWAREKeys.h"
 #import "ESMStorageHelper.h"
-
+#import <CoreTelephony/CTCallCenter.h>
+#import <CoreTelephony/CTCall.h>
 
 @interface ViewController () {
     NSString *KEY_CEL_TITLE;
@@ -33,6 +34,8 @@
     double uploadInterval;
     NSTimer* testTimer;
     NSTimer * dailyUpdateTimer;
+    
+    CTCallCenter *callCenter;
 //    AWAREScheduleManager* scheduleManager;
 }
 
@@ -60,14 +63,6 @@
     mqttQos = @2;
     
     uploadInterval = 60*15;
-    
-//    NSTimer* testaTimer = [NSTimer scheduledTimerWithTimeInterval:60*10
-//                                                 target:self
-//                                               selector:@selector(pushedStudyRefreshButton:)
-//                                               userInfo:nil
-//                                                repeats:YES];
-//    [testaTimer fire];
-    
     
     // daily study update
     NSDate* dailyUpdateTime = [self getTargetTimeAsNSDate:[NSDate date] hour:3 minute:0 second:0];
@@ -108,6 +103,7 @@
     [self initList];
     
     listUpdateTimer = [NSTimer scheduledTimerWithTimeInterval:0.1f target:self.tableView selector:@selector(reloadData) userInfo:nil repeats:YES];
+    
 }
 
 - (void)appDidBecomeActive:(NSNotification *)notification {
@@ -256,7 +252,7 @@
     [_sensors addObject:[self getCelContent:@"Proximity" desc:@"The proximity sensor measures the distance to an object in front of the mobile device. Depending on the hardware, it can be in centimeters or binary." image:@"ic_action_proximity" key:SENSOR_PROXIMITY]];
     [_sensors addObject:[self getCelContent:@"Screen (iOS)" desc:@"Screen events (on/off, locked/unlocked)" image:@"ic_action_screen" key:SENSOR_SCREEN]];
     [_sensors addObject:[self getCelContent:@"Timezone" desc:@"The timezone sensor keeps track of the user’s current timezone." image:@"ic_action_timezone" key:SENSOR_TIMEZONE]];
-//    [_sensors addObject:[self getCelContent:@"Processor" desc:@"CPU workload for user, system and idle(%)" image:@"ic_action_processor" key:SENSOR_PROCESSOR]];
+    [_sensors addObject:[self getCelContent:@"Processor" desc:@"CPU workload for user, system and idle(%)" image:@"ic_action_processor" key:SENSOR_PROCESSOR]];
 //    [_sensors addObject:[self getCelContent:@"Telephony" desc:@"Mobile operator and specifications, cell tower and neighbor scanning" image:@"ic_action_telephony" key:SENSOR_TELEPHONY]];
     [_sensors addObject:[self getCelContent:@"WiFi" desc:@"Wi-Fi sensing" image:@"ic_action_wifi" key:SENSOR_WIFI]];
 //    [_sensors addObject:[self getCelContent:@"AmbientNoise" desc:@"AmbientNoise sensor" image:@"" key:SENSOR_AMBIENT_NOISE]];

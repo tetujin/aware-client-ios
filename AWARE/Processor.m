@@ -7,7 +7,14 @@
 //
 
 #import "Processor.h"
-
+#import <sys/sysctl.h>
+#import <sys/types.h>
+#import <sys/param.h>
+#import <sys/mount.h>
+#import <mach/mach.h>
+#import <mach/processor_info.h>
+#import <mach/mach_host.h>
+//#import <SystemServices.h>
 
 @implementation Processor{
     NSTimer * uploadTimer;
@@ -44,33 +51,53 @@
     NSLog(@"[%@] Create Table", [self getSensorName]);
     [self createTable];
     
+    double frequency = [self getSensorSetting:settings withKey:@"frequency_processor"];
+    if(frequency < 1.0f ){
+        frequency = 10.0f;
+    }
+    NSLog(@"Location sensing requency is %f ", frequency);
+    
     NSLog(@"[%@] Start Processor Sensor", [self getSensorName]);
-    double interval = 1.0f;
+    
+    
     uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval target:self selector:@selector(syncAwareDB) userInfo:nil repeats:YES];
-    sensingTimer = [NSTimer scheduledTimerWithTimeInterval:interval target:self selector:@selector(getSensorData) userInfo:nil repeats:YES];
+    sensingTimer = [NSTimer scheduledTimerWithTimeInterval:frequency target:self selector:@selector(getSensorData) userInfo:nil repeats:YES];
     return YES;
 }
 
 - (void) getSensorData{
-    // Get wifi information
-    NSNumber *cpuUsage = [NSNumber numberWithFloat:[self getCpuUsage]];
-    NSNumber *memoryUsage = [NSNumber numberWithFloat:[self getMemory]];
-    //https://github.com/Shmoopi/iOS-System-Services
     
+//    NSString *processName = [[NSProcessInfo processInfo] processName];
+//    NSLog(@"%@", processName);
+//    NSLog(@"%@",[[NSProcessInfo processInfo] operatingSystemName]);
+//    NSLog(@"%@",[[NSProcessInfo processInfo] operatingSystemVersionString]);
+//    NSLog(@"%ld",[[NSProcessInfo processInfo] processorCount]);
+//    SystemServices * systemServices = [[SystemServices alloc] init];
+    // Get wifi information
+    float cpuUsageFloat = [self getCpuUsage];
+    NSNumber *appCpuUsage = [NSNumber numberWithFloat:cpuUsageFloat];
+    NSNumber *idleCpuUsage = [NSNumber numberWithFloat:(100.0f-cpuUsageFloat)];
+
+//    NSNumber *memoryUsage = @0; // [NSNumber numberWithFloat:[self getMemory]];
+    //https://github.com/Shmoopi/iOS-System-Services
+
     // Save sensor data to the local database.
     double timeStamp = [[NSDate date] timeIntervalSince1970] * 1000;
     NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
     NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
     [dic setObject:unixtime forKey:@"timestamp"];
     [dic setObject:[self getDeviceId] forKey:@"device_id"];
-    [dic setObject:cpuUsage forKey:@"double_last_user"]; //double
+    [dic setObject:appCpuUsage forKey:@"double_last_user"]; //double
     [dic setObject:@0 forKey:@"double_last_system"]; //double
-    [dic setObject:@0 forKey:@"double_last_idle"]; //double
+    [dic setObject:idleCpuUsage forKey:@"double_last_idle"]; //double
     [dic setObject:@0 forKey:@"double_user_load"];//double
     [dic setObject:@0 forKey:@"double_system_load"]; //double
-    [dic setObject:@0 forKey:@"double_system_load"]; //double
-    [self setLatestValue:[NSString stringWithFormat:@"%@",cpuUsage]];
+    [dic setObject:@0 forKey:@"double_idle_load"]; //double
+    [self setLatestValue:[NSString stringWithFormat:@"%@ %%",appCpuUsage]];
     [self saveData:dic toLocalFile:SENSOR_PROCESSOR];
+    
+    malloc(cpuUsageFloat);
+//    cpuUsageFloat
 }
 
 - (BOOL)stopSensor{
@@ -79,8 +106,66 @@
     return YES;
 }
 
+- (float) getDeviceCpuUsage{
+    
+    float userTotalCpuUsage = 0;
+    
+    processor_info_array_t _cpuInfo, _prevCPUInfo = nil;
+    mach_msg_type_number_t _numCPUInfo, _numPrevCPUInfo = 0;
+    unsigned _numCPUs;
+    NSLock *_cpuUsageLock;
+    
+    int _mib[2U] = { CTL_HW, HW_NCPU };
+    size_t _sizeOfNumCPUs = sizeof(_numCPUs);
+    int _status = sysctl(_mib, 2U, &_numCPUs, &_sizeOfNumCPUs, NULL, 0U);
+    if(_status)
+        _numCPUs = 1;
+    
+    _cpuUsageLock = [[NSLock alloc] init];
+    
+    natural_t _numCPUsU = 0U;
+    kern_return_t err = host_processor_info(mach_host_self(), PROCESSOR_CPU_LOAD_INFO, &_numCPUsU, &_cpuInfo, &_numCPUInfo);
+    if(err == KERN_SUCCESS) {
+        [_cpuUsageLock lock];
+        
+        for(unsigned i = 0U; i < _numCPUs; ++i) {
+            Float32 _inUse, _total;
+            if(_prevCPUInfo) {
+                _inUse = (
+                          (_cpuInfo[(CPU_STATE_MAX * i) + CPU_STATE_USER]   - _prevCPUInfo[(CPU_STATE_MAX * i) + CPU_STATE_USER])
+                          + (_cpuInfo[(CPU_STATE_MAX * i) + CPU_STATE_SYSTEM] - _prevCPUInfo[(CPU_STATE_MAX * i) + CPU_STATE_SYSTEM])
+                          + (_cpuInfo[(CPU_STATE_MAX * i) + CPU_STATE_NICE]   - _prevCPUInfo[(CPU_STATE_MAX * i) + CPU_STATE_NICE])
+                          );
+                _total = _inUse + (_cpuInfo[(CPU_STATE_MAX * i) + CPU_STATE_IDLE] - _prevCPUInfo[(CPU_STATE_MAX * i) + CPU_STATE_IDLE]);
+            } else {
+                _inUse = _cpuInfo[(CPU_STATE_MAX * i) + CPU_STATE_USER] + _cpuInfo[(CPU_STATE_MAX * i) + CPU_STATE_SYSTEM] + _cpuInfo[(CPU_STATE_MAX * i) + CPU_STATE_NICE];
+                _total = _inUse + _cpuInfo[(CPU_STATE_MAX * i) + CPU_STATE_IDLE];
+            }
+            
+            NSLog(@"Core : %u, Usage: %.2f%%", i, _inUse / _total * 100.f);
+            userTotalCpuUsage = userTotalCpuUsage + (_inUse / _total * 100.f); // TODO
+        }
+        userTotalCpuUsage = userTotalCpuUsage/_numCPUs; //TODO
+        
+        [_cpuUsageLock unlock];
+        
+        if(_prevCPUInfo) {
+            size_t prevCpuInfoSize = sizeof(integer_t) * _numPrevCPUInfo;
+            vm_deallocate(mach_task_self(), (vm_address_t)_prevCPUInfo, prevCpuInfoSize);
+        }
+        
+        _prevCPUInfo = _cpuInfo;
+        _numPrevCPUInfo = _numCPUInfo;
+        
+        _cpuInfo = nil;
+        _numCPUInfo = 0U;
+    } else {
+        NSLog(@"Error!");
+    }
+    return userTotalCpuUsage;
+}
 
-- (float) getCpuUsage {
+- (float) getCpuUsage{
     kern_return_t kr;
     task_info_data_t tinfo;
     mach_msg_type_number_t task_info_count;
@@ -137,6 +222,9 @@
     
     kr = vm_deallocate(mach_task_self(), (vm_offset_t)thread_list, thread_count * sizeof(thread_t));
     assert(kr == KERN_SUCCESS);
+    
+//    NSLog(@"%ld, %ld, %f", tot_sec, tot_usec, tot_cpu);
+//    NSString* value = [NSString stringWithFormat:@""];
     
     return tot_cpu;
 }

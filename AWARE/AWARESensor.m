@@ -37,6 +37,8 @@
     SCNetworkReachability* reachability;
     
     double httpStart;
+    
+    bool debug;
 }
 
 @end
@@ -48,6 +50,8 @@
         NSLog(@"[%@] Initialize an AWARESensor as '%@' ", sensorName, sensorName);
         _syncDataQueryIdentifier = [NSString stringWithFormat:@"sync_data_query_identifier_%@", sensorName];
         _createTableQueryIdentifier = [NSString stringWithFormat:@"create_table_query_identifier_%@",  sensorName];
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        debug = [userDefaults boolForKey:SETTING_DEBUG_STATE];
         awareSensorName = sensorName;
         httpStart = 0;
         bufferLimit = 0;
@@ -137,6 +141,10 @@
 
 - (NSString *)getLatestValue {
     return latestSensorValue;
+}
+
+- (bool) getDebugState {
+    return debug;
 }
 
 - (void) setSensorName:(NSString *)sensorName{

@@ -230,6 +230,7 @@ didReceiveResponse:(NSURLResponse *)response
     //    NSString *deviceName = [self deviceName];
     NSString *manufacturer = @"Apple";
     
+    
     [jsonQuery setValue:uuid  forKey:@"device_id"];
     [jsonQuery setValue:unixtime forKey:@"timestamp"];
     [jsonQuery setValue:manufacturer forKey:@"board"];//    board	TEXT	Manufacturer’s board name

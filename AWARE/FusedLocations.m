@@ -82,8 +82,6 @@
 //    Cell Tower - kCLLocationAccuracyKilometer;
 //    Cell Tower - kCLLocationAccuracyThreeKilometers;
     
-
-    
     uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval target:self selector:@selector(syncAwareDB) userInfo:nil repeats:YES];
     
     if (nil == locationManager){
@@ -103,6 +101,7 @@
         }
         // Set a movement threshold for new events.
 //        locationManager.distanceFilter = miniDistrance;
+//        locationManager.distanceFilter = 250;
         [locationManager startUpdatingLocation];
         [locationManager startUpdatingHeading];
         //    [_locationManager startMonitoringVisits];

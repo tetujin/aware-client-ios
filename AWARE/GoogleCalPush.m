@@ -17,6 +17,7 @@
     NSString* AWARE_CAL_NAME;
     
     NSDate * fireDate;
+    
     // for locations
 //    double miniDistrance;
 //    IBOutlet CLLocationManager *locationManager;
@@ -28,7 +29,7 @@
     self = [super initWithSensorName:sensorName];
     if (self) {
         NSDate* date = [NSDate date];
-        fireDate  = [self getTargetTimeAsNSDate:date hour:21 minute:0 second:0 nextDay:YES];
+        fireDate  = [self getTargetTimeAsNSDate:date hour:21 minute:0 second:0 nextDay:NO];
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
 //        [dateFormatter setDateFormat:@"yyyy-MM-dd 'at' HH:mm"];
         [dateFormatter setDateFormat:@"HH:mm"];
@@ -88,7 +89,9 @@
     }
     
     if (awareCal == nil) {
-        NSLog(@"[ERROR] AWARE iOS can not find a Google calendar for AWARE. Please add 'AWARE Calendar' to your google calendar. ");
+        NSString* message = @"[ERROR] AWARE iOS can not find a 'BalancedCampusJournal' on your Google Calendar.";
+        NSLog(@"%@", message);
+        [self sendLocalNotificationForMessage:message soundFlag:YES];
         return;
     }
     
@@ -108,15 +111,31 @@
     NSPredicate *predicate = [store predicateForEventsWithStartDate:startDate
                                                             endDate:endDate
                                                              calendars:nil];
+    NSMutableArray *existingJournalEvents = [[NSMutableArray alloc] init];
+    __block bool finished = NO;
     [store enumerateEventsMatchingPredicate:predicate usingBlock:^(EKEvent *ekEvent, BOOL *stop) {
         // Check this event against each ekObjectID in notification
         if (!ekEvent.allDay) {
             if(ekEvent.calendar != awareCal){
                 [currentEvents addObject:ekEvent];
+            }else{
+//                NSLog(@"%@", ekEvent.debugDescription);
+                [existingJournalEvents addObject:ekEvent];
             }
         }
+        finished = stop;
     }];
-
+    
+    int count = 0;
+    while (!finished) {
+        [NSThread sleepForTimeInterval:0.05];
+        NSLog(@"%d",count);
+        if (count > 10*120) { // wait 60 sec (maximum)
+            [self sendLocalNotificationForMessage:@"TIMEOUT: Google Calendar Update" soundFlag:NO];
+            break;
+        }
+        count++;
+    }
     
     // == Make new events (Aware Events), and Get Null events ==
     NSMutableArray * nullTimes = [[NSMutableArray alloc] init];
@@ -125,10 +144,20 @@
     lastEvent.endDate   = [self getTargetTimeAsNSDate:[NSDate date] hour:0 minute:0 second:0 nextDay:NO];
     
     NSMutableArray * awareEvents = [[NSMutableArray alloc] initWithArray:currentEvents];
-
+    
+    
+    for (EKEvent* event in existingJournalEvents ) {
+        NSLog(@"%@ %@", event.calendar.calendarIdentifier, awareCal.calendarIdentifier);
+        if ([event.calendar.calendarIdentifier isEqualToString:awareCal.calendarIdentifier] ) {
+            if ([self getDebugState]) {
+                [self sendLocalNotificationForMessage:@"Your Google Calandar is alerday updated today." soundFlag:YES];
+            }
+            return;
+        }
+    }
+    
     int g = 1;
     for ( EKEvent * event in awareEvents ) {
-
 //        NSLog(@"%@", event.notes);
         EKEvent * awareEvent = [EKEvent eventWithEventStore:store];
         // Add questions to a note of aware events
@@ -139,8 +168,7 @@
         awareEvent.location = event.location;
         // Change an aware event's calendar
         awareEvent.calendar = awareCal;
-        // save events to the aware calendar
-        
+        // Save events to the aware calendar
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, g * 2 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
             NSError * error = nil;
             [store saveEvent:awareEvent span:EKSpanThisEvent commit:YES error:&error];
@@ -152,9 +180,7 @@
         });
         g++;
         
-        
-        
-        // startDate - endDate
+        // Add null events: startDate - endDate
         if (lastEvent != nil) {
             NSDate * nullStart = lastEvent.endDate;
             NSDate * nullEnd = event.startDate;
@@ -181,46 +207,110 @@
         [hours addObject:[self getTargetTimeAsNSDate:today hour:i minute:0 second:0 nextDay:NO]];
     }
     
+    NSDateFormatter *timeFormat = [[NSDateFormatter alloc] init];
+    [timeFormat setDateFormat:@"HH:mm:ss"];
+    
     for (NSArray * times in nullTimes) {
         NSDate * nullStart = [times objectAtIndex:0];
         NSDate * nullEnd = [times objectAtIndex:1];
         NSDate * tempNullTime = nullStart;
+        
         for (int i=0; i<hours.count; i++) {
             NSDate * currentHour = [hours objectAtIndex:i];
             //set start date
-//            NSLog(@"%@",currentHour);
-            if (tempNullTime < currentHour ){
+//            NSLog(@"%@ < %@",[timeFormat stringFromDate:tempNullTime], [timeFormat stringFromDate:currentHour]);
+            if (tempNullTime <= currentHour ){
+//                NSLog(@"--");
                 if (nullEnd >= currentHour) {
                     EKEvent * event = [EKEvent eventWithEventStore:store];
-                    event.title = @"#event_category #Location #brief_description"; //@"#event_category #Location #brief_description"
+                    event.title = @"#event_category #Location #brief_description"; //@"#event_category #Location
                     event.calendar  = awareCal;
-//                    NSLog(@"-->  %@", currentHour);
                     double gap = [nullEnd timeIntervalSince1970] - [currentHour timeIntervalSince1970];
-//                    NSLog(@"gap: %f", gap);
                     if ( gap < 60*60) {
-                        NSLog(@"start:%@  end:%@", tempNullTime, nullEnd );
+//                        NSLog(@"start:%@  end:%@", [timeFormat stringFromDate:tempNullTime], [timeFormat stringFromDate:currentHour] );
+                        NSLog(@" %@ - %@", [timeFormat stringFromDate:tempNullTime], [timeFormat stringFromDate:currentHour] );
                         event.startDate = tempNullTime;
-                        event.endDate   = nullEnd;
-                    } else{
-                        NSLog(@"start:%@  end:%@", tempNullTime, currentHour);
+                        event.endDate   = currentHour;
+                        
+                        // new calendar
+                        EKEvent * additionalEvent = [EKEvent eventWithEventStore:store];
+                        additionalEvent.title = @"#event_category #Location #brief_description"; //@"#event_category #Location
+                        additionalEvent.calendar  = awareCal;
+                        additionalEvent.startDate = currentHour;
+                        additionalEvent.endDate = nullEnd;
+                        int gap = [additionalEvent.endDate timeIntervalSince1970] - [additionalEvent.startDate timeIntervalSince1970];
+                        if (gap > 0) {
+                            NSError * e = nil;
+                            [store saveEvent:additionalEvent span:EKSpanThisEvent commit:YES error:&e];
+                            if (e != nil) {
+                                NSLog(@"[%d] error: %@", i, e.debugDescription);
+                            } else {
+                                NSLog(@"[%d] success!", i);
+                            }
+                        }
+                        
+                    } else {
+//                        NSLog(@"start:%@  end:%@", [timeFormat stringFromDate:tempNullTime], [timeFormat stringFromDate:currentHour]);
+                        NSLog(@"%@ - %@", [timeFormat stringFromDate:tempNullTime], [timeFormat stringFromDate:currentHour]);
                         event.startDate = tempNullTime;
                         event.endDate   = currentHour;
                     }
-                    // save events to the aware calendar
+                    
+                    
                     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, i * 2 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
                         NSError * error;
-                        [store saveEvent:event span:EKSpanThisEvent commit:YES error:&error];
-                        if (error != nil) {
-                            NSLog(@"[%d] error: %@", i, error.debugDescription);
+                        int gap = [event.endDate timeIntervalSince1970] - [event.startDate timeIntervalSince1970];
+                        if (gap > 0) {
+                            [store saveEvent:event span:EKSpanThisEvent commit:YES error:&error];
+                            if (error != nil) {
+                                NSLog(@"[%d] error: %@", i, error.debugDescription);
+                            }else{
+                                NSLog(@"[%d] success!", i);
+                            }
                         }else{
-                            NSLog(@"[%d] success!", i);
+                            
                         }
                     });
-                    
                     tempNullTime = currentHour;
                 }
             }
         }
+//        for (int i=0; i<hours.count; i++) {
+//            NSDate * currentHour = [hours objectAtIndex:i];
+//            //set start date
+////            NSLog(@"%@",currentHour);
+//            if (tempNullTime < currentHour ){
+//                if (nullEnd >= currentHour) {
+//                    EKEvent * event = [EKEvent eventWithEventStore:store];
+//                    event.title = @"#event_category #Location #brief_description"; //@"#event_category #Location #brief_description"
+//                    event.calendar  = awareCal;
+////                    NSLog(@"-->  %@", currentHour);
+//                    double gap = [nullEnd timeIntervalSince1970] - [currentHour timeIntervalSince1970];
+////                    NSLog(@"gap: %f", gap);
+//                    if ( gap < 60*60) {
+//                        NSLog(@"start:%@  end:%@", tempNullTime, nullEnd );
+//                        event.startDate = tempNullTime;
+//                        event.endDate   = nullEnd;
+//                    } else{
+//                        NSLog(@"start:%@  end:%@", tempNullTime, currentHour);
+//                        event.startDate = tempNullTime;
+//                        event.endDate   = currentHour;
+//                    }
+//                    // save events to the aware calendar
+//                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, i * 2 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+//                        NSError * error;
+//                        [store saveEvent:event span:EKSpanThisEvent commit:YES error:&error];
+//                        if (error != nil) {
+//                            NSLog(@"[%d] error: %@", i, error.debugDescription);
+//                        }else{
+//                            NSLog(@"[%d] success!", i);
+//                        }
+//                    });
+//                    
+//                    tempNullTime = currentHour;
+//                }
+//            }
+//        }
     }
     //set end date
 

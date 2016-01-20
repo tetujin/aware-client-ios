@@ -36,6 +36,7 @@
 - (NSString *) getLatestDataUrl:(NSString *)sensorName;
 - (NSString *) getCreateTableUrl:(NSString*) sensorName;
 - (NSString *) getClearTableUrl:(NSString*) sensorName;
+- (BOOL) getDebugState;
 - (bool) saveData:(NSDictionary *) data;
 - (bool) saveData:(NSDictionary *) data toLocalFile:(NSString*) fileName;
 - (bool) saveDataWithArray:(NSArray*) array;

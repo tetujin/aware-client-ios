@@ -28,6 +28,8 @@
 		1623CEB71BFE175F00EFAD72 /* AWARESensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 1623CEB61BFE175F00EFAD72 /* AWARESensor.m */; };
 		1623CEB91BFE319100EFAD72 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1623CEB81BFE319100EFAD72 /* CoreMotion.framework */; };
 		1623CEBC1BFE390600EFAD72 /* Accelerometer.m in Sources */ = {isa = PBXBuildFile; fileRef = 1623CEBB1BFE390600EFAD72 /* Accelerometer.m */; };
+		162B7DDC1C4EF792006972B5 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 162B7DDB1C4EF792006972B5 /* CoreTelephony.framework */; };
+		162B7DDF1C4EFA46006972B5 /* Telephony.m in Sources */ = {isa = PBXBuildFile; fileRef = 162B7DDE1C4EFA46006972B5 /* Telephony.m */; };
 		1643959F1C22EEC40039E113 /* Scheduler.m in Sources */ = {isa = PBXBuildFile; fileRef = 1643959E1C22EEC40039E113 /* Scheduler.m */; };
 		164810401C20ECC300B830D9 /* AWAREEsmViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1648103F1C20ECC300B830D9 /* AWAREEsmViewController.m */; };
 		164810851C21C08C00B830D9 /* ESM.m in Sources */ = {isa = PBXBuildFile; fileRef = 164810841C21C08C00B830D9 /* ESM.m */; };
@@ -161,6 +163,9 @@
 		1623CEB81BFE319100EFAD72 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		1623CEBA1BFE390600EFAD72 /* Accelerometer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Accelerometer.h; sourceTree = "<group>"; };
 		1623CEBB1BFE390600EFAD72 /* Accelerometer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Accelerometer.m; sourceTree = "<group>"; };
+		162B7DDB1C4EF792006972B5 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
+		162B7DDD1C4EFA46006972B5 /* Telephony.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Telephony.h; sourceTree = "<group>"; };
+		162B7DDE1C4EFA46006972B5 /* Telephony.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Telephony.m; sourceTree = "<group>"; };
 		1643959D1C22EEC40039E113 /* Scheduler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Scheduler.h; sourceTree = "<group>"; };
 		1643959E1C22EEC40039E113 /* Scheduler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Scheduler.m; sourceTree = "<group>"; };
 		1648103E1C20ECC300B830D9 /* AWAREEsmViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AWAREEsmViewController.h; sourceTree = "<group>"; };
@@ -259,6 +264,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				162B7DDC1C4EF792006972B5 /* CoreTelephony.framework in Frameworks */,
 				165B6E0D1C4018EC00417432 /* libGoogle-API-Client.a in Frameworks */,
 				16E7AF961C3DF8A9005C9EDC /* CoreData.framework in Frameworks */,
 				16E155391C27C2AC00316321 /* EventKit.framework in Frameworks */,
@@ -559,6 +565,15 @@
 			path = AWAREUITests;
 			sourceTree = "<group>";
 		};
+		162B7DE01C4EFA59006972B5 /* Telephony */ = {
+			isa = PBXGroup;
+			children = (
+				162B7DDD1C4EFA46006972B5 /* Telephony.h */,
+				162B7DDE1C4EFA46006972B5 /* Telephony.m */,
+			);
+			name = Telephony;
+			sourceTree = "<group>";
+		};
 		164B1A9D1C4923FC0047BB85 /* BalancedCampusCalendar */ = {
 			isa = PBXGroup;
 			children = (
@@ -600,6 +615,7 @@
 			children = (
 				1623CEB51BFE175F00EFAD72 /* AWARESensor.h */,
 				1623CEB61BFE175F00EFAD72 /* AWARESensor.m */,
+				162B7DE01C4EFA59006972B5 /* Telephony */,
 				1602ADB81C45B021002B3121 /* Accelerometer */,
 				1602ADB91C45B030002B3121 /* Gyroscope */,
 				1602ADBA1C45B03A002B3121 /* Magnetometer */,
@@ -749,6 +765,7 @@
 		2A3CA9F5620967BACB187EB7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				162B7DDB1C4EF792006972B5 /* CoreTelephony.framework */,
 				165B6E0C1C4018EC00417432 /* libGoogle-API-Client.a */,
 				16E7AF951C3DF8A9005C9EDC /* CoreData.framework */,
 				16E155371C27C2AC00316321 /* EventKit.framework */,
@@ -1046,6 +1063,7 @@
 				169A7B431BFFDE8F00A7C06D /* Rotation.m in Sources */,
 				1643959F1C22EEC40039E113 /* Scheduler.m in Sources */,
 				1623CEB41BFD659000EFAD72 /* AWAREKeys.m in Sources */,
+				162B7DDF1C4EFA46006972B5 /* Telephony.m in Sources */,
 				164DD6651C1FB1A400ADA92B /* Proximity.m in Sources */,
 				169A7B301BFF280C00A7C06D /* Locations.m in Sources */,
 				169A7B491C00591A00A7C06D /* LinearAccelerometer.m in Sources */,

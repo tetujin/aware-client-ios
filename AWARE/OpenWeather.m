@@ -491,7 +491,7 @@ didReceiveResponse:(NSURLResponse *)response
 - (bool) isOld:(int)gap
 {
     NSDate *now = [NSDate date];
-    NSTimeInterval delta = [now timeIntervalSinceDate:thisDate]; // => 例えば 500.0 秒後
+    NSTimeInterval delta = [now timeIntervalSinceDate:thisDate];
     if(delta > gap){
         return true;
     }else{

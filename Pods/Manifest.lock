@@ -185,9 +185,9 @@ PODS:
     - CocoaAsyncSocket (~> 7.4.1)
   - macros_blocks (0.0.1)
   - MQTTKit (0.1.0-next)
-  - SCNetworkReachability (2.0.4):
-    - SCNetworkReachability/Core (= 2.0.4)
-  - SCNetworkReachability/Core (2.0.4):
+  - SCNetworkReachability (2.0.5):
+    - SCNetworkReachability/Core (= 2.0.5)
+  - SCNetworkReachability/Core (2.0.5):
     - macros_blocks (= 0.0.1)
 
 DEPENDENCIES:
@@ -224,6 +224,6 @@ SPEC CHECKSUMS:
   ios-ntp: 5f2f4fecf0432169b358eb3b564f12b94157108f
   macros_blocks: da2106a0975514e16f3669f2f50a02efaff642cf
   MQTTKit: 513ffc31464db7adeffefac986e228fdf6cd87e5
-  SCNetworkReachability: 4d836180e9ef916da4ef68a34fec748f88950712
+  SCNetworkReachability: 14026e754d9abb264c157131539e8e2c2131cb62
 
 COCOAPODS: 0.39.0
