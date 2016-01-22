@@ -50,6 +50,37 @@
 }
 
 
+- (void) showTargetCalendarCondition {
+    bool isAvaiable = NO;
+    EKEventStore *tempStore = [[EKEventStore alloc] init];
+    //    for (EKSource *calSource in tempStore.sources) {
+    for (EKCalendar *cal in [tempStore calendarsForEntityType:EKEntityTypeEvent]) {
+        NSLog(@"%@", cal.title);
+        if ([cal.title isEqualToString:@"BalancedCampusJournal"]) {
+            isAvaiable = YES;
+        }
+    }
+    //    }
+    
+    tempStore = nil;
+    if (isAvaiable) {
+        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Correct"
+                                                         message:@"'BalancedCampusJournal' calendar is available!"
+                                                        delegate:self
+                                               cancelButtonTitle:@"Cancel"
+                                               otherButtonTitles:nil];
+        [alert show];
+    }else{
+        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Miss"
+                                                         message:@"AWARE can not find 'BalancedCampusJournal' calendar."
+                                                        delegate:self
+                                               cancelButtonTitle:@"Cancel"
+                                               otherButtonTitles:nil];
+        [alert show];
+    }
+}
+
+
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings {
     
     [self setDailyNotification];

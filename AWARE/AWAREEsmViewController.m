@@ -264,7 +264,7 @@
                                                                 totalHight+ textView.frame.size.height,
                                                                 mainContentRect.size.width-90,
                                                                 30)];
-    nalabel.text = @"N/A";
+    nalabel.text = @"NA";
     
     [self setContentSizeWithAdditionalHeight: mainContentRect.size.height + naCheckBox.frame.size.height ];
     
@@ -548,7 +548,7 @@
         numbers.text = [NSString stringWithFormat:@"%d", i+1];
 //        [elements addObject:numbers];
         if ( i == ([max intValue]) ) { // last label
-            numbers.text = @"N/A";
+            numbers.text = @"NA";
             numbers.frame = CGRectMake(x-(anOptionWidth/4), y, w, h);
         }
         [_mainScrollView addSubview:numbers];
@@ -806,7 +806,7 @@
                                                                 totalHight+valueLabelH+mainContentH+spaceH,
                                                                 mainContentRect.size.width-90, naH)];
     label.adjustsFontSizeToFitWidth = YES;
-    label.text = @"N/A";
+    label.text = @"NA";
     [naCheckBox addTarget:self
                    action:@selector(pushedNaBox:)
          forControlEvents:UIControlEventTouchUpInside];
@@ -872,7 +872,7 @@
                                                                 mainContentRect.size.width-90,
                                                                 30)];
     label.adjustsFontSizeToFitWidth = YES;
-    label.text = @"N/A";
+    label.text = @"NA";
     [naCheckBox addTarget:self
                    action:@selector(pushedNaBox:)
          forControlEvents:UIControlEventTouchUpInside];
@@ -987,6 +987,11 @@
     NSMutableArray *array = [[NSMutableArray alloc] init];
     ESM *esm = [[ESM alloc] initWithSensorName:SENSOR_ESMS];
     
+    NSNumber *NEW = @0;
+    NSNumber *DISMISSED = @1;
+    NSNumber *ANSWERED = @2;
+    NSNumber *EXPIRED = @3;
+    
     double timeStamp = [[NSDate date] timeIntervalSince1970] * 1000;
     NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
     NSString * deviceId = [esm getDeviceId];
@@ -1001,7 +1006,7 @@
         [dic setObject:unixtime forKey:@"timestamp"];
         [dic setObject:unixtime forKey:KEY_ESM_USER_ANSWER_TIMESTAMP];
         [dic setObject:deviceId forKey:@"device_id"];
-        [dic setObject:@2 forKey:KEY_ESM_STATUS]; // the status of the ESM (0-new, 1-dismissed, 2-answered, 3-expired) -> Defualt is zero(0).
+        [dic setObject:ANSWERED forKey:KEY_ESM_STATUS]; // the status of the ESM (0-new, 1-dismissed, 2-answered, 3-expired) -> Defualt is zero(0).
         // add special data to dic from each uielements
         NSNumber* type = [esmDic objectForKey:KEY_ESM_TYPE];
         // save each data to the dictionary
@@ -1014,10 +1019,11 @@
                     NSLog(@"Value is = %@", textView.text);
                     UIButton * naButton = [contents objectAtIndex:1];
                     if ([textView.text isEqualToString:@""] && !naButton.selected) {
-                        [dic setObject:@1 forKey:KEY_ESM_STATUS];
+                        [dic setObject:DISMISSED forKey:KEY_ESM_STATUS];
                     }
                     if (naButton.selected) {
-                        [dic setObject:@"N/A" forKey:KEY_ESM_USER_ANSWER];
+                        [dic setObject:@"NA" forKey:KEY_ESM_USER_ANSWER];
+                        [dic setObject:ANSWERED forKey:KEY_ESM_STATUS];
                     }
                 }
             }
@@ -1035,30 +1041,45 @@
                 }
             }
             if(skip){
-                [dic setObject:@1 forKey:KEY_ESM_STATUS];
+                [dic setObject:DISMISSED forKey:KEY_ESM_STATUS];
             }else{
-                [dic setObject:@2 forKey:KEY_ESM_STATUS];
+                [dic setObject:ANSWERED forKey:KEY_ESM_STATUS];
             }
         } else if ([type isEqualToNumber:@3]) {
             NSLog(@"Get check box data.");
             bool skip = true;
             if (contents != nil) {
-                NSString *result = @"";
+//                NSString *result = @"";
+                NSMutableArray * results = [[NSMutableArray alloc] init];
                 for (int i=0; i<contents.count; i++) {
                     UIButton * button = [contents objectAtIndex:i];
                     UILabel * label = [labels objectAtIndex:i];
                     if (button.selected) {
-                        result = [NSString stringWithFormat:@"%@,%@", result , label.text];
-                        skip = false;
+//                        result = [NSString stringWithFormat:@"%@,%@", result , label.text];
+                        if (label.text != nil) {
+                            [results addObject:label.text];
+                            skip = false;
+                        }
                     }
                 }
-                [dic setObject:result forKey:KEY_ESM_USER_ANSWER];
+                [dic setObject:[self convertArrayToCSVFormat:results] forKey:KEY_ESM_USER_ANSWER];
             }
             if(skip){
-                [dic setObject:@1 forKey:KEY_ESM_STATUS];
+                [dic setObject:DISMISSED forKey:KEY_ESM_STATUS];
+            }else{
+                [dic setObject:ANSWERED forKey:KEY_ESM_STATUS];
             }
         } else if ([type isEqualToNumber:@4]) {
             NSLog(@"Get likert data");
+            [dic setObject:ANSWERED forKey:KEY_ESM_STATUS];
+            
+            NSArray * radios = (NSArray *)[esmDic objectForKey:@"esm_radios"];
+            if (radios != nil) {
+                if (radios.count > 0) {
+                    // update esm type
+                    [dic setObject:@2 forKey:KEY_ESM_TYPE];
+                }
+            }
             if (contents != nil) {
                 if ( contents.count > 1) {
                     int selectedOption = -1;
@@ -1068,10 +1089,31 @@
                             selectedOption = i;
                         }
                     }
+                    
                     if (selectedOption == -1) {
-                        [dic setObject:@1 forKey:KEY_ESM_STATUS];
+                        [dic setObject:DISMISSED forKey:KEY_ESM_STATUS];
                     }else{
                         [dic setObject:[NSNumber numberWithInt:selectedOption] forKey:KEY_ESM_USER_ANSWER];
+                        /**
+                         * =====================================================================
+                         * [NOTE]: If the dic include "esm_radios". we change the value as label
+                         * =====================================================================
+                         */
+                        NSArray * radios = (NSArray *)[esmDic objectForKey:@"esm_radios"];
+                        if (radios != nil) {
+                            for (int i=0; i<radios.count; i++) {
+                                if (i == selectedOption) {
+                                    NSString* selectedLabel = [radios objectAtIndex:i];
+                                    // Set user answer
+                                    [dic setObject:selectedLabel forKey:KEY_ESM_USER_ANSWER];
+                                    // Change ESM type to radio button
+                                    NSLog(@"selected label: %@", selectedLabel);
+                                }
+                                [dic setObject:@2 forKey:KEY_ESM_TYPE];
+                            }
+                            
+                        }
+                        [dic setObject:ANSWERED forKey:KEY_ESM_STATUS];
                     }
                     NSLog(@"%d", selectedOption);
                 }
@@ -1082,18 +1124,19 @@
             NSLog(@"Get Scale data");
             if (contents != nil) {
                 if ( contents.count > 1) {
-                    
                     UILabel * label = [contents objectAtIndex:0];
                     if ([label.text isEqualToString:@"---"]) {
-                        [dic setObject:@1 forKey:KEY_ESM_STATUS];
                         [dic setObject:@"" forKey:KEY_ESM_USER_ANSWER];
+                        [dic setObject:@1 forKey:KEY_ESM_STATUS];
                     }else{
                         [dic setObject:label.text forKey:KEY_ESM_USER_ANSWER];
+                        [dic setObject:@2 forKey:KEY_ESM_STATUS];
                     }
                     
                     UIButton * naButton = [contents objectAtIndex:1];
                     if(naButton.selected){
                         [dic setObject:@"NA" forKey:KEY_ESM_USER_ANSWER];
+                        [dic setObject:@2 forKey:KEY_ESM_STATUS];
                     }
                 }
             }
@@ -1107,6 +1150,7 @@
 //                        UIDatePicker * datePicker = [contents objectAtIndex:0];
 //                        double selectedDate = [datePicker.date timeIntervalSince1970];
                         [dic setObject:[[contents objectAtIndex:0] stringValue] forKey:KEY_ESM_USER_ANSWER];
+                        [dic setObject:@2 forKey:KEY_ESM_STATUS];
                         NSLog(@"selecte date => %@", [contents objectAtIndex:0]);
                     }else{
                         [dic setObject:@"0" forKey:KEY_ESM_USER_ANSWER];
@@ -1116,7 +1160,8 @@
                     // Get N/A button value and set N/A condition
                     UIButton* naButton = [contents objectAtIndex:1];
                     if(naButton.selected){
-                        [dic setObject:@"N/A" forKey:KEY_ESM_USER_ANSWER];
+                        [dic setObject:@"NA" forKey:KEY_ESM_USER_ANSWER];
+                        [dic setObject:@2 forKey:KEY_ESM_STATUS];
                     }
                 }
             }
@@ -1132,7 +1177,6 @@
     bool result = [esm saveDataWithArray:array];
     
     if ( result ) {
-        [esm performSelector:@selector(syncAwareDB) withObject:0 afterDelay:5];
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Thank for submitting your answer!"
                                                         message:@""
                                                        delegate:nil
@@ -1147,6 +1191,8 @@
 //            [self viewDidLoad] //TODO
             [self viewDidAppear:NO];
             return ;
+        }else{
+            [esm performSelector:@selector(syncAwareDB) withObject:0 afterDelay:5];
         }
         
         CGFloat currentVersion = [[[UIDevice currentDevice] systemVersion] floatValue];
@@ -1200,25 +1246,39 @@
     return dic;
 }
 
+
 - (NSString* ) convertArrayToCSVFormat:(NSArray *) array {
     if (array == nil || array.count == 0){
         return @"";
     }
-    NSMutableString* csvStr = [[NSMutableString alloc] init];
-    for (NSString * item in array) {
-        [csvStr appendString:item];
-        [csvStr appendString:@","];
+    
+    NSError * error;
+    NSData *jsondata = [NSJSONSerialization dataWithJSONObject:array options:0 error:&error];
+    if (error) {
+        NSLog(@"%@", error);
     }
-    NSRange rangeOfExtraText = [csvStr rangeOfString:@"," options:NSBackwardsSearch];
-    if (rangeOfExtraText.location == NSNotFound) {
-    }else{
-        NSRange deleteRange = NSMakeRange(rangeOfExtraText.location, csvStr.length-rangeOfExtraText.location);
-        [csvStr deleteCharactersInRange:deleteRange];
+    NSString* jsonString = [[NSString alloc] initWithData:jsondata encoding:NSUTF8StringEncoding];
+    if ([jsonString isEqualToString:@""] || jsonString == nil) {
+        return @"[]";
     }
-    if (csvStr == nil) {
-        return @"";
-    }
-    return csvStr;
+    
+    return jsonString;
+    
+    //    NSMutableString* csvStr = [[NSMutableString alloc] init];
+    //    for (NSString * item in array) {
+    //        [csvStr appendString:item];
+    //        [csvStr appendString:@","];
+    //    }
+    //    NSRange rangeOfExtraText = [csvStr rangeOfString:@"," options:NSBackwardsSearch];
+    //    if (rangeOfExtraText.location == NSNotFound) {
+    //    }else{
+    //        NSRange deleteRange = NSMakeRange(rangeOfExtraText.location, csvStr.length-rangeOfExtraText.location);
+    //        [csvStr deleteCharactersInRange:deleteRange];
+    //    }
+    //    if (csvStr == nil) {
+    //        return @"";
+    //    }
+    //    return csvStr;
 }
 
 - (void) addSubmitButtonWithText:(NSString*) text {

@@ -30,12 +30,12 @@
         resultData = [[NSMutableData alloc] init];
 //                [super setSensorName:sensorName];
         scheduleManager = [[NSMutableArray alloc] init];
-        dailyUpdate = [self getTargetTimeAsNSDate:[NSDate new] hour:6 minute:0 second:0];
+        dailyUpdate = [self getTargetTimeAsNSDate:[NSDate new] hour:3 minute:0 second:0];
         _getConfigFileIdentifier = @"get_config_file_identifier";
         KEY_SCHEDULE = @"key_schedule";
         KEY_TIMER = @"key_timer";
         KEY_PREVIOUS_SCHEDULE_JSON = @"key_previous_schedule_json";
-//        CONFIG_URL = @"http://r2d2.hcii.cs.cmu.edu/esm/master.json";
+//        CONFIG_URL = @"http://r2d2.hcii.cs.cmu.edu/esm/7cfdf527-dc13-42bd-ac8e-a7587452076d/master.json";
 //        CONFIG_URL = @"http://r2d2.hcii.cs.cmu.edu/esm/master_ios.json";
         CONFIG_URL = [NSString stringWithFormat:@"http://r2d2.hcii.cs.cmu.edu/esm/%@/master.json", [self getDeviceId]];
     }
@@ -142,6 +142,7 @@ didReceiveResponse:(NSURLResponse *)response
     
     NSMutableArray * awareSchedules = [[NSMutableArray alloc] init];
     
+    //TODO
 //    AWARESchedule * awareSchedule = [self getScheduleForTest];
 //    awareSchedule.schedule = [NSDate new];
 //    [awareSchedule setScheduleType:SCHEDULE_INTERVAL_TEST];
@@ -191,7 +192,7 @@ didReceiveResponse:(NSURLResponse *)response
 }
 
 
-- (NSArray *)checkEsmIOS:esmsDic{
+- (NSMutableArray *)checkEsmIOS:esmsDic {
 //    NSMutableDictionary esm = [[NSMutableDictionary alloc] initWithDictionary:esmsDic];
     NSMutableArray *newArray = [[NSMutableArray alloc] init];
     for (NSDictionary* esm in esmsDic) {
@@ -341,24 +342,56 @@ didReceiveResponse:(NSURLResponse *)response
 
 
 
-- (void) saveEsmObjects:(AWARESchedule *) schedule{
+- (void) saveEsmObjects:(AWARESchedule *) schedule {
     // ESM Objects
     ESM *esm = [[ESM alloc] initWithSensorName:SENSOR_ESMS];
     NSMutableArray* mulitEsm = schedule.esmObject.esms;
+    
+    // check esm_ios
+//    if (mulitEsm != nil) {
+//        mulitEsm = [self checkEsmIOS:mulitEsm];
+//    }
+    
     double timeStamp = [[NSDate date] timeIntervalSince1970] * 1000;
     NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
     NSString * deviceId = [esm getDeviceId];
     
-    for (SingleESMObject * singleEsm in mulitEsm) {
+
+    
+    for ( SingleESMObject * singleEsm in mulitEsm ) {
+        
+        // Check esm_ios object
+        // if case of ( esm_type==4[Likert Scale] && radio_button.count > 0 ) => change esm_type to 2[Radio Button]
+        BOOL result = [self checkRadioBtnToLikert:singleEsm.esmObject];
+        if (result) {
+            NSLog(@"--- change esm type");
+            [singleEsm.esmObject setObject:@2 forKey:KEY_ESM_TYPE];
+        }else{
+            NSLog(@"----- ");
+        }
+        
         NSMutableDictionary *dic = [self getEsmFormatDictionary:(NSMutableDictionary *)singleEsm.esmObject
                                                    withTimesmap:unixtime
                                                         devieId:deviceId];
         [dic setObject:deviceId forKey:@"device_id"];
         [dic setObject:unixtime forKey:@"timestamp"];
         [dic setObject:@"0" forKey:KEY_ESM_STATUS]; // status is new
+        
         [esm saveData:dic];
 //        NSLog(@"%@",dic);
     }
+}
+
+- (bool) checkRadioBtnToLikert:dic {
+    NSNumber * esmType = (NSNumber *)[dic objectForKey:@"esm_type"];
+    NSArray* array = (NSArray *)[dic objectForKey:@"esm_radios"];
+    NSString* className = NSStringFromClass([array class]);
+    if ( [className isEqualToString:@"__NSCFArray"] && array != nil && esmType != nil) {
+        if (array.count > 0 && [esmType isEqualToNumber:@4]) {
+            return YES;
+        }
+    }
+    return NO;
 }
 
 - (NSMutableDictionary *) getEsmFormatDictionary:(NSMutableDictionary *)originalDic
@@ -403,21 +436,34 @@ didReceiveResponse:(NSURLResponse *)response
     if (array == nil || array.count == 0){
         return @"";
     }
-    NSMutableString* csvStr = [[NSMutableString alloc] init];
-    for (NSString * item in array) {
-        [csvStr appendString:item];
-        [csvStr appendString:@","];
+    
+    NSError * error;
+    NSData *jsondata = [NSJSONSerialization dataWithJSONObject:array options:0 error:&error];
+    if (error) {
+        NSLog(@"%@", error);
     }
-    NSRange rangeOfExtraText = [csvStr rangeOfString:@"," options:NSBackwardsSearch];
-    if (rangeOfExtraText.location == NSNotFound) {
-    }else{
-        NSRange deleteRange = NSMakeRange(rangeOfExtraText.location, csvStr.length-rangeOfExtraText.location);
-        [csvStr deleteCharactersInRange:deleteRange];
+    NSString* jsonString = [[NSString alloc] initWithData:jsondata encoding:NSUTF8StringEncoding];
+    if ([jsonString isEqualToString:@""] || jsonString == nil) {
+        return @"[]";
     }
-    if (csvStr == nil) {
-        return @"";
-    }
-    return csvStr;
+    
+    return jsonString;
+    
+//    NSMutableString* csvStr = [[NSMutableString alloc] init];
+//    for (NSString * item in array) {
+//        [csvStr appendString:item];
+//        [csvStr appendString:@","];
+//    }
+//    NSRange rangeOfExtraText = [csvStr rangeOfString:@"," options:NSBackwardsSearch];
+//    if (rangeOfExtraText.location == NSNotFound) {
+//    }else{
+//        NSRange deleteRange = NSMakeRange(rangeOfExtraText.location, csvStr.length-rangeOfExtraText.location);
+//        [csvStr deleteCharactersInRange:deleteRange];
+//    }
+//    if (csvStr == nil) {
+//        return @"";
+//    }
+//    return csvStr;
 }
 
 

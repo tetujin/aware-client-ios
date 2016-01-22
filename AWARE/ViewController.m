@@ -15,6 +15,8 @@
 #import <CoreTelephony/CTCallCenter.h>
 #import <CoreTelephony/CTCall.h>
 
+#import "GoogleCalPush.h"
+
 @interface ViewController () {
     NSString *KEY_CEL_TITLE;
     NSString *KEY_CEL_DESC;
@@ -65,7 +67,7 @@
     uploadInterval = 60*15;
     
     // daily study update
-    NSDate* dailyUpdateTime = [self getTargetTimeAsNSDate:[NSDate date] hour:3 minute:0 second:0];
+    NSDate* dailyUpdateTime = [self getTargetTimeAsNSDate:[NSDate date] hour:2 minute:0 second:0];
     dailyUpdateTimer = [[NSTimer alloc] initWithFireDate:dailyUpdateTime
                                                 interval:60*60*24
                                                   target:self
@@ -280,11 +282,14 @@
     [_sensors addObject:[self getCelContent:@"Blanced Campus ESMs" desc:@"ESM Plugin" image:@"ic_action_campus" key:SENSOR_PLUGIN_CAMPUS]];
     
     
+    
     [_sensors addObject:[self getCelContent:@"Settings" desc:@"" image:@"" key:@"TITLE_CELL_VIEW"]];
     [_sensors addObject:[self getCelContent:@"Debug" desc:debugState image:@"" key:@"STUDY_CELL_DEBUG"]]; //ic_action_mqtt
     [_sensors addObject:[self getCelContent:@"Sync Interval to AWARE Server (min)" desc:syncInterval image:@"" key:@"STUDY_CELL_SYNC"]]; //ic_action_mqtt
     [_sensors addObject:[self getCelContent:@"Sync only wifi" desc:wifiOnly image:@"" key:@"STUDY_CELL_WIFI"]]; //ic_action_mqtt
     [_sensors addObject:[self getCelContent:@"Maximum file size" desc:maximumFileSizeDesc image:@"" key:@"STUDY_CELL_MAX_FILE_SIZE"]]; //ic_action_mqtt
+    NSString* version = [NSString stringWithFormat:@"%@",[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]];
+    [_sensors addObject:[self getCelContent:@"Version" desc:version image:@"" key:@"STUDY_CELL_VIEW"]];
 }
 
 
@@ -348,13 +353,15 @@
         [self performSegueWithIdentifier:@"esmView" sender:self];
     }else if([key isEqualToString:SENSOR_PLUGIN_SCHEDULER]){
         // [TODO] For making new schedule.
-    }else if ([key isEqualToString:SENSOR_PLUGIN_GOOGLE_CAL_PULL]) {
-//        GoogleCalPull* googleCalPull = [[GoogleCalPull alloc] initWithSensorName:SENSOR_PLUGIN_GOOGLE_CAL_PULL];
-//        [googleCalPull showSelectPrimaryGoogleCalView];
+    }else if ([key isEqualToString:SENSOR_PLUGIN_GOOGLE_CAL_PUSH]) {
+        GoogleCalPush *googlePush = [[GoogleCalPush alloc] init];
+        [googlePush showTargetCalendarCondition];
     }else if([key isEqualToString:SENSOR_PLUGIN_CAMPUS]){
         NSString* schedules = [_sensorManager getLatestSensorData:SENSOR_PLUGIN_CAMPUS];
          UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Current ESM Schedules" message:schedules delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [alert show];
+    }else if([key isEqualToString:SENSOR_PLUGIN_GOOGLE_LOGIN]){
+//        [self pushedGoogleLogin:nil];
     }
 }
 
@@ -504,9 +511,9 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
     } else {
         [self sendLocalNotificationForMessage:@"AWARE Configuration was refreshed in the background!" soundFlag:NO];
     }
-    [self performSelector:@selector(initList) withObject:0 afterDelay:3];
+    [self performSelector:@selector(initList) withObject:0 afterDelay:2];
 //    [self initList];
-    [self.tableView performSelector:@selector(reloadData) withObject:0 afterDelay:3];
+    [self.tableView performSelector:@selector(reloadData) withObject:0 afterDelay:2];
 //    [self connectMqttServer];
 }
 

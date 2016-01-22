@@ -27,7 +27,7 @@
     // for locations
     double miniDistrance;
     
-    NSString* AWARE_CAL_NAME;
+//    NSString* AWARE_CAL_NAME;
     NSString* PRIMARY_GOOGLE_ACCOUNT_NAME;
     NSString* KEY_AWARE_CAL_FIRST_ACCESS;
     
@@ -47,7 +47,7 @@
             store = [[EKEventStore alloc] init];
             
             googleCalPullSensorName = @"balancedcampuscalendar";
-            AWARE_CAL_NAME = @"AWARE Calendar";
+//            AWARE_CAL_NAME = @"AWARE Calendar";
             PRIMARY_GOOGLE_ACCOUNT_NAME = @"primary_google_account_name";
             KEY_AWARE_CAL_FIRST_ACCESS  = @"key_aware_cal_first_access";
 
@@ -72,6 +72,7 @@
         return self;
 }
 
+
 - (void) saveOriginalCalEvents {
     [store enumerateEventsMatchingPredicate:[self getPredication] usingBlock:^(EKEvent *ekEvent, BOOL *stop) {
         // Check this event against each ekObjectID in notification
@@ -79,6 +80,7 @@
         [self saveCalEvent:calEvent];
     }];
 }
+
 
 
 - (BOOL) showSelectPrimaryGoogleCalView {
@@ -128,22 +130,22 @@
 /**
  * check aware calendar
  */
-- (BOOL) isAwareCal {
-    for (EKSource *calSource in store.sources) {
-        NSLog(@"%@",calSource);
-        if ([calSource.title isEqualToString:[self getPrimaryGoogleCal]]) {
-//            NSString *identifier = nil;
-            for (EKCalendar *cal in [store calendarsForEntityType:EKEntityTypeEvent]) {
-//                identifier = cal.calendarIdentifier;
-//                NSLog(@"%@", cal.title);
-                if ([cal.title isEqualToString:AWARE_CAL_NAME]) {
-                    return YES;
-                }
-            }
-        }
-    }
-    return NO;
-}
+//- (BOOL) isAwareCal {
+//    for (EKSource *calSource in store.sources) {
+//        NSLog(@"%@",calSource);
+//        if ([calSource.title isEqualToString:[self getPrimaryGoogleCal]]) {
+////            NSString *identifier = nil;
+//            for (EKCalendar *cal in [store calendarsForEntityType:EKEntityTypeEvent]) {
+////                identifier = cal.calendarIdentifier;
+////                NSLog(@"%@", cal.title);
+//                if ([cal.title isEqualToString:googleCalPullSensorName]) {
+//                    return YES;
+//                }
+//            }
+//        }
+//    }
+//    return NO;
+//}
 
 
 

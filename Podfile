@@ -10,6 +10,8 @@ pod 'Google/SignIn'
 pod 'DeployGateSDK'
 pod 'ios-ntp'
 pod 'Google-API-Client'
+#pod 'Podfile'
+#pod 'ResearchKit'
 end
 
 target 'AWARETests' do

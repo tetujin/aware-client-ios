@@ -20,5 +20,6 @@
 //@property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 - (void)saveContext;
 - (NSURL *)applicationDocumentsDirectory;
+- (void) showTargetCalendarCondition;
 
 @end
