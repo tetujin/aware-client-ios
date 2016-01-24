@@ -68,8 +68,10 @@
         [motionManager startDeviceMotionUpdatesToQueue:[NSOperationQueue new]
                                            withHandler:^(CMDeviceMotion *motion, NSError *error){
                                                // Save sensor data to the local database.
-                                               double timeStamp = [[NSDate date] timeIntervalSince1970] * 1000;
-                                               NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];                                               NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+//                                               double timeStamp = [[NSDate date] timeIntervalSince1970] * 1000;
+//                                               NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
+                                               NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
+                                               NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
                                                [dic setObject:unixtime forKey:@"timestamp"];
                                                [dic setObject:[self getDeviceId] forKey:@"device_id"];
                                                [dic setObject:[NSNumber numberWithDouble:motion.gravity.x] forKey:@"double_values_0"]; //double

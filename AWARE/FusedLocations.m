@@ -82,7 +82,11 @@
 //    Cell Tower - kCLLocationAccuracyKilometer;
 //    Cell Tower - kCLLocationAccuracyThreeKilometers;
     
-    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval target:self selector:@selector(syncAwareDB) userInfo:nil repeats:YES];
+    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval
+                                                   target:self
+                                                 selector:@selector(syncAwareDB)
+                                                 userInfo:nil
+                                                  repeats:YES];
     
     if (nil == locationManager){
         locationManager = [[CLLocationManager alloc] init];
@@ -144,8 +148,9 @@
 }
 
 - (void) saveLocation:(CLLocation *)location{
-    double timeStamp = [[NSDate date] timeIntervalSince1970] * 1000;
-    NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
+//    double timeStamp = [[NSDate date] timeIntervalSince1970] * 1000;
+//    NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
+    NSNumber *unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
     NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
     [dic setObject:unixtime forKey:@"timestamp"];
     [dic setObject:[self getDeviceId] forKey:@"device_id"];

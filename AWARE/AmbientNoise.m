@@ -117,8 +117,9 @@ static void AudioInputCallback(
     double max = levelMeter.mPeakPower;
     double ave = levelMeter.mAveragePower;
     
-    double timeStamp = [[NSDate date] timeIntervalSince1970] * 1000;
-    NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
+//    double timeStamp = [[NSDate date] timeIntervalSince1970] * 1000;
+//    NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
+    NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
     NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
     [dic setObject:unixtime forKey:@"timestamp"];
     [dic setObject:[self getDeviceId] forKey:@"device_id"];

@@ -133,7 +133,7 @@ int ONE_HOUR = 60*60;
         locationManager = [[CLLocationManager alloc] init];
         locationManager.delegate = self;
         // locationManager.desiredAccuracy = kCLLocationAccuracyKilometer;
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+        locationManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers;
         locationManager.pausesLocationUpdatesAutomatically = NO;
         CGFloat currentVersion = [[[UIDevice currentDevice] systemVersion] floatValue];
         NSLog(@"OS:%f", currentVersion);
@@ -145,7 +145,7 @@ int ONE_HOUR = 60*60;
             [locationManager requestAlwaysAuthorization];
         }
         // Set a movement threshold for new events.
-        locationManager.distanceFilter = 150; // meters
+        locationManager.distanceFilter = 300; // meters
         [locationManager startUpdatingLocation];
         //    [_locationManager startMonitoringVisits]; // This method calls didVisit.
         [locationManager startUpdatingHeading];
@@ -220,11 +220,13 @@ int ONE_HOUR = 60*60;
     
     // Set settion configu and HTTP/POST body.
     NSURLSessionConfiguration *sessionConfig = nil;
+    
+    identificationForOpenWeather = [NSString stringWithFormat:@"%@%f", identificationForOpenWeather, [[NSDate new] timeIntervalSince1970]];
     sessionConfig = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:identificationForOpenWeather];
     sessionConfig.timeoutIntervalForRequest = 180.0;
     sessionConfig.timeoutIntervalForResource = 60.0;
-    sessionConfig.HTTPMaximumConnectionsPerHost = 30;
-//    sessionConfig.allowsCellularAccess = NO;
+    sessionConfig.HTTPMaximumConnectionsPerHost = 60;
+    sessionConfig.allowsCellularAccess = YES;
     sessionConfig.discretionary = YES;
     
     NSString *url = [NSString stringWithFormat:OPEN_WEATHER_API, (int)lat, (int)lon];
@@ -277,8 +279,9 @@ didReceiveResponse:(NSURLResponse *)response
         };
         
         NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-        double timeStamp = [[NSDate date] timeIntervalSince1970] * 1000;
-        NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
+//        double timeStamp = [[NSDate date] timeIntervalSince1970] * 1000;
+//        NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
+        NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
         [dic setObject:unixtime forKey:@"timestamp"];
         [dic setObject:[self getDeviceId] forKey:@"device_id"];
         [dic setObject:[self getName] forKey:@"city"];

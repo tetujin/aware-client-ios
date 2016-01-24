@@ -93,9 +93,10 @@ didFailToConnectWithError:(NSError *)error{
 }
 
 - (NSNumber *) getUnixTime {
-    double timeStamp = [[NSDate date] timeIntervalSince1970] * 1000;
-    NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
-    return unixtime;
+//    double timeStamp = [[NSDate date] timeIntervalSince1970] * 1000;
+//    NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
+//    return unixtime;
+    return [AWAREUtils getUnixTimestamp:[NSDate new]];
 }
 
 - (void)startMSBSensors:(double)upInterval withSettings:(NSArray *)settings{

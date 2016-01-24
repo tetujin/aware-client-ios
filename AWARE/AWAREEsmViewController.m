@@ -906,8 +906,9 @@
     NSArray * elements = [uiElement objectForKey:KEY_ELEMENT];
     
     NSMutableArray * array = [[NSMutableArray alloc] initWithArray:elements];
-    double timeStamp = [[NSDate date] timeIntervalSince1970] * 1000;
-    NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
+//    double timeStamp = [[NSDate date] timeIntervalSince1970] * 1000;
+//    NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
+    NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
     [array setObject:unixtime atIndexedSubscript:0];
     
     [uiElement setObject:array forKey:KEY_ELEMENT];
@@ -992,8 +993,9 @@
     NSNumber *ANSWERED = @2;
     NSNumber *EXPIRED = @3;
     
-    double timeStamp = [[NSDate date] timeIntervalSince1970] * 1000;
-    NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
+//    double timeStamp = [[NSDate date] timeIntervalSince1970] * 1000;
+//    NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
+    NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
     NSString * deviceId = [esm getDeviceId];
     
     for (int i=0; i<uiElements.count; i++) {
@@ -1302,8 +1304,9 @@
     
     // Create
     ESM *esm = [[ESM alloc] initWithSensorName:SENSOR_ESMS];
-    double timeStamp = [[NSDate date] timeIntervalSince1970] * 1000;
-    NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
+//    double timeStamp = [[NSDate date] timeIntervalSince1970] * 1000;
+//    NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
+    NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
     NSString *deviceId = [esm getDeviceId];
     for (int i=0; i<uiElements.count; i++) {
         NSDictionary *esmDic = [[uiElements objectAtIndex:i] objectForKey:KEY_OBJECT];
@@ -1342,7 +1345,6 @@
         [self dismissViewControllerAnimated:YES completion:nil];
         [self viewDidAppear:NO];
     }
- 
 }
 
 

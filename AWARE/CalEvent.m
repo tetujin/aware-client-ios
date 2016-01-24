@@ -10,6 +10,7 @@
 #import <CoreData/CoreData.h>
 #import <EventKit/EventKit.h>
 #import <EventKitUI/EventKitUI.h>
+#import "AWAREUtils.h"
 
 @implementation CalEvent{
     NSString* AWARE_CAL_EVENT_UNKNOWN;
@@ -154,11 +155,11 @@
     if(_notes == nil) _notes = @"";
     
 //    @property (nonatomic, strong) IBOutlet NSString* begin;
-    _begin = [[self getUnixtimeWithNSDate:event.startDate] stringValue];
+    _begin = [[AWAREUtils getUnixTimestamp:event.startDate] stringValue];
     if(_begin == nil) _begin = @"";
     
 //    @property (nonatomic, strong) IBOutlet NSString* end;
-    _end = [[self getUnixtimeWithNSDate:event.endDate] stringValue];
+    _end = [[AWAREUtils getUnixTimestamp:event.endDate] stringValue];
     if(_end == nil) _end = @"";
     
 //    @property (nonatomic, strong) IBOutlet NSString* allDay;
@@ -308,56 +309,93 @@
     
 //    [query appendFormat:@"%@ text default '',", CAL_ID];
     [dic setObject:_calendarId forKey:CAL_ID];
+    if(_calendarId == nil) [dic setObject:@"" forKey:CAL_ID];
+        
 //    [query appendFormat:@"%@ text default '',", ACCOUNT_NAME];
     [dic setObject:_accountName forKey:ACCOUNT_NAME];
+    if(_accountName == nil) [dic setObject:@"" forKey:ACCOUNT_NAME];
+    
 //    [query appendFormat:@"%@ text default '',", CAL_NAME];
     [dic setObject:_calendarName forKey:CAL_NAME];
+    if(_calendarName == nil) [dic setObject:@"" forKey:CAL_NAME];
+    
 //    [query appendFormat:@"%@ text default '',", OWNER_ACCOUNT];
     [dic setObject:_ownerAccount forKey:OWNER_ACCOUNT];
+    if(_ownerAccount == nil) [dic setObject:@"" forKey:OWNER_ACCOUNT];
+    
 //    [query appendFormat:@"%@ text default '',", CAL_COLOR];
     [dic setObject:_calendarColor forKey:CAL_COLOR];
+    if(_calendarColor == nil) [dic setObject:@"" forKey:CAL_COLOR];
 //    
 //    [query appendFormat:@"%@ text default '',", EVENT_ID];
     [dic setObject:_eventId forKey:EVENT_ID];
+    if(_eventId == nil) [dic setObject:@"" forKey:EVENT_ID];
+    
 //    [query appendFormat:@"%@ text default '',", TITLE];
     [dic setObject:_title forKey:TITLE];
+    if(_title == nil) [dic setObject:@"" forKey:TITLE];
+    
 //    [query appendFormat:@"%@ text default '',", LOCATION];
     [dic setObject:_location forKey:LOCATION];
+    if(_location == nil) [dic setObject:@"" forKey:LOCATION];
+    
 //    [query appendFormat:@"%@ text default '',", DESCRIPTION];
     [dic setObject:_notes forKey:DESCRIPTION];
+    if(_notes == nil) [dic setObject:@"" forKey:DESCRIPTION];
+    
 //    [query appendFormat:@"%@ text default '',", BEGIN];
     [dic setObject:_begin forKey:BEGIN];
+    if(_begin == nil) [dic setObject:@"" forKey:BEGIN];
+    
 //    [query appendFormat:@"%@ text default '',", END];
     [dic setObject:_end forKey:END];
+    if(_end == nil) [dic setObject:@"" forKey:END];
+    
 //    [query appendFormat:@"%@ text default '',", ALL_DAY];
     [dic setObject:_allDay forKey:ALL_DAY];
+    if(_allDay == nil) [dic setObject:@"" forKey:ALL_DAY];
+    
 //    [query appendFormat:@"%@ text default '',", COLOR];
     [dic setObject:_color forKey:COLOR];
+    if(_color == nil) [dic setObject:@"" forKey:COLOR];
+    
 //    [query appendFormat:@"%@ text default '',", HAS_ALARM];
     [dic setObject:_hasAlarm forKey:HAS_ALARM];
+    if(_hasAlarm == nil) [dic setObject:@"" forKey:HAS_ALARM];
+    
 //    [query appendFormat:@"%@ text default '',", AVAILABILITY];
     [dic setObject:_availability forKey:AVAILABILITY];
+    if(_availability == nil) [dic setObject:@"" forKey:AVAILABILITY];
+    
 //    [query appendFormat:@"%@ text default '',", IS_ORGANIZER];
     [dic setObject:_isOganizer forKey:IS_ORGANIZER];
+    if(_isOganizer == nil) [dic setObject:@"" forKey:IS_ORGANIZER];
+    
 //    [query appendFormat:@"%@ text default '',", EVENT_TIMEZONE];
     [dic setObject:_eventTimezone forKey:EVENT_TIMEZONE];
+    if(_eventTimezone == nil) [dic setObject:@"" forKey:EVENT_TIMEZONE];
+    
 //    [query appendFormat:@"%@ text default '',", RRULE];
     [dic setObject:_rrule forKey:RRULE];
-//    
+    if(_rrule == nil) [dic setObject:@"" forKey:RRULE];
+
 //    [query appendFormat:@"%@ text default '',", STATUS];
     [dic setObject:_status forKey:STATUS];
+    if(_status == nil)[dic setObject:@"" forKey:STATUS];
+    
 //    [query appendFormat:@"%@ text default '',", SEEN];
     [dic setObject:_seen forKey:SEEN];
-
+    if(_seen == nil) [dic setObject:@"" forKey:SEEN];
+    
     return dic;
 }
 
 
-- (NSNumber *) getUnixtimeWithNSDate:(NSDate *) date {
-    double timeStamp = [date timeIntervalSince1970] * 1000;
-    NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
-    return unixtime;
-}
+//- (NSNumber *) getUnixtimeWithNSDate:(NSDate *) date {
+//    double timeStamp = [date timeIntervalSince1970] * 1000;
+//    NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
+//    return unixtime;
+//}
 
 
 @end

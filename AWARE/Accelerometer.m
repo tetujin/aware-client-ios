@@ -7,6 +7,7 @@
 //
 
 #import "Accelerometer.h"
+#import "AWAREUtils.h"
 
 @implementation Accelerometer{
     CMMotionManager *manager;
@@ -60,10 +61,10 @@
                                       if( error ) {
                                           NSLog(@"%@:%ld", [error domain], [error code] );
                                       } else {
-                                              double timeStamp = [[NSDate date] timeIntervalSince1970] * 1000;
-                                              NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
+//                                              double timeStamp = [[NSDate date] timeIntervalSince1970] * 1000;
+//                                              NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
                                               NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-                                              [dic setObject:unixtime forKey:@"timestamp"];
+                                              [dic setObject:[AWAREUtils getUnixTimestamp:[NSDate new]] forKey:@"timestamp"];
                                               [dic setObject:[self getDeviceId] forKey:@"device_id"];
                                               [dic setObject:[NSNumber numberWithDouble:accelerometerData.acceleration.x] forKey:@"double_values_0"];
                                               [dic setObject:[NSNumber numberWithDouble:accelerometerData.acceleration.y] forKey:@"double_values_1"];

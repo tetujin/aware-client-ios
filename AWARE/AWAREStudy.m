@@ -61,6 +61,11 @@
     return uuid;
 }
 
+- (BOOL) isForeground {
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    return [userDefaults boolForKey:@"APP_STATE"];
+}
+
 - (BOOL) setStudyInformationWithURL:(NSString*)url {
     if (url != nil) {
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -75,11 +80,18 @@
     NSURLSessionConfiguration *sessionConfig = nil;
     double unxtime = [[NSDate new] timeIntervalSince1970];
     _getSettingIdentifier = [NSString stringWithFormat:@"%@%f", _getSettingIdentifier, unxtime];
-    sessionConfig = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:_getSettingIdentifier];
+    
+    if ([self isForeground]) {
+        sessionConfig = [NSURLSessionConfiguration ephemeralSessionConfiguration];
+    }else{
+//        sessionConfig = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:_getConfigFileIdentifier];
+        sessionConfig = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:_getSettingIdentifier];
+    }
+
     sessionConfig.timeoutIntervalForRequest = 120.0;
     sessionConfig.HTTPMaximumConnectionsPerHost = 60;
     sessionConfig.timeoutIntervalForResource = 60; //60*60*24; // 1 day
-    sessionConfig.allowsCellularAccess = NO;
+    sessionConfig.allowsCellularAccess = YES;
     sessionConfig.discretionary = YES;
     
     NSString *post = [NSString stringWithFormat:@"device_id=%@", uuid];
@@ -117,10 +129,11 @@ didReceiveResponse:(NSURLResponse *)response
          dataTask:(NSURLSessionDataTask *)dataTask
    didReceiveData:(NSData *)data {
 
-    if ([session.configuration.identifier isEqualToString:_getSettingIdentifier]) {
-        // CRT file was installed to this device
-        [self setStudySettings:data];
-    }
+//    if ([session.configuration.identifier isEqualToString:_getSettingIdentifier]) {
+//        // CRT file was installed to this device
+////        [self setStudySettings:data];
+//    }
+    [self setStudySettings:data];
     [session finishTasksAndInvalidate];
     [session invalidateAndCancel];
 }
@@ -129,7 +142,8 @@ didReceiveResponse:(NSURLResponse *)response
 - (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error {
     if (error != nil) {
         NSLog(@"ERROR: %@ %ld", error.debugDescription , error.code);
-        if ([session.configuration.identifier isEqualToString:_getSettingIdentifier] && error.code == -1202) {
+//        if ([session.configuration.identifier isEqualToString:_getSettingIdentifier] && error.code == -1202) {
+         if (error.code == -1202) {
             // Install CRT file for SSL
             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
             NSString* url = [userDefaults objectForKey:KEY_STUDY_QR_CODE];

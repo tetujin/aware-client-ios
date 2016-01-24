@@ -64,10 +64,12 @@
     NetworkClock * nc = [NetworkClock sharedNetworkClock];
     NSDate * nt = nc.networkTime;
     double offset = nc.networkOffset * 1000;
-    double timeStamp = [[NSDate date] timeIntervalSince1970] * 1000;
-    NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
-    double ntpTimestamp = [nt timeIntervalSince1970] * 1000;
-    NSNumber* ntpUnixtime = [NSNumber numberWithLong:ntpTimestamp];
+//    double timeStamp = [[NSDate date] timeIntervalSince1970] * 1000;
+//    NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
+//    double ntpTimestamp = [nt timeIntervalSince1970] * 1000;
+//    NSNumber* ntpUnixtime = [NSNumber numberWithLongLong:ntpTimestamp];
+    NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
+    NSNumber * ntpUnixtime = [AWAREUtils getUnixTimestamp:nt];
     NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
     [dic setObject:unixtime forKey:@"timestamp"];
     [dic setObject:[self getDeviceId] forKey:@"device_id"];

@@ -41,6 +41,14 @@
     NSLog(@"[%@] Create Table", [self getSensorName]);
     [self createTable];
     
+    
+//    double frequency = [self getSensorSetting:settings withKey:@"frequency_barometer"];
+//    if(frequency != -1){
+//        frequency = 200000/100000;
+//    }else{
+//        
+//    }
+    
     NSLog(@"[%@] Start Barometer Sensor", [self getSensorName]);
     uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval target:self selector:@selector(syncAwareDB) userInfo:nil repeats:YES];
     if (![CMAltimeter isRelativeAltitudeAvailable]) {
@@ -55,8 +63,9 @@
                                                NSNumber *pressure_value = altitudeData.pressure;
                                                double pressure_f = [pressure_value doubleValue];
 //                                               self.pressureLabel.text = [NSString stringWithFormat:@"%.2f [hPa]", pressure_f*10];
-                                               double timeStamp = [[NSDate date] timeIntervalSince1970] * 1000;
-                                               NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
+//                                               double timeStamp = [[NSDate date] timeIntervalSince1970] * 1000;
+//                                               NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
+                                               NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
                                                NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
                                                [dic setObject:unixtime forKey:@"timestamp"];
                                                [dic setObject:[self getDeviceId] forKey:@"device_id"];

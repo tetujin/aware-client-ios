@@ -20,13 +20,17 @@
     NSString * KEY_PREVIOUS_SCHEDULE_JSON;
     NSTimer * dailyQuestionUpdateTimer;
     NSString* CONFIG_URL;
+    NSString* KEY_LATEST_ESM_JSON_JSON_DATA;
     NSMutableData* resultData;
     NSDate* dailyUpdate;
+    bool debug;
 }
 
 - (instancetype)initWithSensorName:(NSString *)sensorName {
     self = [super initWithSensorName:SENSOR_PLUGIN_CAMPUS];
     if (self) {
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        debug = [userDefaults boolForKey:SETTING_DEBUG_STATE];
         resultData = [[NSMutableData alloc] init];
 //                [super setSensorName:sensorName];
         scheduleManager = [[NSMutableArray alloc] init];
@@ -34,14 +38,31 @@
         _getConfigFileIdentifier = @"get_config_file_identifier";
         KEY_SCHEDULE = @"key_schedule";
         KEY_TIMER = @"key_timer";
+        KEY_LATEST_ESM_JSON_JSON_DATA = @"key_latest_esm_json_date";
         KEY_PREVIOUS_SCHEDULE_JSON = @"key_previous_schedule_json";
-//        CONFIG_URL = @"http://r2d2.hcii.cs.cmu.edu/esm/7cfdf527-dc13-42bd-ac8e-a7587452076d/master.json";
+//        CONFIG_URL = @"https://r2d2.hcii.cs.cmu.edu/esm/ad6e5ac2-ca24-436b-9e4f-77848918c7cb/master.json";
 //        CONFIG_URL = @"http://r2d2.hcii.cs.cmu.edu/esm/master_ios.json";
         CONFIG_URL = [NSString stringWithFormat:@"http://r2d2.hcii.cs.cmu.edu/esm/%@/master.json", [self getDeviceId]];
     }
     return self;
 }
 
+- (NSData *) getLatestEsmJsonData {
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSData * data = [userDefaults dataForKey:KEY_LATEST_ESM_JSON_JSON_DATA];
+    return data;
+}
+
+-(void) setLatestEsmJsonData: (NSData*) jsonData{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setObject:jsonData forKey:KEY_LATEST_ESM_JSON_JSON_DATA];
+}
+
+
+- (BOOL) isForeground {
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    return [userDefaults boolForKey:@"APP_STATE"];
+}
 
 - (void) setConfigFile:(id) sender {
     // Get Config URL from NSTimer of userInfo.
@@ -57,11 +78,16 @@
     
     double unxtime = [[NSDate new] timeIntervalSince1970];
     _getConfigFileIdentifier = [NSString stringWithFormat:@"%@%f", _getConfigFileIdentifier, unxtime];
-    sessionConfig = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:_getConfigFileIdentifier];
-    sessionConfig.timeoutIntervalForRequest = 180.0;
-    sessionConfig.HTTPMaximumConnectionsPerHost = 60;
-    sessionConfig.timeoutIntervalForResource = 60; //60*60*24; // 1 day
-    sessionConfig.allowsCellularAccess = NO;
+    if ([self isForeground]) {
+        sessionConfig = [NSURLSessionConfiguration ephemeralSessionConfiguration];
+    }else{
+        sessionConfig = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:_getConfigFileIdentifier];
+    }
+    
+    sessionConfig.timeoutIntervalForRequest = 180; //180.0;
+    sessionConfig.HTTPMaximumConnectionsPerHost = 180; //180;
+    sessionConfig.timeoutIntervalForResource = 60*60*24; // 1 day
+    sessionConfig.allowsCellularAccess = YES;
     sessionConfig.discretionary = YES;
     
     NSString *post = [NSString stringWithFormat:@"device_id=%@", [self getDeviceId] ];
@@ -69,6 +95,7 @@
     NSString *postLength = [NSString stringWithFormat:@"%ld", [postData length]];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
     [request setURL:[NSURL URLWithString:url]];
+//    [request setHTTPMethod:@"POST"];
     [request setHTTPMethod:@"POST"];
     [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
     [request setHTTPBody:postData];
@@ -87,6 +114,9 @@ didReceiveResponse:(NSURLResponse *)response
     NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
     int responseCode = (int)[httpResponse statusCode];
     NSLog(@"%d",responseCode);
+//    if(response != 200 && debug){
+//        [self sendLocalNotificationForMessage: soundFlag:<#(BOOL)#>]
+//    }
     [session finishTasksAndInvalidate];
     [session invalidateAndCancel];
     completionHandler(NSURLSessionResponseAllow);
@@ -96,25 +126,40 @@ didReceiveResponse:(NSURLResponse *)response
 -(void)URLSession:(NSURLSession *)session
          dataTask:(NSURLSessionDataTask *)dataTask
    didReceiveData:(NSData *)data {
-    NSLog(@"--> %@", session.configuration.identifier);
-    if ([session.configuration.identifier isEqualToString:_getConfigFileIdentifier]) {
+    
+    [session finishTasksAndInvalidate];
+    [session invalidateAndCancel];
+    [resultData appendData:data];
+    
+//    NSLog(@"--> %@", session.configuration.identifier);
+//    if ([session.configuration.identifier isEqualToString:_getConfigFileIdentifier]) {
         // NOTE: For registrate a NSTimer in the backgroung, we have to set it in the main thread!
 //        dispatch_async(dispatch_get_main_queue(), ^{
 //            [self.tableView reloadData];
-        [resultData appendData:data];
-        
+//        [resultData appendData:data];
+//
 //        [self setEsmSchedulesWithJSONData:data];
 //        });
-    }
+//    }else{
+//
+//    }
     [session finishTasksAndInvalidate];
     [session invalidateAndCancel];
 }
 
 
-- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error {
+
+- (void)URLSession:(NSURLSession *)session
+              task:(NSURLSessionTask *)task
+didCompleteWithError:(NSError *)error {
     NSLog(@"--> finish");
     if (error != nil) {
-        NSLog(@"ERROR: %@ %ld", error.debugDescription , error.code);
+        NSString* errorMessage = [NSString stringWithFormat:@"HTTP Connection Error: %@ %ld", error.debugDescription , error.code];
+        NSLog(@"%@", errorMessage);
+        // NOTE: case of error
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self setBackupEsmsWithNotification:errorMessage];
+        });
     }else{
         // NOTE: For registrate a NSTimer in the backgroung, we have to set it in the main thread!
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -125,6 +170,16 @@ didReceiveResponse:(NSURLResponse *)response
     [session invalidateAndCancel];
 }
 
+- (void) setBackupEsmsWithNotification:(NSString*) errorMessage {
+    if (debug) {
+        [self sendLocalNotificationForMessage:errorMessage soundFlag:NO];
+    }
+    NSData * data = [self getLatestEsmJsonData];
+    if (data != nil) {
+        [self setEsmSchedulesWithJSONData:data];
+
+    }
+}
 
 - (void) setEsmSchedulesWithJSONData:(NSData *)data {
     
@@ -135,7 +190,10 @@ didReceiveResponse:(NSURLResponse *)response
     
     if (error != nil) {
         NSLog(@"JSON FORMAT ERROR: %@", error.debugDescription);
+        if(debug)[self setBackupEsmsWithNotification:@"JSON Format Error: AWARE iOS sets backuped ESMs."];
         return;
+    }else{
+        [self setLatestEsmJsonData:data];
     }
     
     [self stopSchedules];
@@ -351,12 +409,11 @@ didReceiveResponse:(NSURLResponse *)response
 //    if (mulitEsm != nil) {
 //        mulitEsm = [self checkEsmIOS:mulitEsm];
 //    }
+//    double timeStamp = [[NSDate date] timeIntervalSince1970] * 1000;
+//    NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
     
-    double timeStamp = [[NSDate date] timeIntervalSince1970] * 1000;
-    NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
+    NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
     NSString * deviceId = [esm getDeviceId];
-    
-
     
     for ( SingleESMObject * singleEsm in mulitEsm ) {
         

@@ -19,6 +19,7 @@
 
 - (IBAction)pushedStudyRefreshButton:(id)sender;
 - (IBAction)pushedGoogleLogin:(id)sender;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *refreshButton;
 
 @property MQTTClient *client;
 

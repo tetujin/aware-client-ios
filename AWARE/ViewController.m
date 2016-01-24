@@ -12,6 +12,7 @@
 #import "AWAREStudy.h"
 #import "AWAREKeys.h"
 #import "ESMStorageHelper.h"
+#import "AWAREUtils.h"
 #import <CoreTelephony/CTCallCenter.h>
 #import <CoreTelephony/CTCall.h>
 
@@ -47,6 +48,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    NSLog(@"-- %@", [AWAREUtils getUnixTimestamp:[NSDate new]]);
     
     KEY_CEL_TITLE = @"title";
     KEY_CEL_DESC = @"desc";
@@ -277,9 +280,9 @@
     [_sensors addObject:[self getCelContent:@"Micrsoft Band" desc:@"Wearable sensor data (such as Heart Rate, UV, and Skin Temperature) from Microsoft Band." image:@"ic_action_msband" key:SENSOR_PLUGIN_MSBAND]];
 //    [_sensors addObject:[self getCelContent:@"Google Calendar" desc:@"This plugin stores your Google Calendar events." image:@"ic_action_google_cal" key:SENSOR_PLUGIN_GOOGLE_CAL_PULL]];
     [_sensors addObject:[self getCelContent:@"Google Login" desc:@"Multi-device management using Google Account." image:@"google_logo" key:SENSOR_PLUGIN_GOOGLE_LOGIN]];
-    [_sensors addObject:[self getCelContent:@"Blanced Campus Calendar" desc:@"This plugin gathers calendar events from all Google Calendars from the phone." image:@"ic_action_google_cal_grab" key:SENSOR_PLUGIN_GOOGLE_CAL_PULL]];
-    [_sensors addObject:[self getCelContent:@"Blanced Campus Journal" desc:@"This plugin creates new events in the journal calendar and sends a reminder email to the user to update the journal." image:@"ic_action_google_cal_push" key:SENSOR_PLUGIN_GOOGLE_CAL_PUSH]];
-    [_sensors addObject:[self getCelContent:@"Blanced Campus ESMs" desc:@"ESM Plugin" image:@"ic_action_campus" key:SENSOR_PLUGIN_CAMPUS]];
+    [_sensors addObject:[self getCelContent:@"Balanced Campus Calendar" desc:@"This plugin gathers calendar events from all Google Calendars from the phone." image:@"ic_action_google_cal_grab" key:SENSOR_PLUGIN_GOOGLE_CAL_PULL]];
+    [_sensors addObject:[self getCelContent:@"Balanced Campus Journal" desc:@"This plugin creates new events in the journal calendar and sends a reminder email to the user to update the journal." image:@"ic_action_google_cal_push" key:SENSOR_PLUGIN_GOOGLE_CAL_PUSH]];
+    [_sensors addObject:[self getCelContent:@"Balanced Campus ESMs" desc:@"ESM Plugin" image:@"ic_action_campus" key:SENSOR_PLUGIN_CAMPUS]];
     
     
     
@@ -491,6 +494,8 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
 
 
 - (IBAction)pushedStudyRefreshButton:(id)sender {
+    _refreshButton.enabled = NO;
+    
     @autoreleasepool {
         [_sensorManager stopAllSensors];
         NSLog(@"remove all sensors");
@@ -499,8 +504,6 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
     AWAREStudy *awareStudy = [[AWAREStudy alloc] init];
     [awareStudy refreshStudy];
     
-//    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-//    bool front = [defaults boolForKey:@"APP_STATE"];
     if (sender) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"AWARE Study"
                                                         message:@"AWARE Study was refreshed!"
@@ -511,13 +514,21 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
     } else {
         [self sendLocalNotificationForMessage:@"AWARE Configuration was refreshed in the background!" soundFlag:NO];
     }
+    
     [self performSelector:@selector(initList) withObject:0 afterDelay:2];
-//    [self initList];
     [self.tableView performSelector:@selector(reloadData) withObject:0 afterDelay:2];
+    
+    [self performSelector:@selector(refreshButtonEnableYes) withObject:0 afterDelay:8];
+    
 //    [self connectMqttServer];
 }
 
+- (void) refreshButtonEnableYes {
+    _refreshButton.enabled = YES;
+}
+
 - (IBAction)pushedGoogleLogin:(id)sender {
+
 }
 
 

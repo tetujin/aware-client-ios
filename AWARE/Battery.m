@@ -43,7 +43,7 @@
             // lastBatteryEvent = UIDeviceBatteryStateUnknown;
             [userDefaults setInteger:UIDeviceBatteryStateUnknown forKey:KEY_LAST_BATTERY_EVENT];
             // lastBatteryEventTimestamp = [self getUnixtimeWithNSDate:[NSDate new]];
-            [userDefaults setObject:[self getUnixtimeWithNSDate:[NSDate new]] forKey:KEY_LAST_BATTERY_EVENT_TIMESTAMP];
+            [userDefaults setObject:[AWAREUtils getUnixTimestamp:[NSDate new]] forKey:KEY_LAST_BATTERY_EVENT_TIMESTAMP];
             // lastBatteryEvent = [UIDevice currentDevice].batteryLevel * 100;
             [userDefaults setInteger:[UIDevice currentDevice].batteryLevel*100 forKey:KEY_LAST_BATTERY_LEVEL];
         }
@@ -128,8 +128,9 @@
     //    NSLog(@"battery status: %d",state); // 0 unknown, 1 unplegged, 2 charging, 3 full
     int batLeft = [myDevice batteryLevel] * 100;
     
-    double timeStamp = [[NSDate date] timeIntervalSince1970] * 1000;
-    NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
+//    double timeStamp = [[NSDate date] timeIntervalSince1970] * 1000;
+//    NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
+    NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
     NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
     [dic setObject:unixtime forKey:@"timestamp"];
     [dic setObject:[self getDeviceId] forKey:@"device_id"];
@@ -180,7 +181,8 @@
             break;
     };
     
-    NSNumber * currentTime = [self getUnixtimeWithNSDate:[NSDate new]];
+//    NSNumber * currentTime = [self getUnixtimeWithNSDate:[NSDate new]];
+    NSNumber * currentTime = [AWAREUtils getUnixTimestamp:[NSDate new]];
     int battery = [UIDevice currentDevice].batteryLevel * 100;
     NSNumber * currentBatteryLevel = [NSNumber numberWithInt:battery];
 
@@ -250,11 +252,11 @@
 }
 
 
-- (NSNumber *) getUnixtimeWithNSDate:(NSDate *) date {
-    double timeStamp = [date timeIntervalSince1970] * 1000;
-    NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
-    return unixtime;
-}
+//- (NSNumber *) getUnixtimeWithNSDate:(NSDate *) date {
+//    double timeStamp = [date timeIntervalSince1970] * 1000;
+//    NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
+//    return unixtime;
+//}
 
 
 

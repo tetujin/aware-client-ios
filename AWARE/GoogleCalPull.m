@@ -265,7 +265,7 @@
 - (void) saveCalEvent:(CalEvent *)calEvent{
 //    CalEvent *calEvent = [[CalEvent alloc] initWithEKEvent:event eventType:eventType];
     NSMutableDictionary * dic = [calEvent getCalEventAsDictionaryWithDeviceId:[self getDeviceId]
-                                                                    timestamp:[self getUnixtimeWithNSDate:[NSDate date]]];
+                                                                    timestamp:[AWAREUtils getUnixTimestamp:[NSDate new]]];
     [self saveData:dic toLocalFile:googleCalPullSensorName];
 //    NSLog(@"%@", dic);
 }
@@ -335,11 +335,11 @@
     return predicate;
 }
 
-- (NSNumber *) getUnixtimeWithNSDate:(NSDate *) date {
-    double timeStamp = [date timeIntervalSince1970] * 1000;
-    NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
-    return unixtime;
-}
+//- (NSNumber *) getUnixtimeWithNSDate:(NSDate *) date {
+//    double timeStamp = [date timeIntervalSince1970] * 1000;
+//    NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
+//    return unixtime;
+//}
 
 
 @end
