@@ -15,11 +15,12 @@
  *  for ESMs
  * ===========
  */
-- (void) addEsmText:(NSString*) esmText;
+//- (void) addEsmText:(NSString*) esmText;
+- (void) addEsmText:(NSString *)esmText withId:(NSString *)scheduleId timeout:(NSNumber *)timeout;
 - (void) removeEsmTexts;
 - (void) removeEsmWithText:(NSString*) esmText;
+//- (void) removeEsmWithScheduleId:(NSString *)scheduleId;
 - (NSArray *) getEsmTexts;
-
 /** remove expired schedules */
 // - (NSMutableArray *) removeExpiredEsms:(NSMutableArray*) esms;
 

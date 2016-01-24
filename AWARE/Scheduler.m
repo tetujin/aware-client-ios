@@ -12,6 +12,7 @@
 #import "SingleESMObject.h"
 #import "AWAREKeys.h"
 #import "ESM.h"
+#import "AWAREEsmUtils.h"
 
 @implementation Scheduler {
     NSMutableArray * scheduleManager; // This variable manages NSTimers.
@@ -209,7 +210,7 @@ didCompleteWithError:(NSError *)error {
     NSString* currentSchedules = @"";//[[NSString alloc] init];
     int i = 0;
     for (NSDictionary * schedule in schedules) {
-        NSString * notificationTitle = @"BlancedCampus Question";
+        NSString * notificationTitle = @"BalancedCampus Question";
         NSString * body = @"Tap to answer.";
         NSString * identifier = [schedule objectForKey:@"schedule_id"];
         NSArray * hours = [schedule objectForKey:@"hours"];
@@ -379,148 +380,89 @@ didCompleteWithError:(NSError *)error {
     // Get a schedule ID
     NSMutableDictionary * userInfo = sender.userInfo;
     NSString* scheduleId = [userInfo objectForKey:@"schedule_id"];
+    NSNumber* unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
     // Search the target sechedule by the schedule ID
     for (NSDictionary * dic in scheduleManager) {
         AWARESchedule *schedule = [dic objectForKey:KEY_SCHEDULE];
         NSLog(@"%@ - %@", schedule.scheduleId, scheduleId);
         
         if ([schedule.scheduleId isEqualToString:scheduleId]) {
-            NSString* esmStr = schedule.esmStr;
+            NSString* esmStr = [self setEsmApperedTimestamp:schedule.esmStr withTimestamp:unixtime];
+            NSNumber* timeout = [self getTimeout:schedule.esmStr];
             // Add esm text to local storage
             ESMStorageHelper * helper = [[ESMStorageHelper alloc] init];
-            [helper addEsmText:esmStr];
+            [helper addEsmText:esmStr withId:scheduleId timeout:timeout];
             [self sendLocalNotificationWithSchedule:schedule soundFlag:YES];
             
             // Save ESM
-            [self saveEsmObjects:schedule];
+            [AWAREEsmUtils saveEsmObjects:schedule withTimestamp:unixtime];
             break;
         }
     }
 }
 
 
+- (NSString *) setEsmApperedTimestamp:(NSString*) jsonStr withTimestamp:(NSNumber *) timestamp {
+    /**
+     * [{"esm":[{"":""},{"":""},{"":""}]}]
+     * - esms -> array
+     * - esm -> dictionary
+     * - elements -> array
+     * - element -> dictionary
+     */
+    
+    NSError *writeError = nil;
+    NSArray *esms = [NSJSONSerialization JSONObjectWithData:[jsonStr dataUsingEncoding:NSUTF8StringEncoding] options:0 error:&writeError];
 
-- (void) saveEsmObjects:(AWARESchedule *) schedule {
-    // ESM Objects
-    ESM *esm = [[ESM alloc] initWithSensorName:SENSOR_ESMS];
-    NSMutableArray* mulitEsm = schedule.esmObject.esms;
-    
-    // check esm_ios
-//    if (mulitEsm != nil) {
-//        mulitEsm = [self checkEsmIOS:mulitEsm];
-//    }
-//    double timeStamp = [[NSDate date] timeIntervalSince1970] * 1000;
-//    NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
-    
-    NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
-    NSString * deviceId = [esm getDeviceId];
-    
-    for ( SingleESMObject * singleEsm in mulitEsm ) {
-        
-        // Check esm_ios object
-        // if case of ( esm_type==4[Likert Scale] && radio_button.count > 0 ) => change esm_type to 2[Radio Button]
-        BOOL result = [self checkRadioBtnToLikert:singleEsm.esmObject];
-        if (result) {
-            NSLog(@"--- change esm type");
-            [singleEsm.esmObject setObject:@2 forKey:KEY_ESM_TYPE];
-        }else{
-            NSLog(@"----- ");
-        }
-        
-        NSMutableDictionary *dic = [self getEsmFormatDictionary:(NSMutableDictionary *)singleEsm.esmObject
-                                                   withTimesmap:unixtime
-                                                        devieId:deviceId];
-        [dic setObject:deviceId forKey:@"device_id"];
-        [dic setObject:unixtime forKey:@"timestamp"];
-        [dic setObject:@"0" forKey:KEY_ESM_STATUS]; // status is new
-        
-        [esm saveData:dic];
-//        NSLog(@"%@",dic);
+    if (writeError != nil) {
+        NSLog(@"ERROR: %@", writeError.debugDescription);
+        return jsonStr;
     }
+    
+    NSMutableArray * newEsms = [[NSMutableArray alloc] init];
+    for (NSDictionary * esm in esms) {
+        NSDictionary * elements = [esm objectForKey:@"esm"];
+        NSMutableDictionary * newElements = [[NSMutableDictionary alloc] initWithDictionary:elements];
+        [newElements setObject:timestamp forKey:@"timestamp"];
+        NSMutableDictionary * newEsm = [[NSMutableDictionary alloc] init];
+        [newEsm setObject:newElements forKey:@"esm"];
+        [newEsms addObject:newEsm];
+    }
+    
+    NSError * error = nil;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:newEsms options:0 error:&error];
+    if (error != nil) {
+        return jsonStr;
+    }
+    jsonStr = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    return jsonStr;
 }
 
-- (bool) checkRadioBtnToLikert:dic {
-    NSNumber * esmType = (NSNumber *)[dic objectForKey:@"esm_type"];
-    NSArray* array = (NSArray *)[dic objectForKey:@"esm_radios"];
-    NSString* className = NSStringFromClass([array class]);
-    if ( [className isEqualToString:@"__NSCFArray"] && array != nil && esmType != nil) {
-        if (array.count > 0 && [esmType isEqualToNumber:@4]) {
-            return YES;
-        }
+- (NSNumber *) getTimeout:(NSString*) jsonStr {
+    /**
+     * [{"esm":[{"":""},{"":""},{"":""}]}]
+     * - esms -> array
+     * - esm -> dictionary
+     * - elements -> array
+     * - element -> dictionary
+     */
+    NSNumber * timeout = [AWAREUtils getUnixTimestamp:[NSDate new]];
+    NSError *writeError = nil;
+    NSArray *esms = [NSJSONSerialization JSONObjectWithData:[jsonStr dataUsingEncoding:NSUTF8StringEncoding] options:0 error:&writeError];
+    if (writeError != nil) {
+        NSLog(@"ERROR: %@", writeError.debugDescription);
+        return timeout;
     }
-    return NO;
-}
 
-- (NSMutableDictionary *) getEsmFormatDictionary:(NSMutableDictionary *)originalDic
-                                    withTimesmap:(NSNumber *)unixtime
-                                         devieId:(NSString*) deviceId{
-    // make base dictionary from SingleEsmObject with device ID and timestamp
-    SingleESMObject *singleObject = [[SingleESMObject alloc] init];
-    NSMutableDictionary * dic = [singleObject getEsmDictionaryWithDeviceId:deviceId
-                                                                 timestamp:[unixtime doubleValue]
-                                                                      type:@0
-                                                                     title:@""
-                                                              instructions:@""
-                                                       expirationThreshold:@0
-                                                                   trigger:@""];
-    // init array objects to NSString object
-    [dic setObject:@"" forKey:KEY_ESM_RADIOS];
-    [dic setObject:@"" forKey:KEY_ESM_CHECKBOXES];
-    [dic setObject:@"" forKey:KEY_ESM_QUICK_ANSWERS];
-    
-    // add existing data to base dictionary of an esm
-    for (id key in [originalDic keyEnumerator]) {
-//        NSLog(@"Key: %@ => Value:%@" , key, [originalDic objectForKey:key]);
-        if([key isEqualToString:KEY_ESM_RADIOS]){
-            [dic setObject:[self convertArrayToCSVFormat:[originalDic objectForKey:key]] forKey:KEY_ESM_RADIOS];
-        }else if([key isEqualToString:KEY_ESM_CHECKBOXES]){
-            [dic setObject:[self convertArrayToCSVFormat:[originalDic objectForKey:key]] forKey:KEY_ESM_CHECKBOXES];
-        }else if([key isEqualToString:KEY_ESM_QUICK_ANSWERS]){
-            [dic setObject:[self convertArrayToCSVFormat:[originalDic objectForKey:key]] forKey:KEY_ESM_QUICK_ANSWERS];
-        }else{
-            NSObject *object = [originalDic objectForKey:key];
-            if (object == nil) {
-                object = @"";
-            }
-            [dic setObject:object forKey:key];
-        }
-    }
-    return dic;
-}
-
-
-- (NSString* ) convertArrayToCSVFormat:(NSArray *) array {
-    if (array == nil || array.count == 0){
-        return @"";
+//    NSMutableArray * newEsms = [[NSMutableArray alloc] init];
+    for (NSDictionary * esm in esms) {
+        NSDictionary * elements = [esm objectForKey:@"esm"];
+        NSNumber * timeoutSecond = (NSNumber *)[elements objectForKey:@"esm_expiration_threshold"];
+        NSDate * expireDate = [[NSDate alloc] initWithTimeIntervalSinceNow:[timeoutSecond doubleValue]];
+        timeout =[AWAREUtils getUnixTimestamp:expireDate];
     }
     
-    NSError * error;
-    NSData *jsondata = [NSJSONSerialization dataWithJSONObject:array options:0 error:&error];
-    if (error) {
-        NSLog(@"%@", error);
-    }
-    NSString* jsonString = [[NSString alloc] initWithData:jsondata encoding:NSUTF8StringEncoding];
-    if ([jsonString isEqualToString:@""] || jsonString == nil) {
-        return @"[]";
-    }
-    
-    return jsonString;
-    
-//    NSMutableString* csvStr = [[NSMutableString alloc] init];
-//    for (NSString * item in array) {
-//        [csvStr appendString:item];
-//        [csvStr appendString:@","];
-//    }
-//    NSRange rangeOfExtraText = [csvStr rangeOfString:@"," options:NSBackwardsSearch];
-//    if (rangeOfExtraText.location == NSNotFound) {
-//    }else{
-//        NSRange deleteRange = NSMakeRange(rangeOfExtraText.location, csvStr.length-rangeOfExtraText.location);
-//        [csvStr deleteCharactersInRange:deleteRange];
-//    }
-//    if (csvStr == nil) {
-//        return @"";
-//    }
-//    return csvStr;
+    return timeout;
 }
 
 
@@ -656,7 +598,7 @@ didCompleteWithError:(NSError *)error {
     [schedule setScheduleAsNormalWithDate:[NSDate new]
                              intervalType:SCHEDULE_INTERVAL_DAY
                                       esm:jsonStr
-                                    title:@"BlancedCampus Question"
+                                    title:@"BalancedCampus Question"
                                      body:@"Tap to answer."
                                identifier:@"---"];
     return schedule;
@@ -820,7 +762,7 @@ didCompleteWithError:(NSError *)error {
     [schedule setScheduleAsNormalWithDate:[NSDate new]
                              intervalType:SCHEDULE_INTERVAL_DAY
                                       esm:jsonStr
-                                    title:@"BlancedCampus Question"
+                                    title:@"BalancedCampus Question"
                                      body:@"Tap to answer."
                                identifier:@"---"];
     return schedule;

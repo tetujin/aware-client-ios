@@ -1002,10 +1002,10 @@
         NSDictionary *esmDic = [[uiElements objectAtIndex:i] objectForKey:KEY_OBJECT];
         NSArray * contents = [[uiElements objectAtIndex:i] objectForKey:KEY_ELEMENT];
         NSArray * labels = [[uiElements objectAtIndex:i] objectForKey:KEY_LABLES];
-        NSMutableDictionary *dic = [self getEsmFormatDictionary:(NSMutableDictionary *)esmDic
+        NSMutableDictionary *dic =  [self getEsmFormatDictionary:(NSMutableDictionary *)esmDic
                                                    withTimesmap:unixtime
                                                         devieId:deviceId];
-        [dic setObject:unixtime forKey:@"timestamp"];
+//        [dic setObject:unixtime forKey:@"timestamp"];
         [dic setObject:unixtime forKey:KEY_ESM_USER_ANSWER_TIMESTAMP];
         [dic setObject:deviceId forKey:@"device_id"];
         [dic setObject:ANSWERED forKey:KEY_ESM_STATUS]; // the status of the ESM (0-new, 1-dismissed, 2-answered, 3-expired) -> Defualt is zero(0).
@@ -1189,6 +1189,7 @@
         ESMStorageHelper * helper = [[ESMStorageHelper alloc] init];
         [helper removeEsmWithText:currentTextOfEsm];
         
+        
         if([helper getEsmTexts].count > 0){
 //            [self viewDidLoad] //TODO
             [self viewDidAppear:NO];
@@ -1313,7 +1314,7 @@
         NSMutableDictionary *dic = [self getEsmFormatDictionary:(NSMutableDictionary *)esmDic
                                                    withTimesmap:unixtime
                                                         devieId:deviceId];
-        [dic setObject:unixtime forKey:@"timestamp"];
+//        [dic setObject:unixtime forKey:@"timestamp"];
         [dic setObject:deviceId forKey:@"device_id"];
         // set answerd timestamp with KEY_ESM_USER_ANSWER_TIMESTAMP
         [dic setObject:unixtime forKey:KEY_ESM_USER_ANSWER_TIMESTAMP];

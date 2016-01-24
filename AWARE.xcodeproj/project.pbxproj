@@ -71,6 +71,7 @@
 		16D810261C06242F00605DE2 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16D810251C06242F00605DE2 /* Security.framework */; };
 		16D8102D1C06671500605DE2 /* ExternalAccessory.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16D8102C1C06671500605DE2 /* ExternalAccessory.framework */; };
 		16DEA2371C54557B00B607C9 /* AWAREUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 16DEA2361C54557B00B607C9 /* AWAREUtils.m */; };
+		16DEA23A1C5535B300B607C9 /* AWAREEsmUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 16DEA2391C5535B300B607C9 /* AWAREEsmUtils.m */; };
 		16E155331C252B4D00316321 /* AWAREPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 16E155321C252B4D00316321 /* AWAREPlugin.m */; };
 		16E155391C27C2AC00316321 /* EventKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16E155371C27C2AC00316321 /* EventKit.framework */; };
 		16E1553A1C27C2AC00316321 /* EventKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16E155381C27C2AC00316321 /* EventKitUI.framework */; };
@@ -234,6 +235,8 @@
 		16D8102C1C06671500605DE2 /* ExternalAccessory.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ExternalAccessory.framework; path = System/Library/Frameworks/ExternalAccessory.framework; sourceTree = SDKROOT; };
 		16DEA2351C54557B00B607C9 /* AWAREUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AWAREUtils.h; sourceTree = "<group>"; };
 		16DEA2361C54557B00B607C9 /* AWAREUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AWAREUtils.m; sourceTree = "<group>"; };
+		16DEA2381C5535B300B607C9 /* AWAREEsmUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AWAREEsmUtils.h; sourceTree = "<group>"; };
+		16DEA2391C5535B300B607C9 /* AWAREEsmUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AWAREEsmUtils.m; sourceTree = "<group>"; };
 		16E155311C252B4D00316321 /* AWAREPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AWAREPlugin.h; sourceTree = "<group>"; };
 		16E155321C252B4D00316321 /* AWAREPlugin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AWAREPlugin.m; sourceTree = "<group>"; };
 		16E155371C27C2AC00316321 /* EventKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKit.framework; path = System/Library/Frameworks/EventKit.framework; sourceTree = SDKROOT; };
@@ -609,6 +612,8 @@
 				1677AF311C2B4BDE00F7C482 /* MultiESMObject.m */,
 				1663BB7E1C2C94C3003F03DF /* ESMStorageHelper.h */,
 				1663BB7F1C2C94C3003F03DF /* ESMStorageHelper.m */,
+				16DEA2381C5535B300B607C9 /* AWAREEsmUtils.h */,
+				16DEA2391C5535B300B607C9 /* AWAREEsmUtils.m */,
 			);
 			name = ESM;
 			sourceTree = "<group>";
@@ -1060,6 +1065,7 @@
 				169A7B2A1BFF1C2300A7C06D /* Battery.m in Sources */,
 				1623CE771BFD1B2C00EFAD72 /* AWARE.xcdatamodeld in Sources */,
 				1677AF321C2B4BDE00F7C482 /* MultiESMObject.m in Sources */,
+				16DEA23A1C5535B300B607C9 /* AWAREEsmUtils.m in Sources */,
 				1623CEBC1BFE390600EFAD72 /* Accelerometer.m in Sources */,
 				164810851C21C08C00B830D9 /* ESM.m in Sources */,
 				1663BB801C2C94C3003F03DF /* ESMStorageHelper.m in Sources */,

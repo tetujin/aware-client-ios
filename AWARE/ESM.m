@@ -49,6 +49,7 @@
     "esm_scale_min_label text default '',"
     "esm_scale_step integer default 0";
 //    "UNIQUE (timestamp,device_id)";
+    NSLog(@"%@", query);
     [super createTable:query];
 }
 
@@ -70,20 +71,6 @@
                                                   repeats:YES];
     return YES;
 }
-
-//- (void) getTimezone {
-//    [NSTimeZone localTimeZone];
-//    NSLog(@"Timezone: %@", [[NSTimeZone localTimeZone] description]);
-//    NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
-//    NSNumber* unixtime = [NSNumber numberWithDouble:timeStamp];
-//    NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-//    [dic setObject:unixtime forKey:@"timestamp"];
-//    [dic setObject:[self getDeviceId] forKey:@"device_id"];
-//    [dic setObject:[[NSTimeZone localTimeZone] description] forKey:@"timezone"]; // real
-//    [self setLatestValue:[NSString stringWithFormat:@"%@", [[NSTimeZone localTimeZone] description]]];
-//    [self saveData:dic];
-//}
-
 
 - (BOOL) stopSensor {
     [uploadTimer invalidate];

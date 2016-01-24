@@ -102,7 +102,7 @@ NSString* const KEY_ESM_SCALE_STEP = @"esm_scale_step";
     [dic setObject:expirationThreshold forKey:KEY_ESM_EXPIRATION_THRESHOLD];
     [dic setObject:@"" forKey:KEY_ESM_STATUS];
     //        "double_esm_user_answer_timestamp default 0,"
-    [dic setObject:[NSNumber numberWithDouble:timestamp] forKey:KEY_ESM_USER_ANSWER_TIMESTAMP];
+    [dic setObject:@0 forKey:KEY_ESM_USER_ANSWER_TIMESTAMP];
     //        "esm_user_answer text default '',"
     [dic setObject:@"" forKey:KEY_ESM_USER_ANSWER];
     [dic setObject:trigger forKey:KEY_ESM_TRIGGER];
