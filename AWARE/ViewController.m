@@ -107,6 +107,9 @@
     }
     [self initList];
     
+    _refreshButton.enabled = NO;
+    [self performSelector:@selector(refreshButtonEnableYes) withObject:0 afterDelay:8];
+    
     listUpdateTimer = [NSTimer scheduledTimerWithTimeInterval:0.1f target:self.tableView selector:@selector(reloadData) userInfo:nil repeats:YES];
     
 }
@@ -277,6 +280,7 @@
     [_sensors addObject:[self getCelContent:@"Device Usage" desc:@"This plugin measures how much you use your device" image:@"ic_action_device_usage" key:SENSOR_PLUGIN_DEVICE_USAGE]];
     [_sensors addObject:[self getCelContent:@"Open Weather" desc:@"Weather information by OpenWeatherMap API." image:@"ic_action_openweather" key:SENSOR_PLUGIN_OPEN_WEATHER]];
     [_sensors addObject:[self getCelContent:@"NTPTime" desc:@"Measure device's clock drift from an NTP server." image:@"ic_action_ntptime" key:SENSOR_PLUGIN_NTPTIME]];
+    [_sensors addObject:[self getCelContent:@"Communication" desc:@"The Communication sensor logs communication events such as calls and messages, performed by or received by the user." image:@"ic_action_communication" key:SENSOR_CALLS]];
     [_sensors addObject:[self getCelContent:@"Micrsoft Band" desc:@"Wearable sensor data (such as Heart Rate, UV, and Skin Temperature) from Microsoft Band." image:@"ic_action_msband" key:SENSOR_PLUGIN_MSBAND]];
 //    [_sensors addObject:[self getCelContent:@"Google Calendar" desc:@"This plugin stores your Google Calendar events." image:@"ic_action_google_cal" key:SENSOR_PLUGIN_GOOGLE_CAL_PULL]];
     [_sensors addObject:[self getCelContent:@"Google Login" desc:@"Multi-device management using Google Account." image:@"google_logo" key:SENSOR_PLUGIN_GOOGLE_LOGIN]];
@@ -293,6 +297,8 @@
     [_sensors addObject:[self getCelContent:@"Maximum file size" desc:maximumFileSizeDesc image:@"" key:@"STUDY_CELL_MAX_FILE_SIZE"]]; //ic_action_mqtt
     NSString* version = [NSString stringWithFormat:@"%@",[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]];
     [_sensors addObject:[self getCelContent:@"Version" desc:version image:@"" key:@"STUDY_CELL_VIEW"]];
+
+    
 }
 
 
@@ -325,6 +331,7 @@
     NSString *key = [item objectForKey:KEY_CEL_SENSOR_NAME];
     if ([key isEqualToString:@"STUDY_CELL_DEBUG"]) { //Debug
         UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Debug Statement" message:@"" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"ON", @"OFF", nil];
+        alert.tag = 1;
         [alert show];
     } else if ([key isEqualToString:@"STUDY_CELL_SYNC"]) { //Sync
         UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Sync Interval (min)" message:@"Please inpute a sync interval to the server." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Done",nil];
@@ -333,9 +340,11 @@
         [[alert textFieldAtIndex:0] setKeyboardType:UIKeyboardTypeNumberPad];
         [[alert textFieldAtIndex:0] becomeFirstResponder];
         [alert textFieldAtIndex:0].text = [NSString stringWithFormat:@"%d", (int)uploadInterval/60];
+        alert.tag = 2;
         [alert show];
     }else if([key isEqualToString:@"STUDY_CELL_WIFI"]){ //wifi
         UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Sync Statement" message:@"Do you want to sync your data only WiFi enviroment?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"YES",@"NO",nil];
+        alert.tag = 3;
         [alert show];
     }else if([key isEqualToString:@"STUDY_CELL_MAX_FILE_SIZE"]){ //max file size
         UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Maximum Size of Post Data(KB)" message:@"Please input a maximum file size for uploading sensor data." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Done",nil];
@@ -350,6 +359,7 @@
         [[alert textFieldAtIndex:0] setKeyboardType:UIKeyboardTypeNumberPad];
         [[alert textFieldAtIndex:0] becomeFirstResponder];
         [alert textFieldAtIndex:0].text = maximumFileSizeDesc;
+        alert.tag = 4;
         [alert show];
     }else if([key isEqualToString:SENSOR_ESMS]){
         // [TODO] For testing ESM Module...
@@ -361,7 +371,8 @@
         [googlePush showTargetCalendarCondition];
     }else if([key isEqualToString:SENSOR_PLUGIN_CAMPUS]){
         NSString* schedules = [_sensorManager getLatestSensorData:SENSOR_PLUGIN_CAMPUS];
-         UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Current ESM Schedules" message:schedules delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Current ESM Schedules" message:schedules delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        alert.tag = 7;
         [alert show];
     }else if([key isEqualToString:SENSOR_PLUGIN_GOOGLE_LOGIN]){
 //        [self pushedGoogleLogin:nil];
@@ -504,6 +515,11 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
     AWAREStudy *awareStudy = [[AWAREStudy alloc] init];
     [awareStudy refreshStudy];
     
+    [self performSelector:@selector(initList) withObject:0 afterDelay:2];
+    [self.tableView performSelector:@selector(reloadData) withObject:0 afterDelay:2];
+    
+    [self performSelector:@selector(refreshButtonEnableYes) withObject:0 afterDelay:8];
+    
     if (sender) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"AWARE Study"
                                                         message:@"AWARE Study was refreshed!"
@@ -514,11 +530,6 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
     } else {
         [self sendLocalNotificationForMessage:@"AWARE Configuration was refreshed in the background!" soundFlag:NO];
     }
-    
-    [self performSelector:@selector(initList) withObject:0 afterDelay:2];
-    [self.tableView performSelector:@selector(reloadData) withObject:0 afterDelay:2];
-    
-    [self performSelector:@selector(refreshButtonEnableYes) withObject:0 afterDelay:8];
     
 //    [self connectMqttServer];
 }
@@ -536,133 +547,6 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
 {
     NSLog(@"Back button is pressed!");
     [self.navigationController popToRootViewControllerAnimated:YES];
-    return YES;
-}
-
-
-- (bool) connectMqttServer {
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    // if Study ID is new, AWARE adds new Device ID to the AWARE server.
-    mqttServer = [userDefaults objectForKey:KEY_MQTT_SERVER];
-    oldStudyId = [userDefaults objectForKey:KEY_STUDY_ID];
-    mqttPassword = [userDefaults objectForKey:KEY_MQTT_PASS];
-    mqttUserName = [userDefaults objectForKey:KEY_MQTT_USERNAME];
-    mqttPort = [userDefaults objectForKey:KEY_MQTT_PORT];
-    mqttKeepAlive = [userDefaults objectForKey:KEY_MQTT_KEEP_ALIVE];
-    mqttQos = [userDefaults objectForKey:KEY_MQTT_QOS];
-    studyId = [userDefaults objectForKey:KEY_STUDY_ID];
-//    NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
-//    NSNumber* unixtime = [NSNumber numberWithDouble:timeStamp];
-    if (mqttPassword == nil) {
-        NSLog(@"An AWARE study is not registed! Please read QR code");
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"AWARE Study"
-                                                        message:@"You don't registed an AWARE study yet. Please read a QR code for AWARE study."
-                                                       delegate:nil
-                                              cancelButtonTitle:@"OK"
-                                              otherButtonTitles:nil];
-        [alert show];
-        return NO;
-    }
-    
-    if ([self.client connected]) {
-        [self.client disconnectWithCompletionHandler:^(NSUInteger code) {
-            NSLog(@"disconnected!");
-            [self.client unsubscribe:[NSString stringWithFormat:@"%@/%@/broadcasts",studyId,mqttUserName] withCompletionHandler:^{
-                //
-            }];
-            [self.client unsubscribe:[NSString stringWithFormat:@"%@/%@/esm", studyId,mqttUserName] withCompletionHandler:^{
-                //                         NSLog(grantedQos.description);
-            }];
-            [self.client unsubscribe:[NSString stringWithFormat:@"%@/%@/configuration",studyId,mqttUserName]  withCompletionHandler:^ {
-                //                         NSLog(grantedQos.description);
-            }];
-            [self.client unsubscribe:[NSString stringWithFormat:@"%@/%@/#",studyId,mqttUserName] withCompletionHandler:^ {
-                //                         NSLog(grantedQos.description);
-            }];
-            
-            
-            //Device specific subscribes
-            [self.client unsubscribe:[NSString stringWithFormat:@"%@/esm", mqttUserName] withCompletionHandler:^{
-                //                         NSLog(grantedQos.description);
-            }];
-            [self.client unsubscribe:[NSString stringWithFormat:@"%@/broadcasts", mqttUserName] withCompletionHandler:^{
-                //                         NSLog(grantedQos.description);
-            }];
-            [self.client unsubscribe:[NSString stringWithFormat:@"%@/configuration", mqttUserName] withCompletionHandler:^ {
-                //                         NSLog(grantedQos.description);
-            }];
-            [self.client unsubscribe:[NSString stringWithFormat:@"%@/#", mqttUserName] withCompletionHandler:^{
-                //                         NSLog(grantedQos.description);
-            }];
-            //                                 [self uploadSensorData];
-
-        }];
-    }
-    
-    self.client = [[MQTTClient alloc] initWithClientId:mqttUserName cleanSession:YES];
-    [self.client setPort:[mqttPort intValue]];
-    [self.client setKeepAlive:[mqttKeepAlive intValue]];
-    [self.client setPassword:mqttPassword];
-    [self.client setUsername:mqttUserName];
-    // define the handler that will be called when MQTT messages are received by the client
-    [self.client setMessageHandler:^(MQTTMessage *message) {
-        NSString *text = message.payloadString;
-//        NSLog(@"Received messages %@", text);
-        NSData *data = [text dataUsingEncoding:NSUTF8StringEncoding];
-        NSDictionary * dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
-        NSLog(@"%@",dic);
-        NSArray *array = [dic objectForKey:KEY_SENSORS];
-        NSArray *plugins = [dic objectForKey:KEY_PLUGINS];
-        [userDefaults setObject:array forKey:KEY_SENSORS];
-        [userDefaults setObject:plugins forKey:KEY_PLUGINS];
-        [userDefaults synchronize];
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            // Refreh sensors
-            [_sensorManager stopAllSensors];
-            [self initList];
-            [self.tableView reloadData];
-            [self sendLocalNotificationForMessage:@"AWARE study is updated via MQTT." soundFlag:NO];
-        });
-//        NSLog(@"%@", dic);
-    }];
-
-    [self.client connectToHost:mqttServer
-             completionHandler:^(MQTTConnectionReturnCode code) {
-                 if (code == ConnectionAccepted) {
-                     NSLog(@"Connected to the MQTT server!");
-                     // when the client is connected, send a MQTT message
-                     //Study specific subscribes
-                     [self.client subscribe:[NSString stringWithFormat:@"%@/%@/broadcasts",studyId,mqttUserName] withQos:[mqttQos intValue] completionHandler:^(NSArray *grantedQos) {
-//                         NSLog(grantedQos.description);
-                     }];
-                     [self.client subscribe:[NSString stringWithFormat:@"%@/%@/esm", studyId,mqttUserName] withQos:[mqttQos intValue]  completionHandler:^(NSArray *grantedQos) {
-//                         NSLog(grantedQos.description);
-                     }];
-                     [self.client subscribe:[NSString stringWithFormat:@"%@/%@/configuration",studyId,mqttUserName]  withQos:[mqttQos intValue] completionHandler:^(NSArray *grantedQos) {
-//                         NSLog(grantedQos.description);
-                     }];
-                     [self.client subscribe:[NSString stringWithFormat:@"%@/%@/#",studyId,mqttUserName] withQos:[mqttQos intValue]  completionHandler:^(NSArray *grantedQos) {
-//                         NSLog(grantedQos.description);
-                     }];
-
-
-                     //Device specific subscribes
-                     [self.client subscribe:[NSString stringWithFormat:@"%@/esm", mqttUserName] withQos:[mqttQos intValue] completionHandler:^(NSArray *grantedQos) {
-//                         NSLog(grantedQos.description);
-                     }];
-                     [self.client subscribe:[NSString stringWithFormat:@"%@/broadcasts", mqttUserName] withQos:[mqttQos intValue] completionHandler:^(NSArray *grantedQos) {
-//                         NSLog(grantedQos.description);
-                     }];
-                     [self.client subscribe:[NSString stringWithFormat:@"%@/configuration", mqttUserName] withQos:[mqttQos intValue] completionHandler:^(NSArray *grantedQos) {
-//                         NSLog(grantedQos.description);
-                     }];
-                     [self.client subscribe:[NSString stringWithFormat:@"%@/#", mqttUserName] withQos:[mqttQos intValue] completionHandler:^(NSArray *grantedQos) {
-//                         NSLog(grantedQos.description);
-                     }];
-                     //                                 [self uploadSensorData];
-                 }
-             }];
     return YES;
 }
 
@@ -709,5 +593,135 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
         return targetNSDate;
     }
 }
+
+
+
+//- (bool) connectMqttServer {
+//    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+//    // if Study ID is new, AWARE adds new Device ID to the AWARE server.
+//    mqttServer = [userDefaults objectForKey:KEY_MQTT_SERVER];
+//    oldStudyId = [userDefaults objectForKey:KEY_STUDY_ID];
+//    mqttPassword = [userDefaults objectForKey:KEY_MQTT_PASS];
+//    mqttUserName = [userDefaults objectForKey:KEY_MQTT_USERNAME];
+//    mqttPort = [userDefaults objectForKey:KEY_MQTT_PORT];
+//    mqttKeepAlive = [userDefaults objectForKey:KEY_MQTT_KEEP_ALIVE];
+//    mqttQos = [userDefaults objectForKey:KEY_MQTT_QOS];
+//    studyId = [userDefaults objectForKey:KEY_STUDY_ID];
+////    NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
+////    NSNumber* unixtime = [NSNumber numberWithDouble:timeStamp];
+//    if (mqttPassword == nil) {
+//        NSLog(@"An AWARE study is not registed! Please read QR code");
+//        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"AWARE Study"
+//                                                        message:@"You don't registed an AWARE study yet. Please read a QR code for AWARE study."
+//                                                       delegate:nil
+//                                              cancelButtonTitle:@"OK"
+//                                              otherButtonTitles:nil];
+//        [alert show];
+//        return NO;
+//    }
+//    
+//    if ([self.client connected]) {
+//        [self.client disconnectWithCompletionHandler:^(NSUInteger code) {
+//            NSLog(@"disconnected!");
+//            [self.client unsubscribe:[NSString stringWithFormat:@"%@/%@/broadcasts",studyId,mqttUserName] withCompletionHandler:^{
+//                //
+//            }];
+//            [self.client unsubscribe:[NSString stringWithFormat:@"%@/%@/esm", studyId,mqttUserName] withCompletionHandler:^{
+//                //                         NSLog(grantedQos.description);
+//            }];
+//            [self.client unsubscribe:[NSString stringWithFormat:@"%@/%@/configuration",studyId,mqttUserName]  withCompletionHandler:^ {
+//                //                         NSLog(grantedQos.description);
+//            }];
+//            [self.client unsubscribe:[NSString stringWithFormat:@"%@/%@/#",studyId,mqttUserName] withCompletionHandler:^ {
+//                //                         NSLog(grantedQos.description);
+//            }];
+//            
+//            
+//            //Device specific subscribes
+//            [self.client unsubscribe:[NSString stringWithFormat:@"%@/esm", mqttUserName] withCompletionHandler:^{
+//                //                         NSLog(grantedQos.description);
+//            }];
+//            [self.client unsubscribe:[NSString stringWithFormat:@"%@/broadcasts", mqttUserName] withCompletionHandler:^{
+//                //                         NSLog(grantedQos.description);
+//            }];
+//            [self.client unsubscribe:[NSString stringWithFormat:@"%@/configuration", mqttUserName] withCompletionHandler:^ {
+//                //                         NSLog(grantedQos.description);
+//            }];
+//            [self.client unsubscribe:[NSString stringWithFormat:@"%@/#", mqttUserName] withCompletionHandler:^{
+//                //                         NSLog(grantedQos.description);
+//            }];
+//            //                                 [self uploadSensorData];
+//
+//        }];
+//    }
+//    
+//    self.client = [[MQTTClient alloc] initWithClientId:mqttUserName cleanSession:YES];
+//    [self.client setPort:[mqttPort intValue]];
+//    [self.client setKeepAlive:[mqttKeepAlive intValue]];
+//    [self.client setPassword:mqttPassword];
+//    [self.client setUsername:mqttUserName];
+//    // define the handler that will be called when MQTT messages are received by the client
+//    [self.client setMessageHandler:^(MQTTMessage *message) {
+//        NSString *text = message.payloadString;
+////        NSLog(@"Received messages %@", text);
+//        NSData *data = [text dataUsingEncoding:NSUTF8StringEncoding];
+//        NSDictionary * dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
+//        NSLog(@"%@",dic);
+//        NSArray *array = [dic objectForKey:KEY_SENSORS];
+//        NSArray *plugins = [dic objectForKey:KEY_PLUGINS];
+//        [userDefaults setObject:array forKey:KEY_SENSORS];
+//        [userDefaults setObject:plugins forKey:KEY_PLUGINS];
+//        [userDefaults synchronize];
+//        
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            // Refreh sensors
+//            [_sensorManager stopAllSensors];
+//            [self initList];
+//            [self.tableView reloadData];
+//            [self sendLocalNotificationForMessage:@"AWARE study is updated via MQTT." soundFlag:NO];
+//        });
+////        NSLog(@"%@", dic);
+//    }];
+//
+//    [self.client connectToHost:mqttServer
+//             completionHandler:^(MQTTConnectionReturnCode code) {
+//                 if (code == ConnectionAccepted) {
+//                     NSLog(@"Connected to the MQTT server!");
+//                     // when the client is connected, send a MQTT message
+//                     //Study specific subscribes
+//                     [self.client subscribe:[NSString stringWithFormat:@"%@/%@/broadcasts",studyId,mqttUserName] withQos:[mqttQos intValue] completionHandler:^(NSArray *grantedQos) {
+////                         NSLog(grantedQos.description);
+//                     }];
+//                     [self.client subscribe:[NSString stringWithFormat:@"%@/%@/esm", studyId,mqttUserName] withQos:[mqttQos intValue]  completionHandler:^(NSArray *grantedQos) {
+////                         NSLog(grantedQos.description);
+//                     }];
+//                     [self.client subscribe:[NSString stringWithFormat:@"%@/%@/configuration",studyId,mqttUserName]  withQos:[mqttQos intValue] completionHandler:^(NSArray *grantedQos) {
+////                         NSLog(grantedQos.description);
+//                     }];
+//                     [self.client subscribe:[NSString stringWithFormat:@"%@/%@/#",studyId,mqttUserName] withQos:[mqttQos intValue]  completionHandler:^(NSArray *grantedQos) {
+////                         NSLog(grantedQos.description);
+//                     }];
+//
+//
+//                     //Device specific subscribes
+//                     [self.client subscribe:[NSString stringWithFormat:@"%@/esm", mqttUserName] withQos:[mqttQos intValue] completionHandler:^(NSArray *grantedQos) {
+////                         NSLog(grantedQos.description);
+//                     }];
+//                     [self.client subscribe:[NSString stringWithFormat:@"%@/broadcasts", mqttUserName] withQos:[mqttQos intValue] completionHandler:^(NSArray *grantedQos) {
+////                         NSLog(grantedQos.description);
+//                     }];
+//                     [self.client subscribe:[NSString stringWithFormat:@"%@/configuration", mqttUserName] withQos:[mqttQos intValue] completionHandler:^(NSArray *grantedQos) {
+////                         NSLog(grantedQos.description);
+//                     }];
+//                     [self.client subscribe:[NSString stringWithFormat:@"%@/#", mqttUserName] withQos:[mqttQos intValue] completionHandler:^(NSArray *grantedQos) {
+////                         NSLog(grantedQos.description);
+//                     }];
+//                     //                                 [self uploadSensorData];
+//                 }
+//             }];
+//    return YES;
+//}
+
+
 
 @end

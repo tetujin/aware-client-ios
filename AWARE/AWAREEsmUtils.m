@@ -13,7 +13,8 @@
 @implementation AWAREEsmUtils
 
 
-+ (void) saveEsmObjects:(AWARESchedule *) schedule withTimestamp:(NSNumber *)timestamp{
++ (void) saveEsmObjects:(AWARESchedule *) schedule
+          withTimestamp:(NSNumber *)timestamp {
     // ESM Objects
     ESM *esm = [[ESM alloc] initWithSensorName:SENSOR_ESMS];
     NSMutableArray* mulitEsm = schedule.esmObject.esms;

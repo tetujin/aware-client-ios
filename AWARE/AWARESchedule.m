@@ -91,7 +91,7 @@ NSString * const SCHEDULE_ACTION_TYPE_SERVICE = @"SCHEDULE_ACTION_TYPE_SERVICE";
                           identifier:(NSString*)identifier {
     double intervalValue = 0;
     if ([intervalType isEqualToString:SCHEDULE_INTERVAL_TEST]) {
-        intervalValue = 60;
+        intervalValue = 60*3;
 //        interval = NSMinuteCalendarUnit;
     } else if ([intervalType isEqualToString:SCHEDULE_INTERVAL_HOUR]) {
         intervalValue = 60*60;//hour

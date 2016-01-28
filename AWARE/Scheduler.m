@@ -79,32 +79,55 @@
     
     double unxtime = [[NSDate new] timeIntervalSince1970];
     _getConfigFileIdentifier = [NSString stringWithFormat:@"%@%f", _getConfigFileIdentifier, unxtime];
-    if ([self isForeground]) {
-        sessionConfig = [NSURLSessionConfiguration ephemeralSessionConfiguration];
-    }else{
-        sessionConfig = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:_getConfigFileIdentifier];
-    }
-    
-    sessionConfig.timeoutIntervalForRequest = 180; //180.0;
-    sessionConfig.HTTPMaximumConnectionsPerHost = 180; //180;
-    sessionConfig.timeoutIntervalForResource = 60*60*24; // 1 day
-    sessionConfig.allowsCellularAccess = YES;
-    sessionConfig.discretionary = YES;
     
     NSString *post = [NSString stringWithFormat:@"device_id=%@", [self getDeviceId] ];
     NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
     NSString *postLength = [NSString stringWithFormat:@"%ld", [postData length]];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
     [request setURL:[NSURL URLWithString:url]];
-//    [request setHTTPMethod:@"POST"];
+    //    [request setHTTPMethod:@"POST"];
     [request setHTTPMethod:@"POST"];
     [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
     [request setHTTPBody:postData];
     
-    NSLog(@"--- This is background task for %@ ----", [self getSensorName] );
-    session = [NSURLSession sessionWithConfiguration:sessionConfig delegate:self delegateQueue:nil];
-    NSURLSessionDataTask* dataTask = [session dataTaskWithRequest:request];
-    [dataTask resume];
+    if ([self isForeground]) {
+        NSURLSession *session = [NSURLSession sharedSession];
+        
+        [[session dataTaskWithURL:[NSURL URLWithString:url] completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+//            NSString* resString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+//            NSLog(@"---> %@", resString);
+            
+            if (response && ! error) {
+                // NOTE: For registrate a NSTimer in the backgroung, we have to set it in the main thread!
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self setEsmSchedulesWithJSONData:data];
+                });
+            }else{
+                NSString* errorMessage = [NSString stringWithFormat:@"HTTP Connection Error: %@ %ld", error.debugDescription , error.code];
+                NSLog(@"%@", errorMessage);
+                // NOTE: case of error
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self setBackupEsmsWithNotification:errorMessage];
+                });
+                
+            }
+        }] resume];
+    }else{
+//        sessionConfig = [NSURLSessionConfiguration ephemeralSessionConfiguration];
+//        sessionConfig = [NSURLSessionConfiguration defaultSessionConfiguration];
+
+        sessionConfig = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:_getConfigFileIdentifier];
+        sessionConfig.timeoutIntervalForRequest = 180; //180.0;
+        sessionConfig.HTTPMaximumConnectionsPerHost = 180; //180;
+        sessionConfig.timeoutIntervalForResource = 60*60*24; // 1 day
+        sessionConfig.allowsCellularAccess = YES;
+        sessionConfig.discretionary = YES;
+        
+        NSLog(@"--- This is background task for %@ ----", [self getSensorName] );
+        session = [NSURLSession sessionWithConfiguration:sessionConfig delegate:self delegateQueue:nil];
+        NSURLSessionDataTask* dataTask = [session dataTaskWithRequest:request];
+        [dataTask resume];
+    }
 }
 
 
@@ -116,7 +139,7 @@ didReceiveResponse:(NSURLResponse *)response
     int responseCode = (int)[httpResponse statusCode];
     NSLog(@"%d",responseCode);
 //    if(response != 200 && debug){
-//        [self sendLocalNotificationForMessage: soundFlag:<#(BOOL)#>]
+//        [self sendLocalNotificationForMessage: soundFlag:]
 //    }
     [session finishTasksAndInvalidate];
     [session invalidateAndCancel];
@@ -127,25 +150,9 @@ didReceiveResponse:(NSURLResponse *)response
 -(void)URLSession:(NSURLSession *)session
          dataTask:(NSURLSessionDataTask *)dataTask
    didReceiveData:(NSData *)data {
-    
     [session finishTasksAndInvalidate];
     [session invalidateAndCancel];
     [resultData appendData:data];
-    
-//    NSLog(@"--> %@", session.configuration.identifier);
-//    if ([session.configuration.identifier isEqualToString:_getConfigFileIdentifier]) {
-        // NOTE: For registrate a NSTimer in the backgroung, we have to set it in the main thread!
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            [self.tableView reloadData];
-//        [resultData appendData:data];
-//
-//        [self setEsmSchedulesWithJSONData:data];
-//        });
-//    }else{
-//
-//    }
-    [session finishTasksAndInvalidate];
-    [session invalidateAndCancel];
 }
 
 
@@ -178,7 +185,6 @@ didCompleteWithError:(NSError *)error {
     NSData * data = [self getLatestEsmJsonData];
     if (data != nil) {
         [self setEsmSchedulesWithJSONData:data];
-
     }
 }
 
@@ -291,6 +297,8 @@ didCompleteWithError:(NSError *)error {
 
     NSMutableDictionary * dic = [[NSMutableDictionary alloc] init];
     [dic setObject:CONFIG_URL forKey:@"configUrl"];
+    // --- TEST --
+    dailyUpdate = [AWAREUtils getTargetNSDate:[NSDate new] hour:11 minute:40 second:0 nextDay:NO];
     dailyQuestionUpdateTimer = [[NSTimer alloc] initWithFireDate:dailyUpdate
                                                         interval:60*60*24
                                                           target:self
@@ -298,9 +306,16 @@ didCompleteWithError:(NSError *)error {
                                                         userInfo:dic
                                                          repeats:YES];
     NSRunLoop *runLoop = [NSRunLoop currentRunLoop];
-    [runLoop addTimer:dailyQuestionUpdateTimer forMode:NSDefaultRunLoopMode];// NSRunLoopCommonModes];//
+    [runLoop addTimer:dailyQuestionUpdateTimer forMode:NSDefaultRunLoopMode];
     
+    
+//    dailyQuestionUpdateTimer = [NSTimer timerWithTimeInterval:0
+//                                                       target:self
+//                                                     selector:@selector(setConfigFile:)
+//                                                     userInfo:dic
+//                                                      repeats:NO];
     [dailyQuestionUpdateTimer fire];
+    
     // init scheduler
     
     // Make schdules
@@ -395,7 +410,7 @@ didCompleteWithError:(NSError *)error {
             [self sendLocalNotificationWithSchedule:schedule soundFlag:YES];
             
             // Save ESM
-            [AWAREEsmUtils saveEsmObjects:schedule withTimestamp:unixtime];
+//            [AWAREEsmUtils saveEsmObjects:schedule withTimestamp:unixtime];
             break;
         }
     }

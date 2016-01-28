@@ -36,6 +36,7 @@
 #import "GoogleLogin.h"
 #import "Scheduler.h"
 #import "FusedLocations.h"
+#import "Calls.h"
 
 @implementation AWARESensorManager
 
@@ -120,6 +121,8 @@
                 }else if([key isEqualToString:SENSOR_ESMS]){
                     awareSensor = [[ESM alloc] initWithSensorName:SENSOR_ESMS];
 //                    [awareSensor startSensor:uploadTime withSettings:settings];
+                }else if([key isEqualToString:SENSOR_CALLS]){
+                    awareSensor = [[Calls alloc] initWithSensorName:SENSOR_CALLS];
                 }
                 
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, i * 0.5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{

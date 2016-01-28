@@ -81,19 +81,6 @@
     double unxtime = [[NSDate new] timeIntervalSince1970];
     _getSettingIdentifier = [NSString stringWithFormat:@"%@%f", _getSettingIdentifier, unxtime];
     
-    if ([self isForeground]) {
-        sessionConfig = [NSURLSessionConfiguration ephemeralSessionConfiguration];
-    }else{
-//        sessionConfig = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:_getConfigFileIdentifier];
-        sessionConfig = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:_getSettingIdentifier];
-    }
-
-    sessionConfig.timeoutIntervalForRequest = 120.0;
-    sessionConfig.HTTPMaximumConnectionsPerHost = 60;
-    sessionConfig.timeoutIntervalForResource = 60; //60*60*24; // 1 day
-    sessionConfig.allowsCellularAccess = YES;
-    sessionConfig.discretionary = YES;
-    
     NSString *post = [NSString stringWithFormat:@"device_id=%@", uuid];
     NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
     NSString *postLength = [NSString stringWithFormat:@"%ld", [postData length]];
@@ -103,11 +90,40 @@
     [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
     [request setHTTPBody:postData];
     
-    NSLog(@"--- This is background task ----");
-    session = [NSURLSession sessionWithConfiguration:sessionConfig delegate:self delegateQueue:nil];
-    NSURLSessionDataTask* dataTask = [session dataTaskWithRequest:request];
-    [dataTask resume];
-
+//        sessionConfig = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:_getConfigFileIdentifier];
+    
+    if ([self isForeground]) {
+        NSURLSession *session = [NSURLSession sharedSession];
+        
+        [[session dataTaskWithRequest: request  completionHandler: ^(NSData *data, NSURLResponse *response, NSError *error) {
+            
+            if (response && ! error) {
+                NSString *responseString = [[NSString alloc] initWithData: data  encoding: NSUTF8StringEncoding];
+                NSLog(@"Success: %@", responseString);
+                [self setStudySettings:data];
+                [session finishTasksAndInvalidate];
+                [session invalidateAndCancel];
+            }
+            else {
+                NSLog(@"Error: %@", error);
+                [session finishTasksAndInvalidate];
+                [session invalidateAndCancel];
+            }
+            
+        }] resume];
+    }else{
+        sessionConfig = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:_getSettingIdentifier];
+        sessionConfig.timeoutIntervalForRequest = 120.0;
+        sessionConfig.HTTPMaximumConnectionsPerHost = 60;
+        sessionConfig.timeoutIntervalForResource = 60; //60*60*24; // 1 day
+        sessionConfig.allowsCellularAccess = YES;
+        sessionConfig.discretionary = YES;
+        
+        NSLog(@"--- This is background task ----");
+        session = [NSURLSession sessionWithConfiguration:sessionConfig delegate:self delegateQueue:nil];
+        NSURLSessionDataTask* dataTask = [session dataTaskWithRequest:request];
+        [dataTask resume];
+    }
     return YES;
 }
 

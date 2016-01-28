@@ -20,7 +20,7 @@
 - (BOOL) stopSensor;
 @end
 
-@interface AWARESensor : NSObject <AWARESensorDelegate, NSURLSessionDataDelegate, NSURLSessionTaskDelegate>
+@interface AWARESensor : NSObject <AWARESensorDelegate, NSURLSessionDataDelegate, NSURLSessionTaskDelegate, UIAlertViewDelegate>
 
 - (instancetype) initWithSensorName:(NSString *) sensorName;
 
