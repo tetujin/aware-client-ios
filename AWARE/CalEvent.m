@@ -312,16 +312,38 @@
     if(_calendarId == nil) [dic setObject:@"" forKey:CAL_ID];
         
 //    [query appendFormat:@"%@ text default '',", ACCOUNT_NAME];
-    [dic setObject:_accountName forKey:ACCOUNT_NAME];
-    if(_accountName == nil) [dic setObject:@"" forKey:ACCOUNT_NAME];
+    if(_accountName == nil){
+        [dic setObject:@"" forKey:ACCOUNT_NAME];
+    }else{
+        if ([AWAREUtils validateEmailWithString:_accountName]) {
+            [dic setObject:[AWAREUtils sha1:_accountName] forKey:ACCOUNT_NAME];
+        }else{
+            [dic setObject:_accountName forKey:ACCOUNT_NAME];
+        }
+    }
     
 //    [query appendFormat:@"%@ text default '',", CAL_NAME];
-    [dic setObject:_calendarName forKey:CAL_NAME];
-    if(_calendarName == nil) [dic setObject:@"" forKey:CAL_NAME];
+//    [dic setObject:_calendarName forKey:CAL_NAME];
+    if(_calendarName == nil){
+        [dic setObject:@"" forKey:CAL_NAME];
+    }else{
+        if ([AWAREUtils validateEmailWithString:_calendarName]) {
+            [dic setObject:[AWAREUtils sha1:_calendarName] forKey:CAL_NAME];
+        }else{
+            [dic setObject:_calendarName forKey:CAL_NAME];
+        }
+    }
     
 //    [query appendFormat:@"%@ text default '',", OWNER_ACCOUNT];
-    [dic setObject:_ownerAccount forKey:OWNER_ACCOUNT];
-    if(_ownerAccount == nil) [dic setObject:@"" forKey:OWNER_ACCOUNT];
+    if(_ownerAccount == nil) {
+        [dic setObject:@"" forKey:OWNER_ACCOUNT];
+    }else{
+        if ([AWAREUtils validateEmailWithString:_ownerAccount]) {
+            [dic setObject:[AWAREUtils sha1:_ownerAccount] forKey:OWNER_ACCOUNT];
+        } else {
+            [dic setObject:_ownerAccount forKey:OWNER_ACCOUNT];
+        }
+    }
     
 //    [query appendFormat:@"%@ text default '',", CAL_COLOR];
     [dic setObject:_calendarColor forKey:CAL_COLOR];

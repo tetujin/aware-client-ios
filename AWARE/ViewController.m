@@ -17,6 +17,7 @@
 #import <CoreTelephony/CTCall.h>
 
 #import "GoogleCalPush.h"
+#import "ApplicationHistory.h"
 
 @interface ViewController () {
     NSString *KEY_CEL_TITLE;
@@ -70,7 +71,8 @@
     uploadInterval = 60*15;
     
     // daily study update
-    NSDate* dailyUpdateTime = [self getTargetTimeAsNSDate:[NSDate date] hour:2 minute:0 second:0];
+//    NSDate* dailyUpdateTime = [AWAREUtils getTargetNSDate:[NSDate new] hour:2 minute:20 second:0 nextDay:YES]; //For Debug
+  NSDate* dailyUpdateTime = [AWAREUtils getTargetNSDate:[NSDate new] hour:2 minute:0 second:0 nextDay:YES];
     dailyUpdateTimer = [[NSTimer alloc] initWithFireDate:dailyUpdateTime
                                                 interval:60*60*24
                                                   target:self
@@ -111,7 +113,6 @@
     [self performSelector:@selector(refreshButtonEnableYes) withObject:0 afterDelay:8];
     
     listUpdateTimer = [NSTimer scheduledTimerWithTimeInterval:0.1f target:self.tableView selector:@selector(reloadData) userInfo:nil repeats:YES];
-    
 }
 
 - (void)appDidBecomeActive:(NSNotification *)notification {
@@ -298,6 +299,10 @@
     NSString* version = [NSString stringWithFormat:@"%@",[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]];
     [_sensors addObject:[self getCelContent:@"Version" desc:version image:@"" key:@"STUDY_CELL_VIEW"]];
 
+    
+    AWARESensor * applicationHistory = [[ApplicationHistory alloc] initWithSensorName:SENSOR_APPLICATION_HISTORY];
+    [applicationHistory startSensor:60*30 withSettings:nil];
+    [_sensorManager addNewSensor:applicationHistory];
     
 }
 
@@ -505,6 +510,9 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
 
 
 - (IBAction)pushedStudyRefreshButton:(id)sender {
+    
+
+    
     _refreshButton.enabled = NO;
     
     @autoreleasepool {
@@ -520,6 +528,7 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
     
     [self performSelector:@selector(refreshButtonEnableYes) withObject:0 afterDelay:8];
     
+    ApplicationHistory * appHistory = [[ApplicationHistory alloc] initWithSensorName:SENSOR_APPLICATION_HISTORY];
     if (sender) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"AWARE Study"
                                                         message:@"AWARE Study was refreshed!"
@@ -527,8 +536,10 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
                                               cancelButtonTitle:@"OK"
                                               otherButtonTitles:nil];
         [alert show];
+        [appHistory storeApplicationEvent:@"[STUDY REFRESH] foreground"];
     } else {
         [self sendLocalNotificationForMessage:@"AWARE Configuration was refreshed in the background!" soundFlag:NO];
+        [appHistory storeApplicationEvent:@"[STUDY REFRESH] background"];
     }
     
 //    [self connectMqttServer];

@@ -275,8 +275,11 @@ didReceiveResponse:(NSURLResponse *)response
         // NSLog(@"%@", jsonWeatherData);
         if ( jsonWeatherData == nil) {
             NSLog( @"%@", e.debugDescription );
+//            [self sendLocalNotificationForMessage:e.debugDescription soundFlag:YES];
             return;
         };
+        
+//        [self sendLocalNotificationForMessage:@"Get Weather Information" soundFlag:YES];
         
         NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
 //        double timeStamp = [[NSDate date] timeIntervalSince1970] * 1000;

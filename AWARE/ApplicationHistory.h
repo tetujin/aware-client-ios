@@ -10,4 +10,6 @@
 
 @interface ApplicationHistory : AWARESensor <AWARESensorDelegate>
 
+- (bool) storeApplicationEvent:(NSString*) event;
+
 @end

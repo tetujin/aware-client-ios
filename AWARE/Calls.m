@@ -124,4 +124,27 @@ NSString* const KEY_CALLS_TRACE = @"trace";
 }
 
 
+- (void) sendLocalNotificationWithCallId : (NSString *) callId
+                                 soundFlag : (BOOL) soundFlag {
+    UILocalNotification *localNotification = [UILocalNotification new];
+    CGFloat currentVersion = [[[UIDevice currentDevice] systemVersion] floatValue];
+    NSLog(@"OS:%f", currentVersion);
+    if (currentVersion >= 9.0){
+//        localNotification.alertTitle = @"Call from/to how?";
+        localNotification.alertBody = @"Call from/to who?";
+    } else {
+        localNotification.alertBody = @"Call from/to who?";
+    }
+    localNotification.fireDate = [NSDate new];
+    localNotification.timeZone = [NSTimeZone localTimeZone];
+//    localNotification.category = schedule.scheduleId;
+    localNotification.category = callId;
+    if(soundFlag) {
+        localNotification.soundName = UILocalNotificationDefaultSoundName;
+    }
+    localNotification.applicationIconBadgeNumber = 1; //TODO
+    localNotification.hasAction = YES;
+    [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
+}
+
 @end

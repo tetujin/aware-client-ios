@@ -35,7 +35,7 @@
         resultData = [[NSMutableData alloc] init];
 //                [super setSensorName:sensorName];
         scheduleManager = [[NSMutableArray alloc] init];
-        dailyUpdate = [self getTargetTimeAsNSDate:[NSDate new] hour:3 minute:0 second:0];
+//        dailyUpdate = [self getTargetTimeAsNSDate:[NSDate new] hour:3 minute:0 second:0];
         _getConfigFileIdentifier = @"get_config_file_identifier";
         KEY_SCHEDULE = @"key_schedule";
         KEY_TIMER = @"key_timer";
@@ -69,18 +69,20 @@
     // Get Config URL from NSTimer of userInfo.
     resultData = [[NSMutableData alloc] init];
     
+    double unixtime = [[NSDate new] timeIntervalSince1970];
+    
     NSDictionary *dic = [(NSTimer *) sender userInfo];
     NSString *url = [dic objectForKey:@"configUrl"];
+    url = [NSString stringWithFormat:@"%@?%f", url, unixtime];
     NSLog(@"--> %@", url);
     
     __weak NSURLSession *session = nil;
     NSURLSessionConfiguration *sessionConfig = nil;
     
+//    double unixtime = [[NSDate new] timeIntervalSince1970];
+    _getConfigFileIdentifier = [NSString stringWithFormat:@"%@%f", _getConfigFileIdentifier, unixtime];
     
-    double unxtime = [[NSDate new] timeIntervalSince1970];
-    _getConfigFileIdentifier = [NSString stringWithFormat:@"%@%f", _getConfigFileIdentifier, unxtime];
-    
-    NSString *post = [NSString stringWithFormat:@"device_id=%@", [self getDeviceId] ];
+    NSString *post = [NSString stringWithFormat:@"timestamp=%f&device_id=%@", unixtime, [self getDeviceId] ];
     NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
     NSString *postLength = [NSString stringWithFormat:@"%ld", [postData length]];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
@@ -94,8 +96,8 @@
         NSURLSession *session = [NSURLSession sharedSession];
         
         [[session dataTaskWithURL:[NSURL URLWithString:url] completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-//            NSString* resString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-//            NSLog(@"---> %@", resString);
+            NSString* resString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+            NSLog(@"---> %@", resString);
             
             if (response && ! error) {
                 // NOTE: For registrate a NSTimer in the backgroung, we have to set it in the main thread!
@@ -113,12 +115,9 @@
             }
         }] resume];
     }else{
-//        sessionConfig = [NSURLSessionConfiguration ephemeralSessionConfiguration];
-//        sessionConfig = [NSURLSessionConfiguration defaultSessionConfiguration];
-
         sessionConfig = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:_getConfigFileIdentifier];
-        sessionConfig.timeoutIntervalForRequest = 180; //180.0;
-        sessionConfig.HTTPMaximumConnectionsPerHost = 180; //180;
+        sessionConfig.timeoutIntervalForRequest =60; //180.0;
+        sessionConfig.HTTPMaximumConnectionsPerHost = 60; //180;
         sessionConfig.timeoutIntervalForResource = 60*60*24; // 1 day
         sessionConfig.allowsCellularAccess = YES;
         sessionConfig.discretionary = YES;
@@ -162,7 +161,9 @@ didReceiveResponse:(NSURLResponse *)response
 didCompleteWithError:(NSError *)error {
     NSLog(@"--> finish");
     if (error != nil) {
-        NSString* errorMessage = [NSString stringWithFormat:@"HTTP Connection Error: %@ %ld", error.debugDescription , error.code];
+        NSString* errorMessage = [NSString stringWithFormat:@"HTTP Connection Error: %@ %ld",
+                                  error.debugDescription,
+                                  error.code];
         NSLog(@"%@", errorMessage);
         // NOTE: case of error
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -197,13 +198,16 @@ didCompleteWithError:(NSError *)error {
     
     if (error != nil) {
         NSLog(@"JSON FORMAT ERROR: %@", error.debugDescription);
-        if(debug)[self setBackupEsmsWithNotification:@"JSON Format Error: AWARE iOS sets backuped ESMs."];
+        if(debug)[self setBackupEsmsWithNotification:@"JSON Format Error: AWARE iOS sets the schedules with backuped ESMs."];
         return;
     }else{
+//        if(debug)[self setBackupEsmsWithNotification:@"Success to "];
         [self setLatestEsmJsonData:data];
     }
     
     [self stopSchedules];
+    
+    if(debug) [self sendLocalNotificationForMessage:@"AWARE updated ESM schedules." soundFlag:NO];
     
     NSMutableArray * awareSchedules = [[NSMutableArray alloc] init];
     
@@ -251,7 +255,7 @@ didCompleteWithError:(NSError *)error {
             [awareSchedules addObject:schedule];
         }
     }
-    NSLog(@"%@", currentSchedules);
+//    NSLog(@"%@", currentSchedules);
     [self setLatestValue:[NSString stringWithFormat:@"You have %d ESM schedules per one day.\n%@",i, currentSchedules]];
     [self startSchedules:awareSchedules];
 }
@@ -295,25 +299,31 @@ didCompleteWithError:(NSError *)error {
     ESMStorageHelper *helper = [[ESMStorageHelper alloc] init];
     [helper removeEsmTexts];
 
+    
+    // init
+    if ([self getDebugState]) {
+        [self setBackupEsmsWithNotification:@"AWARE initializes ESM schedules with backup ESMs."];
+    }
+    
     NSMutableDictionary * dic = [[NSMutableDictionary alloc] init];
     [dic setObject:CONFIG_URL forKey:@"configUrl"];
     // --- TEST --
-    dailyUpdate = [AWAREUtils getTargetNSDate:[NSDate new] hour:11 minute:40 second:0 nextDay:NO];
-    dailyQuestionUpdateTimer = [[NSTimer alloc] initWithFireDate:dailyUpdate
-                                                        interval:60*60*24
-                                                          target:self
-                                                        selector:@selector(setConfigFile:)
-                                                        userInfo:dic
-                                                         repeats:YES];
-    NSRunLoop *runLoop = [NSRunLoop currentRunLoop];
-    [runLoop addTimer:dailyQuestionUpdateTimer forMode:NSDefaultRunLoopMode];
+//    dailyUpdate = [AWAREUtils getTargetNSDate:[NSDate new] hour:11 minute:40 second:0 nextDay:NO];
+//    dailyQuestionUpdateTimer = [[NSTimer alloc] initWithFireDate:dailyUpdate
+//                                                        interval:60*60*24
+//                                                          target:self
+//                                                        selector:@selector(setConfigFile:)
+//                                                        userInfo:dic
+//                                                         repeats:YES];
+//    NSRunLoop *runLoop = [NSRunLoop currentRunLoop];
+//    [runLoop addTimer:dailyQuestionUpdateTimer forMode:NSDefaultRunLoopMode];
     
     
-//    dailyQuestionUpdateTimer = [NSTimer timerWithTimeInterval:0
-//                                                       target:self
-//                                                     selector:@selector(setConfigFile:)
-//                                                     userInfo:dic
-//                                                      repeats:NO];
+    dailyQuestionUpdateTimer = [NSTimer timerWithTimeInterval:0
+                                                       target:self
+                                                     selector:@selector(setConfigFile:)
+                                                     userInfo:dic
+                                                      repeats:NO];
     [dailyQuestionUpdateTimer fire];
     
     // init scheduler

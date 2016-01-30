@@ -10,6 +10,7 @@
 
 @interface AWAREUtils : NSObject
 
++ (NSString *)getSystemUUID;
 + (NSNumber *) getUnixTimestamp:(NSDate *)nsdate;
 
 + (NSDate *) getTargetNSDate:(NSDate *) nsDate
@@ -21,5 +22,9 @@
                      minute:(int)minute
                      second:(int)second
                     nextDay:(BOOL)nextDay;
+
++ (NSString*) sha1:(NSString*)input;
++ (NSString*) md5:(NSString*)input;
++ (BOOL)validateEmailWithString:(NSString *)str;
 
 @end

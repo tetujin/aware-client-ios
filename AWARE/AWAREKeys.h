@@ -75,6 +75,9 @@ extern NSString* const SENSOR_PLUGIN_GOOGLE_LOGIN;
 extern NSString* const SENSOR_PLUGIN_STUDENTLIFE_AUDIO;
 extern NSString* const SENSOR_PLUGIN_CAMPUS;
 
+
+extern NSString* const SENSOR_APPLICATION_HISTORY;
+
 extern NSString * const NotificationCategoryIdent;
 extern NSString * const NotificationActionOneIdent;
 extern NSString * const NotificationActionTwoIdent;

@@ -70,6 +70,7 @@
             [dic setObject:@0 forKey:@"accuracy"];
             [dic setObject:@"" forKey:@"label"];
             [self setLatestValue:[NSString stringWithFormat:@"%f, %f, %f",magnetometerData.magneticField.x, magnetometerData.magneticField.y, magnetometerData.magneticField.z]];
+            
 //            [self saveData:dic toLocalFile:SENSOR_MAGNETOMETER];
             [self saveData:dic];
         }

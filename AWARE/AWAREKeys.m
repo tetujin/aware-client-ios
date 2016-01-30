@@ -76,6 +76,9 @@ NSString* const SENSOR_PLUGIN_STUDENTLIFE_AUDIO = @"plugin_studentlife_audio";
 NSString* const SENSOR_PLUGIN_CAMPUS = @"plugin_cmu_esm";
 
 
+NSString* const SENSOR_APPLICATION_HISTORY = @"applications_history";
+
+
 NSString * const NotificationCategoryIdent  = @"ACTIONABLE";
 NSString * const NotificationActionOneIdent = @"ACTION_ONE";
 NSString * const NotificationActionTwoIdent = @"ACTION_TWO";

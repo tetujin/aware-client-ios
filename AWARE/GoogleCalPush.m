@@ -315,6 +315,7 @@
     
     NSDateFormatter *timeFormat = [[NSDateFormatter alloc] init];
     [timeFormat setDateFormat:@"HH:mm:ss"];
+//    NSString * prepopulateTitle = @"#event_category #Location #brief_description";
     NSString * prepopulateTitle = @"#event_category #Location #brief_description";
 
     /**
