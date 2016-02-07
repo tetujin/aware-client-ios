@@ -1,1 +1,0 @@
-../../../SCNetworkReachability/Classes/Private/SCReachabilityScheduler.h
