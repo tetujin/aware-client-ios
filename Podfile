@@ -4,12 +4,13 @@
 # use_frameworks!
 
 target 'AWARE' do
-#pod 'MQTTKit', :git => 'https://github.com/mobile-web-messaging/MQTTKit.git'
-#pod 'SCNetworkReachability'
-#pod 'Google/SignIn'
-#pod 'DeployGateSDK'
-#pod 'ios-ntp'
+pod 'MQTTKit', :git => 'https://github.com/mobile-web-messaging/MQTTKit.git'
+pod 'SCNetworkReachability'
+pod 'Google/SignIn'
+pod 'DeployGateSDK'
+pod 'ios-ntp'
 #pod 'Google-API-Client'
+#pod 'Google/SignIn'
 #pod 'Podfile'
 #pod 'ResearchKit'
 end

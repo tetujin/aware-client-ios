@@ -43,7 +43,6 @@
 		165A8B701C03B90500898C6C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 165A8B6E1C03B90500898C6C /* GoogleService-Info.plist */; };
 		165A8B711C03B90500898C6C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 165A8B6E1C03B90500898C6C /* GoogleService-Info.plist */; };
 		165A8B741C03C0B300898C6C /* GoogleLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 165A8B731C03C0B300898C6C /* GoogleLoginViewController.m */; };
-		165B6E0D1C4018EC00417432 /* libGoogle-API-Client.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 165B6E0C1C4018EC00417432 /* libGoogle-API-Client.a */; };
 		1663BB801C2C94C3003F03DF /* ESMStorageHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 1663BB7F1C2C94C3003F03DF /* ESMStorageHelper.m */; };
 		1671A5D81C3B583C00C41F44 /* GoogleCalPush.m in Sources */ = {isa = PBXBuildFile; fileRef = 1671A5D71C3B583C00C41F44 /* GoogleCalPush.m */; };
 		1677AF2E1C2B109A00F7C482 /* SingleESMObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 1677AF2D1C2B109A00F7C482 /* SingleESMObject.m */; };
@@ -83,10 +82,6 @@
 		16EB1E5A1C4A930500966A07 /* LocalFileStorageHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 16EB1E591C4A930500966A07 /* LocalFileStorageHelper.m */; };
 		16EB1E5D1C4AC12500966A07 /* CalEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 16EB1E5C1C4AC12500966A07 /* CalEvent.m */; };
 		16F09B221C249C5F005C1EB8 /* GoogleCalPull.m in Sources */ = {isa = PBXBuildFile; fileRef = 16F09B211C249C5F005C1EB8 /* GoogleCalPull.m */; };
-		16F09B271C24A584005C1EB8 /* libgtm-http-fetcher.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 16F09B241C24A584005C1EB8 /* libgtm-http-fetcher.a */; };
-		16F09B281C24A584005C1EB8 /* libgtm-oauth2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 16F09B251C24A584005C1EB8 /* libgtm-oauth2.a */; };
-		16F213A01C589BC2007E89CA /* KeyboardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 16F2139F1C589BC2007E89CA /* KeyboardViewController.m */; };
-		16F213A41C589BC2007E89CA /* AWAREKeyboard.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 16F2139C1C589BC2007E89CA /* AWAREKeyboard.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		16F213AE1C594292007E89CA /* ApplicationHistory.m in Sources */ = {isa = PBXBuildFile; fileRef = 16F213AD1C594292007E89CA /* ApplicationHistory.m */; };
 		16FCE2771BFE9326005FC71A /* AWARESensorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 16FCE2761BFE9326005FC71A /* AWARESensorManager.m */; };
 		FC2AF85D761397B784DECBD3 /* libPods-AWARE.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9ED04F29ED60F3FCC960F6CD /* libPods-AWARE.a */; };
@@ -107,13 +102,6 @@
 			remoteGlobalIDString = 1623CE651BFD1B2C00EFAD72;
 			remoteInfo = AWARE;
 		};
-		16F213A21C589BC2007E89CA /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 1623CE5E1BFD1B2C00EFAD72 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 16F2139B1C589BC2007E89CA;
-			remoteInfo = AWAREKeyboard;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -123,7 +111,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				16F213A41C589BC2007E89CA /* AWAREKeyboard.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -200,7 +187,6 @@
 		165A8B6E1C03B90500898C6C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
 		165A8B721C03C0B300898C6C /* GoogleLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GoogleLoginViewController.h; sourceTree = "<group>"; };
 		165A8B731C03C0B300898C6C /* GoogleLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GoogleLoginViewController.m; sourceTree = "<group>"; };
-		165B6E0C1C4018EC00417432 /* libGoogle-API-Client.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libGoogle-API-Client.a"; path = "Pods/../build/Debug-iphoneos/libGoogle-API-Client.a"; sourceTree = "<group>"; };
 		1663BB7E1C2C94C3003F03DF /* ESMStorageHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESMStorageHelper.h; sourceTree = "<group>"; };
 		1663BB7F1C2C94C3003F03DF /* ESMStorageHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ESMStorageHelper.m; sourceTree = "<group>"; };
 		1671A5D61C3B583C00C41F44 /* GoogleCalPush.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GoogleCalPush.h; sourceTree = "<group>"; };
@@ -267,10 +253,6 @@
 		16EB1E5C1C4AC12500966A07 /* CalEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CalEvent.m; sourceTree = "<group>"; };
 		16F09B201C249C5F005C1EB8 /* GoogleCalPull.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GoogleCalPull.h; sourceTree = "<group>"; };
 		16F09B211C249C5F005C1EB8 /* GoogleCalPull.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GoogleCalPull.m; sourceTree = "<group>"; };
-		16F09B231C24A584005C1EB8 /* libGoogle-API-Client.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libGoogle-API-Client.a"; path = "Pods/../build/Debug-iphoneos/libGoogle-API-Client.a"; sourceTree = "<group>"; };
-		16F09B241C24A584005C1EB8 /* libgtm-http-fetcher.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libgtm-http-fetcher.a"; path = "Pods/../build/Debug-iphoneos/libgtm-http-fetcher.a"; sourceTree = "<group>"; };
-		16F09B251C24A584005C1EB8 /* libgtm-oauth2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libgtm-oauth2.a"; path = "Pods/../build/Debug-iphoneos/libgtm-oauth2.a"; sourceTree = "<group>"; };
-		16F2139C1C589BC2007E89CA /* AWAREKeyboard.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = AWAREKeyboard.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		16F2139E1C589BC2007E89CA /* KeyboardViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KeyboardViewController.h; sourceTree = "<group>"; };
 		16F2139F1C589BC2007E89CA /* KeyboardViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KeyboardViewController.m; sourceTree = "<group>"; };
 		16F213A11C589BC2007E89CA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -289,12 +271,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				162B7DDC1C4EF792006972B5 /* CoreTelephony.framework in Frameworks */,
-				165B6E0D1C4018EC00417432 /* libGoogle-API-Client.a in Frameworks */,
 				16E7AF961C3DF8A9005C9EDC /* CoreData.framework in Frameworks */,
 				16E155391C27C2AC00316321 /* EventKit.framework in Frameworks */,
 				16E1553A1C27C2AC00316321 /* EventKitUI.framework in Frameworks */,
-				16F09B271C24A584005C1EB8 /* libgtm-http-fetcher.a in Frameworks */,
-				16F09B281C24A584005C1EB8 /* libgtm-oauth2.a in Frameworks */,
 				164DD66A1C1FC1F900ADA92B /* MapKit.framework in Frameworks */,
 				168683031C07C43600CB4266 /* AudioToolbox.framework in Frameworks */,
 				16D810261C06242F00605DE2 /* Security.framework in Frameworks */,
@@ -318,13 +297,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		1623CE8A1BFD1B2C00EFAD72 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		16F213991C589BC2007E89CA /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -540,7 +512,6 @@
 				1623CE661BFD1B2C00EFAD72 /* AWARE.app */,
 				1623CE821BFD1B2C00EFAD72 /* AWARETests.xctest */,
 				1623CE8D1BFD1B2C00EFAD72 /* AWAREUITests.xctest */,
-				16F2139C1C589BC2007E89CA /* AWAREKeyboard.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -823,14 +794,11 @@
 			isa = PBXGroup;
 			children = (
 				1623FFDC1C5ADB6E00F3E3E4 /* libSystem.tbd */,
+				9ED04F29ED60F3FCC960F6CD /* libPods-AWARE.a */,
 				162B7DDB1C4EF792006972B5 /* CoreTelephony.framework */,
-				165B6E0C1C4018EC00417432 /* libGoogle-API-Client.a */,
 				16E7AF951C3DF8A9005C9EDC /* CoreData.framework */,
 				16E155371C27C2AC00316321 /* EventKit.framework */,
 				16E155381C27C2AC00316321 /* EventKitUI.framework */,
-				16F09B231C24A584005C1EB8 /* libGoogle-API-Client.a */,
-				16F09B241C24A584005C1EB8 /* libgtm-http-fetcher.a */,
-				16F09B251C24A584005C1EB8 /* libgtm-oauth2.a */,
 				164DD6691C1FC1F900ADA92B /* MapKit.framework */,
 				1607944D1C1A240F0021816F /* AudioUnit.framework */,
 				169384EF1C17C39300A17F2C /* MicrosoftBandKit_iOS.framework */,
@@ -843,7 +811,6 @@
 				169A7B311BFF282800A7C06D /* CoreLocation.framework */,
 				1623CEB81BFE319100EFAD72 /* CoreMotion.framework */,
 				1623CEB01BFD40FB00EFAD72 /* AVFoundation.framework */,
-				9ED04F29ED60F3FCC960F6CD /* libPods-AWARE.a */,
 				16228A3B1C22DAE20081C839 /* NotificationCenter.framework */,
 			);
 			name = Frameworks;
@@ -876,7 +843,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				16F213A31C589BC2007E89CA /* PBXTargetDependency */,
 			);
 			name = AWARE;
 			productName = AWARE;
@@ -918,23 +884,6 @@
 			productName = AWAREUITests;
 			productReference = 1623CE8D1BFD1B2C00EFAD72 /* AWAREUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
-		};
-		16F2139B1C589BC2007E89CA /* AWAREKeyboard */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 16F213A71C589BC2007E89CA /* Build configuration list for PBXNativeTarget "AWAREKeyboard" */;
-			buildPhases = (
-				16F213981C589BC2007E89CA /* Sources */,
-				16F213991C589BC2007E89CA /* Frameworks */,
-				16F2139A1C589BC2007E89CA /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = AWAREKeyboard;
-			productName = AWAREKeyboard;
-			productReference = 16F2139C1C589BC2007E89CA /* AWAREKeyboard.appex */;
-			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -989,10 +938,6 @@
 						CreatedOnToolsVersion = 7.1;
 						TestTargetID = 1623CE651BFD1B2C00EFAD72;
 					};
-					16F2139B1C589BC2007E89CA = {
-						CreatedOnToolsVersion = 7.2;
-						DevelopmentTeam = FH352PYMNC;
-					};
 				};
 			};
 			buildConfigurationList = 1623CE611BFD1B2C00EFAD72 /* Build configuration list for PBXProject "AWARE" */;
@@ -1011,7 +956,6 @@
 				1623CE651BFD1B2C00EFAD72 /* AWARE */,
 				1623CE811BFD1B2C00EFAD72 /* AWARETests */,
 				1623CE8C1BFD1B2C00EFAD72 /* AWAREUITests */,
-				16F2139B1C589BC2007E89CA /* AWAREKeyboard */,
 			);
 		};
 /* End PBXProject section */
@@ -1042,13 +986,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				165A8B711C03B90500898C6C /* GoogleService-Info.plist in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		16F2139A1C589BC2007E89CA /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1179,14 +1116,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		16F213981C589BC2007E89CA /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				16F213A01C589BC2007E89CA /* KeyboardViewController.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -1199,11 +1128,6 @@
 			isa = PBXTargetDependency;
 			target = 1623CE651BFD1B2C00EFAD72 /* AWARE */;
 			targetProxy = 1623CE8E1BFD1B2C00EFAD72 /* PBXContainerItemProxy */;
-		};
-		16F213A31C589BC2007E89CA /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 16F2139B1C589BC2007E89CA /* AWAREKeyboard */;
-			targetProxy = 16F213A21C589BC2007E89CA /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1417,33 +1341,6 @@
 			};
 			name = Release;
 		};
-		16F213A51C589BC2007E89CA /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				INFOPLIST_FILE = AWAREKeyboard/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = jp.ac.keio.sfc.ht.tetujin.AWARE.AWAREKeyboard;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-			};
-			name = Debug;
-		};
-		16F213A61C589BC2007E89CA /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				INFOPLIST_FILE = AWAREKeyboard/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = jp.ac.keio.sfc.ht.tetujin.AWARE.AWAREKeyboard;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1479,15 +1376,6 @@
 			buildConfigurations = (
 				1623CE9D1BFD1B2C00EFAD72 /* Debug */,
 				1623CE9E1BFD1B2C00EFAD72 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		16F213A71C589BC2007E89CA /* Build configuration list for PBXNativeTarget "AWAREKeyboard" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				16F213A51C589BC2007E89CA /* Debug */,
-				16F213A61C589BC2007E89CA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
