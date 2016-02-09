@@ -8,6 +8,7 @@
 
 #import "AWAREPlugin.h"
 #import "AWARESensor.h"
+#import "AWAREKeys.h"
 
 @implementation AWAREPlugin {
     NSMutableArray* awareSensors;

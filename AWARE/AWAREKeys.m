@@ -74,6 +74,8 @@ NSString* const SENSOR_PLUGIN_SCHEDULER = @"scheduler";
 NSString* const SENSOR_PLUGIN_STUDENTLIFE_AUDIO = @"plugin_studentlife_audio";
 //NSString* const SENSOR_PLUGIN_CAMPUS = @"plugin_campus";
 NSString* const SENSOR_PLUGIN_CAMPUS = @"plugin_cmu_esm";
+NSString* const SENSOR_PLUGIN_PEDOMETER = @"plugin_pedometer";
+NSString* const SENSOR_AWARE_DEBUG = @"aware_debug";
 
 
 NSString* const SENSOR_APPLICATION_HISTORY = @"applications_history";

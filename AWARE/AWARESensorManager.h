@@ -7,6 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <SVProgressHUD.h>
+#import <AudioToolbox/AudioServices.h>
+
 #import "AWARESensor.h"
 
 @interface AWARESensorManager : NSObject{
@@ -21,5 +24,5 @@
                             plugins:(NSArray*)plugins
                      uploadInterval:(double) uploadTime;
 - (NSString*)getLatestSensorData:(NSString *)sensorName;
-- (void) syncAllSensorsWithDB;
+- (bool) syncAllSensorsWithDB;
 @end

@@ -13,6 +13,78 @@
 
 @implementation AWAREUtils
 
+/**
+ * This method sets application condition (background or foreground).
+ *
+ * @param state 'YES' is foreground. 'NO' is background.
+ */
++ (void)setAppState:(BOOL)state{
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setBool:state forKey:@"APP_STATE"];
+    if (state) {
+        NSLog(@"Application is in the foreground!");
+    }else{
+        NSLog(@"Application is in the background!");
+    }
+    
+}
+
++ (BOOL) getAppState {
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    return [defaults boolForKey:@"APP_STATE"];
+}
+
+
++ (BOOL)isForeground{
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    bool state = [defaults boolForKey:@"APP_STATE"];
+    if (state) {
+        NSLog(@"Application is in the foreground!");
+        return YES;
+    }else{
+        NSLog(@"Application is in the background!");
+        return NO;
+   }
+}
+
++ (BOOL)isBackground{
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    bool state = [defaults boolForKey:@"APP_STATE"];
+    if (state) {
+        NSLog(@"Application is in the foreground!");
+        return NO;
+    }else{
+        NSLog(@"Application is in the background!");
+        return YES;
+    }
+}
+
+
+/**
+ Local push notification method
+ @param message text message for notification
+ @param sound type of sound for notification
+ */
++ (void)sendLocalNotificationForMessage:(NSString *)message soundFlag:(BOOL)soundFlag {
+    UILocalNotification *localNotification = [UILocalNotification new];
+    localNotification.alertBody = message;
+    //    localNotification.fireDate = [NSDate date];
+    localNotification.repeatInterval = 0;
+    if(soundFlag) {
+        localNotification.soundName = UILocalNotificationDefaultSoundName;
+    }
+    localNotification.hasAction = YES;
+    [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
+}
+
+
+
++ (float) getCurrentOSVersionAsFloat{
+    float currentVersion = [[[UIDevice currentDevice] systemVersion] floatValue];
+    return currentVersion;
+}
+
+
 
 + (NSString *)getSystemUUID {
     NSString * uuid = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
@@ -117,6 +189,75 @@
     NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
 
     return [emailTest evaluateWithObject:str];
+}
+
+
+/**
+ * http://stackoverflow.com/questions/11197509/ios-how-to-get-device-make-and-model
+ */
++ (NSString*) deviceName {
+    struct utsname systemInfo;
+    uname(&systemInfo);
+    NSString* code = [NSString stringWithCString:systemInfo.machine
+                                        encoding:NSUTF8StringEncoding];
+    
+    static NSDictionary* deviceNamesByCode = nil;
+    
+    if (!deviceNamesByCode) {
+        
+        deviceNamesByCode = @{@"i386"      :@"Simulator",
+                              @"iPod1,1"   :@"iPod Touch",      // (Original)
+                              @"iPod2,1"   :@"iPod Touch",      // (Second Generation)
+                              @"iPod3,1"   :@"iPod Touch",      // (Third Generation)
+                              @"iPod4,1"   :@"iPod Touch",      // (Fourth Generation)
+                              @"iPhone1,1" :@"iPhone",          // (Original)
+                              @"iPhone1,2" :@"iPhone",          // (3G)
+                              @"iPhone2,1" :@"iPhone",          // (3GS)
+                              @"iPad1,1"   :@"iPad",            // (Original)
+                              @"iPad2,1"   :@"iPad 2",          //
+                              @"iPad3,1"   :@"iPad",            // (3rd Generation)
+                              @"iPhone3,1" :@"iPhone 4",        // (GSM)
+                              @"iPhone3,3" :@"iPhone 4",        // (CDMA/Verizon/Sprint)
+                              @"iPhone4,1" :@"iPhone 4s",       //
+                              @"iPhone5,1" :@"iPhone 5",        // (model A1428, AT&T/Canada)
+                              @"iPhone5,2" :@"iPhone 5",        // (model A1429, everything else)
+                              @"iPad3,4"   :@"iPad",            // (4th Generation)
+                              @"iPad2,5"   :@"iPad Mini",       // (Original)
+                              @"iPhone5,3" :@"iPhone 5c",       // (model A1456, A1532 | GSM)
+                              @"iPhone5,4" :@"iPhone 5c",       // (model A1507, A1516, A1526 (China), A1529 | Global)
+                              @"iPhone6,1" :@"iPhone 5s",       // (model A1433, A1533 | GSM)
+                              @"iPhone6,2" :@"iPhone 5s",       // (model A1457, A1518, A1528 (China), A1530 | Global)
+                              @"iPhone7,1" :@"iPhone 6 Plus",   //
+                              @"iPhone7,2" :@"iPhone 6",        //
+                              @"iPhone8,1" :@"iPhone 6s Plus",   //
+                              @"iPhone8,2" :@"iPhone 6s",        //
+                              @"iPad4,1"   :@"iPad Air",        // 5th Generation iPad (iPad Air) - Wifi
+                              @"iPad4,2"   :@"iPad Air",        // 5th Generation iPad (iPad Air) - Cellular
+                              @"iPad4,4"   :@"iPad Mini",       // (2nd Generation iPad Mini - Wifi)
+                              @"iPad4,5"   :@"iPad Mini"        // (2nd Generation iPad Mini - Cellular)
+                              };
+    }
+    
+    NSString* deviceName = [deviceNamesByCode objectForKey:code];
+    
+    if (!deviceName) {
+        // Not found on database. At least guess main device type from string contents:
+        
+        if ([code rangeOfString:@"iPod"].location != NSNotFound) {
+            deviceName = @"iPod Touch";
+        }
+        else if([code rangeOfString:@"iPad"].location != NSNotFound) {
+            deviceName = @"iPad";
+        }
+        else if([code rangeOfString:@"iPhone"].location != NSNotFound){
+            deviceName = @"iPhone";
+        }
+    }
+    
+    if (deviceName == nil) {
+        deviceName = @"";
+    }
+    return deviceName;
 }
 
 @end

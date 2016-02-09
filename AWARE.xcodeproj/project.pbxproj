@@ -28,6 +28,7 @@
 		1623CEB71BFE175F00EFAD72 /* AWARESensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 1623CEB61BFE175F00EFAD72 /* AWARESensor.m */; };
 		1623CEB91BFE319100EFAD72 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1623CEB81BFE319100EFAD72 /* CoreMotion.framework */; };
 		1623CEBC1BFE390600EFAD72 /* Accelerometer.m in Sources */ = {isa = PBXBuildFile; fileRef = 1623CEBB1BFE390600EFAD72 /* Accelerometer.m */; };
+		1623FFE01C5DCF7900F3E3E4 /* Pedometer.m in Sources */ = {isa = PBXBuildFile; fileRef = 1623FFDF1C5DCF7900F3E3E4 /* Pedometer.m */; };
 		162B7DDC1C4EF792006972B5 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 162B7DDB1C4EF792006972B5 /* CoreTelephony.framework */; };
 		162B7DDF1C4EFA46006972B5 /* Calls.m in Sources */ = {isa = PBXBuildFile; fileRef = 162B7DDE1C4EFA46006972B5 /* Calls.m */; };
 		1643959F1C22EEC40039E113 /* Scheduler.m in Sources */ = {isa = PBXBuildFile; fileRef = 1643959E1C22EEC40039E113 /* Scheduler.m */; };
@@ -44,12 +45,14 @@
 		165A8B711C03B90500898C6C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 165A8B6E1C03B90500898C6C /* GoogleService-Info.plist */; };
 		165A8B741C03C0B300898C6C /* GoogleLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 165A8B731C03C0B300898C6C /* GoogleLoginViewController.m */; };
 		1663BB801C2C94C3003F03DF /* ESMStorageHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 1663BB7F1C2C94C3003F03DF /* ESMStorageHelper.m */; };
+		166F1A701C602B44002124FB /* AWAREHealthKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 166F1A6F1C602B44002124FB /* AWAREHealthKit.m */; };
 		1671A5D81C3B583C00C41F44 /* GoogleCalPush.m in Sources */ = {isa = PBXBuildFile; fileRef = 1671A5D71C3B583C00C41F44 /* GoogleCalPush.m */; };
 		1677AF2E1C2B109A00F7C482 /* SingleESMObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 1677AF2D1C2B109A00F7C482 /* SingleESMObject.m */; };
 		1677AF321C2B4BDE00F7C482 /* MultiESMObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 1677AF311C2B4BDE00F7C482 /* MultiESMObject.m */; };
 		168683031C07C43600CB4266 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 168683021C07C43600CB4266 /* AudioToolbox.framework */; };
 		168683061C07C48900CB4266 /* AmbientNoise.m in Sources */ = {isa = PBXBuildFile; fileRef = 168683051C07C48900CB4266 /* AmbientNoise.m */; };
 		168683091C08050100CB4266 /* ActivityRecognition.m in Sources */ = {isa = PBXBuildFile; fileRef = 168683081C08050100CB4266 /* ActivityRecognition.m */; };
+		168C71DB1C67B9CC00878DD8 /* AWAREDataUploader.m in Sources */ = {isa = PBXBuildFile; fileRef = 168C71DA1C67B9CC00878DD8 /* AWAREDataUploader.m */; };
 		169384F01C17C39300A17F2C /* MicrosoftBandKit_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 169384EF1C17C39300A17F2C /* MicrosoftBandKit_iOS.framework */; };
 		169384F31C17C3D300A17F2C /* MSBand.m in Sources */ = {isa = PBXBuildFile; fileRef = 169384F21C17C3D300A17F2C /* MSBand.m */; };
 		169384F51C18DD3D00A17F2C /* awareframework.der in Resources */ = {isa = PBXBuildFile; fileRef = 169384F41C18DD3D00A17F2C /* awareframework.der */; };
@@ -66,6 +69,9 @@
 		169A7B431BFFDE8F00A7C06D /* Rotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 169A7B421BFFDE8F00A7C06D /* Rotation.m */; };
 		169A7B461C0052F800A7C06D /* Gravity.m in Sources */ = {isa = PBXBuildFile; fileRef = 169A7B451C0052F800A7C06D /* Gravity.m */; };
 		169A7B491C00591A00A7C06D /* LinearAccelerometer.m in Sources */ = {isa = PBXBuildFile; fileRef = 169A7B481C00591A00A7C06D /* LinearAccelerometer.m */; };
+		16C1FF7D1C617FB100C070AA /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16C1FF7C1C617FB100C070AA /* Accelerate.framework */; };
+		16C1FF7F1C617FC300C070AA /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16C1FF7E1C617FC300C070AA /* GLKit.framework */; };
+		16C1FF971C64501D00C070AA /* Debug.m in Sources */ = {isa = PBXBuildFile; fileRef = 16C1FF961C64501D00C070AA /* Debug.m */; };
 		16D810241C06242500605DE2 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16D810231C06242500605DE2 /* CFNetwork.framework */; };
 		16D810261C06242F00605DE2 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16D810251C06242F00605DE2 /* Security.framework */; };
 		16D8102D1C06671500605DE2 /* ExternalAccessory.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16D8102C1C06671500605DE2 /* ExternalAccessory.framework */; };
@@ -129,10 +135,6 @@
 		160EE9C11C052DAA00015688 /* OpenWeather.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenWeather.h; sourceTree = "<group>"; };
 		160EE9C21C052DAA00015688 /* OpenWeather.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenWeather.m; sourceTree = "<group>"; };
 		16228A3B1C22DAE20081C839 /* NotificationCenter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NotificationCenter.framework; path = System/Library/Frameworks/NotificationCenter.framework; sourceTree = SDKROOT; };
-		16228A3E1C22DAE20081C839 /* TodayViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TodayViewController.h; sourceTree = "<group>"; };
-		16228A3F1C22DAE20081C839 /* TodayViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TodayViewController.m; sourceTree = "<group>"; };
-		16228A421C22DAE20081C839 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
-		16228A441C22DAE20081C839 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		16228A4F1C22E9FE0081C839 /* AWARESchedule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AWARESchedule.h; sourceTree = "<group>"; };
 		16228A501C22E9FE0081C839 /* AWARESchedule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AWARESchedule.m; sourceTree = "<group>"; };
 		1623CE661BFD1B2C00EFAD72 /* AWARE.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AWARE.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -164,6 +166,8 @@
 		1623CEBA1BFE390600EFAD72 /* Accelerometer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Accelerometer.h; sourceTree = "<group>"; };
 		1623CEBB1BFE390600EFAD72 /* Accelerometer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Accelerometer.m; sourceTree = "<group>"; };
 		1623FFDC1C5ADB6E00F3E3E4 /* libSystem.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libSystem.tbd; path = usr/lib/libSystem.tbd; sourceTree = SDKROOT; };
+		1623FFDE1C5DCF7900F3E3E4 /* Pedometer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Pedometer.h; sourceTree = "<group>"; };
+		1623FFDF1C5DCF7900F3E3E4 /* Pedometer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Pedometer.m; sourceTree = "<group>"; };
 		162B7DDB1C4EF792006972B5 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		162B7DDD1C4EFA46006972B5 /* Calls.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Calls.h; sourceTree = "<group>"; };
 		162B7DDE1C4EFA46006972B5 /* Calls.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Calls.m; sourceTree = "<group>"; };
@@ -189,6 +193,8 @@
 		165A8B731C03C0B300898C6C /* GoogleLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GoogleLoginViewController.m; sourceTree = "<group>"; };
 		1663BB7E1C2C94C3003F03DF /* ESMStorageHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESMStorageHelper.h; sourceTree = "<group>"; };
 		1663BB7F1C2C94C3003F03DF /* ESMStorageHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ESMStorageHelper.m; sourceTree = "<group>"; };
+		166F1A6E1C602B44002124FB /* AWAREHealthKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AWAREHealthKit.h; sourceTree = "<group>"; };
+		166F1A6F1C602B44002124FB /* AWAREHealthKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AWAREHealthKit.m; sourceTree = "<group>"; };
 		1671A5D61C3B583C00C41F44 /* GoogleCalPush.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GoogleCalPush.h; sourceTree = "<group>"; };
 		1671A5D71C3B583C00C41F44 /* GoogleCalPush.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GoogleCalPush.m; sourceTree = "<group>"; };
 		1677AF2C1C2B109A00F7C482 /* SingleESMObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SingleESMObject.h; sourceTree = "<group>"; };
@@ -200,6 +206,8 @@
 		168683051C07C48900CB4266 /* AmbientNoise.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AmbientNoise.m; sourceTree = "<group>"; };
 		168683071C08050100CB4266 /* ActivityRecognition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActivityRecognition.h; sourceTree = "<group>"; };
 		168683081C08050100CB4266 /* ActivityRecognition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActivityRecognition.m; sourceTree = "<group>"; };
+		168C71D91C67B9CC00878DD8 /* AWAREDataUploader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AWAREDataUploader.h; sourceTree = "<group>"; };
+		168C71DA1C67B9CC00878DD8 /* AWAREDataUploader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AWAREDataUploader.m; sourceTree = "<group>"; };
 		169384EF1C17C39300A17F2C /* MicrosoftBandKit_iOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = MicrosoftBandKit_iOS.framework; sourceTree = "<group>"; };
 		169384F11C17C3D300A17F2C /* MSBand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSBand.h; sourceTree = "<group>"; };
 		169384F21C17C3D300A17F2C /* MSBand.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSBand.m; sourceTree = "<group>"; };
@@ -228,6 +236,10 @@
 		169A7B451C0052F800A7C06D /* Gravity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Gravity.m; sourceTree = "<group>"; };
 		169A7B471C00591A00A7C06D /* LinearAccelerometer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LinearAccelerometer.h; sourceTree = "<group>"; };
 		169A7B481C00591A00A7C06D /* LinearAccelerometer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LinearAccelerometer.m; sourceTree = "<group>"; };
+		16C1FF7C1C617FB100C070AA /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
+		16C1FF7E1C617FC300C070AA /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
+		16C1FF951C64501D00C070AA /* Debug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Debug.h; sourceTree = "<group>"; };
+		16C1FF961C64501D00C070AA /* Debug.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Debug.m; sourceTree = "<group>"; };
 		16D810231C06242500605DE2 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		16D810251C06242F00605DE2 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		16D8102C1C06671500605DE2 /* ExternalAccessory.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ExternalAccessory.framework; path = System/Library/Frameworks/ExternalAccessory.framework; sourceTree = SDKROOT; };
@@ -253,9 +265,6 @@
 		16EB1E5C1C4AC12500966A07 /* CalEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CalEvent.m; sourceTree = "<group>"; };
 		16F09B201C249C5F005C1EB8 /* GoogleCalPull.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GoogleCalPull.h; sourceTree = "<group>"; };
 		16F09B211C249C5F005C1EB8 /* GoogleCalPull.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GoogleCalPull.m; sourceTree = "<group>"; };
-		16F2139E1C589BC2007E89CA /* KeyboardViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KeyboardViewController.h; sourceTree = "<group>"; };
-		16F2139F1C589BC2007E89CA /* KeyboardViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KeyboardViewController.m; sourceTree = "<group>"; };
-		16F213A11C589BC2007E89CA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		16F213AC1C594292007E89CA /* ApplicationHistory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApplicationHistory.h; sourceTree = "<group>"; };
 		16F213AD1C594292007E89CA /* ApplicationHistory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApplicationHistory.m; sourceTree = "<group>"; };
 		16FCE2751BFE9326005FC71A /* AWARESensorManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AWARESensorManager.h; sourceTree = "<group>"; };
@@ -270,21 +279,23 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1623CEB11BFD40FB00EFAD72 /* AVFoundation.framework in Frameworks */,
+				168683031C07C43600CB4266 /* AudioToolbox.framework in Frameworks */,
+				16C1FF7D1C617FB100C070AA /* Accelerate.framework in Frameworks */,
+				16D810241C06242500605DE2 /* CFNetwork.framework in Frameworks */,
 				162B7DDC1C4EF792006972B5 /* CoreTelephony.framework in Frameworks */,
 				16E7AF961C3DF8A9005C9EDC /* CoreData.framework in Frameworks */,
+				169A7B321BFF282800A7C06D /* CoreLocation.framework in Frameworks */,
+				1623CEB91BFE319100EFAD72 /* CoreMotion.framework in Frameworks */,
+				160EE9BF1C050B9000015688 /* CoreBluetooth.framework in Frameworks */,
+				16D8102D1C06671500605DE2 /* ExternalAccessory.framework in Frameworks */,
 				16E155391C27C2AC00316321 /* EventKit.framework in Frameworks */,
 				16E1553A1C27C2AC00316321 /* EventKitUI.framework in Frameworks */,
+				16C1FF7F1C617FC300C070AA /* GLKit.framework in Frameworks */,
 				164DD66A1C1FC1F900ADA92B /* MapKit.framework in Frameworks */,
-				168683031C07C43600CB4266 /* AudioToolbox.framework in Frameworks */,
 				16D810261C06242F00605DE2 /* Security.framework in Frameworks */,
-				16D810241C06242500605DE2 /* CFNetwork.framework in Frameworks */,
-				160EE9BF1C050B9000015688 /* CoreBluetooth.framework in Frameworks */,
 				169A7B3D1BFFC9F900A7C06D /* SystemConfiguration.framework in Frameworks */,
-				169A7B321BFF282800A7C06D /* CoreLocation.framework in Frameworks */,
 				169384F01C17C39300A17F2C /* MicrosoftBandKit_iOS.framework in Frameworks */,
-				1623CEB91BFE319100EFAD72 /* CoreMotion.framework in Frameworks */,
-				16D8102D1C06671500605DE2 /* ExternalAccessory.framework in Frameworks */,
-				1623CEB11BFD40FB00EFAD72 /* AVFoundation.framework in Frameworks */,
 				FC2AF85D761397B784DECBD3 /* libPods-AWARE.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -481,25 +492,12 @@
 			name = AWAREFramework;
 			sourceTree = "<group>";
 		};
-		16228A3D1C22DAE20081C839 /* AWARE-Widget */ = {
-			isa = PBXGroup;
-			children = (
-				16228A3E1C22DAE20081C839 /* TodayViewController.h */,
-				16228A3F1C22DAE20081C839 /* TodayViewController.m */,
-				16228A411C22DAE20081C839 /* MainInterface.storyboard */,
-				16228A441C22DAE20081C839 /* Info.plist */,
-			);
-			path = "AWARE-Widget";
-			sourceTree = "<group>";
-		};
 		1623CE5D1BFD1B2C00EFAD72 = {
 			isa = PBXGroup;
 			children = (
 				1623CE681BFD1B2C00EFAD72 /* AWARE */,
 				1623CE851BFD1B2C00EFAD72 /* AWARETests */,
 				1623CE901BFD1B2C00EFAD72 /* AWAREUITests */,
-				16228A3D1C22DAE20081C839 /* AWARE-Widget */,
-				16F2139D1C589BC2007E89CA /* AWAREKeyboard */,
 				1623CE671BFD1B2C00EFAD72 /* Products */,
 				FB81DBFF7EDA98B8AA03FF24 /* Pods */,
 				2A3CA9F5620967BACB187EB7 /* Frameworks */,
@@ -569,6 +567,15 @@
 			path = AWAREUITests;
 			sourceTree = "<group>";
 		};
+		1623FFE11C5DCFC500F3E3E4 /* Pedometer */ = {
+			isa = PBXGroup;
+			children = (
+				1623FFDE1C5DCF7900F3E3E4 /* Pedometer.h */,
+				1623FFDF1C5DCF7900F3E3E4 /* Pedometer.m */,
+			);
+			name = Pedometer;
+			sourceTree = "<group>";
+		};
 		162B7DE01C4EFA59006972B5 /* Calls */ = {
 			isa = PBXGroup;
 			children = (
@@ -621,6 +628,11 @@
 			children = (
 				1623CEB51BFE175F00EFAD72 /* AWARESensor.h */,
 				1623CEB61BFE175F00EFAD72 /* AWARESensor.m */,
+				16EB1E581C4A930500966A07 /* LocalFileStorageHelper.h */,
+				16EB1E591C4A930500966A07 /* LocalFileStorageHelper.m */,
+				168C71D91C67B9CC00878DD8 /* AWAREDataUploader.h */,
+				168C71DA1C67B9CC00878DD8 /* AWAREDataUploader.m */,
+				16C1FF911C644F5000C070AA /* Debug */,
 				16F213AB1C59426D007E89CA /* ApplicationHistory */,
 				162B7DE01C4EFA59006972B5 /* Calls */,
 				1602ADB81C45B021002B3121 /* Accelerometer */,
@@ -644,11 +656,31 @@
 			name = Sensors;
 			sourceTree = "<group>";
 		};
+		16C1FDAD1C617D4500C070AA /* HealthKit */ = {
+			isa = PBXGroup;
+			children = (
+				166F1A6E1C602B44002124FB /* AWAREHealthKit.h */,
+				166F1A6F1C602B44002124FB /* AWAREHealthKit.m */,
+			);
+			name = HealthKit;
+			sourceTree = "<group>";
+		};
+		16C1FF911C644F5000C070AA /* Debug */ = {
+			isa = PBXGroup;
+			children = (
+				16C1FF951C64501D00C070AA /* Debug.h */,
+				16C1FF961C64501D00C070AA /* Debug.m */,
+			);
+			name = Debug;
+			sourceTree = "<group>";
+		};
 		16E155341C252B5B00316321 /* Plugins */ = {
 			isa = PBXGroup;
 			children = (
 				16E155311C252B4D00316321 /* AWAREPlugin.h */,
 				16E155321C252B4D00316321 /* AWAREPlugin.m */,
+				16C1FDAD1C617D4500C070AA /* HealthKit */,
+				1623FFE11C5DCFC500F3E3E4 /* Pedometer */,
 				16E47ECB1C4D8C05005B7932 /* FusedLocations */,
 				16E7AF911C3DB9D4005C9EDC /* GoogleLogin */,
 				164B1A9D1C4923FC0047BB85 /* BalancedCampusCalendar */,
@@ -691,8 +723,6 @@
 				16DEA2361C54557B00B607C9 /* AWAREUtils.m */,
 				16E7AF821C3D54D4005C9EDC /* SSLManager.h */,
 				16E7AF831C3D54D4005C9EDC /* SSLManager.m */,
-				16EB1E581C4A930500966A07 /* LocalFileStorageHelper.h */,
-				16EB1E591C4A930500966A07 /* LocalFileStorageHelper.m */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -771,16 +801,6 @@
 			name = GoogleLogin;
 			sourceTree = "<group>";
 		};
-		16F2139D1C589BC2007E89CA /* AWAREKeyboard */ = {
-			isa = PBXGroup;
-			children = (
-				16F2139E1C589BC2007E89CA /* KeyboardViewController.h */,
-				16F2139F1C589BC2007E89CA /* KeyboardViewController.m */,
-				16F213A11C589BC2007E89CA /* Info.plist */,
-			);
-			path = AWAREKeyboard;
-			sourceTree = "<group>";
-		};
 		16F213AB1C59426D007E89CA /* ApplicationHistory */ = {
 			isa = PBXGroup;
 			children = (
@@ -795,6 +815,8 @@
 			children = (
 				1623FFDC1C5ADB6E00F3E3E4 /* libSystem.tbd */,
 				9ED04F29ED60F3FCC960F6CD /* libPods-AWARE.a */,
+				16C1FF7E1C617FC300C070AA /* GLKit.framework */,
+				16C1FF7C1C617FB100C070AA /* Accelerate.framework */,
 				162B7DDB1C4EF792006972B5 /* CoreTelephony.framework */,
 				16E7AF951C3DF8A9005C9EDC /* CoreData.framework */,
 				16E155371C27C2AC00316321 /* EventKit.framework */,
@@ -1046,6 +1068,7 @@
 			files = (
 				1623CEB71BFE175F00EFAD72 /* AWARESensor.m in Sources */,
 				169A7B351BFFB67800A7C06D /* Network.m in Sources */,
+				166F1A701C602B44002124FB /* AWAREHealthKit.m in Sources */,
 				169A7B3B1BFFC8B100A7C06D /* Wifi.m in Sources */,
 				164DD65C1C1F762000ADA92B /* Screen.m in Sources */,
 				168683061C07C48900CB4266 /* AmbientNoise.m in Sources */,
@@ -1067,6 +1090,7 @@
 				160EE9BD1C050B4C00015688 /* Bluetooth.m in Sources */,
 				169A7B461C0052F800A7C06D /* Gravity.m in Sources */,
 				169A7B241BFF16E700A7C06D /* Gyroscope.m in Sources */,
+				16C1FF971C64501D00C070AA /* Debug.m in Sources */,
 				16E47ECA1C4D8BF5005B7932 /* FusedLocations.m in Sources */,
 				160EE9C31C052DAA00015688 /* OpenWeather.m in Sources */,
 				16EB1E5A1C4A930500966A07 /* LocalFileStorageHelper.m in Sources */,
@@ -1088,6 +1112,7 @@
 				164DD6621C1FA72D00ADA92B /* NTPTime.m in Sources */,
 				16EB1E5D1C4AC12500966A07 /* CalEvent.m in Sources */,
 				169A7B431BFFDE8F00A7C06D /* Rotation.m in Sources */,
+				168C71DB1C67B9CC00878DD8 /* AWAREDataUploader.m in Sources */,
 				1643959F1C22EEC40039E113 /* Scheduler.m in Sources */,
 				16DEA2371C54557B00B607C9 /* AWAREUtils.m in Sources */,
 				1623CEB41BFD659000EFAD72 /* AWAREKeys.m in Sources */,
@@ -1095,6 +1120,7 @@
 				164DD6651C1FB1A400ADA92B /* Proximity.m in Sources */,
 				169A7B301BFF280C00A7C06D /* Locations.m in Sources */,
 				169A7B491C00591A00A7C06D /* LinearAccelerometer.m in Sources */,
+				1623FFE01C5DCF7900F3E3E4 /* Pedometer.m in Sources */,
 				1623CE6B1BFD1B2C00EFAD72 /* main.m in Sources */,
 				164DD65F1C1F9F1900ADA92B /* DeviceUsage.m in Sources */,
 			);
@@ -1132,14 +1158,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		16228A411C22DAE20081C839 /* MainInterface.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				16228A421C22DAE20081C839 /* Base */,
-			);
-			name = MainInterface.storyboard;
-			sourceTree = "<group>";
-		};
 		1623CE721BFD1B2C00EFAD72 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (

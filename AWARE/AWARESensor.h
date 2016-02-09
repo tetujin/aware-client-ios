@@ -10,14 +10,11 @@
 #import <SystemConfiguration/SystemConfiguration.h>
 #import <Foundation/Foundation.h>
 #import "AWAREUtils.h"
-//#import <DeployGateSDK/DeployGateSDK.h>
-
-//#define NSLog DGSLog
 
 @protocol AWARESensorDelegate <NSObject>
-//- (BOOL) startSensor:(double) interval withUploadInterval:(double)upInterval;
 - (BOOL) startSensor:(double)upInterval withSettings:(NSArray *)settings;
 - (BOOL) stopSensor;
+- (void) syncAwareDB;
 @end
 
 @interface AWARESensor : NSObject <AWARESensorDelegate, NSURLSessionDataDelegate, NSURLSessionTaskDelegate, UIAlertViewDelegate>
@@ -26,6 +23,16 @@
 
 @property (strong, nonatomic) NSString * syncDataQueryIdentifier;
 @property (strong, nonatomic) NSString * createTableQueryIdentifier;
+
+// for storing debug events
+- (void) trackDebugEvents;
+- (bool) saveDebugEventWithText:(NSString *)eventText type:(NSInteger)type label:(NSString *)label;
+
+// for manual data upload
+- (NSString *) getNetworkReachabilityAsText;
+- (bool) isUploading;
+- (void) lockSensor:(bool) status;
+
 
 - (void) setBufferLimit:(int) limit;
 - (void) startWriteAbleTimer;
@@ -44,6 +51,10 @@
 - (void) syncAwareDB;
 - (void) syncAwareDBWithSensorName:(NSString*) sensorName;
 - (BOOL) syncAwareDBWithData:(NSDictionary *) dictionary;
+- (BOOL) syncAwareDBInForeground;
+- (BOOL) syncAwareDBInForegroundWithSensorName:(NSString*) sensorName;
+- (NSString *) getSyncProgressAsText;
+- (NSString *) getSyncProgressAsText:(NSString*) sensorName;
 - (NSString *) getLatestSensorData:(NSString*)deviceId withUrl:(NSString*) url;
 - (double) getSensorSetting:(NSArray *)settings withKey:(NSString *)key;
 - (void) createTable:(NSString *)query withTableName:(NSString*) tableName;

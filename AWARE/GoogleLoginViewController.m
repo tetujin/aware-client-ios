@@ -17,20 +17,15 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
     // -- For Google Login --
-    // TODO(developer) Configure the sign-in button look/feel
     [GIDSignIn sharedInstance].uiDelegate = self;
-    // Uncomment to automatically sign in the user.
     [[GIDSignIn sharedInstance] signInSilently];
-    // Do any additional setup after loading the view.
     
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-    [defaults objectForKey:@"GOOGLE_ID"];
-    [defaults objectForKey:@"GOOGLE_NAME"];
+//    [defaults objectForKey:@"GOOGLE_ID"];
+//    [defaults objectForKey:@"GOOGLE_NAME"];
+//    [defaults objectForKey:@"GOOGLE_ID_TOKEN"];
     NSString *email = [defaults objectForKey:@"GOOGLE_EMAIL"];
-    [defaults objectForKey:@"GOOGLE_ID_TOKEN"];
-    
     _account.text = email;
 }
 
@@ -46,25 +41,19 @@
 // Stop the UIActivityIndicatorView animation that was started when the user
 // pressed the Sign In button
 - (void)signInWillDispatch:(GIDSignIn *)signIn error:(NSError *)error {
-//    [myActivityIndicator stopAnimating];
-    NSLog(@"gogo");
-    
-//    ViewController *secondVC = [[ViewController alloc] init];
-//    [self presentViewController:secondVC animated:YES completion: nil];
+
 }
 
 // Present a view that prompts the user to sign in with Google
-- (void)signIn:(GIDSignIn *)signIn
-presentViewController:(UIViewController *)viewController {
+- (void)signIn:(GIDSignIn *)signIn presentViewController:(UIViewController *)viewController {
     [self presentViewController:viewController animated:YES completion:nil];
-    NSLog(@"---");
     
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     [defaults objectForKey:@"GOOGLE_ID"];
     [defaults objectForKey:@"GOOGLE_NAME"];
-    NSString *email = [defaults objectForKey:@"GOOGLE_EMAIL"];
     [defaults objectForKey:@"GOOGLE_ID_TOKEN"];
     
+    NSString *email = [defaults objectForKey:@"GOOGLE_EMAIL"];
     _account.text = email;
 }
 
@@ -89,7 +78,6 @@ dismissViewController:(UIViewController *)viewController {
                                                delegate:self
                                       cancelButtonTitle:nil
                                       otherButtonTitles:@"OK", nil];
-//    av.alertViewStyle = UIAlertViewStylePlainTextInput;
     [av show];
     
     _account.text = @"";

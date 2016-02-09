@@ -9,6 +9,7 @@
 #import "AWAREStudy.h"
 #import "AWAREKeys.h"
 #import "SSLManager.h"
+#import "AWAREUtils.h"
 
 @implementation AWAREStudy {
     NSString *mqttPassword;
@@ -55,23 +56,19 @@
 }
 
 
-- (NSString *)getSystemUUID {
-    NSString * uuid = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
-    uuid = [uuid lowercaseString];
-    return uuid;
-}
-
-- (BOOL) isForeground {
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    return [userDefaults boolForKey:@"APP_STATE"];
-}
-
+/**
+ * This method downloads and sets a study configuration by using study URL. (NOTE: This URL can get from a study QRCode.)
+ *
+ * @param url An study URL (e.g., https://r2d2.hcii.cs.cmu.edu/aware/dashboard/index.php/webservice/index/41/4LtzPxcAIrdi)
+ * @return The result of download and set a study configuration
+ */
 - (BOOL) setStudyInformationWithURL:(NSString*)url {
     if (url != nil) {
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         [userDefaults setObject:url forKey:KEY_STUDY_QR_CODE];
     }
-    return [self setStudyInformation:url withDeviceId:[self getSystemUUID]];
+    NSString * deviceId = [AWAREUtils getSystemUUID];
+    return [self setStudyInformation:url withDeviceId:deviceId];
 }
 
 - (bool) setStudyInformation:(NSString *)url withDeviceId:(NSString *) uuid {
@@ -89,28 +86,24 @@
     [request setHTTPMethod:@"POST"];
     [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
     [request setHTTPBody:postData];
-    
-//        sessionConfig = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:_getConfigFileIdentifier];
-    
-    if ([self isForeground]) {
+
+    // A process in the foreground
+    if ( [AWAREUtils isForeground] ) {
         NSURLSession *session = [NSURLSession sharedSession];
-        
         [[session dataTaskWithRequest: request  completionHandler: ^(NSData *data, NSURLResponse *response, NSError *error) {
-            
+            [session finishTasksAndInvalidate];
+            [session invalidateAndCancel];
+            // Success
             if (response && ! error) {
                 NSString *responseString = [[NSString alloc] initWithData: data  encoding: NSUTF8StringEncoding];
                 NSLog(@"Success: %@", responseString);
                 [self setStudySettings:data];
-                [session finishTasksAndInvalidate];
-                [session invalidateAndCancel];
-            }
-            else {
+            // Error
+            } else {
                 NSLog(@"Error: %@", error);
-                [session finishTasksAndInvalidate];
-                [session invalidateAndCancel];
             }
-            
         }] resume];
+    // A process in the background
     }else{
         sessionConfig = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:_getSettingIdentifier];
         sessionConfig.timeoutIntervalForRequest = 120.0;
@@ -145,10 +138,6 @@ didReceiveResponse:(NSURLResponse *)response
          dataTask:(NSURLSessionDataTask *)dataTask
    didReceiveData:(NSData *)data {
 
-//    if ([session.configuration.identifier isEqualToString:_getSettingIdentifier]) {
-//        // CRT file was installed to this device
-////        [self setStudySettings:data];
-//    }
     [self setStudySettings:data];
     [session finishTasksAndInvalidate];
     [session invalidateAndCancel];
@@ -158,8 +147,10 @@ didReceiveResponse:(NSURLResponse *)response
 - (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error {
     if (error != nil) {
         NSLog(@"ERROR: %@ %ld", error.debugDescription , error.code);
-//        if ([session.configuration.identifier isEqualToString:_getSettingIdentifier] && error.code == -1202) {
-         if (error.code == -1202) {
+        if (error.code == -1202) {
+            /**
+             * If the error code is -1202, this device needs .crt for SSL(secure) connection.
+             */
             // Install CRT file for SSL
             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
             NSString* url = [userDefaults objectForKey:KEY_STUDY_QR_CODE];
@@ -172,7 +163,14 @@ didReceiveResponse:(NSURLResponse *)response
 }
 
 
-- (void) setStudySettings:(NSData *) resData {// withResponseCode:(int) responseCode{
+
+
+/**
+ * This method sets downloaded study configurations.
+ *
+ * @param resData A response (study configurations) from the aware server
+ */
+- (void) setStudySettings:(NSData *) resData {
     NSArray *mqttArray = [NSJSONSerialization JSONObjectWithData:resData options:NSJSONReadingMutableContainers error:nil];
     id obj = [NSJSONSerialization JSONObjectWithData:resData options:NSJSONReadingMutableContainers error:nil];
     NSData *data = [NSJSONSerialization dataWithJSONObject:obj options:0 error:nil];
@@ -213,7 +211,7 @@ didReceiveResponse:(NSURLResponse *)response
         NSLog(@"Add new device ID to the AWARE server.");
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         NSString* url =  [userDefaults objectForKey:KEY_STUDY_QR_CODE];
-        NSString * uuid = [self getSystemUUID];
+        NSString * uuid = [AWAREUtils getSystemUUID];
         [self addNewDeviceToAwareServer:url withDeviceId:uuid];
     }else{
         NSLog(@"This device ID is already regited to the AWARE server.");
@@ -232,53 +230,61 @@ didReceiveResponse:(NSURLResponse *)response
     [userDefaults setObject:plugins forKey:KEY_PLUGINS];
     
     readingState = YES;
-    //    }else{
-    //        NSLog(@"AWARE cannot get study information from AWARE server.");
-    //    }
 }
 
 
+
+/**
+ * This method sets downloaded study configurations.
+ *
+ * @param resData A response (study configurations) from the aware server
+ */
 - (bool) addNewDeviceToAwareServer:(NSString *)url withDeviceId:(NSString *) uuid {
-    
+    NSLog(@"Create an aware_device table on the aware server");
     [self createTable:url withDeviceId:uuid];
     
     // preparing for insert device information
     url = [NSString stringWithFormat:@"%@/aware_device/insert", url];
-    NSMutableDictionary *jsonQuery = [[NSMutableDictionary alloc] init];
-    double timeStamp = [[NSDate date] timeIntervalSince1970] * 1000;
-    NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
+    NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
     struct utsname systemInfo;
     uname(&systemInfo);
-    NSString* code = [NSString stringWithCString:systemInfo.machine
-                                        encoding:NSUTF8StringEncoding];
-    //    NSString *systemName = [[UIDevice currentDevice] systemName];
-    NSString *identifier = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
-    NSString *name = [[UIDevice currentDevice] name];
-    NSString *systemVersion = [[UIDevice currentDevice] systemVersion];
-    //    NSString *localizeModel = [[UIDevice currentDevice] localizedModel];
-    NSString *model = [[UIDevice currentDevice] model];
-    //    NSString *deviceName = [self deviceName];
-    NSString *manufacturer = @"Apple";
     
+    NSString* machine =  [NSString stringWithCString:systemInfo.machine  encoding:NSUTF8StringEncoding]; // ok
+    NSString* nodeName = [NSString stringWithCString:systemInfo.nodename encoding:NSUTF8StringEncoding]; // ok
+    NSString* release =  [NSString stringWithCString:systemInfo.release  encoding:NSUTF8StringEncoding]; // ok
+    NSString* systemName = [NSString stringWithCString:systemInfo.sysname encoding:NSUTF8StringEncoding];// ok
+    NSString* version = [NSString stringWithCString:systemInfo.version encoding:NSUTF8StringEncoding];
+    NSString *name = [[UIDevice currentDevice] name];//ok
+    NSString *systemVersion = [[UIDevice currentDevice] systemVersion];//ok
+    NSString *localizeModel = [[UIDevice currentDevice] localizedModel];//
+    NSString *model = [[UIDevice currentDevice] model]; //ok
+    NSString *manufacturer = @"Apple";//ok
     
-    [jsonQuery setValue:uuid  forKey:@"device_id"];
-    [jsonQuery setValue:unixtime forKey:@"timestamp"];
-    [jsonQuery setValue:manufacturer forKey:@"board"];//    board	TEXT	Manufacturer’s board name
-    [jsonQuery setValue:model forKey:@"brand"];//    brand	TEXT	Manufacturer’s brand name
-    [jsonQuery setValue:manufacturer forKey:@"device"];//    device	TEXT	Manufacturer’s device name
-    [jsonQuery setValue:code forKey:@"build_id"];//    build_id	TEXT	Android OS build ID
-    [jsonQuery setValue:manufacturer forKey:@"hardware"];//    hardware	TEXT	Hardware codename
-    [jsonQuery setValue:manufacturer forKey:@"manufacturer"];//    manufacturer	TEXT	Device’s manufacturer
-    [jsonQuery setValue:[self deviceName] forKey:@"model"];//    model	TEXT	Device’s model
-    [jsonQuery setValue:manufacturer forKey:@"product"];//    product	TEXT	Device’s product name
-    [jsonQuery setValue:identifier forKey:@"serial"];//    serial	TEXT	Manufacturer’s device serial, not unique
-    [jsonQuery setValue:systemVersion forKey:@"release"];//    release	TEXT	Android’s release
-    [jsonQuery setValue:@"user" forKey:@"release_type"];//    release_type	TEXT	Android’s type of release (e.g., user, userdebug, eng)
-    [jsonQuery setValue:systemVersion forKey:@"sdk"];//    sdk	INTEGER	Android’s SDK level
-    [jsonQuery setValue:name forKey:@"label"];
     
     //    [[UIDevice currentDevice] platformType]   // ex: UIDevice4GiPhone
     //    [[UIDevice currentDevice] platformString] // ex: @"iPhone 4G"
+//    @property(nonatomic,readonly,strong) NSString    *name;              // e.g. "My iPhone"
+//    @property(nonatomic,readonly,strong) NSString    *model;             // e.g. @"iPhone", @"iPod touch"
+//    @property(nonatomic,readonly,strong) NSString    *localizedModel;    // localized version of model
+//    @property(nonatomic,readonly,strong) NSString    *systemName;        // e.g. @"iOS"
+//    @property(nonatomic,readonly,strong) NSString    *systemVersion;     // e.g. @"4.0"
+    
+    NSMutableDictionary *jsonQuery = [[NSMutableDictionary alloc] init];
+    [jsonQuery setValue:uuid            forKey:@"device_id"];
+    [jsonQuery setValue:unixtime        forKey:@"timestamp"];
+    [jsonQuery setValue:manufacturer    forKey:@"board"];
+    [jsonQuery setValue:model           forKey:@"brand"];
+    [jsonQuery setValue:[AWAREUtils deviceName] forKey:@"device"];
+    [jsonQuery setValue:version         forKey:@"build_id"];
+    [jsonQuery setValue:machine         forKey:@"hardware"];
+    [jsonQuery setValue:manufacturer    forKey:@"manufacturer"];
+    [jsonQuery setValue:model           forKey:@"model"];
+    [jsonQuery setValue:[AWAREUtils deviceName]    forKey:@"product"];
+    [jsonQuery setValue:version         forKey:@"serial"];
+    [jsonQuery setValue:release         forKey:@"release"];
+    [jsonQuery setValue:localizeModel        forKey:@"release_type"];
+    [jsonQuery setValue:systemVersion   forKey:@"sdk"];
+    [jsonQuery setValue:name            forKey:@"label"];
     
     NSMutableArray *a = [[NSMutableArray alloc] init];
     [a addObject:jsonQuery];
@@ -322,6 +328,14 @@ didReceiveResponse:(NSURLResponse *)response
     return true;
 }
 
+
+
+/**
+ * Create an aware_device table with an url and an uuid
+ * @param url An url for create aware_device table on aware database
+ * @param uuid An uuid for create aware_device table on aware database
+ * @return A result of creating a table of the aware_deivce table
+ */
 - (bool) createTable:(NSString *)url withDeviceId:(NSString *) uuid{
         // preparing for insert device information
         url = [NSString stringWithFormat:@"%@/aware_device/create_table", url];
@@ -364,7 +378,6 @@ didReceiveResponse:(NSURLResponse *)response
     NSString * resultDate = [[NSString alloc] initWithData:resData encoding:NSUTF8StringEncoding];
     NSLog(@"==> %@", resultDate);
     int responseCode = (int)[response statusCode];
-//            dispatch_async(dispatch_get_main_queue(), ^{
     if(responseCode == 200){
         NSLog(@"UPLOADED SENSOR DATA TO A SERVER");
         return YES;
@@ -372,35 +385,17 @@ didReceiveResponse:(NSURLResponse *)response
         NSLog(@"ERROR");
         return NO;
     }
-//            });
-//        });
     return NO;
 }
 
 
-- (BOOL) isFirstAccess:(NSString* ) url withDeviceId:(NSString *) uuid {
+
+- (BOOL) isFirstAccess:(NSString*) url withDeviceId:(NSString *) uuid {
     // check latest record
     // https://api.awareframework.com/index.php/webservice/index/STUDYID/APIKEY/accelerometer/latest
-    NSString * latestDataURL = [NSString stringWithFormat:@"%@/aware_device_/latest", url];
+    NSString * latestDataURL = [NSString stringWithFormat:@"%@/aware_device/latest", url];
     NSLog(@"%@", latestDataURL);
     
-//    NSMutableDictionary *query = [[NSMutableDictionary alloc] init];
-//    NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
-//    NSNumber* unixtime = [NSNumber numberWithDouble:timeStamp];
-//    [query setValue:uuid  forKey:@"device_id"];
-//    [query setValue:unixtime forKey:@"timestamp"];
-    
-//    NSError *error;
-//    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:query
-//                                                       options:NSJSONWritingPrettyPrinted // Pass 0 if you don't care about the readability of the generated string
-//                                                         error:&error];
-//    NSString *jsonString = @"";
-//    if (! jsonData) {
-//        NSLog(@"Got an error: %@", error);
-//    } else {
-//        jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-//        NSLog(@"%@",jsonString);
-//    }
     NSString *post = [NSString stringWithFormat:@"device_id=%@", uuid];
     NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
     NSString *postLength = [NSString stringWithFormat:@"%ld", [postData length]];
@@ -418,7 +413,7 @@ didReceiveResponse:(NSURLResponse *)response
     int responseCode = (int)[response statusCode];
     if(responseCode == 200){
         NSString* resultString = [[NSString alloc] initWithData:resData encoding:NSUTF8StringEncoding];
-//        NSLog(@"UPLOADED SENSOR DATA TO A SERVER");
+        //        NSLog(@"UPLOADED SENSOR DATA TO A SERVER");
         NSLog(@"Result: %@", resultString);
         if ([resultString isEqualToString:@"[]"]) {
             return YES;
@@ -430,17 +425,7 @@ didReceiveResponse:(NSURLResponse *)response
     }
 }
 
-- (BOOL)refreshStudy {
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    NSString *url = [userDefaults objectForKey:KEY_STUDY_QR_CODE];
-    if (url != nil) {
-        [self setStudyInformationWithURL:url];
-        return YES;
-    }
-    return NO;
-}
 
-// bool
 - (BOOL) isAvailable {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSArray * sensors = [userDefaults objectForKey:KEY_SENSORS];
@@ -449,6 +434,17 @@ didReceiveResponse:(NSURLResponse *)response
     }else{
         return NO;
     }
+}
+
+
+- (BOOL)refreshStudy {
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString *url = [userDefaults objectForKey:KEY_STUDY_QR_CODE];
+    if (url != nil) {
+        [self setStudyInformationWithURL:url];
+        return YES;
+    }
+    return NO;
 }
 
 // MQTT Information
@@ -480,11 +476,12 @@ didReceiveResponse:(NSURLResponse *)response
 - (NSString* ) getStudyId{
     return studyId;}
 
+
 - (NSString* ) getWebserviceServer{
     return webserviceServer;
 }
 
-// Sensor Infromation
+
 - (NSArray *) getSensors {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     return [userDefaults objectForKey:KEY_SENSORS];
@@ -510,69 +507,5 @@ didReceiveResponse:(NSURLResponse *)response
     return YES;
 }
 
-
-
-/**
- * http://stackoverflow.com/questions/11197509/ios-how-to-get-device-make-and-model
- */
-- (NSString*) deviceName {
-    struct utsname systemInfo;
-    uname(&systemInfo);
-    NSString* code = [NSString stringWithCString:systemInfo.machine
-                                        encoding:NSUTF8StringEncoding];
-    
-    static NSDictionary* deviceNamesByCode = nil;
-    
-    if (!deviceNamesByCode) {
-        
-        deviceNamesByCode = @{@"i386"      :@"Simulator",
-                              @"iPod1,1"   :@"iPod Touch",      // (Original)
-                              @"iPod2,1"   :@"iPod Touch",      // (Second Generation)
-                              @"iPod3,1"   :@"iPod Touch",      // (Third Generation)
-                              @"iPod4,1"   :@"iPod Touch",      // (Fourth Generation)
-                              @"iPhone1,1" :@"iPhone",          // (Original)
-                              @"iPhone1,2" :@"iPhone",          // (3G)
-                              @"iPhone2,1" :@"iPhone",          // (3GS)
-                              @"iPad1,1"   :@"iPad",            // (Original)
-                              @"iPad2,1"   :@"iPad 2",          //
-                              @"iPad3,1"   :@"iPad",            // (3rd Generation)
-                              @"iPhone3,1" :@"iPhone 4",        // (GSM)
-                              @"iPhone3,3" :@"iPhone 4",        // (CDMA/Verizon/Sprint)
-                              @"iPhone4,1" :@"iPhone 4S",       //
-                              @"iPhone5,1" :@"iPhone 5",        // (model A1428, AT&T/Canada)
-                              @"iPhone5,2" :@"iPhone 5",        // (model A1429, everything else)
-                              @"iPad3,4"   :@"iPad",            // (4th Generation)
-                              @"iPad2,5"   :@"iPad Mini",       // (Original)
-                              @"iPhone5,3" :@"iPhone 5c",       // (model A1456, A1532 | GSM)
-                              @"iPhone5,4" :@"iPhone 5c",       // (model A1507, A1516, A1526 (China), A1529 | Global)
-                              @"iPhone6,1" :@"iPhone 5s",       // (model A1433, A1533 | GSM)
-                              @"iPhone6,2" :@"iPhone 5s",       // (model A1457, A1518, A1528 (China), A1530 | Global)
-                              @"iPhone7,1" :@"iPhone 6 Plus",   //
-                              @"iPhone7,2" :@"iPhone 6",        //
-                              @"iPad4,1"   :@"iPad Air",        // 5th Generation iPad (iPad Air) - Wifi
-                              @"iPad4,2"   :@"iPad Air",        // 5th Generation iPad (iPad Air) - Cellular
-                              @"iPad4,4"   :@"iPad Mini",       // (2nd Generation iPad Mini - Wifi)
-                              @"iPad4,5"   :@"iPad Mini"        // (2nd Generation iPad Mini - Cellular)
-                              };
-    }
-    
-    NSString* deviceName = [deviceNamesByCode objectForKey:code];
-    
-    if (!deviceName) {
-        // Not found on database. At least guess main device type from string contents:
-        
-        if ([code rangeOfString:@"iPod"].location != NSNotFound) {
-            deviceName = @"iPod Touch";
-        }
-        else if([code rangeOfString:@"iPad"].location != NSNotFound) {
-            deviceName = @"iPad";
-        }
-        else if([code rangeOfString:@"iPhone"].location != NSNotFound){
-            deviceName = @"iPhone";
-        }
-    }
-    
-    return deviceName;
-}
 
 @end

@@ -5,6 +5,8 @@
 //  Created by Yuuki Nishiyama on 12/15/15.
 //  Copyright © 2015 Yuuki NISHIYAMA. All rights reserved.
 //
+//  http://www.awareframework.com/esm/
+//
 
 #import "AWAREEsmViewController.h"
 #import "ESM.h"
@@ -35,7 +37,6 @@
     CGRect spaceRect;
     CGRect lineRect;
     NSMutableArray* freeTextViews;
-//    NSArray *arrayForJson;
     NSMutableArray *uiElements;
     
     NSString * currentTextOfEsm;
@@ -72,10 +73,6 @@
     
     [self addNullElement];
     
-//    self.view = _mainScrollView;
-//    [self.navigationController.toolbar setTranslucent:NO];
-//    self.automaticallyAdjustsScrollViewInsets = NO;
-    
     self.singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onSingleTap:)];
     self.singleTap.delegate = self;
     self.singleTap.numberOfTapsRequired = 1;
@@ -89,6 +86,8 @@
     KEY_LABLES = @"KEY_LABELS";
     KEY_OBJECT = @"KEY_OBJECT";
 }
+
+
 
 -(void)onSingleTap:(UITapGestureRecognizer *)recognizer {
     NSLog(@"Single Tap");
@@ -113,18 +112,11 @@
 }
 
 
-#pragma mark - Navigation
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-//- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-//    // Get the new view controller using [segue destinationViewController].
-//    // Pass the selected object to the new view controller.
-////    NSLog(@"hello");
-//    if ([[segue identifier] isEqualToString:@"selectRow"]) {
-//        CustomViewController *vcntl = [segue destinationViewController];    // <- 1
-//        vcntl.rowNumber = [self.tableView indexPathForSelectedRow].row;    // <- 2
-//    }
-//}
 
 
 - (void)viewDidAppear:(BOOL)animated{
@@ -143,27 +135,23 @@
     if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
         self.navigationController.interactivePopGestureRecognizer.delegate = self;
     }
-
+    
+    // Get ESM using an ESMStorageHelper
     ESMStorageHelper *helper = [[ESMStorageHelper alloc] init];
     NSArray* esms = [helper getEsmTexts];
     for (NSString *esm in esms) {
+        // Set each ESM elemetns to the viewer
         [self addEsm:esm];
         currentTextOfEsm = esm;
         break;
     }
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-
 /**
- * Add ESM elements
+ * Add ESM elements from a JSON text
  */
-// add ESM Elements by using JSON text
 - (bool) addEsm:(NSString*) jsonStrOfAwareEsm {
+    // Covert an ESM json string to ESM object
     NSData *data = [jsonStrOfAwareEsm dataUsingEncoding:NSUTF8StringEncoding];
     NSError *error = nil;
     id object = [NSJSONSerialization
@@ -175,17 +163,14 @@
         NSLog(@"JSON format error!");
         return NO;
     }
-    
-//    NSArray *results = object;
     NSMutableArray * results = [[NSMutableArray alloc] initWithArray:object];
     
-    
-//    bool quick = NO;
+    // Set ESM Elements
     int tag = 0;
     NSLog(@"====== Hello ESM !! =======");
     for (NSDictionary *oneEsmObject in results) {
         NSDictionary * dic = [oneEsmObject objectForKey:@"esm"];
-        //the ESM type (1-free text, 2-radio, 3-checkbox, 4-likert, 5-quick, 6-scale)
+        //The ESM type (1-free text, 2-radio, 3-checkbox, 4-likert, 5-quick, 6-scale)
         NSNumber* type = [dic objectForKey:KEY_ESM_TYPE];
         switch ([type intValue]) {
             case 1: // free text
@@ -237,10 +222,14 @@
     return YES;
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-
-// add Free Text
+/**
+ * esm_type=1 : Add a Free Text element
+ *
+ * @param dic NSDictionary for ESM Object which needs <i>esm_type, esm_title, esm_instructions, esm_submit, esm_expiration_threshold, and esm_trigger.</i>
+ * @param tag An tag for identification of the ESM element
+ */
 - (void) addFreeTextElement:(NSDictionary *) dic withTag:(int) tag
 {
     [self addCommonContents:dic];
@@ -284,7 +273,13 @@
     [uiElements addObject:uiElement];
 }
 
-// add Radio Element
+
+/**
+ * esm_type=2 : Add a Radio Element
+ *
+ * @param dic NSDictionary for ESM Object which needs <i>esm_type, esm_title, esm_instructions, esm_radios, esm_submit, esm_expiration_threshold, and esm_trigger.</i>
+ * @param tag An tag for identification of the ESM element
+ */
 - (void) addRadioElement:(NSDictionary *) dic withTag:(int) tag {
     [self addCommonContents:dic];
     
@@ -296,11 +291,6 @@
     for (int i=0; i<radios.count ; i++) {
         NSString * labelText = @"";
         labelText = [radios objectAtIndex:i];
-//        if (i == radios.count) {
-//            labelText = @"N/A";
-//        }else{
-//            labelText = [radios objectAtIndex:i];
-//        }
         UIButton *s = [[UIButton alloc] initWithFrame:CGRectMake(mainContentRect.origin.x + 10, totalHight, 30, 30)];
         [s setImage:[UIImage imageNamed:@"unselected_circle"] forState:UIControlStateNormal];
         UILabel * label = [[UILabel alloc] initWithFrame:CGRectMake(mainContentRect.origin.x + 10 + 60,
@@ -420,8 +410,15 @@
 }
 
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// add Check Box Element
+
+/**
+ * esm_type=3 : Add a Check Box Element
+ *
+ * @param dic NSDictionary for ESM Object which needs <i>esm_type, esm_title, esm_instructions, esm_checkboxes, esm_submit, esm_expiration_threshold, and esm_trigger.</i>
+ * @param tag An tag for identification of the ESM element
+ */
 - (void) addCheckBoxElement:(NSDictionary *) dic withTag:(int) tag{
     [self addCommonContents:dic];
     NSMutableArray *elements = [[NSMutableArray alloc] init];
@@ -512,7 +509,15 @@
 }
 
 
-// add Likert Scale Element
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+/**
+ * esm_type=4 : Add a Likert Scale Element
+ *
+ * @param dic NSDictionary for ESM Object which needs <i>esm_type, esm_title, esm_instructions, esm_likert_max, esm_likert_max_label, esm_likert_min_label, esm_likert_step, esm_submit, esm_expiration_threshold, and esm_trigger.</i>
+ * @param tag An tag for identification of the ESM element
+ */
 - (void) addLikertScaleElement:(NSDictionary *) dic withTag:(int) tag {
     [self addCommonContents:dic];
     
@@ -524,18 +529,6 @@
                                                                   totalHight,
                                                                   mainContentRect.size.width-120,
                                                                   60)];
-//    UILabel * minLabel = [[UILabel alloc] initWithFrame:CGRectMake(ratingView.frame.origin.x - 20,
-//                                                                  totalHight,
-//                                                                  20,
-//                                                                  31)];
-//    minLabel.text = [NSString stringWithFormat:@"%d", [min intValue]];
-//    
-//    UILabel * maxLabel = [[UILabel alloc] initWithFrame:CGRectMake(ratingView.frame.origin.x + ratingView.frame.size.width,
-//                                                                   totalHight,
-//                                                                   20,
-//                                                                   31)];
-//    maxLabel.text = [NSString stringWithFormat:@"%d", [max intValue]];
-    
     // Add labels
     for (int i=0; i<[max intValue]+1; i++) {
         int anOptionWidth = ratingView.frame.size.width / ([max intValue] + 1); // "1" is a space for N/A label
@@ -571,9 +564,6 @@
         [elements addObject:option];
     }
     
-//    [_mainScrollView addSubview:maxLabel];
-//    [_mainScrollView addSubview:minLabel];
-    
     [self setContentSizeWithAdditionalHeight:ratingView.frame.size.height];
     
     NSMutableDictionary * uiElement = [[NSMutableDictionary alloc] init];
@@ -584,66 +574,6 @@
     [uiElement setObject:dic forKey:KEY_OBJECT];
     
     [uiElements addObject:uiElement];
-
-//    UISlider *slider = [[UISlider alloc] initWithFrame:CGRectMake(mainContentRect.origin.x+60, totalHight, mainContentRect.size.width-120, 31)];
-//    UILabel *maxLabel = [[UILabel alloc] initWithFrame:CGRectMake(mainContentRect.origin.x+mainContentRect.size.width -60, totalHight, 30, 31)];
-//    // We use a Y location as an unique ID; //TODO
-//    maxLabel.tag = totalHight;
-//    
-//    NSNumber *max = [dic objectForKey:KEY_ESM_LIKERT_MAX];
-//    [slider setMaximumValue: [max floatValue]];
-//    [slider setMinimumValue: 1];
-//    double curentValue = [max doubleValue] / 2.0f;
-//    slider.tag = tag;
-//    [slider setValue:roundf(curentValue)];
-//    [slider addTarget:self
-//                   action:@selector(setNaBoxFolse:)
-//         forControlEvents:UIControlEventTouchUpInside];
-//    [maxLabel setText: [NSString stringWithFormat:@"%d", (int)roundf(curentValue) ]];
-//
-//    // for N/A option
-//    UIButton * naCheckBox = [[UIButton alloc] initWithFrame:CGRectMake(mainContentRect.origin.x,
-//                                                                       totalHight+30,
-//                                                                       30, 30)];
-//    [naCheckBox setImage:[UIImage imageNamed:@"checked_box"] forState:UIControlStateNormal];
-//    naCheckBox.tag = tag;
-//    naCheckBox.selected = YES;
-//    UILabel * label = [[UILabel alloc] initWithFrame:CGRectMake(mainContentRect.origin.x+10+40,
-//                                                                totalHight+30,
-//                                                                mainContentRect.size.width-90,
-//                                                                30)];
-//    label.adjustsFontSizeToFitWidth = YES;
-//    label.text = @"N/A";
-//    [labels addObject:label];
-//    [naCheckBox addTarget:self
-//                   action:@selector(pushedNaBox:)
-//         forControlEvents:UIControlEventTouchUpInside];
-//    
-//    [_mainScrollView addSubview:slider];
-//    [_mainScrollView addSubview:maxLabel];
-//    [_mainScrollView addSubview:naCheckBox];
-//    [_mainScrollView addSubview:label];
-////    [_mainScrollView addSubview:minLabel];
-//    
-//    [self setContentSizeWithAdditionalHeight:31 + 30 + 10];
-//    
-//    
-//    [elements addObject:slider];
-//    [elements addObject:naCheckBox];
-//    [labels addObject:maxLabel];
-//    
-//    NSMutableDictionary * uiElement = [[NSMutableDictionary alloc] init];
-//    [uiElement setObject:[NSNumber numberWithInt:tag] forKey:KEY_TAG];
-//    [uiElement setObject:@4 forKey:KEY_TYPE];
-//    [uiElement setObject:elements forKey:KEY_ELEMENT];
-//    [uiElement setObject:labels forKey:KEY_LABLES];
-//    [uiElement setObject:dic forKey:KEY_OBJECT];
-//    
-//    
-//    [uiElements addObject:uiElement];
-//    // add uislder event
-//    
-//    [slider addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
 }
 
 - (void) pushedLikertButton:(UIButton *) sender {
@@ -700,7 +630,19 @@
     }
 }
 
-// add Quick Answer Element
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+/**
+ * esm_type=5 : Add a Quick Answer Element
+ *
+ * @param dic NSDictionary for ESM Object which needs <i>esm_type, esm_title, esm_instructions, esm_quick_answers, esm_submit, esm_expiration_threshold, and esm_trigger.</i>
+ * @param tag An tag for identification of the ESM element
+ */
 - (void) addQuickAnswerElement:(NSDictionary *) dic withTag:(int) tag{
     [self addCommonContents:dic];
     NSMutableArray *elements = [[NSMutableArray alloc] init];
@@ -731,32 +673,18 @@
 }
 
 
-//- (void) pushedQuickAnswerButtons:(id) sender {
-//    UIButton *resultButton = (UIButton *) sender;
-//    NSString *title = resultButton.currentTitle;
-//    
-//    ESM *esm = [[ESM alloc] initWithSensorName:SENSOR_ESMS];
-//    for (NSDictionary *esmDic in arrayForJson) {
-//        int type = [[esmDic objectForKey:KEY_ESM_TYPE] intValue];
-//        if ( type == 5 ) {
-//            NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
-//            NSNumber* unixtime = [NSNumber numberWithDouble:timeStamp];
-//            NSMutableDictionary *dic = [self getEsmFormatDictionary:(NSMutableDictionary *)esmDic
-//                                                       withTimesmap:unixtime
-//                                                            devieId:[esm getDeviceId]];
-//            [dic setObject:title forKey:KEY_ESM_USER_ANSWER];
-//            [esm saveData:dic];
-//            [esm performSelector:@selector(syncAwareDB) withObject:0 afterDelay:5];
-//            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Thank for submitting your answer!" message:@"" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-//            [alert show];
-//            [self.navigationController popToRootViewControllerAnimated:YES];
-//            break;
-//        }
-//    }
-//}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-//add Scale Element
+
+/**
+ * esm_type=6 : Add a Scale Element
+ *
+ * @param dic NSDictionary for ESM Object which needs <i>esm_type, esm_title, esm_instructions, esm_scale_min, esm_scale_max,
+ esm_scale_start, esm_scale_max_label, esm_scale_min_label, esm_scale_step, esm_submit, esm_expiration_threshold, and esm_trigger.</i>
+ * @param tag An tag for identification of the ESM element
+ */
 - (void) addScaleElement:(NSDictionary *) dic withTag:(int) tag{
     int valueLabelH = 30;
     int mainContentH = 30;
@@ -847,7 +775,17 @@
     [label setText:[NSString stringWithFormat:@"%d", intValue]];
 }
 
-// TODO
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+/**
+ * esm_type=6 : Add a Time Picker (WIP)
+ *
+ * @param dic NSDictionary for ESM Object which needs <i>esm_type, esm_title, esm_instructions, esm_submit, esm_expiration_threshold, and esm_trigger.</i>
+ * @param tag An tag for identification of the ESM element
+ */
 - (void) addTimePickerElement:(NSDictionary *)dic withTag:(int) tag{
     [self addCommonContents:dic];
     UIDatePicker * datePicker = [[UIDatePicker alloc] initWithFrame:CGRectMake(mainContentRect.origin.x,
@@ -917,6 +855,12 @@
 }
 
 
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Add a null element to the UI view.
+ */
 - (void) addNullElement {
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, totalHight, WIDTH_VIEW, HIGHT_SPACE)];
 //    [view setBackgroundColor:[UIColor grayColor]];
@@ -925,6 +869,11 @@
 }
 
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Add a line element to the UI view.
+ */
 - (void) addLineElement {
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(lineRect.origin.x, totalHight, lineRect.size.width, lineRect.size.height)];
     [view setBackgroundColor:[UIColor lightTextColor]];
@@ -933,6 +882,8 @@
     [self setContentSizeWithAdditionalHeight:lineRect.size.height];
 }
 
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
  * Add common contents in the ESM view
@@ -968,6 +919,15 @@
     }
 }
 
+- (void) addSubmitButtonWithText:(NSString*) text {
+    UIButton *submitBtn = [[UIButton alloc] initWithFrame:CGRectMake(buttonRect.origin.x, totalHight, buttonRect.size.width, buttonRect.size.height)];
+    [submitBtn setTitle:text forState:UIControlStateNormal];
+    [submitBtn setBackgroundColor:[UIColor grayColor]];
+    [_mainScrollView addSubview:submitBtn];
+    [self setContentSizeWithAdditionalHeight:HIGHT_BUTTON];
+    [submitBtn setTag:0];
+    [submitBtn addTarget:self action:@selector(pushedSubmitButton:) forControlEvents:UIControlEventTouchUpInside];
+}
 
 
 - (void) addCancelButtonWithText:(NSString*) text {
@@ -982,6 +942,15 @@
 
 
 
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+/**
+ * This method stores the esm answerds to local database with esm_status=2(answered). If the answers include dissmiss, this method save the answer as esm_status=1(dissmissed).
+ * And also, this method calls when a user push "submit" button.
+ */
 - (void) pushedSubmitButton:(id) senser {
     NSLog(@"Submit button was pushed!");
     
@@ -1189,9 +1158,10 @@
         ESMStorageHelper * helper = [[ESMStorageHelper alloc] init];
         [helper removeEsmWithText:currentTextOfEsm];
         
-        
+        /**
+         * If the device has other ESM.
+         */
         if([helper getEsmTexts].count > 0){
-//            [self viewDidLoad] //TODO
             [self viewDidAppear:NO];
             return ;
         }else{
@@ -1214,88 +1184,12 @@
 }
 
 
-- (NSMutableDictionary *) getEsmFormatDictionary:(NSMutableDictionary *)originalDic
-                                    withTimesmap:(NSNumber *)unixtime
-                                         devieId:(NSString*) deviceId{
-    // make base dictionary from SingleEsmObject with device ID and timestamp
-    SingleESMObject *singleObject = [[SingleESMObject alloc] init];
-    NSMutableDictionary * dic = [singleObject getEsmDictionaryWithDeviceId:deviceId
-                                                                 timestamp:[unixtime doubleValue]
-                                                                      type:@0
-                                                                     title:@""
-                                                              instructions:@""
-                                                       expirationThreshold:@0
-                                                                   trigger:@""];
-    
-    [dic setObject:@"" forKey:KEY_ESM_RADIOS];
-    [dic setObject:@"" forKey:KEY_ESM_CHECKBOXES];
-    [dic setObject:@"" forKey:KEY_ESM_QUICK_ANSWERS];
-    for (id key in [originalDic keyEnumerator]) {
-//        NSLog(@"Key: %@ => Value:%@" , key, [originalDic objectForKey:key]);
-        if([key isEqualToString:KEY_ESM_RADIOS]){
-            [dic setObject:[self convertArrayToCSVFormat:[originalDic objectForKey:key]] forKey:KEY_ESM_RADIOS];
-        }else if([key isEqualToString:KEY_ESM_CHECKBOXES]){
-            [dic setObject:[self convertArrayToCSVFormat:[originalDic objectForKey:key]] forKey:KEY_ESM_CHECKBOXES];
-        }else if([key isEqualToString:KEY_ESM_QUICK_ANSWERS]){
-            [dic setObject:[self convertArrayToCSVFormat:[originalDic objectForKey:key]] forKey:KEY_ESM_QUICK_ANSWERS];
-        }else{
-            NSObject *object = [originalDic objectForKey:key];
-            if (object == nil) {
-                object = @"";
-            }
-            [dic setObject:object forKey:key];
-        }
-    }
-    return dic;
-}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-- (NSString* ) convertArrayToCSVFormat:(NSArray *) array {
-    if (array == nil || array.count == 0){
-        return @"";
-    }
-    
-    NSError * error;
-    NSData *jsondata = [NSJSONSerialization dataWithJSONObject:array options:0 error:&error];
-    if (error) {
-        NSLog(@"%@", error);
-    }
-    NSString* jsonString = [[NSString alloc] initWithData:jsondata encoding:NSUTF8StringEncoding];
-    if ([jsonString isEqualToString:@""] || jsonString == nil) {
-        return @"[]";
-    }
-    
-    return jsonString;
-    
-    //    NSMutableString* csvStr = [[NSMutableString alloc] init];
-    //    for (NSString * item in array) {
-    //        [csvStr appendString:item];
-    //        [csvStr appendString:@","];
-    //    }
-    //    NSRange rangeOfExtraText = [csvStr rangeOfString:@"," options:NSBackwardsSearch];
-    //    if (rangeOfExtraText.location == NSNotFound) {
-    //    }else{
-    //        NSRange deleteRange = NSMakeRange(rangeOfExtraText.location, csvStr.length-rangeOfExtraText.location);
-    //        [csvStr deleteCharactersInRange:deleteRange];
-    //    }
-    //    if (csvStr == nil) {
-    //        return @"";
-    //    }
-    //    return csvStr;
-}
-
-- (void) addSubmitButtonWithText:(NSString*) text {
-    UIButton *submitBtn = [[UIButton alloc] initWithFrame:CGRectMake(buttonRect.origin.x, totalHight, buttonRect.size.width, buttonRect.size.height)];
-    [submitBtn setTitle:text forState:UIControlStateNormal];
-    [submitBtn setBackgroundColor:[UIColor grayColor]];
-    [_mainScrollView addSubview:submitBtn];
-    [self setContentSizeWithAdditionalHeight:HIGHT_BUTTON];
-    [submitBtn setTag:0];
-    [submitBtn addTarget:self action:@selector(pushedSubmitButton:) forControlEvents:UIControlEventTouchUpInside];
-}
-
-
-
+/**
+ * This method stores the esm answerds to local database with esm_status=2(dissmissed).
+ * And also, this method calls when a user push "cancel" button.
+ */
 - (void) pushedCancelButton:(id) senser {
     NSLog(@"Cancel button was pushed!");
     
@@ -1305,8 +1199,6 @@
     
     // Create
     ESM *esm = [[ESM alloc] initWithSensorName:SENSOR_ESMS];
-//    double timeStamp = [[NSDate date] timeIntervalSince1970] * 1000;
-//    NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
     NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
     NSString *deviceId = [esm getDeviceId];
     for (int i=0; i<uiElements.count; i++) {
@@ -1349,6 +1241,81 @@
 }
 
 
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * This method creates a complemented ESM safely for storing the ESM Object to the localstorage.
+ *
+ * @param originalDic A NSNutableDictionary with insufficie elements
+ * @param unixtime A current timestamp
+ * @param deviceId A evice_id for an aware study
+ * @return A complemented ESM NSMutableDictionary
+ */
+- (NSMutableDictionary *) getEsmFormatDictionary:(NSMutableDictionary *)originalDic
+                                    withTimesmap:(NSNumber *)unixtime
+                                         devieId:(NSString*) deviceId{
+    // make base dictionary from SingleEsmObject with device ID and timestamp
+    SingleESMObject *singleObject = [[SingleESMObject alloc] init];
+    NSMutableDictionary * dic = [singleObject getEsmDictionaryWithDeviceId:deviceId
+                                                                 timestamp:[unixtime doubleValue]
+                                                                      type:@0
+                                                                     title:@""
+                                                              instructions:@""
+                                                       expirationThreshold:@0
+                                                                   trigger:@""];
+    
+    [dic setObject:@"" forKey:KEY_ESM_RADIOS];
+    [dic setObject:@"" forKey:KEY_ESM_CHECKBOXES];
+    [dic setObject:@"" forKey:KEY_ESM_QUICK_ANSWERS];
+    for (id key in [originalDic keyEnumerator]) {
+        //        NSLog(@"Key: %@ => Value:%@" , key, [originalDic objectForKey:key]);
+        if([key isEqualToString:KEY_ESM_RADIOS]){
+            [dic setObject:[self convertArrayToCSVFormat:[originalDic objectForKey:key]] forKey:KEY_ESM_RADIOS];
+        }else if([key isEqualToString:KEY_ESM_CHECKBOXES]){
+            [dic setObject:[self convertArrayToCSVFormat:[originalDic objectForKey:key]] forKey:KEY_ESM_CHECKBOXES];
+        }else if([key isEqualToString:KEY_ESM_QUICK_ANSWERS]){
+            [dic setObject:[self convertArrayToCSVFormat:[originalDic objectForKey:key]] forKey:KEY_ESM_QUICK_ANSWERS];
+        }else{
+            NSObject *object = [originalDic objectForKey:key];
+            if (object == nil) {
+                object = @"";
+            }
+            [dic setObject:object forKey:key];
+        }
+    }
+    return dic;
+}
+
+
+/**
+ * This method converts NSArray object to JSON array string.
+ * @param array NSArray Object (e.g., the value of esm_radios, esm_checkboxes, and esm_quick_answers.)
+ * @return A JSON format string (["a","b", "c"])
+ */
+- (NSString* ) convertArrayToCSVFormat:(NSArray *) array {
+    if (array == nil || array.count == 0){
+        return @"";
+    }
+    NSError * error;
+    NSData *jsondata = [NSJSONSerialization dataWithJSONObject:array options:0 error:&error];
+    if (error) {
+        NSLog(@"%@", error);
+    }
+    NSString* jsonString = [[NSString alloc] initWithData:jsondata encoding:NSUTF8StringEncoding];
+    if ([jsonString isEqualToString:@""] || jsonString == nil) {
+        return @"[]";
+    }
+    
+    return jsonString;
+}
+
+
+/**
+ * This method is managing a total height of the ESM elemetns and a size of the base scroll view. You should call this method if you add a new element to the _mainScrollView.
+ */
 - (void) setContentSizeWithAdditionalHeight:(int) additionalHeight {
     totalHight += additionalHeight;
     [_mainScrollView setContentSize:CGSizeMake(WIDTH_VIEW, totalHight)];

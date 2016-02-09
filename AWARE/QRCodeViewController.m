@@ -13,7 +13,7 @@
 
 
 @interface QRCodeViewController (){
-    NSString *crtUrl;
+    // AWARE Study Object
     AWAREStudy *study;
     bool readingState;
 }
@@ -49,7 +49,7 @@
     [self.session addOutput:output];
 
     
-    //Select QR code
+    //Set QRCode filter
     output.metadataObjectTypes = output.availableMetadataObjectTypes;
     
     NSLog(@"%@", output.availableMetadataObjectTypes);
@@ -113,28 +113,25 @@
 }
 
 
-
+/**
+ * When QRcode is detected by the camera and QRcode filter, this method is called
+ */
 - (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputMetadataObjects:(NSArray *)metadataObjects fromConnection:(AVCaptureConnection *)connection {
-    NSLog(@"----");
-    for (AVMetadataObject *metadata in metadataObjects) {
-        if ([metadata.type isEqualToString:AVMetadataObjectTypeQRCode]) {
-            NSString *qrcode = [(AVMetadataMachineReadableCodeObject *)metadata stringValue];
-            // HTTPS/POST
-            if(readingState){
-                readingState = NO;
-                NSLog(@"%@", qrcode);
-                AWAREStudy *study = [[AWAREStudy alloc] init];
-//                bool result =
-                [study setStudyInformationWithURL:qrcode];
-                [self moveToTopPage];
-//                [self getStudyInformation:qrcode withDeviceId:deviceId];
-//                if (result) {
-//                [self performSelector:@selector(moveToTopPage) withObject:0 afterDelay:3];
-//                }
-//                readingState = YES;
+//    NSLog(@"----");
+    dispatch_async(dispatch_get_main_queue(), ^{
+        for (AVMetadataObject *metadata in metadataObjects) {
+            if ([metadata.type isEqualToString:AVMetadataObjectTypeQRCode]) {
+                NSString *qrcode = [(AVMetadataMachineReadableCodeObject *)metadata stringValue];
+                if(readingState){
+                    readingState = NO;
+                    NSLog(@"%@", qrcode);
+                    AWAREStudy *study = [[AWAREStudy alloc] init];
+                    [study setStudyInformationWithURL:qrcode];
+                    [self moveToTopPage];
+                }
             }
         }
-    }
+    });
 }
 
 - (void) moveToTopPage {

@@ -83,11 +83,18 @@ int ONE_HOUR = 60*60;
     NSLog(@"Start Open Weather Map");
     [self createTable];
     [self initLocationSensor];
+    
+    double frequencyMin = [self getSensorSetting:settings withKey:@"plugin_openweather_frequency"];
+    double frequencySec = 60.0f * frequencyMin;
+    if (frequencyMin == -1) {
+        frequencySec = 60.0f*15.0f;
+    }
+    
     syncTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval
                                                  target:self selector:@selector(syncAwareDB)
                                                userInfo:nil
                                                 repeats:YES];
-    sensingTimer = [NSTimer scheduledTimerWithTimeInterval:ONE_HOUR
+    sensingTimer = [NSTimer scheduledTimerWithTimeInterval:frequencySec
                                                     target:self
                                                   selector:@selector(getNewWeatherData)
                                                   userInfo:nil
@@ -232,7 +239,7 @@ int ONE_HOUR = 60*60;
     NSString *url = [NSString stringWithFormat:OPEN_WEATHER_API, (int)lat, (int)lon];
     request = [[NSMutableURLRequest alloc] init];
     [request setURL:[NSURL URLWithString:url]];
-    [request setHTTPMethod:@"GET"];
+    [request setHTTPMethod:@"POST"];
     [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
     
     // set HTTP/POST body information
@@ -462,7 +469,11 @@ didReceiveResponse:(NSURLResponse *)response
 
 - (NSString *) getName
 {
-    return [jsonWeatherData valueForKey:KEY_NAME];
+    NSString * cityName = [jsonWeatherData valueForKey:KEY_NAME];
+    if (cityName == nil) {
+        cityName = @"";
+    }
+    return cityName;
 }
 
 - (NSString *) convertKelToCel:(NSString *) kelStr

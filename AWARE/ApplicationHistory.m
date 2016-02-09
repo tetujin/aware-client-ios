@@ -41,16 +41,16 @@
         KEY_APP_VERSION = @"key_application_history_app_version";
         KEY_OS_VERSION = @"key_application_history_os_version";
         KEY_APP_INSTALL = @"key_application_history_app_install";
-        isTest = NO;
-        if (isTest) {
-            NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
-            [defaults removeObjectForKey:KEY_APP_VERSION];
-            [defaults removeObjectForKey:KEY_OS_VERSION];
-            [defaults removeObjectForKey:KEY_APP_INSTALL];
-            
-            [defaults setObject:@"hoge" forKey:KEY_OS_VERSION];
-            [defaults setObject:@"hello" forKey:KEY_APP_VERSION];
-        }
+//        isTest = NO;
+//        if (isTest) {
+//            NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
+//            [defaults removeObjectForKey:KEY_APP_VERSION];
+//            [defaults removeObjectForKey:KEY_OS_VERSION];
+//            [defaults removeObjectForKey:KEY_APP_INSTALL];
+//            
+//            [defaults setObject:@"0" forKey:KEY_OS_VERSION];
+//            [defaults setObject:@"0" forKey:KEY_APP_VERSION];
+//        }
     }
     return self;
 }

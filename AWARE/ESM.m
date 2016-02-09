@@ -39,9 +39,9 @@
     "esm_quick_answers text default '',"
     "esm_expiration_threshold integer default 0,"
     "esm_status integer default 0,"
-    "double_esm_user_answer_timestamp default 0,"
+    "double_esm_user_answer_timestamp real default 0,"
     "esm_user_answer text default '',"
-    "esm_trigger text defadult '',"
+    "esm_trigger text default '',"
     "esm_scale_min integer default 0,"
     "esm_scale_max integer default 0,"
     "esm_scale_start integer default 0,"
@@ -49,7 +49,7 @@
     "esm_scale_min_label text default '',"
     "esm_scale_step integer default 0";
 //    "UNIQUE (timestamp,device_id)";
-    NSLog(@"%@", query);
+//    NSLog(@"%@", query);
     [super createTable:query];
 }
 

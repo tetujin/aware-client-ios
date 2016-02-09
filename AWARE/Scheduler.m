@@ -13,6 +13,7 @@
 #import "AWAREKeys.h"
 #import "ESM.h"
 #import "AWAREEsmUtils.h"
+#import "Debug.h"
 
 @implementation Scheduler {
     NSMutableArray * scheduleManager; // This variable manages NSTimers.
@@ -66,6 +67,9 @@
 }
 
 - (void) setConfigFile:(id) sender {
+    
+    [self saveDebugEventWithText:@"[Scheduler] start to set configuration" type:DebugTypeInfo label:@""];
+    
     // Get Config URL from NSTimer of userInfo.
     resultData = [[NSMutableData alloc] init];
     
@@ -100,6 +104,7 @@
             NSLog(@"---> %@", resString);
             
             if (response && ! error) {
+                 [self saveDebugEventWithText:@"[Scheduler] Sucess to upload esm schedule" type:DebugTypeInfo label:@""];
                 // NOTE: For registrate a NSTimer in the backgroung, we have to set it in the main thread!
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self setEsmSchedulesWithJSONData:data];
@@ -107,6 +112,7 @@
             }else{
                 NSString* errorMessage = [NSString stringWithFormat:@"HTTP Connection Error: %@ %ld", error.debugDescription , error.code];
                 NSLog(@"%@", errorMessage);
+                [self saveDebugEventWithText:[NSString stringWithFormat:@"[Scheduler] %@", errorMessage] type:DebugTypeInfo label:@""];
                 // NOTE: case of error
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self setBackupEsmsWithNotification:errorMessage];
@@ -161,15 +167,18 @@ didReceiveResponse:(NSURLResponse *)response
 didCompleteWithError:(NSError *)error {
     NSLog(@"--> finish");
     if (error != nil) {
-        NSString* errorMessage = [NSString stringWithFormat:@"HTTP Connection Error: %@ %ld",
+        NSString* errorMessage = [NSString stringWithFormat:@"[Scheduler] HTTP Connection Error: %@ %ld",
                                   error.debugDescription,
                                   error.code];
         NSLog(@"%@", errorMessage);
+        [self saveDebugEventWithText:errorMessage type:DebugTypeError label:@""];
         // NOTE: case of error
         dispatch_async(dispatch_get_main_queue(), ^{
+            [self saveDebugEventWithText:@"[Scheduler] Set backup esm schedules" type:DebugTypeInfo label:@""];
             [self setBackupEsmsWithNotification:errorMessage];
         });
     }else{
+        [self saveDebugEventWithText:@"[Scheduler] Sucess to update esm schedules." type:DebugTypeError label:@""];
         // NOTE: For registrate a NSTimer in the backgroung, we have to set it in the main thread!
         dispatch_async(dispatch_get_main_queue(), ^{
             [self setEsmSchedulesWithJSONData:resultData];
@@ -192,13 +201,15 @@ didCompleteWithError:(NSError *)error {
 - (void) setEsmSchedulesWithJSONData:(NSData *)data {
     
     NSError * error = nil;
-    NSString * text = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    NSLog(@"==> %@",text);
+//    NSString * text = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+//    NSLog(@"==> %@",text);
     NSArray *schedules = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
     
     if (error != nil) {
-        NSLog(@"JSON FORMAT ERROR: %@", error.debugDescription);
-        if(debug)[self setBackupEsmsWithNotification:@"JSON Format Error: AWARE iOS sets the schedules with backuped ESMs."];
+//        NSLog(@"JSON FORMAT ERROR: %@", error.debugDescription);
+        NSString * debugMessage = @"JSON Format Error: AWARE iOS sets the schedules with backuped ESMs.";
+        if(debug)[self setBackupEsmsWithNotification:debugMessage];
+        [self saveDebugEventWithText:debugMessage type:DebugTypeError label:@""];
         return;
     }else{
 //        if(debug)[self setBackupEsmsWithNotification:@"Success to "];
@@ -207,7 +218,9 @@ didCompleteWithError:(NSError *)error {
     
     [self stopSchedules];
     
-    if(debug) [self sendLocalNotificationForMessage:@"AWARE updated ESM schedules." soundFlag:NO];
+    NSString * debugMessage = @"AWARE updated ESM schedules.";
+    if(debug) [self sendLocalNotificationForMessage:debugMessage soundFlag:NO];
+    [self saveDebugEventWithText:debugMessage type:DebugTypeInfo label:@""];
     
     NSMutableArray * awareSchedules = [[NSMutableArray alloc] init];
     
@@ -256,7 +269,11 @@ didCompleteWithError:(NSError *)error {
         }
     }
 //    NSLog(@"%@", currentSchedules);
-    [self setLatestValue:[NSString stringWithFormat:@"You have %d ESM schedules per one day.\n%@",i, currentSchedules]];
+    NSString *currentEsmSchedules = [NSString stringWithFormat:@"You have %d ESM schedules per one day.\n%@",i, currentSchedules];
+    [self setLatestValue:currentEsmSchedules];
+    [self saveDebugEventWithText:currentEsmSchedules type:DebugTypeInfo label:@""];
+    
+    // start schedules
     [self startSchedules:awareSchedules];
 }
 
@@ -301,9 +318,11 @@ didCompleteWithError:(NSError *)error {
 
     
     // init
+    NSString * debugMessage = @"AWARE initializes ESM schedules with backup ESMs.";
     if ([self getDebugState]) {
-        [self setBackupEsmsWithNotification:@"AWARE initializes ESM schedules with backup ESMs."];
+        [self setBackupEsmsWithNotification:debugMessage];
     }
+    [self saveDebugEventWithText:debugMessage type:DebugTypeInfo label:@""];
     
     NSMutableDictionary * dic = [[NSMutableDictionary alloc] init];
     [dic setObject:CONFIG_URL forKey:@"configUrl"];
@@ -420,7 +439,8 @@ didCompleteWithError:(NSError *)error {
             [self sendLocalNotificationWithSchedule:schedule soundFlag:YES];
             
             // Save ESM
-//            [AWAREEsmUtils saveEsmObjects:schedule withTimestamp:unixtime];
+            [AWAREEsmUtils saveEsmObjects:schedule withTimestamp:unixtime];
+            [self saveDebugEventWithText:[NSString stringWithFormat:@"[%@] Set a new esm schedule to temp-local storage", scheduleId] type:DebugTypeInfo label:@""];
             break;
         }
     }

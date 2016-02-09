@@ -244,6 +244,20 @@
 }
 
 
+- (bool) syncAwareDBInForeground{
+    if(![self syncAwareDBInForegroundWithSensorName:[self getSensorName]]){
+        return NO;
+    }
+    
+    if(![batteryChargeSensor syncAwareDBInForeground]){
+        return NO;
+    }
+    
+    if(![batteryDischargeSensor syncAwareDBInForeground]){
+        return NO;
+    }
+    return YES;
+}
 
 - (BOOL)stopSensor{
     [uploadTimer invalidate];

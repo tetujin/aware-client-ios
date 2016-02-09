@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <MQTTKit/MQTTKit.h>
 #import <CoreLocation/CoreLocation.h>
+#import <SVProgressHUD.h>
 #import "AWARESensorManager.h"
 
 @interface ViewController : UITableViewController <UITableViewDelegate, UITableViewDataSource, UITabBarControllerDelegate, UINavigationBarDelegate, CLLocationManagerDelegate, UIAlertViewDelegate>

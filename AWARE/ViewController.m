@@ -5,6 +5,8 @@
 //  Created by Yuuki Nishiyama on 11/18/15.
 //  Copyright © 2015 Yuuki NISHIYAMA. All rights reserved.
 //
+// This branch is for BalancedCampus Project
+//
 
 #import "ViewController.h"
 #import "GoogleLoginViewController.h"
@@ -13,11 +15,12 @@
 #import "AWAREKeys.h"
 #import "ESMStorageHelper.h"
 #import "AWAREUtils.h"
-#import <CoreTelephony/CTCallCenter.h>
-#import <CoreTelephony/CTCall.h>
 
 #import "GoogleCalPush.h"
-#import "ApplicationHistory.h"
+#import "Debug.h"
+#import "Pedometer.h"
+#import "AWAREHealthKit.h"
+#import "Debug.h"
 
 @interface ViewController () {
     NSString *KEY_CEL_TITLE;
@@ -39,8 +42,7 @@
     NSTimer* testTimer;
     NSTimer * dailyUpdateTimer;
     
-    CTCallCenter *callCenter;
-//    AWAREScheduleManager* scheduleManager;
+    Debug *debugSensor;
 }
 
 @end
@@ -100,6 +102,8 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     
+    debugSensor = [[Debug alloc] init];
+    
     [self initLocationSensor];
     
     _sensorManager = [[AWARESensorManager alloc] init];
@@ -115,6 +119,12 @@
     listUpdateTimer = [NSTimer scheduledTimerWithTimeInterval:0.1f target:self.tableView selector:@selector(reloadData) userInfo:nil repeats:YES];
 }
 
+
+/**
+ * This method is called when application did becase active.
+ * And also, this method check ESM existance using ESMStorageHelper. 
+ * If an ESM is existed, AWARE iOS move to the ESM answer page.
+ */
 - (void)appDidBecomeActive:(NSNotification *)notification {
     NSLog(@"did become active notification");
     ESMStorageHelper * helper = [[ESMStorageHelper alloc] init];
@@ -130,28 +140,28 @@
 
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
         NSLog(@" Hello ESM view !");
-//    if ([[segue identifier] isEqualToString:@"selectRow"]) {
     if ([segue.identifier isEqualToString:@"esmView"]) {
         AWAREEsmViewController *esmView = [segue destinationViewController];    // <- 1
-//        esmView.scheduleManager = scheduleManager;    // <- 2
     }
 }
 
 
-- (void) initLocationSensor{
+/**
+ * This method is initializer for location sensor for background sensing.
+ * On the iOS, we have to turn on the location sensor for background sensing.
+ *
+ */
+- (void) initLocationSensor {
     NSLog(@"start location sensing!");
     if ( nil == _homeLocationManager ) {
         _homeLocationManager = [[CLLocationManager alloc] init];
         _homeLocationManager.delegate = self;
         _homeLocationManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers;
         _homeLocationManager.pausesLocationUpdatesAutomatically = NO;
-        CGFloat currentVersion = [[[UIDevice currentDevice] systemVersion] floatValue];
-        NSLog(@"OS:%f", currentVersion);
-        if (currentVersion >= 9.0) {
-            _homeLocationManager.allowsBackgroundLocationUpdates = YES; //This variable is an important method for background sensing
+        if ([AWAREUtils getCurrentOSVersionAsFloat] >= 9.0) {
+             //After iOS 9.0, we have to set YES value to this variable for background sensing.
+            _homeLocationManager.allowsBackgroundLocationUpdates = YES;
         }
         _homeLocationManager.activityType = CLActivityTypeOther;
         if ([_homeLocationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
@@ -160,54 +170,52 @@
         // Set a movement threshold for new events.
         _homeLocationManager.distanceFilter = 300; // meters
         [_homeLocationManager startUpdatingLocation];
-        [_homeLocationManager startUpdatingHeading];
-        //    [_locationManager startMonitoringVisits]; // This method calls didVisit.
+//      [_homeLocationManager startUpdatingHeading];
+//      [_locationManager startMonitoringVisits];
     }
 }
 
-- (void)locationManager:(CLLocationManager *)manager didUpdateHeading:(CLHeading *)newHeading {
-    if (newHeading.headingAccuracy < 0)
-        return;
-    //    CLLocationDirection  theHeading = ((newHeading.trueHeading > 0) ?
-    //                                       newHeading.trueHeading : newHeading.magneticHeading);
-    //    [sdManager addSensorDataMagx:newHeading.x magy:newHeading.y magz:newHeading.z];
-    //    [sdManager addHeading: theHeading];
-}
-
-
+/**
+ * The method is called by location sensor when the device location is changed.
+ */
 - (void) locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations{
-//    [self sendLocalNotificationForMessage:@"Location data is comming!" soundFlag:YES];
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     bool appTerminated = [userDefaults boolForKey:KEY_APP_TERMINATED];
     if (appTerminated) {
-        [self sendLocalNotificationForMessage:@"AWARE iOS is rebooted!" soundFlag:YES];
-//        [self pushedStudyRefreshButton:nil];
+        NSString * message = @"AWARE iOS is rebooted!";
+        [AWAREUtils sendLocalNotificationForMessage:message soundFlag:YES];
+        [debugSensor saveDebugEventWithText:message type:DebugTypeInfo label:@""];
         [userDefaults setBool:NO forKey:KEY_APP_TERMINATED];
     }else{
 //        [self sendLocalNotificationForMessage:@"" soundFlag:YES];
     }
-//    for (CLLocation* location in locations) {
-////        [self saveLocation:location];
-//    }
 }
 
-
+/**
+ *
+ */
 - (void)didReceiveMemoryWarning {
+    [debugSensor saveDebugEventWithText:@"didReceiveMemoryWarning" type:DebugTypeWarn label:@""];
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
 
+/**
+ * When a study is refreshed (e.g., pushed refresh button, changed settings, and/or done daily study update), this method is called.
+ */
 - (void) initList {
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    // init sensor list
     _sensors = [[NSMutableArray alloc] init];
-    // devices
+    
+    // Get a study and device information from local default storage
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults synchronize];
+    
     NSString *deviceId = [userDefaults objectForKey:KEY_MQTT_USERNAME];
     NSString *awareStudyId = [userDefaults objectForKey:KEY_STUDY_ID];
     NSString *mqttServerName = [userDefaults objectForKey:KEY_MQTT_SERVER];
     NSInteger maximumFileSize = [userDefaults integerForKey:KEY_MAX_DATA_SIZE];
-    [userDefaults synchronize];
-    
     NSString *email = [userDefaults objectForKey:@"GOOGLE_EMAIL"];
     NSString *name = [userDefaults objectForKey:@"GOOGLE_NAME"];
     NSString *accountInfo = [NSString stringWithFormat:@"%@ (%@)", name, email];
@@ -217,7 +225,7 @@
     if(awareStudyId == nil) awareStudyId = @"";
     if(mqttServerName == nil) mqttServerName = @"";
 
-    
+    // Get debug state (bool)
     NSString* debugState = @"OFF";
     if ([userDefaults boolForKey:SETTING_DEBUG_STATE]) {
         debugState = @"ON";
@@ -225,8 +233,10 @@
         debugState = @"OFF";
     }
     
+    // Get sync interval (min)
     NSString *syncInterval = [NSString stringWithFormat:@"%d",(int)[userDefaults doubleForKey:SETTING_SYNC_INT]/60];
     
+    // Get data uploading network for sensor data
     NSString *wifiOnly = @"YES";
     if ([userDefaults boolForKey:SETTING_SYNC_WIFI_ONLY]) {
         wifiOnly = @"YES";
@@ -234,63 +244,109 @@
         wifiOnly = @"NO";
     }
     
+    // Get maximum data per a HTTP/POST request
     if (maximumFileSize > 0 ) {
         maximumFileSize = maximumFileSize/1000;
     }
     NSString *maximumFileSizeDesc = [NSString stringWithFormat:@"%ld (KB)", maximumFileSize];
     
-    
+    /**
+     * Study and Device Information
+     */
+    // title
     [_sensors addObject:[self getCelContent:@"Study" desc:@"" image:@"" key:@"TITLE_CELL_VIEW"]];
+    // device_id
     [_sensors addObject:[self getCelContent:@"AWARE Device ID" desc:deviceId image:@"" key:@"STUDY_CELL_VIEW"]];
-    [_sensors addObject:[self getCelContent:@"AWARE Study" desc:awareStudyId image:@"" key:@"STUDY_CELL_VIEW"]]; //ic_action_study
-    [_sensors addObject:[self getCelContent:@"MQTT Server" desc:mqttServerName image:@"" key:@"STUDY_CELL_VIEW"]]; //ic_action_mqtt
+    // study_number
+    [_sensors addObject:[self getCelContent:@"AWARE Study" desc:awareStudyId image:@"" key:@"STUDY_CELL_VIEW"]];
+//    [_sensors addObject:[self getCelContent:@"MQTT Server" desc:mqttServerName image:@"" key:@"STUDY_CELL_VIEW"]];
+    // Google Account Information if a user registered him/her google account.
     [_sensors addObject:[self getCelContent:@"Google Account" desc:accountInfo image:@"" key:@"STUDY_CELL_VIEW"]];
-    // sensor
+    
+    /**
+     * Defualt iOS supported sensors
+     */
+    // title
     [_sensors addObject:[self getCelContent:@"Sensors" desc:@"" image:@"" key:@"TITLE_CELL_VIEW"]];
+    // accelerometer
     [_sensors addObject:[self getCelContent:@"Accelerometer" desc:@"Acceleration, including the force of gravity(m/s^2)" image:@"ic_action_accelerometer" key:SENSOR_ACCELEROMETER]];
+    // barometer
     [_sensors addObject:[self getCelContent:@"Barometer" desc:@"Atomospheric air pressure (mbar/hPa)" image:@"ic_action_barometer" key:SENSOR_BAROMETER]];
+    // battery
     [_sensors addObject:[self getCelContent:@"Battery" desc:@"Battery and power event" image:@"ic_action_battery" key:SENSOR_BATTERY]];
+    // bluetooth
     [_sensors addObject:[self getCelContent:@"Bluetooth" desc:@"Bluetooth sensing" image:@"ic_action_bluetooth" key:SENSOR_BLUETOOTH]];
+    // gyroscope
     [_sensors addObject:[self getCelContent:@"Gyroscope" desc:@"Rate of rotation of device (rad/s)" image:@"ic_action_gyroscope" key:SENSOR_GYROSCOPE]];
+    // gravity
     [_sensors addObject:[self getCelContent:@"Gravity" desc:@"Gravity provides a three dimensional vector indicating the direction and magnitude of gravity (in m/s²)" image:@"ic_action_gravity" key:SENSOR_GRAVITY]];
+    // linear  accelerometer
     [_sensors addObject:[self getCelContent:@"Linear Accelerometer" desc:@"The linear accelerometer measures the acceleration applied to the sensor built-in into the device, excluding the force of gravity, in m/s" image:@"ic_action_linear_acceleration" key:SENSOR_LINEAR_ACCELEROMETER]];
+    // locations (GPS)
     [_sensors addObject:[self getCelContent:@"Locations" desc:@"User's estimated location by GPS and network triangulation" image:@"ic_action_locations" key:SENSOR_LOCATIONS]];
+    // magnetometer
     [_sensors addObject:[self getCelContent:@"Magnetometer" desc:@"Geomagnetic field strength around the device (uT)" image:@"ic_action_magnetometer" key:SENSOR_MAGNETOMETER]];
+    // ESM
     [_sensors addObject:[self getCelContent:@"Mobile ESM/EMA" desc:@"Mobile questionnaries" image:@"ic_action_esm" key:SENSOR_ESMS]];
+    // network
     [_sensors addObject:[self getCelContent:@"Network" desc:@"Network usage and traffic" image:@"ic_action_network" key:SENSOR_NETWORK]];
+    // proximity
     [_sensors addObject:[self getCelContent:@"Proximity" desc:@"The proximity sensor measures the distance to an object in front of the mobile device. Depending on the hardware, it can be in centimeters or binary." image:@"ic_action_proximity" key:SENSOR_PROXIMITY]];
-    [_sensors addObject:[self getCelContent:@"Screen (iOS)" desc:@"Screen events (on/off, locked/unlocked)" image:@"ic_action_screen" key:SENSOR_SCREEN]];
+    // screen
+    [_sensors addObject:[self getCelContent:@"Screen" desc:@"Screen events (on/off, locked/unlocked)" image:@"ic_action_screen" key:SENSOR_SCREEN]];
+    // timezone
     [_sensors addObject:[self getCelContent:@"Timezone" desc:@"The timezone sensor keeps track of the user’s current timezone." image:@"ic_action_timezone" key:SENSOR_TIMEZONE]];
+    // processor
     [_sensors addObject:[self getCelContent:@"Processor" desc:@"CPU workload for user, system and idle(%)" image:@"ic_action_processor" key:SENSOR_PROCESSOR]];
-//    [_sensors addObject:[self getCelContent:@"Telephony" desc:@"Mobile operator and specifications, cell tower and neighbor scanning" image:@"ic_action_telephony" key:SENSOR_TELEPHONY]];
+    // WiFi sensing
     [_sensors addObject:[self getCelContent:@"WiFi" desc:@"Wi-Fi sensing" image:@"ic_action_wifi" key:SENSOR_WIFI]];
-//    [_sensors addObject:[self getCelContent:@"AmbientNoise" desc:@"AmbientNoise sensor" image:@"" key:SENSOR_AMBIENT_NOISE]];
-
-    // android specific sensors
-    //[_sensors addObject:[self getCelContent:@"Light" desc:@"Ambient Light (lux)" image:@"ic_action_light"]];
-    //[_sensors addObject:[self getCelContent:@"Proximity" desc:@"" image:@"ic_action_proximity"]];
-    //[_sensors addObject:[self getCelContent:@"Temperature" desc:@"" image:@"ic_action_temperature"]];
     
-    // iOS specific sensors
-
-//    [_sensors addObject:[self getCelContent:@"Direction (iOS)" desc:@"Device's direction (0-360)" image:@"safari_copyrighted" key:SENSOR_DIRECTION]];
-//    [_sensors addObject:[self getCelContent:@"Rotation (iOS)" desc:@"Orientation of the device" image:@"ic_action_rotation" key:SENSOR_ROTATION]];
+    // [_sensors addObject:[self getCelContent:@"AmbientNoise" desc:@"AmbientNoise sensor" image:@"" key:SENSOR_AMBIENT_NOISE]];
+    // [_sensors addObject:[self getCelContent:@"Light" desc:@"Ambient Light (lux)" image:@"ic_action_light"]];
+    // [_sensors addObject:[self getCelContent:@"Proximity" desc:@"" image:@"ic_action_proximity"]];
+    // [_sensors addObject:[self getCelContent:@"Telephony" desc:@"Mobile operator and specifications, cell tower and neighbor scanning" image:@"ic_action_telephony"
+    
+    
+    /**
+     * Plugins
+     */
+    // Google Fused Location
     [_sensors addObject:[self getCelContent:@"Google Fused Location" desc:@"Google's Locations API provider. This plugin provides the user's current location in an energy efficient way." image:@"ic_action_google_fused_location" key:SENSOR_GOOGLE_FUSED_LOCATION]];
+    // Ambient Noise
     [_sensors addObject:[self getCelContent:@"Ambient Noise" desc:@"Anbient noise sensing by using a microphone on a smartphone." image:@"ic_action_ambient_noise" key:SENSOR_AMBIENT_NOISE]];
+    // Activity Recognition
     [_sensors addObject:[self getCelContent:@"Activity Recognition" desc:@"iOS Activity Recognition" image:@"ic_action_running" key:SENSOR_PLUGIN_GOOGLE_ACTIVITY_RECOGNITION]];
+    // Device Usage
     [_sensors addObject:[self getCelContent:@"Device Usage" desc:@"This plugin measures how much you use your device" image:@"ic_action_device_usage" key:SENSOR_PLUGIN_DEVICE_USAGE]];
+    // Open Weather
     [_sensors addObject:[self getCelContent:@"Open Weather" desc:@"Weather information by OpenWeatherMap API." image:@"ic_action_openweather" key:SENSOR_PLUGIN_OPEN_WEATHER]];
+    // NTPTime
     [_sensors addObject:[self getCelContent:@"NTPTime" desc:@"Measure device's clock drift from an NTP server." image:@"ic_action_ntptime" key:SENSOR_PLUGIN_NTPTIME]];
+    // Pedometer
+    [_sensors addObject:[self getCelContent:@"Pedometer" desc:@"This plugin collects user's daily steps." image:@"ic_action_steps" key:SENSOR_PLUGIN_PEDOMETER]];
+    // communication
     [_sensors addObject:[self getCelContent:@"Communication" desc:@"The Communication sensor logs communication events such as calls and messages, performed by or received by the user." image:@"ic_action_communication" key:SENSOR_CALLS]];
+    // Microsoft Band
     [_sensors addObject:[self getCelContent:@"Micrsoft Band" desc:@"Wearable sensor data (such as Heart Rate, UV, and Skin Temperature) from Microsoft Band." image:@"ic_action_msband" key:SENSOR_PLUGIN_MSBAND]];
-//    [_sensors addObject:[self getCelContent:@"Google Calendar" desc:@"This plugin stores your Google Calendar events." image:@"ic_action_google_cal" key:SENSOR_PLUGIN_GOOGLE_CAL_PULL]];
+    // Google Login
     [_sensors addObject:[self getCelContent:@"Google Login" desc:@"Multi-device management using Google Account." image:@"google_logo" key:SENSOR_PLUGIN_GOOGLE_LOGIN]];
+    // Balanced Campus Calendar
     [_sensors addObject:[self getCelContent:@"Balanced Campus Calendar" desc:@"This plugin gathers calendar events from all Google Calendars from the phone." image:@"ic_action_google_cal_grab" key:SENSOR_PLUGIN_GOOGLE_CAL_PULL]];
+    // Balanced Campus Journal
     [_sensors addObject:[self getCelContent:@"Balanced Campus Journal" desc:@"This plugin creates new events in the journal calendar and sends a reminder email to the user to update the journal." image:@"ic_action_google_cal_push" key:SENSOR_PLUGIN_GOOGLE_CAL_PUSH]];
+    // Balanced Campus ESMs (ESM Scheduler)
     [_sensors addObject:[self getCelContent:@"Balanced Campus ESMs" desc:@"ESM Plugin" image:@"ic_action_campus" key:SENSOR_PLUGIN_CAMPUS]];
+    // HealthKit
+    [_sensors addObject:[self getCelContent:@"HealthKit" desc:@"This plugin collects stored data in HealthKit App on iOS" image:@"ic_action_health_kit" key:@"sensor_plugin_health_kit"]];
+    // Audio (CampusLife Plugin)
+    [_sensors addObject:[self getCelContent:@"Audio" desc:@"This plugin detects conversation and noize level around your device." image:@"ic_action_audio_wave" key:SENSOR_PLUGIN_STUDENTLIFE_AUDIO]];
+    //    [_sensors addObject:[self getCelContent:@"Direction (iOS)" desc:@"Device's direction (0-360)" image:@"safari_copyrighted" key:SENSOR_DIRECTION]];
+    //    [_sensors addObject:[self getCelContent:@"Rotation (iOS)" desc:@"Orientation of the device" image:@"ic_action_rotation" key:SENSOR_ROTATION]];
     
     
-    
+    /**
+     * Setting
+     */
     [_sensors addObject:[self getCelContent:@"Settings" desc:@"" image:@"" key:@"TITLE_CELL_VIEW"]];
     [_sensors addObject:[self getCelContent:@"Debug" desc:debugState image:@"" key:@"STUDY_CELL_DEBUG"]]; //ic_action_mqtt
     [_sensors addObject:[self getCelContent:@"Sync Interval to AWARE Server (min)" desc:syncInterval image:@"" key:@"STUDY_CELL_SYNC"]]; //ic_action_mqtt
@@ -298,25 +354,57 @@
     [_sensors addObject:[self getCelContent:@"Maximum file size" desc:maximumFileSizeDesc image:@"" key:@"STUDY_CELL_MAX_FILE_SIZE"]]; //ic_action_mqtt
     NSString* version = [NSString stringWithFormat:@"%@",[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]];
     [_sensors addObject:[self getCelContent:@"Version" desc:version image:@"" key:@"STUDY_CELL_VIEW"]];
-
+    [_sensors addObject:[self getCelContent:@"Manual Data Upload" desc:@"Please push this row for uploading sensor data!" image:@"" key:@"STUDY_CELL_MANULA_UPLOAD"]];
     
-    AWARESensor * applicationHistory = [[ApplicationHistory alloc] initWithSensorName:SENSOR_APPLICATION_HISTORY];
-    [applicationHistory startSensor:60*30 withSettings:nil];
-    [_sensorManager addNewSensor:applicationHistory];
     
+    /**
+     * [Additional hidden sensors]
+     * You can add your own AWARESensor and AWAREPlugin to AWARESensorManager directly using following source code. 
+     * The "-addNewSensor" method is versy userful for testing and debuging a AWARESensor without registlating a study.
+     */
+    // Pedometer
+    AWARESensor * steps = [[Pedometer alloc] initWithSensorName:SENSOR_PLUGIN_PEDOMETER];
+    [steps startSensor:60*15 withSettings:nil];
+    [_sensorManager addNewSensor:steps];
+    
+    // HealthKit
+    // AWARESensor * healthKit = [[AWAREHealthKit alloc] initWithPluginName:@"sensor_aware_health_kit" deviceId:@""];
+    // [healthKit startSensor:60 withSettings:nil];
+    
+    
+    /**
+     * Debug Sensor
+     * NOTE: don't remove this sensor. This sensor collects and upload debug message to the server each 15 min.
+     */
+    AWARESensor * debug = [[Debug alloc] init];
+    [debug startSensor:60*15 withSettings:nil];
+    [_sensorManager addNewSensor:debug];
 }
 
 
+
+/**
+ * This method adds an AWARESensor to _sensorManagaer using the -addNewSensorWithSensorName:settings:plugins:uploadInterva: method.
+ * And also, this method return the document type variable for the sensor list.
+ *
+ * @param title A sensor name
+ * @param desc  A Description of the sensor
+ * @param image An image file name in the Assets.xcassets
+ * @param key   An unique key of the sensor in the AWAREKey class
+ * @return Return a NSDictionary object for sensor list
+ */
 - (NSMutableDictionary *) getCelContent:(NSString *)title
                                    desc:(NSString *)desc
                                   image:(NSString *)image
-                                    key:(NSString *)key{
+                                    key:(NSString *)key {
+    // Make a dictionary object for a raw
     NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
     [dic setObject:title forKey:KEY_CEL_TITLE];
     [dic setObject:desc forKey:KEY_CEL_DESC];
     [dic setObject:image forKey:KEY_CEL_IMAGE];
     [dic setObject:key forKey:KEY_CEL_SENSOR_NAME];
 
+    // Get sensors information and plugin information from NSUserDedaults class
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSArray *sensors = [userDefaults objectForKey:KEY_SENSORS];
     NSArray *plugins = [userDefaults objectForKey:KEY_PLUGINS];
@@ -329,32 +417,103 @@
     return dic;
 }
 
+
+/**
+ * When a study is refreshed (e.g., pushed refresh button, changed settings, and/or done daily study update), this method is called before the -initList.
+ */
+- (IBAction)pushedStudyRefreshButton:(id)sender {
+    // Inactivate the refresh button on the navigation bar
+    _refreshButton.enabled = NO;
+    
+    @autoreleasepool {
+        NSLog(@"Atop and remove all sensors from AWARESensorManager.");
+        [_sensorManager stopAllSensors];
+    }
+    
+    // Refresh a study: Donwlod configurations and set it on the device
+    AWAREStudy *awareStudy = [[AWAREStudy alloc] init];
+    [awareStudy refreshStudy];
+    
+    // Init sensors
+    // TODO: The study refresh and initList is not synced, then if the user calls lots of times during sort time, AWARE make a doublicate sensor and uploader.
+    [self performSelector:@selector(initList) withObject:0 afterDelay:2];
+    
+    // Refresh the table view after 2 second
+    [self.tableView performSelector:@selector(reloadData) withObject:0 afterDelay:2];
+    
+    // Activate the refresh button on the navigation bar fater 8 second
+    [self performSelector:@selector(refreshButtonEnableYes) withObject:0 afterDelay:8];
+    
+    if ([AWAREUtils isForeground]) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"AWARE Study"
+                                                        message:@"AWARE Study was refreshed!"
+                                                       delegate:nil
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
+        [alert show];
+        // Save a debug message to a Debug Sensor.
+        [debugSensor saveDebugEventWithText:@"[study] Refresh in the foreground" type:DebugTypeInfo label:@""];
+    } else {
+        [AWAREUtils sendLocalNotificationForMessage:@"AWARE Configuration was refreshed in the background!" soundFlag:NO];
+        // Save a debug message to a Debug Sensor.
+        [debugSensor saveDebugEventWithText:@"[study] Refresh in the background" type:DebugTypeInfo label:@""];
+    }
+}
+
+- (void) refreshButtonEnableYes {
+    _refreshButton.enabled = YES;
+}
+
+- (IBAction)pushedGoogleLogin:(id)sender {
+    
+}
+
+
+-(BOOL)navigationBar:(UINavigationBar *)navigationBar shouldPopItem:(UINavigationItem *)item
+{
+    NSLog(@"Back button is pressed!");
+    [self.navigationController popToRootViewControllerAnimated:YES];
+    return YES;
+}
+
+
+
+//////////////////////////////
+//// Table View Operations
+//////////////////////////////
+
+/**
+ * This is the delegate of TableView. When the table row is selected, the method is called.
+ * If an AWARESensor need specific fanction (such as settings, view, conformation), we can add the function to this method.
+ */
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSLog(@"%ld is selected!", indexPath.row);
     NSDictionary *item = (NSDictionary *)[_sensors objectAtIndex:indexPath.row];
     NSString *key = [item objectForKey:KEY_CEL_SENSOR_NAME];
+    // Debug Model ON/OFF
     if ([key isEqualToString:@"STUDY_CELL_DEBUG"]) { //Debug
         UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Debug Statement" message:@"" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"ON", @"OFF", nil];
         alert.tag = 1;
         [alert show];
+    // Set Sync Interval
     } else if ([key isEqualToString:@"STUDY_CELL_SYNC"]) { //Sync
         UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Sync Interval (min)" message:@"Please inpute a sync interval to the server." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Done",nil];
         alert.alertViewStyle = UIAlertViewStylePlainTextInput;
-        
         [[alert textFieldAtIndex:0] setKeyboardType:UIKeyboardTypeNumberPad];
         [[alert textFieldAtIndex:0] becomeFirstResponder];
         [alert textFieldAtIndex:0].text = [NSString stringWithFormat:@"%d", (int)uploadInterval/60];
         alert.tag = 2;
         [alert show];
+    // Set Wi-Fi and mobile network setting
     }else if([key isEqualToString:@"STUDY_CELL_WIFI"]){ //wifi
         UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Sync Statement" message:@"Do you want to sync your data only WiFi enviroment?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"YES",@"NO",nil];
         alert.tag = 3;
         [alert show];
+    // Set maximum file size
     }else if([key isEqualToString:@"STUDY_CELL_MAX_FILE_SIZE"]){ //max file size
         UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Maximum Size of Post Data(KB)" message:@"Please input a maximum file size for uploading sensor data." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Done",nil];
         alert.alertViewStyle = UIAlertViewStylePlainTextInput;
-        
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         NSInteger maximumFileValue =  [userDefaults integerForKey:KEY_MAX_DATA_SIZE];
         if (maximumFileValue > 0 ) {
@@ -366,24 +525,36 @@
         [alert textFieldAtIndex:0].text = maximumFileSizeDesc;
         alert.tag = 4;
         [alert show];
+    // ESM View
     }else if([key isEqualToString:SENSOR_ESMS]){
         // [TODO] For testing ESM Module...
         [self performSegueWithIdentifier:@"esmView" sender:self];
-    }else if([key isEqualToString:SENSOR_PLUGIN_SCHEDULER]){
-        // [TODO] For making new schedule.
+    // Google Calendar Journal Plugin
     }else if ([key isEqualToString:SENSOR_PLUGIN_GOOGLE_CAL_PUSH]) {
         GoogleCalPush *googlePush = [[GoogleCalPush alloc] init];
         [googlePush showTargetCalendarCondition];
+    // Google Calendar Calendar Plugin
     }else if([key isEqualToString:SENSOR_PLUGIN_CAMPUS]){
         NSString* schedules = [_sensorManager getLatestSensorData:SENSOR_PLUGIN_CAMPUS];
         UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Current ESM Schedules" message:schedules delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
         alert.tag = 7;
         [alert show];
-    }else if([key isEqualToString:SENSOR_PLUGIN_GOOGLE_LOGIN]){
-//        [self pushedGoogleLogin:nil];
+    // Do manula data upload
+    }else if ([key isEqualToString:@"STUDY_CELL_MANULA_UPLOAD"]){
+         UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Start Uploading Data?"
+                                                          message:@"Please push the 'YES' button if you want to upload sensor data to the server. Also, please don't close this application and keep connecting to Wi-Fi during uploading the data."
+                                                         delegate:self
+                                                cancelButtonTitle:@"Not Now"
+                                                otherButtonTitles:@"YES",nil];
+        alert.tag = 8;
+        [alert show];
     }
 }
 
+
+/**
+ * When a user select a button on the UIAlertView, this method is called with selected buttonIndex.
+ */
 - (void)alertView:(UIAlertView *)alertView
 clickedButtonAtIndex:(NSInteger)buttonIndex{
     NSString* title = alertView.title;
@@ -439,8 +610,15 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
         [userDefaults setObject:[NSNumber numberWithInteger:maximumValue] forKey:KEY_MAX_DATA_SIZE];
         [self pushedStudyRefreshButton:alertView];
         [self initList];
+    }else if(alertView.tag == 8){ //manual data upload
+        if (buttonIndex == [alertView cancelButtonIndex]) {
+            
+        }else if (buttonIndex == 1){
+            [_sensorManager syncAllSensorsWithDB];
+        }
     }
 }
+
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     return 1;
@@ -451,7 +629,6 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
 {
     return [_sensors count];
 }
-
 
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -495,7 +672,7 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
         if(![latestSensorData isEqualToString:@""]){
             [cell.detailTextLabel setText:latestSensorData];
         }
-    //    NSLog(@"-> %@",latestSensorData);
+
         
         if ([stateStr isEqualToString:@"true"]) {
             theImage = [theImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
@@ -506,233 +683,6 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
         return cell;
     }
 }
-
-
-
-- (IBAction)pushedStudyRefreshButton:(id)sender {
-    
-
-    
-    _refreshButton.enabled = NO;
-    
-    @autoreleasepool {
-        [_sensorManager stopAllSensors];
-        NSLog(@"remove all sensors");
-    }
-    
-    AWAREStudy *awareStudy = [[AWAREStudy alloc] init];
-    [awareStudy refreshStudy];
-    
-    [self performSelector:@selector(initList) withObject:0 afterDelay:2];
-    [self.tableView performSelector:@selector(reloadData) withObject:0 afterDelay:2];
-    
-    [self performSelector:@selector(refreshButtonEnableYes) withObject:0 afterDelay:8];
-    
-    ApplicationHistory * appHistory = [[ApplicationHistory alloc] initWithSensorName:SENSOR_APPLICATION_HISTORY];
-    if (sender) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"AWARE Study"
-                                                        message:@"AWARE Study was refreshed!"
-                                                       delegate:nil
-                                              cancelButtonTitle:@"OK"
-                                              otherButtonTitles:nil];
-        [alert show];
-        [appHistory storeApplicationEvent:@"[STUDY REFRESH] foreground"];
-    } else {
-        [self sendLocalNotificationForMessage:@"AWARE Configuration was refreshed in the background!" soundFlag:NO];
-        [appHistory storeApplicationEvent:@"[STUDY REFRESH] background"];
-    }
-    
-//    [self connectMqttServer];
-}
-
-- (void) refreshButtonEnableYes {
-    _refreshButton.enabled = YES;
-}
-
-- (IBAction)pushedGoogleLogin:(id)sender {
-
-}
-
-
--(BOOL)navigationBar:(UINavigationBar *)navigationBar shouldPopItem:(UINavigationItem *)item
-{
-    NSLog(@"Back button is pressed!");
-    [self.navigationController popToRootViewControllerAnimated:YES];
-    return YES;
-}
-
-
-/**
- Local push notification method
- @param message text message for notification
- @param sound type of sound for notification
- */
-- (void)sendLocalNotificationForMessage:(NSString *)message soundFlag:(BOOL)soundFlag {
-    UILocalNotification *localNotification = [UILocalNotification new];
-    localNotification.alertBody = message;
-    //    localNotification.fireDate = [NSDate date];
-    localNotification.repeatInterval = 0;
-    if(soundFlag) {
-        localNotification.soundName = UILocalNotificationDefaultSoundName;
-    }
-    [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
-}
-
-
-- (NSDate *) getTargetTimeAsNSDate:(NSDate *) nsDate
-                              hour:(int) hour
-                            minute:(int) minute
-                            second:(int) second {
-    NSCalendar *calendar = [NSCalendar currentCalendar];
-    NSDateComponents *dateComps = [calendar components:NSYearCalendarUnit |
-                                   NSMonthCalendarUnit  |
-                                   NSDayCalendarUnit    |
-                                   NSHourCalendarUnit   |
-                                   NSMinuteCalendarUnit |
-                                   NSSecondCalendarUnit fromDate:nsDate];
-    [dateComps setDay:dateComps.day];
-    [dateComps setHour:hour];
-    [dateComps setMinute:minute];
-    [dateComps setSecond:second];
-    NSDate * targetNSDate = [calendar dateFromComponents:dateComps];
-    // If the maked target day is newer than now, Aware remakes the target day as same time tomorrow.
-    if ([targetNSDate timeIntervalSince1970] < [nsDate timeIntervalSince1970]) {
-        [dateComps setDay:dateComps.day + 1];
-        NSDate * tomorrowNSDate = [calendar dateFromComponents:dateComps];
-        return tomorrowNSDate;
-    }else{
-        return targetNSDate;
-    }
-}
-
-
-
-//- (bool) connectMqttServer {
-//    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-//    // if Study ID is new, AWARE adds new Device ID to the AWARE server.
-//    mqttServer = [userDefaults objectForKey:KEY_MQTT_SERVER];
-//    oldStudyId = [userDefaults objectForKey:KEY_STUDY_ID];
-//    mqttPassword = [userDefaults objectForKey:KEY_MQTT_PASS];
-//    mqttUserName = [userDefaults objectForKey:KEY_MQTT_USERNAME];
-//    mqttPort = [userDefaults objectForKey:KEY_MQTT_PORT];
-//    mqttKeepAlive = [userDefaults objectForKey:KEY_MQTT_KEEP_ALIVE];
-//    mqttQos = [userDefaults objectForKey:KEY_MQTT_QOS];
-//    studyId = [userDefaults objectForKey:KEY_STUDY_ID];
-////    NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
-////    NSNumber* unixtime = [NSNumber numberWithDouble:timeStamp];
-//    if (mqttPassword == nil) {
-//        NSLog(@"An AWARE study is not registed! Please read QR code");
-//        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"AWARE Study"
-//                                                        message:@"You don't registed an AWARE study yet. Please read a QR code for AWARE study."
-//                                                       delegate:nil
-//                                              cancelButtonTitle:@"OK"
-//                                              otherButtonTitles:nil];
-//        [alert show];
-//        return NO;
-//    }
-//    
-//    if ([self.client connected]) {
-//        [self.client disconnectWithCompletionHandler:^(NSUInteger code) {
-//            NSLog(@"disconnected!");
-//            [self.client unsubscribe:[NSString stringWithFormat:@"%@/%@/broadcasts",studyId,mqttUserName] withCompletionHandler:^{
-//                //
-//            }];
-//            [self.client unsubscribe:[NSString stringWithFormat:@"%@/%@/esm", studyId,mqttUserName] withCompletionHandler:^{
-//                //                         NSLog(grantedQos.description);
-//            }];
-//            [self.client unsubscribe:[NSString stringWithFormat:@"%@/%@/configuration",studyId,mqttUserName]  withCompletionHandler:^ {
-//                //                         NSLog(grantedQos.description);
-//            }];
-//            [self.client unsubscribe:[NSString stringWithFormat:@"%@/%@/#",studyId,mqttUserName] withCompletionHandler:^ {
-//                //                         NSLog(grantedQos.description);
-//            }];
-//            
-//            
-//            //Device specific subscribes
-//            [self.client unsubscribe:[NSString stringWithFormat:@"%@/esm", mqttUserName] withCompletionHandler:^{
-//                //                         NSLog(grantedQos.description);
-//            }];
-//            [self.client unsubscribe:[NSString stringWithFormat:@"%@/broadcasts", mqttUserName] withCompletionHandler:^{
-//                //                         NSLog(grantedQos.description);
-//            }];
-//            [self.client unsubscribe:[NSString stringWithFormat:@"%@/configuration", mqttUserName] withCompletionHandler:^ {
-//                //                         NSLog(grantedQos.description);
-//            }];
-//            [self.client unsubscribe:[NSString stringWithFormat:@"%@/#", mqttUserName] withCompletionHandler:^{
-//                //                         NSLog(grantedQos.description);
-//            }];
-//            //                                 [self uploadSensorData];
-//
-//        }];
-//    }
-//    
-//    self.client = [[MQTTClient alloc] initWithClientId:mqttUserName cleanSession:YES];
-//    [self.client setPort:[mqttPort intValue]];
-//    [self.client setKeepAlive:[mqttKeepAlive intValue]];
-//    [self.client setPassword:mqttPassword];
-//    [self.client setUsername:mqttUserName];
-//    // define the handler that will be called when MQTT messages are received by the client
-//    [self.client setMessageHandler:^(MQTTMessage *message) {
-//        NSString *text = message.payloadString;
-////        NSLog(@"Received messages %@", text);
-//        NSData *data = [text dataUsingEncoding:NSUTF8StringEncoding];
-//        NSDictionary * dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
-//        NSLog(@"%@",dic);
-//        NSArray *array = [dic objectForKey:KEY_SENSORS];
-//        NSArray *plugins = [dic objectForKey:KEY_PLUGINS];
-//        [userDefaults setObject:array forKey:KEY_SENSORS];
-//        [userDefaults setObject:plugins forKey:KEY_PLUGINS];
-//        [userDefaults synchronize];
-//        
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            // Refreh sensors
-//            [_sensorManager stopAllSensors];
-//            [self initList];
-//            [self.tableView reloadData];
-//            [self sendLocalNotificationForMessage:@"AWARE study is updated via MQTT." soundFlag:NO];
-//        });
-////        NSLog(@"%@", dic);
-//    }];
-//
-//    [self.client connectToHost:mqttServer
-//             completionHandler:^(MQTTConnectionReturnCode code) {
-//                 if (code == ConnectionAccepted) {
-//                     NSLog(@"Connected to the MQTT server!");
-//                     // when the client is connected, send a MQTT message
-//                     //Study specific subscribes
-//                     [self.client subscribe:[NSString stringWithFormat:@"%@/%@/broadcasts",studyId,mqttUserName] withQos:[mqttQos intValue] completionHandler:^(NSArray *grantedQos) {
-////                         NSLog(grantedQos.description);
-//                     }];
-//                     [self.client subscribe:[NSString stringWithFormat:@"%@/%@/esm", studyId,mqttUserName] withQos:[mqttQos intValue]  completionHandler:^(NSArray *grantedQos) {
-////                         NSLog(grantedQos.description);
-//                     }];
-//                     [self.client subscribe:[NSString stringWithFormat:@"%@/%@/configuration",studyId,mqttUserName]  withQos:[mqttQos intValue] completionHandler:^(NSArray *grantedQos) {
-////                         NSLog(grantedQos.description);
-//                     }];
-//                     [self.client subscribe:[NSString stringWithFormat:@"%@/%@/#",studyId,mqttUserName] withQos:[mqttQos intValue]  completionHandler:^(NSArray *grantedQos) {
-////                         NSLog(grantedQos.description);
-//                     }];
-//
-//
-//                     //Device specific subscribes
-//                     [self.client subscribe:[NSString stringWithFormat:@"%@/esm", mqttUserName] withQos:[mqttQos intValue] completionHandler:^(NSArray *grantedQos) {
-////                         NSLog(grantedQos.description);
-//                     }];
-//                     [self.client subscribe:[NSString stringWithFormat:@"%@/broadcasts", mqttUserName] withQos:[mqttQos intValue] completionHandler:^(NSArray *grantedQos) {
-////                         NSLog(grantedQos.description);
-//                     }];
-//                     [self.client subscribe:[NSString stringWithFormat:@"%@/configuration", mqttUserName] withQos:[mqttQos intValue] completionHandler:^(NSArray *grantedQos) {
-////                         NSLog(grantedQos.description);
-//                     }];
-//                     [self.client subscribe:[NSString stringWithFormat:@"%@/#", mqttUserName] withQos:[mqttQos intValue] completionHandler:^(NSArray *grantedQos) {
-////                         NSLog(grantedQos.description);
-//                     }];
-//                     //                                 [self uploadSensorData];
-//                 }
-//             }];
-//    return YES;
-//}
-
 
 
 @end

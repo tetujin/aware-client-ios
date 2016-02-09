@@ -8,45 +8,68 @@
 #import "FusedLocations.h"
 
 @implementation FusedLocations {
-    NSTimer *uploadTimer;
+    NSTimer *locationDataUploadTimer;
+    NSTimer *visitDataUploadTimer;
     NSTimer *locationTimer;
     IBOutlet CLLocationManager *locationManager;
+    
+    AWARESensor * fusedLocationsSensor;
+    AWARESensor * visitLocationSensor;
 }
 
 - (instancetype)initWithSensorName:(NSString *)sensorName{
-    self = [super initWithSensorName:@"locations"];
+    self = [super initWithSensorName:@"google_fused_location"];
     if (self) {
-        [super setSensorName:@"locations"];
+        [super setSensorName:@"google_fused_location"];
     }
     return self;
 }
 
 
-- (void) createTable{
-    NSString *query = [[NSString alloc] init];
-    query =
-    @"_id integer primary key autoincrement,"
-    "timestamp real default 0,"
-    "device_id text default '',"
-    "double_latitude real default 0,"
-    "double_longitude real default 0,"
-    "double_bearing real default 0,"
-    "double_speed real default 0,"
-    "double_altitude real default 0,"
-    "provider text default '',"
-    "accuracy integer default 0,"
-    "label text default '',"
-    "UNIQUE (timestamp,device_id)";
-    [super createTable:query];
-}
-
-
 
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings {
-    NSLog(@"[%@] Create Table", [self getSensorName]);
-    [self createTable];
+
+    fusedLocationsSensor = [[AWARESensor alloc] initWithSensorName:@"locations"];
+    [fusedLocationsSensor createTable:@"_id integer primary key autoincrement,"
+                                     "timestamp real default 0,"
+                                     "device_id text default '',"
+                                     "double_latitude real default 0,"
+                                     "double_longitude real default 0,"
+                                     "double_bearing real default 0,"
+                                     "double_speed real default 0,"
+                                     "double_altitude real default 0,"
+                                     "provider text default '',"
+                                     "accuracy integer default 0,"
+                                     "label text default '',"
+                                     "UNIQUE (timestamp,device_id)"];
+    locationDataUploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval
+                                                               target:self
+                                                             selector:@selector(syncAwareDBWithLocationTable)
+                                                             userInfo:nil
+                                                              repeats:YES];
     
-    NSLog(@"[%@] Start Location Sensor!", [self getSensorName]);
+    
+    visitLocationSensor = [[AWARESensor alloc] initWithSensorName:@"locations_visit"];
+    [visitLocationSensor createTable:@"_id integer primary key autoincrement,"
+                                     "timestamp real default 0,"
+                                     "device_id text default '',"
+                                     "double_latitude real default 0,"
+                                     "double_longitude real default 0,"
+                                     "double_arrival real default 0,"
+                                     "double_departure real default 0,"
+                                     "address text default '',"
+                                     "name text default '',"
+                                     "provider text default '',"
+                                     "accuracy integer default 0,"
+                                     "label text default '',"
+                                     "UNIQUE (timestamp,device_id)"];
+    visitDataUploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval
+                                                         target:self
+                                                       selector:@selector(syncAwareDBWithLocationVisitTable)
+                                                        userInfo:nil
+                                                         repeats:YES];
+    
+    
     // frequency
     double interval = 0;
     double frequency = [self getSensorSetting:settings withKey:@"frequency_google_fused_location"];
@@ -54,6 +77,7 @@
         NSLog(@"Location sensing requency is %f ", frequency);
         interval = frequency;
     }
+
 //    value	__NSCFString *	@"max_frequency_google_fused_location"	0x000000013c6195f0
 
     
@@ -82,11 +106,6 @@
 //    Cell Tower - kCLLocationAccuracyKilometer;
 //    Cell Tower - kCLLocationAccuracyThreeKilometers;
     
-    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval
-                                                   target:self
-                                                 selector:@selector(syncAwareDB)
-                                                 userInfo:nil
-                                                  repeats:YES];
     
     if (nil == locationManager){
         locationManager = [[CLLocationManager alloc] init];
@@ -108,6 +127,7 @@
 //        locationManager.distanceFilter = 250;
         [locationManager startUpdatingLocation];
         [locationManager startUpdatingHeading];
+        [locationManager startMonitoringVisits]; // This method calls didVisit.
         //    [_locationManager startMonitoringVisits];
         
         if(interval > 0){
@@ -122,6 +142,42 @@
     }
     return YES;
 }
+
+
+- (void) syncAwareDBWithLocationTable {
+    [fusedLocationsSensor syncAwareDB];
+}
+
+- (void) syncAwareDBWithLocationVisitTable {
+    [visitLocationSensor syncAwareDB];
+}
+
+
+- (BOOL)stopSensor{
+    if (locationManager != nil) {
+        [locationManager stopUpdatingHeading];
+        [locationManager stopUpdatingLocation];
+        [locationManager stopMonitoringVisits];
+    }
+    
+    if (locationTimer != nil) {
+        [locationTimer invalidate];
+        locationTimer = nil;
+    }
+    
+    if (locationDataUploadTimer != nil) {
+        [locationDataUploadTimer invalidate];
+        locationDataUploadTimer = nil;
+    }
+    
+    if(visitDataUploadTimer != nil){
+        [visitDataUploadTimer invalidate];
+        visitDataUploadTimer = nil;
+    }
+    
+    return YES;
+}
+
 
 
 
@@ -163,20 +219,167 @@
     [dic setObject:[NSNumber numberWithInt:location.verticalAccuracy] forKey:@"accuracy"];
     [dic setObject:@"" forKey:@"label"];
     [self setLatestValue:[NSString stringWithFormat:@"%f, %f, %f", location.coordinate.latitude, location.coordinate.longitude, location.speed]];
-    [self saveData:dic];
+    [fusedLocationsSensor saveData:dic];
 }
 
 
-- (BOOL)stopSensor{
-    [locationManager stopUpdatingHeading];
-    [locationManager stopUpdatingLocation];
-    [uploadTimer invalidate];
-    uploadTimer = nil;
-    if (locationTimer != nil) {
-        [locationTimer invalidate];
-        locationTimer = nil;
+
+
+- (void)locationManager:(CLLocationManager *)manager
+               didVisit:(CLVisit *)visit {
+
+    CLGeocoder *ceo = [[CLGeocoder alloc]init];
+    CLLocation *loc = [[CLLocation alloc]initWithLatitude:visit.coordinate.latitude longitude:visit.coordinate.longitude]; //insert your coordinates
+    [ceo reverseGeocodeLocation:loc
+              completionHandler:^(NSArray *placemarks, NSError *error) {
+                  CLPlacemark * placemark = nil;
+                  NSMutableDictionary * visitDic = [[NSMutableDictionary alloc] init];
+                  if (placemarks.count > 0) {
+                      placemark = [placemarks objectAtIndex:0];
+                      NSString *address = [[placemark.addressDictionary valueForKey:@"FormattedAddressLines"] componentsJoinedByString:@", "];
+                      [self setLatestValue:address];
+                      NSString* visitMsg = [NSString stringWithFormat:@"I am currently at %@", address];
+                      NSLog( @"%@", visitMsg );
+                      if (placemark.name != nil) {
+                          [visitDic setObject:placemark.name forKey:@"name"];
+                          if ([self getDebugState]) {
+                              [self sendLocalNotificationForMessage:visitMsg soundFlag:YES];
+                          }
+                      }else{
+                          
+                          [visitDic setObject:@"" forKey:@"name"];
+                      }
+                      
+                      if(address != nil){
+                          [visitDic setObject:address forKey:@"address"];
+                      }else{
+                          [visitDic setObject:@"" forKey:@"address"];
+                      }
+                  }else{
+                      [visitDic setObject:@"" forKey:@"address"];
+                      [visitDic setObject:@"" forKey:@"name"];
+                  }
+                  
+                  NSNumber * timestamp = [AWAREUtils getUnixTimestamp:[NSDate new]];
+                  NSNumber * depature = [AWAREUtils getUnixTimestamp:[visit departureDate]];
+                  NSNumber * arrival = [AWAREUtils getUnixTimestamp:[visit arrivalDate]];
+                  
+                  /*
+                   *  arrivalDate
+                   *
+                   *  Discussion:
+                   *    The date when the visit began.  This may be equal to [NSDate
+                   *    distantPast] if the true arrival date isn't available.
+                   */
+                  if([[visit departureDate] isEqualToDate:[NSDate distantPast]]){
+                      arrival = @-1;
+//                      [self sendLocalNotificationForMessage:[NSString stringWithFormat:@"departure date is %@",[NSDate distantPast]] soundFlag:NO];
+                  }
+                  
+                  /*
+                   *  departureDate
+                   *
+                   *  Discussion:
+                   *    The date when the visit ended.  This is equal to [NSDate
+                   *    distantFuture] if the device hasn't yet left.
+                   */
+                  
+                  if([[visit arrivalDate] isEqualToDate:[NSDate distantFuture]]){
+                      depature = @-1;
+//                      [self sendLocalNotificationForMessage:[NSString stringWithFormat:@"departure date is %@",[NSDate distantFuture]] soundFlag:NO];
+                  }
+                  
+                  
+//                  NSNumber * depature = [NSNumber numberWithDouble:[[visit departureDate] timeIntervalSince1970]];
+//                  NSNumber * arrival = [NSNumber numberWithDouble:[[visit arrivalDate] timeIntervalSince1970]];
+                  
+                  
+                  [visitDic setObject:timestamp forKey:@"timestamp"];
+                  [visitDic setObject:[self getDeviceId] forKey:@"device_id"];
+                  [visitDic setObject:[NSNumber numberWithDouble:visit.coordinate.latitude] forKey:@"double_latitude"];
+                  [visitDic setObject:[NSNumber numberWithDouble:visit.coordinate.longitude] forKey:@"double_longitude"];
+                  [visitDic setObject:depature forKey:@"double_departure"];
+                  [visitDic setObject:arrival forKey:@"double_arrival"];
+                  [visitDic setObject:@"fused" forKey:@"provider"];
+                  [visitDic setObject:[NSNumber numberWithDouble:visit.horizontalAccuracy] forKey:@"accuracy"];
+                  [visitDic setObject:@"" forKey:@"label"];
+                  
+                  [visitLocationSensor saveData:visitDic];
+                  
+                  return;
+    }];
+}
+
+- (BOOL)syncAwareDBInForeground{
+    if(![visitLocationSensor syncAwareDBInForeground]){
+        return NO;
+    }
+    if(![fusedLocationsSensor syncAwareDBInForeground]){
+        return NO;
     }
     return YES;
 }
+
+- (NSString *) getSyncProgressAsText{
+    return [self getSyncProgressAsText:@"locations"];
+}
+
+
+//    NSManagedObject *visitObject = [NSEntityDescription insertNewObjectForEntityForName:@"Visit" inManagedObjectContext:_managedObjectContext];
+//
+//    CLGeocoder *ceo = [[CLGeocoder alloc]init];
+//    CLLocation *loc = [[CLLocation alloc]initWithLatitude:location.coordinate.latitude longitude:location.coordinate.longitude]; //insert your coordinates
+//    [ceo reverseGeocodeLocation:loc
+//              completionHandler:^(NSArray *placemarks, NSError *error) {
+//                  CLPlacemark * placemark = nil;
+//                  if (placemarks.count > 0) {
+//                      placemark = [placemarks objectAtIndex:0];
+//                  }
+//                  //                  NSLog(@"placemark %@",placemark);
+//                  //                  //String to hold address
+//                  NSString *locatedAt = [[placemark.addressDictionary valueForKey:@"FormattedAddressLines"] componentsJoinedByString:@", "];
+//                  //                  NSLog(@"addressDictionary %@", placemark.addressDictionary);
+//                  //
+//                  //                  NSLog(@"placemark %@",placemark.region);
+//                  //                  NSLog(@"placemark %@",placemark.country);  // Give Country Name
+//                  //                  NSLog(@"placemark %@",placemark.locality); // Extract the city name
+//                  //                  NSLog(@"location %@",placemark.name);
+//                  //                  NSLog(@"location %@",placemark.ocean);
+//                  //                  NSLog(@"location %@",placemark.postalCode);
+//                  //                  NSLog(@"location %@",placemark.subLocality);
+//                  //
+//                  //                  NSLog(@"location %@",placemark.location);
+//                  //Print the location to console
+//                  NSLog(@"I am currently at %@",locatedAt);
+//
+//                  double timestamp = [[NSDate new] timeIntervalSince1970];
+//                  double depature = [[NSDate new] timeIntervalSince1970];
+//                  double arrival = [[NSDate new] timeIntervalSince1970];
+//
+//                  // Process in the main thread.
+//                  [visitObject setValue:[NSNumber numberWithDouble:timestamp] forKey:@"timestamp"];
+//                  [visitObject setValue:[NSNumber numberWithDouble:location.coordinate.latitude] forKey:@"latitude"];
+//                  [visitObject setValue:[NSNumber numberWithDouble:location.coordinate.longitude] forKey:@"longitude"];
+//                  [visitObject setValue:[NSNumber numberWithDouble:depature] forKey:@"departure"];
+//                  [visitObject setValue:[NSNumber numberWithDouble:arrival] forKey:@"arrival"];
+//                  [visitObject setValue:[NSNumber numberWithDouble:location.horizontalAccuracy] forKey:@"accuracy"];
+//                  if (placemarks != nil) {
+//                      [visitObject setValue:locatedAt forKey:@"name"];
+//                  }else{
+//                      [visitObject setValue:@"" forKey:@"name"];
+//                  }
+//
+//
+//                  // Save the created NSManagedOobject to DB with NSError.
+//                  NSError *e = nil;
+//                  if (![_managedObjectContext save:&e]) {
+//                      NSLog(@"error = %@", e);
+//                  } else {
+//                      NSLog(@"Visit : Insert Completed.");
+//                  }
+//              }];
+//}
+
+
 
 @end

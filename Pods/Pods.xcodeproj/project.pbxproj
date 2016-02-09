@@ -6,43 +6,1327 @@
 	objectVersion = 46;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		01AE8AADB82668BFE29C50CB222E637D /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A18726F6AC551EC9D21C4F4158071273 /* Security.framework */; };
+		02B042168CDCDD42B4258482BD607671 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0CA7158C570C034BBD7A8EE57D4EE5F /* Foundation.framework */; };
+		06D2ACB9CE33A4488D297BC948E66A0D /* GCDAsyncUdpSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = 4711A9ACA8E474490D982CF28AACDA71 /* GCDAsyncUdpSocket.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		09E1E8374B8DDD023EE14124AC86C411 /* EZPlot.h in Headers */ = {isa = PBXBuildFile; fileRef = D29481A7D5B0468729BC3208B3883828 /* EZPlot.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		0BFE82DD4B5056470E54436C8DC901B4 /* NSDate+NetworkClock.h in Headers */ = {isa = PBXBuildFile; fileRef = BEEA56E5BA8852A29180DC60F878E32E /* NSDate+NetworkClock.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		0CD59E4A07679254FCD5F69EDFCDC7B6 /* logging_mosq.h in Headers */ = {isa = PBXBuildFile; fileRef = 33FF2332676DCA7C2B30CCADDDE21E91 /* logging_mosq.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		0D50CACFC1B8E49AD4C6DFE7E8736E91 /* EZAudioPlotGL.h in Headers */ = {isa = PBXBuildFile; fileRef = F5B23EFE9E04F2EB545224659CB828F6 /* EZAudioPlotGL.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		0E66CBF5C8A97419D6C1DD053398D455 /* TPCircularBuffer-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = A5CFD9F9FF38902A33F0FA13888E8523 /* TPCircularBuffer-dummy.m */; };
+		0E68EABA33E9FD516C740C6294A025E6 /* NetAssociation.m in Sources */ = {isa = PBXBuildFile; fileRef = E3E9FB2D583280BDA87A0934A1AFE641 /* NetAssociation.m */; };
+		0F4BF086B7D56BAB174382D93BE7F595 /* EZAudioDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 7F5C46D4371028C9B437FD810B724EAE /* EZAudioDevice.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		1162CB5DC8260BBD6B22FEA27151B559 /* NSDate+NetworkClock.m in Sources */ = {isa = PBXBuildFile; fileRef = B0FA1E9B52454BB8870D2056CEEE70B3 /* NSDate+NetworkClock.m */; };
+		1229BDB8EDC9094B2D33677B263CD997 /* SCNetworkStatus.h in Headers */ = {isa = PBXBuildFile; fileRef = 1FC2A72C071000D50A991561CC7D6FE8 /* SCNetworkStatus.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		12BE33D676B92DE06A2AE7B4A323E7C8 /* net_mosq.h in Headers */ = {isa = PBXBuildFile; fileRef = 90C370FFFFE37D8EE60D06925B7E1DA0 /* net_mosq.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		12E5CCF37F4A675A327CA1E8D3F2D849 /* thread_mosq.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C899422BCD2D8F05F373396C0915C27 /* thread_mosq.c */; };
+		132010EF9B5680FF1CE24C01545D568C /* mqtt3_protocol.h in Headers */ = {isa = PBXBuildFile; fileRef = BDFBC1EA96DAEC67D64D377AA5198B8D /* mqtt3_protocol.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		16089A3A34B5779A1CF6EF1C1ED007CB /* TPCircularBuffer+AudioBufferList.h in Headers */ = {isa = PBXBuildFile; fileRef = A84744663204348ED7C65D3737AD6065 /* TPCircularBuffer+AudioBufferList.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		1C3CFDD84C3C5201485670AC30803CDB /* EZMicrophone.h in Headers */ = {isa = PBXBuildFile; fileRef = 203B6D89337E13DA791146162D165837 /* EZMicrophone.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		1CD43FF0958CF16A582FC025842CAB4A /* MQTTKit-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = C2F312EA0B08BE5D8F98EB2C13078AA2 /* MQTTKit-dummy.m */; };
+		1DCFD37D871328D22C6DB3C6EE3BB745 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9010458398C90D6BAFF32ED269FB508 /* AVFoundation.framework */; };
+		1EF33C149F4A0898FC40496ECF9F680C /* EZMicrophone.m in Sources */ = {isa = PBXBuildFile; fileRef = 99F683789C46DA8B6BADBE8D029E9C23 /* EZMicrophone.m */; };
+		205D945E81134677C4CBAD2AD6B851B5 /* EZOutput.m in Sources */ = {isa = PBXBuildFile; fileRef = 343FD7ACF3E76CF81A03FC7E941871F3 /* EZOutput.m */; };
+		23E6AC2F988657FA818B2F8EA81AD52E /* SCReachabilityScheduler.h in Headers */ = {isa = PBXBuildFile; fileRef = A75E4D2C45C52F94C00FF70FB23ED044 /* SCReachabilityScheduler.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2439F3BF9B3888FC5A9DE003EC958B40 /* SCNetworkReachability.h in Headers */ = {isa = PBXBuildFile; fileRef = BBE8BAC55CC724FD7F5357652F590CCE /* SCNetworkReachability.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		265B4E404B7D078F7804AA3E139548E9 /* SVProgressHUD.h in Headers */ = {isa = PBXBuildFile; fileRef = 8F98708A0F6B2ABC062959E7F2386AF7 /* SVProgressHUD.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		294314306948526F76E719757BC7E4DF /* EZAudioDisplayLink.h in Headers */ = {isa = PBXBuildFile; fileRef = 99177EDDD232120561F30E14CBF3176A /* EZAudioDisplayLink.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2A3D8EE6CBBFCC91E69CDA1351BC32DA /* Pods-AWARE-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EE4010C3D20A2C4F2DF305220509D22 /* Pods-AWARE-dummy.m */; };
+		2D021D7F499345D279E63AFAB6F5D078 /* SCReachabilityRefBuilder.h in Headers */ = {isa = PBXBuildFile; fileRef = EA66896CB14B53B678F50BF7C3244AFB /* SCReachabilityRefBuilder.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2EFA4F87B7C4A2205A98774172C795BA /* EZAudioPlotGL.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F8978730BFF5683FE4B2A170584C545 /* EZAudioPlotGL.m */; };
+		303A4B3C92812D26F440797192AC2571 /* NetworkClock.h in Headers */ = {isa = PBXBuildFile; fileRef = 9567396C4D2DB104DDF3F8B8071635A7 /* NetworkClock.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		32F915F46FBD1AE2DD2F0F496ED2C09E /* NetworkClock.m in Sources */ = {isa = PBXBuildFile; fileRef = 75488BC00570FCCC295E00DA38170B1F /* NetworkClock.m */; };
+		349941F689A2F118D63CDB9F773C5C9C /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3AD64CC0EED8E643561CBAD2C4B3049A /* CFNetwork.framework */; };
+		350D9EEAA564EBC6AD06BD0A30960F1F /* AsyncUdpSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = B2F3132898EA8CFA24C6327AC66FFBA6 /* AsyncUdpSocket.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
+		352B122D4F2977AE1B924F95EAE45B14 /* EZAudioUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D5C31234B40CB9CEDDF1568A2E9411A /* EZAudioUtilities.m */; };
+		3612B3540D37DC4E8CE761CBFC439484 /* EZAudioPlayer.h in Headers */ = {isa = PBXBuildFile; fileRef = E6B6B736BF0ACC4350743001D56DE193 /* EZAudioPlayer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		37D9E1C4F12233C3F8CC0A5C2B88EE3C /* SCReachabilityFlagsParser.h in Headers */ = {isa = PBXBuildFile; fileRef = AE3B70D291373AE445FC1DF74968ACF5 /* SCReachabilityFlagsParser.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3A470C1A4575E0423B418339C3A967DE /* GCDAsyncSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = A7AAF45E830591AFBEC692861411CBB3 /* GCDAsyncSocket.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3AB6BCE6926858E6B5CE3A9568670B60 /* memory_mosq.h in Headers */ = {isa = PBXBuildFile; fileRef = E85F3E6C509D092668E35D278243D7B0 /* memory_mosq.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		3FCBC8DED7E48831872465294DDB9B6E /* time_mosq.h in Headers */ = {isa = PBXBuildFile; fileRef = 593D2A4257AB0284B799B5E1D1F46E17 /* time_mosq.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		419D6021F924C2FE6EA11EB57158AF05 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0CA7158C570C034BBD7A8EE57D4EE5F /* Foundation.framework */; };
+		45C257901E8F645FBF3015102728F0AC /* MQTTKit.h in Headers */ = {isa = PBXBuildFile; fileRef = EBD3325331D191E9F3438D515565ED3A /* MQTTKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		463F6DB636698F3DEDAB0F34E8566E09 /* AsyncUdpSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = BD5582251C2766A2D3AAF1EFBC9A6A99 /* AsyncUdpSocket.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		468C3B68DEF2C90B587786775E4B1AFA /* mosquitto.h in Headers */ = {isa = PBXBuildFile; fileRef = CA02631F64A49A6F0C0FFC9A4A8F7F96 /* mosquitto.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		499B19242F01BE3A0C1B0C30485C732F /* messages_mosq.c in Sources */ = {isa = PBXBuildFile; fileRef = 33D3B9AC41293BE8EF4E6F3ABE6C4F6D /* messages_mosq.c */; };
+		49C79F1E6A28D8F1137F991B67E4FFC6 /* dummypthread.h in Headers */ = {isa = PBXBuildFile; fileRef = 7322A15090BE0E5010B0CC0F2A91D263 /* dummypthread.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		4C4F73857D22FA73585F102FA4ECB214 /* TPCircularBuffer.c in Sources */ = {isa = PBXBuildFile; fileRef = 27E436B98C57B0F4421699DBBAA716B1 /* TPCircularBuffer.c */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		4D8526662C66BB87F83487BE3C9842C1 /* TPCircularBuffer.c in Sources */ = {isa = PBXBuildFile; fileRef = 1ACF1E8AE4688B488674CCF8DAFA33DE /* TPCircularBuffer.c */; };
+		4E17A4CB7FCF2B150C673E00C1653A23 /* SCReachabilityScheduler.m in Sources */ = {isa = PBXBuildFile; fileRef = 08DCEE633DD721CC6A60A32A695F2FFC /* SCReachabilityScheduler.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
+		4EB69428C543D6AAC5EBB9DDF9C0F5C8 /* NetAssociation.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F2E2310A3CE228D7C8CD911A8766CA3 /* NetAssociation.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		513647F3DFE33B1AECA9C7ABC84B8ED2 /* EZAudioFFT.h in Headers */ = {isa = PBXBuildFile; fileRef = 3BD47B4C20629516C5B2AE7BDF9023FD /* EZAudioFFT.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5711B9C0974381FA41135A9460E7DF75 /* mosquitto_internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 72F2D13C1AAD147EA47F4B98459EAE52 /* mosquitto_internal.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		59F6E6FE2D22A9ACB59760DA962E319E /* read_handle.h in Headers */ = {isa = PBXBuildFile; fileRef = C03142F6F7E7BC5C12A1297A4235843C /* read_handle.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		5DA2189DB9C0CC634C959FF09DD7D2DF /* read_handle_shared.c in Sources */ = {isa = PBXBuildFile; fileRef = F77CB1F9E259B3C38D696B731FA1AB61 /* read_handle_shared.c */; };
+		5FCF0EFA8736CCA78B4867991E27B849 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3AD64CC0EED8E643561CBAD2C4B3049A /* CFNetwork.framework */; };
+		62F86A1D4746913894CBF3C86EBA6809 /* EZAudioFile.m in Sources */ = {isa = PBXBuildFile; fileRef = E4A4554A5D9A8496E0474CA54EA3DC48 /* EZAudioFile.m */; };
+		65CE1E208985037C437CF848FF63ABB1 /* EZAudioFloatData.h in Headers */ = {isa = PBXBuildFile; fileRef = D88AE3938989F3C6B9FF893630C97208 /* EZAudioFloatData.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6B4D5A9543ECAFC9A20C88A6615C328E /* SVProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 29079B992A789F8D8E95288ABD5D7B50 /* SVProgressHUD.m */; };
+		6CE74591F3E01FFB85C3F130CC8CDA1D /* SCReachabilityFlagsParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 6AAE19274711AE6CFD850DBA0C55D624 /* SCReachabilityFlagsParser.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
+		6D91FF378F7DABBE76EB9F122DEB517D /* GCDAsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 302E67EF47C97A8CC01A0B3EC98C7598 /* GCDAsyncSocket.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
+		702A36A2FB387BED332E93FE561203CF /* messages_mosq.h in Headers */ = {isa = PBXBuildFile; fileRef = E09A5A1224953FAE60F9F1BBBFEB7829 /* messages_mosq.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		7085236B5A8317AD282B66536D968576 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F0E9E2EC973CD5BB571CFE9563503B1 /* AudioToolbox.framework */; };
+		72529FA31FA603C3872CE011BC152D66 /* SVProgressHUD-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = BC7F54F1194B674E099C221AD3E0F2AB /* SVProgressHUD-dummy.m */; };
+		7271E29F6B67D99AFEC12B55FDC0CE74 /* tls_mosq.c in Sources */ = {isa = PBXBuildFile; fileRef = EC56732FE0778171F842AD4A88D63025 /* tls_mosq.c */; };
+		7325862B87A0AE5C3EE3A6A36D794BC9 /* EZAudio-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 78BD28B812FC25E056B1E600D6C84775 /* EZAudio-dummy.m */; };
+		7621441400D97DC9CFBA694CA71CEDB9 /* EZOutput.h in Headers */ = {isa = PBXBuildFile; fileRef = FF0A96AE3E57F43D67FA3F1997F7612B /* EZOutput.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		79361CFA1804F018EB37E7C6CE32979B /* SVIndefiniteAnimatedView.m in Sources */ = {isa = PBXBuildFile; fileRef = F8FF5163CDF3C7F8602243BAFF48BF52 /* SVIndefiniteAnimatedView.m */; };
+		7D691F38A6E9FB4375A5121E3438FD26 /* EZAudioPlot.h in Headers */ = {isa = PBXBuildFile; fileRef = 932C47B96D5A2C1F99310F0D6C4FECF4 /* EZAudioPlot.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		81E7A4F404D131766E30ADFF8128DD19 /* EZAudioFloatConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 06220D0EEF9714766D8B57A12A6352B1 /* EZAudioFloatConverter.m */; };
+		841FCBD755B5DCCBE743509C5449456D /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 85626531A6C4901CB9C6EB179E1636FF /* SystemConfiguration.framework */; };
+		8523A06471E1C30D6EA21D9E59B755D9 /* AsyncSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = BCA9397ADC1272739AEBB0AE64B27AB8 /* AsyncSocket.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		86591E4ADEB3B875AD6F81B272A47A4C /* EZRecorder.h in Headers */ = {isa = PBXBuildFile; fileRef = B436F01862B6D9D22147A842CD6A3659 /* EZRecorder.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8998088E253A611331B2476E5B58517C /* EZPlot.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E0E5115CA0D17736E4F130B7512BE29 /* EZPlot.m */; };
+		8A46BE9F8482FBBCBF876D0C51F5C9D8 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0CA7158C570C034BBD7A8EE57D4EE5F /* Foundation.framework */; };
+		8BA84460C247C7EF870F8CCEEF1D37A8 /* SCNetworkReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 184745C907B027C1BB3770A453862823 /* SCNetworkReachability.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
+		8BE9DEE060207777C9BB1AEAEBC008EF /* net_mosq.c in Sources */ = {isa = PBXBuildFile; fileRef = 3CFAF671671AA0EADFB3EBFFBC825FD9 /* net_mosq.c */; };
+		8DB66A019B99A2537B803884E0C1B869 /* SCReachabilityRefBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 365C65B69290B37AA6C9A353CF67B2E0 /* SCReachabilityRefBuilder.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
+		8E34C2C41BB9A646C73B40CC13C3A3A5 /* send_mosq.h in Headers */ = {isa = PBXBuildFile; fileRef = 2BED14FB56A30543F457E1B148BDC361 /* send_mosq.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		8FE147D8E30A3FB7C21AB011A809ECA8 /* util_mosq.c in Sources */ = {isa = PBXBuildFile; fileRef = F55C474251C479D1CEA2AD77CB97AE2B /* util_mosq.c */; };
+		90353CEEE0C58707EBF59C039FF4FD3B /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F0E9E2EC973CD5BB571CFE9563503B1 /* AudioToolbox.framework */; };
+		925914081CB3954C664500239281D3D9 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 12654D5F989FC0113DCD46E7A224E2B6 /* GLKit.framework */; };
+		92C639DFEEFCC97CBCB035CAADC6D678 /* EZAudioDisplayLink.m in Sources */ = {isa = PBXBuildFile; fileRef = B177F8E93A94A274ABB4CD9BD3B536AD /* EZAudioDisplayLink.m */; };
+		937E394EC872684FE88174FCF34FCEE1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0CA7158C570C034BBD7A8EE57D4EE5F /* Foundation.framework */; };
+		9BBC14779408194043C420817A2CB6BA /* GCDAsyncUdpSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = A035DB474CDC34F991A3078F78535A4C /* GCDAsyncUdpSocket.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
+		9BC548A42CDF8A56354B0C5D1E9F3B6A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0CA7158C570C034BBD7A8EE57D4EE5F /* Foundation.framework */; };
+		9C5F10C8FE9F5889B98A00D1B508F690 /* EZAudio.h in Headers */ = {isa = PBXBuildFile; fileRef = C711520E92DAFFF6FC421921687EEAFD /* EZAudio.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9CA5A0153764AD308E84AAC712719823 /* read_handle_client.c in Sources */ = {isa = PBXBuildFile; fileRef = 24156C279B06C5CCC303EB908423645F /* read_handle_client.c */; };
+		9E22A1239A501C40263F8AD594627AE9 /* EZAudioDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = B6EF5D4FE08D7E20A0AC47A9D7068030 /* EZAudioDevice.m */; };
+		A2531BC3DCCCAE822AFCEB98463DF2F9 /* read_handle.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DDA3AEFAEC11F1D97F25152A6F3C5F /* read_handle.c */; };
+		A396E4D38054DE05BF654B35E132F1E1 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 156D360A903310DC8C6403BC3EC61A4D /* Accelerate.framework */; };
+		A3FCCB5DFAC08CABB14AB0567912A49B /* EZAudio.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CE12B866C27EEA0EFECCAD5BCB0008F /* EZAudio.m */; };
+		A62C1FD1DC2D3A7590CBEA3FC3FE6CCD /* TPCircularBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C54032F7973B6F912894AB55451BA42 /* TPCircularBuffer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A6CABC64B98B41FC30DCAB9FFC458C04 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0CA7158C570C034BBD7A8EE57D4EE5F /* Foundation.framework */; };
+		A7573484B6C7719944FEABA0681163CB /* EZAudioPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4315223E0C095A1C6D244D4D97732702 /* EZAudioPlayer.m */; };
+		A82BB748CD97C5F0B8128EC4B54F5CB6 /* util_mosq.h in Headers */ = {isa = PBXBuildFile; fileRef = F5400860F31EBAEB5E76B2DD4C84694A /* util_mosq.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		A9B898403FEF2B5B8DC336054BB3F6A1 /* memory_mosq.c in Sources */ = {isa = PBXBuildFile; fileRef = 2DF3DE94334898996432823490E391C6 /* memory_mosq.c */; };
+		AA67F7F2982355B3CB05C290B25B9C1F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0CA7158C570C034BBD7A8EE57D4EE5F /* Foundation.framework */; };
+		AD1DBD47F0E4D19735FD7081B98487E8 /* EZAudioFloatConverter.h in Headers */ = {isa = PBXBuildFile; fileRef = E0132E667F8EC6D30145A69F1640017F /* EZAudioFloatConverter.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B25A28C132E638E1D0ADF096442D10B3 /* SVIndefiniteAnimatedView.h in Headers */ = {isa = PBXBuildFile; fileRef = 5E8FF4601548883D4E38D25246EE83EE /* SVIndefiniteAnimatedView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B3711B4D9B9F378FF7A63083C524A5EA /* EZAudioFile.h in Headers */ = {isa = PBXBuildFile; fileRef = 8EB845314C02BF82F7645AFA70CC595B /* EZAudioFile.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BE3AA57BA0B108142303AE939791E69A /* EZAudioFloatData.m in Sources */ = {isa = PBXBuildFile; fileRef = C74153D7425A9159170D9405F7E4353C /* EZAudioFloatData.m */; };
+		BE54042495D2D7017AF92338141D7A2A /* EZAudioUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 5EE662DE55365F093B7196D70A88D17A /* EZAudioUtilities.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BFB99D555C0DBB8BE78B33730D9AF162 /* SCNetworkReachability-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 036444552191C906FBE3DB0B82C58383 /* SCNetworkReachability-dummy.m */; };
+		BFC5F75D3A368EC52C555F4979DD1E06 /* ios-ntp.h in Headers */ = {isa = PBXBuildFile; fileRef = 45774B4E85F49CF5BE450F5AA2523473 /* ios-ntp.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C04406D31A494A2985E783F20D2AF526 /* send_client_mosq.c in Sources */ = {isa = PBXBuildFile; fileRef = CCE6656A6A7A3BC946B784F8CA74B050 /* send_client_mosq.c */; };
+		C38DE79AE2AC674F6E8FF0B89624A68F /* CocoaAsyncSocket-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = CB4BDCC038C207C0DEEF43E35B498082 /* CocoaAsyncSocket-dummy.m */; };
+		C70624D2FCE51ACAEE1499BE2F2CB268 /* tls_mosq.h in Headers */ = {isa = PBXBuildFile; fileRef = 0AD07CBD25CF96A0097087161E40A58A /* tls_mosq.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		CAED8509360CD1574143B7E3E61C3BD6 /* TPCircularBuffer+AudioBufferList.c in Sources */ = {isa = PBXBuildFile; fileRef = 26F45C132842C694AC401C49AE408FB4 /* TPCircularBuffer+AudioBufferList.c */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		CDEDF658D080A31FA8069A40C399FE48 /* will_mosq.c in Sources */ = {isa = PBXBuildFile; fileRef = 8151EF1A7B4CBC31A11641A5DD3839E3 /* will_mosq.c */; };
+		CF2B54BBC95C6F8B8C60D75E2DCC865A /* config.h in Headers */ = {isa = PBXBuildFile; fileRef = 9F99D3A6E511233A9E07A11948B5D679 /* config.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		D0AA7859787CF3EC266380C200790A18 /* ntp-log.h in Headers */ = {isa = PBXBuildFile; fileRef = 435947F12561AE5176863980B899217D /* ntp-log.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D1F0007FA60BB9C48CE104855A7F0771 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A617EF8B739D8D5B7931493747220FB /* QuartzCore.framework */; };
+		D340E14E91582FA81EA61CB231D4DE0C /* EZAudioOSX.h in Headers */ = {isa = PBXBuildFile; fileRef = 7D1398EDCBB74CCDABFF5329D020E8A6 /* EZAudioOSX.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D4D6F57F3269747A64AE41C41DAAA237 /* MQTTKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 460FB4C3EED34F14F79071C31959589E /* MQTTKit.m */; };
+		D6FB9006BB524C21F983CF85F405CFD1 /* EZAudioPlot.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A620AA3D6F80427125B2732F324DB3 /* EZAudioPlot.m */; };
+		D736B99359621BEC4F87CBB5AB0DC9C4 /* EZAudioFFT.m in Sources */ = {isa = PBXBuildFile; fileRef = 4848EC08EBCC0277B1036EB924BDD8BB /* EZAudioFFT.m */; };
+		E1329092383DC02C6B7502337556F917 /* mosquitto.c in Sources */ = {isa = PBXBuildFile; fileRef = DE986C1E365B2D78ED8B439FE376FD8E /* mosquitto.c */; };
+		E18F00D7D1DD05B7C16F46B5FF77F234 /* AsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = C72EE53EFF814276E5F628EE9D36C3C4 /* AsyncSocket.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
+		E1AF4C08E2D4F5585181885BAB4289A9 /* ios-ntp-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 37F0AD739A04638A5330BBA1A84D0CD8 /* ios-ntp-dummy.m */; };
+		E4B726C4C77C91F40B65BA123468A08B /* time_mosq.c in Sources */ = {isa = PBXBuildFile; fileRef = BE7B956CFA7BB96965E2ACEE59E521DC /* time_mosq.c */; };
+		E4ED52BE75F1191E119E354A91E1CD29 /* will_mosq.h in Headers */ = {isa = PBXBuildFile; fileRef = 226E6EE388A7D6A0C2A97DB5733B330E /* will_mosq.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		E6869BADB2D7B7E0AA7DEBA439CDCA7B /* EZAudioiOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 468F3DD2D83E803F4C321C47303DE6BF /* EZAudioiOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		EF41339F12A09172DB0F101DB347D37E /* send_mosq.c in Sources */ = {isa = PBXBuildFile; fileRef = 7CAA942EFC60C8A2E460EA5264173FF3 /* send_mosq.c */; };
+		F44699170973F30D69A7186436DFC108 /* logging_mosq.c in Sources */ = {isa = PBXBuildFile; fileRef = 885953242F927A379A930BC06489BDC3 /* logging_mosq.c */; };
+		F4C939A2793BE48660A5A1DE56325AD2 /* CocoaAsyncSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = 0DCC160CCB31A2FBDDE182D52E51134F /* CocoaAsyncSocket.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F4ED8A3C57DC26B2BDD994E987B7A6F0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0CA7158C570C034BBD7A8EE57D4EE5F /* Foundation.framework */; };
+		F63E802C4F98982DEDEB54D6A56AEDCB /* TPCircularBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = E6913728AF49F91B7786977FBCA8F5D4 /* TPCircularBuffer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F77D145CF9C1ED7E15F8ADF3C8E1609B /* EZRecorder.m in Sources */ = {isa = PBXBuildFile; fileRef = B56F3B7925B5CA8B4AC243477BBE4E0A /* EZRecorder.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		03387C79B4DC7ECDB3F346FE4B4444FA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D41D8CD98F00B204E9800998ECF8427E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4547FD42E303C73D12CCC45748CC491D;
+			remoteInfo = TPCircularBuffer;
+		};
+		33432FC80B3DD3DD5B45BDB869605FA3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D41D8CD98F00B204E9800998ECF8427E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 67D5A223E67B0EF959BA0BB2E2598C26;
+			remoteInfo = "ios-ntp";
+		};
+		5A8C3DE9BA050913F00AA26C809C445C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D41D8CD98F00B204E9800998ECF8427E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 74CD2F578138157E0B27CCEE08C069EF;
+			remoteInfo = MQTTKit;
+		};
+		A39F90B8CDA698E2E7F0CD0006D68F92 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D41D8CD98F00B204E9800998ECF8427E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4547FD42E303C73D12CCC45748CC491D;
+			remoteInfo = TPCircularBuffer;
+		};
+		B4422FA8039C0DC7B44EF34CFA43F193 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D41D8CD98F00B204E9800998ECF8427E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 500418AF00C5A07C35903372036CF3D1;
+			remoteInfo = SCNetworkReachability;
+		};
+		DEF7AB7AB7FD986144A64F7E4675CE49 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D41D8CD98F00B204E9800998ECF8427E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = ECFE0958DDB7FEC79B3AA1C9337BC941;
+			remoteInfo = CocoaAsyncSocket;
+		};
+		E50AD48E94967CC422AB771967DEC6DE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D41D8CD98F00B204E9800998ECF8427E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = ECFE0958DDB7FEC79B3AA1C9337BC941;
+			remoteInfo = CocoaAsyncSocket;
+		};
+		F3F924A6F70DD6173C499DA66766B32E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D41D8CD98F00B204E9800998ECF8427E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3F38C496AC06681CAEE7767614EDE9F0;
+			remoteInfo = SVProgressHUD;
+		};
+		FC60E8574BD5FA85590443B34B3A3685 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D41D8CD98F00B204E9800998ECF8427E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 9B2B758E5A2FBC4951EB61B6FB6CE421;
+			remoteInfo = EZAudio;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
+		036444552191C906FBE3DB0B82C58383 /* SCNetworkReachability-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "SCNetworkReachability-dummy.m"; sourceTree = "<group>"; };
+		0388FE7D795B6AAE40610D37FA3557C7 /* GGLContext+SignIn.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "GGLContext+SignIn.h"; path = "Headers/GGLSignIn/Public/GGLContext+SignIn.h"; sourceTree = "<group>"; };
+		06220D0EEF9714766D8B57A12A6352B1 /* EZAudioFloatConverter.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = EZAudioFloatConverter.m; path = EZAudio/EZAudioFloatConverter.m; sourceTree = "<group>"; };
+		08C38A25D613297DDBDE516A996037EA /* libTPCircularBuffer.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libTPCircularBuffer.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		08DCEE633DD721CC6A60A32A695F2FFC /* SCReachabilityScheduler.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SCReachabilityScheduler.m; path = Classes/Private/SCReachabilityScheduler.m; sourceTree = "<group>"; };
+		08DDBC0F5F220890C786D35456BAB674 /* libOpenInChrome.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libOpenInChrome.a; path = Libraries/libOpenInChrome.a; sourceTree = "<group>"; };
+		0AB4FED53CEC77874F32B95A803A08CE /* ja.lproj */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = folder; name = ja.lproj; path = DeployGateSDK1.0.7.embeddedframework/DeployGateSDK.framework/Versions/A/Resources/ja.lproj; sourceTree = "<group>"; };
+		0AC0916F235A8D34F4127270EDBAC8BA /* ios-ntp.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "ios-ntp.xcconfig"; sourceTree = "<group>"; };
+		0AD07CBD25CF96A0097087161E40A58A /* tls_mosq.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = tls_mosq.h; path = libmosquitto/tls_mosq.h; sourceTree = "<group>"; };
+		0BBF1130BCBF9971F7B81007DC4093D0 /* GGLConfiguration.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GGLConfiguration.h; path = Headers/GGLCore/Public/GGLConfiguration.h; sourceTree = "<group>"; };
+		0D9253495FEEDB0F002527E010CE77CC /* libGTM_core.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libGTM_core.a; path = Libraries/libGTM_core.a; sourceTree = "<group>"; };
+		0DCC160CCB31A2FBDDE182D52E51134F /* CocoaAsyncSocket.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = CocoaAsyncSocket.h; path = Source/CocoaAsyncSocket.h; sourceTree = "<group>"; };
+		0F094B10F5F0B704065ABC0575AEC9E9 /* libGTM_NSStringHTML.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libGTM_NSStringHTML.a; path = Libraries/libGTM_NSStringHTML.a; sourceTree = "<group>"; };
+		12654D5F989FC0113DCD46E7A224E2B6 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.0.sdk/System/Library/Frameworks/GLKit.framework; sourceTree = DEVELOPER_DIR; };
+		1520407C312C5DED8861BE5A9668C1BB /* libGTM_KVO.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libGTM_KVO.a; path = Libraries/libGTM_KVO.a; sourceTree = "<group>"; };
+		156D360A903310DC8C6403BC3EC61A4D /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.0.sdk/System/Library/Frameworks/Accelerate.framework; sourceTree = DEVELOPER_DIR; };
+		184745C907B027C1BB3770A453862823 /* SCNetworkReachability.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SCNetworkReachability.m; path = Classes/Public/SCNetworkReachability.m; sourceTree = "<group>"; };
+		186DD7174B7866E88F0FC9E872E63CEF /* CocoaAsyncSocket.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = CocoaAsyncSocket.xcconfig; sourceTree = "<group>"; };
+		1ACF1E8AE4688B488674CCF8DAFA33DE /* TPCircularBuffer.c */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.c; name = TPCircularBuffer.c; path = EZAudio/TPCircularBuffer.c; sourceTree = "<group>"; };
+		1BE6D18FDBC1566CF85D6C3BA1532049 /* libGTMSessionFetcher_full.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libGTMSessionFetcher_full.a; path = Libraries/libGTMSessionFetcher_full.a; sourceTree = "<group>"; };
+		1DD2D8DBDFDA2DE3172D86483943E5EB /* libCocoaAsyncSocket.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libCocoaAsyncSocket.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		1DDAC4D45C1F5E2890BFE844E25E2A56 /* SVProgressHUD-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "SVProgressHUD-prefix.pch"; sourceTree = "<group>"; };
+		1F8A8F0A4ABEB4888D1955DD5FAAEB6D /* GIDSignInButton.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GIDSignInButton.h; path = Headers/Public/GIDSignInButton.h; sourceTree = "<group>"; };
+		1FC2A72C071000D50A991561CC7D6FE8 /* SCNetworkStatus.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SCNetworkStatus.h; path = Classes/Public/SCNetworkStatus.h; sourceTree = "<group>"; };
+		203B6D89337E13DA791146162D165837 /* EZMicrophone.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = EZMicrophone.h; path = EZAudio/EZMicrophone.h; sourceTree = "<group>"; };
+		21AF0C80999D96200B0002ABF779E92D /* libGTMStackTrace.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libGTMStackTrace.a; path = Libraries/libGTMStackTrace.a; sourceTree = "<group>"; };
+		226E6EE388A7D6A0C2A97DB5733B330E /* will_mosq.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = will_mosq.h; path = libmosquitto/will_mosq.h; sourceTree = "<group>"; };
+		22BABD7902605043252B64BAD205C6D0 /* libGTM_NSDictionary+URLArguments.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = "libGTM_NSDictionary+URLArguments.a"; path = "Libraries/libGTM_NSDictionary+URLArguments.a"; sourceTree = "<group>"; };
+		24156C279B06C5CCC303EB908423645F /* read_handle_client.c */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.c; name = read_handle_client.c; path = libmosquitto/read_handle_client.c; sourceTree = "<group>"; };
+		2467C60A5769EA8DAF2E261973FA77B4 /* Analytics-Module.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "Analytics-Module.h"; path = "Headers/ModuleHeaders/Analytics-Module.h"; sourceTree = "<group>"; };
+		26F45C132842C694AC401C49AE408FB4 /* TPCircularBuffer+AudioBufferList.c */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.c; path = "TPCircularBuffer+AudioBufferList.c"; sourceTree = "<group>"; };
+		27E436B98C57B0F4421699DBBAA716B1 /* TPCircularBuffer.c */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.c; path = TPCircularBuffer.c; sourceTree = "<group>"; };
+		29079B992A789F8D8E95288ABD5D7B50 /* SVProgressHUD.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SVProgressHUD.m; path = SVProgressHUD/SVProgressHUD.m; sourceTree = "<group>"; };
+		2A33C0DDCDE96EEA40C850B867FAC386 /* Pods-AWARE-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-AWARE-frameworks.sh"; sourceTree = "<group>"; };
+		2B1A8B431BF3708ADD4F646532F130FE /* SignIn.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SignIn.h; path = Headers/GGLSignIn/Public/SignIn.h; sourceTree = "<group>"; };
+		2BED14FB56A30543F457E1B148BDC361 /* send_mosq.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = send_mosq.h; path = libmosquitto/send_mosq.h; sourceTree = "<group>"; };
+		2DF3DE94334898996432823490E391C6 /* memory_mosq.c */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.c; name = memory_mosq.c; path = libmosquitto/memory_mosq.c; sourceTree = "<group>"; };
+		2E0E5115CA0D17736E4F130B7512BE29 /* EZPlot.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = EZPlot.m; path = EZAudio/EZPlot.m; sourceTree = "<group>"; };
+		2F0E9E2EC973CD5BB571CFE9563503B1 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.0.sdk/System/Library/Frameworks/AudioToolbox.framework; sourceTree = DEVELOPER_DIR; };
+		302E67EF47C97A8CC01A0B3EC98C7598 /* GCDAsyncSocket.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = GCDAsyncSocket.m; path = Source/GCD/GCDAsyncSocket.m; sourceTree = "<group>"; };
+		31CA486FBFB9BAB702057893CEE3174A /* libEZAudio.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libEZAudio.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		337259FA655F5AF12B4269D1AE175A78 /* SCNetworkReachability.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = SCNetworkReachability.xcconfig; sourceTree = "<group>"; };
+		33D3B9AC41293BE8EF4E6F3ABE6C4F6D /* messages_mosq.c */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.c; name = messages_mosq.c; path = libmosquitto/messages_mosq.c; sourceTree = "<group>"; };
+		33FF2332676DCA7C2B30CCADDDE21E91 /* logging_mosq.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = logging_mosq.h; path = libmosquitto/logging_mosq.h; sourceTree = "<group>"; };
+		343FD7ACF3E76CF81A03FC7E941871F3 /* EZOutput.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = EZOutput.m; path = EZAudio/EZOutput.m; sourceTree = "<group>"; };
+		365C65B69290B37AA6C9A353CF67B2E0 /* SCReachabilityRefBuilder.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SCReachabilityRefBuilder.m; path = Classes/Private/SCReachabilityRefBuilder.m; sourceTree = "<group>"; };
+		36AE9167DA85EA76BB9EE0C4D04EA03C /* GGLErrorCode.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GGLErrorCode.h; path = Headers/GGLCore/Public/GGLErrorCode.h; sourceTree = "<group>"; };
+		37F0AD739A04638A5330BBA1A84D0CD8 /* ios-ntp-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "ios-ntp-dummy.m"; sourceTree = "<group>"; };
+		3AD64CC0EED8E643561CBAD2C4B3049A /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.0.sdk/System/Library/Frameworks/CFNetwork.framework; sourceTree = DEVELOPER_DIR; };
+		3BD47B4C20629516C5B2AE7BDF9023FD /* EZAudioFFT.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = EZAudioFFT.h; path = EZAudio/EZAudioFFT.h; sourceTree = "<group>"; };
+		3C54032F7973B6F912894AB55451BA42 /* TPCircularBuffer.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = TPCircularBuffer.h; path = EZAudio/TPCircularBuffer.h; sourceTree = "<group>"; };
+		3CFAF671671AA0EADFB3EBFFBC825FD9 /* net_mosq.c */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.c; name = net_mosq.c; path = libmosquitto/net_mosq.c; sourceTree = "<group>"; };
+		4150AC70AC8109354D278615B5CD0475 /* Pods-AWARE-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-AWARE-resources.sh"; sourceTree = "<group>"; };
+		41EAF205C3C207A032E1DE3F3D8B0AB6 /* MQTTKit-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "MQTTKit-prefix.pch"; sourceTree = "<group>"; };
+		4209D040A56C46F194E745C9DCC33E37 /* libGTM_Regex.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libGTM_Regex.a; path = Libraries/libGTM_Regex.a; sourceTree = "<group>"; };
+		43015001AF78568287F32F92DBFB4425 /* CloudMessaging-Module.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "CloudMessaging-Module.h"; path = "Headers/ModuleHeaders/CloudMessaging-Module.h"; sourceTree = "<group>"; };
+		4315223E0C095A1C6D244D4D97732702 /* EZAudioPlayer.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = EZAudioPlayer.m; path = EZAudio/EZAudioPlayer.m; sourceTree = "<group>"; };
+		435947F12561AE5176863980B899217D /* ntp-log.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "ntp-log.h"; path = "ios-ntp-lib/ntp-log.h"; sourceTree = "<group>"; };
+		437061CD71D0306A5244222AC6390F5C /* libGTMSessionFetcher_core.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libGTMSessionFetcher_core.a; path = Libraries/libGTMSessionFetcher_core.a; sourceTree = "<group>"; };
+		45774B4E85F49CF5BE450F5AA2523473 /* ios-ntp.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "ios-ntp.h"; path = "ios-ntp-lib/ios-ntp.h"; sourceTree = "<group>"; };
+		460FB4C3EED34F14F79071C31959589E /* MQTTKit.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = MQTTKit.m; path = MQTTKit/MQTTKit.m; sourceTree = "<group>"; };
+		468F3DD2D83E803F4C321C47303DE6BF /* EZAudioiOS.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = EZAudioiOS.h; path = EZAudio/EZAudioiOS.h; sourceTree = "<group>"; };
+		4711A9ACA8E474490D982CF28AACDA71 /* GCDAsyncUdpSocket.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GCDAsyncUdpSocket.h; path = Source/GCD/GCDAsyncUdpSocket.h; sourceTree = "<group>"; };
+		4848EC08EBCC0277B1036EB924BDD8BB /* EZAudioFFT.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = EZAudioFFT.m; path = EZAudio/EZAudioFFT.m; sourceTree = "<group>"; };
+		4A0389A60A9F60331F4E50B39C7E3342 /* SignIn-Module.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "SignIn-Module.h"; path = "Headers/ModuleHeaders/SignIn-Module.h"; sourceTree = "<group>"; };
+		4A617EF8B739D8D5B7931493747220FB /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.0.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
+		4C899422BCD2D8F05F373396C0915C27 /* thread_mosq.c */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.c; name = thread_mosq.c; path = libmosquitto/thread_mosq.c; sourceTree = "<group>"; };
+		4D5C31234B40CB9CEDDF1568A2E9411A /* EZAudioUtilities.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = EZAudioUtilities.m; path = EZAudio/EZAudioUtilities.m; sourceTree = "<group>"; };
+		54DCCC1536FA07A128392842C7BE59AC /* libGSDK_Overload.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libGSDK_Overload.a; path = Libraries/libGSDK_Overload.a; sourceTree = "<group>"; };
+		593D2A4257AB0284B799B5E1D1F46E17 /* time_mosq.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = time_mosq.h; path = libmosquitto/time_mosq.h; sourceTree = "<group>"; };
+		5CE12B866C27EEA0EFECCAD5BCB0008F /* EZAudio.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = EZAudio.m; path = EZAudio/EZAudio.m; sourceTree = "<group>"; };
+		5E269556FC4141713E1AD5B7FEA029DB /* EZAudio-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "EZAudio-prefix.pch"; sourceTree = "<group>"; };
+		5E8FF4601548883D4E38D25246EE83EE /* SVIndefiniteAnimatedView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SVIndefiniteAnimatedView.h; path = SVProgressHUD/SVIndefiniteAnimatedView.h; sourceTree = "<group>"; };
+		5EE662DE55365F093B7196D70A88D17A /* EZAudioUtilities.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = EZAudioUtilities.h; path = EZAudio/EZAudioUtilities.h; sourceTree = "<group>"; };
+		624469833FF42BD87165866D4C9E39C9 /* GoogleSignIn.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; name = GoogleSignIn.bundle; path = Resources/GoogleSignIn.bundle; sourceTree = "<group>"; };
+		6483D0AF0584B667BD0E85E9FEACCA9D /* GIDGoogleUser.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GIDGoogleUser.h; path = Headers/Public/GIDGoogleUser.h; sourceTree = "<group>"; };
+		6AAE19274711AE6CFD850DBA0C55D624 /* SCReachabilityFlagsParser.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SCReachabilityFlagsParser.m; path = Classes/Private/SCReachabilityFlagsParser.m; sourceTree = "<group>"; };
+		6BAA68424CFDEDD51DBFFA25F82A84C4 /* AdMob-Module.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "AdMob-Module.h"; path = "Headers/ModuleHeaders/AdMob-Module.h"; sourceTree = "<group>"; };
+		6F2E2310A3CE228D7C8CD911A8766CA3 /* NetAssociation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = NetAssociation.h; path = "ios-ntp-lib/NetAssociation.h"; sourceTree = "<group>"; };
+		7139092CF6F9D2E98F3BC615FAD39B60 /* UIViewController+SignIn.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIViewController+SignIn.h"; path = "Headers/Public/UIViewController+SignIn.h"; sourceTree = "<group>"; };
+		725AD2FFAB0D23BCA82FE106D3C6E8C7 /* libGTMOAuth2_internal.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libGTMOAuth2_internal.a; path = Libraries/libGTMOAuth2_internal.a; sourceTree = "<group>"; };
+		72F2D13C1AAD147EA47F4B98459EAE52 /* mosquitto_internal.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = mosquitto_internal.h; path = libmosquitto/mosquitto_internal.h; sourceTree = "<group>"; };
+		7322A15090BE0E5010B0CC0F2A91D263 /* dummypthread.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = dummypthread.h; path = libmosquitto/dummypthread.h; sourceTree = "<group>"; };
+		741E2258BF5AA8731890CDB4388E930C /* libGGLSignIn.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libGGLSignIn.a; path = Libraries/libGGLSignIn.a; sourceTree = "<group>"; };
+		74C6E1B524BC3D365F9FE7D24A8B251C /* libios-ntp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libios-ntp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		75488BC00570FCCC295E00DA38170B1F /* NetworkClock.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = NetworkClock.m; path = "ios-ntp-lib/NetworkClock.m"; sourceTree = "<group>"; };
+		761067FD995C411B2509BAF2FD0B4D4B /* TPCircularBuffer.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = TPCircularBuffer.xcconfig; sourceTree = "<group>"; };
+		7868C86601FDB762E739F0032153D7C2 /* libMQTTKit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libMQTTKit.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		78BD28B812FC25E056B1E600D6C84775 /* EZAudio-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "EZAudio-dummy.m"; sourceTree = "<group>"; };
+		7AC842075AF44FA40B82E59A84A8188F /* GGLContext.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GGLContext.h; path = Headers/GGLCore/Public/GGLContext.h; sourceTree = "<group>"; };
+		7CAA942EFC60C8A2E460EA5264173FF3 /* send_mosq.c */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.c; name = send_mosq.c; path = libmosquitto/send_mosq.c; sourceTree = "<group>"; };
+		7D1398EDCBB74CCDABFF5329D020E8A6 /* EZAudioOSX.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = EZAudioOSX.h; path = EZAudio/EZAudioOSX.h; sourceTree = "<group>"; };
+		7EE4010C3D20A2C4F2DF305220509D22 /* Pods-AWARE-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-AWARE-dummy.m"; sourceTree = "<group>"; };
+		7F5C46D4371028C9B437FD810B724EAE /* EZAudioDevice.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = EZAudioDevice.h; path = EZAudio/EZAudioDevice.h; sourceTree = "<group>"; };
+		80EAE3E10A0A7A4AA864BEAE977EC7E9 /* libGTM_DebugUtils.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libGTM_DebugUtils.a; path = Libraries/libGTM_DebugUtils.a; sourceTree = "<group>"; };
+		8151EF1A7B4CBC31A11641A5DD3839E3 /* will_mosq.c */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.c; name = will_mosq.c; path = libmosquitto/will_mosq.c; sourceTree = "<group>"; };
+		84A620AA3D6F80427125B2732F324DB3 /* EZAudioPlot.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = EZAudioPlot.m; path = EZAudio/EZAudioPlot.m; sourceTree = "<group>"; };
+		85626531A6C4901CB9C6EB179E1636FF /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.0.sdk/System/Library/Frameworks/SystemConfiguration.framework; sourceTree = DEVELOPER_DIR; };
+		85CAB93FDCBC092ADEE9FCD217973D37 /* libGTM_StringEncoding.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libGTM_StringEncoding.a; path = Libraries/libGTM_StringEncoding.a; sourceTree = "<group>"; };
+		87A4A387DBCA9A307EAD5538969A4DE1 /* libGTM_iPhone.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libGTM_iPhone.a; path = Libraries/libGTM_iPhone.a; sourceTree = "<group>"; };
+		885953242F927A379A930BC06489BDC3 /* logging_mosq.c */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.c; name = logging_mosq.c; path = libmosquitto/logging_mosq.c; sourceTree = "<group>"; };
+		894635B87E00E3D04FD06EF37CB64DF3 /* libPods-AWARE.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AWARE.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		89878BF088927C58C6F3FE04B1CC30AD /* Pods-AWARE-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-AWARE-acknowledgements.markdown"; sourceTree = "<group>"; };
+		8EB845314C02BF82F7645AFA70CC595B /* EZAudioFile.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = EZAudioFile.h; path = EZAudio/EZAudioFile.h; sourceTree = "<group>"; };
+		8F273A277438C695C82A5C7B3C6B2C2A /* en.lproj */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = folder; name = en.lproj; path = DeployGateSDK1.0.7.embeddedframework/DeployGateSDK.framework/Versions/A/Resources/en.lproj; sourceTree = "<group>"; };
+		8F98708A0F6B2ABC062959E7F2386AF7 /* SVProgressHUD.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SVProgressHUD.h; path = SVProgressHUD/SVProgressHUD.h; sourceTree = "<group>"; };
+		90C370FFFFE37D8EE60D06925B7E1DA0 /* net_mosq.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = net_mosq.h; path = libmosquitto/net_mosq.h; sourceTree = "<group>"; };
+		916C77D3DE33525D5109D4FBE1841466 /* SVProgressHUD.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; name = SVProgressHUD.bundle; path = SVProgressHUD/SVProgressHUD.bundle; sourceTree = "<group>"; };
+		9257BFF4084215F1BBABB45DA8F174F1 /* libGTMOAuth2_external.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libGTMOAuth2_external.a; path = Libraries/libGTMOAuth2_external.a; sourceTree = "<group>"; };
+		932C47B96D5A2C1F99310F0D6C4FECF4 /* EZAudioPlot.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = EZAudioPlot.h; path = EZAudio/EZAudioPlot.h; sourceTree = "<group>"; };
+		9567396C4D2DB104DDF3F8B8071635A7 /* NetworkClock.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = NetworkClock.h; path = "ios-ntp-lib/NetworkClock.h"; sourceTree = "<group>"; };
+		9586913F840245A5EE8C533667D412C6 /* libGTM_NSStringXML.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libGTM_NSStringXML.a; path = Libraries/libGTM_NSStringXML.a; sourceTree = "<group>"; };
+		9701AFD5A8DA9E4CFA01C080742C7FA6 /* libSCNetworkReachability.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libSCNetworkReachability.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		980F4CB0661CB23C6270EB6D663632D2 /* libProtocolBuffers.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libProtocolBuffers.a; path = Libraries/libProtocolBuffers.a; sourceTree = "<group>"; };
+		99177EDDD232120561F30E14CBF3176A /* EZAudioDisplayLink.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = EZAudioDisplayLink.h; path = EZAudio/EZAudioDisplayLink.h; sourceTree = "<group>"; };
+		99F683789C46DA8B6BADBE8D029E9C23 /* EZMicrophone.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = EZMicrophone.m; path = EZAudio/EZMicrophone.m; sourceTree = "<group>"; };
+		9A58274A17F167129F4FDB5210412ADB /* Pods-AWARE-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-AWARE-acknowledgements.plist"; sourceTree = "<group>"; };
+		9CC0998106C79086D1C5B3913BD787E2 /* GIDAuthentication.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GIDAuthentication.h; path = Headers/Public/GIDAuthentication.h; sourceTree = "<group>"; };
+		9F8978730BFF5683FE4B2A170584C545 /* EZAudioPlotGL.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = EZAudioPlotGL.m; path = EZAudio/EZAudioPlotGL.m; sourceTree = "<group>"; };
+		9F99D3A6E511233A9E07A11948B5D679 /* config.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = config.h; path = libmosquitto/config.h; sourceTree = "<group>"; };
+		A035DB474CDC34F991A3078F78535A4C /* GCDAsyncUdpSocket.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = GCDAsyncUdpSocket.m; path = Source/GCD/GCDAsyncUdpSocket.m; sourceTree = "<group>"; };
+		A18726F6AC551EC9D21C4F4158071273 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.0.sdk/System/Library/Frameworks/Security.framework; sourceTree = DEVELOPER_DIR; };
+		A3990373E11C95926F627E5B78C101BA /* EZAudio.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = EZAudio.xcconfig; sourceTree = "<group>"; };
+		A5CFD9F9FF38902A33F0FA13888E8523 /* TPCircularBuffer-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "TPCircularBuffer-dummy.m"; sourceTree = "<group>"; };
+		A649AC22E5507D16AA27DEEEEEC80A3A /* DeployGateSDK.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = DeployGateSDK.h; path = DeployGateSDK1.0.7.embeddedframework/DeployGateSDK.framework/Versions/A/Headers/DeployGateSDK.h; sourceTree = "<group>"; };
+		A6E1A0C4CF8E2FAAB7BB8B14C9121C9C /* libGIPNSURL+FIFE.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = "libGIPNSURL+FIFE.a"; path = "Libraries/libGIPNSURL+FIFE.a"; sourceTree = "<group>"; };
+		A75E4D2C45C52F94C00FF70FB23ED044 /* SCReachabilityScheduler.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SCReachabilityScheduler.h; path = Classes/Private/SCReachabilityScheduler.h; sourceTree = "<group>"; };
+		A7AAF45E830591AFBEC692861411CBB3 /* GCDAsyncSocket.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GCDAsyncSocket.h; path = Source/GCD/GCDAsyncSocket.h; sourceTree = "<group>"; };
+		A84744663204348ED7C65D3737AD6065 /* TPCircularBuffer+AudioBufferList.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "TPCircularBuffer+AudioBufferList.h"; sourceTree = "<group>"; };
+		A965B4400E486B6F8444A9B5217FBA97 /* libGTM_SystemVersion.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libGTM_SystemVersion.a; path = Libraries/libGTM_SystemVersion.a; sourceTree = "<group>"; };
+		A9DDA3AEFAEC11F1D97F25152A6F3C5F /* read_handle.c */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.c; name = read_handle.c; path = libmosquitto/read_handle.c; sourceTree = "<group>"; };
+		AE3B70D291373AE445FC1DF74968ACF5 /* SCReachabilityFlagsParser.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SCReachabilityFlagsParser.h; path = Classes/Private/SCReachabilityFlagsParser.h; sourceTree = "<group>"; };
+		AEBDBD44F52F35C5D49E3EAED7032B7E /* GoogleSignIn.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GoogleSignIn.h; path = Headers/Public/GoogleSignIn.h; sourceTree = "<group>"; };
+		B0FA1E9B52454BB8870D2056CEEE70B3 /* NSDate+NetworkClock.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSDate+NetworkClock.m"; path = "ios-ntp-lib/NSDate+NetworkClock.m"; sourceTree = "<group>"; };
+		B177F8E93A94A274ABB4CD9BD3B536AD /* EZAudioDisplayLink.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = EZAudioDisplayLink.m; path = EZAudio/EZAudioDisplayLink.m; sourceTree = "<group>"; };
+		B2F3132898EA8CFA24C6327AC66FFBA6 /* AsyncUdpSocket.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AsyncUdpSocket.m; path = Source/RunLoop/AsyncUdpSocket.m; sourceTree = "<group>"; };
+		B3EDF2C229DA7C761AA883BE9AB321B7 /* macros_blocks.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = macros_blocks.h; sourceTree = "<group>"; };
+		B436F01862B6D9D22147A842CD6A3659 /* EZRecorder.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = EZRecorder.h; path = EZAudio/EZRecorder.h; sourceTree = "<group>"; };
+		B56F3B7925B5CA8B4AC243477BBE4E0A /* EZRecorder.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = EZRecorder.m; path = EZAudio/EZRecorder.m; sourceTree = "<group>"; };
+		B6D0EB0915574B09D1E9A9BFCCE1573D /* Pods-AWARE.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-AWARE.release.xcconfig"; sourceTree = "<group>"; };
+		B6EF5D4FE08D7E20A0AC47A9D7068030 /* EZAudioDevice.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = EZAudioDevice.m; path = EZAudio/EZAudioDevice.m; sourceTree = "<group>"; };
 		BA6428E9F66FD5A23C0A2E06ED26CD2F /* Podfile */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		BBE8BAC55CC724FD7F5357652F590CCE /* SCNetworkReachability.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SCNetworkReachability.h; path = Classes/Public/SCNetworkReachability.h; sourceTree = "<group>"; };
+		BC7F54F1194B674E099C221AD3E0F2AB /* SVProgressHUD-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "SVProgressHUD-dummy.m"; sourceTree = "<group>"; };
+		BCA9397ADC1272739AEBB0AE64B27AB8 /* AsyncSocket.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AsyncSocket.h; path = Source/RunLoop/AsyncSocket.h; sourceTree = "<group>"; };
+		BCDF8BD41283303FFA09DC4751EFB32C /* libGTM_RoundedRectPath.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libGTM_RoundedRectPath.a; path = Libraries/libGTM_RoundedRectPath.a; sourceTree = "<group>"; };
+		BD18C4DA26908C46255960507BDE7E6B /* GIDProfileData.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GIDProfileData.h; path = Headers/Public/GIDProfileData.h; sourceTree = "<group>"; };
+		BD5582251C2766A2D3AAF1EFBC9A6A99 /* AsyncUdpSocket.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AsyncUdpSocket.h; path = Source/RunLoop/AsyncUdpSocket.h; sourceTree = "<group>"; };
+		BDFBC1EA96DAEC67D64D377AA5198B8D /* mqtt3_protocol.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = mqtt3_protocol.h; path = libmosquitto/mqtt3_protocol.h; sourceTree = "<group>"; };
+		BE7B956CFA7BB96965E2ACEE59E521DC /* time_mosq.c */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.c; name = time_mosq.c; path = libmosquitto/time_mosq.c; sourceTree = "<group>"; };
+		BEEA56E5BA8852A29180DC60F878E32E /* NSDate+NetworkClock.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSDate+NetworkClock.h"; path = "ios-ntp-lib/NSDate+NetworkClock.h"; sourceTree = "<group>"; };
+		BF45500E8889F31CAB1C5093A61A4CC4 /* libGGLCore.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libGGLCore.a; path = Libraries/libGGLCore.a; sourceTree = "<group>"; };
+		C03142F6F7E7BC5C12A1297A4235843C /* read_handle.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = read_handle.h; path = libmosquitto/read_handle.h; sourceTree = "<group>"; };
+		C2F312EA0B08BE5D8F98EB2C13078AA2 /* MQTTKit-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "MQTTKit-dummy.m"; sourceTree = "<group>"; };
+		C711520E92DAFFF6FC421921687EEAFD /* EZAudio.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = EZAudio.h; path = EZAudio/EZAudio.h; sourceTree = "<group>"; };
+		C72EE53EFF814276E5F628EE9D36C3C4 /* AsyncSocket.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AsyncSocket.m; path = Source/RunLoop/AsyncSocket.m; sourceTree = "<group>"; };
+		C74153D7425A9159170D9405F7E4353C /* EZAudioFloatData.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = EZAudioFloatData.m; path = EZAudio/EZAudioFloatData.m; sourceTree = "<group>"; };
+		C7E9DB7A4F025B9E99F1093BB70ACC16 /* SVProgressHUD.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = SVProgressHUD.xcconfig; sourceTree = "<group>"; };
+		C96E9B7E833A9D054AD04C76F491572D /* ios-ntp-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "ios-ntp-prefix.pch"; sourceTree = "<group>"; };
+		C9FA3B921D3B1FC7659086BB764825A3 /* DeployGateSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DeployGateSDK.framework; path = DeployGateSDK1.0.7.embeddedframework/DeployGateSDK.framework; sourceTree = "<group>"; };
+		CA02631F64A49A6F0C0FFC9A4A8F7F96 /* mosquitto.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = mosquitto.h; path = libmosquitto/mosquitto.h; sourceTree = "<group>"; };
+		CB4BDCC038C207C0DEEF43E35B498082 /* CocoaAsyncSocket-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "CocoaAsyncSocket-dummy.m"; sourceTree = "<group>"; };
+		CCE6656A6A7A3BC946B784F8CA74B050 /* send_client_mosq.c */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.c; name = send_client_mosq.c; path = libmosquitto/send_client_mosq.c; sourceTree = "<group>"; };
+		CE699B2ECD4471E65938D1F159D67334 /* GIDSignIn.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GIDSignIn.h; path = Headers/Public/GIDSignIn.h; sourceTree = "<group>"; };
+		D29481A7D5B0468729BC3208B3883828 /* EZPlot.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = EZPlot.h; path = EZAudio/EZPlot.h; sourceTree = "<group>"; };
+		D4D335E1AAF4AB221A283B52A837A1CE /* libGTM_UIFont+LineHeight.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = "libGTM_UIFont+LineHeight.a"; path = "Libraries/libGTM_UIFont+LineHeight.a"; sourceTree = "<group>"; };
+		D58E93BC86B46E0F2E9EA660FBD56C75 /* libGTM_GTMURLBuilder.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libGTM_GTMURLBuilder.a; path = Libraries/libGTM_GTMURLBuilder.a; sourceTree = "<group>"; };
+		D88AE3938989F3C6B9FF893630C97208 /* EZAudioFloatData.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = EZAudioFloatData.h; path = EZAudio/EZAudioFloatData.h; sourceTree = "<group>"; };
+		D91845B9A3699CC87398F59ADAC12500 /* Pods-AWARE.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-AWARE.debug.xcconfig"; sourceTree = "<group>"; };
+		D9C0AAADA4DEA99D6D00B747C701644A /* TPCircularBuffer-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "TPCircularBuffer-prefix.pch"; sourceTree = "<group>"; };
+		DC0659C9CD88A891198C45B97C67D9F2 /* AppInvite-Module.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "AppInvite-Module.h"; path = "Headers/ModuleHeaders/AppInvite-Module.h"; sourceTree = "<group>"; };
+		DD09395764C8518044E93E42C14D4CF6 /* CocoaAsyncSocket-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "CocoaAsyncSocket-prefix.pch"; sourceTree = "<group>"; };
+		DE58A587A3AB228B51218970F181EF8A /* SCNetworkReachability-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "SCNetworkReachability-prefix.pch"; sourceTree = "<group>"; };
+		DE986C1E365B2D78ED8B439FE376FD8E /* mosquitto.c */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.c; name = mosquitto.c; path = libmosquitto/mosquitto.c; sourceTree = "<group>"; };
+		E0132E667F8EC6D30145A69F1640017F /* EZAudioFloatConverter.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = EZAudioFloatConverter.h; path = EZAudio/EZAudioFloatConverter.h; sourceTree = "<group>"; };
+		E09A5A1224953FAE60F9F1BBBFEB7829 /* messages_mosq.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = messages_mosq.h; path = libmosquitto/messages_mosq.h; sourceTree = "<group>"; };
+		E3E9FB2D583280BDA87A0934A1AFE641 /* NetAssociation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = NetAssociation.m; path = "ios-ntp-lib/NetAssociation.m"; sourceTree = "<group>"; };
+		E4A4554A5D9A8496E0474CA54EA3DC48 /* EZAudioFile.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = EZAudioFile.m; path = EZAudio/EZAudioFile.m; sourceTree = "<group>"; };
+		E6913728AF49F91B7786977FBCA8F5D4 /* TPCircularBuffer.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = TPCircularBuffer.h; sourceTree = "<group>"; };
+		E6B5744ACD4F507B5B81C8C080A611D9 /* libSignIn.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libSignIn.a; path = Libraries/libSignIn.a; sourceTree = "<group>"; };
+		E6B6B736BF0ACC4350743001D56DE193 /* EZAudioPlayer.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = EZAudioPlayer.h; path = EZAudio/EZAudioPlayer.h; sourceTree = "<group>"; };
+		E75F8EA21A499D3525A064AFF9EA8994 /* GMRConfiguration.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GMRConfiguration.h; path = Headers/GGLCore/Public/GMRConfiguration.h; sourceTree = "<group>"; };
+		E85F3E6C509D092668E35D278243D7B0 /* memory_mosq.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = memory_mosq.h; path = libmosquitto/memory_mosq.h; sourceTree = "<group>"; };
+		E8E83C7FED6287F70701FEB31454513C /* libGTM_NSData+zlib.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = "libGTM_NSData+zlib.a"; path = "Libraries/libGTM_NSData+zlib.a"; sourceTree = "<group>"; };
+		E9010458398C90D6BAFF32ED269FB508 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.0.sdk/System/Library/Frameworks/AVFoundation.framework; sourceTree = DEVELOPER_DIR; };
+		EA66896CB14B53B678F50BF7C3244AFB /* SCReachabilityRefBuilder.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SCReachabilityRefBuilder.h; path = Classes/Private/SCReachabilityRefBuilder.h; sourceTree = "<group>"; };
+		EBD3325331D191E9F3438D515565ED3A /* MQTTKit.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = MQTTKit.h; path = MQTTKit/MQTTKit.h; sourceTree = "<group>"; };
+		EC56732FE0778171F842AD4A88D63025 /* tls_mosq.c */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.c; name = tls_mosq.c; path = libmosquitto/tls_mosq.c; sourceTree = "<group>"; };
+		EE0FB14D33B92F21E5C341918149FAAB /* libGTM_NSScannerJSON.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libGTM_NSScannerJSON.a; path = Libraries/libGTM_NSScannerJSON.a; sourceTree = "<group>"; };
+		F0CA7158C570C034BBD7A8EE57D4EE5F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		F467B7238782F0BD1CD1AAC86FCEDF47 /* libGTM_AddressBook.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libGTM_AddressBook.a; path = Libraries/libGTM_AddressBook.a; sourceTree = "<group>"; };
+		F5400860F31EBAEB5E76B2DD4C84694A /* util_mosq.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = util_mosq.h; path = libmosquitto/util_mosq.h; sourceTree = "<group>"; };
+		F55C474251C479D1CEA2AD77CB97AE2B /* util_mosq.c */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.c; name = util_mosq.c; path = libmosquitto/util_mosq.c; sourceTree = "<group>"; };
+		F5B23EFE9E04F2EB545224659CB828F6 /* EZAudioPlotGL.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = EZAudioPlotGL.h; path = EZAudio/EZAudioPlotGL.h; sourceTree = "<group>"; };
+		F64524C112450412DAA325DE982B29D9 /* libSVProgressHUD.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libSVProgressHUD.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		F77CB1F9E259B3C38D696B731FA1AB61 /* read_handle_shared.c */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.c; name = read_handle_shared.c; path = libmosquitto/read_handle_shared.c; sourceTree = "<group>"; };
+		F82D033753B0CA85BFD93DDFA8A38617 /* MQTTKit.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = MQTTKit.xcconfig; sourceTree = "<group>"; };
+		F8FF5163CDF3C7F8602243BAFF48BF52 /* SVIndefiniteAnimatedView.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SVIndefiniteAnimatedView.m; path = SVProgressHUD/SVIndefiniteAnimatedView.m; sourceTree = "<group>"; };
+		F952A49AD89C956738D942DB39F3CC0A /* Core-Module.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "Core-Module.h"; path = "Headers/ModuleHeaders/Core-Module.h"; sourceTree = "<group>"; };
+		FB0F126D967A8F6C55F74831D063A0DD /* Core.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = Core.h; path = Headers/GGLCore/Public/Core.h; sourceTree = "<group>"; };
+		FF0A96AE3E57F43D67FA3F1997F7612B /* EZOutput.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = EZOutput.h; path = EZAudio/EZOutput.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFrameworksBuildPhase section */
+		39037328351418D5A4679F59E68EB38E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				90353CEEE0C58707EBF59C039FF4FD3B /* AudioToolbox.framework in Frameworks */,
+				937E394EC872684FE88174FCF34FCEE1 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		42093E0B00665D5424D70F91BEF0FE58 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A6CABC64B98B41FC30DCAB9FFC458C04 /* Foundation.framework in Frameworks */,
+				841FCBD755B5DCCBE743509C5449456D /* SystemConfiguration.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		62DC7D40D772CF48FE550F2A774CABE6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A396E4D38054DE05BF654B35E132F1E1 /* Accelerate.framework in Frameworks */,
+				7085236B5A8317AD282B66536D968576 /* AudioToolbox.framework in Frameworks */,
+				1DCFD37D871328D22C6DB3C6EE3BB745 /* AVFoundation.framework in Frameworks */,
+				F4ED8A3C57DC26B2BDD994E987B7A6F0 /* Foundation.framework in Frameworks */,
+				925914081CB3954C664500239281D3D9 /* GLKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9278550544296A135AD73F057D0C80F8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9BC548A42CDF8A56354B0C5D1E9F3B6A /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C382A4B359B52D15D820BFF2A8914646 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				02B042168CDCDD42B4258482BD607671 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CEC9E5876B42180E723E3A0B4E68B98F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5FCF0EFA8736CCA78B4867991E27B849 /* CFNetwork.framework in Frameworks */,
+				AA67F7F2982355B3CB05C290B25B9C1F /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CF9667CD3ACDD0BA5A5E788FAB03C953 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				349941F689A2F118D63CDB9F773C5C9C /* CFNetwork.framework in Frameworks */,
+				8A46BE9F8482FBBCBF876D0C51F5C9D8 /* Foundation.framework in Frameworks */,
+				01AE8AADB82668BFE29C50CB222E637D /* Security.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DA723867245C585046FF3A6C22521760 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				419D6021F924C2FE6EA11EB57158AF05 /* Foundation.framework in Frameworks */,
+				D1F0007FA60BB9C48CE104855A7F0771 /* QuartzCore.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
 /* Begin PBXGroup section */
-		09C5E90726D2521A760312DBF50D9358 /* Products */ = {
+		051DD99F3C7281B4AD1FAD834908E8E1 /* GoogleInterchangeUtilities */ = {
 			isa = PBXGroup;
 			children = (
+				631AE60B0A8545B9CD99C4A5AF4647BB /* Frameworks */,
 			);
-			name = Products;
+			path = GoogleInterchangeUtilities;
 			sourceTree = "<group>";
 		};
-		0F8D2E47FE03D3B91B51069F7C273AF4 /* Frameworks */ = {
+		0943815FAD86E37F3EC3FDCFCD7246F2 /* Support Files */ = {
 			isa = PBXGroup;
 			children = (
+				186DD7174B7866E88F0FC9E872E63CEF /* CocoaAsyncSocket.xcconfig */,
+				CB4BDCC038C207C0DEEF43E35B498082 /* CocoaAsyncSocket-dummy.m */,
+				DD09395764C8518044E93E42C14D4CF6 /* CocoaAsyncSocket-prefix.pch */,
+			);
+			name = "Support Files";
+			path = "../Target Support Files/CocoaAsyncSocket";
+			sourceTree = "<group>";
+		};
+		097243A64082867C6A3E1E8A2CD391BB /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				A3990373E11C95926F627E5B78C101BA /* EZAudio.xcconfig */,
+				78BD28B812FC25E056B1E600D6C84775 /* EZAudio-dummy.m */,
+				5E269556FC4141713E1AD5B7FEA029DB /* EZAudio-prefix.pch */,
+			);
+			name = "Support Files";
+			path = "../Target Support Files/EZAudio";
+			sourceTree = "<group>";
+		};
+		1467C7B47F608C2B0C30E4E63C9B3BA0 /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				761067FD995C411B2509BAF2FD0B4D4B /* TPCircularBuffer.xcconfig */,
+				A5CFD9F9FF38902A33F0FA13888E8523 /* TPCircularBuffer-dummy.m */,
+				D9C0AAADA4DEA99D6D00B747C701644A /* TPCircularBuffer-prefix.pch */,
+			);
+			name = "Support Files";
+			path = "../Target Support Files/TPCircularBuffer";
+			sourceTree = "<group>";
+		};
+		1CD30DA5185BF91D5D5B0A4682B1CEE7 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A6E1A0C4CF8E2FAAB7BB8B14C9121C9C /* libGIPNSURL+FIFE.a */,
+				E6B5744ACD4F507B5B81C8C080A611D9 /* libSignIn.a */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		24002A6670E6882ECD6250D3E60F9CB2 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				68A25901C4F207CB23559AAEE4E3C7DE /* iOS */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		2A9BA0E04AA5CF01BBF388FCE3D63DB9 /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				C7E9DB7A4F025B9E99F1093BB70ACC16 /* SVProgressHUD.xcconfig */,
+				BC7F54F1194B674E099C221AD3E0F2AB /* SVProgressHUD-dummy.m */,
+				1DDAC4D45C1F5E2890BFE844E25E2A56 /* SVProgressHUD-prefix.pch */,
+			);
+			name = "Support Files";
+			path = "../Target Support Files/SVProgressHUD";
+			sourceTree = "<group>";
+		};
+		34E1DFECB0BA1CF3E97D569BE82527BF /* GoogleAuthUtilities */ = {
+			isa = PBXGroup;
+			children = (
+				C60C86E101EE7C7AB56C24189AE2835C /* Frameworks */,
+			);
+			path = GoogleAuthUtilities;
+			sourceTree = "<group>";
+		};
+		37B28AB2DDBFEF47999784CE7CC3AD1F /* SignIn */ = {
+			isa = PBXGroup;
+			children = (
+				0388FE7D795B6AAE40610D37FA3557C7 /* GGLContext+SignIn.h */,
+				2B1A8B431BF3708ADD4F646532F130FE /* SignIn.h */,
+				E88D2F653D73A69C41F52A9D276BEB79 /* Frameworks */,
+			);
+			name = SignIn;
+			sourceTree = "<group>";
+		};
+		37DE59EE4D7817AE844C92E0843B68EF /* GoogleSignIn */ = {
+			isa = PBXGroup;
+			children = (
+				9CC0998106C79086D1C5B3913BD787E2 /* GIDAuthentication.h */,
+				6483D0AF0584B667BD0E85E9FEACCA9D /* GIDGoogleUser.h */,
+				BD18C4DA26908C46255960507BDE7E6B /* GIDProfileData.h */,
+				CE699B2ECD4471E65938D1F159D67334 /* GIDSignIn.h */,
+				1F8A8F0A4ABEB4888D1955DD5FAAEB6D /* GIDSignInButton.h */,
+				AEBDBD44F52F35C5D49E3EAED7032B7E /* GoogleSignIn.h */,
+				7139092CF6F9D2E98F3BC615FAD39B60 /* UIViewController+SignIn.h */,
+				1CD30DA5185BF91D5D5B0A4682B1CEE7 /* Frameworks */,
+				B8789061CA7A1250121D1D1F131A8DA1 /* Resources */,
+			);
+			path = GoogleSignIn;
+			sourceTree = "<group>";
+		};
+		3C03B3742C5323EC81F836EA64DB0161 /* GoogleNetworkingUtilities */ = {
+			isa = PBXGroup;
+			children = (
+				8B6DC244B7C2C166542AB41C2A26F593 /* Frameworks */,
+			);
+			path = GoogleNetworkingUtilities;
+			sourceTree = "<group>";
+		};
+		4F876C2C9175673FBCBEA4D2D941BC8B /* GoogleAppUtilities */ = {
+			isa = PBXGroup;
+			children = (
+				F2F608D9D28A72EE30F342D7570474E8 /* Frameworks */,
+			);
+			path = GoogleAppUtilities;
+			sourceTree = "<group>";
+		};
+		53B87A85B36BDAB49DDABDF4700415F7 /* macros_blocks */ = {
+			isa = PBXGroup;
+			children = (
+				B3EDF2C229DA7C761AA883BE9AB321B7 /* macros_blocks.h */,
+			);
+			path = macros_blocks;
+			sourceTree = "<group>";
+		};
+		5CDDF84E61C807BD10FE2254FAFD2A1C /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				ACA59BFF521BB73EDDFD18EE94B3606D /* CocoaAsyncSocket */,
+				E609B614C0CF2631A2E20621220D622A /* DeployGateSDK */,
+				EC754C643CAB0711B7546BCDDEBD36C7 /* EZAudio */,
+				E5DF13A9AD1B657C025DB6ECFCAF8A7E /* Google */,
+				4F876C2C9175673FBCBEA4D2D941BC8B /* GoogleAppUtilities */,
+				34E1DFECB0BA1CF3E97D569BE82527BF /* GoogleAuthUtilities */,
+				051DD99F3C7281B4AD1FAD834908E8E1 /* GoogleInterchangeUtilities */,
+				3C03B3742C5323EC81F836EA64DB0161 /* GoogleNetworkingUtilities */,
+				37DE59EE4D7817AE844C92E0843B68EF /* GoogleSignIn */,
+				BB997E65C67BE7AFD9D48CA0AE41CDC0 /* GoogleSymbolUtilities */,
+				C89A2D16DBD8D7CC4CB1F8FBAE8AF1F1 /* GoogleUtilities */,
+				73FC76E0C8D695C7200FBC51E5AA0F41 /* ios-ntp */,
+				53B87A85B36BDAB49DDABDF4700415F7 /* macros_blocks */,
+				C62AF073D5F195EB0881C1EAFD3346A1 /* MQTTKit */,
+				C5893BD2E2DC15C36EFBFE7666E0C493 /* SCNetworkReachability */,
+				B5711269AD429755C4A0E8168C3A018D /* SVProgressHUD */,
+				C9CCED5E031877B24ECBA9FFA3FC57FF /* TPCircularBuffer */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		631AE60B0A8545B9CD99C4A5AF4647BB /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				980F4CB0661CB23C6270EB6D663632D2 /* libProtocolBuffers.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		65D081C9A423743F97844E16F73A96ED /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				0AC0916F235A8D34F4127270EDBAC8BA /* ios-ntp.xcconfig */,
+				37F0AD739A04638A5330BBA1A84D0CD8 /* ios-ntp-dummy.m */,
+				C96E9B7E833A9D054AD04C76F491572D /* ios-ntp-prefix.pch */,
+			);
+			name = "Support Files";
+			path = "../Target Support Files/ios-ntp";
+			sourceTree = "<group>";
+		};
+		68A25901C4F207CB23559AAEE4E3C7DE /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				156D360A903310DC8C6403BC3EC61A4D /* Accelerate.framework */,
+				2F0E9E2EC973CD5BB571CFE9563503B1 /* AudioToolbox.framework */,
+				E9010458398C90D6BAFF32ED269FB508 /* AVFoundation.framework */,
+				3AD64CC0EED8E643561CBAD2C4B3049A /* CFNetwork.framework */,
+				F0CA7158C570C034BBD7A8EE57D4EE5F /* Foundation.framework */,
+				12654D5F989FC0113DCD46E7A224E2B6 /* GLKit.framework */,
+				4A617EF8B739D8D5B7931493747220FB /* QuartzCore.framework */,
+				A18726F6AC551EC9D21C4F4158071273 /* Security.framework */,
+				85626531A6C4901CB9C6EB179E1636FF /* SystemConfiguration.framework */,
+			);
+			name = iOS;
+			sourceTree = "<group>";
+		};
+		68D98D728DE07ECDE21DB9A387B1AF5C /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				8F273A277438C695C82A5C7B3C6B2C2A /* en.lproj */,
+				0AB4FED53CEC77874F32B95A803A08CE /* ja.lproj */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		73FC76E0C8D695C7200FBC51E5AA0F41 /* ios-ntp */ = {
+			isa = PBXGroup;
+			children = (
+				45774B4E85F49CF5BE450F5AA2523473 /* ios-ntp.h */,
+				6F2E2310A3CE228D7C8CD911A8766CA3 /* NetAssociation.h */,
+				E3E9FB2D583280BDA87A0934A1AFE641 /* NetAssociation.m */,
+				9567396C4D2DB104DDF3F8B8071635A7 /* NetworkClock.h */,
+				75488BC00570FCCC295E00DA38170B1F /* NetworkClock.m */,
+				BEEA56E5BA8852A29180DC60F878E32E /* NSDate+NetworkClock.h */,
+				B0FA1E9B52454BB8870D2056CEEE70B3 /* NSDate+NetworkClock.m */,
+				435947F12561AE5176863980B899217D /* ntp-log.h */,
+				65D081C9A423743F97844E16F73A96ED /* Support Files */,
+			);
+			path = "ios-ntp";
 			sourceTree = "<group>";
 		};
 		7DB346D0F39D3F0E887471402A8071AB = {
 			isa = PBXGroup;
 			children = (
 				BA6428E9F66FD5A23C0A2E06ED26CD2F /* Podfile */,
-				0F8D2E47FE03D3B91B51069F7C273AF4 /* Frameworks */,
-				09C5E90726D2521A760312DBF50D9358 /* Products */,
-				F6CCA5D896907CE7506C37FD31FC265A /* Targets Support Files */,
+				24002A6670E6882ECD6250D3E60F9CB2 /* Frameworks */,
+				5CDDF84E61C807BD10FE2254FAFD2A1C /* Pods */,
+				FDF8E166B904854F0787F2C99BECB3F2 /* Products */,
+				FE92D563C012E8B2E0280FE99B8E3085 /* Targets Support Files */,
 			);
 			sourceTree = "<group>";
 		};
-		F6CCA5D896907CE7506C37FD31FC265A /* Targets Support Files */ = {
+		8B6DC244B7C2C166542AB41C2A26F593 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				437061CD71D0306A5244222AC6390F5C /* libGTMSessionFetcher_core.a */,
+				1BE6D18FDBC1566CF85D6C3BA1532049 /* libGTMSessionFetcher_full.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		A03BB595E93CAF292F68799B38F0A2DC /* Pods-AWARE */ = {
+			isa = PBXGroup;
+			children = (
+				89878BF088927C58C6F3FE04B1CC30AD /* Pods-AWARE-acknowledgements.markdown */,
+				9A58274A17F167129F4FDB5210412ADB /* Pods-AWARE-acknowledgements.plist */,
+				7EE4010C3D20A2C4F2DF305220509D22 /* Pods-AWARE-dummy.m */,
+				2A33C0DDCDE96EEA40C850B867FAC386 /* Pods-AWARE-frameworks.sh */,
+				4150AC70AC8109354D278615B5CD0475 /* Pods-AWARE-resources.sh */,
+				D91845B9A3699CC87398F59ADAC12500 /* Pods-AWARE.debug.xcconfig */,
+				B6D0EB0915574B09D1E9A9BFCCE1573D /* Pods-AWARE.release.xcconfig */,
+			);
+			name = "Pods-AWARE";
+			path = "Target Support Files/Pods-AWARE";
+			sourceTree = "<group>";
+		};
+		A58D077E87E8B05B374522F0DF4DA0DE /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C9FA3B921D3B1FC7659086BB764825A3 /* DeployGateSDK.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		A97F4A4E868EE7E453B802585F0EE1A0 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				F467B7238782F0BD1CD1AAC86FCEDF47 /* libGTM_AddressBook.a */,
+				0D9253495FEEDB0F002527E010CE77CC /* libGTM_core.a */,
+				80EAE3E10A0A7A4AA864BEAE977EC7E9 /* libGTM_DebugUtils.a */,
+				D58E93BC86B46E0F2E9EA660FBD56C75 /* libGTM_GTMURLBuilder.a */,
+				87A4A387DBCA9A307EAD5538969A4DE1 /* libGTM_iPhone.a */,
+				1520407C312C5DED8861BE5A9668C1BB /* libGTM_KVO.a */,
+				E8E83C7FED6287F70701FEB31454513C /* libGTM_NSData+zlib.a */,
+				22BABD7902605043252B64BAD205C6D0 /* libGTM_NSDictionary+URLArguments.a */,
+				EE0FB14D33B92F21E5C341918149FAAB /* libGTM_NSScannerJSON.a */,
+				0F094B10F5F0B704065ABC0575AEC9E9 /* libGTM_NSStringHTML.a */,
+				9586913F840245A5EE8C533667D412C6 /* libGTM_NSStringXML.a */,
+				4209D040A56C46F194E745C9DCC33E37 /* libGTM_Regex.a */,
+				BCDF8BD41283303FFA09DC4751EFB32C /* libGTM_RoundedRectPath.a */,
+				85CAB93FDCBC092ADEE9FCD217973D37 /* libGTM_StringEncoding.a */,
+				A965B4400E486B6F8444A9B5217FBA97 /* libGTM_SystemVersion.a */,
+				D4D335E1AAF4AB221A283B52A837A1CE /* libGTM_UIFont+LineHeight.a */,
+				21AF0C80999D96200B0002ABF779E92D /* libGTMStackTrace.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		ACA59BFF521BB73EDDFD18EE94B3606D /* CocoaAsyncSocket */ = {
+			isa = PBXGroup;
+			children = (
+				BCA9397ADC1272739AEBB0AE64B27AB8 /* AsyncSocket.h */,
+				C72EE53EFF814276E5F628EE9D36C3C4 /* AsyncSocket.m */,
+				BD5582251C2766A2D3AAF1EFBC9A6A99 /* AsyncUdpSocket.h */,
+				B2F3132898EA8CFA24C6327AC66FFBA6 /* AsyncUdpSocket.m */,
+				0DCC160CCB31A2FBDDE182D52E51134F /* CocoaAsyncSocket.h */,
+				A7AAF45E830591AFBEC692861411CBB3 /* GCDAsyncSocket.h */,
+				302E67EF47C97A8CC01A0B3EC98C7598 /* GCDAsyncSocket.m */,
+				4711A9ACA8E474490D982CF28AACDA71 /* GCDAsyncUdpSocket.h */,
+				A035DB474CDC34F991A3078F78535A4C /* GCDAsyncUdpSocket.m */,
+				0943815FAD86E37F3EC3FDCFCD7246F2 /* Support Files */,
+			);
+			path = CocoaAsyncSocket;
+			sourceTree = "<group>";
+		};
+		B0DD5A0FC48C23A7CC0822D2A6087430 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				54DCCC1536FA07A128392842C7BE59AC /* libGSDK_Overload.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		B5711269AD429755C4A0E8168C3A018D /* SVProgressHUD */ = {
+			isa = PBXGroup;
+			children = (
+				5E8FF4601548883D4E38D25246EE83EE /* SVIndefiniteAnimatedView.h */,
+				F8FF5163CDF3C7F8602243BAFF48BF52 /* SVIndefiniteAnimatedView.m */,
+				8F98708A0F6B2ABC062959E7F2386AF7 /* SVProgressHUD.h */,
+				29079B992A789F8D8E95288ABD5D7B50 /* SVProgressHUD.m */,
+				B70CC491E722FF3D7513176359988DF5 /* Resources */,
+				2A9BA0E04AA5CF01BBF388FCE3D63DB9 /* Support Files */,
+			);
+			path = SVProgressHUD;
+			sourceTree = "<group>";
+		};
+		B70CC491E722FF3D7513176359988DF5 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				916C77D3DE33525D5109D4FBE1841466 /* SVProgressHUD.bundle */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		B8789061CA7A1250121D1D1F131A8DA1 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				624469833FF42BD87165866D4C9E39C9 /* GoogleSignIn.bundle */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		BB997E65C67BE7AFD9D48CA0AE41CDC0 /* GoogleSymbolUtilities */ = {
+			isa = PBXGroup;
+			children = (
+				B0DD5A0FC48C23A7CC0822D2A6087430 /* Frameworks */,
+			);
+			path = GoogleSymbolUtilities;
+			sourceTree = "<group>";
+		};
+		C5893BD2E2DC15C36EFBFE7666E0C493 /* SCNetworkReachability */ = {
+			isa = PBXGroup;
+			children = (
+				E616AFE05710A1F2975C1E548F064835 /* Core */,
+				E7D40DC3A2ACB3A748913FB983128011 /* Support Files */,
+			);
+			path = SCNetworkReachability;
+			sourceTree = "<group>";
+		};
+		C60C86E101EE7C7AB56C24189AE2835C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				9257BFF4084215F1BBABB45DA8F174F1 /* libGTMOAuth2_external.a */,
+				725AD2FFAB0D23BCA82FE106D3C6E8C7 /* libGTMOAuth2_internal.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		C62AF073D5F195EB0881C1EAFD3346A1 /* MQTTKit */ = {
+			isa = PBXGroup;
+			children = (
+				9F99D3A6E511233A9E07A11948B5D679 /* config.h */,
+				7322A15090BE0E5010B0CC0F2A91D263 /* dummypthread.h */,
+				885953242F927A379A930BC06489BDC3 /* logging_mosq.c */,
+				33FF2332676DCA7C2B30CCADDDE21E91 /* logging_mosq.h */,
+				2DF3DE94334898996432823490E391C6 /* memory_mosq.c */,
+				E85F3E6C509D092668E35D278243D7B0 /* memory_mosq.h */,
+				33D3B9AC41293BE8EF4E6F3ABE6C4F6D /* messages_mosq.c */,
+				E09A5A1224953FAE60F9F1BBBFEB7829 /* messages_mosq.h */,
+				DE986C1E365B2D78ED8B439FE376FD8E /* mosquitto.c */,
+				CA02631F64A49A6F0C0FFC9A4A8F7F96 /* mosquitto.h */,
+				72F2D13C1AAD147EA47F4B98459EAE52 /* mosquitto_internal.h */,
+				BDFBC1EA96DAEC67D64D377AA5198B8D /* mqtt3_protocol.h */,
+				EBD3325331D191E9F3438D515565ED3A /* MQTTKit.h */,
+				460FB4C3EED34F14F79071C31959589E /* MQTTKit.m */,
+				3CFAF671671AA0EADFB3EBFFBC825FD9 /* net_mosq.c */,
+				90C370FFFFE37D8EE60D06925B7E1DA0 /* net_mosq.h */,
+				A9DDA3AEFAEC11F1D97F25152A6F3C5F /* read_handle.c */,
+				C03142F6F7E7BC5C12A1297A4235843C /* read_handle.h */,
+				24156C279B06C5CCC303EB908423645F /* read_handle_client.c */,
+				F77CB1F9E259B3C38D696B731FA1AB61 /* read_handle_shared.c */,
+				CCE6656A6A7A3BC946B784F8CA74B050 /* send_client_mosq.c */,
+				7CAA942EFC60C8A2E460EA5264173FF3 /* send_mosq.c */,
+				2BED14FB56A30543F457E1B148BDC361 /* send_mosq.h */,
+				4C899422BCD2D8F05F373396C0915C27 /* thread_mosq.c */,
+				BE7B956CFA7BB96965E2ACEE59E521DC /* time_mosq.c */,
+				593D2A4257AB0284B799B5E1D1F46E17 /* time_mosq.h */,
+				EC56732FE0778171F842AD4A88D63025 /* tls_mosq.c */,
+				0AD07CBD25CF96A0097087161E40A58A /* tls_mosq.h */,
+				F55C474251C479D1CEA2AD77CB97AE2B /* util_mosq.c */,
+				F5400860F31EBAEB5E76B2DD4C84694A /* util_mosq.h */,
+				8151EF1A7B4CBC31A11641A5DD3839E3 /* will_mosq.c */,
+				226E6EE388A7D6A0C2A97DB5733B330E /* will_mosq.h */,
+				F8172FFE3253B0BD9E78FA5F414870D1 /* Support Files */,
+			);
+			path = MQTTKit;
+			sourceTree = "<group>";
+		};
+		C89A2D16DBD8D7CC4CB1F8FBAE8AF1F1 /* GoogleUtilities */ = {
+			isa = PBXGroup;
+			children = (
+				A97F4A4E868EE7E453B802585F0EE1A0 /* Frameworks */,
+			);
+			path = GoogleUtilities;
+			sourceTree = "<group>";
+		};
+		C9CCED5E031877B24ECBA9FFA3FC57FF /* TPCircularBuffer */ = {
+			isa = PBXGroup;
+			children = (
+				27E436B98C57B0F4421699DBBAA716B1 /* TPCircularBuffer.c */,
+				E6913728AF49F91B7786977FBCA8F5D4 /* TPCircularBuffer.h */,
+				26F45C132842C694AC401C49AE408FB4 /* TPCircularBuffer+AudioBufferList.c */,
+				A84744663204348ED7C65D3737AD6065 /* TPCircularBuffer+AudioBufferList.h */,
+				1467C7B47F608C2B0C30E4E63C9B3BA0 /* Support Files */,
+			);
+			path = TPCircularBuffer;
+			sourceTree = "<group>";
+		};
+		D2ECC9AB18DF92B05EF3555EE09E034E /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				6BAA68424CFDEDD51DBFFA25F82A84C4 /* AdMob-Module.h */,
+				2467C60A5769EA8DAF2E261973FA77B4 /* Analytics-Module.h */,
+				DC0659C9CD88A891198C45B97C67D9F2 /* AppInvite-Module.h */,
+				43015001AF78568287F32F92DBFB4425 /* CloudMessaging-Module.h */,
+				FB0F126D967A8F6C55F74831D063A0DD /* Core.h */,
+				F952A49AD89C956738D942DB39F3CC0A /* Core-Module.h */,
+				0BBF1130BCBF9971F7B81007DC4093D0 /* GGLConfiguration.h */,
+				7AC842075AF44FA40B82E59A84A8188F /* GGLContext.h */,
+				36AE9167DA85EA76BB9EE0C4D04EA03C /* GGLErrorCode.h */,
+				E75F8EA21A499D3525A064AFF9EA8994 /* GMRConfiguration.h */,
+				4A0389A60A9F60331F4E50B39C7E3342 /* SignIn-Module.h */,
+				F7105FB5AA34DF58BF98B4ED39FC2D96 /* Frameworks */,
+			);
+			name = Core;
+			sourceTree = "<group>";
+		};
+		E5DF13A9AD1B657C025DB6ECFCAF8A7E /* Google */ = {
+			isa = PBXGroup;
+			children = (
+				D2ECC9AB18DF92B05EF3555EE09E034E /* Core */,
+				37B28AB2DDBFEF47999784CE7CC3AD1F /* SignIn */,
+			);
+			path = Google;
+			sourceTree = "<group>";
+		};
+		E609B614C0CF2631A2E20621220D622A /* DeployGateSDK */ = {
+			isa = PBXGroup;
+			children = (
+				A649AC22E5507D16AA27DEEEEEC80A3A /* DeployGateSDK.h */,
+				A58D077E87E8B05B374522F0DF4DA0DE /* Frameworks */,
+				68D98D728DE07ECDE21DB9A387B1AF5C /* Resources */,
+			);
+			path = DeployGateSDK;
+			sourceTree = "<group>";
+		};
+		E616AFE05710A1F2975C1E548F064835 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				BBE8BAC55CC724FD7F5357652F590CCE /* SCNetworkReachability.h */,
+				184745C907B027C1BB3770A453862823 /* SCNetworkReachability.m */,
+				1FC2A72C071000D50A991561CC7D6FE8 /* SCNetworkStatus.h */,
+				AE3B70D291373AE445FC1DF74968ACF5 /* SCReachabilityFlagsParser.h */,
+				6AAE19274711AE6CFD850DBA0C55D624 /* SCReachabilityFlagsParser.m */,
+				EA66896CB14B53B678F50BF7C3244AFB /* SCReachabilityRefBuilder.h */,
+				365C65B69290B37AA6C9A353CF67B2E0 /* SCReachabilityRefBuilder.m */,
+				A75E4D2C45C52F94C00FF70FB23ED044 /* SCReachabilityScheduler.h */,
+				08DCEE633DD721CC6A60A32A695F2FFC /* SCReachabilityScheduler.m */,
+			);
+			name = Core;
+			sourceTree = "<group>";
+		};
+		E7D40DC3A2ACB3A748913FB983128011 /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				337259FA655F5AF12B4269D1AE175A78 /* SCNetworkReachability.xcconfig */,
+				036444552191C906FBE3DB0B82C58383 /* SCNetworkReachability-dummy.m */,
+				DE58A587A3AB228B51218970F181EF8A /* SCNetworkReachability-prefix.pch */,
+			);
+			name = "Support Files";
+			path = "../Target Support Files/SCNetworkReachability";
+			sourceTree = "<group>";
+		};
+		E88D2F653D73A69C41F52A9D276BEB79 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				741E2258BF5AA8731890CDB4388E930C /* libGGLSignIn.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		EC754C643CAB0711B7546BCDDEBD36C7 /* EZAudio */ = {
+			isa = PBXGroup;
+			children = (
+				FE3F196AE8DA65D2ABD38F803B185C75 /* Core */,
+				097243A64082867C6A3E1E8A2CD391BB /* Support Files */,
+			);
+			path = EZAudio;
+			sourceTree = "<group>";
+		};
+		F2F608D9D28A72EE30F342D7570474E8 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				08DDBC0F5F220890C786D35456BAB674 /* libOpenInChrome.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		F7105FB5AA34DF58BF98B4ED39FC2D96 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				BF45500E8889F31CAB1C5093A61A4CC4 /* libGGLCore.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		F8172FFE3253B0BD9E78FA5F414870D1 /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				F82D033753B0CA85BFD93DDFA8A38617 /* MQTTKit.xcconfig */,
+				C2F312EA0B08BE5D8F98EB2C13078AA2 /* MQTTKit-dummy.m */,
+				41EAF205C3C207A032E1DE3F3D8B0AB6 /* MQTTKit-prefix.pch */,
+			);
+			name = "Support Files";
+			path = "../Target Support Files/MQTTKit";
+			sourceTree = "<group>";
+		};
+		FDF8E166B904854F0787F2C99BECB3F2 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1DD2D8DBDFDA2DE3172D86483943E5EB /* libCocoaAsyncSocket.a */,
+				31CA486FBFB9BAB702057893CEE3174A /* libEZAudio.a */,
+				74C6E1B524BC3D365F9FE7D24A8B251C /* libios-ntp.a */,
+				7868C86601FDB762E739F0032153D7C2 /* libMQTTKit.a */,
+				894635B87E00E3D04FD06EF37CB64DF3 /* libPods-AWARE.a */,
+				9701AFD5A8DA9E4CFA01C080742C7FA6 /* libSCNetworkReachability.a */,
+				F64524C112450412DAA325DE982B29D9 /* libSVProgressHUD.a */,
+				08C38A25D613297DDBDE516A996037EA /* libTPCircularBuffer.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		FE3F196AE8DA65D2ABD38F803B185C75 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				C711520E92DAFFF6FC421921687EEAFD /* EZAudio.h */,
+				5CE12B866C27EEA0EFECCAD5BCB0008F /* EZAudio.m */,
+				7F5C46D4371028C9B437FD810B724EAE /* EZAudioDevice.h */,
+				B6EF5D4FE08D7E20A0AC47A9D7068030 /* EZAudioDevice.m */,
+				99177EDDD232120561F30E14CBF3176A /* EZAudioDisplayLink.h */,
+				B177F8E93A94A274ABB4CD9BD3B536AD /* EZAudioDisplayLink.m */,
+				3BD47B4C20629516C5B2AE7BDF9023FD /* EZAudioFFT.h */,
+				4848EC08EBCC0277B1036EB924BDD8BB /* EZAudioFFT.m */,
+				8EB845314C02BF82F7645AFA70CC595B /* EZAudioFile.h */,
+				E4A4554A5D9A8496E0474CA54EA3DC48 /* EZAudioFile.m */,
+				E0132E667F8EC6D30145A69F1640017F /* EZAudioFloatConverter.h */,
+				06220D0EEF9714766D8B57A12A6352B1 /* EZAudioFloatConverter.m */,
+				D88AE3938989F3C6B9FF893630C97208 /* EZAudioFloatData.h */,
+				C74153D7425A9159170D9405F7E4353C /* EZAudioFloatData.m */,
+				468F3DD2D83E803F4C321C47303DE6BF /* EZAudioiOS.h */,
+				7D1398EDCBB74CCDABFF5329D020E8A6 /* EZAudioOSX.h */,
+				E6B6B736BF0ACC4350743001D56DE193 /* EZAudioPlayer.h */,
+				4315223E0C095A1C6D244D4D97732702 /* EZAudioPlayer.m */,
+				932C47B96D5A2C1F99310F0D6C4FECF4 /* EZAudioPlot.h */,
+				84A620AA3D6F80427125B2732F324DB3 /* EZAudioPlot.m */,
+				F5B23EFE9E04F2EB545224659CB828F6 /* EZAudioPlotGL.h */,
+				9F8978730BFF5683FE4B2A170584C545 /* EZAudioPlotGL.m */,
+				5EE662DE55365F093B7196D70A88D17A /* EZAudioUtilities.h */,
+				4D5C31234B40CB9CEDDF1568A2E9411A /* EZAudioUtilities.m */,
+				203B6D89337E13DA791146162D165837 /* EZMicrophone.h */,
+				99F683789C46DA8B6BADBE8D029E9C23 /* EZMicrophone.m */,
+				FF0A96AE3E57F43D67FA3F1997F7612B /* EZOutput.h */,
+				343FD7ACF3E76CF81A03FC7E941871F3 /* EZOutput.m */,
+				D29481A7D5B0468729BC3208B3883828 /* EZPlot.h */,
+				2E0E5115CA0D17736E4F130B7512BE29 /* EZPlot.m */,
+				B436F01862B6D9D22147A842CD6A3659 /* EZRecorder.h */,
+				B56F3B7925B5CA8B4AC243477BBE4E0A /* EZRecorder.m */,
+				1ACF1E8AE4688B488674CCF8DAFA33DE /* TPCircularBuffer.c */,
+				3C54032F7973B6F912894AB55451BA42 /* TPCircularBuffer.h */,
+			);
+			name = Core;
+			sourceTree = "<group>";
+		};
+		FE92D563C012E8B2E0280FE99B8E3085 /* Targets Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				A03BB595E93CAF292F68799B38F0A2DC /* Pods-AWARE */,
 			);
 			name = "Targets Support Files";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		232E8ED65CEF25AA4711362A0E39CDCE /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2439F3BF9B3888FC5A9DE003EC958B40 /* SCNetworkReachability.h in Headers */,
+				1229BDB8EDC9094B2D33677B263CD997 /* SCNetworkStatus.h in Headers */,
+				37D9E1C4F12233C3F8CC0A5C2B88EE3C /* SCReachabilityFlagsParser.h in Headers */,
+				2D021D7F499345D279E63AFAB6F5D078 /* SCReachabilityRefBuilder.h in Headers */,
+				23E6AC2F988657FA818B2F8EA81AD52E /* SCReachabilityScheduler.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5CBDBA7E70FAFE795286B40551926F26 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				16089A3A34B5779A1CF6EF1C1ED007CB /* TPCircularBuffer+AudioBufferList.h in Headers */,
+				F63E802C4F98982DEDEB54D6A56AEDCB /* TPCircularBuffer.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		69A690CE3231C3D12E916510E227770D /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8523A06471E1C30D6EA21D9E59B755D9 /* AsyncSocket.h in Headers */,
+				463F6DB636698F3DEDAB0F34E8566E09 /* AsyncUdpSocket.h in Headers */,
+				F4C939A2793BE48660A5A1DE56325AD2 /* CocoaAsyncSocket.h in Headers */,
+				3A470C1A4575E0423B418339C3A967DE /* GCDAsyncSocket.h in Headers */,
+				06D2ACB9CE33A4488D297BC948E66A0D /* GCDAsyncUdpSocket.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BF73190C47FD6A02DF5C1E362F6FEA1A /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BFC5F75D3A368EC52C555F4979DD1E06 /* ios-ntp.h in Headers */,
+				4EB69428C543D6AAC5EBB9DDF9C0F5C8 /* NetAssociation.h in Headers */,
+				303A4B3C92812D26F440797192AC2571 /* NetworkClock.h in Headers */,
+				0BFE82DD4B5056470E54436C8DC901B4 /* NSDate+NetworkClock.h in Headers */,
+				D0AA7859787CF3EC266380C200790A18 /* ntp-log.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C448F51E23EAE166A502CDC1EFD85430 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B25A28C132E638E1D0ADF096442D10B3 /* SVIndefiniteAnimatedView.h in Headers */,
+				265B4E404B7D078F7804AA3E139548E9 /* SVProgressHUD.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D29F8D57C0B719A185AB3867BB1D1C44 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CF2B54BBC95C6F8B8C60D75E2DCC865A /* config.h in Headers */,
+				49C79F1E6A28D8F1137F991B67E4FFC6 /* dummypthread.h in Headers */,
+				0CD59E4A07679254FCD5F69EDFCDC7B6 /* logging_mosq.h in Headers */,
+				3AB6BCE6926858E6B5CE3A9568670B60 /* memory_mosq.h in Headers */,
+				702A36A2FB387BED332E93FE561203CF /* messages_mosq.h in Headers */,
+				468C3B68DEF2C90B587786775E4B1AFA /* mosquitto.h in Headers */,
+				5711B9C0974381FA41135A9460E7DF75 /* mosquitto_internal.h in Headers */,
+				132010EF9B5680FF1CE24C01545D568C /* mqtt3_protocol.h in Headers */,
+				45C257901E8F645FBF3015102728F0AC /* MQTTKit.h in Headers */,
+				12BE33D676B92DE06A2AE7B4A323E7C8 /* net_mosq.h in Headers */,
+				59F6E6FE2D22A9ACB59760DA962E319E /* read_handle.h in Headers */,
+				8E34C2C41BB9A646C73B40CC13C3A3A5 /* send_mosq.h in Headers */,
+				3FCBC8DED7E48831872465294DDB9B6E /* time_mosq.h in Headers */,
+				C70624D2FCE51ACAEE1499BE2F2CB268 /* tls_mosq.h in Headers */,
+				A82BB748CD97C5F0B8128EC4B54F5CB6 /* util_mosq.h in Headers */,
+				E4ED52BE75F1191E119E354A91E1CD29 /* will_mosq.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D841D9E6C21C6024A7B7625A71AD711A /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9C5F10C8FE9F5889B98A00D1B508F690 /* EZAudio.h in Headers */,
+				0F4BF086B7D56BAB174382D93BE7F595 /* EZAudioDevice.h in Headers */,
+				294314306948526F76E719757BC7E4DF /* EZAudioDisplayLink.h in Headers */,
+				513647F3DFE33B1AECA9C7ABC84B8ED2 /* EZAudioFFT.h in Headers */,
+				B3711B4D9B9F378FF7A63083C524A5EA /* EZAudioFile.h in Headers */,
+				AD1DBD47F0E4D19735FD7081B98487E8 /* EZAudioFloatConverter.h in Headers */,
+				65CE1E208985037C437CF848FF63ABB1 /* EZAudioFloatData.h in Headers */,
+				E6869BADB2D7B7E0AA7DEBA439CDCA7B /* EZAudioiOS.h in Headers */,
+				D340E14E91582FA81EA61CB231D4DE0C /* EZAudioOSX.h in Headers */,
+				3612B3540D37DC4E8CE761CBFC439484 /* EZAudioPlayer.h in Headers */,
+				7D691F38A6E9FB4375A5121E3438FD26 /* EZAudioPlot.h in Headers */,
+				0D50CACFC1B8E49AD4C6DFE7E8736E91 /* EZAudioPlotGL.h in Headers */,
+				BE54042495D2D7017AF92338141D7A2A /* EZAudioUtilities.h in Headers */,
+				1C3CFDD84C3C5201485670AC30803CDB /* EZMicrophone.h in Headers */,
+				7621441400D97DC9CFBA694CA71CEDB9 /* EZOutput.h in Headers */,
+				09E1E8374B8DDD023EE14124AC86C411 /* EZPlot.h in Headers */,
+				86591E4ADEB3B875AD6F81B272A47A4C /* EZRecorder.h in Headers */,
+				A62C1FD1DC2D3A7590CBEA3FC3FE6CCD /* TPCircularBuffer.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		3F38C496AC06681CAEE7767614EDE9F0 /* SVProgressHUD */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 53E4C48350152894812423A089647541 /* Build configuration list for PBXNativeTarget "SVProgressHUD" */;
+			buildPhases = (
+				6A4B2D1BD693BFDD494F426B8EF2547F /* Sources */,
+				DA723867245C585046FF3A6C22521760 /* Frameworks */,
+				C448F51E23EAE166A502CDC1EFD85430 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SVProgressHUD;
+			productName = SVProgressHUD;
+			productReference = F64524C112450412DAA325DE982B29D9 /* libSVProgressHUD.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		4547FD42E303C73D12CCC45748CC491D /* TPCircularBuffer */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 14CD92D7BD6C4D75E38E8EE95EB32E4D /* Build configuration list for PBXNativeTarget "TPCircularBuffer" */;
+			buildPhases = (
+				DDA1BA0C2642B468E80D26616B3C262E /* Sources */,
+				39037328351418D5A4679F59E68EB38E /* Frameworks */,
+				5CBDBA7E70FAFE795286B40551926F26 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TPCircularBuffer;
+			productName = TPCircularBuffer;
+			productReference = 08C38A25D613297DDBDE516A996037EA /* libTPCircularBuffer.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		500418AF00C5A07C35903372036CF3D1 /* SCNetworkReachability */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 87342C911B16339D07F72787DA8FFC19 /* Build configuration list for PBXNativeTarget "SCNetworkReachability" */;
+			buildPhases = (
+				F0DD0C35CB20F560C6CC0C12A0B5E573 /* Sources */,
+				42093E0B00665D5424D70F91BEF0FE58 /* Frameworks */,
+				232E8ED65CEF25AA4711362A0E39CDCE /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SCNetworkReachability;
+			productName = SCNetworkReachability;
+			productReference = 9701AFD5A8DA9E4CFA01C080742C7FA6 /* libSCNetworkReachability.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		67D5A223E67B0EF959BA0BB2E2598C26 /* ios-ntp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 942E5595B9F2DB823D13D242727C063B /* Build configuration list for PBXNativeTarget "ios-ntp" */;
+			buildPhases = (
+				A71EB98EF8DF68D21519F44972B14D01 /* Sources */,
+				CEC9E5876B42180E723E3A0B4E68B98F /* Frameworks */,
+				BF73190C47FD6A02DF5C1E362F6FEA1A /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				BE118A63C6950DF21C40997B592E362E /* PBXTargetDependency */,
+			);
+			name = "ios-ntp";
+			productName = "ios-ntp";
+			productReference = 74C6E1B524BC3D365F9FE7D24A8B251C /* libios-ntp.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		74CD2F578138157E0B27CCEE08C069EF /* MQTTKit */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 666E39B1203DC576AF2A1F565441934B /* Build configuration list for PBXNativeTarget "MQTTKit" */;
+			buildPhases = (
+				66B47A49EAFDC25170BCD3E6FEE12856 /* Sources */,
+				9278550544296A135AD73F057D0C80F8 /* Frameworks */,
+				D29F8D57C0B719A185AB3867BB1D1C44 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MQTTKit;
+			productName = MQTTKit;
+			productReference = 7868C86601FDB762E739F0032153D7C2 /* libMQTTKit.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		9B2B758E5A2FBC4951EB61B6FB6CE421 /* EZAudio */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5235155E140B73AFFC2138A8363D444C /* Build configuration list for PBXNativeTarget "EZAudio" */;
+			buildPhases = (
+				240583EF15C4C8B40D1B98FCC37F87ED /* Sources */,
+				62DC7D40D772CF48FE550F2A774CABE6 /* Frameworks */,
+				D841D9E6C21C6024A7B7625A71AD711A /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				2EE43EA8F82B5816F4773CD7E93ECBA3 /* PBXTargetDependency */,
+			);
+			name = EZAudio;
+			productName = EZAudio;
+			productReference = 31CA486FBFB9BAB702057893CEE3174A /* libEZAudio.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		C8A08542DA0C58497F9940339B35C59F /* Pods-AWARE */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 33B8A31FCE3F990CEE52177559051201 /* Build configuration list for PBXNativeTarget "Pods-AWARE" */;
+			buildPhases = (
+				B9D7B8ADEE75879EA6DBC779170C2C4B /* Sources */,
+				C382A4B359B52D15D820BFF2A8914646 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A28C2D718C45976E25E30F80B821F64A /* PBXTargetDependency */,
+				56DF89659D57CB2616A0A15F3BA84475 /* PBXTargetDependency */,
+				E4608AF4E876D90C09FA3D124A2DC325 /* PBXTargetDependency */,
+				B29F1AFB14F420412EC2AF82F033076A /* PBXTargetDependency */,
+				85022E45C275D04D9FE1B98C9F3E7D3A /* PBXTargetDependency */,
+				7B64EF08C7EEAAE48A123EC537DF9B3C /* PBXTargetDependency */,
+				FD92F3630E407EB25A18F83DEBE4EE37 /* PBXTargetDependency */,
+			);
+			name = "Pods-AWARE";
+			productName = "Pods-AWARE";
+			productReference = 894635B87E00E3D04FD06EF37CB64DF3 /* libPods-AWARE.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		ECFE0958DDB7FEC79B3AA1C9337BC941 /* CocoaAsyncSocket */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7483CB10FF36BE3A36788130D611FF51 /* Build configuration list for PBXNativeTarget "CocoaAsyncSocket" */;
+			buildPhases = (
+				AC878CD0AFC70E240F0625958332767B /* Sources */,
+				CF9667CD3ACDD0BA5A5E788FAB03C953 /* Frameworks */,
+				69A690CE3231C3D12E916510E227770D /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CocoaAsyncSocket;
+			productName = CocoaAsyncSocket;
+			productReference = 1DD2D8DBDFDA2DE3172D86483943E5EB /* libCocoaAsyncSocket.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		D41D8CD98F00B204E9800998ECF8427E /* Project object */ = {
@@ -59,15 +1343,408 @@
 				en,
 			);
 			mainGroup = 7DB346D0F39D3F0E887471402A8071AB;
-			productRefGroup = 09C5E90726D2521A760312DBF50D9358 /* Products */;
+			productRefGroup = FDF8E166B904854F0787F2C99BECB3F2 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
+				ECFE0958DDB7FEC79B3AA1C9337BC941 /* CocoaAsyncSocket */,
+				9B2B758E5A2FBC4951EB61B6FB6CE421 /* EZAudio */,
+				67D5A223E67B0EF959BA0BB2E2598C26 /* ios-ntp */,
+				74CD2F578138157E0B27CCEE08C069EF /* MQTTKit */,
+				C8A08542DA0C58497F9940339B35C59F /* Pods-AWARE */,
+				500418AF00C5A07C35903372036CF3D1 /* SCNetworkReachability */,
+				3F38C496AC06681CAEE7767614EDE9F0 /* SVProgressHUD */,
+				4547FD42E303C73D12CCC45748CC491D /* TPCircularBuffer */,
 			);
 		};
 /* End PBXProject section */
 
+/* Begin PBXSourcesBuildPhase section */
+		240583EF15C4C8B40D1B98FCC37F87ED /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7325862B87A0AE5C3EE3A6A36D794BC9 /* EZAudio-dummy.m in Sources */,
+				A3FCCB5DFAC08CABB14AB0567912A49B /* EZAudio.m in Sources */,
+				9E22A1239A501C40263F8AD594627AE9 /* EZAudioDevice.m in Sources */,
+				92C639DFEEFCC97CBCB035CAADC6D678 /* EZAudioDisplayLink.m in Sources */,
+				D736B99359621BEC4F87CBB5AB0DC9C4 /* EZAudioFFT.m in Sources */,
+				62F86A1D4746913894CBF3C86EBA6809 /* EZAudioFile.m in Sources */,
+				81E7A4F404D131766E30ADFF8128DD19 /* EZAudioFloatConverter.m in Sources */,
+				BE3AA57BA0B108142303AE939791E69A /* EZAudioFloatData.m in Sources */,
+				A7573484B6C7719944FEABA0681163CB /* EZAudioPlayer.m in Sources */,
+				D6FB9006BB524C21F983CF85F405CFD1 /* EZAudioPlot.m in Sources */,
+				2EFA4F87B7C4A2205A98774172C795BA /* EZAudioPlotGL.m in Sources */,
+				352B122D4F2977AE1B924F95EAE45B14 /* EZAudioUtilities.m in Sources */,
+				1EF33C149F4A0898FC40496ECF9F680C /* EZMicrophone.m in Sources */,
+				205D945E81134677C4CBAD2AD6B851B5 /* EZOutput.m in Sources */,
+				8998088E253A611331B2476E5B58517C /* EZPlot.m in Sources */,
+				F77D145CF9C1ED7E15F8ADF3C8E1609B /* EZRecorder.m in Sources */,
+				4D8526662C66BB87F83487BE3C9842C1 /* TPCircularBuffer.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		66B47A49EAFDC25170BCD3E6FEE12856 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F44699170973F30D69A7186436DFC108 /* logging_mosq.c in Sources */,
+				A9B898403FEF2B5B8DC336054BB3F6A1 /* memory_mosq.c in Sources */,
+				499B19242F01BE3A0C1B0C30485C732F /* messages_mosq.c in Sources */,
+				E1329092383DC02C6B7502337556F917 /* mosquitto.c in Sources */,
+				1CD43FF0958CF16A582FC025842CAB4A /* MQTTKit-dummy.m in Sources */,
+				D4D6F57F3269747A64AE41C41DAAA237 /* MQTTKit.m in Sources */,
+				8BE9DEE060207777C9BB1AEAEBC008EF /* net_mosq.c in Sources */,
+				A2531BC3DCCCAE822AFCEB98463DF2F9 /* read_handle.c in Sources */,
+				9CA5A0153764AD308E84AAC712719823 /* read_handle_client.c in Sources */,
+				5DA2189DB9C0CC634C959FF09DD7D2DF /* read_handle_shared.c in Sources */,
+				C04406D31A494A2985E783F20D2AF526 /* send_client_mosq.c in Sources */,
+				EF41339F12A09172DB0F101DB347D37E /* send_mosq.c in Sources */,
+				12E5CCF37F4A675A327CA1E8D3F2D849 /* thread_mosq.c in Sources */,
+				E4B726C4C77C91F40B65BA123468A08B /* time_mosq.c in Sources */,
+				7271E29F6B67D99AFEC12B55FDC0CE74 /* tls_mosq.c in Sources */,
+				8FE147D8E30A3FB7C21AB011A809ECA8 /* util_mosq.c in Sources */,
+				CDEDF658D080A31FA8069A40C399FE48 /* will_mosq.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6A4B2D1BD693BFDD494F426B8EF2547F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				79361CFA1804F018EB37E7C6CE32979B /* SVIndefiniteAnimatedView.m in Sources */,
+				72529FA31FA603C3872CE011BC152D66 /* SVProgressHUD-dummy.m in Sources */,
+				6B4D5A9543ECAFC9A20C88A6615C328E /* SVProgressHUD.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A71EB98EF8DF68D21519F44972B14D01 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E1AF4C08E2D4F5585181885BAB4289A9 /* ios-ntp-dummy.m in Sources */,
+				0E68EABA33E9FD516C740C6294A025E6 /* NetAssociation.m in Sources */,
+				32F915F46FBD1AE2DD2F0F496ED2C09E /* NetworkClock.m in Sources */,
+				1162CB5DC8260BBD6B22FEA27151B559 /* NSDate+NetworkClock.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AC878CD0AFC70E240F0625958332767B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E18F00D7D1DD05B7C16F46B5FF77F234 /* AsyncSocket.m in Sources */,
+				350D9EEAA564EBC6AD06BD0A30960F1F /* AsyncUdpSocket.m in Sources */,
+				C38DE79AE2AC674F6E8FF0B89624A68F /* CocoaAsyncSocket-dummy.m in Sources */,
+				6D91FF378F7DABBE76EB9F122DEB517D /* GCDAsyncSocket.m in Sources */,
+				9BBC14779408194043C420817A2CB6BA /* GCDAsyncUdpSocket.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B9D7B8ADEE75879EA6DBC779170C2C4B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2A3D8EE6CBBFCC91E69CDA1351BC32DA /* Pods-AWARE-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DDA1BA0C2642B468E80D26616B3C262E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CAED8509360CD1574143B7E3E61C3BD6 /* TPCircularBuffer+AudioBufferList.c in Sources */,
+				0E66CBF5C8A97419D6C1DD053398D455 /* TPCircularBuffer-dummy.m in Sources */,
+				4C4F73857D22FA73585F102FA4ECB214 /* TPCircularBuffer.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F0DD0C35CB20F560C6CC0C12A0B5E573 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BFB99D555C0DBB8BE78B33730D9AF162 /* SCNetworkReachability-dummy.m in Sources */,
+				8BA84460C247C7EF870F8CCEEF1D37A8 /* SCNetworkReachability.m in Sources */,
+				6CE74591F3E01FFB85C3F130CC8CDA1D /* SCReachabilityFlagsParser.m in Sources */,
+				8DB66A019B99A2537B803884E0C1B869 /* SCReachabilityRefBuilder.m in Sources */,
+				4E17A4CB7FCF2B150C673E00C1653A23 /* SCReachabilityScheduler.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		2EE43EA8F82B5816F4773CD7E93ECBA3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = TPCircularBuffer;
+			target = 4547FD42E303C73D12CCC45748CC491D /* TPCircularBuffer */;
+			targetProxy = A39F90B8CDA698E2E7F0CD0006D68F92 /* PBXContainerItemProxy */;
+		};
+		56DF89659D57CB2616A0A15F3BA84475 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = EZAudio;
+			target = 9B2B758E5A2FBC4951EB61B6FB6CE421 /* EZAudio */;
+			targetProxy = FC60E8574BD5FA85590443B34B3A3685 /* PBXContainerItemProxy */;
+		};
+		7B64EF08C7EEAAE48A123EC537DF9B3C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = TPCircularBuffer;
+			target = 4547FD42E303C73D12CCC45748CC491D /* TPCircularBuffer */;
+			targetProxy = 03387C79B4DC7ECDB3F346FE4B4444FA /* PBXContainerItemProxy */;
+		};
+		85022E45C275D04D9FE1B98C9F3E7D3A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = SVProgressHUD;
+			target = 3F38C496AC06681CAEE7767614EDE9F0 /* SVProgressHUD */;
+			targetProxy = F3F924A6F70DD6173C499DA66766B32E /* PBXContainerItemProxy */;
+		};
+		A28C2D718C45976E25E30F80B821F64A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = CocoaAsyncSocket;
+			target = ECFE0958DDB7FEC79B3AA1C9337BC941 /* CocoaAsyncSocket */;
+			targetProxy = DEF7AB7AB7FD986144A64F7E4675CE49 /* PBXContainerItemProxy */;
+		};
+		B29F1AFB14F420412EC2AF82F033076A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = SCNetworkReachability;
+			target = 500418AF00C5A07C35903372036CF3D1 /* SCNetworkReachability */;
+			targetProxy = B4422FA8039C0DC7B44EF34CFA43F193 /* PBXContainerItemProxy */;
+		};
+		BE118A63C6950DF21C40997B592E362E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = CocoaAsyncSocket;
+			target = ECFE0958DDB7FEC79B3AA1C9337BC941 /* CocoaAsyncSocket */;
+			targetProxy = E50AD48E94967CC422AB771967DEC6DE /* PBXContainerItemProxy */;
+		};
+		E4608AF4E876D90C09FA3D124A2DC325 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = MQTTKit;
+			target = 74CD2F578138157E0B27CCEE08C069EF /* MQTTKit */;
+			targetProxy = 5A8C3DE9BA050913F00AA26C809C445C /* PBXContainerItemProxy */;
+		};
+		FD92F3630E407EB25A18F83DEBE4EE37 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "ios-ntp";
+			target = 67D5A223E67B0EF959BA0BB2E2598C26 /* ios-ntp */;
+			targetProxy = 33432FC80B3DD3DD5B45BDB869605FA3 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		05C43ACF851697B6A8193405932FE5A2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = B6D0EB0915574B09D1E9A9BFCCE1573D /* Pods-AWARE.release.xcconfig */;
+			buildSettings = {
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MACH_O_TYPE = staticlib;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		10A42A974DFCDBA3694599A97EEB5CF8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D91845B9A3699CC87398F59ADAC12500 /* Pods-AWARE.debug.xcconfig */;
+			buildSettings = {
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MACH_O_TYPE = staticlib;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		1C4501B119509438096A5AE60D0090BF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 337259FA655F5AF12B4269D1AE175A78 /* SCNetworkReachability.xcconfig */;
+			buildSettings = {
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_PREFIX_HEADER = "Target Support Files/SCNetworkReachability/SCNetworkReachability-prefix.pch";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PRIVATE_HEADERS_FOLDER_PATH = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		42E104C6754EEE79897A108C368087AF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A3990373E11C95926F627E5B78C101BA /* EZAudio.xcconfig */;
+			buildSettings = {
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_PREFIX_HEADER = "Target Support Files/EZAudio/EZAudio-prefix.pch";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PRIVATE_HEADERS_FOLDER_PATH = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		58E74E304D00F404410E73F19C647597 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0AC0916F235A8D34F4127270EDBAC8BA /* ios-ntp.xcconfig */;
+			buildSettings = {
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_PREFIX_HEADER = "Target Support Files/ios-ntp/ios-ntp-prefix.pch";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PRIVATE_HEADERS_FOLDER_PATH = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		60FBB7B14BFA1CC4B21F1148A0A7A3E9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = C7E9DB7A4F025B9E99F1093BB70ACC16 /* SVProgressHUD.xcconfig */;
+			buildSettings = {
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_PREFIX_HEADER = "Target Support Files/SVProgressHUD/SVProgressHUD-prefix.pch";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PRIVATE_HEADERS_FOLDER_PATH = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		674FD54902D68BF9CDD5AE1E02C7E72F /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 761067FD995C411B2509BAF2FD0B4D4B /* TPCircularBuffer.xcconfig */;
+			buildSettings = {
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_PREFIX_HEADER = "Target Support Files/TPCircularBuffer/TPCircularBuffer-prefix.pch";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PRIVATE_HEADERS_FOLDER_PATH = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		693935BD080BA2940EA6EE45741FE9C9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = C7E9DB7A4F025B9E99F1093BB70ACC16 /* SVProgressHUD.xcconfig */;
+			buildSettings = {
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_PREFIX_HEADER = "Target Support Files/SVProgressHUD/SVProgressHUD-prefix.pch";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PRIVATE_HEADERS_FOLDER_PATH = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		6941C29E701B65E3B3E43D5C474E4D09 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = F82D033753B0CA85BFD93DDFA8A38617 /* MQTTKit.xcconfig */;
+			buildSettings = {
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_PREFIX_HEADER = "Target Support Files/MQTTKit/MQTTKit-prefix.pch";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PRIVATE_HEADERS_FOLDER_PATH = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		6FFF0758F09DC42DAF639451E00C6DB0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A3990373E11C95926F627E5B78C101BA /* EZAudio.xcconfig */;
+			buildSettings = {
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_PREFIX_HEADER = "Target Support Files/EZAudio/EZAudio-prefix.pch";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PRIVATE_HEADERS_FOLDER_PATH = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		94281822EE1B83042E6FF1016A46533C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = F82D033753B0CA85BFD93DDFA8A38617 /* MQTTKit.xcconfig */;
+			buildSettings = {
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_PREFIX_HEADER = "Target Support Files/MQTTKit/MQTTKit-prefix.pch";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PRIVATE_HEADERS_FOLDER_PATH = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		9AE1301723C87E1A4F3A9507122FCF65 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 337259FA655F5AF12B4269D1AE175A78 /* SCNetworkReachability.xcconfig */;
+			buildSettings = {
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_PREFIX_HEADER = "Target Support Files/SCNetworkReachability/SCNetworkReachability-prefix.pch";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PRIVATE_HEADERS_FOLDER_PATH = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
 		A70CDAD61F90AC503C7D04CC22DA2923 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -104,6 +1781,78 @@
 				ONLY_ACTIVE_ARCH = YES;
 				STRIP_INSTALLED_PRODUCT = NO;
 				SYMROOT = "${SRCROOT}/../build";
+			};
+			name = Debug;
+		};
+		AF1AF7ED406E9FB1B6DC7EFBCD5E8487 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0AC0916F235A8D34F4127270EDBAC8BA /* ios-ntp.xcconfig */;
+			buildSettings = {
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_PREFIX_HEADER = "Target Support Files/ios-ntp/ios-ntp-prefix.pch";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PRIVATE_HEADERS_FOLDER_PATH = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		DD1982A88C8B0F1893FF4A6D43B0A686 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 186DD7174B7866E88F0FC9E872E63CEF /* CocoaAsyncSocket.xcconfig */;
+			buildSettings = {
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_PREFIX_HEADER = "Target Support Files/CocoaAsyncSocket/CocoaAsyncSocket-prefix.pch";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PRIVATE_HEADERS_FOLDER_PATH = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		DF207FACF09F16B0A93DF3CA14981BDF /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 186DD7174B7866E88F0FC9E872E63CEF /* CocoaAsyncSocket.xcconfig */;
+			buildSettings = {
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_PREFIX_HEADER = "Target Support Files/CocoaAsyncSocket/CocoaAsyncSocket-prefix.pch";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PRIVATE_HEADERS_FOLDER_PATH = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		E35F995A595A16CE99DB52BE1E1C949A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 761067FD995C411B2509BAF2FD0B4D4B /* TPCircularBuffer.xcconfig */;
+			buildSettings = {
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_PREFIX_HEADER = "Target Support Files/TPCircularBuffer/TPCircularBuffer-prefix.pch";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PRIVATE_HEADERS_FOLDER_PATH = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
 			};
 			name = Debug;
 		};
@@ -144,11 +1893,83 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		14CD92D7BD6C4D75E38E8EE95EB32E4D /* Build configuration list for PBXNativeTarget "TPCircularBuffer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E35F995A595A16CE99DB52BE1E1C949A /* Debug */,
+				674FD54902D68BF9CDD5AE1E02C7E72F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		2D8E8EC45A3A1A1D94AE762CB5028504 /* Build configuration list for PBXProject "Pods" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				A70CDAD61F90AC503C7D04CC22DA2923 /* Debug */,
 				FB45FFD90572718D82AB9092B750F0CA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		33B8A31FCE3F990CEE52177559051201 /* Build configuration list for PBXNativeTarget "Pods-AWARE" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				10A42A974DFCDBA3694599A97EEB5CF8 /* Debug */,
+				05C43ACF851697B6A8193405932FE5A2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5235155E140B73AFFC2138A8363D444C /* Build configuration list for PBXNativeTarget "EZAudio" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				42E104C6754EEE79897A108C368087AF /* Debug */,
+				6FFF0758F09DC42DAF639451E00C6DB0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		53E4C48350152894812423A089647541 /* Build configuration list for PBXNativeTarget "SVProgressHUD" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				693935BD080BA2940EA6EE45741FE9C9 /* Debug */,
+				60FBB7B14BFA1CC4B21F1148A0A7A3E9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		666E39B1203DC576AF2A1F565441934B /* Build configuration list for PBXNativeTarget "MQTTKit" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				94281822EE1B83042E6FF1016A46533C /* Debug */,
+				6941C29E701B65E3B3E43D5C474E4D09 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7483CB10FF36BE3A36788130D611FF51 /* Build configuration list for PBXNativeTarget "CocoaAsyncSocket" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DD1982A88C8B0F1893FF4A6D43B0A686 /* Debug */,
+				DF207FACF09F16B0A93DF3CA14981BDF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		87342C911B16339D07F72787DA8FFC19 /* Build configuration list for PBXNativeTarget "SCNetworkReachability" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1C4501B119509438096A5AE60D0090BF /* Debug */,
+				9AE1301723C87E1A4F3A9507122FCF65 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		942E5595B9F2DB823D13D242727C063B /* Build configuration list for PBXNativeTarget "ios-ntp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AF1AF7ED406E9FB1B6DC7EFBCD5E8487 /* Debug */,
+				58E74E304D00F404410E73F19C647597 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

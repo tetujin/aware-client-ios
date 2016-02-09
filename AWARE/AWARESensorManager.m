@@ -5,10 +5,15 @@
 //  Created by Yuuki Nishiyama on 11/19/15.
 //  Copyright © 2015 Yuuki NISHIYAMA. All rights reserved.
 //
+// This class manages AWARESensors' start, stop and force data upload
+//
+//
 
 #import "AWARESensorManager.h"
 #import "AWAREKeys.h"
 #import "AWAREPlugin.h"
+
+// AWARE Sensors
 #import "Accelerometer.h"
 #import "Gyroscope.h"
 #import "Magnetometer.h"
@@ -22,21 +27,23 @@
 #import "LinearAccelerometer.h"
 #import "Bluetooth.h"
 #import "AmbientNoise.h"
-#import "ActivityRecognition.h"
-#import "OpenWeather.h"
 #import "Screen.h"
-#import "DeviceUsage.h"
 #import "NTPTime.h"
 #import "Proximity.h"
 #import "Timezone.h"
+#import "Calls.h"
 #import "ESM.h"
+
+// AWARE Plugins
+#import "ActivityRecognition.h"
+#import "OpenWeather.h"
+#import "DeviceUsage.h"
 #import "MSBand.h"
 #import "GoogleCalPull.h"
 #import "GoogleCalPush.h"
 #import "GoogleLogin.h"
 #import "Scheduler.h"
 #import "FusedLocations.h"
-#import "Calls.h"
 
 @implementation AWARESensorManager
 
@@ -57,7 +64,7 @@
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString* deviceId = [userDefaults objectForKey:KEY_MQTT_USERNAME];
     if (deviceId == NULL) {
-        NSLog(@"[Error] You did not have a StudyID. Please check your study configuration.");
+        NSLog( @"[%@] ERROR: You did not have a StudyID. Please check your study configuration.", key );
         return @"";
     }
     
@@ -72,55 +79,38 @@
             NSString * value = [[settings objectAtIndex:i] objectForKey:@"value"];
             bool exit = [self isExist:key];
             if ([value isEqualToString:@"true"] && !exit) {
-//                [_sensorManager addNewSensorWithSensorName:key settings:(NSArray*)sensors];
                 if ([key isEqualToString:SENSOR_ACCELEROMETER]) {
                     awareSensor= [[Accelerometer alloc] initWithSensorName:SENSOR_ACCELEROMETER];
-//                    [awareSensor startSensor:uploadTime withSettings:settings];
                 }else if([key isEqualToString:SENSOR_BAROMETER]){
                     awareSensor = [[Barometer alloc] initWithSensorName:SENSOR_BAROMETER];
-//                    [awareSensor startSensor:uploadTime withSettings:settings];
                 }else if([key isEqualToString:SENSOR_GYROSCOPE]){
                     awareSensor = [[Gyroscope alloc] initWithSensorName:SENSOR_GYROSCOPE];
-//                    [awareSensor startSensor:uploadTime withSettings:settings];
                 }else if([key isEqualToString:SENSOR_MAGNETOMETER]){
                     awareSensor = [[Magnetometer alloc] initWithSensorName:SENSOR_MAGNETOMETER];
-//                    [awareSensor startSensor:uploadTime withSettings:settings];
                 }else if([key isEqualToString:SENSOR_BATTERY]){
                     awareSensor = [[Battery alloc] initWithSensorName:SENSOR_BATTERY];
-//                    [awareSensor startSensor:uploadTime withSettings:settings];
                 }else if([key isEqualToString:SENSOR_LOCATIONS]){
                     awareSensor = [[Locations alloc] initWithSensorName:SENSOR_LOCATIONS];
-//                    [awareSensor startSensor:uploadTime withSettings:settings];//0=>auto
                 }else if([key isEqualToString:SENSOR_NETWORK]){
                     awareSensor = [[Network alloc] initWithSensorName:SENSOR_NETWORK];
-//                    [awareSensor startSensor:uploadTime withSettings:settings];
                 }else if([key isEqualToString:SENSOR_WIFI]){
                     awareSensor = [[Wifi alloc] initWithSensorName:SENSOR_WIFI];
-//                    [awareSensor startSensor:uploadTime withSettings:settings];
                 }else if ([key isEqualToString:SENSOR_PROCESSOR]){
                     awareSensor = [[Processor alloc] initWithSensorName:SENSOR_PROCESSOR];
-//                    [awareSensor startSensor:uploadTime withSettings:settings];
                 }else if ([key isEqualToString:SENSOR_GRAVITY]){
                     awareSensor = [[Gravity alloc] initWithSensorName:SENSOR_GRAVITY];
-//                    [awareSensor startSensor:uploadTime withSettings:settings];
                 }else if([key isEqualToString:SENSOR_LINEAR_ACCELEROMETER]){
                     awareSensor = [[LinearAccelerometer alloc] initWithSensorName:SENSOR_LINEAR_ACCELEROMETER];
-//                    [awareSensor startSensor:uploadTime withSettings:settings];
                 }else if([key isEqualToString:SENSOR_BLUETOOTH]){
                     awareSensor = [[Bluetooth alloc] initWithSensorName:SENSOR_BLUETOOTH];
-//                    [awareSensor startSensor:uploadTime withSettings:settings];
                 }else if([key isEqualToString:SENSOR_SCREEN]){
                     awareSensor = [[Screen alloc] initWithSensorName:SENSOR_SCREEN];
-//                    [awareSensor startSensor:uploadTime withSettings:settings];
                 }else if([key isEqualToString:SENSOR_PROXIMITY]){
                     awareSensor = [[Proximity alloc] initWithSensorName:SENSOR_PROXIMITY];
-//                    [awareSensor startSensor:uploadTime withSettings:settings];
                 }else if([key isEqualToString:SENSOR_TIMEZONE]){
                     awareSensor = [[Timezone alloc] initWithSensorName:SENSOR_TIMEZONE];
-//                    [awareSensor startSensor:uploadTime withSettings:settings];
                 }else if([key isEqualToString:SENSOR_ESMS]){
                     awareSensor = [[ESM alloc] initWithSensorName:SENSOR_ESMS];
-//                    [awareSensor startSensor:uploadTime withSettings:settings];
                 }else if([key isEqualToString:SENSOR_CALLS]){
                     awareSensor = [[Calls alloc] initWithSensorName:SENSOR_CALLS];
                 }
@@ -128,10 +118,6 @@
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, i * 0.5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
                     [awareSensor startSensor:uploadTime withSettings:settings];
                 });
-//                if (awareSensor != NULL) {
-//                    [self addNewSensor:awareSensor];
-////                    return YES;
-//                }
                 break;
             }
         }
@@ -145,20 +131,13 @@
         for (NSDictionary* pluginSetting in pluginSettings) {
             NSString *pluginStateKey = [NSString stringWithFormat:@"status_%@",key];
             NSString *pluginStateName = [pluginSetting objectForKey:@"setting"];
-//            NSLog(@"%@", pluginStateName);
-//            if([pluginStateName isEqual:@"status_google_fused_location"]){
-//                
-//            }
             if ([pluginStateKey isEqualToString:pluginStateName]) {
                 bool pluginState = [pluginSetting objectForKey:@"value"];
                 if (pluginState) {
-                    NSLog(@"--> %@", key);
+//                    NSLog(@"--> %@", key);
                     if ([key isEqualToString:SENSOR_PLUGIN_GOOGLE_ACTIVITY_RECOGNITION]) {
                         awareSensor = [[ActivityRecognition alloc] initWithSensorName:SENSOR_PLUGIN_GOOGLE_ACTIVITY_RECOGNITION];
                         [awareSensor startSensor:uploadTime withSettings:pluginSettings];
-                    }else if([key isEqualToString:SENSOR_AMBIENT_NOISE]){
-//                        awareSensor = [[AmbientNoise alloc] initWithSensorName:SENSOR_AMBIENT_NOISE];
-//                        [awareSensor startSensor:uploadTime withSettings:pluginSettings];
                     }else if([key isEqualToString:SENSOR_PLUGIN_OPEN_WEATHER]){
                         awareSensor = [[OpenWeather alloc] initWithSensorName:SENSOR_PLUGIN_OPEN_WEATHER];
                         [awareSensor startSensor:uploadTime withSettings:pluginSettings];
@@ -184,7 +163,6 @@
                         awareSensor = [[Scheduler alloc] initWithSensorName:SENSOR_PLUGIN_CAMPUS];
                         [awareSensor startSensor:uploadTime withSettings:pluginSettings];
                     }else if([key isEqualToString:SENSOR_GOOGLE_FUSED_LOCATION]){
-//                        awareSensor = [[Locations alloc] initWithSensorName:SENSOR_GOOGLE_FUSED_LOCATION];
                         awareSensor = [[FusedLocations alloc] initWithSensorName:SENSOR_GOOGLE_FUSED_LOCATION];
                         [awareSensor startSensor:uploadTime withSettings:pluginSettings];
                     }
@@ -195,6 +173,9 @@
     }
     
     if (awareSensor != NULL) {
+        if(![key isEqualToString:SENSOR_AWARE_DEBUG]){
+            [awareSensor trackDebugEvents];
+        }
         [self addNewSensor:awareSensor];
         return YES;
     }
@@ -202,10 +183,9 @@
     return NO;
 }
 
+
 - (BOOL) isExist :(NSString *) key {
-    NSLog(@"--> %@", key);
     for (AWARESensor* sensor in awareSensors) {
-        NSLog(@"-- %@", [sensor getSensorName]);
         if([[sensor getSensorName] isEqualToString:key]){
             return YES;
         }
@@ -228,6 +208,7 @@
 
 - (void)stopASensor:(NSString *)sensorName{
     for (AWARESensor* sensor in awareSensors) {
+        
         if ([sensor.getSensorName isEqualToString:sensorName]) {
             [sensor stopSensor];
         }
@@ -237,19 +218,51 @@
 
 - (NSString*)getLatestSensorData:(NSString *)sensorName{
     for (AWARESensor* sensor in awareSensors) {
-//        NSLog(@"%@ <---> %@", sensor.getSensorName, sensorName);
         if ([sensor.getSensorName isEqualToString:sensorName]) {
             NSString *sensorValue = [sensor getLatestValue];
+//            NSLog(@"%@ <---> %@", sensor.getSensorName, sensorName);
             return sensorValue;
         }
     }
     return @"";
 }
 
-- (void) syncAllSensorsWithDB{
-    for (AWARESensor* sensor in awareSensors) {
-        [sensor syncAwareDB];
-    }
+- (bool) syncAllSensorsWithDB {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),^{
+        @autoreleasepool{
+            bool sucessOfUpload = true;
+            // Show progress bar
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeBlack];
+            });
+            // Sync local stored data with aware server.
+            for ( int i=0; i<awareSensors.count; i++) {
+                AWARESensor* sensor = [awareSensors objectAtIndex:i];
+                dispatch_sync(dispatch_get_main_queue(), ^{
+                    NSString *message = [NSString stringWithFormat:@"Uploading %@ data %@", [sensor getSensorName], [sensor getSyncProgressAsText]];
+                    [SVProgressHUD setStatus:message];
+                });
+                if (![sensor syncAwareDBInForeground]) {
+                    sucessOfUpload = false;
+                }
+                // Update UI in the main thread.
+            }
+            // Dissmiss a Progress View
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                if (sucessOfUpload) {
+                    [SVProgressHUD showSuccessWithStatus:@"Success to upload your data to the server!"];
+                    AudioServicesPlayAlertSound(1000);
+                }else{
+                    [SVProgressHUD showErrorWithStatus:@"Fail to upload your data to the server."];
+                    AudioServicesPlayAlertSound(1324);
+                }
+                [SVProgressHUD performSelector:@selector(dismiss) withObject:nil afterDelay:3.0f];
+                
+            });
+        }
+    });
+
+    return YES;
 }
 
 @end
