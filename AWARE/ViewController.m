@@ -8,86 +8,81 @@
 // This branch is for BalancedCampus Project
 //
 
+// Views
 #import "ViewController.h"
 #import "GoogleLoginViewController.h"
 #import "AWAREEsmViewController.h"
+
+// Util
 #import "AWAREStudy.h"
 #import "AWAREKeys.h"
-#import "ESMStorageHelper.h"
 #import "AWAREUtils.h"
+#import "ESMStorageHelper.h"
 
+// Plugins
 #import "GoogleCalPush.h"
-#import "Debug.h"
 #import "Pedometer.h"
-#import "AWAREHealthKit.h"
 #import "Debug.h"
+#import "AWAREHealthKit.h"
 
-@interface ViewController () {
-    NSString *KEY_CEL_TITLE;
-    NSString *KEY_CEL_DESC;
-    NSString *KEY_CEL_IMAGE;
-    NSString *KEY_CEL_STATE;
-    NSString *KEY_CEL_SENSOR_NAME;
-    NSString *KEY;
-    NSString *mqttServer;
-    NSString *oldStudyId;
-    NSString *mqttPassword;
-    NSString *mqttUserName;
-    NSString *studyId;
-    NSNumber *mqttPort;
-    NSNumber *mqttKeepAlive;
-    NSNumber *mqttQos;
-    NSTimer *listUpdateTimer;
-    double uploadInterval;
-    NSTimer* testTimer;
-    NSTimer * dailyUpdateTimer;
-    
-    Debug *debugSensor;
-}
-
+@interface ViewController ()
 @end
 
-@implementation ViewController
+@implementation ViewController{
+    /**  Keys for contetns of a table view raw */
+    /// A key for a title of a raw
+    NSString *KEY_CEL_TITLE;
+    /// A key for a description of a raw
+    NSString *KEY_CEL_DESC;
+    /// A key for a image of a raw
+    NSString *KEY_CEL_IMAGE;
+    /// A key for a status of a raw
+    NSString *KEY_CEL_STATE;
+    /// A key for a sensor name of a raw
+    NSString *KEY_CEL_SENSOR_NAME;
+    
+    /** Study Settings */
+    /// A deault intrval for uploading sensor data
+    double uploadInterval;
+    /// A timer for a daily sync
+    NSTimer * dailyUpdateTimer;
+    /// A Debug sensor object
+    Debug *debugSensor;
+    
+    /** View */
+    /// A timer for updating a list view
+    NSTimer *listUpdateTimer;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    NSLog(@"-- %@", [AWAREUtils getUnixTimestamp:[NSDate new]]);
-    
+    /// Init keys and default interval
     KEY_CEL_TITLE = @"title";
     KEY_CEL_DESC = @"desc";
     KEY_CEL_IMAGE = @"image";
     KEY_CEL_STATE = @"state";
     KEY_CEL_SENSOR_NAME = @"sensorName";
-    KEY = @"key";
-    
-    mqttServer = @"";
-    oldStudyId = @"";
-    mqttPassword = @"";
-    mqttUserName = @"";
-    studyId = @"";
-    mqttPort = @1883;
-    mqttKeepAlive = @600;
-    mqttQos = @2;
-    
     uploadInterval = 60*15;
     
-    // daily study update
-//    NSDate* dailyUpdateTime = [AWAREUtils getTargetNSDate:[NSDate new] hour:2 minute:20 second:0 nextDay:YES]; //For Debug
-  NSDate* dailyUpdateTime = [AWAREUtils getTargetNSDate:[NSDate new] hour:2 minute:0 second:0 nextDay:YES];
+    /// Set a timer for a daily sync update
+    /**
+     * Every 2AM, AWARE iOS refresh the jointed study in the background.
+     * A developer can change the time (2AM to xxxAM/PM) by changing the dailyUpdateTime(NSDate) Object
+     */
+    NSDate* dailyUpdateTime = [AWAREUtils getTargetNSDate:[NSDate new] hour:2 minute:0 second:0 nextDay:YES]; //2AM
     dailyUpdateTimer = [[NSTimer alloc] initWithFireDate:dailyUpdateTime
-                                                interval:60*60*24
+                                                interval:60*60*24 // daily
                                                   target:self
                                                 selector:@selector(pushedStudyRefreshButton:)
                                                 userInfo:nil
                                                  repeats:YES];
     NSRunLoop *runLoop = [NSRunLoop currentRunLoop];
-    [runLoop addTimer:dailyUpdateTimer forMode:NSDefaultRunLoopMode];// NSRunLoopCommonModes];//
+    [runLoop addTimer:dailyUpdateTimer forMode:NSDefaultRunLoopMode];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
     
+    /// Set defualt settings
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    // Get default information from local storage
     if (![userDefaults boolForKey:@"aware_inited"]) {
         [userDefaults setBool:NO forKey:SETTING_DEBUG_STATE];
         [userDefaults setBool:YES forKey:SETTING_SYNC_WIFI_ONLY];
@@ -95,27 +90,42 @@
         [userDefaults setBool:YES forKey:@"aware_inited"];
         [userDefaults setBool:NO forKey:KEY_APP_TERMINATED];
         [userDefaults setInteger:0 forKey:KEY_MARK];
-//        [userDefaults setInteger:1000 * 1000 * 5 forKey:KEY_MAX_DATA_SIZE]; // 5MB
         [userDefaults setInteger:1000 * 100 forKey:KEY_MAX_DATA_SIZE]; // 100 KB
     }
     
+    /**
+     * Init a Debug Sensor for collecting a debug message.
+     * A developer can store debug messages to an aware database
+     * by using the -saveDebugEventWithText:type:label: method on the debugSensor.
+     */
+    debugSensor = [[Debug alloc] init];
+    
+    /**
+     * Start a location sensor for background sensing.
+     * On the iOS, we have to turn on the location sensor 
+     * for using application in the background.
+     */
+    [self initLocationSensor];
+    
+    /// Init sensor manager for the list view
+    _sensorManager = [[AWARESensorManager alloc] init];
+    
+    /// Set delegates for a navigation bar and table view
+    if ([AWAREUtils getCurrentOSVersionAsFloat] >= 9.0) {
+        [self.navigationController.navigationBar setDelegate:self];
+    }
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     
-    debugSensor = [[Debug alloc] init];
-    
-    [self initLocationSensor];
-    
-    _sensorManager = [[AWARESensorManager alloc] init];
-    CGFloat currentVersion = [[[UIDevice currentDevice] systemVersion] floatValue];
-    if (currentVersion >= 9.0) {
-        [self.navigationController.navigationBar setDelegate:self];
-    }
+    /**
+     * The "-initList" method **initialize contetns of list view**, and **starts/stops sensors**.
+     * WIP: I want to split a "list view initializer" and "sensor initializer".
+     */
     [self initList];
-    
     _refreshButton.enabled = NO;
     [self performSelector:@selector(refreshButtonEnableYes) withObject:0 afterDelay:8];
     
+    /// Start an update timer for list view. This timer refreshed the list view every 0.1 sec.
     listUpdateTimer = [NSTimer scheduledTimerWithTimeInterval:0.1f target:self.tableView selector:@selector(reloadData) userInfo:nil repeats:YES];
 }
 
@@ -140,7 +150,7 @@
 
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-        NSLog(@" Hello ESM view !");
+    NSLog(@" Hello ESM view !");
     if ([segue.identifier isEqualToString:@"esmView"]) {
         AWAREEsmViewController *esmView = [segue destinationViewController];    // <- 1
     }
@@ -148,9 +158,10 @@
 
 
 /**
- * This method is initializer for location sensor for background sensing.
- * On the iOS, we have to turn on the location sensor for background sensing.
- *
+ * This method is an initializers for a location sensor.
+ * On the iOS, we have to turn on the location sensor
+ * for using application in the background.
+ * And also, this sensing interval is the most low level.
  */
 - (void) initLocationSensor {
     NSLog(@"start location sensing!");
@@ -159,19 +170,17 @@
         _homeLocationManager.delegate = self;
         _homeLocationManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers;
         _homeLocationManager.pausesLocationUpdatesAutomatically = NO;
+        _homeLocationManager.activityType = CLActivityTypeOther;
         if ([AWAREUtils getCurrentOSVersionAsFloat] >= 9.0) {
-             //After iOS 9.0, we have to set YES value to this variable for background sensing.
+             /// After iOS 9.0, we have to set "YES" value to this variable for background sensing.
             _homeLocationManager.allowsBackgroundLocationUpdates = YES;
         }
-        _homeLocationManager.activityType = CLActivityTypeOther;
         if ([_homeLocationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
             [_homeLocationManager requestAlwaysAuthorization];
         }
         // Set a movement threshold for new events.
         _homeLocationManager.distanceFilter = 300; // meters
         [_homeLocationManager startUpdatingLocation];
-//      [_homeLocationManager startUpdatingHeading];
-//      [_locationManager startMonitoringVisits];
     }
 }
 
@@ -191,9 +200,8 @@
     }
 }
 
-/**
- *
- */
+
+
 - (void)didReceiveMemoryWarning {
     [debugSensor saveDebugEventWithText:@"didReceiveMemoryWarning" type:DebugTypeWarn label:@""];
     [super didReceiveMemoryWarning];
@@ -202,7 +210,8 @@
 
 
 /**
- * When a study is refreshed (e.g., pushed refresh button, changed settings, and/or done daily study update), this method is called.
+ When a study is refreshed (e.g., pushed refresh button, changed settings,
+ and/or done daily study update), this method is called.
  */
 - (void) initList {
     // init sensor list
@@ -338,22 +347,25 @@
     [_sensors addObject:[self getCelContent:@"Balanced Campus ESMs" desc:@"ESM Plugin" image:@"ic_action_campus" key:SENSOR_PLUGIN_CAMPUS]];
     // HealthKit
     [_sensors addObject:[self getCelContent:@"HealthKit" desc:@"This plugin collects stored data in HealthKit App on iOS" image:@"ic_action_health_kit" key:@"sensor_plugin_health_kit"]];
-    // Audio (CampusLife Plugin)
-    [_sensors addObject:[self getCelContent:@"Audio" desc:@"This plugin detects conversation and noize level around your device." image:@"ic_action_audio_wave" key:SENSOR_PLUGIN_STUDENTLIFE_AUDIO]];
-    //    [_sensors addObject:[self getCelContent:@"Direction (iOS)" desc:@"Device's direction (0-360)" image:@"safari_copyrighted" key:SENSOR_DIRECTION]];
-    //    [_sensors addObject:[self getCelContent:@"Rotation (iOS)" desc:@"Orientation of the device" image:@"ic_action_rotation" key:SENSOR_ROTATION]];
-    
+
     
     /**
      * Setting
      */
+    // Title
     [_sensors addObject:[self getCelContent:@"Settings" desc:@"" image:@"" key:@"TITLE_CELL_VIEW"]];
-    [_sensors addObject:[self getCelContent:@"Debug" desc:debugState image:@"" key:@"STUDY_CELL_DEBUG"]]; //ic_action_mqtt
-    [_sensors addObject:[self getCelContent:@"Sync Interval to AWARE Server (min)" desc:syncInterval image:@"" key:@"STUDY_CELL_SYNC"]]; //ic_action_mqtt
-    [_sensors addObject:[self getCelContent:@"Sync only wifi" desc:wifiOnly image:@"" key:@"STUDY_CELL_WIFI"]]; //ic_action_mqtt
-    [_sensors addObject:[self getCelContent:@"Maximum file size" desc:maximumFileSizeDesc image:@"" key:@"STUDY_CELL_MAX_FILE_SIZE"]]; //ic_action_mqtt
+    // A Debug mode on/off
+    [_sensors addObject:[self getCelContent:@"Debug" desc:debugState image:@"" key:@"STUDY_CELL_DEBUG"]];
+    // A Sync interval
+    [_sensors addObject:[self getCelContent:@"Sync Interval to AWARE Server (min)" desc:syncInterval image:@"" key:@"STUDY_CELL_SYNC"]];
+    // A Sync network condition
+    [_sensors addObject:[self getCelContent:@"Sync only wifi" desc:wifiOnly image:@"" key:@"STUDY_CELL_WIFI"]];
+    // A maximum data size per one HTTP/POST
+    [_sensors addObject:[self getCelContent:@"Maximum file size" desc:maximumFileSizeDesc image:@"" key:@"STUDY_CELL_MAX_FILE_SIZE"]];
+    // A current version of AWARE iOS
     NSString* version = [NSString stringWithFormat:@"%@",[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]];
     [_sensors addObject:[self getCelContent:@"Version" desc:version image:@"" key:@"STUDY_CELL_VIEW"]];
+    // A manual data upload button
     [_sensors addObject:[self getCelContent:@"Manual Data Upload" desc:@"Please push this row for uploading sensor data!" image:@"" key:@"STUDY_CELL_MANULA_UPLOAD"]];
     
     
@@ -379,6 +391,7 @@
     AWARESensor * debug = [[Debug alloc] init];
     [debug startSensor:60*15 withSettings:nil];
     [_sensorManager addNewSensor:debug];
+    
 }
 
 
@@ -419,7 +432,8 @@
 
 
 /**
- * When a study is refreshed (e.g., pushed refresh button, changed settings, and/or done daily study update), this method is called before the -initList.
+ When a study is refreshed (e.g., pushed refresh button, changed settings, 
+ and/or done daily study update), this method is called before the -initList.
  */
 - (IBAction)pushedStudyRefreshButton:(id)sender {
     // Inactivate the refresh button on the navigation bar
@@ -572,7 +586,6 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
         } else {
             NSLog(@"Cancel");
         }
-        
     }else if([title isEqualToString:@"Sync Interval (min)"]){
         if ( buttonIndex == [alertView cancelButtonIndex]){
             NSLog(@"Cancel");
@@ -673,7 +686,6 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
             [cell.detailTextLabel setText:latestSensorData];
         }
 
-        
         if ([stateStr isEqualToString:@"true"]) {
             theImage = [theImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             UIImageView *aImageView = [[UIImageView alloc] initWithImage:theImage];

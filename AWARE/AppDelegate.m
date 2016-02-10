@@ -17,8 +17,6 @@
 // GoogleLoginPlugin Library (https://developers.google.com/identity/sign-in/ios/)
 #import "GoogleLogin.h"
 
-// AudioPlugin Libraries
-
 // DebugPlugin Library
 #import "Debug.h"
 
@@ -46,7 +44,7 @@
     }
     
     // DeployGate SDK
-    [[DeployGateSDK sharedInstance] launchApplicationWithAuthor:@"tetujin" key:@"b268f60ae48ecfca7352c0a01918c86a7bd4bc74"];
+    [[DeployGateSDK sharedInstance] launchApplicationWithAuthor:@"[user name]" key:@"[api key]"];
     
     // WIP: Set background fetch
     [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
@@ -161,12 +159,42 @@ void exceptionHandler(NSException *exception) {
 
 ////////////////////////////////
 ///   Backgroud Fetch
+///
+/// https://mobiforge.com/design-development/using-background-fetch-ios
+///
 ///////////////////////////////
 
 - (void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
-    NSLog(@"This is background fetch result!");
-    completionHandler(UIBackgroundFetchResultNewData);
+    NSLog(@"Start a background fetch ...");
+    
+    /// for 30 sec
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm"];
+    NSString *formattedDateString = [dateFormatter stringFromDate:[NSDate new]];
+    
+    Debug * debug = [[Debug alloc] init];
+    [debug saveDebugEventWithText:@"This is a background fetch" type:DebugTypeInfo label:formattedDateString];
+    bool result = [debug syncAwareDBInForeground];
+    
+    NSString * debugMessage = @"";
+    if (result) {
+        debugMessage = @"Sucess to upload debug message in the background fetch.";
+    }else{
+        debugMessage = @"Faile to upload debug message in the background fetch.";
+    }
+    [debug saveDebugEventWithText:debugMessage type:DebugTypeInfo label:formattedDateString];
+//    [AWAREUtils sendLocalNotificationForMessage:debugMessage soundFlag:YES];
+    
+    if (result) {
+        completionHandler(UIBackgroundFetchResultNewData);
+    }else{
+        completionHandler(UIBackgroundFetchResultFailed);
+    }
+    
+    debug = nil;
+    
+    NSLog(@"... Finish a background fetch");
 }
 
 

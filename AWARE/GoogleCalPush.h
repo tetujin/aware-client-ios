@@ -9,20 +9,11 @@
 #import "AWARESensor.h"
 #import <EventKit/EventKit.h>
 #import <EventKitUI/EventKitUI.h>
-#import <CoreLocation/CoreLocation.h>
-#import <CoreData/CoreData.h>
 #import <UIKit/UIKit.h>
-//#import <MapKit/MapKit.h>
 
-@interface GoogleCalPush : AWARESensor <AWARESensorDelegate, CLLocationManagerDelegate, UIAlertViewDelegate>
-
-//@property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
-//@property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
-//@property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
+@interface GoogleCalPush : AWARESensor <AWARESensorDelegate, UIAlertViewDelegate>
 
 - (BOOL) isTargetCalendarCondition;
-- (void)saveContext;
-- (NSURL *)applicationDocumentsDirectory;
 - (void) showTargetCalendarCondition;
 
 @end

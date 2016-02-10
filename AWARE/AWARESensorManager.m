@@ -5,11 +5,13 @@
 //  Created by Yuuki Nishiyama on 11/19/15.
 //  Copyright © 2015 Yuuki NISHIYAMA. All rights reserved.
 //
-// This class manages AWARESensors' start, stop and force data upload
+// This class manages AWARESensors' start and stop operation.
+// And also, you can upload sensor data manually by using this class.
 //
 //
 
 #import "AWARESensorManager.h"
+#import "AWAREStudy.h"
 #import "AWAREKeys.h"
 #import "AWAREPlugin.h"
 
@@ -51,6 +53,7 @@
     self = [super init];
     if (self) {
         awareSensors = [[NSMutableArray alloc] init];
+        awareStudy = [[AWAREStudy alloc] init];
     }
     return self;
 }
@@ -61,20 +64,17 @@
                           plugins:(NSArray*)plugins
                    uploadInterval:(double) uploadTime{
     
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    NSString* deviceId = [userDefaults objectForKey:KEY_MQTT_USERNAME];
+    NSString* deviceId = [awareStudy getMqttUserName];
     if (deviceId == NULL) {
         NSLog( @"[%@] ERROR: You did not have a StudyID. Please check your study configuration.", key );
-        return @"";
+        return NO;
     }
     
-    NSLog(@"[%@] Upload interval is %f.", key, uploadTime);
+//    NSLog(@"[%@] Upload interval is %f.", key, uploadTime);
     AWARESensor* awareSensor = nil;
     for (int i=0; i<settings.count; i++) {
         NSString *setting = [[settings objectAtIndex:i] objectForKey:@"setting"];
         NSString *settingKey = [NSString stringWithFormat:@"status_%@",key];
-//        NSLog(@"[%d] %@ %@", i, setting, key);
-        
         if ([setting isEqualToString:settingKey]) {
             NSString * value = [[settings objectAtIndex:i] objectForKey:@"value"];
             bool exit = [self isExist:key];
@@ -115,6 +115,7 @@
                     awareSensor = [[Calls alloc] initWithSensorName:SENSOR_CALLS];
                 }
                 
+                // Start AWARESensor with some delay (0.5 sec) by each sensor for reducing memory stress
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, i * 0.5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
                     [awareSensor startSensor:uploadTime withSettings:settings];
                 });
@@ -220,7 +221,6 @@
     for (AWARESensor* sensor in awareSensors) {
         if ([sensor.getSensorName isEqualToString:sensorName]) {
             NSString *sensorValue = [sensor getLatestValue];
-//            NSLog(@"%@ <---> %@", sensor.getSensorName, sensorName);
             return sensorValue;
         }
     }

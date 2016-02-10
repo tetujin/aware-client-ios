@@ -11,9 +11,11 @@
 #import <AudioToolbox/AudioServices.h>
 
 #import "AWARESensor.h"
+#import "AWAREStudy.h"
 
 @interface AWARESensorManager : NSObject{
     NSMutableArray* awareSensors;
+    AWAREStudy * awareStudy;
 }
 
 - (void) stopAllSensors;

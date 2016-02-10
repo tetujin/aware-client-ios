@@ -10,20 +10,10 @@
 #import "Debug.h"
 
 @implementation GoogleCalPush {
-    // for calendar events
     EKEventStore *store;
-    
-//    NSTimer * uploadTimer;
     NSTimer * calendarUpdateTimer;
     NSString* AWARE_CAL_NAME;
-    
     NSDate * fireDate;
-    
-    // for locations
-//    double miniDistrance;
-//    IBOutlet CLLocationManager *locationManager;
-//    double interval;
-//    NSTimer* locationTimer;
 }
 
 - (instancetype)initWithSensorName:(NSString *)sensorName {
@@ -33,7 +23,6 @@
         fireDate  = [AWAREUtils getTargetNSDate:date hour:20 minute:0 second:0 nextDay:NO];
     
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-//        [dateFormatter setDateFormat:@"yyyy-MM-dd 'at' HH:mm"];
         [dateFormatter setDateFormat:@"HH:mm"];
         NSString *formattedDateString = [dateFormatter stringFromDate:fireDate];
         [super setLatestValue:[NSString stringWithFormat:@"Next Calendar Update: %@", formattedDateString]];
@@ -67,51 +56,28 @@
 - (void) showTargetCalendarCondition {
     bool isAvaiable = NO;
     EKEventStore *tempStore = [[EKEventStore alloc] init];
-    //    for (EKSource *calSource in tempStore.sources) {
     for (EKCalendar *cal in [tempStore calendarsForEntityType:EKEntityTypeEvent]) {
         NSLog(@"%@", cal.title);
         if ([cal.title isEqualToString:@"BalancedCampusJournal"]) {
             isAvaiable = YES;
         }
     }
-    //    }
     
     tempStore = nil;
-//    dispatch_async(dispatch_get_main_queue(), ^{
-        if (isAvaiable) {
-            UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Correct"
-                                                             message:@"'BalancedCampusJournal' calendar is available!"
-                                                            delegate:self
-                                                   cancelButtonTitle:@"Cancel"
-                                                   otherButtonTitles:nil];
-//            NSDate * ninePM = [AWAREUtils getTargetNSDate:[NSDate new] hour:9 minute:0 second:0 nextDay:NO];
-            [alert show];
-        }else{
-            UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Miss"
-                                                             message:@"AWARE can not find 'BalancedCampusJournal' calendar."
-                                                            delegate:self
-                                                   cancelButtonTitle:@"Cancel"
-                                                   otherButtonTitles:nil];
-            [alert show];
-        }
-//    });
-}
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    NSString* title = alertView.title;
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    if([title isEqualToString:@"Correct"]){
-        NSLog(@"%ld", buttonIndex);
-//        if (buttonIndex == 1){ //yes
-//            [userDefaults setBool:YES forKey:SETTING_DEBUG_STATE];
-//            [self pushedStudyRefreshButton:alertView];
-//        } else if (buttonIndex == 2){ // no
-//            //reset clicked
-//            [userDefaults setBool:NO forKey:SETTING_DEBUG_STATE];
-//            [self pushedStudyRefreshButton:alertView];
-//        } else {
-//            NSLog(@"Cancel");
-//        }
+    if (isAvaiable) {
+        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Correct"
+                                                         message:@"'BalancedCampusJournal' calendar is available!"
+                                                        delegate:self
+                                               cancelButtonTitle:@"Cancel"
+                                               otherButtonTitles:nil];
+        [alert show];
+    }else{
+        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Miss"
+                                                         message:@"AWARE can not find 'BalancedCampusJournal' calendar."
+                                                        delegate:self
+                                               cancelButtonTitle:@"Cancel"
+                                               otherButtonTitles:nil];
+        [alert show];
     }
 }
 
@@ -156,9 +122,12 @@
 //    [self makePrePopulateEvetnsWith:yesterday];
 }
 
-- (void) makePrePopulateEvetnsWith:(NSDate *) date{
+- (void) makePrePopulateEvetnsWith:(NSDate *) date {
     
-    //    [self makePrepopulatedEventsWith:]
+    NSDateFormatter *timeFormat = [[NSDateFormatter alloc] init];
+    [timeFormat setDateFormat:@"HH:mm:ss"];
+    NSString * debugMessage = [NSString stringWithFormat:@"[%@] BalancedCampusJournal Plugin start to populate events at ", [timeFormat stringFromDate:date]];
+    [self saveDebugEventWithText:debugMessage type:DebugTypeInfo label:@""];
     
     EKCalendar * awareCal = nil;
     // Get the aware calendar in Google Calendars
@@ -289,8 +258,8 @@
         
     }
     
-    NSDateFormatter *timeFormat = [[NSDateFormatter alloc] init];
-    [timeFormat setDateFormat:@"HH:mm:ss"];
+//    NSDateFormatter *timeFormat = [[NSDateFormatter alloc] init];
+//    [timeFormat setDateFormat:@"HH:mm:ss"];
     //    NSString * prepopulateTitle = @"#event_category #Location #brief_description";
     NSString * prepopulateTitle = @"#event_category #Location #brief_description";
     
@@ -427,403 +396,19 @@
     }
     
     // == Send Notification ==
-    
-    [self sendLocalNotificationForMessage:@"Hi! Your Calendar is updated." soundFlag:YES];
-    [self saveDebugEventWithText:@"Hi! Your Calendar is updated."type:DebugTypeInfo label:[self getSensorName]];
-    
-    // == Remove past locations ==
-    // [locationsToday removeAllObjects];
+    NSString * message = @"Hi! Your Calendar is updated.";
+    [self sendLocalNotificationForMessage:message soundFlag:YES];
+    [self saveDebugEventWithText:message type:DebugTypeInfo label:[self getSensorName]];
+
 }
-
-
-
-// Check prepopulated events
-//    bool isPopulated = NO;
-//    for (int i=1; i<hours.count; i++) {
-//        NSDate *start = [hours objectAtIndex:i-1];
-//        NSDate *end = [hours objectAtIndex:i];
-//        for (EKEvent * populatEvent in prepopulatedEvents) {
-//            if (start > populatEvent.endDate && end < populatEvent.endDate) {
-//
-//            }
-//        }
-//    }
-//
-
-
-
-
-//    NSMutableArray * awareEvents = [[NSMutableArray alloc] initWithArray:currentEvents];
-
-//    for (EKEvent* event in existingJournalEvents ) {
-//        NSLog(@"%@ %@", event.calendar.calendarIdentifier, awareCal.calendarIdentifier);
-//        if ([event.calendar.calendarIdentifier isEqualToString:awareCal.calendarIdentifier] ) {
-//            if ([self getDebugState]) {
-//                [self sendLocalNotificationForMessage:@"Your Google Calandar is already updated today." soundFlag:YES];
-//
-//            }
-//            return;
-//        }
-//    }
-
-/**
- * Add Last NSDate to NullEvents
- */
-//    NSDate * endOfTimeToday = [AWAREUtils getTargetNSDate:[NSDate date] hour:24 minute:0 second:0 nextDay:NO];
-//    NSDate * lastEventEndDate = lastEvent.endDate;
-//    int gap = [endOfTimeToday timeIntervalSince1970] - [lastEventEndDate timeIntervalSince1970];
-//    NSLog(@"%d", gap);
-//    if (gap > 0) {
-//        [nullTimes addObject:[[NSArray alloc] initWithObjects:lastEventEndDate,endOfTimeToday,nil]];
-//    }
-
-
-//
-//- (NSDate *) getTargetTimeAsNSDate:(NSDate *) nsDate
-//                              hour:(int) hour
-//                            minute:(int) minute
-//                            second:(int) second
-//                           nextDay:(BOOL)nextDay {
-//    NSCalendar *calendar = [NSCalendar currentCalendar];
-//    NSDateComponents *dateComps = [calendar components:NSYearCalendarUnit |
-//                                   NSMonthCalendarUnit  |
-//                                   NSDayCalendarUnit    |
-//                                   NSHourCalendarUnit   |
-//                                   NSMinuteCalendarUnit |
-//                                   NSSecondCalendarUnit fromDate:nsDate];
-//    [dateComps setDay:dateComps.day];
-//    [dateComps setHour:hour];
-//    [dateComps setMinute:minute];
-//    [dateComps setSecond:second];
-//    NSDate * targetNSDate = [calendar dateFromComponents:dateComps];
-////    return targetNSDate;
-//    
-//    if (nextDay) {
-//        if ([targetNSDate timeIntervalSince1970] < [nsDate timeIntervalSince1970]) {
-//            [dateComps setDay:dateComps.day + 1];
-//            NSDate * tomorrowNSDate = [calendar dateFromComponents:dateComps];
-//            return tomorrowNSDate;
-//        }else{
-//            return targetNSDate;
-//        }
-//    }else{
-//        return targetNSDate;
-//    }
-//}
-
-
 
 - (BOOL) stopSensor {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-//    [uploadTimer invalidate];
     [calendarUpdateTimer invalidate];
-//    [locationTimer invalidate];
     calendarUpdateTimer = nil;
     return YES;
 }
 
-
-//- (void) startLocationSensor{
-//    if (nil == locationManager){
-//        locationManager = [[CLLocationManager alloc] init];
-//        locationManager.delegate = self;
-//        //    locationManager.desiredAccuracy = kCLLocationAccuracyKilometer;
-//        locationManager.desiredAccuracy = kCLLocationAccuracyBest;
-//        locationManager.pausesLocationUpdatesAutomatically = NO;
-//        CGFloat currentVersion = [[[UIDevice currentDevice] systemVersion] floatValue];
-//        NSLog(@"OS:%f", currentVersion);
-//        if (currentVersion >= 9.0) {
-//            //        _homeLocationManager.allowsBackgroundLocationUpdates = YES; //This variable is an important method for background sensing
-//            locationManager.allowsBackgroundLocationUpdates = YES; //This variable is an important method for background sensing after iOS9
-//        }
-//        locationManager.activityType = CLActivityTypeFitness;
-//        if ([locationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
-//            [locationManager requestAlwaysAuthorization];
-//        }
-//        // Set a movement threshold for new events.
-//        locationManager.distanceFilter = miniDistrance; // meters
-//        [locationManager startUpdatingLocation];
-//        [locationManager startMonitoringVisits]; // This method calls didVisit.
-//        [locationManager startUpdatingHeading];
-//        //    _location = [[CLLocation alloc] init];
-//        if(interval > 0){
-//            locationTimer = [NSTimer scheduledTimerWithTimeInterval:interval
-//                                                         target:self
-//                                                       selector:@selector(getGpsData)
-//                                                       userInfo:nil
-//                                                        repeats:YES];
-//            [locationTimer fire];
-//        }
-//    }
-//}
-//
-//- (void)locationManager:(CLLocationManager *)manager
-//               didVisit:(CLVisit *)visit {
-//    NSManagedObject *visitObject = [NSEntityDescription insertNewObjectForEntityForName:@"Visit" inManagedObjectContext:_managedObjectContext];
-//    
-//    CLGeocoder *ceo = [[CLGeocoder alloc]init];
-//    CLLocation *loc = [[CLLocation alloc]initWithLatitude:visit.coordinate.latitude longitude:visit.coordinate.longitude]; //insert your coordinates
-//    [ceo reverseGeocodeLocation:loc
-//              completionHandler:^(NSArray *placemarks, NSError *error) {
-//                  CLPlacemark * placemark = nil;
-//                  if (placemarks.count > 0) {
-//                      placemark = [placemarks objectAtIndex:0];
-//                  }
-//                  //                  NSLog(@"placemark %@",placemark);
-//                  //                  //String to hold address
-//                  NSString *locatedAt = [[placemark.addressDictionary valueForKey:@"FormattedAddressLines"] componentsJoinedByString:@", "];
-//                  //                  NSLog(@"addressDictionary %@", placemark.addressDictionary);
-//                  //
-//                  //                  NSLog(@"placemark %@",placemark.region);
-//                  //                  NSLog(@"placemark %@",placemark.country);  // Give Country Name
-//                  //                  NSLog(@"placemark %@",placemark.locality); // Extract the city name
-//                  //                  NSLog(@"location %@",placemark.name);
-//                  //                  NSLog(@"location %@",placemark.ocean);
-//                  //                  NSLog(@"location %@",placemark.postalCode);
-//                  //                  NSLog(@"location %@",placemark.subLocality);
-//                  //
-//                  //                  NSLog(@"location %@",placemark.location);
-//                  //Print the location to console
-//                  NSLog(@"I am currently at %@",locatedAt);
-//                  
-//                  double timestamp = [[NSDate new] timeIntervalSince1970];
-//                  double depature = [[visit departureDate] timeIntervalSince1970];
-//                  double arrival = [[visit arrivalDate] timeIntervalSince1970];
-//                  
-//                  // Process in the main thread.
-//                  [visitObject setValue:[NSNumber numberWithDouble:timestamp] forKey:@"timestamp"];
-//                  [visitObject setValue:[NSNumber numberWithDouble:visit.coordinate.latitude] forKey:@"latitude"];
-//                  [visitObject setValue:[NSNumber numberWithDouble:visit.coordinate.longitude] forKey:@"longitude"];
-//                  [visitObject setValue:[NSNumber numberWithDouble:depature] forKey:@"departure"];
-//                  [visitObject setValue:[NSNumber numberWithDouble:arrival] forKey:@"arrival"];
-//                  [visitObject setValue:[NSNumber numberWithDouble:visit.horizontalAccuracy] forKey:@"accuracy"];
-//                  if (placemarks != nil) {
-//                      [visitObject setValue:locatedAt forKey:@"name"];
-//                  }else{
-//                      [visitObject setValue:@"" forKey:@"name"];
-//                  }
-//                  
-//                  
-//                  // Save the created NSManagedOobject to DB with NSError.
-//                  NSError *e = nil;
-//                  if (![_managedObjectContext save:&e]) {
-//                      NSLog(@"error = %@", e);
-//                  } else {
-//                      NSLog(@"Visit : Insert Completed.");
-//                  }
-//              }];
-//
-//}
-//
-//- (void)locationManager:(CLLocationManager *)manager
-//       didUpdateHeading:(CLHeading *)newHeading {
-//    if (newHeading.headingAccuracy < 0)
-//        return;
-//    //    CLLocationDirection  theHeading = ((newHeading.trueHeading > 0) ?
-//    //                                       newHeading.trueHeading : newHeading.magneticHeading);
-//    //    [sdManager addSensorDataMagx:newHeading.x magy:newHeading.y magz:newHeading.z];
-//    //    [sdManager addHeading: theHeading];
-//}
-//
-//
-//- (void) locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations{
-//    for (CLLocation* location in locations) {
-//        // Make a new NSManagedObject with entity name
-//        [self saveLocation:location];
-//    }
-//}
-//
-//- (void) getGpsData {
-//    //[sdManager addLocation:[_locationManager location]];
-//    CLLocation* location = [locationManager location];
-//    [self saveLocation:location];
-//    
-//    //削除対象のフェッチ情報を生成
-//    NSFetchRequest *deleteRequest = [[NSFetchRequest alloc] init];
-//    [deleteRequest setEntity:[NSEntityDescription entityForName:@"Location" inManagedObjectContext:_managedObjectContext]];
-//    [deleteRequest setIncludesPropertyValues:NO];
-//    
-//    NSError *error = nil;
-//    
-//    //生成したフェッチ情報からデータをフェッチ
-//    NSArray *results = [_managedObjectContext executeFetchRequest:deleteRequest error:&error];
-//    NSLog(@"Number of location data: %ld", results.count);
-//    
-//    //[deleteRequest release]; //ARCオフの場合
-//    
-//    //フェッチしたデータを削除処理
-//    //    for (NSManagedObject *data in results) {
-//    //        [managedObjectContext deleteObject:data];
-//    //    }
-//    //    NSError *saveError = nil;
-//    //    //削除を反映
-//    //    [managedObjectContext save:&saveError];
-//}
-//
-//- (void) saveLocation:(CLLocation *) location {
-//    NSManagedObject *object = [NSEntityDescription insertNewObjectForEntityForName:@"Location" inManagedObjectContext:_managedObjectContext];
-//    
-//    // Add data to the object
-//    double timestamp = [[NSDate new] timeIntervalSince1970];
-//    [object setValue:[NSNumber numberWithDouble:timestamp] forKey:@"timestamp"];
-//    [object setValue:[NSNumber numberWithDouble:location.coordinate.latitude] forKey:@"latitude"];
-//    [object setValue:[NSNumber numberWithDouble:location.coordinate.longitude] forKey:@"longitude"];
-//    
-//    // Save the created NSManagedOobject to DB with NSError.
-//    NSError *error = nil;
-//    if (![_managedObjectContext save:&error]) {
-//        NSLog(@"error = %@", error);
-//    } else {
-//        NSLog(@"Insert Completed.");
-//    }
-//    
-//    
-//    
-////    NSManagedObject *visitObject = [NSEntityDescription insertNewObjectForEntityForName:@"Visit" inManagedObjectContext:_managedObjectContext];
-////    
-////    CLGeocoder *ceo = [[CLGeocoder alloc]init];
-////    CLLocation *loc = [[CLLocation alloc]initWithLatitude:location.coordinate.latitude longitude:location.coordinate.longitude]; //insert your coordinates
-////    [ceo reverseGeocodeLocation:loc
-////              completionHandler:^(NSArray *placemarks, NSError *error) {
-////                  CLPlacemark * placemark = nil;
-////                  if (placemarks.count > 0) {
-////                      placemark = [placemarks objectAtIndex:0];
-////                  }
-////                  //                  NSLog(@"placemark %@",placemark);
-////                  //                  //String to hold address
-////                  NSString *locatedAt = [[placemark.addressDictionary valueForKey:@"FormattedAddressLines"] componentsJoinedByString:@", "];
-////                  //                  NSLog(@"addressDictionary %@", placemark.addressDictionary);
-////                  //
-////                  //                  NSLog(@"placemark %@",placemark.region);
-////                  //                  NSLog(@"placemark %@",placemark.country);  // Give Country Name
-////                  //                  NSLog(@"placemark %@",placemark.locality); // Extract the city name
-////                  //                  NSLog(@"location %@",placemark.name);
-////                  //                  NSLog(@"location %@",placemark.ocean);
-////                  //                  NSLog(@"location %@",placemark.postalCode);
-////                  //                  NSLog(@"location %@",placemark.subLocality);
-////                  //
-////                  //                  NSLog(@"location %@",placemark.location);
-////                  //Print the location to console
-////                  NSLog(@"I am currently at %@",locatedAt);
-////                  
-////                  double timestamp = [[NSDate new] timeIntervalSince1970];
-////                  double depature = [[NSDate new] timeIntervalSince1970];
-////                  double arrival = [[NSDate new] timeIntervalSince1970];
-////                  
-////                  // Process in the main thread.
-////                  [visitObject setValue:[NSNumber numberWithDouble:timestamp] forKey:@"timestamp"];
-////                  [visitObject setValue:[NSNumber numberWithDouble:location.coordinate.latitude] forKey:@"latitude"];
-////                  [visitObject setValue:[NSNumber numberWithDouble:location.coordinate.longitude] forKey:@"longitude"];
-////                  [visitObject setValue:[NSNumber numberWithDouble:depature] forKey:@"departure"];
-////                  [visitObject setValue:[NSNumber numberWithDouble:arrival] forKey:@"arrival"];
-////                  [visitObject setValue:[NSNumber numberWithDouble:location.horizontalAccuracy] forKey:@"accuracy"];
-////                  if (placemarks != nil) {
-////                      [visitObject setValue:locatedAt forKey:@"name"];
-////                  }else{
-////                      [visitObject setValue:@"" forKey:@"name"];
-////                  }
-////                  
-////                  
-////                  // Save the created NSManagedOobject to DB with NSError.
-////                  NSError *e = nil;
-////                  if (![_managedObjectContext save:&e]) {
-////                      NSLog(@"error = %@", e);
-////                  } else {
-////                      NSLog(@"Visit : Insert Completed.");
-////                  }
-////              }];
-//
-//    
-//    
-//}
-
-//
-//
-//
-///**
-// * ===========
-// * For CoreData
-// * ===========
-// */
-//#pragma mark - Core Data stack
-//
-//@synthesize managedObjectContext = _managedObjectContext;
-//@synthesize managedObjectModel = _managedObjectModel;
-//@synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
-//
-//- (NSURL *)applicationDocumentsDirectory {
-//    // The directory the application uses to store the Core Data store file. This code uses a directory named "jp.ac.keio.sfc.ht.tetujin.AWARE" in the application's documents directory.
-//    return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
-//}
-//
-//- (NSManagedObjectModel *)managedObjectModel {
-//    // The managed object model for the application. It is a fatal error for the application not to be able to find and load its model.
-//    if (_managedObjectModel != nil) {
-//        return _managedObjectModel;
-//    }
-//    NSURL *modelURL = [[NSBundle mainBundle] URLForResource:@"LocationModel" withExtension:@"momd"];
-//    _managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
-//    return _managedObjectModel;
-//}
-//
-//- (NSPersistentStoreCoordinator *)persistentStoreCoordinator {
-//    // The persistent store coordinator for the application. This implementation creates and returns a coordinator, having added the store for the application to it.
-//    if (_persistentStoreCoordinator != nil) {
-//        return _persistentStoreCoordinator;
-//    }
-//    
-//    // Create the coordinator and store
-//    
-//    _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
-//    NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"LocationProj.sqlite"];
-//    NSError *error = nil;
-//    NSString *failureReason = @"There was an error creating or loading the application's saved data.";
-//    if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&error]) {
-//        // Report any error we got.
-//        NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-//        dict[NSLocalizedDescriptionKey] = @"Failed to initialize the application's saved data";
-//        dict[NSLocalizedFailureReasonErrorKey] = failureReason;
-//        dict[NSUnderlyingErrorKey] = error;
-//        error = [NSError errorWithDomain:@"YOUR_ERROR_DOMAIN" code:9999 userInfo:dict];
-//        // Replace this with code to handle the error appropriately.
-//        // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-//        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-//        abort();
-//    }
-//    
-//    return _persistentStoreCoordinator;
-//}
-//
-//
-//- (NSManagedObjectContext *)managedObjectContext {
-//    // Returns the managed object context for the application (which is already bound to the persistent store coordinator for the application.)
-//    if (_managedObjectContext != nil) {
-//        return _managedObjectContext;
-//    }
-//    
-//    NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
-//    if (!coordinator) {
-//        return nil;
-//    }
-//    _managedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
-//    [_managedObjectContext setPersistentStoreCoordinator:coordinator];
-//    return _managedObjectContext;
-//}
-//
-//#pragma mark - Core Data Saving support
-//
-//- (void)saveContext {
-//    NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
-//    if (managedObjectContext != nil) {
-//        NSError *error = nil;
-//        if ([managedObjectContext hasChanges] && ![managedObjectContext save:&error]) {
-//            // Replace this implementation with code to handle the error appropriately.
-//            // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-//            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-//            abort();
-//        }
-//    }
-//}
 
 
 @end

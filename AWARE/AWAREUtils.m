@@ -13,6 +13,7 @@
 
 @implementation AWAREUtils
 
+
 /**
  * This method sets application condition (background or foreground).
  *
@@ -29,12 +30,24 @@
     
 }
 
+
+/**
+ * This method returns application condition (background or foreground).
+ *
+ * @return 'YES' is foreground. 'NO' is background.
+ */
 + (BOOL) getAppState {
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     return [defaults boolForKey:@"APP_STATE"];
 }
 
 
+
+/**
+ * This method sets application is in the foreground or not.
+ *
+ * @return state 'YES' is foreground. 'NO' is background.
+ */
 + (BOOL)isForeground{
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     bool state = [defaults boolForKey:@"APP_STATE"];
@@ -47,6 +60,11 @@
    }
 }
 
+/**
+ * This method sets application condition in the background or not.
+ *
+ * @return state 'YES' is background, on the other hand 'NO' is foreground.
+ */
 + (BOOL)isBackground{
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     bool state = [defaults boolForKey:@"APP_STATE"];
@@ -78,33 +96,103 @@
 }
 
 
-
+/**
+ This method provides current OS version such as iOS8.2, iOS9 or iOS9.1 with float value.
+ @return an os version of the device
+ */
 + (float) getCurrentOSVersionAsFloat{
     float currentVersion = [[[UIDevice currentDevice] systemVersion] floatValue];
     return currentVersion;
 }
 
 
-
+/**
+This method provides a system uuid.
+ 
+- NOTE: AWARE iOS uses this value as a device_id.
+- NOTE: If user uninstall the AWARE iOS, this value will be change.
+ 
+@return A system UUID with NSString (Sample: 37ce6bb8-d35f-4375-ae90-87219bb3f97b)
+ */
 + (NSString *)getSystemUUID {
     NSString * uuid = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
     uuid = [uuid lowercaseString];
     return uuid;
 }
 
+
+/**
+ This method generates an unixtimestamp value from NSDate.
+ 
+ In the Objective-C, we can get a timestamp with [[NSDate new] timeIntervalSince1970].
+ However, the value is 'float', and it is not the same format in the AWARE database.
+ For fixing the problem, we have to calculate the timestamp . And also, we have to store the value to a LongLong (8bit) object 
+ for preventing a cast error on the 32bit platfrom.
+ In the Objective-C, a bit size of a Long value on 32bit devices (such as iPhoen4s, iPhone5 and iPhone5c) is 4bit.
+ On the other hand, on the 64bit device (such as iPhone5s, iPhone6 and iPhone6s), the size is 8bit.
+ If you cast the Float value(8bit) to a Long value(4bit) on the 32bit devices, you will get a wronge value.
+ 
+ On the 32bit device, you should use a LongLong value insted of a Long value.
+ The LongLong value is 8bit variable both 32bit and 64bit devices.
+ 
+ @param NSDate  Commonly you can make the value using [NSDate new] method.
+ @return An unixtime stamp value (e.g., 1453141282.168 => 1453141282168)
+ */
 + (NSNumber *)getUnixTimestamp:(NSDate *)nsdate{
+    if (nsdate == nil) {
+        return [self getUnixTimestamp:[NSDate new]];
+    }
     NSTimeInterval timeStamp = [nsdate timeIntervalSince1970] * 1000;
-//    double errorValue = [nsdate timeIntervalSince1970] * 1000;
     NSNumber* unixtime = [NSNumber numberWithLongLong:timeStamp];
     return unixtime;
 }
 
 
-+ (NSDate *)getTargetNSDate:(NSDate *)nsDate hour:(int)hour nextDay:(BOOL)nextDay{
+
+/**
+ This is a wrapper class of -getTargetNSDate:hour:minute:second:nextDay.
+ 
+ @param nsDate   A NSDate value of a base date
+ @param hour     An int value of a target special hour (0-24)
+ @param nextDay  A 'YES' return a NSDate of next data, if the input NSDate is over the current time. On the other hand, A 'No' return a NSDate of today.
+ @return A NSDate object based on the input values
+ */
++ (NSDate *)getTargetNSDate:(NSDate *)nsDate hour:(int)hour nextDay:(BOOL)nextDay {
     return [self getTargetNSDate:nsDate hour:hour minute:0 second:0 nextDay:nextDay];
 }
 
 
+/**
+ This method generate a specific NSDate based on the input values (hour, minute, second).
+ NOTE: This method offten is used in schedulers.
+ 
+ // [Sample1]
+ // Current time is 8AM.
+ NSDate * now = [NSDate new]; // Get today's NSDate
+ NSDate * tommorowSevenAM = [AWAREUtils getTargetNSDate:now hour:7 minute:0 second:0 nextDay:YES];
+ 
+ // [Sample2]
+ // Current time is 8AM.
+ NSDate * now = [NSDate new]; // Get today's NSDate
+ NSDate * todaySevenAM = [AWAREUtils getTargetNSDate:now hour:7 minute:0 second:0 nextDay:NO];
+ 
+ // [Sample3]
+ // Current time is 8AM.
+ NSDate * now = [NSDate new]; // Get today's NSDate
+ NSDate * todayNineAM = [AWAREUtils getTargetNSDate:now hour:9 minute:0 second:0 nextDay:YES];
+ 
+ // [Sample4]
+ // Current time is 8AM.
+ NSDate * now = [NSDate new]; // Get today's NSDate
+ NSDate * todayNineAM = [AWAREUtils getTargetNSDate:now hour:9 minute:0 second:0 nextDay:NO];
+ 
+ @param nsDate   A NSDate value of a base date
+ @param hour     An int value of a target special hour (0-24)
+ @param minute   An int value of a target special minute (0-60)
+ @param second   An int value of a target special second (0-60)
+ @param nextDay  A 'YES' return a NSDate of next data, if the input NSDate is over the current time. On the other hand, A 'No' return a NSDate of today.
+ @return A NSDate object based on the input values
+ */
 + (NSDate *) getTargetNSDate:(NSDate *) nsDate
                               hour:(int) hour
                             minute:(int) minute
@@ -137,8 +225,16 @@
     }
 }
 
+
+
 /**
- * The methods from http://www.makebetterthings.com/iphone/how-to-get-md5-and-sha1-in-objective-c-ios-sdk/
+ * An hash method of SHA1
+ *
+ * This source code is refered from the [web-page]( http://www.makebetterthings.com/iphone/how-to-get-md5-and-sha1-in-objective-c-ios-sdk/ ).
+ * Also, Google Calendar Plugin is using this method for make an hash object.
+ *
+ * @param input A NSString object for hasing
+ *
  */
 + (NSString*) sha1:(NSString*)input
 {
@@ -161,6 +257,15 @@
     
 }
 
+
+/**
+ * An hash method of MD5
+ *
+ * This source code is refered from the [web-page]( http://www.makebetterthings.com/iphone/how-to-get-md5-and-sha1-in-objective-c-ios-sdk/ ).
+ *
+ * @param input A NSString object for hasing
+ *
+ */
 + (NSString *) md5:(NSString *) input
 {
     const char *cStr = [input UTF8String];
@@ -175,6 +280,13 @@
     return  output;
 }
 
+
+/**
+ * An email format checker
+ *
+ * @param  str A NSString object for checking an existence of email addresses
+ * @return An existance of email address in the inputed text as a boolean value
+ */
 + (BOOL)validateEmailWithString:(NSString *)str
 {
     if (!str || [str length] == 0) {
