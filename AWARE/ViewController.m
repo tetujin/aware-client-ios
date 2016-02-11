@@ -121,7 +121,9 @@
      * The "-initList" method **initialize contetns of list view**, and **starts/stops sensors**.
      * WIP: I want to split a "list view initializer" and "sensor initializer".
      */
-    [self initList];
+    [self initContentsOnTableView];
+    [self initSensors];
+    
     _refreshButton.enabled = NO;
     [self performSelector:@selector(refreshButtonEnableYes) withObject:0 afterDelay:8];
     
@@ -172,7 +174,7 @@
         _homeLocationManager.pausesLocationUpdatesAutomatically = NO;
         _homeLocationManager.activityType = CLActivityTypeOther;
         if ([AWAREUtils getCurrentOSVersionAsFloat] >= 9.0) {
-             /// After iOS 9.0, we have to set "YES" value to this variable for background sensing.
+             /// After iOS 9.0, we have to set "YES" for background sensing.
             _homeLocationManager.allowsBackgroundLocationUpdates = YES;
         }
         if ([_homeLocationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
@@ -213,23 +215,24 @@
  When a study is refreshed (e.g., pushed refresh button, changed settings,
  and/or done daily study update), this method is called.
  */
-- (void) initList {
+- (void) initContentsOnTableView {
     // init sensor list
     _sensors = [[NSMutableArray alloc] init];
     
     // Get a study and device information from local default storage
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults synchronize];
-    
-    NSString *deviceId = [userDefaults objectForKey:KEY_MQTT_USERNAME];
-    NSString *awareStudyId = [userDefaults objectForKey:KEY_STUDY_ID];
-    NSString *mqttServerName = [userDefaults objectForKey:KEY_MQTT_SERVER];
-    NSInteger maximumFileSize = [userDefaults integerForKey:KEY_MAX_DATA_SIZE];
     NSString *email = [userDefaults objectForKey:@"GOOGLE_EMAIL"];
     NSString *name = [userDefaults objectForKey:@"GOOGLE_NAME"];
+    NSInteger maximumFileSize = [userDefaults integerForKey:KEY_MAX_DATA_SIZE];
     NSString *accountInfo = [NSString stringWithFormat:@"%@ (%@)", name, email];
-
     if(name == nil) accountInfo = @"";
+    if(email == nil) email = @"";
+    
+    AWAREStudy *awareStudy = [[AWAREStudy alloc] init];
+    NSString *deviceId = [awareStudy getDeviceId];
+    NSString *awareStudyId = [awareStudy getStudyId];
+    NSString *mqttServerName = [awareStudy getMqttServer];
     if(deviceId == nil) deviceId = @"";
     if(awareStudyId == nil) awareStudyId = @"";
     if(mqttServerName == nil) mqttServerName = @"";
@@ -367,31 +370,6 @@
     [_sensors addObject:[self getCelContent:@"Version" desc:version image:@"" key:@"STUDY_CELL_VIEW"]];
     // A manual data upload button
     [_sensors addObject:[self getCelContent:@"Manual Data Upload" desc:@"Please push this row for uploading sensor data!" image:@"" key:@"STUDY_CELL_MANULA_UPLOAD"]];
-    
-    
-    /**
-     * [Additional hidden sensors]
-     * You can add your own AWARESensor and AWAREPlugin to AWARESensorManager directly using following source code. 
-     * The "-addNewSensor" method is versy userful for testing and debuging a AWARESensor without registlating a study.
-     */
-    // Pedometer
-    AWARESensor * steps = [[Pedometer alloc] initWithSensorName:SENSOR_PLUGIN_PEDOMETER];
-    [steps startSensor:60*15 withSettings:nil];
-    [_sensorManager addNewSensor:steps];
-    
-    // HealthKit
-    // AWARESensor * healthKit = [[AWAREHealthKit alloc] initWithPluginName:@"sensor_aware_health_kit" deviceId:@""];
-    // [healthKit startSensor:60 withSettings:nil];
-    
-    
-    /**
-     * Debug Sensor
-     * NOTE: don't remove this sensor. This sensor collects and upload debug message to the server each 15 min.
-     */
-    AWARESensor * debug = [[Debug alloc] init];
-    [debug startSensor:60*15 withSettings:nil];
-    [_sensorManager addNewSensor:debug];
-    
 }
 
 
@@ -416,18 +394,54 @@
     [dic setObject:desc forKey:KEY_CEL_DESC];
     [dic setObject:image forKey:KEY_CEL_IMAGE];
     [dic setObject:key forKey:KEY_CEL_SENSOR_NAME];
-
-    // Get sensors information and plugin information from NSUserDedaults class
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    NSArray *sensors = [userDefaults objectForKey:KEY_SENSORS];
-    NSArray *plugins = [userDefaults objectForKey:KEY_PLUGINS];
-    // [NOTE] If this sensor is "active", addNewSensorWithSensorName method return TRUE value.
-    uploadInterval = [userDefaults doubleForKey:SETTING_SYNC_INT];
-    bool state = [_sensorManager addNewSensorWithSensorName:key settings:sensors plugins:plugins uploadInterval:uploadInterval];
-    if (state) {
-        [dic setObject:@"true" forKey:KEY_CEL_STATE];
+    if(_sensorManager != nil){
+        bool exist = [_sensorManager isExist:key];
+        if (exist) {
+            [dic setObject:@"true" forKey:KEY_CEL_STATE];
+        }
     }
     return dic;
+}
+
+
+- (void) initSensors {
+    
+    for (NSMutableDictionary * sensor in _sensors) {
+        // Get sensors information and plugin information from NSUserDedaults class
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        NSArray *sensors = [userDefaults objectForKey:KEY_SENSORS];
+        NSArray *plugins = [userDefaults objectForKey:KEY_PLUGINS];
+        // [NOTE] If this sensor is "active", addNewSensorWithSensorName method return TRUE value.
+        uploadInterval = [userDefaults doubleForKey:SETTING_SYNC_INT];
+        NSString * key = [sensor objectForKey:KEY_CEL_SENSOR_NAME];
+        bool state = [_sensorManager addNewSensorWithSensorName:key settings:sensors plugins:plugins uploadInterval:uploadInterval];
+        if (state) {
+            [sensor setObject:@"true" forKey:KEY_CEL_STATE];
+        }
+    }
+    
+    /**
+     * [Additional hidden sensors]
+     * You can add your own AWARESensor and AWAREPlugin to AWARESensorManager directly using following source code.
+     * The "-addNewSensor" method is versy userful for testing and debuging a AWARESensor without registlating a study.
+     */
+    // Pedometer
+    AWARESensor * steps = [[Pedometer alloc] initWithSensorName:SENSOR_PLUGIN_PEDOMETER];
+    [steps startSensor:60*15 withSettings:nil];
+    [_sensorManager addNewSensor:steps];
+    
+    // HealthKit
+    // AWARESensor * healthKit = [[AWAREHealthKit alloc] initWithPluginName:@"sensor_aware_health_kit" deviceId:@""];
+    // [healthKit startSensor:60 withSettings:nil];
+    
+    
+    /**
+     * Debug Sensor
+     * NOTE: don't remove this sensor. This sensor collects and upload debug message to the server each 15 min.
+     */
+    AWARESensor * debug = [[Debug alloc] init];
+    [debug startSensor:60*15 withSettings:nil];
+    [_sensorManager addNewSensor:debug];
 }
 
 
@@ -450,10 +464,11 @@
     
     // Init sensors
     // TODO: The study refresh and initList is not synced, then if the user calls lots of times during sort time, AWARE make a doublicate sensor and uploader.
-    [self performSelector:@selector(initList) withObject:0 afterDelay:2];
+    [self performSelector:@selector(initContentsOnTableView) withObject:0 afterDelay:2];
+    [self performSelector:@selector(initSensors) withObject:0 afterDelay:3];
     
-    // Refresh the table view after 2 second
-    [self.tableView performSelector:@selector(reloadData) withObject:0 afterDelay:2];
+    // Refresh the table view after 4 second
+    [self.tableView performSelector:@selector(reloadData) withObject:0 afterDelay:4];
     
     // Activate the refresh button on the navigation bar fater 8 second
     [self performSelector:@selector(refreshButtonEnableYes) withObject:0 afterDelay:8];
@@ -578,11 +593,13 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
         NSLog(@"%ld", buttonIndex);
         if (buttonIndex == 1){ //yes
             [userDefaults setBool:YES forKey:SETTING_DEBUG_STATE];
-            [self pushedStudyRefreshButton:alertView];
+            [self initContentsOnTableView];
+//            [self pushedStudyRefreshButton:alertView];
         } else if (buttonIndex == 2){ // no
             //reset clicked
             [userDefaults setBool:NO forKey:SETTING_DEBUG_STATE];
-            [self pushedStudyRefreshButton:alertView];
+            [self initContentsOnTableView];
+//            [self pushedStudyRefreshButton:alertView];
         } else {
             NSLog(@"Cancel");
         }
@@ -602,11 +619,13 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
         NSLog(@"%ld", buttonIndex);
         if (buttonIndex == 1){ //yes
             [userDefaults setBool:YES forKey:SETTING_SYNC_WIFI_ONLY];
-            [self pushedStudyRefreshButton:alertView];
+//            [self pushedStudyRefreshButton:alertView];
+            [self initContentsOnTableView];
         } else if (buttonIndex == 2){ // no
             //reset clicked
             [userDefaults setBool:NO forKey:SETTING_SYNC_WIFI_ONLY];
-            [self pushedStudyRefreshButton:alertView];
+            [self initContentsOnTableView];
+//            [self pushedStudyRefreshButton:alertView];
         } else {
             NSLog(@"Cancel");
         }
@@ -621,8 +640,8 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
         }
         NSInteger maximumValue = [maximumValueStr integerValue] * 1000;
         [userDefaults setObject:[NSNumber numberWithInteger:maximumValue] forKey:KEY_MAX_DATA_SIZE];
-        [self pushedStudyRefreshButton:alertView];
-        [self initList];
+//        [self pushedStudyRefreshButton:alertView];
+        [self initContentsOnTableView];
     }else if(alertView.tag == 8){ //manual data upload
         if (buttonIndex == [alertView cancelButtonIndex]) {
             
@@ -648,7 +667,7 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
 {
     NSDictionary *item = (NSDictionary *)[_sensors objectAtIndex:indexPath.row];
     if ([[item objectForKey:KEY_CEL_SENSOR_NAME] isEqualToString:@"TITLE_CELL_VIEW"]) {
-        return 40;//[TitleViewCell rowHeight];
+        return 40;
     }else if ([[item objectForKey:KEY_CEL_SENSOR_NAME] isEqualToString:@"STUDY_CELL_VIEW"]){
         return 80;
     }else{
@@ -663,18 +682,18 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
         static NSString *MyIdentifier = @"MyReuseIdentifier";
         
         NSDictionary *item = (NSDictionary *)[_sensors objectAtIndex:indexPath.row];
+        
+        /// Make a cell by _sensors (sensor list on ViewController.)
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:MyIdentifier];
         if (cell == nil) {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle  reuseIdentifier:MyIdentifier];
         }
-        
         cell.textLabel.text = [item objectForKey:KEY_CEL_TITLE];
         cell.detailTextLabel.text = [item objectForKey:KEY_CEL_DESC];
-//        [cell.detailTextLabel setNumberOfLines:2];
         NSString * imageName = [item objectForKey:KEY_CEL_IMAGE];
         UIImage *theImage= nil;
         if (![imageName isEqualToString:@""]) {
-             theImage = [UIImage imageNamed:imageName];
+            theImage = [UIImage imageNamed:imageName];
         }
         NSString *stateStr = [item objectForKey:KEY_CEL_STATE];
         cell.imageView.image = theImage;

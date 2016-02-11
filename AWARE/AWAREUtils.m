@@ -341,8 +341,8 @@ This method provides a system uuid.
                               @"iPhone6,2" :@"iPhone 5s",       // (model A1457, A1518, A1528 (China), A1530 | Global)
                               @"iPhone7,1" :@"iPhone 6 Plus",   //
                               @"iPhone7,2" :@"iPhone 6",        //
-                              @"iPhone8,1" :@"iPhone 6s Plus",   //
-                              @"iPhone8,2" :@"iPhone 6s",        //
+                              @"iPhone8,1" :@"iPhone 6s",   //
+                              @"iPhone8,2" :@"iPhone 6s Plus",        //
                               @"iPad4,1"   :@"iPad Air",        // 5th Generation iPad (iPad Air) - Wifi
                               @"iPad4,2"   :@"iPad Air",        // 5th Generation iPad (iPad Air) - Cellular
                               @"iPad4,4"   :@"iPad Mini",       // (2nd Generation iPad Mini - Wifi)

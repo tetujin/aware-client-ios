@@ -42,9 +42,9 @@
         awareStudy = [[AWAREStudy alloc] init];
         awareLocalStorage = localStorage;
         isUploading = false;
-        if ([awareLocalStorage getMarker] >= 1) {
-            [awareLocalStorage setMarker:([localStorage getMarker] - 1)];
-        }
+//        if ([awareLocalStorage getMarker] >= 1) {
+//            [awareLocalStorage setMarker:([localStorage getMarker] - 1)];
+//        }
         syncDataQueryIdentifier = [NSString stringWithFormat:@"sync_data_query_identifier_%@", sensorName];
         createTableQueryIdentifier = [NSString stringWithFormat:@"create_table_query_identifier_%@",  sensorName];
         
@@ -200,7 +200,7 @@ didReceiveResponse:(NSURLResponse *)response
     double diff = [[NSDate new] timeIntervalSince1970] - httpStart;
     NSLog(@"[%@] %f", sensorName, diff);
     if (postLengthDouble > 0 && diff > 0) {
-        NSString *networkPeformance = [NSString stringWithFormat:@"%0.2f bps",postLengthDouble/diff];
+        NSString *networkPeformance = [NSString stringWithFormat:@"%0.2f KB/s",postLengthDouble/diff/1000.0f];
         NSLog(@"[%@] %@", sensorName, networkPeformance);
         [self saveDebugEventWithText:networkPeformance type:DebugTypeInfo label:sensorName];
     }
@@ -331,7 +331,10 @@ didReceiveResponse:(NSURLResponse *)response
             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
             NSInteger length = [userDefaults integerForKey:KEY_MAX_DATA_SIZE];
             long denominator = (long)[awareLocalStorage getFileSize]/(long)length;
-            message = [NSString stringWithFormat:@"[%@] Sucess to upload sensor data to AWARE server with %@ - %d/%ld", sensorName, bytes, [awareLocalStorage getMarker], denominator];
+            
+            NSString* formatedLength = [self getFileStrSize:(double)length];
+            
+            message = [NSString stringWithFormat:@"[%@] Sucess to upload sensor data to AWARE server with %@ - %d/%ld", sensorName, formatedLength, [awareLocalStorage getMarker], denominator];
             NSLog(@"%@", message);
             [self saveDebugEventWithText:message type:DebugTypeInfo label:syncDataQueryIdentifier];
             
@@ -537,8 +540,8 @@ didReceiveResponse:(NSURLResponse *)response
     return [self getSyncProgressAsText:sensorName];
 }
 
-- (NSString *) getSyncProgressAsText:(NSString *)sensorName {
-    double fileSize = [awareLocalStorage getFileSize];
+- (NSString *) getSyncProgressAsText:(NSString *)name {
+    double fileSize = [awareLocalStorage getFileSizeWithName:name];
     NSString *bytes = [self getFileStrSize:fileSize];
     return [NSString stringWithFormat:@"(%@)",bytes];
 }

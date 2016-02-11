@@ -10,7 +10,6 @@
 #import "AWAREKeys.h"
 
 @implementation LocalFileStorageHelper {
-
     NSString * KEY_SENSOR_UPLOAD_MARK;
     NSString * KEY_SENSOR_UPLOAD_LOSTED_TEXT_LENGTH;
     
@@ -195,6 +194,12 @@
 - (NSMutableString *) getSensorDataForPost {
     NSInteger maxLength = [self getMaxDateLength];
     NSUInteger seek = [self getMarker] * maxLength;
+    if (seek <= 0) {
+        NSString *errorMsg = [NSString stringWithFormat:@"[%@] a seek point error: seek is %ld", sensorName, seek];
+        [self saveDebugEventWithText:errorMsg type:DebugTypeError label:@"seek error"];
+        [self setMarker:0];
+        seek = 0;
+    }
     // get sensor data from file
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
@@ -209,18 +214,22 @@
     }
     NSLog(@"--> %ld", seek);
     if (seek > [self getLostedTextLength]) {
-        [fileHandle seekToFileOffset:seek-(NSInteger)[self getLostedTextLength]];
+        NSInteger seekPointWithLostedText = seek-[self getLostedTextLength];
+        if (seekPointWithLostedText < 0) {
+            seekPointWithLostedText = seek;
+        }
+        NSLog(@"----------> %ld, %d", seek, [self getLostedTextLength]);
+        [fileHandle seekToFileOffset:seekPointWithLostedText];
     }else{
         [fileHandle seekToFileOffset:seek];
     }
     
-
     
     NSData *clipedData = [fileHandle readDataOfLength:maxLength];
     [fileHandle closeFile];
     
+    
     data = [[NSMutableString alloc] initWithData:clipedData encoding:NSUTF8StringEncoding];
-//    lineCount = (int)data.length;
     NSLog(@"[%@] Line lenght is %ld", [self getSensorName], (unsigned long)data.length);
     if (data.length == 0 || data.length < [self getMaxDateLength]) {
         [self setMarker:0];
@@ -275,12 +284,15 @@
 //////////////////////////////////////
 
 - (uint64_t) getFileSize{
-    NSString * path = [self getFilePath];
-    return [[[NSFileManager defaultManager] attributesOfItemAtPath:path error:nil] fileSize];
+//    NSString * path = [self getFilePath];
+//    return [[[NSFileManager defaultManager] attributesOfItemAtPath:path error:nil] fileSize];
+    return [self getFileSizeWithName:sensorName];
 }
 
-
-
+- (uint64_t) getFileSizeWithName:(NSString*) name {
+    NSString * path = [self getFilePathWithName:name];
+    return [[[NSFileManager defaultManager] attributesOfItemAtPath:path error:nil] fileSize];
+}
 
 ///////////////////////////////////////
 ///////////////////////////////////////
@@ -296,15 +308,18 @@
 }
 
 - (void) setMarker:(int) intMarker {
+    if (intMarker <= 0) {
+        intMarker = 0;
+    }
     NSNumber * number = [NSNumber numberWithInt:intMarker];
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults setInteger:number.integerValue forKey:KEY_SENSOR_UPLOAD_MARK];
 }
 
-- (int) getLostedTextLength{
+- (NSInteger) getLostedTextLength{
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSNumber * number = [NSNumber numberWithInteger:[userDefaults integerForKey:KEY_SENSOR_UPLOAD_LOSTED_TEXT_LENGTH]];
-    return number.intValue;
+    return number.integerValue;
 }
 
 - (void) setLostedTextLength:(int)lostedTextLength {
@@ -366,9 +381,13 @@
 ///////////////////////////////////////////////
 
 - (NSString *) getFilePath {
+    return [self getFilePathWithName:[self getSensorName]];
+}
+
+- (NSString *) getFilePathWithName:(NSString *) name {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
-    NSString * path = [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.dat",[self getSensorName]]];
+    NSString * path = [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.dat",name]];
     return path;
 }
 

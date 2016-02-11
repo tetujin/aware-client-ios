@@ -290,10 +290,6 @@
                   }
                   
                   
-//                  NSNumber * depature = [NSNumber numberWithDouble:[[visit departureDate] timeIntervalSince1970]];
-//                  NSNumber * arrival = [NSNumber numberWithDouble:[[visit arrivalDate] timeIntervalSince1970]];
-                  
-                  
                   [visitDic setObject:timestamp forKey:@"timestamp"];
                   [visitDic setObject:[self getDeviceId] forKey:@"device_id"];
                   [visitDic setObject:[NSNumber numberWithDouble:visit.coordinate.latitude] forKey:@"double_latitude"];
@@ -323,63 +319,6 @@
 - (NSString *) getSyncProgressAsText{
     return [self getSyncProgressAsText:@"locations"];
 }
-
-
-//    NSManagedObject *visitObject = [NSEntityDescription insertNewObjectForEntityForName:@"Visit" inManagedObjectContext:_managedObjectContext];
-//
-//    CLGeocoder *ceo = [[CLGeocoder alloc]init];
-//    CLLocation *loc = [[CLLocation alloc]initWithLatitude:location.coordinate.latitude longitude:location.coordinate.longitude]; //insert your coordinates
-//    [ceo reverseGeocodeLocation:loc
-//              completionHandler:^(NSArray *placemarks, NSError *error) {
-//                  CLPlacemark * placemark = nil;
-//                  if (placemarks.count > 0) {
-//                      placemark = [placemarks objectAtIndex:0];
-//                  }
-//                  //                  NSLog(@"placemark %@",placemark);
-//                  //                  //String to hold address
-//                  NSString *locatedAt = [[placemark.addressDictionary valueForKey:@"FormattedAddressLines"] componentsJoinedByString:@", "];
-//                  //                  NSLog(@"addressDictionary %@", placemark.addressDictionary);
-//                  //
-//                  //                  NSLog(@"placemark %@",placemark.region);
-//                  //                  NSLog(@"placemark %@",placemark.country);  // Give Country Name
-//                  //                  NSLog(@"placemark %@",placemark.locality); // Extract the city name
-//                  //                  NSLog(@"location %@",placemark.name);
-//                  //                  NSLog(@"location %@",placemark.ocean);
-//                  //                  NSLog(@"location %@",placemark.postalCode);
-//                  //                  NSLog(@"location %@",placemark.subLocality);
-//                  //
-//                  //                  NSLog(@"location %@",placemark.location);
-//                  //Print the location to console
-//                  NSLog(@"I am currently at %@",locatedAt);
-//
-//                  double timestamp = [[NSDate new] timeIntervalSince1970];
-//                  double depature = [[NSDate new] timeIntervalSince1970];
-//                  double arrival = [[NSDate new] timeIntervalSince1970];
-//
-//                  // Process in the main thread.
-//                  [visitObject setValue:[NSNumber numberWithDouble:timestamp] forKey:@"timestamp"];
-//                  [visitObject setValue:[NSNumber numberWithDouble:location.coordinate.latitude] forKey:@"latitude"];
-//                  [visitObject setValue:[NSNumber numberWithDouble:location.coordinate.longitude] forKey:@"longitude"];
-//                  [visitObject setValue:[NSNumber numberWithDouble:depature] forKey:@"departure"];
-//                  [visitObject setValue:[NSNumber numberWithDouble:arrival] forKey:@"arrival"];
-//                  [visitObject setValue:[NSNumber numberWithDouble:location.horizontalAccuracy] forKey:@"accuracy"];
-//                  if (placemarks != nil) {
-//                      [visitObject setValue:locatedAt forKey:@"name"];
-//                  }else{
-//                      [visitObject setValue:@"" forKey:@"name"];
-//                  }
-//
-//
-//                  // Save the created NSManagedOobject to DB with NSError.
-//                  NSError *e = nil;
-//                  if (![_managedObjectContext save:&e]) {
-//                      NSLog(@"error = %@", e);
-//                  } else {
-//                      NSLog(@"Visit : Insert Completed.");
-//                  }
-//              }];
-//}
-
 
 
 @end

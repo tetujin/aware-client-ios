@@ -27,4 +27,5 @@
                      uploadInterval:(double) uploadTime;
 - (NSString*)getLatestSensorData:(NSString *)sensorName;
 - (bool) syncAllSensorsWithDB;
+- (BOOL) isExist :(NSString *) key;
 @end

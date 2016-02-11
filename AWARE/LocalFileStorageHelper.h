@@ -39,6 +39,7 @@
 
 
 - (uint64_t) getFileSize;
+- (uint64_t) getFileSizeWithName:(NSString*) name;
 
 /**
  * Makers

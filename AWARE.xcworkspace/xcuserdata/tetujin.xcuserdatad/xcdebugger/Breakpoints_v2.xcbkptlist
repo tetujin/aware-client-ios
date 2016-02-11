@@ -901,11 +901,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AWARE/FusedLocations.m"
-            timestampString = "476351157.26432"
+            timestampString = "476914416.526455"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "305"
-            endingLineNumber = "305"
+            startingLineNumber = "301"
+            endingLineNumber = "301"
             landmarkName = "-locationManager:didVisit:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1109,11 +1109,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AWARE/LocalFileStorageHelper.m"
-            timestampString = "476870178.689659"
+            timestampString = "476918089.475641"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "106"
-            endingLineNumber = "106"
+            startingLineNumber = "105"
+            endingLineNumber = "105"
             landmarkName = "-saveData:toLocalFile:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1339,6 +1339,22 @@
             startingLineNumber = "148"
             endingLineNumber = "148"
             landmarkName = "-postSensorDataWithSensorName:session:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "AWARE/AWAREDataUploader.m"
+            timestampString = "476920692.657576"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "411"
+            endingLineNumber = "411"
+            landmarkName = "-foregroundSyncRequestWithSensorName:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
