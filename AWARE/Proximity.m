@@ -8,16 +8,14 @@
 
 #import "proximity.h"
 
-@implementation Proximity{
+@implementation Proximity {
     NSTimer * uploadTimer;
     NSTimer * sensingTimer;
-    //    NetAssociation * netAssociation;
 }
 
 - (instancetype)initWithSensorName:(NSString *)sensorName{
     self = [super initWithSensorName:sensorName];
     if (self) {
-        [super setSensorName:sensorName];
     }
     return self;
 }
@@ -69,13 +67,8 @@
 }
 
 - (void)proximitySensorStateDidChange:(NSNotification *)notification {
-    //"double_proximity real default 0,"
-    //"accuracy real default 0,"
-    //"label text default '',"
     int state = [UIDevice currentDevice].proximityState;
     NSLog(@"Proximity: %d", state );
-//    double timeStamp = [[NSDate date] timeIntervalSince1970] * 1000;
-//    NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
     NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
     NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
     [dic setObject:unixtime forKey:@"timestamp"];
@@ -91,6 +84,9 @@
 - (BOOL)stopSensor{
     [uploadTimer invalidate];
     [sensingTimer invalidate];
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UIDeviceProximityStateDidChangeNotification
+                                                  object:nil];
     [UIDevice currentDevice].proximityMonitoringEnabled = NO;
     return YES;
 }

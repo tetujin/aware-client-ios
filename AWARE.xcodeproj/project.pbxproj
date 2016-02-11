@@ -72,6 +72,7 @@
 		16C1FF7D1C617FB100C070AA /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16C1FF7C1C617FB100C070AA /* Accelerate.framework */; };
 		16C1FF7F1C617FC300C070AA /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16C1FF7E1C617FC300C070AA /* GLKit.framework */; };
 		16C1FF971C64501D00C070AA /* Debug.m in Sources */ = {isa = PBXBuildFile; fileRef = 16C1FF961C64501D00C070AA /* Debug.m */; };
+		16C251BB1C6C45270018D156 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 16C251BA1C6C45270018D156 /* Reachability.m */; };
 		16D810241C06242500605DE2 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16D810231C06242500605DE2 /* CFNetwork.framework */; };
 		16D810261C06242F00605DE2 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16D810251C06242F00605DE2 /* Security.framework */; };
 		16D8102D1C06671500605DE2 /* ExternalAccessory.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16D8102C1C06671500605DE2 /* ExternalAccessory.framework */; };
@@ -88,7 +89,6 @@
 		16EB1E5A1C4A930500966A07 /* LocalFileStorageHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 16EB1E591C4A930500966A07 /* LocalFileStorageHelper.m */; };
 		16EB1E5D1C4AC12500966A07 /* CalEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 16EB1E5C1C4AC12500966A07 /* CalEvent.m */; };
 		16F09B221C249C5F005C1EB8 /* GoogleCalPull.m in Sources */ = {isa = PBXBuildFile; fileRef = 16F09B211C249C5F005C1EB8 /* GoogleCalPull.m */; };
-		16F213AE1C594292007E89CA /* ApplicationHistory.m in Sources */ = {isa = PBXBuildFile; fileRef = 16F213AD1C594292007E89CA /* ApplicationHistory.m */; };
 		16FCE2771BFE9326005FC71A /* AWARESensorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 16FCE2761BFE9326005FC71A /* AWARESensorManager.m */; };
 		FC2AF85D761397B784DECBD3 /* libPods-AWARE.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9ED04F29ED60F3FCC960F6CD /* libPods-AWARE.a */; };
 /* End PBXBuildFile section */
@@ -240,6 +240,8 @@
 		16C1FF7E1C617FC300C070AA /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		16C1FF951C64501D00C070AA /* Debug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Debug.h; sourceTree = "<group>"; };
 		16C1FF961C64501D00C070AA /* Debug.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Debug.m; sourceTree = "<group>"; };
+		16C251B91C6C45270018D156 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
+		16C251BA1C6C45270018D156 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		16D810231C06242500605DE2 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		16D810251C06242F00605DE2 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		16D8102C1C06671500605DE2 /* ExternalAccessory.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ExternalAccessory.framework; path = System/Library/Frameworks/ExternalAccessory.framework; sourceTree = SDKROOT; };
@@ -265,8 +267,6 @@
 		16EB1E5C1C4AC12500966A07 /* CalEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CalEvent.m; sourceTree = "<group>"; };
 		16F09B201C249C5F005C1EB8 /* GoogleCalPull.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GoogleCalPull.h; sourceTree = "<group>"; };
 		16F09B211C249C5F005C1EB8 /* GoogleCalPull.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GoogleCalPull.m; sourceTree = "<group>"; };
-		16F213AC1C594292007E89CA /* ApplicationHistory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApplicationHistory.h; sourceTree = "<group>"; };
-		16F213AD1C594292007E89CA /* ApplicationHistory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApplicationHistory.m; sourceTree = "<group>"; };
 		16FCE2751BFE9326005FC71A /* AWARESensorManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AWARESensorManager.h; sourceTree = "<group>"; };
 		16FCE2761BFE9326005FC71A /* AWARESensorManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AWARESensorManager.m; sourceTree = "<group>"; };
 		9B5BAD09F1FBEE0838867ACF /* Pods-AWARE.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AWARE.release.xcconfig"; path = "Pods/Target Support Files/Pods-AWARE/Pods-AWARE.release.xcconfig"; sourceTree = "<group>"; };
@@ -633,7 +633,6 @@
 				168C71D91C67B9CC00878DD8 /* AWAREDataUploader.h */,
 				168C71DA1C67B9CC00878DD8 /* AWAREDataUploader.m */,
 				16C1FF911C644F5000C070AA /* Debug */,
-				16F213AB1C59426D007E89CA /* ApplicationHistory */,
 				162B7DE01C4EFA59006972B5 /* Calls */,
 				1602ADB81C45B021002B3121 /* Accelerometer */,
 				1602ADB91C45B030002B3121 /* Gyroscope */,
@@ -717,6 +716,8 @@
 		16E7AF851C3D54E0005C9EDC /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				16C251B91C6C45270018D156 /* Reachability.h */,
+				16C251BA1C6C45270018D156 /* Reachability.m */,
 				1623CEB21BFD659000EFAD72 /* AWAREKeys.h */,
 				1623CEB31BFD659000EFAD72 /* AWAREKeys.m */,
 				16DEA2351C54557B00B607C9 /* AWAREUtils.h */,
@@ -799,15 +800,6 @@
 				16E7AF8F1C3DB8E5005C9EDC /* GoogleLogin.m */,
 			);
 			name = GoogleLogin;
-			sourceTree = "<group>";
-		};
-		16F213AB1C59426D007E89CA /* ApplicationHistory */ = {
-			isa = PBXGroup;
-			children = (
-				16F213AC1C594292007E89CA /* ApplicationHistory.h */,
-				16F213AD1C594292007E89CA /* ApplicationHistory.m */,
-			);
-			name = ApplicationHistory;
 			sourceTree = "<group>";
 		};
 		2A3CA9F5620967BACB187EB7 /* Frameworks */ = {
@@ -1076,6 +1068,7 @@
 				164810401C20ECC300B830D9 /* AWAREEsmViewController.m in Sources */,
 				16E155331C252B4D00316321 /* AWAREPlugin.m in Sources */,
 				164DD6681C1FBA9100ADA92B /* Timezone.m in Sources */,
+				16C251BB1C6C45270018D156 /* Reachability.m in Sources */,
 				169384F31C17C3D300A17F2C /* MSBand.m in Sources */,
 				16228A511C22E9FE0081C839 /* AWARESchedule.m in Sources */,
 				165A8B741C03C0B300898C6C /* GoogleLoginViewController.m in Sources */,
@@ -1083,7 +1076,6 @@
 				1623CEAF1BFD407900EFAD72 /* QRCodeViewController.m in Sources */,
 				160794511C1A4E380021816F /* AWAREMqtt.m in Sources */,
 				16E7AF901C3DB8E5005C9EDC /* GoogleLogin.m in Sources */,
-				16F213AE1C594292007E89CA /* ApplicationHistory.m in Sources */,
 				1623CE711BFD1B2C00EFAD72 /* ViewController.m in Sources */,
 				16E7AF841C3D54D4005C9EDC /* SSLManager.m in Sources */,
 				16E7AF941C3DF7A0005C9EDC /* LocationModel.xcdatamodeld in Sources */,

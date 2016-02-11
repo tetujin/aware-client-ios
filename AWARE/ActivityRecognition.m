@@ -17,7 +17,7 @@
 - (instancetype)initWithSensorName:(NSString *)sensorName{
     self = [super initWithSensorName:sensorName];
     if (self) {
-        [super setSensorName:sensorName];
+//        [super setSensorName:sensorName];
         motionActivityManager = [[CMMotionActivityManager alloc] init];
     }
     return self;

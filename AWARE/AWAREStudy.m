@@ -101,6 +101,17 @@
             // Error
             } else {
                 NSLog(@"Error: %@", error);
+                NSLog(@"ERROR: %@ %ld", error.debugDescription , error.code);
+                if (error.code == -1202) {
+                    /**
+                     * If the error code is -1202, this device needs .crt for SSL(secure) connection.
+                     */
+                    // Install CRT file for SSL
+                    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+                    NSString* url = [userDefaults objectForKey:KEY_STUDY_QR_CODE];
+                    SSLManager *sslManager = [[SSLManager alloc] init];
+                    [sslManager installCRTWithTextOfQRCode:url];
+                }
             }
         }] resume];
     // A process in the background
@@ -445,6 +456,14 @@ didReceiveResponse:(NSURLResponse *)response
         return YES;
     }
     return NO;
+}
+
+
+- (NSString *)getDeviceId {
+    if ([mqttUsername isEqualToString:@""] || mqttUsername == nil) {
+        return [AWAREUtils getSystemUUID];
+    }
+    return mqttUsername;
 }
 
 // MQTT Information

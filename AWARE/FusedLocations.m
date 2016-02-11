@@ -20,7 +20,7 @@
 - (instancetype)initWithSensorName:(NSString *)sensorName{
     self = [super initWithSensorName:@"google_fused_location"];
     if (self) {
-        [super setSensorName:@"google_fused_location"];
+//        [super setSensorName:@"google_fused_location"];
     }
     return self;
 }
@@ -243,7 +243,7 @@
                       if (placemark.name != nil) {
                           [visitDic setObject:placemark.name forKey:@"name"];
                           if ([self getDebugState]) {
-                              [self sendLocalNotificationForMessage:visitMsg soundFlag:YES];
+                              [AWAREUtils sendLocalNotificationForMessage:visitMsg soundFlag:YES];
                           }
                       }else{
                           

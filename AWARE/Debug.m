@@ -95,7 +95,7 @@
     if (![defaults boolForKey:KEY_APP_INSTALL]) {
         if ([self getDebugState]) {
             NSString* message = [NSString stringWithFormat:@"AWARE iOS is installed"];
-            [self sendLocalNotificationForMessage:message soundFlag:YES];
+            [AWAREUtils sendLocalNotificationForMessage:message soundFlag:YES];
         }
         NSString *updateInformation = [NSString stringWithFormat:@"[SOFTWARE INSTALL] %@", currentVersion];
         [self saveDebugEventWithText:updateInformation type:DebugTypeInfo label:@""];
@@ -110,7 +110,7 @@
         if (![currentVersion isEqualToString:oldVersion]) {
             if ([self getDebugState]) {
                 NSString* message = [NSString stringWithFormat:@"AWARE iOS is updated to %@", currentVersion];
-                [self sendLocalNotificationForMessage:message soundFlag:YES];
+                [AWAREUtils sendLocalNotificationForMessage:message soundFlag:YES];
             }
             NSString *updateInformation = [NSString stringWithFormat:@"[SOFTWARE UPDATE] %@", currentVersion];
             [self saveDebugEventWithText:updateInformation type:DebugTypeInfo label:@""];
@@ -126,7 +126,7 @@
         if (![currentOsVersion isEqualToString:storedOsVersion]) {
             if ([self getDebugState]) {
                 NSString* message = [NSString stringWithFormat:@"OS is updated to %@", currentOsVersion];
-                [self sendLocalNotificationForMessage:message soundFlag:YES];
+                [AWAREUtils sendLocalNotificationForMessage:message soundFlag:YES];
             }
             NSString *updateInformation = [NSString stringWithFormat:@"[OS UPDATE] %@", currentOsVersion];
             [self saveDebugEventWithText:updateInformation type:DebugTypeInfo label:@""];

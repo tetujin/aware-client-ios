@@ -8,6 +8,8 @@
 
 //#import "AWARESensor.h"
 #import "AWAREPlugin.h"
+#import "AWARESensor.h"
+#import "Debug.h"
 #import <EventKit/EventKit.h>
 #import <EventKitUI/EventKitUI.h>
 //#import <CoreLocation/CoreLocation.h>

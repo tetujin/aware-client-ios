@@ -19,7 +19,6 @@
     self = [super initWithSensorName:sensorName];
     if (self) {
         gyroManager = [[CMMotionManager alloc] init];
-        [super setSensorName:sensorName];
     }
     return self;
 }

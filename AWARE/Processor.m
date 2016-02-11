@@ -24,7 +24,7 @@
 - (instancetype)initWithSensorName:(NSString *)sensorName{
     self = [super initWithSensorName:sensorName];
     if (self) {
-        [super setSensorName:sensorName];
+//        [super setSensorName:sensorName];
     }
     return self;
 }

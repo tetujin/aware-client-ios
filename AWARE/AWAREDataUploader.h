@@ -7,7 +7,68 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "LocalFileStorageHelper.h"
 
-@interface AWAREDataUploader : NSData
+@interface AWAREDataUploader : NSData <NSURLSessionDataDelegate, NSURLSessionTaskDelegate>
+
+- (instancetype) initWithLocalStorage:(LocalFileStorageHelper *)localStorage;
+
+- (bool) isUploading;
+- (void) setUploadingState:(bool)state;
+
+/**
+ * Background data upload
+ */
+- (void) syncAwareDB;
+- (void) syncAwareDBWithSensorName:(NSString*) name;
+- (void) postSensorDataWithSensorName:(NSString*) name session:(NSURLSession *)oursession;
+
+/**
+ * Foreground data upload
+ */
+- (BOOL) syncAwareDBInForeground;
+- (BOOL) syncAwareDBInForegroundWithSensorName:(NSString*) name;
+//- (void) postSensorDataForegroundWithSensorName:(NSString* )name;
+
+/**
+ * Sync with AWARE database
+ */
+- (BOOL) syncAwareDBWithData:(NSDictionary *) dictionary;
+
+/**
+ * Get progress
+ */
+- (NSString *) getSyncProgressAsText;
+- (NSString *) getSyncProgressAsText:(NSString *)sensorName;
+// - (NSString *) getFileStrSize:(double)size;
+
+/**
+ * Create Table Methods
+ */
+- (void) createTable:(NSString*) query;
+- (void) createTable:(NSString *)query withTableName:(NSString*) tableName;
+- (BOOL) clearTable;
+
+/**
+ * Return current network condition with a text
+ */
+- (NSString *) getNetworkReachabilityAsText;
+
+/**
+ * Set Debug Sensor
+ */
+//- (bool) saveDebugEventWithText:(NSString *)eventText type:(NSInteger)type label:(NSString *)label;
+- (void) trackDebugEventsWithDebugSensor:(Debug*)debug;
+- (bool) getDebugState;
+
+/**
+ * AWARE URL makers
+ */
+//- (NSString *) getWebserviceUrl;
+//- (NSString *) getInsertUrl:(NSString *)sensorName;
+//- (NSString *) getLatestDataUrl:(NSString *)sensorName;
+//- (NSString *) getCreateTableUrl:(NSString *)sensorName;
+//- (NSString *) getClearTableUrl:(NSString *)sensorName;
+
 
 @end

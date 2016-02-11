@@ -35,7 +35,6 @@ static void AudioInputCallback(
 - (instancetype)initWithSensorName:(NSString *)sensorName{
     self = [super initWithSensorName:sensorName ];
     if (self) {
-        [super setSensorName:sensorName];
         AudioStreamBasicDescription dataFormat;
         dataFormat.mSampleRate = 44100.0f;
         dataFormat.mFormatID = kAudioFormatLinearPCM;

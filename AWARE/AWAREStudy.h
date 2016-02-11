@@ -19,6 +19,9 @@
 - (BOOL) setStudyInformationWithURL:(NSString*)url;
 - (BOOL) refreshStudy;
 
+// device Id
+- (NSString *) getDeviceId;
+
 // for check
 - (BOOL) isAvailable;
 - (BOOL) clearAllSetting;

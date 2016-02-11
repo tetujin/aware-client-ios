@@ -7,16 +7,65 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "Debug.h"
 
 @interface LocalFileStorageHelper : NSObject
 
 - (instancetype) initWithStorageName:(NSString *) storageName;
-- (NSString *) getStorageName;
 
+- (NSString *) getSensorName;
 
-- (bool) saveData:(NSDictionary *) data;
-- (bool) saveData:(NSDictionary *) data toLocalFile:(NSString*) fileName;
+//// save data
 - (bool) saveDataWithArray:(NSArray*) array;
-- (BOOL) appendLine:(NSString *)line path:(NSString*) fileName;
+
+// save data
+- (bool) saveData:(NSDictionary *)data;
+
+// save data with local file
+- (bool) saveData:(NSDictionary *)data toLocalFile:(NSString *)fileName;
+
+
+- (BOOL) appendLine:(NSString *)line;
+/** create new file */
+-(BOOL)createNewFile:(NSString*) fileName;
+
+
+- (NSMutableString *) fixJsonFormat:(NSMutableString *) clipedText;
+
+/** clear file */
+- (bool) clearFile:(NSString *) fileName;
+- (NSInteger) getMaxDateLength;
+- (NSMutableString *) getSensorDataForPost;
+
+
+- (uint64_t) getFileSize;
+
+/**
+ * Makers
+ */
+- (int) getMarker;
+- (void) setMarker:(int) intMarker;
+
+/**
+ * text legnth
+ */
+- (int) getLostedTextLength;
+- (void) setLostedTextLength:(int)lostedTextLength;
+
+/**
+ * Set Debug Sensor
+ */
+- (void) trackDebugEventsWithDebugSensor:(Debug*)debug;
+
+/**
+ * A File access balancer
+ */
+- (void) startWriteAbleTimer;
+- (void) stopWriteableTimer;
+- (NSString *) getFilePath;
+
+
+- (void)dbLock;
+- (void)dbUnlock;
 
 @end

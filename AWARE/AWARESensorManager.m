@@ -114,7 +114,6 @@
                 }else if([key isEqualToString:SENSOR_CALLS]){
                     awareSensor = [[Calls alloc] initWithSensorName:SENSOR_CALLS];
                 }
-                
                 // Start AWARESensor with some delay (0.5 sec) by each sensor for reducing memory stress
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, i * 0.5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
                     [awareSensor startSensor:uploadTime withSettings:settings];
@@ -176,6 +175,8 @@
     if (awareSensor != NULL) {
         if(![key isEqualToString:SENSOR_AWARE_DEBUG]){
             [awareSensor trackDebugEvents];
+            NSString *startSensorMessage = [NSString stringWithFormat:@"[%@] Start %@ sensor", key, key];
+            [awareSensor saveDebugEventWithText:startSensorMessage type:DebugTypeInfo label:key];
         }
         [self addNewSensor:awareSensor];
         return YES;
@@ -239,12 +240,16 @@
             for ( int i=0; i<awareSensors.count; i++) {
                 AWARESensor* sensor = [awareSensors objectAtIndex:i];
                 dispatch_sync(dispatch_get_main_queue(), ^{
-                    NSString *message = [NSString stringWithFormat:@"Uploading %@ data %@", [sensor getSensorName], [sensor getSyncProgressAsText]];
+                    NSString *message = [NSString stringWithFormat:@"Uploading %@ data %@",
+                                                                     [sensor getSensorName],
+                                                                     [sensor getSyncProgressAsText]];
                     [SVProgressHUD setStatus:message];
                 });
+                [sensor sensorLock];
                 if (![sensor syncAwareDBInForeground]) {
                     sucessOfUpload = false;
                 }
+                [sensor sensorUnLock];
                 // Update UI in the main thread.
             }
             // Dissmiss a Progress View

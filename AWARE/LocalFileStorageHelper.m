@@ -7,159 +7,126 @@
 //
 
 #import "LocalFileStorageHelper.h"
+#import "AWAREKeys.h"
 
 @implementation LocalFileStorageHelper {
-    NSString * storageName;
-    NSMutableString* tempData;
-    NSMutableString* bufferStr;
-    int lostedTextLength;
+
+    NSString * KEY_SENSOR_UPLOAD_MARK;
+    NSString * KEY_SENSOR_UPLOAD_LOSTED_TEXT_LENGTH;
     
-    BOOL fileAccess;
-    NSTimer* fileAccessTimer;
-    int fileAccessInterval;
+    uint64_t fileSize;
+    NSString * sensorName;
+    
+    bool writeAble;
+    NSMutableString *bufferStr;
+    
+    NSTimer* writeAbleTimer;
+    
+    Debug * debugSensor;
+    
+    bool isLock;
 }
 
 - (instancetype)initWithStorageName:(NSString *)name{
     if (self = [super init]) {
-        NSLog(@"[%@] Initialize an LocalStorage as '%@' ", storageName, name);
-        lostedTextLength = 0;
-        storageName = name;
-        tempData = [[NSMutableString alloc] init];
+        isLock = NO;
+        sensorName = name;
+        KEY_SENSOR_UPLOAD_MARK = [NSString stringWithFormat:@"key_sensor_upload_mark_%@", sensorName];
+        KEY_SENSOR_UPLOAD_LOSTED_TEXT_LENGTH = [NSString stringWithFormat:@"key_sensor_upload_losted_text_length_%@", sensorName];
         bufferStr = [[NSMutableString alloc] init];
-        fileAccess = YES;
-        fileAccessInterval = 1; //1 sec 1 file access
-        fileAccessTimer = [NSTimer scheduledTimerWithTimeInterval:fileAccessInterval
-                                                       target:self
-                                                         selector:@selector(setFileAccessYES)
-                                                         userInfo:nil
-                                                          repeats:YES];
-        [fileAccessTimer fire];
-        BOOL result = [self createLocalStorage:name];
-        if (!result) {
-            NSLog(@"[%@] Error to create the file", name);
-        }else{
-            NSLog(@"[%@] Sucess to create the file", name);
-        }
-     
+        writeAble = YES;
+        [self createNewFile:sensorName];
     }
     return self;
 }
 
 
-/**
- * =============================================
- *  Make Storage
- * =============================================
- */
 
-- (bool) createLocalStorage:(NSString *) name {
-    // Make New Local Storage as Text File
-    NSString * path = [self getStoragePath:name];
-    NSFileHandle *fh = [NSFileHandle fileHandleForWritingAtPath:path];
-    if (!fh) { // no
-        NSLog(@"[%@] You don't have a file for %@, then system recreated new file!", name, name);
-        NSFileManager *manager = [NSFileManager defaultManager];
-        if (![manager fileExistsAtPath:path]) { // yes
-            BOOL result = [manager createFileAtPath:path
-                                        contents:[NSData data] attributes:nil];
-            return result;
-        }
+- (void)dbLock{
+    isLock = YES;
+}
+
+- (void)dbUnlock{
+    isLock = NO;
+}
+
+
+- (NSString *) getSensorName {
+    if (sensorName == nil) {
+        return @"";
     }
-    return false;
-}
-
-- (NSString *)getStorageName{
-    return storageName;
-}
-
-- (void) fileAccessTimer {
-    [fileAccessTimer invalidate];
-    fileAccessTimer = nil;
-}
-
-- (NSString* )getStoragePath:(NSString *) name{
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0];
-    NSString * path = [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.dat",name]];
-    return path;
+    return sensorName;
 }
 
 
+//// save data
+- (bool) saveDataWithArray:(NSArray*) array {
+    if (array !=nil) {
+        return false;
+    }
+    bool result = false;
+    for (NSDictionary *dic in array) {
+        result = [self saveData:dic];
+    }
+    return result;
+}
 
-/**
- * =============================================
- *  Store Data
- * =============================================
- */
 
+// save data
 - (bool) saveData:(NSDictionary *)data{
+    return [self saveData:data toLocalFile:[self getSensorName]];
+}
+
+// save data with local file
+- (bool) saveData:(NSDictionary *)data toLocalFile:(NSString *)fileName{
+    
+    if (isLock) {
+        NSLog(@"[%@] This sensor is Locked now!", [self getSensorName]);
+        return NO;
+    }
+    
     NSError*error=nil;
-    // Convert NSData to JSONObject
     NSData*d=[NSJSONSerialization dataWithJSONObject:data options:2 error:&error];
     NSString* jsonstr = [[NSString alloc] init];
     if (!error) {
         jsonstr = [[NSString alloc]initWithData:d encoding:NSUTF8StringEncoding];
     } else {
-        NSLog(@"[%@] %@", [self  getStorageName], [error localizedDescription]);
+        NSString * errorStr = [NSString stringWithFormat:@"[%@] %@", [self getSensorName], [error localizedDescription]];
+        // [AWAREUtils sendLocalNotificationForMessage:errorStr soundFlag:YES];
+        [self saveDebugEventWithText:errorStr type:DebugTypeError label:@""];
         return NO;
     }
-    [bufferStr appendString:jsonstr];
+    [bufferStr appendString:[jsonstr copy]];
     [bufferStr appendFormat:@","];
-    //write the object to local storage
-    if ( fileAccess ) {
-        [self appendLine:bufferStr];
+    
+    if ( writeAble) {
+        [self appendLine:[bufferStr mutableCopy]];
         [bufferStr setString:@""];
-        [self setFileAccessNO];
-    }else{
-        NSLog(@"[%@] File access is failed.", [self getStorageName]);
-    }
-    return YES;
-}
-
-- (bool) saveDataWithArray:(NSArray*) array {
-    NSError*error=nil;
-    for (NSDictionary *dic in array) {
-        NSData*d=[NSJSONSerialization dataWithJSONObject:dic options:2 error:&error];
-        NSString* jsonstr = [[NSString alloc] init];
-        if (!error) {
-            jsonstr = [[NSString alloc]initWithData:d encoding:NSUTF8StringEncoding];
-        } else {
-            NSLog(@"[%@] %@", [self getStorageName], [error localizedDescription]);
-//            [self sendLocalNotificationForMessage:errorStr soundFlag:YES];
-            return NO;
+        if(writeAbleTimer != nil){
+            [self setWriteableNO];
         }
-        [bufferStr appendString:jsonstr];
-        [bufferStr appendFormat:@","];
-    }
-    if (fileAccess) {
-        [self appendLine:bufferStr];
-        [bufferStr setString:@""];
-        [self setFileAccessNO];
-    }else{
-         NSLog(@"[%@] File access is failed.", [self getStorageName]);
     }
     return YES;
 }
 
 
 - (BOOL) appendLine:(NSString *)line{
+//    NSLog(@"[%@] Append Line", [self getSensorName] );
     if (!line) {
-        NSLog(@"[%@] Line is null", [self getStorageName] );
+        NSLog(@"[%@] Line is null", [self getSensorName] );
         return NO;
     }
-    NSFileHandle *fh = [NSFileHandle fileHandleForWritingAtPath:[self getStoragePath:[self getStorageName]]];
+    NSFileHandle *fh = [NSFileHandle fileHandleForWritingAtPath:[self getFilePath]];
     if (fh == nil) { // no
-        NSLog(@"[%@] ERROR: AWARE can not handle the file.", [self getStorageName]);
-        [self createLocalStorage:[self getStorageName]];
+        NSString * fileName = [self getSensorName];
+        NSString* debugMassage = [NSString stringWithFormat:@"[%@] ERROR: AWARE can not handle the file.", fileName];
+        [self saveDebugEventWithText:debugMassage type:DebugTypeError label:fileName];
         return NO;
     }else{
         [fh seekToEndOfFile];
-        if (![tempData isEqualToString:@""]) {
-            NSData * tempdataLine = [tempData dataUsingEncoding:NSUTF8StringEncoding];
-            [fh writeData:tempdataLine]; //write temp data to the main file
-            [tempData setString:@""];
-            NSLog(@"[%@] Add the sensor data to temp variable.", [self getStorageName]);
-        }
+        NSData * tempdataLine = [line dataUsingEncoding:NSUTF8StringEncoding];
+        [fh writeData:tempdataLine];
+        
         NSString * oneLine = [[NSString alloc] initWithString:[NSString stringWithFormat:@"%@", line]];
         NSData *data = [oneLine dataUsingEncoding:NSUTF8StringEncoding];
         [fh writeData:data];
@@ -171,41 +138,99 @@
 }
 
 
-- (void) setFileAccessYES {
-    fileAccess = YES;
+
+
+
+/** create new file */
+-(BOOL)createNewFile:(NSString*) fileName {
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString * path = [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.dat",fileName]];
+    NSFileManager *manager = [NSFileManager defaultManager];
+    if (![manager fileExistsAtPath:path]) { // yes
+        BOOL result = [manager createFileAtPath:path
+                                       contents:[NSData data]
+                                     attributes:nil];
+        if (!result) {
+            NSLog(@"[%@] Failed to create the file.", fileName);
+            return NO;
+        }else{
+            NSLog(@"[%@] Create the file.", fileName);
+            return YES;
+        }
+    }
+    return NO;
 }
 
-- (void) setFileAccessNO{
-    fileAccess = NO;
+/** clear file */
+- (bool) clearFile:(NSString *) fileName {
+    NSFileManager *manager = [NSFileManager defaultManager];
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString * path = [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.dat",fileName]];
+    if ([manager fileExistsAtPath:path]) { // yes
+        bool result = [@"" writeToFile:path atomically:NO encoding:NSUTF8StringEncoding error:nil];
+        if (result) {
+            NSLog(@"[%@] Correct to clear sensor data.", fileName);
+            return YES;
+        }else{
+            NSLog(@"[%@] Error to clear sensor data.", fileName);
+            return NO;
+        }
+    }else{
+        NSLog(@"[%@] The file is not exist.", fileName);
+        [self createNewFile:fileName];
+        return NO;
+    }
+    return NO;
 }
 
 
-/**
- * =============================================
- *  Get Sensor Data
- * =============================================
- */
-- (NSMutableString *) getSensorDataWithSeek:(NSInteger)seek length:(NSInteger)length {
+- (NSInteger) getMaxDateLength {
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSInteger length = [userDefaults integerForKey:KEY_MAX_DATA_SIZE];
+    return length;
+}
+
+- (NSMutableString *) getSensorDataForPost {
+    NSInteger maxLength = [self getMaxDateLength];
+    NSUInteger seek = [self getMarker] * maxLength;
     // get sensor data from file
-    NSString * path = [self getStoragePath:[self getStorageName]];
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString * path = [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.dat",[self getSensorName]]];
     NSMutableString *data = nil;
     NSFileHandle *fileHandle = [NSFileHandle fileHandleForReadingAtPath:path];
     if (!fileHandle) {
-        NSLog(@"[%@] AWARE can not handle the file.", [self getStorageName]);
-        [self createLocalStorage:[self getStorageName]];
-        return [[NSMutableString alloc] init];
+        NSString * message = [NSString stringWithFormat:@"[%@] AWARE can not handle the file.", [self getSensorName]];
+        NSLog(@"%@", message);
+        [self saveDebugEventWithText:message type:DebugTypeError label:@""];
+        return Nil;
     }
-    if (seek > lostedTextLength) {
-        [fileHandle seekToFileOffset:seek-(NSInteger)lostedTextLength];
+    NSLog(@"--> %ld", seek);
+    if (seek > [self getLostedTextLength]) {
+        [fileHandle seekToFileOffset:seek-(NSInteger)[self getLostedTextLength]];
     }else{
         [fileHandle seekToFileOffset:seek];
     }
-    NSData *clipedData = [fileHandle readDataOfLength:length];
+    
+
+    
+    NSData *clipedData = [fileHandle readDataOfLength:maxLength];
     [fileHandle closeFile];
     
     data = [[NSMutableString alloc] initWithData:clipedData encoding:NSUTF8StringEncoding];
+//    lineCount = (int)data.length;
+    NSLog(@"[%@] Line lenght is %ld", [self getSensorName], (unsigned long)data.length);
+    if (data.length == 0 || data.length < [self getMaxDateLength]) {
+        [self setMarker:0];
+    }else{
+        [self setMarker:([self getMarker]+1)];
+    }
     return data;
 }
+
+
 
 
 - (NSMutableString *) fixJsonFormat:(NSMutableString *) clipedText {
@@ -228,49 +253,124 @@
         NSRange rangeOfExtraText = [clipedText rangeOfString:@"}" options:NSBackwardsSearch];
         if (rangeOfExtraText.location == NSNotFound) {
             //             NSLog(@"[TAIL] There is no extra text");
-            lostedTextLength = 0;
+            //            lostedTextLength = 0;
+            [self setLostedTextLength:0];
         }else{
             //             NSLog(@"[TAIL] There is some extra text!");
             NSRange deleteRange = NSMakeRange(rangeOfExtraText.location+1, clipedText.length-rangeOfExtraText.location-1);
             [clipedText deleteCharactersInRange:deleteRange];
-            lostedTextLength = (int)deleteRange.length;
+            //            lostedTextLength = (int)deleteRange.length;
+            [self setLostedTextLength:(int) deleteRange.length];
         }
     }
     [clipedText insertString:@"[" atIndex:0];
     [clipedText appendString:@"]"];
-    
+    //    NSLog(@"%@", clipedText);
     return clipedText;
 }
 
 
 
-/**
- * =============================================
- *  clear Data
- * =============================================
- */
-- (bool) clearStorage {
-    NSString * path = [self getStoragePath:[self getStorageName]];
-    NSFileManager *manager = [NSFileManager defaultManager];
-    if ([manager fileExistsAtPath:path]) { // yes
-        bool result = [@"" writeToFile:path atomically:NO encoding:NSUTF8StringEncoding error:nil];
-        if (result) {
-            NSLog(@"[%@] Correct to clear sensor data.", [self getStorageName]);
-            return YES;
-        }else{
-            NSLog(@"[%@] Error to clear sensor data.", [self getStorageName]);
-            return NO;
-        }
-    }else{
-        NSLog(@"[%@] The file is not exist.", [self getStorageName]);
-        [self createLocalStorage:[self getStorageName]];
-        return YES;
-    }
-//    return NO;
+//////////////////////////////////////
+//////////////////////////////////////
+
+- (uint64_t) getFileSize{
+    NSString * path = [self getFilePath];
+    return [[[NSFileManager defaultManager] attributesOfItemAtPath:path error:nil] fileSize];
 }
 
 
 
+
+///////////////////////////////////////
+///////////////////////////////////////
+
+
+/**
+ * Makers
+ */
+- (int) getMarker {
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSNumber * number = [NSNumber numberWithInteger:[userDefaults integerForKey:KEY_SENSOR_UPLOAD_MARK]];
+    return number.intValue;
+}
+
+- (void) setMarker:(int) intMarker {
+    NSNumber * number = [NSNumber numberWithInt:intMarker];
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setInteger:number.integerValue forKey:KEY_SENSOR_UPLOAD_MARK];
+}
+
+- (int) getLostedTextLength{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSNumber * number = [NSNumber numberWithInteger:[userDefaults integerForKey:KEY_SENSOR_UPLOAD_LOSTED_TEXT_LENGTH]];
+    return number.intValue;
+}
+
+- (void) setLostedTextLength:(int)lostedTextLength {
+    NSNumber * number = [NSNumber numberWithInt:lostedTextLength];
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setInteger:number.integerValue forKey:KEY_SENSOR_UPLOAD_LOSTED_TEXT_LENGTH];
+}
+
+
+
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+
+
+- (bool)saveDebugEventWithText:(NSString *)eventText type:(NSInteger)type label:(NSString *)label{
+    if (debugSensor != nil) {
+        [debugSensor saveDebugEventWithText:eventText type:type label:label];
+        return  YES;
+    }
+    return NO;
+}
+
+/**
+ * Set Debug Sensor
+ */
+- (void) trackDebugEventsWithDebugSensor:(Debug*)debug{
+    debugSensor = debug;
+}
+
+
+//////////////////////////////////////////////
+/////////////////////////////////////////////
+
+/**
+ * A File access balancer
+ */
+- (void) startWriteAbleTimer {
+    writeAbleTimer =  [NSTimer scheduledTimerWithTimeInterval:10.0f
+                                                       target:self
+                                                     selector:@selector(setWriteableYES)
+                                                     userInfo:nil repeats:YES];
+    [writeAbleTimer fire];
+}
+
+
+- (void) stopWriteableTimer{
+    if (!writeAbleTimer) {
+        [writeAbleTimer invalidate];
+        writeAble = nil;
+    }
+}
+
+- (void) setWriteableYES{ writeAble = YES; }
+
+- (void) setWriteableNO{ writeAble = NO; }
+
+
+//////////////////////////////////////////////
+///////////////////////////////////////////////
+
+- (NSString *) getFilePath {
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString * path = [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.dat",[self getSensorName]]];
+    return path;
+}
 
 
 @end

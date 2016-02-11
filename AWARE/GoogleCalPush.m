@@ -141,7 +141,7 @@
     if (awareCal == nil) {
         NSString* message = @"[ERROR] AWARE iOS can not find a 'BalancedCampusJournal' on your Calendar.";
         NSLog(@"%@", message);
-        [self sendLocalNotificationForMessage:message soundFlag:YES];
+        [AWAREUtils sendLocalNotificationForMessage:message soundFlag:YES];
         [self saveDebugEventWithText:message type:DebugTypeError label:@""];
         return;
     }
@@ -187,7 +187,7 @@
         NSLog(@"%d",count);
         if (count > 60) { // wait 60 sec (maximum)
             NSString * debugMessage = @"TIMEOUT: Calendar Update";
-            [self sendLocalNotificationForMessage:debugMessage soundFlag:NO];
+            [AWAREUtils sendLocalNotificationForMessage:debugMessage soundFlag:NO];
             [self saveDebugEventWithText:debugMessage type:DebugTypeError label:@""];
             isEmpty = YES;
             break;
@@ -242,7 +242,7 @@
     if (preNullEvents.count == 0 && prepopulatedEvents.count > 0) {
         NSString * debugMessage = @"Your Google Calandar is already updated today.";
         if ([self getDebugState]) {
-            [self sendLocalNotificationForMessage:debugMessage soundFlag:YES];
+            [AWAREUtils sendLocalNotificationForMessage:debugMessage soundFlag:YES];
         }
         [self saveDebugEventWithText:debugMessage type:DebugTypeInfo label:@""];
         return;
@@ -397,13 +397,12 @@
     
     // == Send Notification ==
     NSString * message = @"Hi! Your Calendar is updated.";
-    [self sendLocalNotificationForMessage:message soundFlag:YES];
+    [AWAREUtils sendLocalNotificationForMessage:message soundFlag:YES];
     [self saveDebugEventWithText:message type:DebugTypeInfo label:[self getSensorName]];
 
 }
 
 - (BOOL) stopSensor {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
     [calendarUpdateTimer invalidate];
     calendarUpdateTimer = nil;
     return YES;

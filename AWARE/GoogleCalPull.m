@@ -6,10 +6,6 @@
 //  Copyright © 2015 Yuuki NISHIYAMA. All rights reserved.
 //
 
-/**
- * How about save events via Apple Calender
- */
-
 #import "GoogleCalPull.h"
 #import <CoreData/CoreData.h>
 #import "CalEvent.h"
@@ -24,10 +20,6 @@
     
     NSString* googleCalPullSensorName;
     
-    // for locations
-    double miniDistrance;
-    
-//    NSString* AWARE_CAL_NAME;
     NSString* PRIMARY_GOOGLE_ACCOUNT_NAME;
     NSString* KEY_AWARE_CAL_FIRST_ACCESS;
     
@@ -39,15 +31,12 @@
 
 - (instancetype) initWithPluginName:(NSString *)pluginName
                            deviceId:(NSString *)deviceId{
-//        self = [super initWithSensorName:pluginName];
     self  = [super initWithPluginName:pluginName deviceId:deviceId];
         if (self) {
-            miniDistrance = 15;
             allEvents = [[NSMutableArray alloc] init];
             store = [[EKEventStore alloc] init];
             
             googleCalPullSensorName = @"balancedcampuscalendar";
-//            AWARE_CAL_NAME = @"AWARE Calendar";
             PRIMARY_GOOGLE_ACCOUNT_NAME = @"primary_google_account_name";
             KEY_AWARE_CAL_FIRST_ACCESS  = @"key_aware_cal_first_access";
 
@@ -127,29 +116,6 @@
     return [userDefaults objectForKey:PRIMARY_GOOGLE_ACCOUNT_NAME];
 }
 
-/**
- * check aware calendar
- */
-//- (BOOL) isAwareCal {
-//    for (EKSource *calSource in store.sources) {
-//        NSLog(@"%@",calSource);
-//        if ([calSource.title isEqualToString:[self getPrimaryGoogleCal]]) {
-////            NSString *identifier = nil;
-//            for (EKCalendar *cal in [store calendarsForEntityType:EKEntityTypeEvent]) {
-////                identifier = cal.calendarIdentifier;
-////                NSLog(@"%@", cal.title);
-//                if ([cal.title isEqualToString:googleCalPullSensorName]) {
-//                    return YES;
-//                }
-//            }
-//        }
-//    }
-//    return NO;
-//}
-
-
-
-
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings {
     
     NSLog(@"[%@] Create table", [self getSensorName]);
@@ -159,18 +125,15 @@
     [self createTable:[calEvent getCreateTableQuery]];
     [self addAnAwareSensor:balancedCampusCalendarSensor];
     [self startAllSensors:upInterval withSettings:settings];
-//    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval
-//                                                   target:self
-//                                                 selector:@selector(syncAwareDB)
-//                                                 userInfo:nil repeats:YES];
-    // set current events
     [self updateExistingEvents];
     
     return YES;
 }
 
 - (BOOL) stopSensor {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:EKEventStoreChangedNotification
+                                                  object:store];
     [self stopAndRemoveAllSensors];
     return YES;
 }
@@ -178,6 +141,8 @@
 
 - (void) storeChanged:(NSNotification *) notification {
     NSLog(@"A calendar event is updated!");
+    
+    [self saveDebugEventWithText:@"A calendar event is updated!" type:DebugTypeInfo label:@""];
     
     EKEventStore *ekEventStore = notification.object;
     
@@ -334,13 +299,6 @@
                                                           calendars:nil];
     return predicate;
 }
-
-//- (NSNumber *) getUnixtimeWithNSDate:(NSDate *) date {
-//    double timeStamp = [date timeIntervalSince1970] * 1000;
-//    NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
-//    return unixtime;
-//}
-
 
 
 @end
