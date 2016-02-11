@@ -23,12 +23,14 @@
     
     // for network test
     double httpStart;
+    double postLengthDouble;
     
     SCNetworkReachability* reachability;
     NSInteger networkState;
     BOOL wifiReachable;
     
     BOOL isDebug;
+    BOOL isLock;
     
     Debug * debugSensor;
 }
@@ -82,6 +84,14 @@
     isUploading = state;
 }
 
+- (void) lockBackgroundUpload{
+    isLock = YES;
+}
+
+- (void) unlockBackgroundUpload{
+    isLock = NO;
+}
+
 /////////////////////////////////
 /////////////////////////////////
 
@@ -128,10 +138,11 @@
     NSMutableString* sensorData = [awareLocalStorage getSensorDataForPost];
     NSString* formatedSensorData = [awareLocalStorage fixJsonFormat:sensorData];
     
-    if (sensorData.length == 0) {
+    if (sensorData.length == 0 || [sensorData isEqualToString:@"[]"]) {
         NSString * message = [NSString stringWithFormat:@"[%@] Data length is zero => %ld", sensorName, sensorData.length];
         NSLog(@"%@", message);
         [self saveDebugEventWithText:message type:DebugTypeInfo  label:@""];
+        [self dataSyncIsFinishedCorrectoly];
         return;
     }
     
@@ -171,10 +182,11 @@
         }
     }];
     
-    [dataTask resume];
-    // test
     httpStart = [[NSDate new] timeIntervalSince1970];
+    postLengthDouble = [[NSNumber numberWithInteger:postData.length] doubleValue];
     [self saveDebugEventWithText:logMessage type:DebugTypeInfo  label:syncDataQueryIdentifier];
+    
+    [dataTask resume];
 }
 
 
@@ -183,9 +195,16 @@
           dataTask:(NSURLSessionDataTask *)dataTask
 didReceiveResponse:(NSURLResponse *)response
  completionHandler:(void (^)(NSURLSessionResponseDisposition disposition))completionHandler {
-    // test: httpend
-    double serverPerformace = [[NSDate new] timeIntervalSince1970] - httpStart;
-    NSLog(@"[%@] %f", sensorName, serverPerformace);
+    
+    // test: server peformance
+    double diff = [[NSDate new] timeIntervalSince1970] - httpStart;
+    NSLog(@"[%@] %f", sensorName, diff);
+    if (postLengthDouble > 0 && diff > 0) {
+        NSString *networkPeformance = [NSString stringWithFormat:@"%0.2f bps",postLengthDouble/diff];
+        NSLog(@"[%@] %@", sensorName, networkPeformance);
+        [self saveDebugEventWithText:networkPeformance type:DebugTypeInfo label:sensorName];
+    }
+    
     
     [session finishTasksAndInvalidate];
     [session invalidateAndCancel];
@@ -263,14 +282,6 @@ didReceiveResponse:(NSURLResponse *)response
 }
 
 
-- (void) dataSyncIsFinishedCorrectoly {
-    isUploading = NO;
-    NSLog(@"[%@] Session task finished correctly.", sensorName);
-    errorPosts = 0;
-}
-
-
-
 - (void)URLSession:(NSURLSession *)session didBecomeInvalidWithError:(NSError *)error{
     if (error != nil) {
         NSLog(@"[%@] the session did become invaild with error: %@", sensorName, error.debugDescription);
@@ -289,46 +300,59 @@ didReceiveResponse:(NSURLResponse *)response
     NSString* newStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     NSLog(@"[%@] %d  Response =====> %@",sensorName, responseCode, newStr);
     
-    if ( responseCode == 200 ) {
-        NSString *bytes = [self getFileStrSize:(double)[awareLocalStorage getFileSize]];
-        NSString *message = @"";
-        if( [awareLocalStorage getMarker] == 0 ){
-            message = [NSString stringWithFormat:@"[%@] Sucess to upload sensor data to AWARE server with %@", sensorName, bytes];
-        }else{
-            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-            NSInteger length = [userDefaults integerForKey:KEY_MAX_DATA_SIZE];
-            long denominator = (long)[awareLocalStorage getFileSize]/(long)length;
-            message = [NSString stringWithFormat:@"[%@] Sucess to upload sensor data to AWARE server with %@ - %d/%ld", sensorName, bytes, [awareLocalStorage getMarker], denominator];
-        }
-        NSLog(@"%@", message);
-        [self saveDebugEventWithText:message type:DebugTypeInfo label:syncDataQueryIdentifier];
-        // send notification
-        if ([self getDebugState]) {
-            [AWAREUtils sendLocalNotificationForMessage:message soundFlag:NO];
-        }
-    }
-    
     data = nil;
     response = nil;
     error = nil;
     httpResponse = nil;
-    if ([awareLocalStorage getMarker] != 0) {
-        [self saveDebugEventWithText:[NSString stringWithFormat:@"[%@] Upload stored data again", sensorName]
-                                type:DebugTypeInfo
-                               label:syncDataQueryIdentifier];
-        [self postSensorDataWithSensorName:sensorName session:nil];
-    }else{
-        if(responseCode == 200){
+    
+    if ( responseCode == 200 ) {
+        NSString *bytes = [self getFileStrSize:(double)[awareLocalStorage getFileSize]];
+        NSString *message = @"";
+        if( [awareLocalStorage getMarker] == 0 ){
+            
+            // success to upload data
+            message = [NSString stringWithFormat:@"[%@] Sucess to upload sensor data to AWARE server with %@", sensorName, bytes];
+            NSLog(@"%@", message);
+            [self saveDebugEventWithText:message type:DebugTypeInfo label:syncDataQueryIdentifier];
+            
+            // send notification
+            if ([self getDebugState]) [AWAREUtils sendLocalNotificationForMessage:message soundFlag:NO];
+            
+            // remove store data
+            [awareLocalStorage clearFile:sensorName];
             [self saveDebugEventWithText:[NSString stringWithFormat:@"[%@] Remove stored data", sensorName]
                                     type:DebugTypeInfo
                                    label:syncDataQueryIdentifier];
-            [awareLocalStorage clearFile:sensorName];
+            // init http/post condition
+            [self dataSyncIsFinishedCorrectoly];
+            
+        } else {
+            
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+            NSInteger length = [userDefaults integerForKey:KEY_MAX_DATA_SIZE];
+            long denominator = (long)[awareLocalStorage getFileSize]/(long)length;
+            message = [NSString stringWithFormat:@"[%@] Sucess to upload sensor data to AWARE server with %@ - %d/%ld", sensorName, bytes, [awareLocalStorage getMarker], denominator];
+            NSLog(@"%@", message);
+            [self saveDebugEventWithText:message type:DebugTypeInfo label:syncDataQueryIdentifier];
+            
+            // send notification
+            if ([self getDebugState]) [AWAREUtils sendLocalNotificationForMessage:message soundFlag:NO];
+            
+            // upload sensor data again
+            [self saveDebugEventWithText:[NSString stringWithFormat:@"[%@] Upload stored data again", sensorName]
+                                    type:DebugTypeInfo
+                                   label:syncDataQueryIdentifier];
+            [self postSensorDataWithSensorName:sensorName session:nil];
         }
     }
 }
 
 
-
+- (void) dataSyncIsFinishedCorrectoly {
+    isUploading = NO;
+    NSLog(@"[%@] Session task finished correctly.", sensorName);
+    errorPosts = 0;
+}
 
 
 /**

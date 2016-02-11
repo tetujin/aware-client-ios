@@ -147,10 +147,12 @@
 
 - (void) sensorLock{
     [localStorage dbLock];
+    [uploader lockBackgroundUpload];
 }
 
 - (void) sensorUnLock{
     [localStorage dbUnlock];
+    [uploader unlockBackgroundUpload];
 }
 
 /**

@@ -15,6 +15,8 @@
 
 - (bool) isUploading;
 - (void) setUploadingState:(bool)state;
+- (void) lockBackgroundUpload;
+- (void) unlockBackgroundUpload;
 
 /**
  * Background data upload

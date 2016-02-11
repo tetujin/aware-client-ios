@@ -61,7 +61,7 @@
 
 //// save data
 - (bool) saveDataWithArray:(NSArray*) array {
-    if (array !=nil) {
+    if (array == nil) {
         return false;
     }
     bool result = false;
@@ -81,7 +81,7 @@
 - (bool) saveData:(NSDictionary *)data toLocalFile:(NSString *)fileName{
     
     if (isLock) {
-        NSLog(@"[%@] This sensor is Locked now!", [self getSensorName]);
+//        NSLog(@"[%@] This sensor is Locked now!", [self getSensorName]);
         return NO;
     }
     
