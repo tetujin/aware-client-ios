@@ -58,19 +58,27 @@
     return self;
 }
 
-
--(bool)addNewSensorWithSensorName:(NSString *)key
-                         settings:(NSArray*)settings
-                          plugins:(NSArray*)plugins
-                   uploadInterval:(double) uploadTime{
+/**
+ * Add a new sensor with upload interval
+ * 
+ * @param key           A key for a sensor with NSString
+ * @param settings      Settings of AWARE Study with NSArray
+ * @param plugings      Plugin sessings of AWARE Setudy with NSArray
+ * @param uploadTime    An upload insterval (second) with double
+ * @return A result of the generation of new sensor
+ */
+- (bool) addNewSensorWithSensorName:(NSString *)key
+                           settings:(NSArray*)settings
+                            plugins:(NSArray*)plugins
+                     uploadInterval:(double) uploadTime{
     
-    NSString* deviceId = [awareStudy getMqttUserName];
+    NSString* deviceId = [awareStudy getDeviceId];
     if (deviceId == NULL) {
         NSLog( @"[%@] ERROR: You did not have a StudyID. Please check your study configuration.", key );
         return NO;
     }
     
-//    NSLog(@"[%@] Upload interval is %f.", key, uploadTime);
+    /// start and make a sensor instance
     AWARESensor* awareSensor = nil;
     for (int i=0; i<settings.count; i++) {
         NSString *setting = [[settings objectAtIndex:i] objectForKey:@"setting"];
@@ -123,8 +131,8 @@
         }
     }
     
-//    awareSensor = nil;
     
+    // Start and make a plugin instance
     for (int i=0; i<plugins.count; i++) {
         NSDictionary *plugin = [plugins objectAtIndex:i];
         NSArray *pluginSettings = [plugin objectForKey:@"settings"];
@@ -172,20 +180,29 @@
         }
     }
     
+    /// Add the sensor to the sensor manager with debugger.
     if (awareSensor != NULL) {
-        if(![key isEqualToString:SENSOR_AWARE_DEBUG]){
-            [awareSensor trackDebugEvents];
-            NSString *startSensorMessage = [NSString stringWithFormat:@"[%@] Start %@ sensor", key, key];
-            [awareSensor saveDebugEventWithText:startSensorMessage type:DebugTypeInfo label:key];
+        if (![self isExist:key]) {
+            if(![key isEqualToString:SENSOR_AWARE_DEBUG]){
+                // NOTE: Please don't call -trackDebguEvents method on the Debug sensor. The operation makes an infonity loop.
+                [awareSensor trackDebugEvents];
+                NSString *startSensorMessage = [NSString stringWithFormat:@"[%@] Start %@ sensor", key, key];
+                [awareSensor saveDebugEventWithText:startSensorMessage type:DebugTypeInfo label:key];
+            }
+            [self addNewSensor:awareSensor];
+            return YES;
         }
-        [self addNewSensor:awareSensor];
-        return YES;
     }
-
     return NO;
 }
 
-
+/**
+ * Check an existance of a sensor by a sensor name
+ * You can find and edit the keys on AWAREKeys.h and AWAREKeys.m
+ *
+ * @param   key A NSString key for a sensor
+ * @return  An existance of the target sensor as a boolean value
+ */
 - (BOOL) isExist :(NSString *) key {
     for (AWARESensor* sensor in awareSensors) {
         if([[sensor getSensorName] isEqualToString:key]){
@@ -195,11 +212,22 @@
     return NO;
 }
 
-- (void)addNewSensor:(AWARESensor *)sensor{
+
+/**
+ * Add a new sensor to a aware sensor manager
+ *
+ * @param sensor An AWARESensor object (A null value is not an acceptable)
+ */
+- (void) addNewSensor : (AWARESensor *) sensor {
+    if (sensor == nil) return;
     [awareSensors addObject:sensor];
 }
 
-- (void)stopAllSensors{
+
+/**
+ * Remove all sensors from the manager after stop the sensors
+ */
+- (void) stopAllSensors {
     for (AWARESensor* sensor in awareSensors) {
         NSLog(@"Stop %@ sensor.", [sensor getSensorName]);
         [sensor stopSensor];
@@ -207,10 +235,14 @@
     awareSensors = [[NSMutableArray alloc] init];
 }
 
-
-- (void)stopASensor:(NSString *)sensorName{
+/**
+ * Stop a sensor with the sensor name.
+ * You can find the sensor name (key) on AWAREKeys.h and .m.
+ * 
+ * @param sensorName A NSString sensor name (key)
+ */
+- (void) stopASensor:(NSString *)sensorName{
     for (AWARESensor* sensor in awareSensors) {
-        
         if ([sensor.getSensorName isEqualToString:sensorName]) {
             [sensor stopSensor];
         }
@@ -218,7 +250,15 @@
     }
 }
 
-- (NSString*)getLatestSensorData:(NSString *)sensorName{
+
+/**
+ * Provide latest sensor data by each sensor as NSString value.
+ * You can access the data by using sensor names (keys) on AWAREKeys.h and .m.
+ *
+ * @param sensorName A NSString sensor name (key)
+ * @return A latest sensor value as
+ */
+- (NSString*) getLatestSensorData:(NSString *) sensorName {
     for (AWARESensor* sensor in awareSensors) {
         if ([sensor.getSensorName isEqualToString:sensorName]) {
             NSString *sensorValue = [sensor getLatestValue];
@@ -228,6 +268,15 @@
     return @"";
 }
 
+
+/**
+ * Upload sensor data manually in the foreground
+ *
+ * NOTE: 
+ * This method works in the foreground only, and lock the uploading file.
+ * During an uploading process, an AWARE can not access to the file.
+ *
+ */
 - (bool) syncAllSensorsWithDB {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),^{
         @autoreleasepool{

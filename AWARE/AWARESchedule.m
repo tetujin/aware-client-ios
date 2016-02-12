@@ -16,7 +16,7 @@
 //NSString * const SCHEDULE_KEY_INTERVAL = @"interval";
 //NSString * const SCHEFULE_KEY_ACTION_TYPE = @"actionType";
 
-
+// Weeks
 NSString * const SCHEDULE_WEEK_SUNDAY = @"Sunday";
 NSString * const SCHEDULE_WEEK_MONDAY = @"Monday";
 NSString * const SCHEDULE_WEEK_TUESDAY = @"Tuesday";
@@ -24,6 +24,7 @@ NSString * const SCHEDULE_WEEK_WEDNESDAY = @"Wednesday";
 NSString * const SCHEDULE_WEEK_THURSDAY = @"Thursday";
 NSString * const SCHEDULE_WEEK_FRIDAY = @"Friday";
 
+// Month
 NSString * const SCHEDULE_MONTH_JAN = @"January";
 NSString * const SCHEDULE_MONTH_FEB = @"February";
 NSString * const SCHEDULE_MONTH_MAR = @"March";
@@ -37,24 +38,25 @@ NSString * const SCHEDULE_MONTH_OCT = @"October";
 NSString * const SCHEDULE_MONTH_NOV = @"November";
 NSString * const SCHEDULE_MONTH_DEC = @"December";
 
+// Type of schedules
 NSString * const SCHEDULE_TYPE_NORMAL = @"SCHEDULE_TYPE_NORMAL";
 NSString * const SCHEDULE_TYPE_RANDOM = @"SCHEDULE_TYPE_RANDOM";
 NSString * const SCHEDULE_TYPE_CONTEXT = @"SCHEDULE_TYPE_CONTEXT";
 
+// Preparation of an interval
 NSString * const SCHEDULE_INTERVAL_HOUR = @"SCHEDULE_INTERVAL_HOUR";
 NSString * const SCHEDULE_INTERVAL_DAY = @"SCHEDULE_INTERVAL_DAY";
 NSString * const SCHEDULE_INTERVAL_WEEK = @"SCHEDULE_INTERVAL_WEEK";
 NSString * const SCHEDULE_INTERVAL_MONTH = @"SCHEDULE_INTERVAL_MONTH";
 NSString * const SCHEDULE_INTERVAL_TEST = @"SCHEDULE_INTERVAL_TEST";
 
+
 NSString * const SCHEDULE_ACTION_TYPE_BROADCAST = @"SCHEDULE_ACTION_TYPE_BROADCAST";
 NSString * const SCHEDULE_ACTION_TYPE_ACTIVITY = @"SCHEDULE_ACTION_TYPE_ACTIVITY";
 NSString * const SCHEDULE_ACTION_TYPE_SERVICE = @"SCHEDULE_ACTION_TYPE_SERVICE";
 
-@implementation AWARESchedule {
-//    NSInteger interval;
-//    NSCalendarUnit interval;
-}
+@implementation AWARESchedule
+
 
 - (instancetype) initWithScheduleId:(NSString* ) scheduleId {
     self = [super init];
@@ -70,17 +72,10 @@ NSString * const SCHEDULE_ACTION_TYPE_SERVICE = @"SCHEDULE_ACTION_TYPE_SERVICE";
         _actionClass = @"";
         _key = @"";
         _esmStr = @"";
-//        interval = NSHourCalendarUnit;
         _interval = @0;
     }
     return self;
 }
-
-//- (NSCalendarUnit) getInterval {
-//    return interval;
-//}
-
-
 
 
 - (void) setScheduleAsNormalWithDate:(NSDate *)date

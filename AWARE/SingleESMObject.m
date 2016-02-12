@@ -38,15 +38,16 @@ NSString* const KEY_ESM_SCALE_STEP = @"esm_scale_step";
 {
     self = [super init];
     if (self) {
-//        esms = [[NSMutableArray alloc] init];
         [self setEsm:esmObject];
     }
     return self;
 }
 
+
 - (void) setEsm:(NSDictionary *) esmObject {
     
     NSDictionary * esm = [esmObject objectForKey:@"esm"];
+    
     _esmObjectWithKey = [[NSMutableDictionary alloc] initWithDictionary:esmObject];
     _esmObject = [[NSMutableDictionary alloc] initWithDictionary:esm];
     _type = [NSNumber numberWithInteger:[[esm objectForKey:KEY_ESM_TYPE] integerValue]];
@@ -78,6 +79,18 @@ NSString* const KEY_ESM_SCALE_STEP = @"esm_scale_step";
     return YES;
 }
 
+
+/**
+ * Make a skelton (NSMutableDictionary) for an ESM
+ *
+ * @param   deviceId        A device_id for an aware study
+ * @param   timestamp       A timestamp value
+ * @param   instructions    An instructions for the esm
+ * @param   submit          A text for submit button
+ * @param   expirationThreshold An expiration threshold value as a second
+ * @param   trigger         An unique label for a trigger
+ * @return A skelton (NSMutableDictionary) of an ESM
+ */
 - (NSMutableDictionary*) getEsmDictionaryWithDeviceId:(NSString*)deviceId
                                             timestamp:(double) timestamp
                                                  type:(NSNumber *) type
@@ -116,6 +129,19 @@ NSString* const KEY_ESM_SCALE_STEP = @"esm_scale_step";
 }
 
 
+/**
+ * Make an ESM Free Text (NSMutableDictionary) for a sample
+ *
+ * This ESM allows the user to provide free text input as context. This can be leveraged to capture sensor-challenging context, such personal opinions, moods and others.
+ *
+ * @param   deviceId        A device_id for an aware study
+ * @param   timestamp       A timestamp value
+ * @param   instructions    An instructions for the esm
+ * @param   submit          A text for submit button
+ * @param   expirationThreshold An expiration threshold value as a second
+ * @param   trigger         An unique label for a trigger
+ * @return  A NSMutableDictonary of an ESM Free Text (esm_type=1)
+ */
 - (NSMutableDictionary*) getEsmDictionaryAsFreeTextWithDeviceId:(NSString*)deviceId
                                                  timestamp:(double) timestamp
                                                      title:(NSString *) title
@@ -134,6 +160,20 @@ NSString* const KEY_ESM_SCALE_STEP = @"esm_scale_step";
 }
 
 
+/**
+ * Make an ESM Radio Button (NSMutableDictionary) for a sample
+ *
+ * This ESM only allows the user to select a single option from a list of alternatives. One of the options can be defined as “Other”, which will prompt the user to be more specific, replacing “Other” with the users’ defined option.
+ *
+ * @param   deviceId        A device_id for an aware study
+ * @param   timestamp       A timestamp value
+ * @param   instructions    An instructions for the esm
+ * @param   submit          A text for submit button
+ * @param   expirationThreshold An expiration threshold value as a second
+ * @param   trigger         An unique label for a trigger
+ * @param   radios          Labels for radio button
+ * @return  A NSMutableDictonary of an ESM Radio Button (esm_type=2)
+ */
 - (NSMutableDictionary*) getEsmDictionaryAsRadioWithDeviceId:(NSString*)deviceId
                                                    timestamp:(double) timestamp
                                                        title:(NSString *) title
@@ -154,6 +194,21 @@ NSString* const KEY_ESM_SCALE_STEP = @"esm_scale_step";
 }
 
 
+
+/**
+ * Make an ESM Check Box (NSMutableDictionary) for a sample
+ *
+ * This ESM allows the user to select one or more options from a list of alternatives. Similar to the Radio ESM, one of the options can be defined as “Other”, which will prompt the user to be more specific, replacing “Other” with the users’ defined option.
+ *
+ * @param   deviceId        A device_id for an aware study
+ * @param   timestamp       A timestamp value
+ * @param   instructions    An instructions for the esm
+ * @param   submit          A text for submit button
+ * @param   expirationThreshold An expiration threshold value as a second
+ * @param   trigger         An unique label for a trigger
+ * @param   checkBoxes      Labels for check boxes
+ * @return  NSMutableDictonary of an ESM Check Box (esm_type=3)
+ */
 - (NSMutableDictionary *) getEsmDictionaryAsCheckBoxWithDeviceId:(NSString*)deviceId
                                                        timestamp:(double) timestamp
                                                            title:(NSString *) title
@@ -175,6 +230,23 @@ NSString* const KEY_ESM_SCALE_STEP = @"esm_scale_step";
 
 
 
+/**
+ * Make an ESM Likert Scale (NSMutableDictionary) for a sample
+ *
+ * This ESM allows the user to provide ratings, between 0 and 5/7, at 0.5/1 increments. The likert scale labels are also customisable. The default rating is no rating.
+ *
+ * @param   deviceId        A device_id for an aware study
+ * @param   timestamp       A timestamp value
+ * @param   instructions    An instructions for the esm
+ * @param   submit          A text for submit button
+ * @param   expirationThreshold An expiration threshold value as a second
+ * @param   trigger         An unique label for a trigger
+ * @param   likertMax       A maximum value of the likert scale
+ * @param   likertMaxLabel  A maximum value of the scale
+ * @param   likertMinLabel  A minimum value of the scale
+ * @param   likertStep      A likert steps
+ * @return  NSMutableDictonary of an ESM Quick Answer (esm_type=4)
+ */
 - (NSMutableDictionary *) getEsmDictionaryAsLikertScaleWithDeviceId:(NSString*)deviceId
                                                           timestamp:(double) timestamp
                                                               title:(NSString *) title
@@ -201,6 +273,21 @@ NSString* const KEY_ESM_SCALE_STEP = @"esm_scale_step";
 }
 
 
+
+/**
+ * Make an ESM Quick Answer (NSMutableDictionary) for a sample
+ *
+ * This ESM allows the user to quickly answer the ESM. The button arrangement  is fluid, to support more or less inputs. Unlike previous ESMs , there is no “Cancel” button for this type of ESM. However, the user can dismiss the questionnaire by pressing the Home or Back button on the device.
+ *
+ * @param   deviceId        A device_id for an aware study
+ * @param   timestamp       A timestamp value
+ * @param   instructions    An instructions for the esm
+ * @param   submit          A text for submit button
+ * @param   expirationThreshold An expiration threshold value as a second
+ * @param   trigger         An unique label for a trigger
+ * @param   quickAnswers    Labels for quick answer
+ * @return  NSMutableDictonary of an ESM Quick Answer (esm_type=5)
+ */
 - (NSMutableDictionary *) getEsmDictionaryAsQuickAnswerWithDeviceId:(NSString*)deviceId
                                                           timestamp:(double) timestamp
                                                               title:(NSString *) title
@@ -221,6 +308,26 @@ NSString* const KEY_ESM_SCALE_STEP = @"esm_scale_step";
 }
 
 
+
+/**
+ * Make a sample Scale ESM Object (NSMutableDictionary) for a DatePicker
+ *
+ * This ESM allows the user to select a value within a range of values. The range can be positive (e.g., X to Y) where X and Y are both positive numbers; or negatively balanced (e.g., -X to X), where X is the same value.
+ *
+ * @param   deviceId        A device_id for an aware study
+ * @param   timestamp       A timestamp value
+ * @param   instructions    An instructions for the esm
+ * @param   submit          A text for submit button
+ * @param   expirationThreshold An expiration threshold value as a second
+ * @param   trigger         An unique label for a trigger
+ * @param   min             A minimum value of the scale
+ * @param   max             A maximum value of the scale
+ * @param   scaleStart      A scale start value
+ * @param   minLabel        A minimum value label
+ * @param   maxLabel        A maximum value label
+ * @param   scaleStep       A scale of step
+ * @return  NSMutableDictonary of an ESM Scale (esm_type=6)
+ */
 - (NSMutableDictionary *) getEsmDictionaryAsScaleWithDeviceId:(NSString*)deviceId
                                                     timestamp:(double) timestamp
                                                         title:(NSString *) title
@@ -250,7 +357,17 @@ NSString* const KEY_ESM_SCALE_STEP = @"esm_scale_step";
     return scaleEsm;
 }
 
-
+/**
+ * Make a sample ESM Object (NSMutableDictionary) for a DatePicker
+ *
+ * @param   deviceId        A device_id for an aware study
+ * @param   timestamp       A timestamp value
+ * @param   instructions    An instructions for the esm
+ * @param   submit          A text for submit button
+ * @param   expirationThreshold An expiration threshold value as a second
+ * @param   trigger         An unique label for a trigger
+ * @return  NSMutableDictonary of a sample ESM Object for DatePicker (esm_type=7)
+ */
 - (NSMutableDictionary *) getEsmDictionaryAsDatePickerWithDeviceId:(NSString*)deviceId
                                                          timestamp:(double) timestamp
                                                              title:(NSString *) title

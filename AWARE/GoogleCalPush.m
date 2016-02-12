@@ -127,7 +127,7 @@
     NSDateFormatter *timeFormat = [[NSDateFormatter alloc] init];
     [timeFormat setDateFormat:@"HH:mm:ss"];
     NSString * debugMessage = [NSString stringWithFormat:@"[%@] BalancedCampusJournal Plugin start to populate events at ", [timeFormat stringFromDate:date]];
-    [self saveDebugEventWithText:debugMessage type:DebugTypeInfo label:@""];
+    [self saveDebugEventWithText:debugMessage type:DebugTypeInfo label:[timeFormat stringFromDate:date]];
     
     EKCalendar * awareCal = nil;
     // Get the aware calendar in Google Calendars

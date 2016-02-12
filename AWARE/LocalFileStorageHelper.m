@@ -139,7 +139,6 @@
 
 
 
-
 /** create new file */
 -(BOOL)createNewFile:(NSString*) fileName {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
@@ -193,8 +192,8 @@
 
 - (NSMutableString *) getSensorDataForPost {
     NSInteger maxLength = [self getMaxDateLength];
-    NSUInteger seek = [self getMarker] * maxLength;
-    if (seek <= 0) {
+    NSInteger seek = [self getMarker] * maxLength;
+    if (seek < 0) {
         NSString *errorMsg = [NSString stringWithFormat:@"[%@] a seek point error: seek is %ld", sensorName, seek];
         [self saveDebugEventWithText:errorMsg type:DebugTypeError label:@"seek error"];
         [self setMarker:0];
@@ -316,10 +315,10 @@
     [userDefaults setInteger:number.integerValue forKey:KEY_SENSOR_UPLOAD_MARK];
 }
 
-- (NSInteger) getLostedTextLength{
+- (int) getLostedTextLength{
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSNumber * number = [NSNumber numberWithInteger:[userDefaults integerForKey:KEY_SENSOR_UPLOAD_LOSTED_TEXT_LENGTH]];
-    return number.integerValue;
+    return number.intValue;
 }
 
 - (void) setLostedTextLength:(int)lostedTextLength {
