@@ -15,8 +15,8 @@
     NSTimer *testTimer;
 }
 
-- (instancetype)initWithSensorName:(NSString *)sensorName{
-    self = [super initWithSensorName:sensorName];
+- (instancetype)initWithSensorName:(NSString *)sensorName withAwareStudy:(AWAREStudy *)study{
+    self = [super initWithSensorName:sensorName withAwareStudy:study];
     if (self) {
         manager = [[CMMotionManager alloc] init];
     }
@@ -44,7 +44,8 @@
     NSLog(@"[%@] Start Sensor!", [self getSensorName]);
     timer = [NSTimer scheduledTimerWithTimeInterval:upInterval
                                              target:self selector:@selector(syncAwareDB) userInfo:nil repeats:YES];
-    [self startWriteAbleTimer];
+//    [self startWriteAbleTimer];
+    [self setBufferSize:1000];
     
     double frequency = [self getSensorSetting:settings withKey:@"frequency_accelerometer"];
     if(frequency != -1){
@@ -84,7 +85,7 @@
 -(BOOL) stopSensor{
     [manager stopAccelerometerUpdates];
     [timer invalidate];
-    [self stopWriteableTimer];
+//    [self stopWriteableTimer];
     return YES;
 }
 

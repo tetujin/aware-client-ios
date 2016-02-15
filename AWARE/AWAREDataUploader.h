@@ -8,10 +8,12 @@
 
 #import <Foundation/Foundation.h>
 #import "LocalFileStorageHelper.h"
+#import "AWAREStudy.h"
 
 @interface AWAREDataUploader : NSData <NSURLSessionDataDelegate, NSURLSessionTaskDelegate>
 
-- (instancetype) initWithLocalStorage:(LocalFileStorageHelper *)localStorage;
+//- (instancetype) initWithLocalStorage:(LocalFileStorageHelper *)localStorage;
+- (instancetype) initWithLocalStorage:(LocalFileStorageHelper *)localStorage withAwareStudy:(AWAREStudy *) study;
 
 - (bool) isUploading;
 - (void) setUploadingState:(bool)state;

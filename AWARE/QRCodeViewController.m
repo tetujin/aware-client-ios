@@ -41,7 +41,10 @@
     NSError *error = nil;
     AVCaptureDeviceInput *input = [AVCaptureDeviceInput deviceInputWithDevice:device
                                                                         error:&error];
-    [self.session addInput:input];
+    if ([self.session canAddInput:input]) {
+        [self.session addInput: input];
+    }
+//    [self.session addInput:input];
 
     
     AVCaptureMetadataOutput *output = [AVCaptureMetadataOutput new];

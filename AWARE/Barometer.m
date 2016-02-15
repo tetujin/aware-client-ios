@@ -14,8 +14,8 @@
 }
 
 
-- (instancetype)initWithSensorName:(NSString *)sensorName{
-    self = [super initWithSensorName:sensorName];
+- (instancetype)initWithSensorName:(NSString *)sensorName withAwareStudy:(AWAREStudy *)study{
+    self = [super initWithSensorName:sensorName withAwareStudy:study];
     if (self) {
 //        [super setSensorName:sensorName];
     }
@@ -48,6 +48,8 @@
 //    }else{
 //        
 //    }
+    
+    [self setBufferSize:100];
     
     NSLog(@"[%@] Start Barometer Sensor", [self getSensorName]);
     uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval target:self selector:@selector(syncAwareDB) userInfo:nil repeats:YES];

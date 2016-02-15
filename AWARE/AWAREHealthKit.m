@@ -16,8 +16,8 @@
     HKHealthStore *healthStore;
 }
 
-- (instancetype)initWithPluginName:(NSString *)pluginName deviceId:(NSString *)deviceId{
-    self = [super initWithPluginName:pluginName deviceId:deviceId];
+- (instancetype)initWithPluginName:(NSString *)pluginName awareStudy:(AWAREStudy *)study{
+    self = [super initWithPluginName:pluginName awareStudy:study];
     if(self){
         // Add your HealthKit code here
         healthStore = [[HKHealthStore alloc] init];

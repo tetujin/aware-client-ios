@@ -12,8 +12,8 @@
     NSTimer * uploadTimer;
 }
 
-- (instancetype)initWithSensorName:(NSString *)sensorName {
-    self = [super initWithSensorName:@"esms"];
+- (instancetype)initWithSensorName:(NSString *)sensorName withAwareStudy:(AWAREStudy *)study{
+    self = [super initWithSensorName:@"esms" withAwareStudy:study];
     if (self) {
 //        [super setSensorName:sensorName];
     }

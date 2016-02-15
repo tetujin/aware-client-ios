@@ -79,6 +79,8 @@
     NSRunLoop *runLoop = [NSRunLoop currentRunLoop];
     [runLoop addTimer:dailyUpdateTimer forMode:NSDefaultRunLoopMode];
     
+    
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
     
     /// Set defualt settings
@@ -86,10 +88,11 @@
     if (![userDefaults boolForKey:@"aware_inited"]) {
         [userDefaults setBool:NO forKey:SETTING_DEBUG_STATE];
         [userDefaults setBool:YES forKey:SETTING_SYNC_WIFI_ONLY];
+        [userDefaults setBool:YES forKey:SETTING_SYNC_BATTERY_CHARGING_ONLY];
         [userDefaults setDouble:uploadInterval forKey:SETTING_SYNC_INT];
         [userDefaults setBool:YES forKey:@"aware_inited"];
         [userDefaults setBool:NO forKey:KEY_APP_TERMINATED];
-        [userDefaults setInteger:0 forKey:KEY_MARK];
+        [userDefaults setInteger:0 forKey:KEY_UPLOAD_MARK];
         [userDefaults setInteger:1000 * 100 forKey:KEY_MAX_DATA_SIZE]; // 100 KB
     }
     
@@ -98,7 +101,7 @@
      * A developer can store debug messages to an aware database
      * by using the -saveDebugEventWithText:type:label: method on the debugSensor.
      */
-    debugSensor = [[Debug alloc] init];
+    debugSensor = [[Debug alloc] initWithAwareStudy:nil];
     
     /**
      * Start a location sensor for background sensing.
@@ -236,7 +239,8 @@
     if(deviceId == nil) deviceId = @"";
     if(awareStudyId == nil) awareStudyId = @"";
     if(mqttServerName == nil) mqttServerName = @"";
-
+    awareStudy = nil;
+    
     // Get debug state (bool)
     NSString* debugState = @"OFF";
     if ([userDefaults boolForKey:SETTING_DEBUG_STATE]) {
@@ -254,6 +258,14 @@
         wifiOnly = @"YES";
     }else{
         wifiOnly = @"NO";
+    }
+    
+    
+    NSString * batteryChargingOnly = @"YES";
+    if ([userDefaults boolForKey:SETTING_SYNC_BATTERY_CHARGING_ONLY]) {
+        batteryChargingOnly = @"YES";
+    }else{
+        batteryChargingOnly = @"NO";
     }
     
     // Get maximum data per a HTTP/POST request
@@ -360,9 +372,11 @@
     // A Debug mode on/off
     [_sensors addObject:[self getCelContent:@"Debug" desc:debugState image:@"" key:@"STUDY_CELL_DEBUG"]];
     // A Sync interval
-    [_sensors addObject:[self getCelContent:@"Sync Interval to AWARE Server (min)" desc:syncInterval image:@"" key:@"STUDY_CELL_SYNC"]];
+    [_sensors addObject:[self getCelContent:@"Sync Interval (min)" desc:syncInterval image:@"" key:@"STUDY_CELL_SYNC"]];
     // A Sync network condition
-    [_sensors addObject:[self getCelContent:@"Sync only wifi" desc:wifiOnly image:@"" key:@"STUDY_CELL_WIFI"]];
+    [_sensors addObject:[self getCelContent:@"Auto sync with only Wi-Fi" desc:wifiOnly image:@"" key:@"STUDY_CELL_WIFI"]];
+    // A Sync battery condition
+    [_sensors addObject:[self getCelContent:@"Auto sync with only battery charging" desc:batteryChargingOnly image:@"" key:@"STUDY_CELL_BATTERY"]];
     // A maximum data size per one HTTP/POST
     [_sensors addObject:[self getCelContent:@"Maximum file size" desc:maximumFileSizeDesc image:@"" key:@"STUDY_CELL_MAX_FILE_SIZE"]];
     // A current version of AWARE iOS
@@ -426,7 +440,7 @@
      * The "-addNewSensor" method is versy userful for testing and debuging a AWARESensor without registlating a study.
      */
     // Pedometer
-    AWARESensor * steps = [[Pedometer alloc] initWithSensorName:SENSOR_PLUGIN_PEDOMETER];
+    AWARESensor * steps = [[Pedometer alloc] initWithSensorName:SENSOR_PLUGIN_PEDOMETER withAwareStudy:nil];
     [steps startSensor:60*15 withSettings:nil];
     [_sensorManager addNewSensor:steps];
     
@@ -439,7 +453,7 @@
      * Debug Sensor
      * NOTE: don't remove this sensor. This sensor collects and upload debug message to the server each 15 min.
      */
-    AWARESensor * debug = [[Debug alloc] init];
+    AWARESensor * debug = [[Debug alloc] initWithAwareStudy:nil];
     [debug startSensor:60*15 withSettings:nil];
     [_sensorManager addNewSensor:debug];
 }
@@ -460,7 +474,19 @@
     
     // Refresh a study: Donwlod configurations and set it on the device
     AWAREStudy *awareStudy = [[AWAREStudy alloc] init];
+    
+    
+    /* [NOTE]:
+     * A simulator can not use camera API for reading a study QR code, therefore, a developer has to add a study url directly by youself.
+     * Also, a developer can get the url from a AWARE Dashboard. If you want to add the url directly, you should allow following souce code ("===Test code for a simulator===").
+     */
+    // === Test code for a simulator ===
+    //[awareStudy setStudyInformationWithURL:@"https://api.awareframework.com/index.php/webservice/index/628/rqBnwZw9xNyq"];
+    // =================================
+    
+    // =================================
     [awareStudy refreshStudy];
+    // =================================
     
     // Init sensors
     // TODO: The study refresh and initList is not synced, then if the user calls lots of times during sort time, AWARE make a doublicate sensor and uploader.
@@ -536,8 +562,12 @@
         [alert show];
     // Set Wi-Fi and mobile network setting
     }else if([key isEqualToString:@"STUDY_CELL_WIFI"]){ //wifi
-        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Sync Statement" message:@"Do you want to sync your data only WiFi enviroment?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"YES",@"NO",nil];
+        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Sync Statement (Network)" message:@"Do you want to sync your data with only Wi-Fi enviroment?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"YES",@"NO",nil];
         alert.tag = 3;
+        [alert show];
+    }else if([key isEqualToString:@"STUDY_CELL_BATTERY"]){
+        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Sync Statement (Battery)" message:@"Do you want to sync your data with only battery charging condition?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"YES",@"NO",nil];
+        alert.tag = 9;
         [alert show];
     // Set maximum file size
     }else if([key isEqualToString:@"STUDY_CELL_MAX_FILE_SIZE"]){ //max file size
@@ -615,7 +645,7 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
         double syncInterval = [interval doubleValue] * 60.0f;
         [userDefaults setObject:[NSNumber numberWithDouble:syncInterval] forKey:SETTING_SYNC_INT];
         [self pushedStudyRefreshButton:alertView];
-    }else if([title isEqualToString:@"Sync Statement"]){
+    }else if(alertView.tag == 3){
         NSLog(@"%ld", buttonIndex);
         if (buttonIndex == 1){ //yes
             [userDefaults setBool:YES forKey:SETTING_SYNC_WIFI_ONLY];
@@ -626,6 +656,17 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
             [userDefaults setBool:NO forKey:SETTING_SYNC_WIFI_ONLY];
             [self initContentsOnTableView];
 //            [self pushedStudyRefreshButton:alertView];
+        } else {
+            NSLog(@"Cancel");
+        }
+    }else if (alertView.tag == 9){ // Set Sync Setting
+        NSLog(@"%ld", buttonIndex);
+        if (buttonIndex == 1){ //yes
+            [userDefaults setBool:YES forKey:SETTING_SYNC_BATTERY_CHARGING_ONLY];
+            [self initContentsOnTableView];
+        } else if (buttonIndex == 2){ // no
+            [userDefaults setBool:NO forKey:SETTING_SYNC_BATTERY_CHARGING_ONLY];
+            [self initContentsOnTableView];
         } else {
             NSLog(@"Cancel");
         }

@@ -7,6 +7,7 @@
 //
 
 #import "AWAREUtils.h"
+#import "AWAREKeys.h"
 #import <CommonCrypto/CommonDigest.h>
 #import <UIKit/UIKit.h>
 #import <sys/utsname.h>
@@ -146,7 +147,6 @@ This method provides a system uuid.
     NSNumber* unixtime = [NSNumber numberWithLongLong:timeStamp];
     return unixtime;
 }
-
 
 
 /**

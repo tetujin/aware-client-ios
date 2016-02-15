@@ -13,8 +13,8 @@
     NSTimer* timer;
 }
 
-- (instancetype)initWithSensorName:(NSString *)sensorName{
-    self = [super initWithSensorName:sensorName];
+- (instancetype)initWithSensorName:(NSString *)sensorName withAwareStudy:(AWAREStudy *)study{
+    self = [super initWithSensorName:sensorName withAwareStudy:study];
     if (self) {
         manager = [[CMMotionManager alloc] init];
     }
@@ -43,7 +43,8 @@
     NSLog(@"[%@] Start Mag sensor", [self getSensorName]);
     timer = [NSTimer scheduledTimerWithTimeInterval:upInterval target:self selector:@selector(syncAwareDB) userInfo:nil repeats:YES];
     
-    [self startWriteAbleTimer];
+//    [self startWriteAbleTimer];
+    [self setBufferSize:100];
     double frequency = [self getSensorSetting:settings withKey:@"frequency_magnetometer"];
     if(frequency != -1){
         NSLog(@"Accelerometer's frequency is %f !!", frequency);
@@ -80,7 +81,7 @@
 - (BOOL)stopSensor{
     [manager stopMagnetometerUpdates];
     [timer invalidate];
-    [self stopWriteableTimer];
+//    [self stopWriteableTimer];
     return YES;
 }
 

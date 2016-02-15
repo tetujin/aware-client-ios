@@ -67,8 +67,8 @@ int ONE_HOUR = 60*60;
 //    return self;
 //}
 
-- (instancetype) initWithSensorName:(NSString *)sensorName {
-    self = [super initWithSensorName:SENSOR_PLUGIN_OPEN_WEATHER];
+- (instancetype) initWithSensorName:(NSString *)sensorName withAwareStudy:(AWAREStudy *)study{
+    self = [super initWithSensorName:SENSOR_PLUGIN_OPEN_WEATHER withAwareStudy:study];
     if (self) {
         locationManager = nil;
         NSDate *date = [NSDate new];

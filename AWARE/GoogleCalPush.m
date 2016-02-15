@@ -16,8 +16,8 @@
     NSDate * fireDate;
 }
 
-- (instancetype)initWithSensorName:(NSString *)sensorName {
-    self = [super initWithSensorName:sensorName];
+- (instancetype)initWithSensorName:(NSString *)sensorName withAwareStudy:(AWAREStudy *)study{
+    self = [super initWithSensorName:sensorName withAwareStudy:study];
     if (self) {
         NSDate* date = [NSDate date];
         fireDate  = [AWAREUtils getTargetNSDate:date hour:20 minute:0 second:0 nextDay:NO];

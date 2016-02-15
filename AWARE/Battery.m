@@ -27,8 +27,8 @@
 //    int lastBatteryLevel;
 }
 
-- (instancetype)initWithSensorName:(NSString *)sensorName{
-    self = [super initWithSensorName:sensorName];
+- (instancetype)initWithSensorName:(NSString *)sensorName withAwareStudy:(AWAREStudy *)study{
+    self = [super initWithSensorName:sensorName withAwareStudy:study];
     if (self) {
         
 //
@@ -51,8 +51,10 @@
         }
         // Get default information from local storage
         
-        batteryChargeSensor = [[AWARESensor alloc] initWithSensorName:BATTERY_CHARGERES];
-        batteryDischargeSensor = [[AWARESensor alloc] initWithSensorName:BATTERY_DISCHARGERES];
+        batteryChargeSensor = [[AWARESensor alloc] initWithSensorName:BATTERY_CHARGERES withAwareStudy:study];
+        batteryDischargeSensor = [[AWARESensor alloc] initWithSensorName:BATTERY_DISCHARGERES withAwareStudy:study];
+        [batteryChargeSensor trackDebugEvents];
+        [batteryDischargeSensor trackDebugEvents];
     }
     return self;
 }

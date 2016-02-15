@@ -30,8 +30,8 @@
     NSDate * lastUpdate;
 }
 
-- (instancetype)initWithSensorName:(NSString *)sensorName{
-    self = [super initWithSensorName:SENSOR_PLUGIN_PEDOMETER];
+- (instancetype)initWithSensorName:(NSString *)sensorName withAwareStudy:(AWAREStudy *)study{
+    self = [super initWithSensorName:SENSOR_PLUGIN_PEDOMETER withAwareStudy:study];
     if (self) {
         KEY_DEVICE_ID = @"device_id";
         KEY_TIMESTAMP =@"timestamp";

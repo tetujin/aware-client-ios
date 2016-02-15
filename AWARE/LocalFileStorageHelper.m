@@ -16,10 +16,8 @@
     uint64_t fileSize;
     NSString * sensorName;
     
-    bool writeAble;
-    NSMutableString *bufferStr;
-    
-    NSTimer* writeAbleTimer;
+    NSMutableArray * bufferArray;
+    int bufferSize;
     
     Debug * debugSensor;
     
@@ -32,8 +30,10 @@
         sensorName = name;
         KEY_SENSOR_UPLOAD_MARK = [NSString stringWithFormat:@"key_sensor_upload_mark_%@", sensorName];
         KEY_SENSOR_UPLOAD_LOSTED_TEXT_LENGTH = [NSString stringWithFormat:@"key_sensor_upload_losted_text_length_%@", sensorName];
-        bufferStr = [[NSMutableString alloc] init];
-        writeAble = YES;
+
+        bufferArray = [[NSMutableArray alloc] init];
+        bufferSize = 0;
+
         [self createNewFile:sensorName];
     }
     return self;
@@ -83,27 +83,35 @@
 //        NSLog(@"[%@] This sensor is Locked now!", [self getSensorName]);
         return NO;
     }
+
+    [bufferArray addObject:data];
     
-    NSError*error=nil;
-    NSData*d=[NSJSONSerialization dataWithJSONObject:data options:2 error:&error];
-    NSString* jsonstr = [[NSString alloc] init];
-    if (!error) {
-        jsonstr = [[NSString alloc]initWithData:d encoding:NSUTF8StringEncoding];
-    } else {
-        NSString * errorStr = [NSString stringWithFormat:@"[%@] %@", [self getSensorName], [error localizedDescription]];
-        // [AWAREUtils sendLocalNotificationForMessage:errorStr soundFlag:YES];
-        [self saveDebugEventWithText:errorStr type:DebugTypeError label:@""];
-        return NO;
-    }
-    [bufferStr appendString:[jsonstr copy]];
-    [bufferStr appendFormat:@","];
-    
-    if ( writeAble) {
-        [self appendLine:[bufferStr mutableCopy]];
-        [bufferStr setString:@""];
-        if(writeAbleTimer != nil){
-            [self setWriteableNO];
+    if ( bufferArray.count >  bufferSize) {
+        
+        NSError*error=nil;
+        NSData*d=[NSJSONSerialization dataWithJSONObject:bufferArray options:2 error:&error];
+        NSMutableString* jsonstr = nil;
+        if (!error) {
+            jsonstr = [[NSMutableString alloc] initWithData:d encoding:NSUTF8StringEncoding];
+        } else {
+            NSString * errorStr = [NSString stringWithFormat:@"[%@] %@", [self getSensorName], [error localizedDescription]];
+            // [AWAREUtils sendLocalNotificationForMessage:errorStr soundFlag:YES];
+            [self saveDebugEventWithText:errorStr type:DebugTypeError label:@""];
+            return NO;
         }
+        // remove head and tail object ([]) TODO check
+        NSRange deleteRangeHead = NSMakeRange(0, 1);
+        [jsonstr deleteCharactersInRange:deleteRangeHead];
+        NSRange deleteRangeTail = NSMakeRange(jsonstr.length-1, 1);
+        [jsonstr deleteCharactersInRange:deleteRangeTail];
+        // append "," to the tail of object
+        [jsonstr appendFormat:@","];
+        
+        // save the data to local storage
+        [self appendLine:jsonstr];
+        
+        // init buffer array
+        [bufferArray removeAllObjects];
     }
     return YES;
 }
@@ -211,13 +219,13 @@
         [self saveDebugEventWithText:message type:DebugTypeError label:@""];
         return Nil;
     }
-    NSLog(@"--> %ld", seek);
+//    NSLog(@"--> %ld", seek);
     if (seek > [self getLostedTextLength]) {
         NSInteger seekPointWithLostedText = seek-[self getLostedTextLength];
         if (seekPointWithLostedText < 0) {
             seekPointWithLostedText = seek;
         }
-        NSLog(@"----------> %ld, %d", seek, [self getLostedTextLength]);
+//        NSLog(@"----------> %ld, %d", seek, [self getLostedTextLength]);
         [fileHandle seekToFileOffset:seekPointWithLostedText];
     }else{
         [fileHandle seekToFileOffset:seek];
@@ -355,26 +363,33 @@
 /**
  * A File access balancer
  */
-- (void) startWriteAbleTimer {
-    writeAbleTimer =  [NSTimer scheduledTimerWithTimeInterval:10.0f
-                                                       target:self
-                                                     selector:@selector(setWriteableYES)
-                                                     userInfo:nil repeats:YES];
-    [writeAbleTimer fire];
-}
-
-
-- (void) stopWriteableTimer{
-    if (!writeAbleTimer) {
-        [writeAbleTimer invalidate];
-        writeAble = nil;
+//- (void) startWriteAbleTimer {
+//    writeAbleTimer =  [NSTimer scheduledTimerWithTimeInterval:10.0f
+//                                                       target:self
+//                                                     selector:@selector(setWriteableYES)
+//                                                     userInfo:nil repeats:YES];
+//    [writeAbleTimer fire];
+//}
+//
+//
+//- (void) stopWriteableTimer{
+//    if (!writeAbleTimer) {
+//        [writeAbleTimer invalidate];
+//        writeAble = nil;
+//    }
+//}
+//
+//- (void) setWriteableYES{ writeAble = YES; }
+//
+//- (void) setWriteableNO{ writeAble = NO; }
+- (void)setBufferSize:(int)size{
+    if (size >= 0 ) {
+        bufferSize = size;
+    }else{
+        bufferSize = 0;
     }
+
 }
-
-- (void) setWriteableYES{ writeAble = YES; }
-
-- (void) setWriteableNO{ writeAble = NO; }
-
 
 //////////////////////////////////////////////
 ///////////////////////////////////////////////

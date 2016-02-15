@@ -23,42 +23,44 @@
     NSString* PRIMARY_GOOGLE_ACCOUNT_NAME;
     NSString* KEY_AWARE_CAL_FIRST_ACCESS;
     
+    AWAREStudy * awareStudy;
+    
 //    BOOL isAddOrUpdate;
 //    EKEvent* targetEvent;
 //    CalEvent * deletedEvent;
 }
 
 
-- (instancetype) initWithPluginName:(NSString *)pluginName
-                           deviceId:(NSString *)deviceId{
-    self  = [super initWithPluginName:pluginName deviceId:deviceId];
-        if (self) {
-            allEvents = [[NSMutableArray alloc] init];
-            store = [[EKEventStore alloc] init];
-            
-            googleCalPullSensorName = @"balancedcampuscalendar";
-            PRIMARY_GOOGLE_ACCOUNT_NAME = @"primary_google_account_name";
-            KEY_AWARE_CAL_FIRST_ACCESS  = @"key_aware_cal_first_access";
+- (instancetype) initWithPluginName:(NSString *)pluginName awareStudy:(AWAREStudy *)study{
+    self  = [super initWithSensorName:pluginName withAwareStudy:study];
+    awareStudy = study;
+    if (self) {
+        allEvents = [[NSMutableArray alloc] init];
+        store = [[EKEventStore alloc] init];
+        
+        googleCalPullSensorName = @"balancedcampuscalendar";
+        PRIMARY_GOOGLE_ACCOUNT_NAME = @"primary_google_account_name";
+        KEY_AWARE_CAL_FIRST_ACCESS  = @"key_aware_cal_first_access";
 
-            [store requestAccessToEntityType:EKEntityTypeEvent completion:^(BOOL granted, NSError *error){
-                if(granted){ // yes
-                    [[NSNotificationCenter defaultCenter] addObserver:self
-                                                             selector:@selector(storeChanged:)
-                                                                 name:EKEventStoreChangedNotification
-                                                               object:store];
-                }else{ // no
-                }
-            }];
-            
-            
-            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-            BOOL state = [userDefaults boolForKey:KEY_AWARE_CAL_FIRST_ACCESS];
-            if (!state) {
-                [self saveOriginalCalEvents];
-                [userDefaults setBool:YES forKey:KEY_AWARE_CAL_FIRST_ACCESS];
+        [store requestAccessToEntityType:EKEntityTypeEvent completion:^(BOOL granted, NSError *error){
+            if(granted){ // yes
+                [[NSNotificationCenter defaultCenter] addObserver:self
+                                                         selector:@selector(storeChanged:)
+                                                             name:EKEventStoreChangedNotification
+                                                           object:store];
+            }else{ // no
             }
+        }];
+        
+        
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        BOOL state = [userDefaults boolForKey:KEY_AWARE_CAL_FIRST_ACCESS];
+        if (!state) {
+            [self saveOriginalCalEvents];
+            [userDefaults setBool:YES forKey:KEY_AWARE_CAL_FIRST_ACCESS];
         }
-        return self;
+    }
+    return self;
 }
 
 
@@ -116,11 +118,13 @@
     return [userDefaults objectForKey:PRIMARY_GOOGLE_ACCOUNT_NAME];
 }
 
+
+
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings {
     
     NSLog(@"[%@] Create table", [self getSensorName]);
 
-    AWARESensor *balancedCampusCalendarSensor = [[AWARESensor alloc] initWithSensorName:googleCalPullSensorName];
+    AWARESensor *balancedCampusCalendarSensor = [[AWARESensor alloc] initWithSensorName:googleCalPullSensorName withAwareStudy:awareStudy];
     CalEvent *calEvent = [[CalEvent alloc] init];
     [self createTable:[calEvent getCreateTableQuery]];
     [self addAnAwareSensor:balancedCampusCalendarSensor];
@@ -134,7 +138,7 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:EKEventStoreChangedNotification
                                                   object:store];
-    [self stopAndRemoveAllSensors];
+//    [self stopAndRemoveAllSensors];
     return YES;
 }
 
@@ -229,7 +233,7 @@
 
 - (void) saveCalEvent:(CalEvent *)calEvent{
 //    CalEvent *calEvent = [[CalEvent alloc] initWithEKEvent:event eventType:eventType];
-    NSMutableDictionary * dic = [calEvent getCalEventAsDictionaryWithDeviceId:[self getDeviceId]
+    NSMutableDictionary * dic = [calEvent getCalEventAsDictionaryWithDeviceId:[awareStudy getDeviceId]
                                                                     timestamp:[AWAREUtils getUnixTimestamp:[NSDate new]]];
     [self saveData:dic toLocalFile:googleCalPullSensorName];
 //    NSLog(@"%@", dic);

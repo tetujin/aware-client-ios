@@ -17,11 +17,13 @@ typedef enum: NSInteger {
     DebugTypeCrash = 4
 } DebugType;
 
+
 @interface Debug : AWARESensor <AWARESensorDelegate>
 //@property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 //@property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 //@property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
+- (instancetype) initWithAwareStudy:(AWAREStudy *) study;
 
 - (void) saveDebugEventWithText:(NSString *)eventText type:(NSInteger)type label:(NSString *) label;
 @end

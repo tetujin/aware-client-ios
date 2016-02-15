@@ -15,8 +15,8 @@
     NSTimer* gTimer;
 }
 
-- (instancetype)initWithSensorName:(NSString *)sensorName{
-    self = [super initWithSensorName:sensorName];
+- (instancetype)initWithSensorName:(NSString *)sensorName withAwareStudy:(AWAREStudy *)study{
+    self = [super initWithSensorName:sensorName withAwareStudy:study];
     if (self) {
         gyroManager = [[CMMotionManager alloc] init];
     }
@@ -45,8 +45,8 @@
     NSLog(@"[%@] Start Gyro Sensor", [self getSensorName]);
     gTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval target:self selector:@selector(syncAwareDB) userInfo:nil repeats:YES];
     
-//    [self setBufferLimit:10000];
-    [self startWriteAbleTimer];
+    [self setBufferSize:100];
+//    [self startWriteAbleTimer];
     
     double frequency = [self getSensorSetting:settings withKey:@"frequency_gyroscope"];
     if(frequency != -1){
@@ -84,7 +84,7 @@
 - (BOOL)stopSensor{
     [gyroManager stopGyroUpdates];
     [gTimer invalidate];
-    [self stopWriteableTimer];
+//    [self stopWriteableTimer];
     return YES;
 }
 

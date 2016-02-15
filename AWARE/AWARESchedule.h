@@ -40,6 +40,7 @@ extern NSString * const SCHEDULE_ACTION_TYPE_BROADCAST;
 extern NSString * const SCHEDULE_ACTION_TYPE_ACTIVITY;
 extern NSString * const SCHEDULE_ACTION_TYPE_SERVICE;
 
+
 @interface AWARESchedule : NSObject
 
 - (instancetype) initWithScheduleId:(NSString* ) scheduleId;

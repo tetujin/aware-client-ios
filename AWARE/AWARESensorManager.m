@@ -88,39 +88,39 @@
             bool exit = [self isExist:key];
             if ([value isEqualToString:@"true"] && !exit) {
                 if ([key isEqualToString:SENSOR_ACCELEROMETER]) {
-                    awareSensor= [[Accelerometer alloc] initWithSensorName:SENSOR_ACCELEROMETER];
+                    awareSensor= [[Accelerometer alloc] initWithSensorName:SENSOR_ACCELEROMETER withAwareStudy:awareStudy];
                 }else if([key isEqualToString:SENSOR_BAROMETER]){
-                    awareSensor = [[Barometer alloc] initWithSensorName:SENSOR_BAROMETER];
+                    awareSensor = [[Barometer alloc] initWithSensorName:SENSOR_BAROMETER withAwareStudy:awareStudy];
                 }else if([key isEqualToString:SENSOR_GYROSCOPE]){
-                    awareSensor = [[Gyroscope alloc] initWithSensorName:SENSOR_GYROSCOPE];
+                    awareSensor = [[Gyroscope alloc] initWithSensorName:SENSOR_GYROSCOPE withAwareStudy:awareStudy];
                 }else if([key isEqualToString:SENSOR_MAGNETOMETER]){
-                    awareSensor = [[Magnetometer alloc] initWithSensorName:SENSOR_MAGNETOMETER];
+                    awareSensor = [[Magnetometer alloc] initWithSensorName:SENSOR_MAGNETOMETER  withAwareStudy:awareStudy];
                 }else if([key isEqualToString:SENSOR_BATTERY]){
-                    awareSensor = [[Battery alloc] initWithSensorName:SENSOR_BATTERY];
+                    awareSensor = [[Battery alloc] initWithSensorName:SENSOR_BATTERY  withAwareStudy:awareStudy];
                 }else if([key isEqualToString:SENSOR_LOCATIONS]){
-                    awareSensor = [[Locations alloc] initWithSensorName:SENSOR_LOCATIONS];
+                    awareSensor = [[Locations alloc] initWithSensorName:SENSOR_LOCATIONS  withAwareStudy:awareStudy];
                 }else if([key isEqualToString:SENSOR_NETWORK]){
-                    awareSensor = [[Network alloc] initWithSensorName:SENSOR_NETWORK];
+                    awareSensor = [[Network alloc] initWithSensorName:SENSOR_NETWORK withAwareStudy:awareStudy];
                 }else if([key isEqualToString:SENSOR_WIFI]){
-                    awareSensor = [[Wifi alloc] initWithSensorName:SENSOR_WIFI];
+                    awareSensor = [[Wifi alloc] initWithSensorName:SENSOR_WIFI withAwareStudy:awareStudy];
                 }else if ([key isEqualToString:SENSOR_PROCESSOR]){
-                    awareSensor = [[Processor alloc] initWithSensorName:SENSOR_PROCESSOR];
+                    awareSensor = [[Processor alloc] initWithSensorName:SENSOR_PROCESSOR withAwareStudy:awareStudy];
                 }else if ([key isEqualToString:SENSOR_GRAVITY]){
-                    awareSensor = [[Gravity alloc] initWithSensorName:SENSOR_GRAVITY];
+                    awareSensor = [[Gravity alloc] initWithSensorName:SENSOR_GRAVITY withAwareStudy:awareStudy];
                 }else if([key isEqualToString:SENSOR_LINEAR_ACCELEROMETER]){
-                    awareSensor = [[LinearAccelerometer alloc] initWithSensorName:SENSOR_LINEAR_ACCELEROMETER];
+                    awareSensor = [[LinearAccelerometer alloc] initWithSensorName:SENSOR_LINEAR_ACCELEROMETER withAwareStudy:awareStudy];
                 }else if([key isEqualToString:SENSOR_BLUETOOTH]){
-                    awareSensor = [[Bluetooth alloc] initWithSensorName:SENSOR_BLUETOOTH];
+                    awareSensor = [[Bluetooth alloc] initWithSensorName:SENSOR_BLUETOOTH withAwareStudy:awareStudy];
                 }else if([key isEqualToString:SENSOR_SCREEN]){
-                    awareSensor = [[Screen alloc] initWithSensorName:SENSOR_SCREEN];
+                    awareSensor = [[Screen alloc] initWithSensorName:SENSOR_SCREEN withAwareStudy:awareStudy];
                 }else if([key isEqualToString:SENSOR_PROXIMITY]){
-                    awareSensor = [[Proximity alloc] initWithSensorName:SENSOR_PROXIMITY];
+                    awareSensor = [[Proximity alloc] initWithSensorName:SENSOR_PROXIMITY withAwareStudy:awareStudy];
                 }else if([key isEqualToString:SENSOR_TIMEZONE]){
-                    awareSensor = [[Timezone alloc] initWithSensorName:SENSOR_TIMEZONE];
+                    awareSensor = [[Timezone alloc] initWithSensorName:SENSOR_TIMEZONE withAwareStudy:awareStudy];
                 }else if([key isEqualToString:SENSOR_ESMS]){
-                    awareSensor = [[ESM alloc] initWithSensorName:SENSOR_ESMS];
+                    awareSensor = [[ESM alloc] initWithSensorName:SENSOR_ESMS withAwareStudy:awareStudy];
                 }else if([key isEqualToString:SENSOR_CALLS]){
-                    awareSensor = [[Calls alloc] initWithSensorName:SENSOR_CALLS];
+                    awareSensor = [[Calls alloc] initWithSensorName:SENSOR_CALLS withAwareStudy:awareStudy];
                 }
                 // Start AWARESensor with some delay (0.5 sec) by each sensor for reducing memory stress
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, i * 0.5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
@@ -144,34 +144,34 @@
                 if (pluginState) {
 //                    NSLog(@"--> %@", key);
                     if ([key isEqualToString:SENSOR_PLUGIN_GOOGLE_ACTIVITY_RECOGNITION]) {
-                        awareSensor = [[ActivityRecognition alloc] initWithSensorName:SENSOR_PLUGIN_GOOGLE_ACTIVITY_RECOGNITION];
+                        awareSensor = [[ActivityRecognition alloc] initWithSensorName:SENSOR_PLUGIN_GOOGLE_ACTIVITY_RECOGNITION  withAwareStudy:awareStudy];
                         [awareSensor startSensor:uploadTime withSettings:pluginSettings];
                     }else if([key isEqualToString:SENSOR_PLUGIN_OPEN_WEATHER]){
-                        awareSensor = [[OpenWeather alloc] initWithSensorName:SENSOR_PLUGIN_OPEN_WEATHER];
-                        [awareSensor startSensor:uploadTime withSettings:pluginSettings];
+                        awareSensor = [[OpenWeather alloc] initWithSensorName:SENSOR_PLUGIN_OPEN_WEATHER  withAwareStudy:awareStudy];
+                        [awareSensor startSensor:uploadTime withSettings:pluginSettings ];
                     }else if([key isEqualToString:SENSOR_PLUGIN_DEVICE_USAGE]){
-                        awareSensor = [[DeviceUsage alloc] initWithSensorName:SENSOR_PLUGIN_DEVICE_USAGE];
+                        awareSensor = [[DeviceUsage alloc] initWithSensorName:SENSOR_PLUGIN_DEVICE_USAGE  withAwareStudy:awareStudy];
                         [awareSensor startSensor:uploadTime withSettings:pluginSettings];
                     }else if([key isEqualToString:SENSOR_PLUGIN_NTPTIME]){
-                        awareSensor = [[NTPTime alloc] initWithSensorName:SENSOR_PLUGIN_NTPTIME];
+                        awareSensor = [[NTPTime alloc] initWithSensorName:SENSOR_PLUGIN_NTPTIME withAwareStudy:awareStudy];
                         [awareSensor startSensor:uploadTime withSettings:pluginSettings];
                     }else if([key isEqualToString:SENSOR_PLUGIN_MSBAND]){
-                        awareSensor = [[MSBand alloc] initWithPluginName:SENSOR_PLUGIN_MSBAND deviceId:deviceId];
+                        awareSensor = [[MSBand alloc] initWithPluginName:SENSOR_PLUGIN_MSBAND awareStudy:awareStudy];
                         [awareSensor startSensor:uploadTime withSettings:pluginSettings];
                     }else if([key isEqualToString:SENSOR_PLUGIN_GOOGLE_CAL_PULL]){
-                        awareSensor = [[GoogleCalPull alloc] initWithPluginName:SENSOR_PLUGIN_GOOGLE_CAL_PULL deviceId:deviceId];
+                        awareSensor = [[GoogleCalPull alloc] initWithPluginName:SENSOR_PLUGIN_GOOGLE_CAL_PULL awareStudy:awareStudy];
                         [awareSensor startSensor:uploadTime withSettings:pluginSettings];
                     }else if([key isEqualToString:SENSOR_PLUGIN_GOOGLE_CAL_PUSH]){
-                        awareSensor = [[GoogleCalPush alloc] initWithSensorName:SENSOR_PLUGIN_GOOGLE_CAL_PUSH];
+                        awareSensor = [[GoogleCalPush alloc] initWithSensorName:SENSOR_PLUGIN_GOOGLE_CAL_PUSH withAwareStudy:awareStudy];
                         [awareSensor startSensor:uploadTime withSettings:pluginSettings];
                     }else if([key isEqualToString:SENSOR_PLUGIN_GOOGLE_LOGIN]){
-                        awareSensor = [[GoogleLogin alloc] initWithSensorName:SENSOR_PLUGIN_GOOGLE_LOGIN];
+                        awareSensor = [[GoogleLogin alloc] initWithSensorName:SENSOR_PLUGIN_GOOGLE_LOGIN withAwareStudy:awareStudy];
                         [awareSensor startSensor:uploadTime withSettings:pluginSettings];
                     }else if([key isEqualToString:SENSOR_PLUGIN_CAMPUS]){
-                        awareSensor = [[Scheduler alloc] initWithSensorName:SENSOR_PLUGIN_CAMPUS];
+                        awareSensor = [[Scheduler alloc] initWithSensorName:SENSOR_PLUGIN_CAMPUS withAwareStudy:awareStudy];
                         [awareSensor startSensor:uploadTime withSettings:pluginSettings];
                     }else if([key isEqualToString:SENSOR_GOOGLE_FUSED_LOCATION]){
-                        awareSensor = [[FusedLocations alloc] initWithSensorName:SENSOR_GOOGLE_FUSED_LOCATION];
+                        awareSensor = [[FusedLocations alloc] initWithSensorName:SENSOR_GOOGLE_FUSED_LOCATION withAwareStudy:awareStudy];
                         [awareSensor startSensor:uploadTime withSettings:pluginSettings];
                     }
                     break;

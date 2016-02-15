@@ -10,6 +10,7 @@
 #import <SystemConfiguration/SystemConfiguration.h>
 #import <Foundation/Foundation.h>
 #import "AWAREUtils.h"
+#import "AWAREStudy.h"
 
 @protocol AWARESensorDelegate <NSObject>
 - (BOOL) startSensor:(double)upInterval withSettings:(NSArray *)settings;
@@ -19,50 +20,52 @@
 
 @interface AWARESensor : NSObject <AWARESensorDelegate, UIAlertViewDelegate>
 
-- (instancetype) initWithSensorName:(NSString *) sensorName;
+- (instancetype) initWithSensorName:(NSString *) sensorName withAwareStudy:(AWAREStudy *) study;
 
-- (void) sensorLock;
-- (void) sensorUnLock;
-
-// for storing debug events
+// save debug events
 - (void) trackDebugEvents;
 - (bool) saveDebugEventWithText:(NSString *)eventText type:(NSInteger)type label:(NSString *)label;
 
-// for manual data upload
+// get condition
 - (NSString *) getNetworkReachabilityAsText;
-- (bool) isUploading;
-
-// store data
-- (void) startWriteAbleTimer;
-- (void) stopWriteableTimer;
-- (void) syncAwareDB;
-- (BOOL) syncAwareDBInForeground;
-- (BOOL) syncAwareDBWithData:(NSDictionary *) dictionary;
-
-
-- (void) setLatestValue:(NSString *) valueStr;
 - (NSString *) getLatestValue;
 - (NSString *) getDeviceId;
+- (NSString *) getSensorName;
+- (double) getSensorSetting:(NSArray *)settings withKey:(NSString *)key;
+- (bool) isUploading;
 
+// create table
+- (void) createTable:(NSString *)query withTableName:(NSString*) tableName;
+- (void) createTable:(NSString *)query;
+
+// clear table
+- (BOOL) clearTable;
+
+// store data
+- (void) setBufferSize:(int)size;
 - (BOOL) getDebugState;
 - (bool) saveData:(NSDictionary *) data;
 - (bool) saveData:(NSDictionary *) data toLocalFile:(NSString*) fileName;
 - (bool) saveDataWithArray:(NSArray*) array;
+- (void) setLatestValue:(NSString *) valueStr;
 
+// sync data
+- (void) syncAwareDB;
+- (BOOL) syncAwareDBInForeground;
+- (BOOL) syncAwareDBWithData:(NSDictionary *) dictionary;
+
+// show progress of uploading
 - (NSString *) getSyncProgressAsText;
 - (NSString *) getSyncProgressAsText:(NSString*) sensorName;
-//- (NSString *) getLatestSensorData:(NSString*)deviceId withUrl:(NSString*) url;
-- (double) getSensorSetting:(NSArray *)settings withKey:(NSString *)key;
+
+// lock
+- (void) sensorLock;
+- (void) sensorUnLock;
 
 
-- (void) createTable:(NSString *)query withTableName:(NSString*) tableName;
-- (void) createTable:(NSString *)query;
-- (BOOL) clearTable;
 
-
-//- (void) setSensorName:(NSString *) sensorName;
-- (NSString *) getSensorName;
+// Utils
 - (double) convertMotionSensorFrequecyFromAndroid:(double)frequency;
-- (void)sendLocalNotificationForMessage:(NSString *)message soundFlag:(BOOL)soundFlag;
+- (void) sendLocalNotificationForMessage:(NSString *)message soundFlag:(BOOL)soundFlag;
 
 @end

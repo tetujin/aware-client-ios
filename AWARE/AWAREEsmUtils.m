@@ -5,6 +5,8 @@
 //  Created by Yuuki Nishiyama on 1/24/16.
 //  Copyright © 2016 Yuuki NISHIYAMA. All rights reserved.
 //
+//  This class provies utilites of esm
+//
 
 #import "AWAREEsmUtils.h"
 #import "ESM.h"
@@ -12,21 +14,17 @@
 
 @implementation AWAREEsmUtils
 
-
+/**
+ * Save esm objects to a main local storage
+ * @param AWARESchedule     an AWARESchedule object
+ * @param NSNumber          a timestamp as NSNumber
+ */
 + (void) saveEsmObjects:(AWARESchedule *) schedule
           withTimestamp:(NSNumber *)timestamp {
     // ESM Objects
-    ESM *esm = [[ESM alloc] initWithSensorName:SENSOR_ESMS];
+    ESM *esm = [[ESM alloc] initWithSensorName:SENSOR_ESMS withAwareStudy:nil];
     NSMutableArray* mulitEsm = schedule.esmObject.esms;
-    
-    // check esm_ios
-    //    if (mulitEsm != nil) {
-    //        mulitEsm = [self checkEsmIOS:mulitEsm];
-    //    }
-    //    double timeStamp = [[NSDate date] timeIntervalSince1970] * 1000;
-    //    NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
-    
-    NSNumber * unixtime = timestamp;//[AWAREUtils getUnixTimestamp:[NSDate new]];
+    NSNumber * unixtime = timestamp;
     NSString * deviceId = [esm getDeviceId];
     
     for ( SingleESMObject * singleEsm in mulitEsm ) {
@@ -49,11 +47,9 @@
         [dic setObject:@"0" forKey:KEY_ESM_STATUS]; // status is new
         
         [esm saveData:dic];
-        //        NSLog(@"%@",dic);
+        // NSLog(@"%@",dic);
     }
 }
-
-
 
 
 + (bool) checkRadioBtnToLikert:(NSDictionary * )dic {
@@ -107,6 +103,13 @@
 }
 
 
+/**
+ * Convert a NSArray to a JSON format NSString. An aware server doesn't support 
+ * array object, therefore we have to convert an array object.
+ * 
+ * @param NSArray   A NSArray object (e.g., labels for esm such as esm_type radios, checkboxes, and quick answer).
+ * @return NSString A NSString object which is a json format
+ */
 + (NSString* ) convertArrayToCSVFormat:(NSArray *) array {
     if (array == nil || array.count == 0){
         return @"";

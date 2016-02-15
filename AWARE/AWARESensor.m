@@ -40,7 +40,7 @@
 
 @implementation AWARESensor
 
-- (instancetype) initWithSensorName:(NSString *)sensorName {
+- (instancetype) initWithSensorName:(NSString *)sensorName withAwareStudy:(AWAREStudy *)study {
     if (self = [super init]) {
         NSLog(@"[%@] Initialize an AWARESensor as '%@' ", sensorName, sensorName);
         
@@ -49,10 +49,15 @@
         
         localStorage = [[LocalFileStorageHelper alloc] initWithStorageName:sensorName];
         
-        awareStudy = [[AWAREStudy alloc] init];
+        if(study == nil){
+            awareStudy = [[AWAREStudy alloc] init];
+        }else{
+            awareStudy = study;
+        }
+        
         awareSensorName = sensorName;
         latestSensorValue = @"";
-        uploader = [[AWAREDataUploader alloc] initWithLocalStorage:localStorage];
+        uploader = [[AWAREDataUploader alloc] initWithLocalStorage:localStorage withAwareStudy:awareStudy];
     }
     return self;
 }
@@ -118,14 +123,9 @@
     return [localStorage saveData:data toLocalFile:fileName];
 }
 
-- (void)startWriteAbleTimer{
-    [localStorage startWriteAbleTimer];
+- (void) setBufferSize:(int) size{
+    [localStorage setBufferSize:size];
 }
-
-- (void) stopWriteableTimer{
-    [localStorage stopWriteableTimer];
-}
-
 
 
 //////////////////////////////////////////
@@ -251,7 +251,7 @@
  * Set Debug Sensor
  */
 - (void) trackDebugEvents {
-    debugSensor = [[Debug alloc] init];
+    debugSensor = [[Debug alloc] initWithAwareStudy:awareStudy];
     [localStorage trackDebugEventsWithDebugSensor:debugSensor];
     [uploader trackDebugEventsWithDebugSensor:debugSensor];
 }

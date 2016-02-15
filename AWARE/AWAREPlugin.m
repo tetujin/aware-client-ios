@@ -12,32 +12,31 @@
 
 @implementation AWAREPlugin {
     NSMutableArray* awareSensors;
-    NSMutableArray* awareTimers;
+//    NSMutableArray* awareTimers;
+    NSTimer* timer;
 }
 
 /**
  * Initialization of AWARE Plugin
  */
-- (instancetype) initWithPluginName:(NSString *)pluginName deviceId:(NSString*) deviceId {
-    self = [super initWithSensorName:pluginName];
+- (instancetype) initWithPluginName:(NSString *)pluginName awareStudy:(AWAREStudy *) study {
+    self = [super initWithSensorName:pluginName withAwareStudy:study];
     if (self) {
         _pluginName = pluginName;
-        _deviceId = deviceId;
+        _deviceId = [study getDeviceId];
         awareSensors = [[NSMutableArray alloc] init];
-        awareTimers = [[ NSMutableArray alloc] init];
     }
     return self;
 }
 
 - (instancetype)initWithSensorName:(NSString *)sensorName {
-    self = [super initWithSensorName:sensorName];
+    self = [super initWithSensorName:sensorName withAwareStudy:nil];
     NSLog(@"====[ERROR]====");
     NSLog(@"Please init with initWithPluginName:pluginName:deviceId method. This initializer is ilelgal for init for AWARE plugin.");
     if (self) {
         _pluginName = sensorName;
         _deviceId = [self getDeviceId];
         awareSensors = [[NSMutableArray alloc] init];
-        awareTimers = [[ NSMutableArray alloc] init];
     }
     return self;
 }
@@ -80,28 +79,45 @@
  */
 - (BOOL)startAllSensors:(double)upInterval
            withSettings:(NSArray *)settings{
-    for (AWARESensor* sensor in awareSensors) {
+//    for (AWARESensor* sensor in awareSensors) {
 //        [sensor startSensor:upInterval withSettings:settings];
-        NSTimer* timer = [NSTimer scheduledTimerWithTimeInterval:upInterval
-                                                          target:sensor
+        timer = [NSTimer scheduledTimerWithTimeInterval:upInterval
+                                                          target:self
                                                         selector:@selector(syncAwareDB)
                                                         userInfo:nil
                                                          repeats:YES];
         [timer fire];
-        [awareTimers addObject:timer];
-    }
+//        [awareTimers addObject:timer];
+//    }
     return YES;
+}
+
+- (void)syncAwareDB {
+     for (AWARESensor* sensor in awareSensors) {
+         [sensor syncAwareDB];
+     }
+}
+
+- (BOOL)syncAwareDBInForeground {
+    bool result = YES;
+    for (AWARESensor* sensor in awareSensors) {
+        if(![sensor syncAwareDBInForeground]){
+            result = NO;
+        }
+    }
+    return result;
 }
 
 /**
  * Stop and remove all sensors
  */
 - (BOOL)stopAndRemoveAllSensors {
-    for (NSTimer* timer in awareTimers) {
+//    for (NSTimer* timer in awareTimers) {
+    if (timer != nil) {
         [timer invalidate];
     }
-    [awareTimers removeAllObjects];
-    
+//    }
+//    [awareTimers removeAllObjects];
     for (AWARESensor* sensor in awareSensors) {
         [sensor stopSensor];
     }

@@ -15,8 +15,8 @@
     NSTimer * sensingTimer;
 }
 
-- (instancetype)initWithSensorName:(NSString *)sensorName{
-    self = [super initWithSensorName:sensorName];
+- (instancetype)initWithSensorName:(NSString *)sensorName withAwareStudy:(AWAREStudy *)study{
+    self = [super initWithSensorName:sensorName withAwareStudy:study];
     if (self) {
     }
     return self;
@@ -44,6 +44,8 @@
     
     NSLog(@"[%@] Start Wifi Sensor", [self getSensorName]);
     double interval = 1.0f;
+    
+    [self setBufferSize:10];
     
     double frequency = [self getSensorSetting:settings withKey:@"frequency_wifi"];
     if(frequency != -1){

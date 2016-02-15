@@ -20,6 +20,8 @@
 // DebugPlugin Library
 #import "Debug.h"
 
+#import "MSBand.h"
+
 
 @implementation AppDelegate
 
@@ -55,6 +57,12 @@
     NSAssert(!configureError, @"Error configuring Google services: %@", configureError);
     [GIDSignIn sharedInstance].delegate = self;
     
+    // Microsoft Band Plugin
+//    AWAREStudy * awareStudy = [[AWAREStudy alloc] init];
+//    MSBand * awareSensor = [[MSBand alloc] initWithPluginName:SENSOR_PLUGIN_MSBAND awareStudy:awareStudy];
+//    [awareSensor startSensor:60*15 withSettings:[awareStudy getPlugins]];
+//    [awareSensor trackDebugEvents];
+    
     
     NSLog(@"Turn 'OFF' the auto sleep mode on this app");
     [UIApplication sharedApplication].idleTimerDisabled = YES;
@@ -73,7 +81,7 @@ void exceptionHandler(NSException *exception) {
     
     NSString * error = [NSString stringWithFormat:@"[%@] %@ , %@" , exception.name, exception.reason, exception.callStackSymbols];
     
-    Debug * debugSensor = [[Debug alloc] init];
+    Debug * debugSensor = [[Debug alloc] initWithAwareStudy:nil];
     [debugSensor saveDebugEventWithText:error type:DebugTypeCrash label:exception.name];
  }
 
@@ -155,8 +163,6 @@ void exceptionHandler(NSException *exception) {
 }
 
 
-
-
 ////////////////////////////////
 ///   Backgroud Fetch
 ///
@@ -166,35 +172,37 @@ void exceptionHandler(NSException *exception) {
 
 - (void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
-    NSLog(@"Start a background fetch ...");
-    
-    /// for 30 sec
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm"];
-    NSString *formattedDateString = [dateFormatter stringFromDate:[NSDate new]];
-    
-    Debug * debug = [[Debug alloc] init];
-    [debug saveDebugEventWithText:@"This is a background fetch" type:DebugTypeInfo label:formattedDateString];
-    bool result = [debug syncAwareDBInForeground];
-    
-    NSString * debugMessage = @"";
-    if (result) {
-        debugMessage = @"Sucess to upload debug message in the background fetch.";
-    }else{
-        debugMessage = @"Faile to upload debug message in the background fetch.";
-    }
-    [debug saveDebugEventWithText:debugMessage type:DebugTypeInfo label:formattedDateString];
-//    [AWAREUtils sendLocalNotificationForMessage:debugMessage soundFlag:YES];
-    
-    if (result) {
-        completionHandler(UIBackgroundFetchResultNewData);
-    }else{
-        completionHandler(UIBackgroundFetchResultFailed);
-    }
-    
-    debug = nil;
-    
-    NSLog(@"... Finish a background fetch");
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        
+        NSLog(@"Start a background fetch ...");
+        /// for 30 sec
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm"];
+        NSString *formattedDateString = [dateFormatter stringFromDate:[NSDate new]];
+        
+        Debug * debug = [[Debug alloc] initWithAwareStudy:nil];
+        [debug saveDebugEventWithText:@"This is a background fetch" type:DebugTypeInfo label:formattedDateString];
+        bool result = [debug syncAwareDBInForeground];
+        
+        NSString * debugMessage = @"";
+        if (result) {
+            debugMessage = @"Sucess to upload debug message in the background fetch.";
+        }else{
+            debugMessage = @"Faile to upload debug message in the background fetch.";
+        }
+        [debug saveDebugEventWithText:debugMessage type:DebugTypeInfo label:formattedDateString];
+        //    [AWAREUtils sendLocalNotificationForMessage:debugMessage soundFlag:YES];
+        
+        if (result) {
+            completionHandler(UIBackgroundFetchResultNewData);
+        }else{
+            completionHandler(UIBackgroundFetchResultFailed);
+        }
+        
+        debug = nil;
+        
+        NSLog(@"... Finish a background fetch");
+    });
 }
 
 
@@ -317,7 +325,7 @@ didSignInForUser:(GIDGoogleUser *)user
     NSLog(@"%@",[alertView textFieldAtIndex:0].text);
     if (buttonIndex != 0) {
         NSString * phonenumber = [alertView textFieldAtIndex:0].text;
-        GoogleLogin * googleLogin = [[GoogleLogin alloc] initWithSensorName:SENSOR_PLUGIN_GOOGLE_LOGIN];
+        GoogleLogin * googleLogin = [[GoogleLogin alloc] initWithSensorName:SENSOR_PLUGIN_GOOGLE_LOGIN withAwareStudy:nil];
         NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
 //        NSString *userId = [defaults objectForKey:@"GOOGLE_ID"];                  // For client-side use only!
 //        NSString *idToken = [defaults objectForKey:@"GOOGLE_ID_TOKEN"]; // Safe to send to the server

@@ -24,8 +24,8 @@ NSString* const KEY_CALLS_TRACE = @"trace";
     NSDate * start;
 }
 
-- (instancetype)initWithSensorName:(NSString *)sensorName{
-    self = [super initWithSensorName:@"calls" ];
+- (instancetype)initWithSensorName:(NSString *)sensorName withAwareStudy:(AWAREStudy *)study{
+    self = [super initWithSensorName:@"calls" withAwareStudy:study];
     if (self) {
 
     }

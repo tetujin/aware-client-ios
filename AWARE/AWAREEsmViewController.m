@@ -955,7 +955,7 @@
     NSLog(@"Submit button was pushed!");
     
     NSMutableArray *array = [[NSMutableArray alloc] init];
-    ESM *esm = [[ESM alloc] initWithSensorName:SENSOR_ESMS];
+    ESM *esm = [[ESM alloc] initWithSensorName:SENSOR_ESMS withAwareStudy:nil];
     
     NSNumber *NEW = @0;
     NSNumber *DISMISSED = @1;
@@ -1198,7 +1198,7 @@
     NSMutableArray *answers = [[NSMutableArray alloc] init];
     
     // Create
-    ESM *esm = [[ESM alloc] initWithSensorName:SENSOR_ESMS];
+    ESM *esm = [[ESM alloc] initWithSensorName:SENSOR_ESMS withAwareStudy:nil];
     NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
     NSString *deviceId = [esm getDeviceId];
     for (int i=0; i<uiElements.count; i++) {

@@ -21,8 +21,8 @@
     NSTimer * sensingTimer;
 }
 
-- (instancetype)initWithSensorName:(NSString *)sensorName{
-    self = [super initWithSensorName:sensorName];
+- (instancetype)initWithSensorName:(NSString *)sensorName withAwareStudy:(AWAREStudy *)study{
+    self = [super initWithSensorName:sensorName withAwareStudy:study];
     if (self) {
 //        [super setSensorName:sensorName];
     }
@@ -47,9 +47,11 @@
 
 
 
-- (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings {
+- (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
     NSLog(@"[%@] Create Table", [self getSensorName]);
     [self createTable];
+    
+    [self setBufferSize:100];
     
     double frequency = [self getSensorSetting:settings withKey:@"frequency_processor"];
     if(frequency < 1.0f ){

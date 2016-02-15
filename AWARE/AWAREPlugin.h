@@ -10,7 +10,8 @@
 
 
 @protocol AWAREPluginDelegate <NSObject>
-- (instancetype)initWithPluginName:(NSString *)pluginName deviceId:(NSString*) deviceId;
+//- (instancetype)initWithPluginName:(NSString *)pluginName deviceId:(NSString*) deviceId;
+- (instancetype) initWithPluginName:(NSString *)pluginName awareStudy:(AWAREStudy *) study;
 - (BOOL) startAllSensors:(double)upInterval withSettings:(NSArray *)settings;
 - (BOOL) stopAndRemoveAllSensors;
 @end
@@ -23,7 +24,7 @@
 /**
  * Init
  */
-- (instancetype) initWithPluginName:(NSString *)pluginName deviceId:(NSString *)deviceId;
+- (instancetype) initWithPluginName:(NSString *)pluginName awareStudy:(AWAREStudy *) study;
 
 
 - (NSString *) getDeviceId ;

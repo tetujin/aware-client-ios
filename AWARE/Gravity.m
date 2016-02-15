@@ -21,8 +21,8 @@
     NSTimer * uploadTimer;
 }
 
-- (instancetype)initWithSensorName:(NSString *)sensorName{
-    self = [super initWithSensorName:sensorName];
+- (instancetype)initWithSensorName:(NSString *)sensorName withAwareStudy:(AWAREStudy *)study{
+    self = [super initWithSensorName:sensorName withAwareStudy:study];
     if (self) {
         motionManager = [[CMMotionManager alloc] init];
     }
@@ -52,7 +52,8 @@
     NSLog(@"[%@] Start Gravity Sensor", [self getSensorName]);
     double interval = 0.1f;
     
-    [self startWriteAbleTimer];
+//    [self startWriteAbleTimer];
+    [self setBufferSize:100];
     double frequency = [self getSensorSetting:settings withKey:@"frequency_gravity"];
     if(frequency != -1){
         NSLog(@"Gravity's frequency is %f !!", frequency);
@@ -89,7 +90,7 @@
 - (BOOL)stopSensor{
     [uploadTimer invalidate];
     [motionManager stopDeviceMotionUpdates];
-    [self stopWriteableTimer];
+//    [self stopWriteableTimer];
     return YES;
 }
 

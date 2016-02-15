@@ -14,8 +14,8 @@
 }
 
 
-- (instancetype)initWithSensorName:(NSString *)sensorName {
-    self = [super initWithSensorName:sensorName];
+- (instancetype)initWithSensorName:(NSString *)sensorName withAwareStudy:(AWAREStudy *)study{
+    self = [super initWithSensorName:sensorName withAwareStudy:study];
     if (self) {
         motionManager = [[CMMotionManager alloc] init];
     }
@@ -45,7 +45,6 @@
  * https://developer.apple.com/library/ios/documentation/CoreMotion/Reference/CMDeviceMotion_Class/index.html#//apple_ref/occ/cl/CMDeviceMotion
  */
 
-//- (BOOL)startSensor:(double)interval withUploadInterval:(double)upInterval{
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
     NSLog(@"[%@] Create Table", [self getSensorName]);
     [self createTable];
@@ -54,7 +53,8 @@
     int interval = 0.1f;
     
 //    [self setBufferLimit:10000];
-    [self startWriteAbleTimer];
+//    [self startWriteAbleTimer];
+    [self setBufferSize:100];
     double frequency = [self getSensorSetting:settings withKey:@"frequency_rotation"];
     if(frequency != -1){
         NSLog(@"Accelerometer's frequency is %f !!", frequency);
@@ -114,7 +114,7 @@
 - (BOOL)stopSensor{
     [uploadTimer invalidate];
     [motionManager stopDeviceMotionUpdates];
-    [self stopWriteableTimer];
+//    [self stopWriteableTimer];
     return YES;
 }
 

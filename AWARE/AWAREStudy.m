@@ -10,6 +10,7 @@
 #import "AWAREKeys.h"
 #import "SSLManager.h"
 #import "AWAREUtils.h"
+#import <SCNetworkReachability.h>
 
 @implementation AWAREStudy {
     NSString *mqttPassword;
@@ -21,6 +22,10 @@
     int mqttKeepAlive;
     int mqttQos;
     bool readingState;
+    
+    SCNetworkReachability * reachability;
+    bool wifiReachable;
+    NSInteger networkState;
 }
 
 - (instancetype)init {
@@ -51,6 +56,21 @@
             studyId = [userDefaults objectForKey:KEY_STUDY_ID];
             webserviceServer = [userDefaults objectForKey:KEY_WEBSERVICE_SERVER];
         }
+        reachability = [[SCNetworkReachability alloc] initWithHost:@"www.google.com"];
+        [reachability observeReachability:^(SCNetworkStatus status){
+            networkState = status;
+            switch (status){
+                case SCNetworkStatusReachableViaWiFi:
+                    wifiReachable = YES;
+                    break;
+                case SCNetworkStatusReachableViaCellular:
+                    wifiReachable = NO;
+                    break;
+                case SCNetworkStatusNotReachable:
+                    wifiReachable = NO;
+                    break;
+            }
+        }];
     }
     return self;
 }
@@ -71,6 +91,13 @@
     return [self setStudyInformation:url withDeviceId:deviceId];
 }
 
+/**
+ * This method downloads and sets a study configuration by using study URL. (NOTE: This URL can get from a study QRCode.)
+ *
+ * @param url An study URL (e.g., https://r2d2.hcii.cs.cmu.edu/aware/dashboard/index.php/webservice/index/41/4LtzPxcAIrdi)
+ * @param a device_id of this device
+ * @return The result of download and set a study configuration
+ */
 - (bool) setStudyInformation:(NSString *)url withDeviceId:(NSString *) uuid {
     __weak NSURLSession *session = nil;
     // Set session configuration
@@ -87,8 +114,8 @@
     [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
     [request setHTTPBody:postData];
 
-    // A process in the foreground
-    if ( [AWAREUtils isForeground] ) {
+    
+    if ( [AWAREUtils isForeground] ) { /// If the application in the foreground
         NSURLSession *session = [NSURLSession sharedSession];
         [[session dataTaskWithRequest: request  completionHandler: ^(NSData *data, NSURLResponse *response, NSError *error) {
             [session finishTasksAndInvalidate];
@@ -114,8 +141,7 @@
                 }
             }
         }] resume];
-    // A process in the background
-    }else{
+    } else { // If the application in the background
         sessionConfig = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:_getSettingIdentifier];
         sessionConfig.timeoutIntervalForRequest = 120.0;
         sessionConfig.HTTPMaximumConnectionsPerHost = 60;
@@ -132,6 +158,14 @@
 }
 
 
+/* The task has received a response and no further messages will be
+ * received until the completion block is called. The disposition
+ * allows you to cancel a request or to turn a data task into a
+ * download task. This delegate message is optional - if you do not
+ * implement it, you can get the response as a property of the task.
+ *
+ * This method will not be called for background upload tasks (which cannot be converted to download tasks).
+ */
 - (void)URLSession:(NSURLSession *)session
           dataTask:(NSURLSessionDataTask *)dataTask
 didReceiveResponse:(NSURLResponse *)response
@@ -145,6 +179,11 @@ didReceiveResponse:(NSURLResponse *)response
 }
 
 
+/* Sent when data is available for the delegate to consume.  It is
+ * assumed that the delegate will retain and not copy the data.  As
+ * the data may be discontiguous, you should use
+ * [NSData enumerateByteRangesUsingBlock:] to access it.
+ */
 -(void)URLSession:(NSURLSession *)session
          dataTask:(NSURLSessionDataTask *)dataTask
    didReceiveData:(NSData *)data {
@@ -155,7 +194,12 @@ didReceiveResponse:(NSURLResponse *)response
 }
 
 
-- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error {
+/* Sent as the last message related to a specific task.  Error may be
+ * nil, which implies that no error occurred and this task is complete.
+ */
+- (void)URLSession:(NSURLSession *)session
+              task:(NSURLSessionTask *)task
+didCompleteWithError:(NSError *)error {
     if (error != nil) {
         NSLog(@"ERROR: %@ %ld", error.debugDescription , error.code);
         if (error.code == -1202) {
@@ -400,6 +444,182 @@ didReceiveResponse:(NSURLResponse *)response
 }
 
 
+/**
+ * Refresh a study configuration. When the method is called, the method access to 
+ * the aware sernver and download configurations from the server by using -setStudyInformationWithURL.
+ * If this device does not join a study, this method can not refresh the study 
+ * and return a NO (false) as a BOOL value.
+ *
+ * NOTE: The response of this method is not synchronized in the background!!
+ *
+ * @return a refresh query is sent(YES) or not sent(NO) as a BOOL value
+ */
+- (BOOL) refreshStudy {
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString *url = [userDefaults objectForKey:KEY_STUDY_QR_CODE];
+    if (url != nil) {
+        [self setStudyInformationWithURL:url];
+        return YES;
+    }
+    return NO;
+}
+
+
+
+
+
+///////////////////////////////////////////////////////////////////////
+// Getter
+////////////////////////////////////////////////////////////////////////
+
+/**
+ * Get a device id from a local storage.
+ * @return a device id of this device
+ */
+- (NSString *)getDeviceId {
+    if ([mqttUsername isEqualToString:@""] || mqttUsername == nil) {
+        return [AWAREUtils getSystemUUID];
+    }
+    return mqttUsername;
+}
+
+///  MQTT Information ///
+/**
+ * Get an address of MQTT server (e.g,. "api.awareframework.com")
+ * @return an address of mqtt server
+ */
+- (NSString* ) getMqttServer{
+    return mqttServer;
+}
+
+
+/**
+ * Get an user name of MQTT. Actually, this value is same as a 
+ * device_id(c09e93dc-5067-4f9b-b639-9cbc232eb6f8) of this device.
+ *
+ * @return a device_id of this device
+ */
+- (NSString* ) getMqttUserName{ return mqttUsername; }
+
+
+/**
+ * Get a password of MQTT server
+ * @return a password of MQTT server as a NSString value
+ */
+- (NSString* ) getMqttPassowrd{ return mqttPassword; }
+
+
+/**
+ * Get a port of MQTT server
+ * @return a port of MQTT server a NSNumber
+ */
+- (NSNumber* ) getMqttPort{ return [NSNumber numberWithInt:mqttPort]; }
+
+
+/**
+ * Get a time of MQTT Keep Alive
+ * @return a time of MQTT Keep Alive as NSNumber
+ */
+- (NSNumber* ) getMqttKeepAlive{ return [NSNumber numberWithInt:mqttKeepAlive]; }
+
+
+/**
+ * Get a MQTT QOS as NSNumber
+ * @return a value of MQTT QOS
+ */
+- (NSNumber* ) getMqttQos{ return [NSNumber numberWithInt:mqttQos]; }
+
+
+/**
+ * Get a study_id (e.g., 24)
+ * @return a study id
+ */
+- (NSString* ) getStudyId{ return studyId; }
+
+
+/**
+ * Get an aware server name (e.g., api.awareframework.com )
+ * @return an name of an aware server
+ */
+- (NSString* ) getWebserviceServer{ return webserviceServer; }
+
+
+/**
+ * Get sensor settings from a local storage as a NSArray object
+ * @return a sensor settings as a NSArray object
+ */
+- (NSArray *) getSensors {
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    return [userDefaults objectForKey:KEY_SENSORS];
+}
+
+/**
+ * Get plugin settings from a local storage as a NSArray object
+ * @return a plugin settings as a NSArray object
+ */
+- (NSArray *) getPlugins{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    return [userDefaults objectForKey:KEY_PLUGINS];
+}
+
+
+/**
+ * Clean all AWARE study configuration from a local storage (NSUserDefaults)
+ * @return a result of a cleaning operation
+ */
+- (BOOL) clearAllSetting {
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults removeObjectForKey:KEY_MQTT_SERVER];
+    [userDefaults removeObjectForKey:KEY_MQTT_USERNAME];
+    [userDefaults removeObjectForKey:KEY_MQTT_PASS];
+    [userDefaults removeObjectForKey:KEY_MQTT_PORT];
+    [userDefaults removeObjectForKey:KEY_MQTT_KEEP_ALIVE];
+    [userDefaults removeObjectForKey:KEY_MQTT_QOS];
+    [userDefaults removeObjectForKey:KEY_STUDY_ID];
+    [userDefaults removeObjectForKey:KEY_WEBSERVICE_SERVER];
+    [userDefaults removeObjectForKey:KEY_SENSORS];
+    [userDefaults removeObjectForKey:KEY_PLUGINS];
+    return YES;
+}
+
+
+/**
+ * Get a Wi-Fi network reachable as a boolean
+ * @return a Wi-Fi network reachable as a boolean
+ */
+- (bool) isWifiReachable { return wifiReachable; }
+
+
+/**
+ * Get a network condition as text
+ * @return a network reachability as a text
+ */
+- (NSString *) getNetworkReachabilityAsText{
+    NSString * reachabilityText = @"";
+    switch (networkState){
+        case SCNetworkStatusReachableViaWiFi:
+            reachabilityText = @"wifi";
+            break;
+        case SCNetworkStatusReachableViaCellular:
+            reachabilityText = @"cellular";
+            break;
+        case SCNetworkStatusNotReachable:
+            reachabilityText = @"no";
+            break;
+        default:
+            reachabilityText = @"unknown";
+            break;
+    }
+    return reachabilityText;
+}
+
+
+
+
+///////////////////////////////////////
+// Checker
+///////////////////////////////////////
+
 
 - (BOOL) isFirstAccess:(NSString*) url withDeviceId:(NSString *) uuid {
     // check latest record
@@ -446,85 +666,5 @@ didReceiveResponse:(NSURLResponse *)response
         return NO;
     }
 }
-
-
-- (BOOL)refreshStudy {
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    NSString *url = [userDefaults objectForKey:KEY_STUDY_QR_CODE];
-    if (url != nil) {
-        [self setStudyInformationWithURL:url];
-        return YES;
-    }
-    return NO;
-}
-
-
-- (NSString *)getDeviceId {
-    if ([mqttUsername isEqualToString:@""] || mqttUsername == nil) {
-        return [AWAREUtils getSystemUUID];
-    }
-    return mqttUsername;
-}
-
-// MQTT Information
-- (NSString* ) getMqttServer{
-    return mqttServer;
-}
-
-- (NSString* ) getMqttUserName{
-    return mqttUsername;
-}
-
-- (NSString* ) getMqttPassowrd{
-    return mqttPassword;
-}
-
-- (NSNumber* ) getMqttPort{
-    return [NSNumber numberWithInt:mqttPort];
-}
-
-- (NSNumber* ) getMqttKeepAlive{
-    return [NSNumber numberWithInt:mqttKeepAlive];
-}
-
-- (NSNumber* ) getMqttQos{
-    return [NSNumber numberWithInt:mqttKeepAlive];
-}
-
-// Study Information
-- (NSString* ) getStudyId{
-    return studyId;}
-
-
-- (NSString* ) getWebserviceServer{
-    return webserviceServer;
-}
-
-
-- (NSArray *) getSensors {
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    return [userDefaults objectForKey:KEY_SENSORS];
-}
-
-- (NSArray *) getPlugins{
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    return [userDefaults objectForKey:KEY_PLUGINS];
-}
-
-- (BOOL) clearAllSetting {
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults removeObjectForKey:KEY_MQTT_SERVER];
-    [userDefaults removeObjectForKey:KEY_MQTT_USERNAME];
-    [userDefaults removeObjectForKey:KEY_MQTT_PASS];
-    [userDefaults removeObjectForKey:KEY_MQTT_PORT];
-    [userDefaults removeObjectForKey:KEY_MQTT_KEEP_ALIVE];
-    [userDefaults removeObjectForKey:KEY_MQTT_QOS];
-    [userDefaults removeObjectForKey:KEY_STUDY_ID];
-    [userDefaults removeObjectForKey:KEY_WEBSERVICE_SERVER];
-    [userDefaults removeObjectForKey:KEY_SENSORS];
-    [userDefaults removeObjectForKey:KEY_PLUGINS];
-    return YES;
-}
-
 
 @end

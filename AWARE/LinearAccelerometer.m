@@ -24,8 +24,8 @@
 }
 
 
-- (instancetype)initWithSensorName:(NSString *)sensorName{
-    self = [super initWithSensorName:sensorName];
+- (instancetype)initWithSensorName:(NSString *)sensorName withAwareStudy:(AWAREStudy *)study{
+    self = [super initWithSensorName:sensorName withAwareStudy:study];
     if (self) {
         motionManager = [[CMMotionManager alloc] init];
     }
@@ -47,14 +47,14 @@
 }
 
 
-//- (BOOL)startSensor:(double)interval withUploadInterval:(double)upInterval{
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
     NSLog(@"[%@] Create Table", [self getSensorName]);
     [self createTable];
     
     NSLog(@"[%@] Start Linear Acc Sensor", [self getSensorName]);
     double interval = 0.1f;
-    [self startWriteAbleTimer];
+//    [self startWriteAbleTimer];
+    [self setBufferSize:100];
     
     double frequency = [self getSensorSetting:settings withKey:@"frequency_linear_accelerometer"];
     if(frequency != -1){
@@ -114,7 +114,7 @@
 - (BOOL)stopSensor{
     [uploadTimer invalidate];
     [motionManager stopDeviceMotionUpdates];
-    [self stopWriteableTimer];
+//    [self stopWriteableTimer];
     return YES;
 }
 

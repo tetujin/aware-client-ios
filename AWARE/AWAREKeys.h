@@ -13,7 +13,7 @@ extern NSString* const KEY_AWARE_STUDY;
 extern NSString* const KEY_APP_TERMINATED;
 
 extern NSString* const KEY_MAX_DATA_SIZE;
-extern NSString* const KEY_MARK;
+extern NSString* const KEY_UPLOAD_MARK;
 
 extern NSString* const KEY_SENSORS;
 extern NSString* const KEY_PLUGINS;
@@ -34,6 +34,7 @@ extern NSString* const KEY_WEBSERVICE_SERVER;
 extern NSString* const SETTING_DEBUG_STATE;
 extern NSString *const SETTING_SYNC_WIFI_ONLY;
 extern NSString* const SETTING_SYNC_INT;
+extern NSString* const SETTING_SYNC_BATTERY_CHARGING_ONLY;
 
 
 extern NSString* const TABLE_INSER;

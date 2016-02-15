@@ -32,8 +32,8 @@ static void AudioInputCallback(
 }
 
 
-- (instancetype)initWithSensorName:(NSString *)sensorName{
-    self = [super initWithSensorName:sensorName ];
+- (instancetype)initWithSensorName:(NSString *)sensorName withAwareStudy:(AWAREStudy *)study{
+    self = [super initWithSensorName:sensorName  withAwareStudy:study];
     if (self) {
         AudioStreamBasicDescription dataFormat;
         dataFormat.mSampleRate = 44100.0f;
@@ -54,7 +54,7 @@ static void AudioInputCallback(
     NSLog(@"Start Anbient Sensor!");
     timer = [NSTimer scheduledTimerWithTimeInterval:upInterval
                                              target:self selector:@selector(syncAwareDB) userInfo:nil repeats:YES];
-    [self startWriteAbleTimer];
+    [self setBufferSize:10];
     [self startUpdatingVolume];
 //    [audioController setInputEnabled:NO];
 //    AudioSessionSetActive(false);
@@ -65,7 +65,6 @@ static void AudioInputCallback(
 -(BOOL) stopSensor{
     [timer invalidate];
     [sensingTimer invalidate];
-    [self stopWriteableTimer];
     [self stopUpdatingVolume];
     return YES;
 }

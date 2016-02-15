@@ -30,8 +30,8 @@
     NSTimer * timer;
 }
 
-- (instancetype)init{
-    self = [super initWithSensorName:@"aware_debug"];
+- (instancetype)initWithAwareStudy:(AWAREStudy *) study {
+    self = [super initWithSensorName:@"aware_debug" withAwareStudy:study];
     if (self) {
         KEY_DEBUG_TIMESTAMP = @"timestamp";
         KEY_DEBUG_DEVICE_ID = @"device_id";
@@ -83,6 +83,8 @@
                                            selector:@selector(syncAwareDB)
                                            userInfo:nil
                                             repeats:YES];
+    
+    [self setBufferSize:10];
     
     // Software Update Event
     NSString* currentVersion = [NSString stringWithFormat:@"%@",[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]];

@@ -13,7 +13,7 @@ NSString* const KEY_AWARE_STUDY = @"key_aware_study";
 NSString* const KEY_APP_TERMINATED = @"key_app_terminated";
 
 NSString* const KEY_MAX_DATA_SIZE = @"key_max_data_size_";
-NSString* const KEY_MARK = @"key_data_mark_";
+NSString* const KEY_UPLOAD_MARK = @"key_data_mark_";
 
 NSString* const KEY_SENSORS = @"sensors";
 NSString* const KEY_PLUGINS = @"plugins";
@@ -33,6 +33,7 @@ NSString* const KEY_WEBSERVICE_SERVER = @"webservice_server";
 NSString* const SETTING_DEBUG_STATE = @"setting_debug_state";
 NSString *const SETTING_SYNC_WIFI_ONLY = @"setting_sync_wifi_only";
 NSString* const SETTING_SYNC_INT = @"setting_sync_interval";
+NSString* const SETTING_SYNC_BATTERY_CHARGING_ONLY = @"setting_sync_battery_charging_only";
 
 
 NSString* const TABLE_INSERT = @"insert";

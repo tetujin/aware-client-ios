@@ -23,10 +23,13 @@
     NSString* PLUGIN_MSBAND_SENSORS_GYRO;
     NSString* PLUGIN_MSBAND_SENSORS_ALTIMETER;
     NSString* PLUGIN_MSBAND_SENSORS_BAROMETER;
+    
+    AWAREStudy * awareStudy;
 }
 
-- (instancetype)initWithPluginName:(NSString *)pluginName deviceId:(NSString *)deviceId {
-    self = [super initWithPluginName:pluginName deviceId:deviceId];
+- (instancetype)initWithPluginName:(NSString *)pluginName awareStudy:(AWAREStudy *)study{
+    self = [super initWithPluginName:pluginName awareStudy:study];
+    awareStudy = study;
     if (self) {
         PLUGIN_MSBAND_SENSORS_ACC = @"plugin_msband_sensors_accelerometer";
         PLUGIN_MSBAND_SENSORS_GYRO = @"plugin_msband_sensors_gyroscope";
@@ -93,10 +96,15 @@ didFailToConnectWithError:(NSError *)error{
 }
 
 - (NSNumber *) getUnixTime {
-//    double timeStamp = [[NSDate date] timeIntervalSince1970] * 1000;
-//    NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
-//    return unixtime;
     return [AWAREUtils getUnixTimestamp:[NSDate new]];
+}
+
+- (void)syncAwareDB{
+    [super syncAwareDB];
+}
+
+- (BOOL)syncAwareDBInForeground{
+    return [super syncAwareDBInForeground];
 }
 
 - (void)startMSBSensors:(double)upInterval withSettings:(NSArray *)settings{
@@ -140,7 +148,7 @@ didFailToConnectWithError:(NSError *)error{
 
 - (AWARESensor *) getCalorieSensor{
     
-    AWARESensor *calSensor = [[AWARESensor alloc] initWithSensorName:PLUGIN_MSBAND_SENSORS_CALORIES];
+    AWARESensor *calSensor = [[AWARESensor alloc] initWithSensorName:PLUGIN_MSBAND_SENSORS_CALORIES withAwareStudy:awareStudy];
     
     NSString *query = [[NSString alloc] init];
     query = @"_id integer primary key autoincrement,"
@@ -166,6 +174,8 @@ didFailToConnectWithError:(NSError *)error{
     if (![self.client.sensorManager startCaloriesUpdatesToQueue:nil errorRef:&stateError withHandler:calHandler]) {
         NSLog(@"Cal sensor is faild: %@", stateError.description);
     }
+    [calSensor trackDebugEvents];
+    [calSensor setBufferSize:100];
     return calSensor;
 }
 
@@ -173,7 +183,7 @@ didFailToConnectWithError:(NSError *)error{
 
 - (AWARESensor *) getDistanceSensor{
     
-    AWARESensor *distanceSensor = [[AWARESensor alloc] initWithSensorName:PLUGIN_MSBAND_SENSORS_DISTANCE];
+    AWARESensor *distanceSensor = [[AWARESensor alloc] initWithSensorName:PLUGIN_MSBAND_SENSORS_DISTANCE withAwareStudy:awareStudy];
     
     NSString *query = [[NSString alloc] init];
     query = @"_id integer primary key autoincrement,"
@@ -228,11 +238,13 @@ didFailToConnectWithError:(NSError *)error{
     if (![self.client.sensorManager startDistanceUpdatesToQueue:nil errorRef:&stateError withHandler:distanceHandler]) {
         NSLog(@"Distance sensor is faild: %@", stateError.description);
     }
+    [distanceSensor setBufferSize:100];
+    [distanceSensor trackDebugEvents];
     return distanceSensor;
 }
 
 - (AWARESensor *) getGSRSensor { //x
-    AWARESensor * gsrSensor = [[AWARESensor alloc] initWithSensorName:PLUGIN_MSBAND_SENSORS_GSR];
+    AWARESensor * gsrSensor = [[AWARESensor alloc] initWithSensorName:PLUGIN_MSBAND_SENSORS_GSR withAwareStudy:awareStudy];
     NSLog(@"Start a GSR Sensor!");
     void (^gsrHandler)(MSBSensorGSRData *, NSError *error) = ^(MSBSensorGSRData *gsrData, NSError *error){
         NSString *data = [NSString stringWithFormat:@"%8u kOhm", (unsigned int)gsrData.resistance];
@@ -242,13 +254,15 @@ didFailToConnectWithError:(NSError *)error{
     if (![self.client.sensorManager startGSRUpdatesToQueue:nil errorRef:&stateError withHandler:gsrHandler]) {
         NSLog(@"GSE sensor is faild: %@", stateError.description);
     }
+    [gsrSensor setBufferSize:100];
+    [gsrSensor trackDebugEvents];
     return gsrSensor;
 }
 
 
 - (AWARESensor *) getHRSensor {
     
-    AWARESensor *hrSensor = [[AWARESensor alloc] initWithSensorName:PLUGIN_MSBAND_SENSORS_HEARTRATE];
+    AWARESensor *hrSensor = [[AWARESensor alloc] initWithSensorName:PLUGIN_MSBAND_SENSORS_HEARTRATE withAwareStudy:awareStudy];
 
     NSString *query = [[NSString alloc] init];
     query = @"_id integer primary key autoincrement,"
@@ -299,12 +313,14 @@ didFailToConnectWithError:(NSError *)error{
             NSLog(@"User consent declined.");
         }
     }];
+    [hrSensor setBufferSize:100];
+    [hrSensor trackDebugEvents];
     return hrSensor;
 }
 
 
 - (AWARESensor *) getUVSensor {
-    AWARESensor *uvSensor = [[AWARESensor alloc] initWithSensorName:PLUGIN_MSBAND_SENSORS_UV];
+    AWARESensor *uvSensor = [[AWARESensor alloc] initWithSensorName:PLUGIN_MSBAND_SENSORS_UV withAwareStudy:awareStudy];
     NSString *query = [[NSString alloc] init];
     query = @"_id integer primary key autoincrement,"
     "timestamp real default 0,"
@@ -329,17 +345,19 @@ didFailToConnectWithError:(NSError *)error{
     if (![self.client.sensorManager startUVUpdatesToQueue:nil errorRef:&stateError withHandler:uvHandler]) {
         NSLog(@"UV sensor is faild: %@", stateError.description);
     }
+    [uvSensor setBufferSize:100];
+    [uvSensor trackDebugEvents];
     return uvSensor;
 }
 
 - (AWARESensor *) getBatteryGaugeSensor {
-    AWARESensor * batteryGaugeSensor = [[AWARESensor alloc] initWithSensorName:PLUGIN_MSBAND_SENSORS_BATTERYGAUGE];
+    AWARESensor * batteryGaugeSensor = [[AWARESensor alloc] initWithSensorName:PLUGIN_MSBAND_SENSORS_BATTERYGAUGE  withAwareStudy:awareStudy];
     return batteryGaugeSensor;
 }
 
 
 - (AWARESensor *) getSkinTempSensor {
-    AWARESensor *skinTempSensor = [[AWARESensor alloc] initWithSensorName:PLUGIN_MSBAND_SENSORS_SKINTEMP];
+    AWARESensor *skinTempSensor = [[AWARESensor alloc] initWithSensorName:PLUGIN_MSBAND_SENSORS_SKINTEMP  withAwareStudy:awareStudy];
     NSString *query = [[NSString alloc] init];
     query = @"_id integer primary key autoincrement,"
     "timestamp real default 0,"
@@ -365,6 +383,8 @@ didFailToConnectWithError:(NSError *)error{
     if (![self.client.sensorManager startSkinTempUpdatesToQueue:nil errorRef:&stateError withHandler:skinHandler]) {
         NSLog(@"Skin sensor is faild: %@", stateError.description);
     }
+    [skinTempSensor setBufferSize:100];
+    [skinTempSensor trackDebugEvents];
     return skinTempSensor;
 }
 
@@ -382,7 +402,7 @@ didFailToConnectWithError:(NSError *)error{
  */
 
 - (AWARESensor *) getAccSensor {
-    AWARESensor *accSensor = [[AWARESensor alloc] initWithSensorName:PLUGIN_MSBAND_SENSORS_ACC];
+    AWARESensor *accSensor = [[AWARESensor alloc] initWithSensorName:PLUGIN_MSBAND_SENSORS_ACC  withAwareStudy:awareStudy];
     
     NSString *query = [[NSString alloc] init];
     query = @"_id integer primary key autoincrement,"
@@ -420,6 +440,8 @@ didFailToConnectWithError:(NSError *)error{
     if (![self.client.sensorManager startAccelerometerUpdatesToQueue:nil errorRef:&stateError withHandler:accelerometerHandler]) {
         NSLog(@"Accelerometer is faild: %@", stateError.description);
     }
+    [accSensor setBufferSize:100];
+    [accSensor trackDebugEvents];
     return accSensor;
 }
 

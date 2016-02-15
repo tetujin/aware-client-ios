@@ -14,8 +14,8 @@
     NSTimer * uploadTimer;
 }
 
-- (instancetype)initWithSensorName:(NSString *)sensorName{
-    self = [super initWithSensorName:sensorName];
+- (instancetype)initWithSensorName:(NSString *)sensorName withAwareStudy:(AWAREStudy *)study{
+    self = [super initWithSensorName:sensorName withAwareStudy:study];
     if (self) {
 //        [super setSensorName:sensorName];
         motionActivityManager = [[CMMotionActivityManager alloc] init];
@@ -45,20 +45,19 @@
     [super createTable:query];
 }
 
-//- (BOOL)startSensor:(double)interval withUploadInterval:(double)upInterval{
+
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
     NSLog(@"Start Motion Activity Manager! ");
     [self createTable];
 
+    [self setBufferSize:10];
     uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval target:self selector:@selector(syncAwareDB) userInfo:nil repeats:YES];
     /** motion activity */
     if([CMMotionActivityManager isActivityAvailable]){
         motionActivityManager = [CMMotionActivityManager new];
         [motionActivityManager startActivityUpdatesToQueue:[NSOperationQueue new]
                                                 withHandler:^(CMMotionActivity *activity) {
-                                                    if (activity.confidence  == CMMotionActivityConfidenceHigh){
-                                                        [self addMotionActivity:activity];
-                                                    }
+                                                    [self addMotionActivity:activity];
                                                 }];
     }
     return YES;
@@ -134,7 +133,7 @@
         uploadTimer = nil;
     }
     [motionActivityManager stopActivityUpdates];
-    [self stopWriteableTimer];
+//    [self stopWriteableTimer];
     return YES;
 }
 

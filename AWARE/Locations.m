@@ -14,8 +14,8 @@
     IBOutlet CLLocationManager *locationManager;
 }
 
-- (instancetype)initWithSensorName:(NSString *)sensorName{
-    self = [super initWithSensorName:@"locations"];
+- (instancetype)initWithSensorName:(NSString *)sensorName withAwareStudy:(AWAREStudy *)study{
+    self = [super initWithSensorName:@"locations" withAwareStudy:study];
     if (self) {
     }
     return self;

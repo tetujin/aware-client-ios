@@ -18,28 +18,26 @@
 
 - (BOOL) setStudyInformationWithURL:(NSString*)url;
 - (BOOL) refreshStudy;
-
-// device Id
-- (NSString *) getDeviceId;
-
-// for check
-- (BOOL) isAvailable;
 - (BOOL) clearAllSetting;
 
-// MQTT Information
+// Getter
+- (NSString *) getDeviceId;
 - (NSString* ) getMqttServer;
 - (NSString* ) getMqttUserName;
 - (NSString* ) getMqttPassowrd;
 - (NSNumber* ) getMqttPort;
 - (NSNumber* ) getMqttKeepAlive;
 - (NSNumber* ) getMqttQos;
-
-// Study Information
 - (NSString* ) getStudyId;
 - (NSString* ) getWebserviceServer;
 
-// Sensor Infromation
+// Sensor and plugin infromation
 - (NSArray *) getSensors;
 - (NSArray *) getPlugins;
+
+// Check some thing
+- (BOOL) isAvailable;
+- (bool) isWifiReachable;
+- (NSString *) getNetworkReachabilityAsText;
 
 @end

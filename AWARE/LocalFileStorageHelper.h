@@ -61,8 +61,11 @@
 /**
  * A File access balancer
  */
-- (void) startWriteAbleTimer;
-- (void) stopWriteableTimer;
+//- (void) startWriteAbleTimer;
+//- (void) stopWriteableTimer;
+
+- (void) setBufferSize:(int) size;
+
 - (NSString *) getFilePath;
 
 

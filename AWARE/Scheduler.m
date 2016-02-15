@@ -28,8 +28,8 @@
     bool debug;
 }
 
-- (instancetype)initWithSensorName:(NSString *)sensorName {
-    self = [super initWithSensorName:SENSOR_PLUGIN_CAMPUS];
+- (instancetype)initWithSensorName:(NSString *)sensorName withAwareStudy:(AWAREStudy *)study{
+    self = [super initWithSensorName:SENSOR_PLUGIN_CAMPUS withAwareStudy:study];
     if (self) {
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         debug = [userDefaults boolForKey:SETTING_DEBUG_STATE];

@@ -15,10 +15,12 @@
     
     AWARESensor * fusedLocationsSensor;
     AWARESensor * visitLocationSensor;
+    AWAREStudy * awareStudy;
 }
 
-- (instancetype)initWithSensorName:(NSString *)sensorName{
-    self = [super initWithSensorName:@"google_fused_location"];
+- (instancetype)initWithSensorName:(NSString *)sensorName withAwareStudy:(AWAREStudy *)study{
+    self = [super initWithSensorName:@"google_fused_location" withAwareStudy:study];
+    awareStudy = study;
     if (self) {
 //        [super setSensorName:@"google_fused_location"];
     }
@@ -29,7 +31,7 @@
 
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings {
 
-    fusedLocationsSensor = [[AWARESensor alloc] initWithSensorName:@"locations"];
+    fusedLocationsSensor = [[AWARESensor alloc] initWithSensorName:@"locations" withAwareStudy:awareStudy];
     [fusedLocationsSensor createTable:@"_id integer primary key autoincrement,"
                                      "timestamp real default 0,"
                                      "device_id text default '',"
@@ -49,7 +51,7 @@
                                                               repeats:YES];
     
     
-    visitLocationSensor = [[AWARESensor alloc] initWithSensorName:@"locations_visit"];
+    visitLocationSensor = [[AWARESensor alloc] initWithSensorName:@"locations_visit" withAwareStudy:awareStudy];
     [visitLocationSensor createTable:@"_id integer primary key autoincrement,"
                                      "timestamp real default 0,"
                                      "device_id text default '',"
@@ -112,9 +114,9 @@
         locationManager.delegate = self;
         locationManager.desiredAccuracy = accuracySetting;
         locationManager.pausesLocationUpdatesAutomatically = NO;
-        CGFloat currentVersion = [[[UIDevice currentDevice] systemVersion] floatValue];
-        NSLog(@"OS:%f", currentVersion);
-        if (currentVersion >= 9.0) {
+//        CGFloat currentVersion = [[[UIDevice currentDevice] systemVersion] floatValue];
+//        NSLog(@"OS:%f", currentVersion);
+        if ([AWAREUtils getCurrentOSVersionAsFloat] >= 9.0) {
             //This variable is an important method for background sensing after iOS9
             locationManager.allowsBackgroundLocationUpdates = YES;
         }
@@ -123,7 +125,6 @@
             [locationManager requestAlwaysAuthorization];
         }
         // Set a movement threshold for new events.
-//        locationManager.distanceFilter = miniDistrance;
 //        locationManager.distanceFilter = 250;
         [locationManager startUpdatingLocation];
         [locationManager startUpdatingHeading];
@@ -137,9 +138,10 @@
                                                            userInfo:nil
                                                             repeats:YES];
         }
-        
-        
     }
+    
+    [fusedLocationsSensor setBufferSize:10];
+    
     return YES;
 }
 

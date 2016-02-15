@@ -17,8 +17,8 @@
     NSString* KEY_GOOGLE_PHONENUMBER;
 }
 
-- (instancetype)initWithSensorName:(NSString *)sensorName {
-    self = [super initWithSensorName:SENSOR_PLUGIN_GOOGLE_LOGIN];
+- (instancetype)initWithSensorName:(NSString *)sensorName withAwareStudy:(AWAREStudy *)study{
+    self = [super initWithSensorName:SENSOR_PLUGIN_GOOGLE_LOGIN withAwareStudy:study];
     if (self) {
         KEY_GOOGLE_NAME = @"name";
         KEY_GOOGLE_EMAIL = @"email";

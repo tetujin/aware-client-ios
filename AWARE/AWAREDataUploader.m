@@ -25,49 +25,36 @@
     double httpStart;
     double postLengthDouble;
     
-    SCNetworkReachability* reachability;
-    NSInteger networkState;
-    BOOL wifiReachable;
+//    SCNetworkReachability* reachability;
+//    NSInteger networkState;
+//    BOOL wifiReachable;
     
     BOOL isDebug;
     BOOL isLock;
+    BOOL isSyncWithOnlyBatteryCharging;
     
     Debug * debugSensor;
 }
 
 
-- (instancetype)initWithLocalStorage:(LocalFileStorageHelper *)localStorage{
+- (instancetype)initWithLocalStorage:(LocalFileStorageHelper *)localStorage withAwareStudy:(AWAREStudy *) study {
     if (self = [super init]) {
         sensorName = [localStorage getSensorName];
-        awareStudy = [[AWAREStudy alloc] init];
+        
+//        if (study == nil) {
+//            awareStudy = [[AWAREStudy alloc] init];
+//        }else{
+        awareStudy = study;
+//        }
+        
         awareLocalStorage = localStorage;
         isUploading = false;
-//        if ([awareLocalStorage getMarker] >= 1) {
-//            [awareLocalStorage setMarker:([localStorage getMarker] - 1)];
-//        }
         syncDataQueryIdentifier = [NSString stringWithFormat:@"sync_data_query_identifier_%@", sensorName];
         createTableQueryIdentifier = [NSString stringWithFormat:@"create_table_query_identifier_%@",  sensorName];
         
-        reachability = [[SCNetworkReachability alloc] initWithHost:@"www.google.com"];
-        [reachability observeReachability:^(SCNetworkStatus status){
-            networkState = status;
-            switch (status){
-                case SCNetworkStatusReachableViaWiFi:
-                    NSLog(@"[%@] Reachable via WiFi", sensorName);
-                    wifiReachable = YES;
-                    break;
-                case SCNetworkStatusReachableViaCellular:
-                    NSLog(@"[%@] Reachable via Cellular", sensorName);
-                    wifiReachable = NO;
-                    break;
-                case SCNetworkStatusNotReachable:
-                    NSLog(@"[%@] Not Reachable", sensorName);
-                    wifiReachable = NO;
-                    break;
-            }
-        }];
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         isDebug = [userDefaults boolForKey:SETTING_DEBUG_STATE];
+        isSyncWithOnlyBatteryCharging = [userDefaults boolForKey:SETTING_SYNC_BATTERY_CHARGING_ONLY];
     }
     return self;
 }
@@ -96,7 +83,6 @@
 /////////////////////////////////
 
 
-
 /**
  * Background data post
  */
@@ -109,6 +95,7 @@
 
 /** Sync with AWARE database */
 - (void) syncAwareDBWithSensorName:(NSString*) name {
+    // chekc wifi state
     if(isUploading){
         NSString * message= [NSString stringWithFormat:@"[%@] Now sendsor data is uploading.", name];
         NSLog(@"%@", message);
@@ -116,12 +103,26 @@
         return;
     }
     
-    if (!wifiReachable) {
+    // chekc wifi state
+    if (![awareStudy isWifiReachable]) {
         NSString * message = [NSString stringWithFormat:@"[%@] Wifi is not availabe.", name];
         NSLog(@"%@", message);
         [self saveDebugEventWithText:message type:DebugTypeInfo  label:@""];
         return;
     }
+    
+    // check battery condition
+    if (isSyncWithOnlyBatteryCharging) {
+        NSInteger batteryState = [UIDevice currentDevice].batteryState;
+        if ( batteryState == UIDeviceBatteryStateCharging || batteryState == UIDeviceBatteryStateFull) {
+        }else{
+            NSString * message = [NSString stringWithFormat:@"[%@] This device is not charginig battery now.", name];
+            NSLog(@"%@", message);
+            [self saveDebugEventWithText:message type:DebugTypeInfo  label:name];
+            return;
+        }
+    }
+    
     isUploading = YES;
     [self postSensorDataWithSensorName:sensorName session:nil];
 }
@@ -198,7 +199,7 @@ didReceiveResponse:(NSURLResponse *)response
     
     // test: server peformance
     double diff = [[NSDate new] timeIntervalSince1970] - httpStart;
-    NSLog(@"[%@] %f", sensorName, diff);
+//    NSLog(@"[%@] %f", sensorName, diff);
     if (postLengthDouble > 0 && diff > 0) {
         NSString *networkPeformance = [NSString stringWithFormat:@"%0.2f KB/s",postLengthDouble/diff/1000.0f];
         NSLog(@"[%@] %@", sensorName, networkPeformance);
@@ -413,6 +414,7 @@ didReceiveResponse:(NSURLResponse *)response
         // Get sensor data
         NSMutableString* sensorData = [awareLocalStorage getSensorDataForPost];
         sensorData = [awareLocalStorage fixJsonFormat:sensorData];
+//        NSLog(@"%@", sensorData);
         
         if (sensorData.length == 0) {
             NSString * message = [NSString stringWithFormat:@"[%@] Data length is zero => %ld", name, sensorData.length ];
@@ -685,22 +687,7 @@ didReceiveResponse:(NSURLResponse *)response
  * Return current network condition with a text
  */
 - (NSString *) getNetworkReachabilityAsText{
-    NSString * reachabilityText = @"";
-    switch (networkState){
-        case SCNetworkStatusReachableViaWiFi:
-            reachabilityText = @"wifi";
-            break;
-        case SCNetworkStatusReachableViaCellular:
-            reachabilityText = @"cellular";
-            break;
-        case SCNetworkStatusNotReachable:
-            reachabilityText = @"no";
-            break;
-        default:
-            reachabilityText = @"unknown";
-            break;
-    }
-    return reachabilityText;
+    return [awareStudy getNetworkReachabilityAsText];
 }
 
 

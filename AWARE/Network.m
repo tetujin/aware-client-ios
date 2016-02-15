@@ -18,8 +18,8 @@
     NSString* networkSubtype;
 }
 
-- (instancetype)initWithSensorName:(NSString *)sensorName {
-    self = [super initWithSensorName:sensorName];
+- (instancetype)initWithSensorName:(NSString *)sensorName withAwareStudy:(AWAREStudy *)study{
+    self = [super initWithSensorName:sensorName withAwareStudy:study];
     if (self) {
         networkState= YES;
         networkType = @0;
@@ -50,7 +50,7 @@
     
     // start sensor
     NSLog(@"Start Network Sensing!");
-    double interval = 1.0f;
+//    double interval = 60.0f;
     reachability = [[SCNetworkReachability alloc] initWithHost:@"https://github.com"];
     [reachability reachabilityStatus:^(SCNetworkStatus status) {
          switch (status) {
@@ -59,6 +59,7 @@
                  networkState= YES;
                  networkType = @1;
                  networkSubtype = @"WIFI";
+                 [self getNetworkInfo];
                  break;
                  
              case SCNetworkStatusReachableViaCellular:
@@ -66,6 +67,7 @@
                  networkState= YES;
                  networkType = @4;
                  networkSubtype = @"MOBILE";
+                 [self getNetworkInfo];
                  break;
                  
              case SCNetworkStatusNotReachable:
@@ -73,11 +75,12 @@
                  networkType = @0;
                  networkState= NO;
                  networkSubtype = @"";
+                 [self getNetworkInfo];
                  break;
          }
      }];
     
-    sensingTimer = [NSTimer scheduledTimerWithTimeInterval:interval target:self selector:@selector(getNetworkInfo) userInfo:nil repeats:YES];
+//    sensingTimer = [NSTimer scheduledTimerWithTimeInterval:interval target:self selector:@selector(getNetworkInfo) userInfo:nil repeats:YES];
     uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval target:self selector:@selector(syncAwareDB) userInfo:nil repeats:YES];
     
     return YES;
@@ -85,7 +88,7 @@
 
 
 - (BOOL)stopSensor{
-    [sensingTimer invalidate];
+//    [sensingTimer invalidate];
     [uploadTimer invalidate];
     return YES;
 }
