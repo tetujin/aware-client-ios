@@ -71,11 +71,12 @@
     NSSetUncaughtExceptionHandler(&exceptionHandler);
     
     // Battery Save Mode
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(powerStateDidChange:)
-                                                 name:NSProcessInfoPowerStateDidChangeNotification
-                                               object:nil];
-    
+    if([AWAREUtils getCurrentOSVersionAsFloat] >= 9.0){
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(powerStateDidChange:)
+                                                     name:NSProcessInfoPowerStateDidChangeNotification
+                                                   object:nil];
+    }
     return YES;
 }
 

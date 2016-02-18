@@ -172,8 +172,10 @@
         NSLog(@"----------");
     }
     
-    if ([NSProcessInfo processInfo].lowPowerModeEnabled ) {
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"prefs:root=BATTERY_USAGE"]];
+    if([AWAREUtils getCurrentOSVersionAsFloat] >= 9.0){
+        if ([NSProcessInfo processInfo].lowPowerModeEnabled ) {
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"prefs:root=BATTERY_USAGE"]];
+        }
     }
 //    else if (![CLLocationManager locationServicesEnabled]){
 //        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"prefs:root=LOCATION_SERVICES"]];
