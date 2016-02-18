@@ -123,9 +123,9 @@
                     awareSensor = [[Calls alloc] initWithSensorName:SENSOR_CALLS withAwareStudy:awareStudy];
                 }
                 // Start AWARESensor with some delay (0.5 sec) by each sensor for reducing memory stress
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, i * 0.5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+//                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, i * 0.5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
                     [awareSensor startSensor:uploadTime withSettings:settings];
-                });
+//                });
                 break;
             }
         }
@@ -159,7 +159,7 @@
                         awareSensor = [[MSBand alloc] initWithPluginName:SENSOR_PLUGIN_MSBAND awareStudy:awareStudy];
                         [awareSensor startSensor:uploadTime withSettings:pluginSettings];
                     }else if([key isEqualToString:SENSOR_PLUGIN_GOOGLE_CAL_PULL]){
-                        awareSensor = [[GoogleCalPull alloc] initWithPluginName:SENSOR_PLUGIN_GOOGLE_CAL_PULL awareStudy:awareStudy];
+                        awareSensor = [[GoogleCalPull alloc] initWithSensorName:SENSOR_PLUGIN_GOOGLE_CAL_PULL withAwareStudy:awareStudy];
                         [awareSensor startSensor:uploadTime withSettings:pluginSettings];
                     }else if([key isEqualToString:SENSOR_PLUGIN_GOOGLE_CAL_PUSH]){
                         awareSensor = [[GoogleCalPush alloc] initWithSensorName:SENSOR_PLUGIN_GOOGLE_CAL_PUSH withAwareStudy:awareStudy];
@@ -228,9 +228,12 @@
  * Remove all sensors from the manager after stop the sensors
  */
 - (void) stopAllSensors {
-    for (AWARESensor* sensor in awareSensors) {
-        NSLog(@"Stop %@ sensor.", [sensor getSensorName]);
-        [sensor stopSensor];
+    @autoreleasepool {
+        for (AWARESensor* sensor in awareSensors) {
+            NSLog(@"Stop %@ sensor.", [sensor getSensorName]);
+            [sensor stopSensor];
+        }
+        awareSensors = nil;
     }
     awareSensors = [[NSMutableArray alloc] init];
 }
@@ -277,7 +280,7 @@
  * During an uploading process, an AWARE can not access to the file.
  *
  */
-- (bool) syncAllSensorsWithDB {
+- (bool) syncAllSensorsWithDBInForeground {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),^{
         @autoreleasepool{
             bool sucessOfUpload = true;
@@ -318,5 +321,22 @@
 
     return YES;
 }
+
+
+
+/**
+ * Sync All Sensors with DB in the bacground
+ *
+ */
+- (bool) syncAllSensorsWithDBInBackground {
+    // Sync local stored data with aware server.
+    for ( int i=0; i<awareSensors.count; i++) {
+        AWARESensor* sensor = [awareSensors objectAtIndex:i];
+        [sensor syncAwareDB];
+    }
+    return YES;
+}
+
+
 
 @end

@@ -36,22 +36,22 @@
     NSLog(@"[%@] Create Table", [self getSensorName]);
     [self createTable];
     
-    NSLog(@"[%@] Start Device Usage Sensor", [self getSensorName]);
-
+    // Get a frequency of data upload from settings
     double frequency = [self getSensorSetting:settings withKey:@"frequency_timezone"];
     if (frequency == -1) {
         frequency = 60*60;//3600 sec = 1 hour
     }
     
+    // Set and start sensing timer
+    NSLog(@"[%@] Start Device Usage Sensor", [self getSensorName]);
     [self getTimezone];
-    // set sensing timer
     sensingTimer = [NSTimer scheduledTimerWithTimeInterval:frequency
                                                     target:self
                                                   selector:@selector(getTimezone)
                                                   userInfo:nil
                                                    repeats:YES];
     
-    // set sync timer
+    // Set and start sync timer
     uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval
                                                    target:self
                                                  selector:@selector(syncAwareDB)
@@ -60,26 +60,28 @@
     return YES;
 }
 
-- (void) getTimezone {
-    [NSTimeZone localTimeZone];
-//    NSLog(@"Timezone: %@", [[NSTimeZone localTimeZone] description]);
-//    double timeStamp = [[NSDate date] timeIntervalSince1970] * 1000;
-//    NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
-    NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
-    NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-    [dic setObject:unixtime forKey:@"timestamp"];
-    [dic setObject:[self getDeviceId] forKey:@"device_id"];
-    [dic setObject:[[NSTimeZone localTimeZone] description] forKey:@"timezone"]; // real
-    [self setLatestValue:[NSString stringWithFormat:@"%@", [[NSTimeZone localTimeZone] description]]];
-    [self saveData:dic];
-}
-
-
 - (BOOL)stopSensor{
     [uploadTimer invalidate];
     [sensingTimer invalidate];
     [UIDevice currentDevice].proximityMonitoringEnabled = NO;
     return YES;
+}
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////
+
+
+- (void) getTimezone {
+    [NSTimeZone localTimeZone];
+    NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
+    NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+    [dic setObject:unixtime forKey:@"timestamp"];
+    [dic setObject:[self getDeviceId] forKey:@"device_id"];
+    [dic setObject:[[NSTimeZone localTimeZone] description] forKey:@"timezone"];
+    [self setLatestValue:[NSString stringWithFormat:@"%@", [[NSTimeZone localTimeZone] description]]];
+    [self saveData:dic];
 }
 
 @end

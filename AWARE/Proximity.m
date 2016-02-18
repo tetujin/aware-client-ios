@@ -10,7 +10,6 @@
 
 @implementation Proximity {
     NSTimer * uploadTimer;
-    NSTimer * sensingTimer;
 }
 
 - (instancetype)initWithSensorName:(NSString *)sensorName withAwareStudy:(AWAREStudy *)study{
@@ -38,26 +37,15 @@
     [self createTable];
     
     NSLog(@"[%@] Start Device Usage Sensor", [self getSensorName]);
+    // Set and start proximity sensor
+    // NOTE: This sensor is not working in the background
+    [UIDevice currentDevice].proximityMonitoringEnabled = YES;
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(proximitySensorStateDidChange:)
+                                                 name:UIDeviceProximityStateDidChangeNotification
+                                               object:nil];
     
-//    double frequency = [self getSensorSetting:settings withKey:@"frequency_proximity"];
-//    if ( frequency != -1 ) {
-//        NSLog(@"Proximity's frequency is %f !!", frequency);
-//        frequency = [self convertMotionSensorFrequecyFromAndroid:frequency];
-//        [UIDevice currentDevice].proximityMonitoringEnabled = YES;
-//        sensingTimer = [NSTimer scheduledTimerWithTimeInterval:frequency
-//                                                        target:self
-//                                                      selector:@selector(proximitySensorStateDidChange:)
-//                                                      userInfo:nil
-//                                                       repeats:YES];
-//    } else {
-        [UIDevice currentDevice].proximityMonitoringEnabled = YES;
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(proximitySensorStateDidChange:)
-                                                     name:UIDeviceProximityStateDidChangeNotification
-                                                   object:nil];
-//    }
-    
-    // set sync timer
+    // set and start a data upload timer
     uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval
                                                    target:self
                                                  selector:@selector(syncAwareDB)
@@ -66,30 +54,37 @@
     return YES;
 }
 
-- (void)proximitySensorStateDidChange:(NSNotification *)notification {
-    int state = [UIDevice currentDevice].proximityState;
-    NSLog(@"Proximity: %d", state );
-    NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
-    NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-    [dic setObject:unixtime forKey:@"timestamp"];
-    [dic setObject:[self getDeviceId] forKey:@"device_id"];
-    [dic setObject:[NSNumber numberWithInt:state] forKey:@"double_proximity"]; // real
-    [dic setObject:@0 forKey:@"accuracy"]; // real
-    [dic setObject:@"" forKey:@"label"]; // real
-    [self setLatestValue:[NSString stringWithFormat:@"[%d]", state ]];
-    [self saveData:dic];
-}
-
 
 - (BOOL)stopSensor{
     [uploadTimer invalidate];
-    [sensingTimer invalidate];
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:UIDeviceProximityStateDidChangeNotification
                                                   object:nil];
     [UIDevice currentDevice].proximityMonitoringEnabled = NO;
     return YES;
 }
+
+
+/////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////
+
+
+- (void)proximitySensorStateDidChange:(NSNotification *)notification {
+    int state = [UIDevice currentDevice].proximityState;
+    // NSLog(@"Proximity: %d", state );
+    NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
+    NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+    [dic setObject:unixtime forKey:@"timestamp"];
+    [dic setObject:[self getDeviceId] forKey:@"device_id"];
+    [dic setObject:[NSNumber numberWithInt:state] forKey:@"double_proximity"];
+    [dic setObject:@0 forKey:@"accuracy"];
+    [dic setObject:@"" forKey:@"label"];
+    [self setLatestValue:[NSString stringWithFormat:@"[%d]", state ]];
+    [self saveData:dic];
+}
+
+
+
 
 
 @end

@@ -18,20 +18,20 @@
     AWAREStudy * awareStudy;
 }
 
+
 - (instancetype)initWithSensorName:(NSString *)sensorName withAwareStudy:(AWAREStudy *)study{
     self = [super initWithSensorName:@"google_fused_location" withAwareStudy:study];
     awareStudy = study;
     if (self) {
-//        [super setSensorName:@"google_fused_location"];
     }
     return self;
 }
 
 
-
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings {
-
+    // Make a fused location sensor
     fusedLocationsSensor = [[AWARESensor alloc] initWithSensorName:@"locations" withAwareStudy:awareStudy];
+    // Send a table create query
     [fusedLocationsSensor createTable:@"_id integer primary key autoincrement,"
                                      "timestamp real default 0,"
                                      "device_id text default '',"
@@ -44,14 +44,18 @@
                                      "accuracy integer default 0,"
                                      "label text default '',"
                                      "UNIQUE (timestamp,device_id)"];
+    // Start a data uploader
     locationDataUploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval
                                                                target:self
                                                              selector:@selector(syncAwareDBWithLocationTable)
                                                              userInfo:nil
                                                               repeats:YES];
     
+    //////////////////////////
     
+    // Make a visit location sensor
     visitLocationSensor = [[AWARESensor alloc] initWithSensorName:@"locations_visit" withAwareStudy:awareStudy];
+    // Send a table create query
     [visitLocationSensor createTable:@"_id integer primary key autoincrement,"
                                      "timestamp real default 0,"
                                      "device_id text default '',"
@@ -65,6 +69,7 @@
                                      "accuracy integer default 0,"
                                      "label text default '',"
                                      "UNIQUE (timestamp,device_id)"];
+    // Start a data uploader
     visitDataUploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval
                                                          target:self
                                                        selector:@selector(syncAwareDBWithLocationVisitTable)
@@ -72,7 +77,7 @@
                                                          repeats:YES];
     
     
-    // frequency
+    // Get a sensing frequency for a location sensor
     double interval = 0;
     double frequency = [self getSensorSetting:settings withKey:@"frequency_google_fused_location"];
     if(frequency != -1){
@@ -80,12 +85,7 @@
         interval = frequency;
     }
 
-//    value	__NSCFString *	@"max_frequency_google_fused_location"	0x000000013c6195f0
-
-    
-    // One of the following numbers: 100 (High accuracy); 102 (balanced); 104 (low power); 105 (no power, listens to others location requests)
-    //min gps
-//    double miniDistrance = 25; //[self getSensorSetting:settings withKey:@"min_gps_accuracy"];
+    // Get a sensing accuracy for a location sensor
     NSInteger accuracySetting = 0;
     int accuracy = [self getSensorSetting:settings withKey:@"accuracy_google_fused_location"];
     if (accuracy == 100) { // High accuracy
@@ -99,25 +99,24 @@
     } else {
         accuracySetting = kCLLocationAccuracyHundredMeters;
     }
-    // [memo]
+    // One of the following numbers: 100 (High accuracy); 102 (balanced); 104 (low power); 105 (no power, listens to others location requests)
     // http://stackoverflow.com/questions/3411629/decoding-the-cllocationaccuracy-consts
-//    GPS - kCLLocationAccuracyBestForNavigation;
-//    GPS - kCLLocationAccuracyBest;
-//    GPS - kCLLocationAccuracyNearestTenMeters;
-//    WiFi (or GPS in rural area) - kCLLocationAccuracyHundredMeters;
-//    Cell Tower - kCLLocationAccuracyKilometer;
-//    Cell Tower - kCLLocationAccuracyThreeKilometers;
+    //    GPS - kCLLocationAccuracyBestForNavigation;
+    //    GPS - kCLLocationAccuracyBest;
+    //    GPS - kCLLocationAccuracyNearestTenMeters;
+    //    WiFi (or GPS in rural area) - kCLLocationAccuracyHundredMeters;
+    //    Cell Tower - kCLLocationAccuracyKilometer;
+    //    Cell Tower - kCLLocationAccuracyThreeKilometers;
     
     
-    if (nil == locationManager){
+    // Initialize a location sensor
+    if (locationManager == nil){
         locationManager = [[CLLocationManager alloc] init];
         locationManager.delegate = self;
         locationManager.desiredAccuracy = accuracySetting;
         locationManager.pausesLocationUpdatesAutomatically = NO;
-//        CGFloat currentVersion = [[[UIDevice currentDevice] systemVersion] floatValue];
-//        NSLog(@"OS:%f", currentVersion);
         if ([AWAREUtils getCurrentOSVersionAsFloat] >= 9.0) {
-            //This variable is an important method for background sensing after iOS9
+        //This variable is an important method for background sensing after iOS9
             locationManager.allowsBackgroundLocationUpdates = YES;
         }
         locationManager.activityType = CLActivityTypeOther;
@@ -125,11 +124,9 @@
             [locationManager requestAlwaysAuthorization];
         }
         // Set a movement threshold for new events.
-//        locationManager.distanceFilter = 250;
-        [locationManager startUpdatingLocation];
-        [locationManager startUpdatingHeading];
+//         locationManager.distanceFilter = 250;
         [locationManager startMonitoringVisits]; // This method calls didVisit.
-        //    [_locationManager startMonitoringVisits];
+        // [locationManager startUpdatingHeading];
         
         if(interval > 0){
             locationTimer = [NSTimer scheduledTimerWithTimeInterval:interval
@@ -137,21 +134,13 @@
                                                            selector:@selector(getGpsData:)
                                                            userInfo:nil
                                                             repeats:YES];
+        }else{
+            [locationManager startUpdatingLocation];
+            [fusedLocationsSensor setBufferSize:10];
         }
     }
     
-    [fusedLocationsSensor setBufferSize:10];
-    
     return YES;
-}
-
-
-- (void) syncAwareDBWithLocationTable {
-    [fusedLocationsSensor syncAwareDB];
-}
-
-- (void) syncAwareDBWithLocationVisitTable {
-    [visitLocationSensor syncAwareDB];
 }
 
 
@@ -181,23 +170,44 @@
 }
 
 
+- (void) syncAwareDB {
+    [fusedLocationsSensor syncAwareDB];
+    [visitLocationSensor syncAwareDB];
+}
+
+- (void) syncAwareDBWithLocationTable {
+    [fusedLocationsSensor syncAwareDB];
+}
+
+- (void) syncAwareDBWithLocationVisitTable {
+    [visitLocationSensor syncAwareDB];
+}
+
+- (BOOL)syncAwareDBInForeground{
+    if(![visitLocationSensor syncAwareDBInForeground]){
+        return NO;
+    }
+    if(![fusedLocationsSensor syncAwareDBInForeground]){
+        return NO;
+    }
+    return YES;
+}
+
+- (NSString *) getSyncProgressAsText{
+    return [self getSyncProgressAsText:@"locations"];
+}
+
+
+/////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////
+
 
 
 - (void) getGpsData: (NSTimer *) theTimer {
-    //[sdManager addLocation:[_locationManager location]];
+    NSLog(@"Get a location");
     CLLocation* location = [locationManager location];
     [self saveLocation:location];
 }
-
-- (void)locationManager:(CLLocationManager *)manager didUpdateHeading:(CLHeading *)newHeading {
-    if (newHeading.headingAccuracy < 0)
-        return;
-    //    CLLocationDirection  theHeading = ((newHeading.trueHeading > 0) ?
-    //                                       newHeading.trueHeading : newHeading.magneticHeading);
-    //    [sdManager addSensorDataMagx:newHeading.x magy:newHeading.y magz:newHeading.z];
-    //    [sdManager addHeading: theHeading];
-}
-
 
 - (void) locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations{
     for (CLLocation* location in locations) {
@@ -206,8 +216,6 @@
 }
 
 - (void) saveLocation:(CLLocation *)location{
-//    double timeStamp = [[NSDate date] timeIntervalSince1970] * 1000;
-//    NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
     NSNumber *unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
     NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
     [dic setObject:unixtime forKey:@"timestamp"];
@@ -223,8 +231,6 @@
     [self setLatestValue:[NSString stringWithFormat:@"%f, %f, %f", location.coordinate.latitude, location.coordinate.longitude, location.speed]];
     [fusedLocationsSensor saveData:dic];
 }
-
-
 
 
 - (void)locationManager:(CLLocationManager *)manager
@@ -308,19 +314,15 @@
     }];
 }
 
-- (BOOL)syncAwareDBInForeground{
-    if(![visitLocationSensor syncAwareDBInForeground]){
-        return NO;
-    }
-    if(![fusedLocationsSensor syncAwareDBInForeground]){
-        return NO;
-    }
-    return YES;
-}
+//- (void)locationManager:(CLLocationManager *)manager didUpdateHeading:(CLHeading *)newHeading {
+//    if (newHeading.headingAccuracy < 0)
+//        return;
+//    //    CLLocationDirection  theHeading = ((newHeading.trueHeading > 0) ?
+//    //                                       newHeading.trueHeading : newHeading.magneticHeading);
+//    //    [sdManager addSensorDataMagx:newHeading.x magy:newHeading.y magz:newHeading.z];
+//    //    [sdManager addHeading: theHeading];
+//}
 
-- (NSString *) getSyncProgressAsText{
-    return [self getSyncProgressAsText:@"locations"];
-}
 
 
 @end

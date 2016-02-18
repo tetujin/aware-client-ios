@@ -12,7 +12,6 @@
 #import "Calls.h"
 #import "AWAREUtils.h"
 
-
 NSString* const KEY_CALLS_TIMESTAMP = @"timestamp";
 NSString* const KEY_CALLS_DEVICEID = @"device_id";
 NSString* const KEY_CALLS_CALL_TYPE = @"call_type";
@@ -27,7 +26,6 @@ NSString* const KEY_CALLS_TRACE = @"trace";
 - (instancetype)initWithSensorName:(NSString *)sensorName withAwareStudy:(AWAREStudy *)study{
     self = [super initWithSensorName:@"calls" withAwareStudy:study];
     if (self) {
-
     }
     return self;
 }
@@ -47,19 +45,20 @@ NSString* const KEY_CALLS_TRACE = @"trace";
 
 
 -(BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
-
+    // Send a table create query
     NSLog(@"[%@] Create Telephony Sensor Table", [self getSensorName]);
     [self createTable];
     
+    // Start a data uploader
     timer = [NSTimer scheduledTimerWithTimeInterval:upInterval
                                              target:self
                                            selector:@selector(syncAwareDB)
                                            userInfo:nil
                                             repeats:YES];
+    // Set and start a call sensor
     _callCenter = [[CTCallCenter alloc] init];
     _callCenter.callEventHandler = ^(CTCall* call){
         NSString * callId = call.callID;
-//        NSLog(@"---> %@", callId);
         NSNumber * callType = @0;
         NSString * callTypeStr = @"Unknown";
         int duration = 0;
@@ -124,25 +123,28 @@ NSString* const KEY_CALLS_TRACE = @"trace";
 }
 
 
+////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////
+
+
+
 - (void) sendLocalNotificationWithCallId : (NSString *) callId
                                  soundFlag : (BOOL) soundFlag {
     UILocalNotification *localNotification = [UILocalNotification new];
     CGFloat currentVersion = [[[UIDevice currentDevice] systemVersion] floatValue];
     NSLog(@"OS:%f", currentVersion);
     if (currentVersion >= 9.0){
-//        localNotification.alertTitle = @"Call from/to how?";
         localNotification.alertBody = @"Call from/to who?";
     } else {
         localNotification.alertBody = @"Call from/to who?";
     }
     localNotification.fireDate = [NSDate new];
     localNotification.timeZone = [NSTimeZone localTimeZone];
-//    localNotification.category = schedule.scheduleId;
     localNotification.category = callId;
     if(soundFlag) {
         localNotification.soundName = UILocalNotificationDefaultSoundName;
     }
-    localNotification.applicationIconBadgeNumber = 1; //TODO
+    localNotification.applicationIconBadgeNumber = 1;
     localNotification.hasAction = YES;
     [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
 }

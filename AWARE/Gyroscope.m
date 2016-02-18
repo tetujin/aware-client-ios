@@ -38,16 +38,24 @@
 }
 
 
-//- (BOOL)startSensor:(double)interval withUploadInterval:(double)upInterval{
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
+    // Send a table create query
     NSLog(@"[%@] Create Table", [self getSensorName]);
     [self createTable];
+    
+    // Set and start a data uploader
     NSLog(@"[%@] Start Gyro Sensor", [self getSensorName]);
-    gTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval target:self selector:@selector(syncAwareDB) userInfo:nil repeats:YES];
+    gTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval
+                                              target:self
+                                            selector:@selector(syncAwareDB)
+                                            userInfo:nil
+                                             repeats:YES];
     
-    [self setBufferSize:100];
-//    [self startWriteAbleTimer];
+    // Set a buffer size for reducing file access
+    [self setBufferSize:1000];
     
+    
+    // Get a sensing frequency from settings
     double frequency = [self getSensorSetting:settings withKey:@"frequency_gyroscope"];
     if(frequency != -1){
         NSLog(@"Gyroscope's frequency is %f !!", frequency);
@@ -57,13 +65,11 @@
         gyroManager.gyroUpdateInterval = 0.1f;//default value
     }
     
-    
+    // Start a sensor
     [gyroManager startGyroUpdatesToQueue:[NSOperationQueue currentQueue] withHandler:^(CMGyroData * _Nullable gyroData, NSError * _Nullable error) {
         if( error ) {
             NSLog(@"%@:%ld", [error domain], [error code] );
         } else {
-//            double timeStamp = [[NSDate date] timeIntervalSince1970] * 1000;
-//            NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
             NSNumber *unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
             NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
             [dic setObject:unixtime forKey:@"timestamp"];
@@ -74,7 +80,6 @@
             [dic setObject:@0 forKey:@"accuracy"];
             [dic setObject:@"" forKey:@"label"];
             [self setLatestValue:[NSString stringWithFormat:@"%f, %f, %f",gyroData.rotationRate.x,gyroData.rotationRate.y,gyroData.rotationRate.z]];
-//            [self saveData:dic toLocalFile:SENSOR_GYROSCOPE];
             [self saveData:dic];
         }
     }];
@@ -84,15 +89,8 @@
 - (BOOL)stopSensor{
     [gyroManager stopGyroUpdates];
     [gTimer invalidate];
-//    [self stopWriteableTimer];
     return YES;
 }
-
-//- (void)uploadSensorData{
-//    [self syncAwareDB];
-////    NSString * jsonStr = [self getData:SENSOR_GYROSCOPE withJsonArrayFormat:YES];
-////    [self insertSensorData:jsonStr withDeviceId:[self getDeviceId] url:[self getInsertUrl:SENSOR_GYROSCOPE ]];
-//}
 
 
 @end

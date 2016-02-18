@@ -25,7 +25,6 @@
 - (instancetype)initWithSensorName:(NSString *)sensorName withAwareStudy:(AWAREStudy *)study{
     self = [super initWithSensorName:sensorName withAwareStudy:study];
     if (self) {
-//        [super setSensorName:sensorName];
     }
     return self;
 }
@@ -50,8 +49,12 @@
     [self registerAppforDetectLockState];
     [self registerAppforDetectDisplayStatus];
     
-    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval target:self selector:@selector(syncAwareDB) userInfo:nil repeats:YES];
-    
+    // Set and start data upload timer
+    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval
+                                                   target:self
+                                                 selector:@selector(syncAwareDB)
+                                                 userInfo:nil
+                                                  repeats:YES];
     return YES;
 }
 
@@ -61,6 +64,12 @@
     [uploadTimer invalidate];
     return YES;
 }
+
+
+/////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////
+
+
 
 -(void)registerAppforDetectLockState {
     notify_register_dispatch("com.apple.springboard.lockstate", &_notifyTokenForDidChangeLockStatus,dispatch_get_main_queue(), ^(int token) {
@@ -109,8 +118,6 @@
             awareScreenState = 1;
         }
         
-//        NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970] * 10000;
-//        NSNumber* unixtime = [NSNumber numberWithDouble:timeStamp];
         NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
         NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
         [dic setObject:unixtime forKey:@"timestamp"];
@@ -124,7 +131,7 @@
 
 
 -(void) unregisterAppforDetectLockState {
-//    notify_suspend(_notifyTokenForDidChangeLockStatus);
+    //    notify_suspend(_notifyTokenForDidChangeLockStatus);
     uint32_t result = notify_cancel(_notifyTokenForDidChangeLockStatus);
 
     if (result == NOTIFY_STATUS_OK) {
@@ -135,7 +142,7 @@
 }
 
 - (void) unregisterAppforDetectDisplayStatus {
-//    notify_suspend(_notifyTokenForDidChangeDisplayStatus);
+    //    notify_suspend(_notifyTokenForDidChangeDisplayStatus);
     uint32_t result = notify_cancel(_notifyTokenForDidChangeDisplayStatus);
     if (result == NOTIFY_STATUS_OK) {
         NSLog(@"[screen] OK ==> %d", result);

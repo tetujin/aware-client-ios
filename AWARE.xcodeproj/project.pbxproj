@@ -45,6 +45,7 @@
 		165A8B711C03B90500898C6C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 165A8B6E1C03B90500898C6C /* GoogleService-Info.plist */; };
 		165A8B741C03C0B300898C6C /* GoogleLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 165A8B731C03C0B300898C6C /* GoogleLoginViewController.m */; };
 		1663BB801C2C94C3003F03DF /* ESMStorageHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 1663BB7F1C2C94C3003F03DF /* ESMStorageHelper.m */; };
+		166603F51C751957006A4F25 /* ExternalAccessory.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 166603F41C751957006A4F25 /* ExternalAccessory.framework */; };
 		166F1A701C602B44002124FB /* AWAREHealthKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 166F1A6F1C602B44002124FB /* AWAREHealthKit.m */; };
 		1671A5D81C3B583C00C41F44 /* GoogleCalPush.m in Sources */ = {isa = PBXBuildFile; fileRef = 1671A5D71C3B583C00C41F44 /* GoogleCalPush.m */; };
 		1677AF2E1C2B109A00F7C482 /* SingleESMObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 1677AF2D1C2B109A00F7C482 /* SingleESMObject.m */; };
@@ -75,7 +76,6 @@
 		16C251BB1C6C45270018D156 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 16C251BA1C6C45270018D156 /* Reachability.m */; };
 		16D810241C06242500605DE2 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16D810231C06242500605DE2 /* CFNetwork.framework */; };
 		16D810261C06242F00605DE2 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16D810251C06242F00605DE2 /* Security.framework */; };
-		16D8102D1C06671500605DE2 /* ExternalAccessory.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16D8102C1C06671500605DE2 /* ExternalAccessory.framework */; };
 		16DEA2371C54557B00B607C9 /* AWAREUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 16DEA2361C54557B00B607C9 /* AWAREUtils.m */; };
 		16DEA23A1C5535B300B607C9 /* AWAREEsmUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 16DEA2391C5535B300B607C9 /* AWAREEsmUtils.m */; };
 		16E155331C252B4D00316321 /* AWAREPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 16E155321C252B4D00316321 /* AWAREPlugin.m */; };
@@ -193,6 +193,7 @@
 		165A8B731C03C0B300898C6C /* GoogleLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GoogleLoginViewController.m; sourceTree = "<group>"; };
 		1663BB7E1C2C94C3003F03DF /* ESMStorageHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESMStorageHelper.h; sourceTree = "<group>"; };
 		1663BB7F1C2C94C3003F03DF /* ESMStorageHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ESMStorageHelper.m; sourceTree = "<group>"; };
+		166603F41C751957006A4F25 /* ExternalAccessory.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ExternalAccessory.framework; path = System/Library/Frameworks/ExternalAccessory.framework; sourceTree = SDKROOT; };
 		166F1A6E1C602B44002124FB /* AWAREHealthKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AWAREHealthKit.h; sourceTree = "<group>"; };
 		166F1A6F1C602B44002124FB /* AWAREHealthKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AWAREHealthKit.m; sourceTree = "<group>"; };
 		1671A5D61C3B583C00C41F44 /* GoogleCalPush.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GoogleCalPush.h; sourceTree = "<group>"; };
@@ -244,7 +245,6 @@
 		16C251BA1C6C45270018D156 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		16D810231C06242500605DE2 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		16D810251C06242F00605DE2 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
-		16D8102C1C06671500605DE2 /* ExternalAccessory.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ExternalAccessory.framework; path = System/Library/Frameworks/ExternalAccessory.framework; sourceTree = SDKROOT; };
 		16DEA2351C54557B00B607C9 /* AWAREUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AWAREUtils.h; sourceTree = "<group>"; };
 		16DEA2361C54557B00B607C9 /* AWAREUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AWAREUtils.m; sourceTree = "<group>"; };
 		16DEA2381C5535B300B607C9 /* AWAREEsmUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AWAREEsmUtils.h; sourceTree = "<group>"; };
@@ -279,6 +279,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				166603F51C751957006A4F25 /* ExternalAccessory.framework in Frameworks */,
 				1623CEB11BFD40FB00EFAD72 /* AVFoundation.framework in Frameworks */,
 				168683031C07C43600CB4266 /* AudioToolbox.framework in Frameworks */,
 				16C1FF7D1C617FB100C070AA /* Accelerate.framework in Frameworks */,
@@ -288,7 +289,6 @@
 				169A7B321BFF282800A7C06D /* CoreLocation.framework in Frameworks */,
 				1623CEB91BFE319100EFAD72 /* CoreMotion.framework in Frameworks */,
 				160EE9BF1C050B9000015688 /* CoreBluetooth.framework in Frameworks */,
-				16D8102D1C06671500605DE2 /* ExternalAccessory.framework in Frameworks */,
 				16E155391C27C2AC00316321 /* EventKit.framework in Frameworks */,
 				16E1553A1C27C2AC00316321 /* EventKitUI.framework in Frameworks */,
 				16C1FF7F1C617FC300C070AA /* GLKit.framework in Frameworks */,
@@ -609,12 +609,12 @@
 		1677AF2F1C2B4BB500F7C482 /* ESM */ = {
 			isa = PBXGroup;
 			children = (
-				16228A4F1C22E9FE0081C839 /* AWARESchedule.h */,
-				16228A501C22E9FE0081C839 /* AWARESchedule.m */,
 				1677AF2C1C2B109A00F7C482 /* SingleESMObject.h */,
 				1677AF2D1C2B109A00F7C482 /* SingleESMObject.m */,
 				1677AF301C2B4BDE00F7C482 /* MultiESMObject.h */,
 				1677AF311C2B4BDE00F7C482 /* MultiESMObject.m */,
+				16228A4F1C22E9FE0081C839 /* AWARESchedule.h */,
+				16228A501C22E9FE0081C839 /* AWARESchedule.m */,
 				1663BB7E1C2C94C3003F03DF /* ESMStorageHelper.h */,
 				1663BB7F1C2C94C3003F03DF /* ESMStorageHelper.m */,
 				16DEA2381C5535B300B607C9 /* AWAREEsmUtils.h */,
@@ -805,6 +805,7 @@
 		2A3CA9F5620967BACB187EB7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				166603F41C751957006A4F25 /* ExternalAccessory.framework */,
 				1623FFDC1C5ADB6E00F3E3E4 /* libSystem.tbd */,
 				9ED04F29ED60F3FCC960F6CD /* libPods-AWARE.a */,
 				16C1FF7E1C617FC300C070AA /* GLKit.framework */,
@@ -817,7 +818,6 @@
 				1607944D1C1A240F0021816F /* AudioUnit.framework */,
 				169384EF1C17C39300A17F2C /* MicrosoftBandKit_iOS.framework */,
 				168683021C07C43600CB4266 /* AudioToolbox.framework */,
-				16D8102C1C06671500605DE2 /* ExternalAccessory.framework */,
 				16D810251C06242F00605DE2 /* Security.framework */,
 				16D810231C06242500605DE2 /* CFNetwork.framework */,
 				160EE9BE1C050B9000015688 /* CoreBluetooth.framework */,

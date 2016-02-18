@@ -39,13 +39,7 @@
     [self createTable];
     
     NSLog(@"[%@] Start Device Usage Sensor", [self getSensorName]);
-    //    [self registerAppforDetectLockState];
-//    lastTime = [[[NSDate alloc] init] timeIntervalSince1970];
-    
-//    netAssociation = [[NetAssociation alloc] initWithServerName:@"time.apple.com"];
-//    netAssociation.delegate = self;
-    
-    sensingTimer = [NSTimer scheduledTimerWithTimeInterval:60
+    sensingTimer = [NSTimer scheduledTimerWithTimeInterval:60*10
                                                     target:self
                                                   selector:@selector(getNTPTime)
                                                   userInfo:nil
@@ -59,14 +53,22 @@
     return YES;
 }
 
+
+
+- (BOOL)stopSensor{
+    [uploadTimer invalidate];
+    [sensingTimer invalidate];
+    return YES;
+}
+
+
+///////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////
+
 - (void) getNTPTime {
     NetworkClock * nc = [NetworkClock sharedNetworkClock];
     NSDate * nt = nc.networkTime;
     double offset = nc.networkOffset * 1000;
-//    double timeStamp = [[NSDate date] timeIntervalSince1970] * 1000;
-//    NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
-//    double ntpTimestamp = [nt timeIntervalSince1970] * 1000;
-//    NSNumber* ntpUnixtime = [NSNumber numberWithLongLong:ntpTimestamp];
     NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
     NSNumber * ntpUnixtime = [AWAREUtils getUnixTimestamp:nt];
     NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
@@ -76,13 +78,6 @@
     [dic setObject:ntpUnixtime forKey:@"ntp_time"]; // real
     [self setLatestValue:[NSString stringWithFormat:@"[%f] %@",offset, nt ]];
     [self saveData:dic];
-}
-
-
-- (BOOL)stopSensor{
-    [uploadTimer invalidate];
-    [sensingTimer invalidate];
-    return YES;
 }
 
 

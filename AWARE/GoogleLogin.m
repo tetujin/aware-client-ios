@@ -45,10 +45,11 @@
 }
 
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
-    // Create table
+    // Send a table create query
     [self createTable];
     NSLog(@"[%@] Crate table.", [self getSensorName]);
     
+    // Start a data uploader
     uploadTimer = [NSTimer timerWithTimeInterval:upInterval
                                           target:self
                                         selector:@selector(syncAwareDB)
@@ -60,11 +61,7 @@
 - (void) saveName:(NSString* )name
         withEmail:(NSString *)email
       phoneNumber:(NSString*) phonenumber {
-
     NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-    
-//    double timeStamp = [[NSDate date] timeIntervalSince1970] * 1000;
-//    NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
     NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
     [dic setObject:unixtime forKey:@"timestamp"];
     [dic setObject:[self getDeviceId] forKey:@"device_id"];
@@ -74,7 +71,6 @@
     [dic setObject:[NSNull null] forKey:KEY_GOOGLE_BLOB_PICTURE];
     [self saveData:dic];
     [self performSelector:@selector(syncAwareDB) withObject:0 afterDelay:5];
-//    [self syncAwareDB];
 }
 
 - (BOOL)stopSensor {

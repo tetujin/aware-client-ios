@@ -5,12 +5,14 @@
 //  Created by Yuuki Nishiyama on 11/20/15.
 //  Copyright © 2015 Yuuki NISHIYAMA. All rights reserved.
 //
+//http://stackoverflow.com/questions/9515479/monitor-and-detect-if-the-iphone-is-plugged-in-and-charging-wifi-connected-when
+//https://developer.apple.com/library/ios/samplecode/BatteryStatus/Introduction/Intro.html
+//
 
 #import "Battery.h"
 
-@implementation Battery{
+@implementation Battery {
     NSTimer *uploadTimer;
-//    NSTimer *sensingTimer;
     
     NSString* BATTERY_DISCHARGERES;
     NSString* BATTERY_CHARGERES;
@@ -19,20 +21,15 @@
     NSString* KEY_LAST_BATTERY_EVENT_TIMESTAMP;
     NSString* KEY_LAST_BATTERY_LEVEL;
     
+    // A battery charge sensor
     AWARESensor * batteryChargeSensor;
+    // A battery discharge sensor
     AWARESensor * batteryDischargeSensor;
-    
-//    NSInteger lastBatteryEvent;
-//    NSNumber *lastBatteryEventTimestamp;
-//    int lastBatteryLevel;
 }
 
 - (instancetype)initWithSensorName:(NSString *)sensorName withAwareStudy:(AWAREStudy *)study{
     self = [super initWithSensorName:sensorName withAwareStudy:study];
     if (self) {
-        
-//
-//        [super setSensorName:sensorName];
         BATTERY_DISCHARGERES = @"battery_discharges";
         BATTERY_CHARGERES = @"battery_charges";
         
@@ -42,15 +39,11 @@
         KEY_LAST_BATTERY_LEVEL = @"key_last_battery_level";
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         if (![userDefaults integerForKey:KEY_LAST_BATTERY_EVENT_TIMESTAMP]) {
-            // lastBatteryEvent = UIDeviceBatteryStateUnknown;
             [userDefaults setInteger:UIDeviceBatteryStateUnknown forKey:KEY_LAST_BATTERY_EVENT];
-            // lastBatteryEventTimestamp = [self getUnixtimeWithNSDate:[NSDate new]];
             [userDefaults setObject:[AWAREUtils getUnixTimestamp:[NSDate new]] forKey:KEY_LAST_BATTERY_EVENT_TIMESTAMP];
-            // lastBatteryEvent = [UIDevice currentDevice].batteryLevel * 100;
             [userDefaults setInteger:[UIDevice currentDevice].batteryLevel*100 forKey:KEY_LAST_BATTERY_LEVEL];
         }
         // Get default information from local storage
-        
         batteryChargeSensor = [[AWARESensor alloc] initWithSensorName:BATTERY_CHARGERES withAwareStudy:study];
         batteryDischargeSensor = [[AWARESensor alloc] initWithSensorName:BATTERY_DISCHARGERES withAwareStudy:study];
         [batteryChargeSensor trackDebugEvents];
@@ -59,9 +52,6 @@
     return self;
 }
 
-//http://stackoverflow.com/questions/9515479/monitor-and-detect-if-the-iphone-is-plugged-in-and-charging-wifi-connected-when
-
-//https://developer.apple.com/library/ios/samplecode/BatteryStatus/Introduction/Intro.html
 
 - (void) createTable{
     NSString *query = [[NSString alloc] init];
@@ -79,6 +69,7 @@
     "UNIQUE (timestamp,device_id)";
     [super createTable:query];
 }
+
 
 - (void) createDichargeTable {
     NSString *query = [[NSString alloc] init];
@@ -106,23 +97,75 @@
 }
 
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
+    // Send a create table queries (battery_level, battery_charging, and battery_discharging)
     [self createTable];
     [self createCargeTable];
     [self createDichargeTable];
     
+    // Set a battery level change event to a notification center
     [UIDevice currentDevice].batteryMonitoringEnabled = YES;
-    
-    NSLog(@"upload interval is %f.", upInterval);
-    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval target:self selector:@selector(syncAwareDBWithAllBatterySensor:) userInfo:nil repeats:YES];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(batteryLevelChanged:)
                                                  name:UIDeviceBatteryLevelDidChangeNotification object:nil];
     
+    // Set a battery state change event to a notification center
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(batteryStateChanged:)
                                                  name:UIDeviceBatteryStateDidChangeNotification object:nil];
+    
+    
+    // Set and start a data upload timer
+    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval
+                                                   target:self
+                                                 selector:@selector(syncAwareDB)
+                                                 userInfo:nil
+                                                  repeats:YES];
+    
+    
     return YES;
 }
+
+
+- (BOOL)stopSensor{
+    [uploadTimer invalidate];
+    uploadTimer = nil;
+    [NSNotificationCenter.defaultCenter removeObserver:self name:UIDeviceBatteryLevelDidChangeNotification object:nil];
+    [NSNotificationCenter.defaultCenter removeObserver:self name:UIDeviceBatteryStateDidChangeNotification object:nil];
+    [UIDevice currentDevice].batteryMonitoringEnabled = NO;
+    return YES;
+}
+
+
+
+-(BOOL)syncAwareDBInForeground{
+    if(![super syncAwareDBInForeground]){
+        return NO;
+    }
+    
+    if(![batteryChargeSensor syncAwareDBInForeground]){
+        return NO;
+    }
+    
+    if(![batteryDischargeSensor syncAwareDBInForeground]){
+        return NO;
+    }
+    return YES;
+}
+
+- (void) syncAwareDB {
+    [super syncAwareDB];
+    [batteryChargeSensor syncAwareDB];
+    [batteryDischargeSensor syncAwareDB];
+}
+
+/////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////
+
+//- (void)syncAwareDBWithAllBatterySensor:(id) sendar {
+//    [self syncAwareDB];
+//    [batteryChargeSensor syncAwareDB];
+//    [batteryDischargeSensor syncAwareDB];
+//}
 
 
 - (void)batteryLevelChanged:(NSNotification *)notification {
@@ -228,44 +271,5 @@
     }
     [userDefaults synchronize];
 }
-
-- (void)syncAwareDBWithAllBatterySensor:(id) sendar {
-    [self syncAwareDB];
-    [batteryChargeSensor syncAwareDB];
-    [batteryDischargeSensor syncAwareDB];
-}
-
-
-- (bool) syncAwareDBInForeground {
-    if(![super syncAwareDBInForeground]){
-        return NO;
-    }
-    
-    if(![batteryChargeSensor syncAwareDBInForeground]){
-        return NO;
-    }
-    
-    if(![batteryDischargeSensor syncAwareDBInForeground]){
-        return NO;
-    }
-    return YES;
-}
-
-- (BOOL)stopSensor{
-    [uploadTimer invalidate];
-    [NSNotificationCenter.defaultCenter removeObserver:self name:UIDeviceBatteryLevelDidChangeNotification object:nil];
-    [NSNotificationCenter.defaultCenter removeObserver:self name:UIDeviceBatteryStateDidChangeNotification object:nil];
-    [UIDevice currentDevice].batteryMonitoringEnabled = NO;
-    return YES;
-}
-
-
-//- (NSNumber *) getUnixtimeWithNSDate:(NSDate *) date {
-//    double timeStamp = [date timeIntervalSince1970] * 1000;
-//    NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
-//    return unixtime;
-//}
-
-
 
 @end

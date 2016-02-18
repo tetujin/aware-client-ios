@@ -70,8 +70,15 @@
     // Error Tacking
     NSSetUncaughtExceptionHandler(&exceptionHandler);
     
+    // Battery Save Mode
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(powerStateDidChange:)
+                                                 name:NSProcessInfoPowerStateDidChangeNotification
+                                               object:nil];
+    
     return YES;
 }
+
 
 void exceptionHandler(NSException *exception) {
     // http://www.yoheim.net/blog.php?q=20130113
@@ -84,6 +91,20 @@ void exceptionHandler(NSException *exception) {
     Debug * debugSensor = [[Debug alloc] initWithAwareStudy:nil];
     [debugSensor saveDebugEventWithText:error type:DebugTypeCrash label:exception.name];
  }
+
+
+- (void) powerStateDidChange:(id) sender {
+    Debug * debugSensor = [[Debug alloc] initWithAwareStudy:nil];
+    if ([[NSProcessInfo processInfo] isLowPowerModeEnabled]) {
+        // Low Power Mode is enabled. Start reducing activity to conserve energy.
+        [debugSensor saveDebugEventWithText:@"[Low Power Mode] On" type:DebugTypeWarn label:@""];
+        [AWAREUtils sendLocalNotificationForMessage:@"Please don't use **Low Power Mode** during a study!" soundFlag:YES];
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"prefs:root=BATTERY_USAGE"]];
+    } else {
+        // Low Power Mode is not enabled.
+        [debugSensor saveDebugEventWithText:@"[Low Power Mode] Off" type:DebugTypeWarn label:@""];
+    };
+}
 
 
 - (void)applicationWillResignActive:(UIApplication *)application {

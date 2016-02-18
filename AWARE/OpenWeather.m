@@ -58,56 +58,17 @@ NSString* ZERO            = @"0";
     
 int ONE_HOUR = 60*60;
 
-//- (instancetype) initWithDate:(NSDate *) date
-//               Lat:(double)lat
-//               Lon:(double)lon
-//{
-//    locationManager = nil;
-//    [self updateWeatherData:date Lat:0 Lon:0];
-//    return self;
-//}
 
 - (instancetype) initWithSensorName:(NSString *)sensorName withAwareStudy:(AWAREStudy *)study{
     self = [super initWithSensorName:SENSOR_PLUGIN_OPEN_WEATHER withAwareStudy:study];
     if (self) {
         locationManager = nil;
-        NSDate *date = [NSDate new];
         identificationForOpenWeather = @"http_for_open_weather_";
-        [self updateWeatherData:date Lat:0 Lon:0];
+        [self updateWeatherData:[NSDate new] Lat:0 Lon:0];
     }
     return self;
 }
 
-
-- (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
-    NSLog(@"Start Open Weather Map");
-    [self createTable];
-    [self initLocationSensor];
-    
-    double frequencyMin = [self getSensorSetting:settings withKey:@"plugin_openweather_frequency"];
-    double frequencySec = 60.0f * frequencyMin;
-    if (frequencyMin == -1) {
-        frequencySec = 60.0f*15.0f;
-    }
-    
-    syncTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval
-                                                 target:self selector:@selector(syncAwareDB)
-                                               userInfo:nil
-                                                repeats:YES];
-    sensingTimer = [NSTimer scheduledTimerWithTimeInterval:frequencySec
-                                                    target:self
-                                                  selector:@selector(getNewWeatherData)
-                                                  userInfo:nil
-                                                   repeats:YES];
-    [self getNewWeatherData];
-    return YES;
-}
-
-- (BOOL)stopSensor{
-    [syncTimer invalidate];
-    [sensingTimer invalidate];
-    return YES;
-}
 
 - (void) createTable{
     NSString *query = [[NSString alloc] init];
@@ -134,8 +95,17 @@ int ONE_HOUR = 60*60;
     [super createTable:query];
 }
 
-- (void) initLocationSensor {
-//    NSLog(@"start location sensing!");
+
+- (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
+    NSLog(@"Start Open Weather Map");
+    [self createTable];
+    
+    double frequencyMin = [self getSensorSetting:settings withKey:@"plugin_openweather_frequency"];
+    double frequencySec = 60.0f * frequencyMin;
+    if (frequencyMin == -1) {
+        frequencySec = 60.0f*15.0f;
+    }
+    
     if (locationManager == nil){
         locationManager = [[CLLocationManager alloc] init];
         locationManager.delegate = self;
@@ -151,63 +121,44 @@ int ONE_HOUR = 60*60;
         if ([locationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
             [locationManager requestAlwaysAuthorization];
         }
-        // Set a movement threshold for new events.
         locationManager.distanceFilter = 300; // meters
-        [locationManager startUpdatingLocation];
-        //    [_locationManager startMonitoringVisits]; // This method calls didVisit.
-        [locationManager startUpdatingHeading];
+        // [locationManager startUpdatingLocation];
     }
+    
+    syncTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval
+                                                 target:self selector:@selector(syncAwareDB)
+                                               userInfo:nil
+                                                repeats:YES];
+    
+    sensingTimer = [NSTimer scheduledTimerWithTimeInterval:frequencySec
+                                                    target:self
+                                                  selector:@selector(getNewWeatherData)
+                                                  userInfo:nil
+                                                   repeats:YES];
+    [self getNewWeatherData];
+    return YES;
 }
 
+- (BOOL)stopSensor{
+    [syncTimer invalidate];
+    [sensingTimer invalidate];
+    return YES;
+}
+
+
+
+/////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////
+
+
+
 - (void) getNewWeatherData {
-    //[sdManager addLocation:[_locationManager location]];
     CLLocation* location = [locationManager location];
     NSDate *now = [NSDate new];
     [self updateWeatherData:now
                         Lat:location.coordinate.latitude
                         Lon:location.coordinate.longitude];
 }
-
-//- (void) locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations{
-//    for (CLLocation* location in locations) {
-//        //        [self saveLocation:location];
-//        NSDate *now = [NSDate new];
-//        [self updateWeatherData:now
-//                            Lat:location.coordinate.latitude
-//                            Lon:location.coordinate.longitude];
-//    }
-//}
-
-//- (void)locationManager:(CLLocationManager *)manager didUpdateHeading:(CLHeading *)newHeading {
-//    if (newHeading.headingAccuracy < 0)
-//        return;
-//    //    CLLocationDirection  theHeading = ((newHeading.trueHeading > 0) ?
-//    //                                       newHeading.trueHeading : newHeading.magneticHeading);
-//    //    [sdManager addSensorDataMagx:newHeading.x magy:newHeading.y magz:newHeading.z];
-//    //    [sdManager addHeading: theHeading];
-//}
-
-
-
-
-//- (void) saveLocation:(CLLocation *)location{
-////    NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
-////    NSNumber* unixtime = [NSNumber numberWithDouble:timeStamp];
-////    NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-////    [dic setObject:unixtime forKey:@"timestamp"];
-////    [dic setObject:[self getDeviceId] forKey:@"device_id"];
-////    [dic setObject:[NSNumber numberWithDouble:location.coordinate.latitude] forKey:@"double_latitude"];
-////    [dic setObject:[NSNumber numberWithDouble:location.coordinate.longitude] forKey:@"double_longitude"];
-////    [dic setObject:[NSNumber numberWithDouble:location.course] forKey:@"double_bearing"];
-////    [dic setObject:[NSNumber numberWithDouble:location.speed] forKey:@"double_speed"];
-////    [dic setObject:[NSNumber numberWithDouble:location.altitude] forKey:@"double_altitude"];
-////    [dic setObject:@"gps" forKey:@"provider"];
-////    [dic setObject:[NSNumber numberWithInt:location.verticalAccuracy] forKey:@"accuracy"];
-////    [dic setObject:@"" forKey:@"label"];
-////    [self setLatestValue:[NSString stringWithFormat:@"%f, %f, %f", location.coordinate.latitude, location.coordinate.longitude, location.speed]];
-////    [self saveData:dic toLocalFile:@"locations"];
-//}
-
 
 - (void)updateWeatherData:(NSDate *)date Lat:(double)lat Lon:(double)lon
 {
@@ -279,18 +230,19 @@ didReceiveResponse:(NSURLResponse *)response
                                                           options:NSJSONReadingAllowFragments
                                                             error:&e];
         
-        // NSLog(@"%@", jsonWeatherData);
         if ( jsonWeatherData == nil) {
             NSLog( @"%@", e.debugDescription );
-//            [self sendLocalNotificationForMessage:e.debugDescription soundFlag:YES];
+            if ([self getDebugState]) {
+                [self sendLocalNotificationForMessage:e.debugDescription soundFlag:NO];
+            }
             return;
         };
         
-//        [self sendLocalNotificationForMessage:@"Get Weather Information" soundFlag:YES];
+        if ([self getDebugState]) {
+            [self sendLocalNotificationForMessage:@"Get Weather Information" soundFlag:NO];
+        }
         
         NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-//        double timeStamp = [[NSDate date] timeIntervalSince1970] * 1000;
-//        NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
         NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
         [dic setObject:unixtime forKey:@"timestamp"];
         [dic setObject:[self getDeviceId] forKey:@"device_id"];

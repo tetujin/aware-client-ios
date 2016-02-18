@@ -9,6 +9,7 @@
 //
 
 #import "Debug.h"
+#import "AWAREKeys.h"
 
 @implementation Debug {
     NSString * KEY_DEBUG_TIMESTAMP;
@@ -74,9 +75,11 @@
 
 
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
+    // Send a create table query
     NSLog(@"[%@] CreateTable!", [self getSensorName]);
     [self createTable];
     
+    // Start a data upload timer
     NSLog(@"[%@] Start Sensor!", [self getSensorName]);
     timer = [NSTimer scheduledTimerWithTimeInterval:upInterval
                                              target:self
@@ -84,6 +87,7 @@
                                            userInfo:nil
                                             repeats:YES];
     
+    // Set a buffer for reducing file access
     [self setBufferSize:10];
     
     // Software Update Event
@@ -148,6 +152,13 @@
     }
     return NO;
 }
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
+
+
 
 - (void) saveDebugEventWithText:(NSString *)eventText type:(NSInteger)type label:(NSString *) label {
     if (eventText == nil) eventText = @"";

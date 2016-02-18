@@ -17,7 +17,6 @@
 - (instancetype)initWithSensorName:(NSString *)sensorName withAwareStudy:(AWAREStudy *)study{
     self = [super initWithSensorName:sensorName withAwareStudy:study];
     if (self) {
-//        [super setSensorName:sensorName];
     }
     return self;
 }
@@ -35,38 +34,44 @@
     [super createTable:query];
 }
 
-
-//- (BOOL)startSensor:(double)interval withUploadInterval:(double)upInterval{
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
+    // Send a table create query
     NSLog(@"[%@] Create Table", [self getSensorName]);
     [self createTable];
     
     
-//    double frequency = [self getSensorSetting:settings withKey:@"frequency_barometer"];
-//    if(frequency != -1){
-//        frequency = 200000/100000;
-//    }else{
-//        
-//    }
+    // Get a sensing frequency
+    double frequency = [self getSensorSetting:settings withKey:@"frequency_barometer"];
+    if(frequency != -1){
+        // NOTE: The frequency value is a microsecond
+        frequency = frequency/100000;
+    }else{
+        // default value = 200000(microseconds) = 0.2(second)
+        frequency = 0.2;
+    }
     
+    
+    // Set a buffer size for reducing file access
     [self setBufferSize:100];
     
+    
+    // Set and start a data uploader with an interval
+    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval
+                                                   target:self
+                                                 selector:@selector(syncAwareDB)
+                                                 userInfo:nil
+                                                  repeats:YES];
+    
+    // Set and start a sensor
     NSLog(@"[%@] Start Barometer Sensor", [self getSensorName]);
-    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval target:self selector:@selector(syncAwareDB) userInfo:nil repeats:YES];
     if (![CMAltimeter isRelativeAltitudeAvailable]) {
         NSLog(@"This device doesen't support CMAltimeter.");
     } else {
         altitude = [[CMAltimeter alloc] init];
         [altitude startRelativeAltitudeUpdatesToQueue:[NSOperationQueue mainQueue]
                                            withHandler:^(CMAltitudeData *altitudeData, NSError *error) {
-//                                               NSNumber *altitude_value = altitudeData.relativeAltitude;
-//                                               double altitude_f = [altitude_value doubleValue];
-//                                               self.altitudeLabel.text = [NSString stringWithFormat:@"%.2f [m]", altitude_f];
                                                NSNumber *pressure_value = altitudeData.pressure;
                                                double pressure_f = [pressure_value doubleValue];
-//                                               self.pressureLabel.text = [NSString stringWithFormat:@"%.2f [hPa]", pressure_f*10];
-//                                               double timeStamp = [[NSDate date] timeIntervalSince1970] * 1000;
-//                                               NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
                                                NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
                                                NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
                                                [dic setObject:unixtime forKey:@"timestamp"];
@@ -78,16 +83,16 @@
                                                [self saveData:dic];
                                            }];
     }
-    
-    
-    
-    
+
     return YES;
 }
 
 - (BOOL)stopSensor{
     [altitude stopRelativeAltitudeUpdates];
-    [uploadTimer invalidate];
+    if (uploadTimer != nil) {
+        [uploadTimer invalidate];
+        uploadTimer = nil;
+    }
     return YES;
 }
 

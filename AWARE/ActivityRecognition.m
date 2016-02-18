@@ -5,11 +5,18 @@
 //  Created by Yuuki Nishiyama on 11/26/15.
 //  Copyright © 2015 Yuuki NISHIYAMA. All rights reserved.
 //
+//
+
+/**
+- [Document for CoreMotion API]( https://developer.apple.com/library/ios/documentation/EventHandling/Conceptual/EventHandlingiPhoneOS/motion_event_basics/motion_event_basics.html )
+ 
+- [Document for CMDeviceMotion API] ( https://developer.apple.com/library/ios/documentation/CoreMotion/Reference/CMDeviceMotion_Class/index.html#//apple_ref/occ/cl/CMDeviceMotion )
+ */
+
 
 #import "ActivityRecognition.h"
 
-@implementation ActivityRecognition
-{
+@implementation ActivityRecognition {
     CMMotionActivityManager *motionActivityManager;
     NSTimer * uploadTimer;
 }
@@ -17,20 +24,10 @@
 - (instancetype)initWithSensorName:(NSString *)sensorName withAwareStudy:(AWAREStudy *)study{
     self = [super initWithSensorName:sensorName withAwareStudy:study];
     if (self) {
-//        [super setSensorName:sensorName];
         motionActivityManager = [[CMMotionActivityManager alloc] init];
     }
     return self;
 }
-
-/**
- * [CoreMotion API]
- * https://developer.apple.com/library/ios/documentation/EventHandling/Conceptual/EventHandlingiPhoneOS/motion_event_basics/motion_event_basics.html
- *
- * [CMDeviceMotion API]
- * https://developer.apple.com/library/ios/documentation/CoreMotion/Reference/CMDeviceMotion_Class/index.html#//apple_ref/occ/cl/CMDeviceMotion
- */
-
 
 - (void) createTable{
     NSString *query = [[NSString alloc] init];
@@ -64,6 +61,20 @@
 }
 
 
+- (BOOL)stopSensor{
+    if (uploadTimer != nil) {
+        [uploadTimer invalidate];
+        uploadTimer = nil;
+    }
+    [motionActivityManager stopActivityUpdates];
+    return YES;
+}
+
+
+////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
+
+
 - (void) addMotionActivity: (CMMotionActivity *) motionActivity{
     NSNumber *motionConfidence = [NSNumber numberWithInt:0];
     if (motionActivity.confidence  == CMMotionActivityConfidenceHigh){
@@ -79,40 +90,29 @@
     NSString *motionName = @"";
     NSNumber *motionType = @4;
 //    NSLog(@"Quite probably a new activity.");
-    //        NSDate *started = motionActivity.startDate;
     if (motionActivity.stationary){
         motionName = @"still";
-//        NSLog(@"still");
         motionType = @3;
     } else if (motionActivity.running){
         motionName = @"running";
-//        NSLog(@"running");
         motionType = @8;
     } else if (motionActivity.automotive){
         motionName = @"in_vehicle";
         motionType = @1;
-//        NSLog(@"in_vehicle");
     } else if (motionActivity.walking){
         motionName = @"walking";
         motionType = @7;
-//        NSLog(@"walking");
     } else if (motionActivity.cycling){
         motionName = @"on_bicycle";
         motionType = @1;
-//        NSLog(@"on_bicycle");
     } else if (motionActivity.unknown){
         motionName = @"unknown";
         motionType = @4;
-//        NSLog(@"unknown");
     } else {
         motionName = @"unknown";
         motionType = @4;
-//        NSLog(@"unknown");
     }
     
-    //    NSLog(@"Discovered characteristic %@", characteristic);
-//    double timeStamp = [[NSDate date] timeIntervalSince1970] * 1000;
-//    NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
     NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
     NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
     [dic setObject:unixtime forKey:@"timestamp"];
@@ -126,21 +126,5 @@
 }
 
 
-
-- (BOOL)stopSensor{
-    if (uploadTimer) {
-        [uploadTimer invalidate];
-        uploadTimer = nil;
-    }
-    [motionActivityManager stopActivityUpdates];
-//    [self stopWriteableTimer];
-    return YES;
-}
-
-//- (void)uploadSensorData{
-//    [self syncAwareDB];
-////    NSString * jsonStr = [self getData:SENSOR_PLUGIING_GOOGLE_ACTIVITY_RECOGNITION withJsonArrayFormat:YES];
-////    [self insertSensorData:jsonStr withDeviceId:[self getDeviceId] url:[self getInsertUrl:SENSOR_PLUGIING_GOOGLE_ACTIVITY_RECOGNITION]];
-//}
 
 @end

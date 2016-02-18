@@ -112,17 +112,13 @@
  * Stop and remove all sensors
  */
 - (BOOL)stopAndRemoveAllSensors {
-//    for (NSTimer* timer in awareTimers) {
     if (timer != nil) {
         [timer invalidate];
     }
-//    }
-//    [awareTimers removeAllObjects];
     for (AWARESensor* sensor in awareSensors) {
         [sensor stopSensor];
     }
     [awareSensors removeAllObjects];
-    
     return NO;
 }
 

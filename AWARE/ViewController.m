@@ -30,15 +30,15 @@
 
 @implementation ViewController{
     /**  Keys for contetns of a table view raw */
-    /// A key for a title of a raw
+    /// A key for a title in a raw
     NSString *KEY_CEL_TITLE;
-    /// A key for a description of a raw
+    /// A key for a description in a raw
     NSString *KEY_CEL_DESC;
-    /// A key for a image of a raw
+    /// A key for a image in a raw
     NSString *KEY_CEL_IMAGE;
-    /// A key for a status of a raw
+    /// A key for a status in a raw
     NSString *KEY_CEL_STATE;
-    /// A key for a sensor name of a raw
+    /// A key for a sensor_name in a raw
     NSString *KEY_CEL_SENSOR_NAME;
     
     /** Study Settings */
@@ -56,6 +56,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     /// Init keys and default interval
     KEY_CEL_TITLE = @"title";
     KEY_CEL_DESC = @"desc";
@@ -77,9 +78,8 @@
                                                 userInfo:nil
                                                  repeats:YES];
     NSRunLoop *runLoop = [NSRunLoop currentRunLoop];
-    [runLoop addTimer:dailyUpdateTimer forMode:NSDefaultRunLoopMode];
-    
-    
+//    [runLoop addTimer:dailyUpdateTimer forMode:NSDefaultRunLoopMode];
+    [runLoop addTimer:dailyUpdateTimer forMode:NSRunLoopCommonModes];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
     
@@ -132,6 +132,26 @@
     
     /// Start an update timer for list view. This timer refreshed the list view every 0.1 sec.
     listUpdateTimer = [NSTimer scheduledTimerWithTimeInterval:0.1f target:self.tableView selector:@selector(reloadData) userInfo:nil repeats:YES];
+    
+    // battery state trigger
+    // Set a battery state change event to a notification center
+    [UIDevice currentDevice].batteryMonitoringEnabled = YES;
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(changedBatteryState:)
+                                                 name:UIDeviceBatteryStateDidChangeNotification object:nil];
+}
+
+
+/**
+ * Start data sync with all sensors in the background when the device is started a battery charging.
+ */
+- (void) changedBatteryState:(id) sender {
+    if ([UIDevice currentDevice].batteryState == UIDeviceBatteryStateCharging) {
+        [debugSensor saveDebugEventWithText:@"[Uploader] The battery is charging. AWARE iOS start to upload sensor data." type:DebugTypeInfo label:@""];
+        if (_sensorManager != nil) {
+            [_sensorManager syncAllSensorsWithDBInBackground];
+        }
+    }
 }
 
 
@@ -151,6 +171,14 @@
     }else{
         NSLog(@"----------");
     }
+    
+    if ([NSProcessInfo processInfo].lowPowerModeEnabled ) {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"prefs:root=BATTERY_USAGE"]];
+    }
+//    else if (![CLLocationManager locationServicesEnabled]){
+//        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"prefs:root=LOCATION_SERVICES"]];
+//    }
+//    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"prefs:root=AWARE"]];
 }
 
 
@@ -283,8 +311,9 @@
     [_sensors addObject:[self getCelContent:@"AWARE Device ID" desc:deviceId image:@"" key:@"STUDY_CELL_VIEW"]];
     // study_number
     [_sensors addObject:[self getCelContent:@"AWARE Study" desc:awareStudyId image:@"" key:@"STUDY_CELL_VIEW"]];
-//    [_sensors addObject:[self getCelContent:@"MQTT Server" desc:mqttServerName image:@"" key:@"STUDY_CELL_VIEW"]];
-    // Google Account Information if a user registered him/her google account.
+    // aware server information
+    [_sensors addObject:[self getCelContent:@"AWARE Server" desc:mqttServerName image:@"" key:@"STUDY_CELL_VIEW"]];
+//     Google Account Information if a user registered him/her google account.
     [_sensors addObject:[self getCelContent:@"Google Account" desc:accountInfo image:@"" key:@"STUDY_CELL_VIEW"]];
     
     /**
@@ -384,6 +413,18 @@
     [_sensors addObject:[self getCelContent:@"Version" desc:version image:@"" key:@"STUDY_CELL_VIEW"]];
     // A manual data upload button
     [_sensors addObject:[self getCelContent:@"Manual Data Upload" desc:@"Please push this row for uploading sensor data!" image:@"" key:@"STUDY_CELL_MANULA_UPLOAD"]];
+    [_sensors addObject:[self getCelContent:@"General App Settings" desc:@"Move to the Settings app" image:@"" key:@"STUDY_CELL_SETTINGS_APP"]];
+    // Auto Study Update
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"HH:mm"];
+    NSString *formattedDateString = @"--:--";
+    if (dailyUpdateTimer != nil) {
+        if (dailyUpdateTimer.fireDate != nil) {
+            formattedDateString = [dateFormatter stringFromDate:dailyUpdateTimer.fireDate];
+        }
+    }
+    [_sensors addObject:[self getCelContent:@"Auto Study Update" desc:formattedDateString image:@"" key:@"STUDY_CELL_AUTO_STUDY_UPDATE"]];
+
 }
 
 
@@ -419,14 +460,13 @@
 
 
 - (void) initSensors {
-    
+    // Get sensors information and plugin information from NSUserDedaults class
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSArray *sensors = [userDefaults objectForKey:KEY_SENSORS];
+    NSArray *plugins = [userDefaults objectForKey:KEY_PLUGINS];
+    uploadInterval = [userDefaults doubleForKey:SETTING_SYNC_INT];
     for (NSMutableDictionary * sensor in _sensors) {
-        // Get sensors information and plugin information from NSUserDedaults class
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        NSArray *sensors = [userDefaults objectForKey:KEY_SENSORS];
-        NSArray *plugins = [userDefaults objectForKey:KEY_PLUGINS];
         // [NOTE] If this sensor is "active", addNewSensorWithSensorName method return TRUE value.
-        uploadInterval = [userDefaults doubleForKey:SETTING_SYNC_INT];
         NSString * key = [sensor objectForKey:KEY_CEL_SENSOR_NAME];
         bool state = [_sensorManager addNewSensorWithSensorName:key settings:sensors plugins:plugins uploadInterval:uploadInterval];
         if (state) {
@@ -464,12 +504,14 @@
  and/or done daily study update), this method is called before the -initList.
  */
 - (IBAction)pushedStudyRefreshButton:(id)sender {
+    
     // Inactivate the refresh button on the navigation bar
     _refreshButton.enabled = NO;
     
     @autoreleasepool {
         NSLog(@"Atop and remove all sensors from AWARESensorManager.");
         [_sensorManager stopAllSensors];
+        _sensorManager = [[AWARESensorManager alloc] init];
     }
     
     // Refresh a study: Donwlod configurations and set it on the device
@@ -481,20 +523,24 @@
      * Also, a developer can get the url from a AWARE Dashboard. If you want to add the url directly, you should allow following souce code ("===Test code for a simulator===").
      */
     // === Test code for a simulator ===
-    //[awareStudy setStudyInformationWithURL:@"https://api.awareframework.com/index.php/webservice/index/628/rqBnwZw9xNyq"];
+//    [awareStudy setStudyInformationWithURL:@"https://api.awareframework.com/index.php/webservice/index/628/rqBnwZw9xNyq"];
     // =================================
     
     // =================================
     [awareStudy refreshStudy];
+    awareStudy = nil;
     // =================================
     
     // Init sensors
     // TODO: The study refresh and initList is not synced, then if the user calls lots of times during sort time, AWARE make a doublicate sensor and uploader.
-    [self performSelector:@selector(initContentsOnTableView) withObject:0 afterDelay:2];
-    [self performSelector:@selector(initSensors) withObject:0 afterDelay:3];
+    //    [self performSelector:@selector(initContentsOnTableView) withObject:0 afterDelay:2];
+    //    [self performSelector:@selector(initSensors) withObject:0 afterDelay:3];
+    [self initContentsOnTableView];
+    [self initSensors];
     
     // Refresh the table view after 4 second
-    [self.tableView performSelector:@selector(reloadData) withObject:0 afterDelay:4];
+//    [self.tableView performSelector:@selector(reloadData) withObject:0 afterDelay:4];
+//    [self.tableView reloadData];
     
     // Activate the refresh button on the navigation bar fater 8 second
     [self performSelector:@selector(refreshButtonEnableYes) withObject:0 afterDelay:8];
@@ -607,6 +653,14 @@
                                                 otherButtonTitles:@"YES",nil];
         alert.tag = 8;
         [alert show];
+    }else if([key isEqualToString:@"STUDY_CELL_SETTINGS_APP"]){
+        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Move to Settings App?"
+                                                         message:@"You can change the allow to access APIs on the Settings app."
+                                                        delegate:self
+                                               cancelButtonTitle:@"NO"
+                                               otherButtonTitles:@"YES",nil];
+        alert.tag = 10;
+        [alert show];
     }
 }
 
@@ -623,13 +677,13 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
         NSLog(@"%ld", buttonIndex);
         if (buttonIndex == 1){ //yes
             [userDefaults setBool:YES forKey:SETTING_DEBUG_STATE];
-            [self initContentsOnTableView];
-//            [self pushedStudyRefreshButton:alertView];
+//            [self initContentsOnTableView];
+            [self pushedStudyRefreshButton:alertView];
         } else if (buttonIndex == 2){ // no
             //reset clicked
             [userDefaults setBool:NO forKey:SETTING_DEBUG_STATE];
-            [self initContentsOnTableView];
-//            [self pushedStudyRefreshButton:alertView];
+//            [self initContentsOnTableView];
+            [self pushedStudyRefreshButton:alertView];
         } else {
             NSLog(@"Cancel");
         }
@@ -649,13 +703,13 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
         NSLog(@"%ld", buttonIndex);
         if (buttonIndex == 1){ //yes
             [userDefaults setBool:YES forKey:SETTING_SYNC_WIFI_ONLY];
-//            [self pushedStudyRefreshButton:alertView];
-            [self initContentsOnTableView];
+            [self pushedStudyRefreshButton:alertView];
+//            [self initContentsOnTableView];
         } else if (buttonIndex == 2){ // no
             //reset clicked
             [userDefaults setBool:NO forKey:SETTING_SYNC_WIFI_ONLY];
-            [self initContentsOnTableView];
-//            [self pushedStudyRefreshButton:alertView];
+//            [self initContentsOnTableView];
+            [self pushedStudyRefreshButton:alertView];
         } else {
             NSLog(@"Cancel");
         }
@@ -681,13 +735,20 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
         }
         NSInteger maximumValue = [maximumValueStr integerValue] * 1000;
         [userDefaults setObject:[NSNumber numberWithInteger:maximumValue] forKey:KEY_MAX_DATA_SIZE];
-//        [self pushedStudyRefreshButton:alertView];
-        [self initContentsOnTableView];
+        [self pushedStudyRefreshButton:alertView];
+//        [self initContentsOnTableView];
     }else if(alertView.tag == 8){ //manual data upload
         if (buttonIndex == [alertView cancelButtonIndex]) {
             
         }else if (buttonIndex == 1){
-            [_sensorManager syncAllSensorsWithDB];
+            [_sensorManager syncAllSensorsWithDBInForeground];
+        }
+    }else if(alertView.tag == 10){
+        if (buttonIndex == [alertView cancelButtonIndex]) {
+            
+        }else if (buttonIndex == 1){
+//            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"prefs://"]];
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
         }
     }
 }
@@ -720,6 +781,7 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
 - (UITableViewCell *)tableView:(UITableView *)tableView
          cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     @autoreleasepool {
+//        NSLog(@"%ld",indexPath.row);
         static NSString *MyIdentifier = @"MyReuseIdentifier";
         
         NSDictionary *item = (NSDictionary *)[_sensors objectAtIndex:indexPath.row];

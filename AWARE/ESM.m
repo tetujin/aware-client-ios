@@ -15,10 +15,10 @@
 - (instancetype)initWithSensorName:(NSString *)sensorName withAwareStudy:(AWAREStudy *)study{
     self = [super initWithSensorName:@"esms" withAwareStudy:study];
     if (self) {
-//        [super setSensorName:sensorName];
     }
     return self;
 }
+
 
 - (void) createTable {
     NSString *query = [[NSString alloc] init];
@@ -48,10 +48,10 @@
     "esm_scale_max_label text default '',"
     "esm_scale_min_label text default '',"
     "esm_scale_step integer default 0";
-//    "UNIQUE (timestamp,device_id)";
 //    NSLog(@"%@", query);
     [super createTable:query];
 }
+
 
 - (BOOL) syncAwareDBWithData:(NSDictionary *)dictionary {
     return [super syncAwareDBWithData:dictionary];
@@ -62,8 +62,6 @@
     [self createTable];
     
     NSLog(@"[%@] Start ESM uploader", [self getSensorName]);
-    
-    // set sync timer
     uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval
                                                    target:self
                                                  selector:@selector(syncAwareDB)
@@ -77,4 +75,5 @@
     uploadTimer = nil;
     return YES;
 }
+
 @end

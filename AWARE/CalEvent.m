@@ -413,11 +413,4 @@
 }
 
 
-//- (NSNumber *) getUnixtimeWithNSDate:(NSDate *) date {
-//    double timeStamp = [date timeIntervalSince1970] * 1000;
-//    NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
-//    return unixtime;
-//}
-
-
 @end

@@ -11,12 +11,11 @@
 #import "CalEvent.h"
 
 @implementation GoogleCalPull {
-    // for calendar events
     EKEventStore *store;
     EKSource *awareCalSource;
-    NSTimer * calRefreshTimer;
     NSMutableArray *allEvents;
     EKEvent * dailyNotification;
+    NSTimer * timer;
     
     NSString* googleCalPullSensorName;
     
@@ -24,15 +23,11 @@
     NSString* KEY_AWARE_CAL_FIRST_ACCESS;
     
     AWAREStudy * awareStudy;
-    
-//    BOOL isAddOrUpdate;
-//    EKEvent* targetEvent;
-//    CalEvent * deletedEvent;
 }
 
 
-- (instancetype) initWithPluginName:(NSString *)pluginName awareStudy:(AWAREStudy *)study{
-    self  = [super initWithSensorName:pluginName withAwareStudy:study];
+- (instancetype) initWithSensorName:(NSString *)sensorName withAwareStudy:(AWAREStudy *)study{
+    self  = [super initWithSensorName:@"balancedcampuscalendar" withAwareStudy:study];
     awareStudy = study;
     if (self) {
         allEvents = [[NSMutableArray alloc] init];
@@ -64,83 +59,40 @@
 }
 
 
-- (void) saveOriginalCalEvents {
-    [store enumerateEventsMatchingPredicate:[self getPredication] usingBlock:^(EKEvent *ekEvent, BOOL *stop) {
-        // Check this event against each ekObjectID in notification
-        CalEvent* calEvent = [[CalEvent alloc] initWithEKEvent:ekEvent eventType:CalEventTypeOriginal];
-        [self saveCalEvent:calEvent];
-    }];
-}
-
-
-
-- (BOOL) showSelectPrimaryGoogleCalView {
-    UIAlertView * alert = [[UIAlertView alloc] init];
-    alert.title = @"Which is your Google Calendar?";
-    alert.message = @"Please select your primary Google Calendar.";
-    alert.delegate = self;
-    for (NSString* name in [self getCals]) {
-        [alert addButtonWithTitle:name];
-    }
-//    alert.alertViewStyle = UIAlertViewStylePlainTextInput;
-    [alert show];
-    return NO;
-}
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
-    NSLog(@"[%ld] %@", buttonIndex, [alertView buttonTitleAtIndex:buttonIndex] );
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults setObject:[alertView buttonTitleAtIndex:buttonIndex] forKey:PRIMARY_GOOGLE_ACCOUNT_NAME];
-    [self setLatestValue:[alertView buttonTitleAtIndex:buttonIndex]];
-    //make aware cal
-//    if (![self isAwareCal]) {
-//        [self makeAwareCalWithAccount:[alertView buttonTitleAtIndex:buttonIndex]];
-//    }
-}
-
-
-- (NSArray *) getCals {
-    NSMutableArray * cals = [[NSMutableArray alloc] init];
-    for (EKSource *calSource in store.sources) {
-        NSLog(@"%@",calSource);
-        [cals addObject:calSource.title];
-    }
-    return cals;
-}
-
-- (void) setPrimaryGoogleCal:(NSString*) googleCalName {
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults setObject:googleCalName forKey:PRIMARY_GOOGLE_ACCOUNT_NAME];
-}
-
-- (NSString* ) getPrimaryGoogleCal {
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    return [userDefaults objectForKey:PRIMARY_GOOGLE_ACCOUNT_NAME];
-}
-
-
-
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings {
-    
+    // Send a create table query
     NSLog(@"[%@] Create table", [self getSensorName]);
-
-    AWARESensor *balancedCampusCalendarSensor = [[AWARESensor alloc] initWithSensorName:googleCalPullSensorName withAwareStudy:awareStudy];
     CalEvent *calEvent = [[CalEvent alloc] init];
     [self createTable:[calEvent getCreateTableQuery]];
-    [self addAnAwareSensor:balancedCampusCalendarSensor];
-    [self startAllSensors:upInterval withSettings:settings];
+    
+    // Update existing events
     [self updateExistingEvents];
     
+    // Start a data uploader
+    timer = [NSTimer scheduledTimerWithTimeInterval:upInterval
+                                             target:self
+                                           selector:@selector(syncAwareDB)
+                                           userInfo:nil
+                                            repeats:YES];
     return YES;
 }
+
 
 - (BOOL) stopSensor {
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:EKEventStoreChangedNotification
                                                   object:store];
-//    [self stopAndRemoveAllSensors];
+    [timer invalidate];
     return YES;
 }
+
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////
+
+
 
 
 - (void) storeChanged:(NSNotification *) notification {
@@ -151,7 +103,7 @@
     EKEventStore *ekEventStore = notification.object;
     
     NSArray *ekEventStoreChangedObjectIDArray = [notification.userInfo objectForKey:@"EKEventStoreChangedObjectIDsUserInfoKey"];
-
+    
     //    NSPredicate *predicate = [ekEventStore    predicateForEventsWithStartDate:startDate
     //                                                                      endDate:endDate
     //                                                                    calendars:nil];
@@ -167,8 +119,8 @@
         [ids addObject:ekEventStoreChangedObjectID];
     }];
     
-//    BOOL isDeleteOrOther = YES;
-//    EKEvent* targetEvent;
+    //    BOOL isDeleteOrOther = YES;
+    //    EKEvent* targetEvent;
     //    for (EKEvent * ekEvent in currentEvents) {
     NSMutableArray * deletedEventIds = [[NSMutableArray alloc] init];
     for (NSString* ekEventStoreChangedObjectID in ids) {
@@ -210,9 +162,14 @@
             NSLog(@"unkown");
         }
     }
-
+    
     [self updateExistingEvents];
 }
+
+
+//////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////
+
 
 - (void) setLatestValueWithEvent:(CalEvent *) event {
     // update latest updated sensor value.
@@ -221,6 +178,41 @@
     NSString *formattedDateString = [dateFormatter stringFromDate:[NSDate new]];
     [super setLatestValue:[NSString stringWithFormat:@"[%@] %@ (%@)", event.status, event.title, formattedDateString]];
 }
+
+
+//////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////
+
+
+- (void) updateExistingEvents {
+    [allEvents removeAllObjects];
+    // Loop through all events in range
+    [store enumerateEventsMatchingPredicate:[self getPredication] usingBlock:^(EKEvent *ekEvent, BOOL *stop) {
+        // Check this event against each ekObjectID in notification
+        CalEvent* calEvent = [[CalEvent alloc] initWithEKEvent:ekEvent];
+        [allEvents addObject:calEvent];
+    }];
+}
+
+
+- (void) saveOriginalCalEvents {
+    [store enumerateEventsMatchingPredicate:[self getPredication] usingBlock:^(EKEvent *ekEvent, BOOL *stop) {
+        // Check this event against each ekObjectID in notification
+        CalEvent* calEvent = [[CalEvent alloc] initWithEKEvent:ekEvent eventType:CalEventTypeOriginal];
+        [self saveCalEvent:calEvent];
+    }];
+}
+
+
+- (NSArray *) getCals {
+    NSMutableArray * cals = [[NSMutableArray alloc] init];
+    for (EKSource *calSource in store.sources) {
+        NSLog(@"%@",calSource);
+        [cals addObject:calSource.title];
+    }
+    return cals;
+}
+
 
 - (CalEvent *) getDeletedCalEventWithManageId:(NSObject*) manageId {
     for (CalEvent* calEvent in allEvents) {
@@ -236,7 +228,6 @@
     NSMutableDictionary * dic = [calEvent getCalEventAsDictionaryWithDeviceId:[awareStudy getDeviceId]
                                                                     timestamp:[AWAREUtils getUnixTimestamp:[NSDate new]]];
     [self saveData:dic toLocalFile:googleCalPullSensorName];
-//    NSLog(@"%@", dic);
 }
 
 
@@ -269,20 +260,6 @@
     return deletedCalEvent;
 }
 
-- (void) updateExistingEvents {
-//    NSLog(@"= Get All Events =");
-    
-    [allEvents removeAllObjects];
-    
-    // Loop through all events in range
-    [store enumerateEventsMatchingPredicate:[self getPredication] usingBlock:^(EKEvent *ekEvent, BOOL *stop) {
-        // Check this event against each ekObjectID in notification
-        CalEvent* calEvent = [[CalEvent alloc] initWithEKEvent:ekEvent];
-        [allEvents addObject:calEvent];
-//        NSLog(@"count %ld", allEvents.count);
-//        NSLog(@"calendars: %@ ", ekEvent.calendarItemIdentifier);
-    }];
-}
 
 - (NSPredicate *) getPredication {
     NSDate *now = [NSDate date];
@@ -303,6 +280,48 @@
                                                           calendars:nil];
     return predicate;
 }
+
+
+/////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////
+
+- (BOOL) showSelectPrimaryGoogleCalView {
+    UIAlertView * alert = [[UIAlertView alloc] init];
+    alert.title = @"Which is your Google Calendar?";
+    alert.message = @"Please select your primary Google Calendar.";
+    alert.delegate = self;
+    for (NSString* name in [self getCals]) {
+        [alert addButtonWithTitle:name];
+    }
+    [alert show];
+    return NO;
+}
+
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    NSLog(@"[%ld] %@", buttonIndex, [alertView buttonTitleAtIndex:buttonIndex] );
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setObject:[alertView buttonTitleAtIndex:buttonIndex] forKey:PRIMARY_GOOGLE_ACCOUNT_NAME];
+    [self setLatestValue:[alertView buttonTitleAtIndex:buttonIndex]];
+}
+
+
+
+/////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////
+
+
+- (void) setPrimaryGoogleCal:(NSString*) googleCalName {
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setObject:googleCalName forKey:PRIMARY_GOOGLE_ACCOUNT_NAME];
+}
+
+- (NSString* ) getPrimaryGoogleCal {
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    return [userDefaults objectForKey:PRIMARY_GOOGLE_ACCOUNT_NAME];
+}
+
+
 
 
 @end

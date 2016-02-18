@@ -6,7 +6,8 @@
 //  Copyright © 2016 Yuuki NISHIYAMA. All rights reserved.
 //
 
-#import "AWAREPlugin.h"
+#import "AWARESensor.h"
+#import "AWAREKeys.h"
 //#import <CoreData/CoreData.h>
 
 typedef enum: NSInteger {

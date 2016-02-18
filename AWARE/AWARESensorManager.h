@@ -26,6 +26,7 @@
                             plugins:(NSArray*)plugins
                      uploadInterval:(double) uploadTime;
 - (NSString*)getLatestSensorData:(NSString *)sensorName;
-- (bool) syncAllSensorsWithDB;
+- (bool) syncAllSensorsWithDBInForeground;
+- (bool) syncAllSensorsWithDBInBackground;
 - (BOOL) isExist :(NSString *) key;
 @end

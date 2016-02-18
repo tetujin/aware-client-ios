@@ -5,6 +5,8 @@
 //  Created by Yuuki Nishiyama on 11/24/15.
 //  Copyright © 2015 Yuuki NISHIYAMA. All rights reserved.
 //
+//  NOTE: This sensor can scan BLE devices' UUID. Those UUIDs not unique.
+//
 
 #import "Bluetooth.h"
 
@@ -36,11 +38,18 @@
 
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
     NSLog(@"[%@] Create Table", [self getSensorName]);
+    // Send a table create query
     [self createTable];
     
     NSLog(@"[%@] Start BLE Sensor", [self getSensorName]);
+    // Init a CBCentralManager for sensing BLE devices
     _myCentralManager = [[CBCentralManager alloc] initWithDelegate:self queue:nil];
-    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval target:self selector:@selector(syncAwareDB) userInfo:nil repeats:YES];
+    
+    // Set and start a data upload timer
+    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval
+                                                   target:self
+                                                 selector:@selector(syncAwareDB)
+                                                 userInfo:nil repeats:YES];
     return YES;
 }
 
@@ -49,6 +58,11 @@
     [uploadTimer invalidate];
     return YES;
 }
+
+
+/////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////
+
 
 
 - (void)centralManagerDidUpdateState:(CBCentralManager *)central
@@ -106,9 +120,6 @@
     if (!name) name = @"";
     if (!uuid) uuid = @"";
     
-//    NSLog(@"Discovered characteristic %@", characteristic);
-//    double timeStamp = [[NSDate date] timeIntervalSince1970] * 1000;
-//    NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
     NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
     NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
     [dic setObject:unixtime forKey:@"timestamp"];

@@ -34,7 +34,6 @@
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         debug = [userDefaults boolForKey:SETTING_DEBUG_STATE];
         resultData = [[NSMutableData alloc] init];
-//                [super setSensorName:sensorName];
         scheduleManager = [[NSMutableArray alloc] init];
 //        dailyUpdate = [self getTargetTimeAsNSDate:[NSDate new] hour:3 minute:0 second:0];
         _getConfigFileIdentifier = @"get_config_file_identifier";
@@ -43,28 +42,180 @@
         KEY_LATEST_ESM_JSON_JSON_DATA = @"key_latest_esm_json_date";
         KEY_PREVIOUS_SCHEDULE_JSON = @"key_previous_schedule_json";
 //        CONFIG_URL = @"https://r2d2.hcii.cs.cmu.edu/esm/ad6e5ac2-ca24-436b-9e4f-77848918c7cb/master.json";
-//        CONFIG_URL = @"http://r2d2.hcii.cs.cmu.edu/esm/master_ios.json";
         CONFIG_URL = [NSString stringWithFormat:@"http://r2d2.hcii.cs.cmu.edu/esm/%@/master.json", [self getDeviceId]];
     }
     return self;
 }
 
-- (NSData *) getLatestEsmJsonData {
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    NSData * data = [userDefaults dataForKey:KEY_LATEST_ESM_JSON_JSON_DATA];
-    return data;
-}
-
--(void) setLatestEsmJsonData: (NSData*) jsonData{
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults setObject:jsonData forKey:KEY_LATEST_ESM_JSON_JSON_DATA];
-}
 
 
-- (BOOL) isForeground {
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    return [userDefaults boolForKey:@"APP_STATE"];
+- (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
+    
+    ESMStorageHelper *helper = [[ESMStorageHelper alloc] init];
+    [helper removeEsmTexts];
+    
+    
+    // init
+    NSString * debugMessage = @"AWARE initializes ESM schedules with backup ESMs.";
+    if ([self getDebugState]) {
+        [self setBackupEsmsWithNotification:debugMessage];
+    }
+    [self saveDebugEventWithText:debugMessage type:DebugTypeInfo label:@""];
+    
+    NSMutableDictionary * dic = [[NSMutableDictionary alloc] init];
+    [dic setObject:CONFIG_URL forKey:@"configUrl"];
+    // --- TEST --
+    //    dailyUpdate = [AWAREUtils getTargetNSDate:[NSDate new] hour:11 minute:40 second:0 nextDay:NO];
+    //    dailyQuestionUpdateTimer = [[NSTimer alloc] initWithFireDate:dailyUpdate
+    //                                                        interval:60*60*24
+    //                                                          target:self
+    //                                                        selector:@selector(setConfigFile:)
+    //                                                        userInfo:dic
+    //                                                         repeats:YES];
+    //    NSRunLoop *runLoop = [NSRunLoop currentRunLoop];
+    //    [runLoop addTimer:dailyQuestionUpdateTimer forMode:NSDefaultRunLoopMode];
+    
+    
+    dailyQuestionUpdateTimer = [NSTimer timerWithTimeInterval:0
+                                                       target:self
+                                                     selector:@selector(setConfigFile:)
+                                                     userInfo:dic
+                                                      repeats:NO];
+    [dailyQuestionUpdateTimer fire];
+    
+    // init scheduler
+    
+    // Make schdules
+    //    AWARESchedule * test = [self getScheduleForTest];
+    //    AWARESchedule * drinkOne = [self getDringSchedule];
+    //    AWARESchedule * drinkTwo = [self getDringSchedule];
+    //    AWARESchedule * emotionOne = [self getEmotionSchedule];
+    //    AWARESchedule * emotionTwo = [self getEmotionSchedule];
+    //    AWARESchedule * emotionThree = [self getEmotionSchedule];
+    //    AWARESchedule * emotionFour = [self getEmotionSchedule];
+    //
+    //    // Set Notification Time using -getTargetTimeAsNSDate:hour:minute:second method.
+    //    NSDate * now = [NSDate new];
+    //    drinkOne.schedule = [self getTargetTimeAsNSDate:now hour:9];
+    //    drinkTwo.schedule = [self getTargetTimeAsNSDate:now hour:1];
+    //    emotionOne.schedule = [self getTargetTimeAsNSDate:now hour:9];
+    //    emotionTwo.schedule = [self getTargetTimeAsNSDate:now hour:13];
+    //    emotionThree.schedule = [self getTargetTimeAsNSDate:now hour:17];
+    //    emotionFour.schedule = [self getTargetTimeAsNSDate:now hour:21];
+    ////    [emotionFour setScheduleType:SCHEDULE_INTERVAL_TEST];
+    //
+    //    test.schedule = now;
+    ////    drinkTwo.schedule = now; //[self getTargetTimeAsNSDate:now hour:21 minute:52 second:0];
+    ////    emotionFour.schedule = now;//[self getTargetTimeAsNSDate:now hour:13 minute:5 second:0];
+    ////    [emotionFour setScheduleType:SCHEDULE_INTERVAL_TEST];
+    //
+    //    // Add maked schedules to schedules
+    //    // Set a New ESMSchedule to a SchduleManager
+    //    NSMutableArray *schedules = [[NSMutableArray alloc] init]
+    //    ;
+    //    [schedules addObject:test];
+    //    [schedules addObject:drinkOne];
+    //    [schedules addObject:drinkTwo];
+    //    [schedules addObject:emotionOne];
+    //    [schedules addObject:emotionTwo];
+    //    [schedules addObject:emotionThree];
+    //    [schedules addObject:emotionFour];
+    //    
+    //    [self startSchedules:schedules];
+    
+    return NO;
 }
+
+
+
+- (BOOL)stopSensor {
+    for (NSDictionary * dic in scheduleManager) {
+        //        AWARESchedule *schedule = [dic objectForKey:KEY_SCHEDULE];
+        NSTimer* timer = [dic objectForKey:KEY_TIMER];
+        [timer invalidate];
+    }
+    scheduleManager = [[NSMutableArray alloc] init];
+    ESMStorageHelper * helper = [[ESMStorageHelper alloc] init];
+    [helper removeEsmTexts];
+    return YES;
+}
+
+
+
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+
+
+
+- (void) startSchedules:(NSArray *) schedules {
+    for (AWARESchedule * s in schedules) {
+        NSMutableDictionary * userInfo = [[NSMutableDictionary alloc] init];
+        [userInfo setObject:s.scheduleId forKey:@"schedule_id"];
+        NSTimer * notificationTimer = [[NSTimer alloc] initWithFireDate:s.schedule //TODO
+                                                               interval:[s.interval doubleValue]
+                                                                 target:self
+                                                               selector:@selector(scheduleAction:)
+                                                               userInfo:userInfo//s.scheduleId
+                                                                repeats:YES];
+        
+        //https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/Timers/Articles/usingTimers.html
+        NSRunLoop *runLoop = [NSRunLoop currentRunLoop];
+        //        [runLoop addTimer:notificationTimer forMode:NSDefaultRunLoopMode];
+        [runLoop addTimer:notificationTimer forMode:NSRunLoopCommonModes];
+        
+        NSMutableDictionary * dic = [[NSMutableDictionary alloc] init];
+        [dic setObject:s forKey:KEY_SCHEDULE];
+        [dic setObject:notificationTimer forKey:KEY_TIMER];
+        [scheduleManager addObject:dic];
+    }
+}
+
+- (void) stopSchedules {
+    // stop old esm schedules
+    for (NSDictionary * dic in scheduleManager) {
+        NSTimer* timer = [dic objectForKey:KEY_TIMER];
+        [timer invalidate];
+    }
+    scheduleManager = [[NSMutableArray alloc] init];
+}
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
+
+- (void) scheduleAction: (NSTimer *) sender {
+    // Get a schedule ID
+    NSMutableDictionary * userInfo = sender.userInfo;
+    NSString* scheduleId = [userInfo objectForKey:@"schedule_id"];
+    NSNumber* unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
+    // Search the target sechedule by the schedule ID
+    for (NSDictionary * dic in scheduleManager) {
+        AWARESchedule *schedule = [dic objectForKey:KEY_SCHEDULE];
+        NSLog(@"%@ - %@", schedule.scheduleId, scheduleId);
+        
+        if ([schedule.scheduleId isEqualToString:scheduleId]) {
+            NSString* esmStr = [self setEsmApperedTimestamp:schedule.esmStr withTimestamp:unixtime];
+            NSNumber* timeout = [self getTimeout:schedule.esmStr];
+            // Add esm text to local storage
+            ESMStorageHelper * helper = [[ESMStorageHelper alloc] init];
+            [helper addEsmText:esmStr withId:scheduleId timeout:timeout];
+            [self sendLocalNotificationWithSchedule:schedule soundFlag:YES];
+            
+            // Save ESM
+            [AWAREEsmUtils saveEsmObjects:schedule withTimestamp:unixtime];
+            [self saveDebugEventWithText:[NSString stringWithFormat:@"[%@] Set a new esm schedule to temp-local storage", scheduleId] type:DebugTypeInfo label:@""];
+            break;
+        }
+    }
+}
+
+
+
+////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
+
 
 - (void) setConfigFile:(id) sender {
     
@@ -83,7 +234,6 @@
     __weak NSURLSession *session = nil;
     NSURLSessionConfiguration *sessionConfig = nil;
     
-//    double unixtime = [[NSDate new] timeIntervalSince1970];
     _getConfigFileIdentifier = [NSString stringWithFormat:@"%@%f", _getConfigFileIdentifier, unixtime];
     
     NSString *post = [NSString stringWithFormat:@"timestamp=%f&device_id=%@", unixtime, [self getDeviceId] ];
@@ -122,9 +272,9 @@
         }] resume];
     }else{
         sessionConfig = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:_getConfigFileIdentifier];
-        sessionConfig.timeoutIntervalForRequest =60; //180.0;
+        sessionConfig.timeoutIntervalForRequest = 60; //180.0;
         sessionConfig.HTTPMaximumConnectionsPerHost = 60; //180;
-        sessionConfig.timeoutIntervalForResource = 60*60*24; // 1 day
+        sessionConfig.timeoutIntervalForResource = 60; // 1 day
         sessionConfig.allowsCellularAccess = YES;
         sessionConfig.discretionary = YES;
         
@@ -188,6 +338,14 @@ didCompleteWithError:(NSError *)error {
     [session invalidateAndCancel];
 }
 
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+
+
 - (void) setBackupEsmsWithNotification:(NSString*) errorMessage {
     if (debug) {
         [self sendLocalNotificationForMessage:errorMessage soundFlag:NO];
@@ -198,21 +356,20 @@ didCompleteWithError:(NSError *)error {
     }
 }
 
+
 - (void) setEsmSchedulesWithJSONData:(NSData *)data {
     
     NSError * error = nil;
-//    NSString * text = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-//    NSLog(@"==> %@",text);
     NSArray *schedules = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
     
     if (error != nil) {
-//        NSLog(@"JSON FORMAT ERROR: %@", error.debugDescription);
+        //        NSLog(@"JSON FORMAT ERROR: %@", error.debugDescription);
         NSString * debugMessage = @"JSON Format Error: AWARE iOS sets the schedules with backuped ESMs.";
         if(debug)[self setBackupEsmsWithNotification:debugMessage];
         [self saveDebugEventWithText:debugMessage type:DebugTypeError label:@""];
         return;
     }else{
-//        if(debug)[self setBackupEsmsWithNotification:@"Success to "];
+        //        if(debug)[self setBackupEsmsWithNotification:@"Success to "];
         [self setLatestEsmJsonData:data];
     }
     
@@ -225,10 +382,10 @@ didCompleteWithError:(NSError *)error {
     NSMutableArray * awareSchedules = [[NSMutableArray alloc] init];
     
     //TODO
-//    AWARESchedule * awareSchedule = [self getScheduleForTest];
-//    awareSchedule.schedule = [NSDate new];
-//    [awareSchedule setScheduleType:SCHEDULE_INTERVAL_TEST];
-//    [awareSchedules addObject:awareSchedule];
+    //    AWARESchedule * awareSchedule = [self getScheduleForTest];
+    //    awareSchedule.schedule = [NSDate new];
+    //    [awareSchedule setScheduleType:SCHEDULE_INTERVAL_TEST];
+    //    [awareSchedules addObject:awareSchedule];
     
     NSString* currentSchedules = @"";//[[NSString alloc] init];
     int i = 0;
@@ -248,10 +405,9 @@ didCompleteWithError:(NSError *)error {
         for (NSNumber * hour in hours) {
             i++;
             int intHour = [hour intValue]; //TODO
-//            NSDate * fireDate = [NSDate new];//[self getTargetTimeAsNSDate:[NSDate new] hour:intHour];
+            //            NSDate * fireDate = [NSDate new];//[self getTargetTimeAsNSDate:[NSDate new] hour:intHour];
             NSDate * fireDate = [self getTargetTimeAsNSDate:[NSDate new] hour:intHour];
             NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
-//            [dateFormatter setDateFormat:@"yyyy-MM-dd 'at' h:mm a"];
             [dateFormatter setDateFormat:@"h:mm a"];
             NSString* fireDateString = [dateFormatter stringFromDate:fireDate];
             NSString * currentSchedule = [NSString stringWithFormat:@"'%@' at '[%@]'\n", identifier, fireDateString];
@@ -268,7 +424,6 @@ didCompleteWithError:(NSError *)error {
             [awareSchedules addObject:schedule];
         }
     }
-//    NSLog(@"%@", currentSchedules);
     NSString *currentEsmSchedules = [NSString stringWithFormat:@"You have %d ESM schedules per one day.\n%@",i, currentSchedules];
     [self setLatestValue:currentEsmSchedules];
     [self saveDebugEventWithText:currentEsmSchedules type:DebugTypeInfo label:@""];
@@ -277,6 +432,11 @@ didCompleteWithError:(NSError *)error {
     [self startSchedules:awareSchedules];
 }
 
+
+/////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
+
+/// ESM conveter (Androind -> iOS)
 
 - (NSMutableArray *)checkEsmIOS:esmsDic {
 //    NSMutableDictionary esm = [[NSMutableDictionary alloc] initWithDictionary:esmsDic];
@@ -308,142 +468,6 @@ didCompleteWithError:(NSError *)error {
     }
     
     return newArray;
-}
-
-
-- (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
-    
-    ESMStorageHelper *helper = [[ESMStorageHelper alloc] init];
-    [helper removeEsmTexts];
-
-    
-    // init
-    NSString * debugMessage = @"AWARE initializes ESM schedules with backup ESMs.";
-    if ([self getDebugState]) {
-        [self setBackupEsmsWithNotification:debugMessage];
-    }
-    [self saveDebugEventWithText:debugMessage type:DebugTypeInfo label:@""];
-    
-    NSMutableDictionary * dic = [[NSMutableDictionary alloc] init];
-    [dic setObject:CONFIG_URL forKey:@"configUrl"];
-    // --- TEST --
-//    dailyUpdate = [AWAREUtils getTargetNSDate:[NSDate new] hour:11 minute:40 second:0 nextDay:NO];
-//    dailyQuestionUpdateTimer = [[NSTimer alloc] initWithFireDate:dailyUpdate
-//                                                        interval:60*60*24
-//                                                          target:self
-//                                                        selector:@selector(setConfigFile:)
-//                                                        userInfo:dic
-//                                                         repeats:YES];
-//    NSRunLoop *runLoop = [NSRunLoop currentRunLoop];
-//    [runLoop addTimer:dailyQuestionUpdateTimer forMode:NSDefaultRunLoopMode];
-    
-    
-    dailyQuestionUpdateTimer = [NSTimer timerWithTimeInterval:0
-                                                       target:self
-                                                     selector:@selector(setConfigFile:)
-                                                     userInfo:dic
-                                                      repeats:NO];
-    [dailyQuestionUpdateTimer fire];
-    
-    // init scheduler
-    
-    // Make schdules
-//    AWARESchedule * test = [self getScheduleForTest];
-//    AWARESchedule * drinkOne = [self getDringSchedule];
-//    AWARESchedule * drinkTwo = [self getDringSchedule];
-//    AWARESchedule * emotionOne = [self getEmotionSchedule];
-//    AWARESchedule * emotionTwo = [self getEmotionSchedule];
-//    AWARESchedule * emotionThree = [self getEmotionSchedule];
-//    AWARESchedule * emotionFour = [self getEmotionSchedule];
-//    
-//    // Set Notification Time using -getTargetTimeAsNSDate:hour:minute:second method.
-//    NSDate * now = [NSDate new];
-//    drinkOne.schedule = [self getTargetTimeAsNSDate:now hour:9];
-//    drinkTwo.schedule = [self getTargetTimeAsNSDate:now hour:1];
-//    emotionOne.schedule = [self getTargetTimeAsNSDate:now hour:9];
-//    emotionTwo.schedule = [self getTargetTimeAsNSDate:now hour:13];
-//    emotionThree.schedule = [self getTargetTimeAsNSDate:now hour:17];
-//    emotionFour.schedule = [self getTargetTimeAsNSDate:now hour:21];
-////    [emotionFour setScheduleType:SCHEDULE_INTERVAL_TEST];
-//    
-//    test.schedule = now;
-////    drinkTwo.schedule = now; //[self getTargetTimeAsNSDate:now hour:21 minute:52 second:0];
-////    emotionFour.schedule = now;//[self getTargetTimeAsNSDate:now hour:13 minute:5 second:0];
-////    [emotionFour setScheduleType:SCHEDULE_INTERVAL_TEST];
-//    
-//    // Add maked schedules to schedules
-//    // Set a New ESMSchedule to a SchduleManager
-//    NSMutableArray *schedules = [[NSMutableArray alloc] init]
-//    ;
-//    [schedules addObject:test];
-//    [schedules addObject:drinkOne];
-//    [schedules addObject:drinkTwo];
-//    [schedules addObject:emotionOne];
-//    [schedules addObject:emotionTwo];
-//    [schedules addObject:emotionThree];
-//    [schedules addObject:emotionFour];
-//    
-//    [self startSchedules:schedules];
-    
-    return NO;
-}
-
-- (void) startSchedules:(NSArray *) schedules {
-    for (AWARESchedule * s in schedules) {
-        NSMutableDictionary * userInfo = [[NSMutableDictionary alloc] init];
-        [userInfo setObject:s.scheduleId forKey:@"schedule_id"];
-        NSTimer * notificationTimer = [[NSTimer alloc] initWithFireDate:s.schedule //TODO
-                                                               interval:[s.interval doubleValue]
-                                                                 target:self
-                                                               selector:@selector(scheduleAction:)
-                                                               userInfo:userInfo//s.scheduleId
-                                                                repeats:YES];
-        
-        //https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/Timers/Articles/usingTimers.html
-        NSRunLoop *runLoop = [NSRunLoop currentRunLoop];
-        [runLoop addTimer:notificationTimer forMode:NSDefaultRunLoopMode];
-        
-        NSMutableDictionary * dic = [[NSMutableDictionary alloc] init];
-        [dic setObject:s forKey:KEY_SCHEDULE];
-        [dic setObject:notificationTimer forKey:KEY_TIMER];
-        [scheduleManager addObject:dic];
-    }
-}
-
-- (void) stopSchedules {
-    // stop old esm schedules
-    for (NSDictionary * dic in scheduleManager) {
-        NSTimer* timer = [dic objectForKey:KEY_TIMER];
-        [timer invalidate];
-    }
-    scheduleManager = [[NSMutableArray alloc] init];
-}
-
-
-- (void) scheduleAction: (NSTimer *) sender {
-    // Get a schedule ID
-    NSMutableDictionary * userInfo = sender.userInfo;
-    NSString* scheduleId = [userInfo objectForKey:@"schedule_id"];
-    NSNumber* unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
-    // Search the target sechedule by the schedule ID
-    for (NSDictionary * dic in scheduleManager) {
-        AWARESchedule *schedule = [dic objectForKey:KEY_SCHEDULE];
-        NSLog(@"%@ - %@", schedule.scheduleId, scheduleId);
-        
-        if ([schedule.scheduleId isEqualToString:scheduleId]) {
-            NSString* esmStr = [self setEsmApperedTimestamp:schedule.esmStr withTimestamp:unixtime];
-            NSNumber* timeout = [self getTimeout:schedule.esmStr];
-            // Add esm text to local storage
-            ESMStorageHelper * helper = [[ESMStorageHelper alloc] init];
-            [helper addEsmText:esmStr withId:scheduleId timeout:timeout];
-            [self sendLocalNotificationWithSchedule:schedule soundFlag:YES];
-            
-            // Save ESM
-            [AWAREEsmUtils saveEsmObjects:schedule withTimestamp:unixtime];
-            [self saveDebugEventWithText:[NSString stringWithFormat:@"[%@] Set a new esm schedule to temp-local storage", scheduleId] type:DebugTypeInfo label:@""];
-            break;
-        }
-    }
 }
 
 
@@ -483,6 +507,7 @@ didCompleteWithError:(NSError *)error {
     return jsonStr;
 }
 
+
 - (NSNumber *) getTimeout:(NSString*) jsonStr {
     /**
      * [{"esm":[{"":""},{"":""},{"":""}]}]
@@ -511,17 +536,28 @@ didCompleteWithError:(NSError *)error {
 }
 
 
-- (BOOL)stopSensor {
-    for (NSDictionary * dic in scheduleManager) {
-//        AWARESchedule *schedule = [dic objectForKey:KEY_SCHEDULE];
-        NSTimer* timer = [dic objectForKey:KEY_TIMER];
-        [timer invalidate];
-    }
-    scheduleManager = [[NSMutableArray alloc] init];
-    ESMStorageHelper * helper = [[ESMStorageHelper alloc] init];
-    [helper removeEsmTexts];
-    return YES;
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+
+// Getter and Setter
+
+- (NSData *) getLatestEsmJsonData {
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSData * data = [userDefaults dataForKey:KEY_LATEST_ESM_JSON_JSON_DATA];
+    return data;
 }
+
+-(void) setLatestEsmJsonData: (NSData*) jsonData{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setObject:jsonData forKey:KEY_LATEST_ESM_JSON_JSON_DATA];
+}
+
+
+
+///////////////////////////////////////////////////////
+///////////////////////////////////////////////////////
+
+// Notification
 
 - (void) sendLocalNotificationWithSchedule : (AWARESchedule *) schedule
                                  soundFlag : (BOOL) soundFlag{
@@ -550,10 +586,18 @@ didCompleteWithError:(NSError *)error {
 }
 
 
+
+
+
+
+////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////
+
 - (NSDate *) getTargetTimeAsNSDate:(NSDate *) nsDate
                               hour:(int) hour {
     return [self getTargetTimeAsNSDate:nsDate hour:hour minute:0 second:0];
 }
+
 
 - (NSDate *) getTargetTimeAsNSDate:(NSDate *) nsDate
                               hour:(int) hour
@@ -580,6 +624,17 @@ didCompleteWithError:(NSError *)error {
         return targetNSDate;
     }
 }
+
+
+- (BOOL) isForeground {
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    return [userDefaults boolForKey:@"APP_STATE"];
+}
+
+////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////
+
+/// test
 
 - (AWARESchedule *) getDringSchedule{
     SingleESMObject *esmObject = [[SingleESMObject alloc] init];

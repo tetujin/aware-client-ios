@@ -49,11 +49,15 @@
     NSLog(@"[%@] Create Table", [self getSensorName]);
     [self createTable];
     
-    NSLog(@"[%@] Start Gravity Sensor", [self getSensorName]);
-    double interval = 0.1f;
+    // Start a data uploader
+    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval
+                                                   target:self
+                                                 selector:@selector(syncAwareDB)
+                                                 userInfo:nil
+                                                  repeats:YES];
     
-//    [self startWriteAbleTimer];
-    [self setBufferSize:100];
+    /// Get sensing frequency from settings
+    double interval = 0.1f;
     double frequency = [self getSensorSetting:settings withKey:@"frequency_gravity"];
     if(frequency != -1){
         NSLog(@"Gravity's frequency is %f !!", frequency);
@@ -61,15 +65,16 @@
         interval = iOSfrequency;
     }
     
-    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval target:self selector:@selector(syncAwareDB) userInfo:nil repeats:YES];
-    /** motion */
+    // Set a buffer size for reducing file access
+    [self setBufferSize:100];
+    
+    // Set and start motion sensor
+    NSLog(@"[%@] Start Gravity Sensor", [self getSensorName]);
     if( motionManager.deviceMotionAvailable ){
         motionManager.deviceMotionUpdateInterval = interval;
         [motionManager startDeviceMotionUpdatesToQueue:[NSOperationQueue new]
                                            withHandler:^(CMDeviceMotion *motion, NSError *error){
                                                // Save sensor data to the local database.
-//                                               double timeStamp = [[NSDate date] timeIntervalSince1970] * 1000;
-//                                               NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
                                                NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
                                                NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
                                                [dic setObject:unixtime forKey:@"timestamp"];
@@ -80,7 +85,6 @@
                                                [dic setObject:@0 forKey:@"accuracy"];//int
                                                [dic setObject:@"" forKey:@"label"]; //text
                                                [self setLatestValue:[NSString stringWithFormat:@"%f, %f, %f",motion.attitude.pitch, motion.attitude.roll,motion.attitude.yaw]];
-//                                               [self saveData:dic toLocalFile:SENSOR_GRAVITY];
                                                [self saveData:dic];
                                            }];
     }
@@ -90,32 +94,8 @@
 - (BOOL)stopSensor{
     [uploadTimer invalidate];
     [motionManager stopDeviceMotionUpdates];
-//    [self stopWriteableTimer];
     return YES;
 }
-
-
-//    deviceMotion.magneticField.field.x; done
-//    deviceMotion.magneticField.field.y; done
-//    deviceMotion.magneticField.field.z; done
-//    deviceMotion.magneticField.accuracy;
-
-//    deviceMotion.gravity.x;
-//    deviceMotion.gravity.y;
-//    deviceMotion.gravity.z;
-//    deviceMotion.attitude.pitch;
-//    deviceMotion.attitude.roll;
-//    deviceMotion.attitude.yaw;
-//    deviceMotion.rotationRate.x;
-//    deviceMotion.rotationRate.y;
-//    deviceMotion.rotationRate.z;
-
-//    deviceMotion.timestamp;
-//    deviceMotion.userAcceleration.x;
-//    deviceMotion.userAcceleration.y;
-//    deviceMotion.userAcceleration.z;
-
-
 
 
 @end

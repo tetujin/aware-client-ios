@@ -13,62 +13,43 @@
 
 - (instancetype) initWithStorageName:(NSString *) storageName;
 
-- (NSString *) getSensorName;
+/// create file
+- (BOOL) createNewFile:(NSString*)fileName;
 
-//// save data
-- (bool) saveDataWithArray:(NSArray*) array;
-
-// save data
-- (bool) saveData:(NSDictionary *)data;
-
-// save data with local file
-- (bool) saveData:(NSDictionary *)data toLocalFile:(NSString *)fileName;
-
-
-- (BOOL) appendLine:(NSString *)line;
-/** create new file */
--(BOOL)createNewFile:(NSString*) fileName;
-
-
-- (NSMutableString *) fixJsonFormat:(NSMutableString *) clipedText;
-
-/** clear file */
+/// clear file
 - (bool) clearFile:(NSString *) fileName;
-- (NSInteger) getMaxDateLength;
+
+/// save data
+- (bool) saveDataWithArray:(NSArray*) array;
+- (bool) saveData:(NSDictionary *)data;
+- (bool) saveData:(NSDictionary *)data toLocalFile:(NSString *)fileName;
+- (BOOL) appendLine:(NSString *)line;
+
+// get sensor data
 - (NSMutableString *) getSensorDataForPost;
-
-
+- (NSMutableString *) fixJsonFormat:(NSMutableString *) clipedText;
+- (NSInteger) getMaxDateLength;
 - (uint64_t) getFileSize;
 - (uint64_t) getFileSizeWithName:(NSString*) name;
 
-/**
- * Makers
- */
-- (int) getMarker;
-- (void) setMarker:(int) intMarker;
+// set and get mark
+- (void) setNextMark;
+- (void) restMark;
+- (int)  getMarker;
 
-/**
- * text legnth
- */
+// set and get a losted text length
 - (int) getLostedTextLength;
 - (void) setLostedTextLength:(int)lostedTextLength;
 
-/**
- * Set Debug Sensor
- */
+// set debug tracker
 - (void) trackDebugEventsWithDebugSensor:(Debug*)debug;
 
-/**
- * A File access balancer
- */
-//- (void) startWriteAbleTimer;
-//- (void) stopWriteableTimer;
-
-- (void) setBufferSize:(int) size;
-
+// get sensor storage name and path
+- (NSString *) getSensorName;
 - (NSString *) getFilePath;
 
-
+// set buffer and db lock
+- (void) setBufferSize:(int) size;
 - (void)dbLock;
 - (void)dbUnlock;
 

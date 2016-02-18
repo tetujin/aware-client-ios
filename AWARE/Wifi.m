@@ -38,50 +38,61 @@
     [super createTable:query];
 }
 
+
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
     NSLog(@"[%@] Create Table", [self getSensorName]);
     [self createTable];
     
-    NSLog(@"[%@] Start Wifi Sensor", [self getSensorName]);
+    // Get a sensing frequency
     double interval = 1.0f;
-    
-    [self setBufferSize:10];
-    
     double frequency = [self getSensorSetting:settings withKey:@"frequency_wifi"];
     if(frequency != -1){
         NSLog(@"Location sensing requency is %f ", frequency);
         interval = frequency;
     }
     
-    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval target:self selector:@selector(syncAwareDB) userInfo:nil repeats:YES];
-    sensingTimer = [NSTimer scheduledTimerWithTimeInterval:interval target:self selector:@selector(getSensorData) userInfo:nil repeats:YES];
-    [sensingTimer fire];
+    // Set a buffer size for reducing file access
+    [self setBufferSize:10];
+    
+    // Set and start a data uploader with an interval
+    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval
+                                                   target:self
+                                                 selector:@selector(syncAwareDB)
+                                                 userInfo:nil
+                                                  repeats:YES];
+    
+    // Set and start a data upload interval
+    NSLog(@"[%@] Start Wifi Sensor", [self getSensorName]);
+    sensingTimer = [NSTimer scheduledTimerWithTimeInterval:interval
+                                                    target:self
+                                                  selector:@selector(getWifiInfo)
+                                                  userInfo:nil
+                                                   repeats:YES];
+    
     return YES;
 }
 
-- (void) getSensorData{
-    // Get wifi information
 
-    
+- (BOOL)stopSensor{
+    if (sensingTimer != nil) {
+        [sensingTimer invalidate];
+        sensingTimer = nil;
+    }
+    if (uploadTimer != nil) {
+        [uploadTimer invalidate];
+        uploadTimer = nil;
+    }
+    return YES;
+}
+
+///////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////
+
+
+- (void) getWifiInfo {
+    // Get wifi information
     //http://www.heapoverflow.me/question-how-to-get-wifi-ssid-in-ios9-after-captivenetwork-is-depracted-and-calls-for-wif-31555640
-//    NSArray * networkInterfaces = [NEHotspotHelper supportedNetworkInterfaces];
-//    NSLog(@"Networks %@",networkInterfaces);
-//    for(NEHotspotNetwork *hotspotNetwork in [NEHotspotHelper supportedNetworkInterfaces]) {
-//        NSString *ssid = hotspotNetwork.SSID;
-//        NSString *bssid = hotspotNetwork.BSSID;
-//        BOOL secure = hotspotNetwork.secure;
-//        BOOL autoJoined = hotspotNetwork.autoJoined;
-//        double signalStrength = hotspotNetwork.signalStrength;
-//    }
-    
-//    CFArrayRef myArray = CNCopySupportedInterfaces();
-//    CFDictionaryRef captiveNetWork = CNCopyCurrentNetworkInfo(CFArrayGetValueAtIndex(myArray, 0));
-//    NSLog(@"Connected at : %@", captiveNetWork);
-//    NSDictionary *myDictionnary = (__bridge NSDictionary *)captiveNetWork;
-//    NSString *bssid = [myDictionnary objectForKey:@"BSSID"];
-//    NSLog(@"BSSID : %@", bssid);
-    
-    
+
     NSArray *ifs = (__bridge_transfer id)CNCopySupportedInterfaces();
     for (NSString *ifnam in ifs) {
         NSDictionary *info = (__bridge_transfer id)CNCopyCurrentNetworkInfo((__bridge CFStringRef)ifnam);
@@ -116,8 +127,6 @@
         }
         
         // Save sensor data to the local database.
-//        double timeStamp = [[NSDate date] timeIntervalSince1970] * 1000;
-//        NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
         NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
         NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
         [dic setObject:unixtime forKey:@"timestamp"];
@@ -130,23 +139,27 @@
         [dic setObject:@"" forKey:@"label"]; //text
         [self setLatestValue:[NSString stringWithFormat:@"%@ (%@)",ssid, finalBSSID]];
         [self saveData:dic toLocalFile:SENSOR_WIFI];
-        
     }
+    
+    //    NSArray * networkInterfaces = [NEHotspotHelper supportedNetworkInterfaces];
+    //    NSLog(@"Networks %@",networkInterfaces);
+    //    for(NEHotspotNetwork *hotspotNetwork in [NEHotspotHelper supportedNetworkInterfaces]) {
+    //        NSString *ssid = hotspotNetwork.SSID;
+    //        NSString *bssid = hotspotNetwork.BSSID;
+    //        BOOL secure = hotspotNetwork.secure;
+    //        BOOL autoJoined = hotspotNetwork.autoJoined;
+    //        double signalStrength = hotspotNetwork.signalStrength;
+    //    }
+    
+    //    CFArrayRef myArray = CNCopySupportedInterfaces();
+    //    CFDictionaryRef captiveNetWork = CNCopyCurrentNetworkInfo(CFArrayGetValueAtIndex(myArray, 0));
+    //    NSLog(@"Connected at : %@", captiveNetWork);
+    //    NSDictionary *myDictionnary = (__bridge NSDictionary *)captiveNetWork;
+    //    NSString *bssid = [myDictionnary objectForKey:@"BSSID"];
+    //    NSLog(@"BSSID : %@", bssid);
 }
 
 
 
-
-- (BOOL)stopSensor{
-    [sensingTimer invalidate];
-    [uploadTimer invalidate];
-    return YES;
-}
-
-//- (void)uploadSensorData{
-//    [self syncAwareDB];
-////    NSString * jsonStr = [self getData:SENSOR_WIFI withJsonArrayFormat:YES];
-////    [self insertSensorData:jsonStr withDeviceId:[self getDeviceId] url:[self getInsertUrl:SENSOR_WIFI]];
-//}
 
 @end

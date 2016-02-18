@@ -42,15 +42,13 @@
 }
 
 
-//- (BOOL)startSensor:(double)interval withUploadInterval:(double)upInterval{
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings {
-    // crate table
+    // Send a create table query
     NSLog(@"[%@] Cretate Table", [self getSensorName]);
     [self createTable];
     
-    // start sensor
+    // Set and start a network reachability sensor
     NSLog(@"Start Network Sensing!");
-//    double interval = 60.0f;
     reachability = [[SCNetworkReachability alloc] initWithHost:@"https://github.com"];
     [reachability reachabilityStatus:^(SCNetworkStatus status) {
          switch (status) {
@@ -80,24 +78,30 @@
          }
      }];
     
-//    sensingTimer = [NSTimer scheduledTimerWithTimeInterval:interval target:self selector:@selector(getNetworkInfo) userInfo:nil repeats:YES];
-    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval target:self selector:@selector(syncAwareDB) userInfo:nil repeats:YES];
+    // Start a data uploader
+    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval
+                                                   target:self
+                                                 selector:@selector(syncAwareDB)
+                                                 userInfo:nil
+                                                  repeats:YES];
     
     return YES;
 }
 
 
 - (BOOL)stopSensor{
-//    [sensingTimer invalidate];
-    [uploadTimer invalidate];
+    if (uploadTimer != nil) {
+        [uploadTimer invalidate];
+        uploadTimer = nil;
+    }
     return YES;
 }
 
 
+//////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////
+
 - (void) getNetworkInfo{
-    // Save sensor data to the local DB.
-//    double timeStamp = [[NSDate date] timeIntervalSince1970] * 1000;
-//    NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
     NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
     NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
     [dic setObject:unixtime forKey:@"timestamp"];

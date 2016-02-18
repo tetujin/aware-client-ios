@@ -44,8 +44,6 @@
     if ([self.session canAddInput:input]) {
         [self.session addInput: input];
     }
-//    [self.session addInput:input];
-
     
     AVCaptureMetadataOutput *output = [AVCaptureMetadataOutput new];
     [output setMetadataObjectsDelegate:self queue:dispatch_get_main_queue()];

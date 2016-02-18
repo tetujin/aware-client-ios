@@ -40,6 +40,25 @@
     return self;
 }
 
+
+
+- (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings {
+    [self setDailyNotification];
+    return YES;
+}
+
+
+- (BOOL) stopSensor {
+    [calendarUpdateTimer invalidate];
+    calendarUpdateTimer = nil;
+    return YES;
+}
+
+
+
+
+
+
 - (BOOL) isTargetCalendarCondition {
     bool isAvaiable = NO;
     EKEventStore *tempStore = [[EKEventStore alloc] init];
@@ -82,13 +101,6 @@
 }
 
 
-- (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings {
-    
-    [self setDailyNotification];
-//    [self startLocationSensor];
-
-    return YES;
-}
 
 
 - (void) setDailyNotification {
@@ -103,7 +115,8 @@
     
     //https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/Timers/Articles/usingTimers.html
     NSRunLoop *runLoop = [NSRunLoop currentRunLoop];
-    [runLoop addTimer:calendarUpdateTimer forMode:NSDefaultRunLoopMode];
+//    [runLoop addTimer:calendarUpdateTimer forMode:NSDefaultRunLoopMode];
+    [runLoop addTimer:calendarUpdateTimer forMode:NSRunLoopCommonModes];
     
     // Make yesterday's pre-popluated events
     NSDate * yesterday = [AWAREUtils getTargetNSDate:[NSDate new] hour:-24 minute:0 second:0 nextDay:NO];
@@ -400,12 +413,6 @@
     [AWAREUtils sendLocalNotificationForMessage:message soundFlag:YES];
     [self saveDebugEventWithText:message type:DebugTypeInfo label:[self getSensorName]];
 
-}
-
-- (BOOL) stopSensor {
-    [calendarUpdateTimer invalidate];
-    calendarUpdateTimer = nil;
-    return YES;
 }
 
 

@@ -5,6 +5,8 @@
 //  Created by Yuuki Nishiyama on 11/20/15.
 //  Copyright © 2015 Yuuki NISHIYAMA. All rights reserved.
 //
+// https://developer.apple.com/library/prerelease/ios/documentation/Cocoa/Reference/Foundation/Classes/NSProcessInfo_Class/index.html#//apple_ref/doc/constant_group/NSProcessInfo_Operating_Systems
+//
 
 #import "Processor.h"
 #import <sys/sysctl.h>
@@ -14,7 +16,6 @@
 #import <mach/mach.h>
 #import <mach/processor_info.h>
 #import <mach/mach_host.h>
-//#import <SystemServices.h>
 
 @implementation Processor{
     NSTimer * uploadTimer;
@@ -24,7 +25,6 @@
 - (instancetype)initWithSensorName:(NSString *)sensorName withAwareStudy:(AWAREStudy *)study{
     self = [super initWithSensorName:sensorName withAwareStudy:study];
     if (self) {
-//        [super setSensorName:sensorName];
     }
     return self;
 }
@@ -51,41 +51,41 @@
     NSLog(@"[%@] Create Table", [self getSensorName]);
     [self createTable];
     
-    [self setBufferSize:100];
-    
+    // Get a sensing frequency
     double frequency = [self getSensorSetting:settings withKey:@"frequency_processor"];
     if(frequency < 1.0f ){
         frequency = 10.0f;
     }
-    NSLog(@"Location sensing requency is %f ", frequency);
+    NSLog(@"[%@] Sensing requency is %f ",[self getSensorName], frequency);
     
+    // Set a buffer size for reducing file access
+    [self setBufferSize:100];
+    
+    // Set and start data uploader with a data upload interval
+    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval
+                                                   target:self
+                                                 selector:@selector(syncAwareDB)
+                                                 userInfo:nil
+                                                  repeats:YES];
+    
+    
+    //
     NSLog(@"[%@] Start Processor Sensor", [self getSensorName]);
-    
-    
-    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval target:self selector:@selector(syncAwareDB) userInfo:nil repeats:YES];
-    sensingTimer = [NSTimer scheduledTimerWithTimeInterval:frequency target:self selector:@selector(getSensorData) userInfo:nil repeats:YES];
+    sensingTimer = [NSTimer scheduledTimerWithTimeInterval:frequency
+                                                    target:self
+                                                  selector:@selector(getSensorData)
+                                                  userInfo:nil
+                                                   repeats:YES];
     return YES;
 }
 
 - (void) getSensorData{
-    
-//    NSString *processName = [[NSProcessInfo processInfo] processName];
-//    NSLog(@"%@", processName);
-//    NSLog(@"%@",[[NSProcessInfo processInfo] operatingSystemName]);
-//    NSLog(@"%@",[[NSProcessInfo processInfo] operatingSystemVersionString]);
-//    NSLog(@"%ld",[[NSProcessInfo processInfo] processorCount]);
-//    SystemServices * systemServices = [[SystemServices alloc] init];
-    // Get wifi information
+    // Get a CPU usage
     float cpuUsageFloat = [self getCpuUsage];
     NSNumber *appCpuUsage = [NSNumber numberWithFloat:cpuUsageFloat];
     NSNumber *idleCpuUsage = [NSNumber numberWithFloat:(100.0f-cpuUsageFloat)];
 
-//    NSNumber *memoryUsage = @0; // [NSNumber numberWithFloat:[self getMemory]];
-    //https://github.com/Shmoopi/iOS-System-Services
-
     // Save sensor data to the local database.
-//    double timeStamp = [[NSDate date] timeIntervalSince1970] * 1000;
-//    NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
     NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
     NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
     [dic setObject:unixtime forKey:@"timestamp"];
@@ -100,7 +100,6 @@
     [self saveData:dic toLocalFile:SENSOR_PROCESSOR];
     
     malloc(cpuUsageFloat);
-//    cpuUsageFloat
 }
 
 - (BOOL)stopSensor{
@@ -108,6 +107,13 @@
     [uploadTimer invalidate];
     return YES;
 }
+
+
+
+////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////
+
+
 
 - (float) getDeviceCpuUsage{
     

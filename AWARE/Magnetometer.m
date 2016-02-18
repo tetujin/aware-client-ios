@@ -21,6 +21,7 @@
     return self;
 }
 
+
 - (void) createTable{
     NSString *query = [[NSString alloc] init];
     query = @"_id integer primary key autoincrement,"
@@ -35,16 +36,24 @@
     [super createTable:query];
 }
 
-//- (BOOL)startSensor:(double)interval withUploadInterval:(double)upInterval{
+
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
+    // Send a table craete query
     NSLog(@"[%@] Create table", [self getSensorName]);
     [self createTable];
     
-    NSLog(@"[%@] Start Mag sensor", [self getSensorName]);
-    timer = [NSTimer scheduledTimerWithTimeInterval:upInterval target:self selector:@selector(syncAwareDB) userInfo:nil repeats:YES];
+
+    // Set and start a data uploader
+    timer = [NSTimer scheduledTimerWithTimeInterval:upInterval
+                                             target:self
+                                           selector:@selector(syncAwareDB)
+                                           userInfo:nil
+                                            repeats:YES];
     
-//    [self startWriteAbleTimer];
+    // Set a buffer size for reducing file access
     [self setBufferSize:100];
+    
+    // Get and set a sensng frequency to CMMotionManager
     double frequency = [self getSensorSetting:settings withKey:@"frequency_magnetometer"];
     if(frequency != -1){
         NSLog(@"Accelerometer's frequency is %f !!", frequency);
@@ -54,12 +63,12 @@
         manager.magnetometerUpdateInterval = 0.1f;//default value
     }
     
+    // Set and start a sensor
+    NSLog(@"[%@] Start Mag sensor", [self getSensorName]);
     [manager startMagnetometerUpdatesToQueue:[NSOperationQueue currentQueue] withHandler:^(CMMagnetometerData * _Nullable magnetometerData, NSError * _Nullable error) {
         if( error ) {
             NSLog(@"%@:%ld", [error domain], [error code] );
         } else {
-//            double timeStamp = [[NSDate date] timeIntervalSince1970] * 1000;
-//            NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
             NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
             NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
             [dic setObject:unixtime forKey:@"timestamp"];
@@ -70,26 +79,19 @@
             [dic setObject:@0 forKey:@"accuracy"];
             [dic setObject:@"" forKey:@"label"];
             [self setLatestValue:[NSString stringWithFormat:@"%f, %f, %f",magnetometerData.magneticField.x, magnetometerData.magneticField.y, magnetometerData.magneticField.z]];
-            
-//            [self saveData:dic toLocalFile:SENSOR_MAGNETOMETER];
             [self saveData:dic];
         }
     }];
+    
+    
     return YES;
 }
 
 - (BOOL)stopSensor{
     [manager stopMagnetometerUpdates];
     [timer invalidate];
-//    [self stopWriteableTimer];
     return YES;
 }
-
-//- (void)uploadSensorData{
-//    [self syncAwareDB];
-////    NSString * jsonStr = [self getData:SENSOR_MAGNETOMETER withJsonArrayFormat:YES];
-////    [self insertSensorData:jsonStr withDeviceId:[self getDeviceId] url:[self getInsertUrl:SENSOR_MAGNETOMETER]];
-//}
 
 
 @end

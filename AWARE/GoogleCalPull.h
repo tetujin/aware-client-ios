@@ -14,7 +14,7 @@
 #import <EventKitUI/EventKitUI.h>
 //#import <CoreLocation/CoreLocation.h>
 
-@interface GoogleCalPull : AWAREPlugin <UIAlertViewDelegate>
+@interface GoogleCalPull : AWARESensor <UIAlertViewDelegate>
 
 - (BOOL) showSelectPrimaryGoogleCalView;
 

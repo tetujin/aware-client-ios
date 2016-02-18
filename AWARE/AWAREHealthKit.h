@@ -8,6 +8,6 @@
 
 #import "AWAREPlugin.h"
 
-@interface AWAREHealthKit : AWAREPlugin <AWAREPluginDelegate>
+@interface AWAREHealthKit : AWARESensor <AWARESensorDelegate>
 
 @end

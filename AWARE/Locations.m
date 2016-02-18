@@ -43,27 +43,37 @@
 
 
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings {
+    // Send a query for creating table
     NSLog(@"[%@] Create Table", [self getSensorName]);
     [self createTable];
     
-    NSLog(@"[%@] Start Location Sensor!", [self getSensorName]);
+    
+    // Get a sensing frequency from settings
     double interval = 0;
     double frequency = [self getSensorSetting:settings withKey:@"frequency_gps"];
     if(frequency != -1){
-        NSLog(@"Location sensing requency is %f ", frequency);
+        NSLog(@"Sensing requency is %f ", frequency);
         interval = frequency;
     }
     
-    //min gps
-    double miniDistrance = [self getSensorSetting:settings withKey:@"min_gps_accuracy"];
-    if (miniDistrance) {
-        NSLog(@"Mini gps accuracy is %f", miniDistrance);
+    // Get a min gps accuracy from settings
+    double minAccuracy = [self getSensorSetting:settings withKey:@"min_gps_accuracy"];
+    if (minAccuracy) {
+        NSLog(@"Mini GSP accuracy is %f", minAccuracy);
     }else{
-        miniDistrance = 25;
+        minAccuracy = 25;
     }
     
-    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval target:self selector:@selector(syncAwareDB) userInfo:nil repeats:YES];
+    // Set and start a data uploader
+    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval
+                                                   target:self
+                                                 selector:@selector(syncAwareDB)
+                                                 userInfo:nil
+                                                  repeats:YES];
     
+    
+    // Set and start a location sensor with the senseing frequency and min GPS accuracy
+    NSLog(@"[%@] Start Location Sensor!", [self getSensorName]);
     if (nil == locationManager){
         locationManager = [[CLLocationManager alloc] init];
         locationManager.delegate = self;
@@ -73,20 +83,17 @@
         CGFloat currentVersion = [[[UIDevice currentDevice] systemVersion] floatValue];
         NSLog(@"OS:%f", currentVersion);
         if (currentVersion >= 9.0) {
-//        _homeLocationManager.allowsBackgroundLocationUpdates = YES; //This variable is an important method for background sensing
-            locationManager.allowsBackgroundLocationUpdates = YES; //This variable is an important method for background sensing after iOS9
+             //This variable is an important method for background sensing after iOS9
+            locationManager.allowsBackgroundLocationUpdates = YES;
         }
         locationManager.activityType = CLActivityTypeFitness;
         if ([locationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
             [locationManager requestAlwaysAuthorization];
         }
         // Set a movement threshold for new events.
-        locationManager.distanceFilter = miniDistrance; // meters
-        [locationManager startUpdatingLocation];
-        //    [_locationManager startMonitoringVisits]; // This method calls didVisit.
-        [locationManager startUpdatingHeading];
-        //    _location = [[CLLocation alloc] init];
-        
+        locationManager.distanceFilter = minAccuracy; // meter
+        // [locationManager startUpdatingHeading];
+        // [_locationManager startMonitoringVisits]; // This method calls didVisit.
         
         if(interval > 0){
             locationTimer = [NSTimer scheduledTimerWithTimeInterval:interval
@@ -94,13 +101,25 @@
                                                            selector:@selector(getGpsData:)
                                                            userInfo:nil
                                                             repeats:YES];
+        }else{
+            [locationManager startUpdatingLocation];
+            [self setBufferSize:10];
         }
-
-    
     }
     return YES;
 }
 
+
+- (BOOL)stopSensor{
+    [locationManager stopUpdatingHeading];
+    [locationManager stopUpdatingLocation];
+    [uploadTimer invalidate];
+    return YES;
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////
 
 
 - (void) getGpsData: (NSTimer *) theTimer {
@@ -109,25 +128,24 @@
     [self saveLocation:location];
 }
 
-- (void)locationManager:(CLLocationManager *)manager didUpdateHeading:(CLHeading *)newHeading {
-    if (newHeading.headingAccuracy < 0)
-        return;
-//    CLLocationDirection  theHeading = ((newHeading.trueHeading > 0) ?
-//                                       newHeading.trueHeading : newHeading.magneticHeading);
-//    [sdManager addSensorDataMagx:newHeading.x magy:newHeading.y magz:newHeading.z];
-//    [sdManager addHeading: theHeading];
-}
-
-
 - (void) locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations{
     for (CLLocation* location in locations) {
         [self saveLocation:location];
     }
 }
 
+
+//- (void)locationManager:(CLLocationManager *)manager didUpdateHeading:(CLHeading *)newHeading {
+//    if (newHeading.headingAccuracy < 0)
+//        return;
+////    CLLocationDirection  theHeading = ((newHeading.trueHeading > 0) ?
+////                                       newHeading.trueHeading : newHeading.magneticHeading);
+////    [sdManager addSensorDataMagx:newHeading.x magy:newHeading.y magz:newHeading.z];
+////    [sdManager addHeading: theHeading];
+//}
+
+
 - (void) saveLocation:(CLLocation *)location{
-//    double timeStamp = [[NSDate date] timeIntervalSince1970] * 1000;
-//    NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
     NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
     NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
     [dic setObject:unixtime forKey:@"timestamp"];
@@ -145,11 +163,6 @@
 }
 
 
-- (BOOL)stopSensor{
-    [locationManager stopUpdatingHeading];
-    [locationManager stopUpdatingLocation];
-    [uploadTimer invalidate];
-    return YES;
-}
+
 
 @end

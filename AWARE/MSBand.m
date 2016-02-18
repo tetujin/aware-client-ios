@@ -49,6 +49,51 @@
     return self;
 }
 
+
+
+- (BOOL) startAllSensors:(double)upInterval withSettings:(NSArray *)settings {
+    NSLog(@"Start MSBand Sensor!");
+    [MSBClientManager sharedManager].delegate = self;
+    NSArray	*clients = [[MSBClientManager sharedManager] attachedClients];
+    self.client = [clients firstObject];
+    if (self.client == nil) {
+        NSLog(@"Failed! No Bands attached.");
+        return NO;
+    }
+    [[MSBClientManager sharedManager] connectClient:self.client];
+    NSLog(@"%@",[NSString stringWithFormat:@"Please wait. Connecting to Band <%@>", self.client.name]);
+    
+    //    [self performSelector:@selector(startMSBSensors) withObject:0 afterDelay:5];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+        //        [awareSensor startSensor:uploadTime withSettings:settings];
+        [self startMSBSensors:upInterval withSettings:settings];
+    });
+    
+    return YES;
+}
+
+- (BOOL) stopAllSensors{
+    [self stopMSBSensors];
+    return YES;
+}
+
+
+- (void)syncAwareDB{
+    [super syncAwareDB];
+}
+
+- (BOOL)syncAwareDBInForeground{
+    return [super syncAwareDBInForeground];
+}
+
+
+
+
+
+///////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////
+
+
 /**
  * MSBand Delegate
  */
@@ -67,45 +112,9 @@ didFailToConnectWithError:(NSError *)error{
 }
 
 
-- (BOOL) stopAllSensors{
-    [self stopMSBSensors];
-    return YES;
-}
 
-- (BOOL) startAllSensors:(double)upInterval withSettings:(NSArray *)settings {
-    NSLog(@"Start MSBand Sensor!");
-    
-    // Setup Band
-    [MSBClientManager sharedManager].delegate = self;
-    NSArray	*clients = [[MSBClientManager sharedManager] attachedClients];
-    self.client = [clients firstObject];
-    if (self.client == nil) {
-        NSLog(@"Failed! No Bands attached.");
-        return NO;
-    }
-    [[MSBClientManager sharedManager] connectClient:self.client];
-    NSLog(@"%@",[NSString stringWithFormat:@"Please wait. Connecting to Band <%@>", self.client.name]);
-    
-//    [self performSelector:@selector(startMSBSensors) withObject:0 afterDelay:5];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-//        [awareSensor startSensor:uploadTime withSettings:settings];
-        [self startMSBSensors:upInterval withSettings:settings];
-    });
-    
-    return YES;
-}
-
-- (NSNumber *) getUnixTime {
-    return [AWAREUtils getUnixTimestamp:[NSDate new]];
-}
-
-- (void)syncAwareDB{
-    [super syncAwareDB];
-}
-
-- (BOOL)syncAwareDBInForeground{
-    return [super syncAwareDBInForeground];
-}
+/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
 
 - (void)startMSBSensors:(double)upInterval withSettings:(NSArray *)settings{
     [super addAnAwareSensor:[self getCalorieSensor]];
@@ -115,7 +124,7 @@ didFailToConnectWithError:(NSError *)error{
     [super addAnAwareSensor:[self getSkinTempSensor]];
     [super addAnAwareSensor:[self getUVSensor]];
     [super addAnAwareSensor:[self getBatteryGaugeSensor]];
-
+    
     //    [self startAccelerometer];
     //    [self startAltimeter]; //x
     //    [self startAmbientLight]; //x
@@ -144,6 +153,11 @@ didFailToConnectWithError:(NSError *)error{
     [self.client.sensorManager stopSkinTempUpdatesErrorRef:nil];
     [self.client.sensorManager stopUVUpdatesErrorRef:nil];
 }
+
+//////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////
+
+// Sensors
 
 
 - (AWARESensor *) getCalorieSensor{
@@ -332,8 +346,7 @@ didFailToConnectWithError:(NSError *)error{
     void (^uvHandler)(MSBSensorUVData *, NSError *) = ^(MSBSensorUVData *uvData,  NSError *error){
         NSString *data = [NSString stringWithFormat:@" interval (s): %ld", uvData.uvIndexLevel];
         //        NSLog(@"UV: %@",data);
-//        NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970] * 10000;
-        NSNumber* unixtime = [self getUnixTime];//[NSNumber numberWithDouble:timeStamp];
+        NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
         NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
         [dic setObject:unixtime forKey:@"timestamp"];
         [dic setObject:[self getDeviceId] forKey:@"device_id"];
@@ -369,7 +382,6 @@ didFailToConnectWithError:(NSError *)error{
     void (^skinHandler)(MSBSensorSkinTemperatureData *, NSError *) = ^(MSBSensorSkinTemperatureData *skinData,  NSError *error){
         NSString *data = [NSString stringWithFormat:@" interval (s): %.2f", skinData.temperature];
         //        NSLog(@"Skin: %@",data);
-//        NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970] * 10000;
         NSNumber* unixtime = [self getUnixTime]; //[NSNumber numberWithDouble:timeStamp];
         NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
         [dic setObject:unixtime forKey:@"timestamp"];
@@ -389,15 +401,23 @@ didFailToConnectWithError:(NSError *)error{
 }
 
 
+///////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////
 
 
 
+- (NSNumber *) getUnixTime {
+    return [AWAREUtils getUnixTimestamp:[NSDate new]];
+}
 
+
+////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////
 
 
 /**
  * ========================================
- * Following methods are not compleated yet
+ * WIP: sensors
  * ========================================
  */
 
@@ -444,6 +464,8 @@ didFailToConnectWithError:(NSError *)error{
     [accSensor trackDebugEvents];
     return accSensor;
 }
+
+
 
 //- (void) startAltimeter {
 //    NSString *query = [[NSString alloc] init];

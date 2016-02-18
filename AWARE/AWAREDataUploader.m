@@ -21,13 +21,8 @@
     NSString * syncDataQueryIdentifier;
     NSString * createTableQueryIdentifier;
     
-    // for network test
     double httpStart;
     double postLengthDouble;
-    
-//    SCNetworkReachability* reachability;
-//    NSInteger networkState;
-//    BOOL wifiReachable;
     
     BOOL isDebug;
     BOOL isLock;
@@ -40,18 +35,11 @@
 - (instancetype)initWithLocalStorage:(LocalFileStorageHelper *)localStorage withAwareStudy:(AWAREStudy *) study {
     if (self = [super init]) {
         sensorName = [localStorage getSensorName];
-        
-//        if (study == nil) {
-//            awareStudy = [[AWAREStudy alloc] init];
-//        }else{
         awareStudy = study;
-//        }
-        
         awareLocalStorage = localStorage;
         isUploading = false;
         syncDataQueryIdentifier = [NSString stringWithFormat:@"sync_data_query_identifier_%@", sensorName];
         createTableQueryIdentifier = [NSString stringWithFormat:@"create_table_query_identifier_%@",  sensorName];
-        
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         isDebug = [userDefaults boolForKey:SETTING_DEBUG_STATE];
         isSyncWithOnlyBatteryCharging = [userDefaults boolForKey:SETTING_SYNC_BATTERY_CHARGING_ONLY];
@@ -60,6 +48,8 @@
 }
 
 
+/////////////////////////////////
+/////////////////////////////////
 /**
  * Sensor data uploading state
  */
@@ -84,16 +74,16 @@
 
 
 /**
- * Background data post
+ * Background data sync
  */
-
-
-
 - (void) syncAwareDB {
     [self syncAwareDBWithSensorName:sensorName];
 }
 
-/** Sync with AWARE database */
+/** 
+ * Background data sync with database name
+ * @param NSString  A sensor name
+ */
 - (void) syncAwareDBWithSensorName:(NSString*) name {
     // chekc wifi state
     if(isUploading){
@@ -129,7 +119,7 @@
 
 
 /**
- * Core Date Upload method
+ * Upload method
  */
 - (void) postSensorDataWithSensorName:(NSString* )name session:(NSURLSession *)oursession {
     
@@ -144,6 +134,7 @@
         NSLog(@"%@", message);
         [self saveDebugEventWithText:message type:DebugTypeInfo  label:@""];
         [self dataSyncIsFinishedCorrectoly];
+        [awareLocalStorage restMark];
         return;
     }
     
@@ -152,9 +143,9 @@
     double unxtime = [[NSDate new] timeIntervalSince1970];
     syncDataQueryIdentifier = [NSString stringWithFormat:@"%@%f", syncDataQueryIdentifier, unxtime];
     sessionConfig = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:syncDataQueryIdentifier];
-    sessionConfig.timeoutIntervalForRequest = 60 * 5;
-    sessionConfig.HTTPMaximumConnectionsPerHost = 60 * 5;
-    sessionConfig.timeoutIntervalForResource = 300.0;
+    sessionConfig.timeoutIntervalForRequest = 60 * 3;
+    sessionConfig.HTTPMaximumConnectionsPerHost = 60 * 3;
+    sessionConfig.timeoutIntervalForResource = 60 * 3;
     sessionConfig.allowsCellularAccess = NO;
     
     // set HTTP/POST body information
@@ -307,10 +298,13 @@ didReceiveResponse:(NSURLResponse *)response
     httpResponse = nil;
     
     if ( responseCode == 200 ) {
+        [awareLocalStorage setNextMark];
         NSString *bytes = [self getFileStrSize:(double)[awareLocalStorage getFileSize]];
         NSString *message = @"";
+        
+        NSLog(@"%d", [awareLocalStorage getMarker]);
+        
         if( [awareLocalStorage getMarker] == 0 ){
-            
             // success to upload data
             message = [NSString stringWithFormat:@"[%@] Sucess to upload sensor data to AWARE server with %@", sensorName, bytes];
             NSLog(@"%@", message);
@@ -328,7 +322,6 @@ didReceiveResponse:(NSURLResponse *)response
             [self dataSyncIsFinishedCorrectoly];
             
         } else {
-            
             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
             NSInteger length = [userDefaults integerForKey:KEY_MAX_DATA_SIZE];
             long denominator = (long)[awareLocalStorage getFileSize]/(long)length;
@@ -370,6 +363,7 @@ didReceiveResponse:(NSURLResponse *)response
 - (BOOL) syncAwareDBInForegroundWithSensorName:(NSString*) name {
     while(true){
         if([self foregroundSyncRequestWithSensorName:name]){
+            NSLog(@"%d", [awareLocalStorage getMarker]);
             if([awareLocalStorage getMarker] == 0){
                 bool isRemoved = [awareLocalStorage clearFile:sensorName];
                 if (isRemoved) {
@@ -386,16 +380,12 @@ didReceiveResponse:(NSURLResponse *)response
                 [self saveDebugEventWithText:[NSString stringWithFormat:@"[%@] Upload stored data in the foreground again", sensorName]
                                         type:DebugTypeInfo
                                        label:@""];
-//                [self foregroundSyncRequestWithSensorName:sensorName];
             }
         }else{
             NSLog(@"Error");
             [self saveDebugEventWithText:[NSString stringWithFormat:@"[%@] Failed to upload sensor data in the foreground", sensorName]
                                     type:DebugTypeError
                                    label:@""];
-            if ([awareLocalStorage getMarker] == 0) {
-                [awareLocalStorage setMarker:[awareLocalStorage getMarker] - 1];
-            }
             return NO;
         }
     }
@@ -416,10 +406,11 @@ didReceiveResponse:(NSURLResponse *)response
         sensorData = [awareLocalStorage fixJsonFormat:sensorData];
 //        NSLog(@"%@", sensorData);
         
-        if (sensorData.length == 0) {
+        if (sensorData.length == 0 || sensorData.length == 2) {
             NSString * message = [NSString stringWithFormat:@"[%@] Data length is zero => %ld", name, sensorData.length ];
             NSLog(@"%@", message);
             [self saveDebugEventWithText:message type:DebugTypeInfo label:@""];
+            [awareLocalStorage restMark];
             return YES;
         }
         NSString * message = [NSString stringWithFormat:@"[%@] Start sensor data upload in the foreground => %ld", name, sensorData.length ];
@@ -434,7 +425,7 @@ didReceiveResponse:(NSURLResponse *)response
         [request setHTTPMethod:@"POST"];
         [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
         [request setHTTPBody:postData];
-        [request setTimeoutInterval:60*60];
+        [request setTimeoutInterval:60*3];
         [request setAllowsCellularAccess:NO];
         
         NSHTTPURLResponse *response = nil;
@@ -453,6 +444,7 @@ didReceiveResponse:(NSURLResponse *)response
 
     if(responseCode == 200){
         NSLog(@"Success to upload the data: %@", newStr);
+        [awareLocalStorage setNextMark];
         return YES;
     }else{
         return NO;
@@ -480,7 +472,6 @@ didReceiveResponse:(NSURLResponse *)response
         [AWAREUtils sendLocalNotificationForMessage:errorStr soundFlag:YES];
         return NO;
     }
-    
     NSString *post = [NSString stringWithFormat:@"device_id=%@&data=%@", deviceId, jsonstr];
     NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
     NSString *postLength = [NSString stringWithFormat:@"%ld", [postData length]];

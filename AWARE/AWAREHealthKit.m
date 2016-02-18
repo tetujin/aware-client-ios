@@ -16,8 +16,8 @@
     HKHealthStore *healthStore;
 }
 
-- (instancetype)initWithPluginName:(NSString *)pluginName awareStudy:(AWAREStudy *)study{
-    self = [super initWithPluginName:pluginName awareStudy:study];
+- (instancetype)initWithSensorName:(NSString *)sensorName withAwareStudy:(AWAREStudy *)study{
+    self = [super initWithSensorName:sensorName withAwareStudy:study];
     if(self){
         // Add your HealthKit code here
         healthStore = [[HKHealthStore alloc] init];
@@ -52,8 +52,9 @@
     return YES;
 }
 
-- (BOOL)stopAndRemoveAllSensors{
-    return NO;
+- (BOOL)stopSensor{
+    healthStore = nil;
+    return YES;
 }
 
 - (void) readAllDate {

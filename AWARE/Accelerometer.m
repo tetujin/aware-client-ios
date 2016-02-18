@@ -37,16 +37,23 @@
     [super createTable:query];
 }
 
+
 -(BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
+    // Send a create table query
     NSLog(@"[%@] Create Table", [self getSensorName]);
     [self createTable];
     
+    // Set and start a data uploader
     NSLog(@"[%@] Start Sensor!", [self getSensorName]);
     timer = [NSTimer scheduledTimerWithTimeInterval:upInterval
-                                             target:self selector:@selector(syncAwareDB) userInfo:nil repeats:YES];
-//    [self startWriteAbleTimer];
-    [self setBufferSize:1000];
+                                             target:self
+                                           selector:@selector(syncAwareDB)
+                                           userInfo:nil
+                                            repeats:YES];
+    // Set buffer size for reducing file access
+    [self setBufferSize:100];
     
+    // Get a sensing frequency from settings
     double frequency = [self getSensorSetting:settings withKey:@"frequency_accelerometer"];
     if(frequency != -1){
         NSLog(@"Accelerometer's frequency is %f !!", frequency);
@@ -56,13 +63,12 @@
         manager.accelerometerUpdateInterval = 0.1f; //default value
     }
     
+    // Set and start a motion sensor
     [manager startAccelerometerUpdatesToQueue:[NSOperationQueue currentQueue]
                                   withHandler:^(CMAccelerometerData *accelerometerData, NSError *error) {
                                       if( error ) {
                                           NSLog(@"%@:%ld", [error domain], [error code] );
                                       } else {
-//                                              double timeStamp = [[NSDate date] timeIntervalSince1970] * 1000;
-//                                              NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
                                               NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
                                               [dic setObject:[AWAREUtils getUnixTimestamp:[NSDate new]] forKey:@"timestamp"];
                                               [dic setObject:[self getDeviceId] forKey:@"device_id"];
@@ -85,7 +91,6 @@
 -(BOOL) stopSensor{
     [manager stopAccelerometerUpdates];
     [timer invalidate];
-//    [self stopWriteableTimer];
     return YES;
 }
 

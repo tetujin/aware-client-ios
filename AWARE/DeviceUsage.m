@@ -39,7 +39,6 @@
     [self createTable];
     
     NSLog(@"[%@] Start Device Usage Sensor", [self getSensorName]);
-//    [self registerAppforDetectLockState];
     lastTime = [[[NSDate alloc] init] timeIntervalSince1970];
     
     [self registerAppforDetectDisplayStatus];
@@ -54,12 +53,15 @@
     return YES;
 }
 
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+
 - (void) registerAppforDetectDisplayStatus {
 //    int notify_token;
     notify_register_dispatch("com.apple.iokit.hid.displayStatus", &_notifyTokenForDidChangeDisplayStatus,dispatch_get_main_queue(), ^(int token) {
         
-//        double timeStamp = [[NSDate date] timeIntervalSince1970] * 1000;
-//        NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
         NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
         NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
         [dic setObject:unixtime forKey:@"timestamp"];
@@ -99,40 +101,5 @@
         NSLog(@"[screen] NO ==> %d", result);
     }
 }
-
-
-
-
-//-(void)registerAppforDetectLockState {
-//    int notify_token;
-//    notify_register_dispatch("com.apple.springboard.lockstate", &notify_token,dispatch_get_main_queue(), ^(int token) {
-//        
-//        uint64_t state = UINT64_MAX;
-//        notify_get_state(token, &state);
-//        
-//        int awareScreenState = 0;
-//        
-//        if(state == 0) {
-//            NSLog(@"unlock device");
-//            awareScreenState = 3;
-//        } else {
-//            NSLog(@"lock device");
-//            awareScreenState = 2;
-//        }
-//        
-//        NSLog(@"com.apple.springboard.lockstate = %llu", state);
-//        
-//        NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
-//        NSNumber* unixtime = [NSNumber numberWithDouble:timeStamp];
-//        NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-//        [dic setObject:unixtime forKey:@"timestamp"];
-//        [dic setObject:[self getDeviceId] forKey:@"device_id"];
-//        [dic setObject:[NSNumber numberWithInt:awareScreenState] forKey:@"screen_status"]; // int
-//        [self setLatestValue:[NSString stringWithFormat:@"%@", [NSNumber numberWithInt:awareScreenState]]];
-//        [self saveData:dic];
-//    });
-//}
-
-
 
 @end

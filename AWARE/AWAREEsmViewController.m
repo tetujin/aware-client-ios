@@ -148,7 +148,7 @@
 }
 
 /**
- * Add ESM elements from a JSON text
+ * Add ESM elements with a JSON text
  */
 - (bool) addEsm:(NSString*) jsonStrOfAwareEsm {
     // Covert an ESM json string to ESM object
