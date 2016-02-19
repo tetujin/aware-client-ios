@@ -377,8 +377,8 @@
 /**
  * Get a debug sensor state
  */
-- (bool) getDebugState {
-    return debugSensor;
+- (bool) isDebug{
+    return debug;
 }
 
 

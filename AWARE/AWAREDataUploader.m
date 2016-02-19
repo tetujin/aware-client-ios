@@ -311,7 +311,7 @@ didReceiveResponse:(NSURLResponse *)response
             [self saveDebugEventWithText:message type:DebugTypeInfo label:syncDataQueryIdentifier];
             
             // send notification
-            if ([self getDebugState]) [AWAREUtils sendLocalNotificationForMessage:message soundFlag:NO];
+            if (isDebug) [AWAREUtils sendLocalNotificationForMessage:message soundFlag:NO];
             
             // remove store data
             [awareLocalStorage clearFile:sensorName];
@@ -333,7 +333,7 @@ didReceiveResponse:(NSURLResponse *)response
             [self saveDebugEventWithText:message type:DebugTypeInfo label:syncDataQueryIdentifier];
             
             // send notification
-            if ([self getDebugState]) [AWAREUtils sendLocalNotificationForMessage:message soundFlag:NO];
+            if (isDebug) [AWAREUtils sendLocalNotificationForMessage:message soundFlag:NO];
             
             // upload sensor data again
             [self saveDebugEventWithText:[NSString stringWithFormat:@"[%@] Upload stored data again", sensorName]
@@ -692,9 +692,5 @@ didReceiveResponse:(NSURLResponse *)response
     debugSensor = debug;
 }
 
-
-- (bool) getDebugState {
-    return debugSensor;
-}
 
 @end

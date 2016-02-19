@@ -250,7 +250,7 @@
                       NSLog( @"%@", visitMsg );
                       if (placemark.name != nil) {
                           [visitDic setObject:placemark.name forKey:@"name"];
-                          if ([self getDebugState]) {
+                          if ([self isDebug]) {
                               [AWAREUtils sendLocalNotificationForMessage:visitMsg soundFlag:YES];
                           }
                       }else{

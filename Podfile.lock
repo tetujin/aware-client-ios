@@ -1,5 +1,11 @@
 PODS:
-  - CocoaAsyncSocket (7.4.2)
+  - CocoaAsyncSocket (7.4.3):
+    - CocoaAsyncSocket/All (= 7.4.3)
+  - CocoaAsyncSocket/All (7.4.3):
+    - CocoaAsyncSocket/GCD
+    - CocoaAsyncSocket/RunLoop
+  - CocoaAsyncSocket/GCD (7.4.3)
+  - CocoaAsyncSocket/RunLoop (7.4.3)
   - DeployGateSDK (1.0.7)
   - EZAudio (1.1.5):
     - EZAudio/Full (= 1.1.5)
@@ -62,7 +68,7 @@ CHECKOUT OPTIONS:
     :git: https://github.com/mobile-web-messaging/MQTTKit.git
 
 SPEC CHECKSUMS:
-  CocoaAsyncSocket: f5783bdedd232d91b89769bc4b5a1580aed518ad
+  CocoaAsyncSocket: a18c75dca4b08723628a0bacca6e94803d90be91
   DeployGateSDK: df3d5838db7e35c05a711c35a3bdeef3c2b016ba
   EZAudio: 3b1cb4b6d7ebca68f0c2478576d75940aad4aa99
   Google: 97618e118111b998cce1d8dd1bd98b82301d72db

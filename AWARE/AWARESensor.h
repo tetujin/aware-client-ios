@@ -43,7 +43,7 @@
 
 // store data
 - (void) setBufferSize:(int)size;
-- (BOOL) getDebugState;
+- (bool) isDebug;
 - (bool) saveData:(NSDictionary *) data;
 - (bool) saveData:(NSDictionary *) data toLocalFile:(NSString*) fileName;
 - (bool) saveDataWithArray:(NSArray*) array;

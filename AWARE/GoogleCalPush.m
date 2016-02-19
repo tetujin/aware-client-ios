@@ -254,7 +254,7 @@
     
     if (preNullEvents.count == 0 && prepopulatedEvents.count > 0) {
         NSString * debugMessage = @"Your Google Calandar is already updated today.";
-        if ([self getDebugState]) {
+        if ([self isDebug]) {
             [AWAREUtils sendLocalNotificationForMessage:debugMessage soundFlag:YES];
         }
         [self saveDebugEventWithText:debugMessage type:DebugTypeInfo label:@""];

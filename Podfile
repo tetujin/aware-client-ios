@@ -3,7 +3,9 @@
 # Uncomment this line if you're using Swift
 # use_frameworks!
 
+
 target 'AWARE' do
+
 
 pod 'MQTTKit', :git => 'https://github.com/mobile-web-messaging/MQTTKit.git'
 pod 'SCNetworkReachability'
@@ -12,6 +14,7 @@ pod 'DeployGateSDK'
 pod 'ios-ntp'
 pod 'EZAudio'
 pod 'SVProgressHUD'
+
 
 
 

@@ -57,7 +57,7 @@
     
     // init
     NSString * debugMessage = @"AWARE initializes ESM schedules with backup ESMs.";
-    if ([self getDebugState]) {
+    if ([self isDebug]) {
         [self setBackupEsmsWithNotification:debugMessage];
     }
     [self saveDebugEventWithText:debugMessage type:DebugTypeInfo label:@""];

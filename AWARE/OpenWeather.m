@@ -232,13 +232,13 @@ didReceiveResponse:(NSURLResponse *)response
         
         if ( jsonWeatherData == nil) {
             NSLog( @"%@", e.debugDescription );
-            if ([self getDebugState]) {
+            if ([self isDebug]) {
                 [self sendLocalNotificationForMessage:e.debugDescription soundFlag:NO];
             }
             return;
         };
         
-        if ([self getDebugState]) {
+        if ([self isDebug]) {
             [self sendLocalNotificationForMessage:@"Get Weather Information" soundFlag:NO];
         }
         

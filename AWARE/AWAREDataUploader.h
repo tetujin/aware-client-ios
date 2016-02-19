@@ -63,7 +63,6 @@
  */
 //- (bool) saveDebugEventWithText:(NSString *)eventText type:(NSInteger)type label:(NSString *)label;
 - (void) trackDebugEventsWithDebugSensor:(Debug*)debug;
-- (bool) getDebugState;
 
 /**
  * AWARE URL makers
