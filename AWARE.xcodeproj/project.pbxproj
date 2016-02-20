@@ -89,6 +89,7 @@
 		16EB1E5A1C4A930500966A07 /* LocalFileStorageHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 16EB1E591C4A930500966A07 /* LocalFileStorageHelper.m */; };
 		16EB1E5D1C4AC12500966A07 /* CalEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 16EB1E5C1C4AC12500966A07 /* CalEvent.m */; };
 		16F09B221C249C5F005C1EB8 /* GoogleCalPull.m in Sources */ = {isa = PBXBuildFile; fileRef = 16F09B211C249C5F005C1EB8 /* GoogleCalPull.m */; };
+		16F3BC151C76D31B005ACEE3 /* LocalCoreDataStorageHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 16F3BC141C76D31B005ACEE3 /* LocalCoreDataStorageHelper.m */; };
 		16FCE2771BFE9326005FC71A /* AWARESensorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 16FCE2761BFE9326005FC71A /* AWARESensorManager.m */; };
 		FC2AF85D761397B784DECBD3 /* libPods-AWARE.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9ED04F29ED60F3FCC960F6CD /* libPods-AWARE.a */; };
 /* End PBXBuildFile section */
@@ -267,6 +268,8 @@
 		16EB1E5C1C4AC12500966A07 /* CalEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CalEvent.m; sourceTree = "<group>"; };
 		16F09B201C249C5F005C1EB8 /* GoogleCalPull.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GoogleCalPull.h; sourceTree = "<group>"; };
 		16F09B211C249C5F005C1EB8 /* GoogleCalPull.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GoogleCalPull.m; sourceTree = "<group>"; };
+		16F3BC131C76D31B005ACEE3 /* LocalCoreDataStorageHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalCoreDataStorageHelper.h; sourceTree = "<group>"; };
+		16F3BC141C76D31B005ACEE3 /* LocalCoreDataStorageHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalCoreDataStorageHelper.m; sourceTree = "<group>"; };
 		16FCE2751BFE9326005FC71A /* AWARESensorManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AWARESensorManager.h; sourceTree = "<group>"; };
 		16FCE2761BFE9326005FC71A /* AWARESensorManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AWARESensorManager.m; sourceTree = "<group>"; };
 		9B5BAD09F1FBEE0838867ACF /* Pods-AWARE.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AWARE.release.xcconfig"; path = "Pods/Target Support Files/Pods-AWARE/Pods-AWARE.release.xcconfig"; sourceTree = "<group>"; };
@@ -630,6 +633,8 @@
 				1623CEB61BFE175F00EFAD72 /* AWARESensor.m */,
 				16EB1E581C4A930500966A07 /* LocalFileStorageHelper.h */,
 				16EB1E591C4A930500966A07 /* LocalFileStorageHelper.m */,
+				16F3BC131C76D31B005ACEE3 /* LocalCoreDataStorageHelper.h */,
+				16F3BC141C76D31B005ACEE3 /* LocalCoreDataStorageHelper.m */,
 				168C71D91C67B9CC00878DD8 /* AWAREDataUploader.h */,
 				168C71DA1C67B9CC00878DD8 /* AWAREDataUploader.m */,
 				16C1FF911C644F5000C070AA /* Debug */,
@@ -1080,6 +1085,7 @@
 				16E7AF841C3D54D4005C9EDC /* SSLManager.m in Sources */,
 				16E7AF941C3DF7A0005C9EDC /* LocationModel.xcdatamodeld in Sources */,
 				160EE9BD1C050B4C00015688 /* Bluetooth.m in Sources */,
+				16F3BC151C76D31B005ACEE3 /* LocalCoreDataStorageHelper.m in Sources */,
 				169A7B461C0052F800A7C06D /* Gravity.m in Sources */,
 				169A7B241BFF16E700A7C06D /* Gyroscope.m in Sources */,
 				16C1FF971C64501D00C070AA /* Debug.m in Sources */,
