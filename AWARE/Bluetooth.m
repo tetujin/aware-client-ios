@@ -11,7 +11,7 @@
 #import "Bluetooth.h"
 
 @implementation Bluetooth{
-    NSTimer * uploadTimer;
+//    NSTimer * uploadTimer;
 }
 
 - (instancetype)initWithSensorName:(NSString *)sensorName withAwareStudy:(AWAREStudy *)study{
@@ -46,16 +46,20 @@
     _myCentralManager = [[CBCentralManager alloc] initWithDelegate:self queue:nil];
     
     // Set and start a data upload timer
-    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval
-                                                   target:self
-                                                 selector:@selector(syncAwareDB)
-                                                 userInfo:nil repeats:YES];
+//    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval
+//                                                   target:self
+//                                                 selector:@selector(syncAwareDB)
+//                                                 userInfo:nil repeats:YES];
     return YES;
 }
 
-- (BOOL)stopSensor{
+- (BOOL) stopSensor {
+    // Stop a sync timer
+//    [uploadTimer invalidate];
+//    uploadTimer = nil;
+    // Stop a scan ble devices by CBCentralManager
     [_myCentralManager stopScan];
-    [uploadTimer invalidate];
+    _myCentralManager = nil;
     return YES;
 }
 

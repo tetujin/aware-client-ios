@@ -11,8 +11,7 @@
 
 @implementation Accelerometer{
     CMMotionManager *manager;
-    NSTimer *timer;
-    NSTimer *testTimer;
+//    NSTimer *timer;
 }
 
 - (instancetype)initWithSensorName:(NSString *)sensorName withAwareStudy:(AWAREStudy *)study{
@@ -45,11 +44,11 @@
     
     // Set and start a data uploader
     NSLog(@"[%@] Start Sensor!", [self getSensorName]);
-    timer = [NSTimer scheduledTimerWithTimeInterval:upInterval
-                                             target:self
-                                           selector:@selector(syncAwareDB)
-                                           userInfo:nil
-                                            repeats:YES];
+//    timer = [NSTimer scheduledTimerWithTimeInterval:upInterval
+//                                             target:self
+//                                           selector:@selector(syncAwareDB)
+//                                           userInfo:nil
+//                                            repeats:YES];
     // Set buffer size for reducing file access
     [self setBufferSize:100];
     
@@ -90,7 +89,7 @@
 
 -(BOOL) stopSensor{
     [manager stopAccelerometerUpdates];
-    [timer invalidate];
+//    [timer invalidate];
     return YES;
 }
 

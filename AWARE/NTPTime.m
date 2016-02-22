@@ -10,7 +10,7 @@
 #import "ios-ntp.h"
 
 @implementation NTPTime  {
-    NSTimer * uploadTimer;
+//    NSTimer * uploadTimer;
     NSTimer * sensingTimer;
 //    NetAssociation * netAssociation;
  }
@@ -45,18 +45,18 @@
                                                   userInfo:nil
                                                    repeats:YES];
     
-    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval
-                                                   target:self
-                                                 selector:@selector(syncAwareDB)
-                                                 userInfo:nil
-                                                  repeats:YES];
+//    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval
+//                                                   target:self
+//                                                 selector:@selector(syncAwareDB)
+//                                                 userInfo:nil
+//                                                  repeats:YES];
     return YES;
 }
 
 
 
 - (BOOL)stopSensor{
-    [uploadTimer invalidate];
+//    [uploadTimer invalidate];
     [sensingTimer invalidate];
     return YES;
 }

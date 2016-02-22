@@ -19,7 +19,7 @@ NSString* const KEY_CALLS_CALL_DURATION = @"call_duration";
 NSString* const KEY_CALLS_TRACE = @"trace";
 
 @implementation Calls {
-    NSTimer * timer;
+//    NSTimer * timer;
     NSDate * start;
 }
 
@@ -50,11 +50,11 @@ NSString* const KEY_CALLS_TRACE = @"trace";
     [self createTable];
     
     // Start a data uploader
-    timer = [NSTimer scheduledTimerWithTimeInterval:upInterval
-                                             target:self
-                                           selector:@selector(syncAwareDB)
-                                           userInfo:nil
-                                            repeats:YES];
+//    timer = [NSTimer scheduledTimerWithTimeInterval:upInterval
+//                                             target:self
+//                                           selector:@selector(syncAwareDB)
+//                                           userInfo:nil
+//                                            repeats:YES];
     // Set and start a call sensor
     _callCenter = [[CTCallCenter alloc] init];
     _callCenter.callEventHandler = ^(CTCall* call){
@@ -114,10 +114,10 @@ NSString* const KEY_CALLS_TRACE = @"trace";
 }
 
 -(BOOL) stopSensor{
-    if (!timer) {
-        [timer invalidate];
-        timer = nil;
-    }
+//    if (timer != nil) {
+//        [timer invalidate];
+//        timer = nil;
+//    }
     _callCenter.callEventHandler = nil;
     return YES;
 }

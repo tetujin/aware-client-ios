@@ -28,7 +28,12 @@
     NSInteger networkState;
 }
 
+
 - (instancetype)init {
+    return [self initWithReachability:YES];
+}
+
+- (instancetype) initWithReachability: (BOOL) reachabilityState {
     self = [super init];
     if (self) {
         _getSettingIdentifier = @"set_setting_identifier";
@@ -56,24 +61,27 @@
             studyId = [userDefaults objectForKey:KEY_STUDY_ID];
             webserviceServer = [userDefaults objectForKey:KEY_WEBSERVICE_SERVER];
         }
-        reachability = [[SCNetworkReachability alloc] initWithHost:@"www.google.com"];
-        [reachability observeReachability:^(SCNetworkStatus status){
-            networkState = status;
-            switch (status){
-                case SCNetworkStatusReachableViaWiFi:
-                    wifiReachable = YES;
-                    break;
-                case SCNetworkStatusReachableViaCellular:
-                    wifiReachable = NO;
-                    break;
-                case SCNetworkStatusNotReachable:
-                    wifiReachable = NO;
-                    break;
-            }
-        }];
+        if(reachabilityState){
+            reachability = [[SCNetworkReachability alloc] initWithHost:@"www.google.com"];
+            [reachability observeReachability:^(SCNetworkStatus status){
+                networkState = status;
+                switch (status){
+                    case SCNetworkStatusReachableViaWiFi:
+                        wifiReachable = YES;
+                        break;
+                    case SCNetworkStatusReachableViaCellular:
+                        wifiReachable = NO;
+                        break;
+                    case SCNetworkStatusNotReachable:
+                        wifiReachable = NO;
+                        break;
+                }
+            }];
+        }
     }
     return self;
 }
+
 
 
 /**
@@ -102,8 +110,10 @@
     __weak NSURLSession *session = nil;
     // Set session configuration
     NSURLSessionConfiguration *sessionConfig = nil;
-    double unxtime = [[NSDate new] timeIntervalSince1970];
-    _getSettingIdentifier = [NSString stringWithFormat:@"%@%f", _getSettingIdentifier, unxtime];
+    double unixtime = [[NSDate new] timeIntervalSince1970];
+    _getSettingIdentifier = [NSString stringWithFormat:@"%@%f", _getSettingIdentifier, unixtime];
+    
+    url = [NSString stringWithFormat:@"%@?%f", url, unixtime];
     
     NSString *post = [NSString stringWithFormat:@"device_id=%@", uuid];
     NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
@@ -143,7 +153,7 @@
         }] resume];
     } else { // If the application in the background
         sessionConfig = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:_getSettingIdentifier];
-        sessionConfig.timeoutIntervalForRequest = 120.0;
+        sessionConfig.timeoutIntervalForRequest = 60;
         sessionConfig.HTTPMaximumConnectionsPerHost = 60;
         sessionConfig.timeoutIntervalForResource = 60; //60*60*24; // 1 day
         sessionConfig.allowsCellularAccess = YES;
@@ -229,7 +239,9 @@ didCompleteWithError:(NSError *)error {
     NSArray *mqttArray = [NSJSONSerialization JSONObjectWithData:resData options:NSJSONReadingMutableContainers error:nil];
     id obj = [NSJSONSerialization JSONObjectWithData:resData options:NSJSONReadingMutableContainers error:nil];
     NSData *data = [NSJSONSerialization dataWithJSONObject:obj options:0 error:nil];
-    NSLog(@"%@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+    NSString * studyConfiguration = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    [self setStudyConfiguration:studyConfiguration];
+    NSLog( @"%@", studyConfiguration );
     
     //    if(responseCode == 200){
     NSLog(@"GET Study Information");
@@ -560,6 +572,31 @@ didCompleteWithError:(NSError *)error {
 - (NSArray *) getPlugins{
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     return [userDefaults objectForKey:KEY_PLUGINS];
+}
+
+/**
+ * Get a study configuration as text
+ * @return a study configuration as a NSString
+ */
+- (NSString *) getStudyConfigurationAsText {
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString * studyConfigurationText = @"";
+    studyConfigurationText = [userDefaults objectForKey:@"key_aware_study_configuration_json_text"];
+    if (studyConfigurationText == nil) {
+        studyConfigurationText = @"";
+    }
+    return studyConfigurationText;
+}
+
+
+/**
+ * Set a study configuration as text
+ */
+- (void) setStudyConfiguration:(NSString* ) configuration {
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    if(configuration !=nil){
+        [userDefaults setObject:configuration forKey:@"key_aware_study_configuration_json_text"];
+    }
 }
 
 

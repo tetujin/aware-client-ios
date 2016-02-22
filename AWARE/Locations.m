@@ -9,7 +9,7 @@
 #import "Locations.h"
 
 @implementation Locations{
-    NSTimer *uploadTimer;
+//    NSTimer *uploadTimer;
     NSTimer *locationTimer;
     IBOutlet CLLocationManager *locationManager;
 }
@@ -65,11 +65,11 @@
     }
     
     // Set and start a data uploader
-    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval
-                                                   target:self
-                                                 selector:@selector(syncAwareDB)
-                                                 userInfo:nil
-                                                  repeats:YES];
+//    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval
+//                                                   target:self
+//                                                 selector:@selector(syncAwareDB)
+//                                                 userInfo:nil
+//                                                  repeats:YES];
     
     
     // Set and start a location sensor with the senseing frequency and min GPS accuracy
@@ -111,9 +111,19 @@
 
 
 - (BOOL)stopSensor{
+    // Stop a sync timer
+//    [uploadTimer invalidate];
+//    uploadTimer = nil;
+    
+    // Stop a sensing timer
+    [locationTimer invalidate];
+    locationTimer = nil;
+    
+    // Stop location sensors
     [locationManager stopUpdatingHeading];
     [locationManager stopUpdatingLocation];
-    [uploadTimer invalidate];
+    locationManager = nil;
+    
     return YES;
 }
 

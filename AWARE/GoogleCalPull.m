@@ -15,7 +15,7 @@
     EKSource *awareCalSource;
     NSMutableArray *allEvents;
     EKEvent * dailyNotification;
-    NSTimer * timer;
+//    NSTimer * timer;
     
     NSString* googleCalPullSensorName;
     
@@ -65,24 +65,31 @@
     CalEvent *calEvent = [[CalEvent alloc] init];
     [self createTable:[calEvent getCreateTableQuery]];
     
-    // Update existing events
-    [self updateExistingEvents];
+    // Update existing events after 5 sec
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+        [self updateExistingEvents];
+    });
+
     
     // Start a data uploader
-    timer = [NSTimer scheduledTimerWithTimeInterval:upInterval
-                                             target:self
-                                           selector:@selector(syncAwareDB)
-                                           userInfo:nil
-                                            repeats:YES];
+//    timer = [NSTimer scheduledTimerWithTimeInterval:upInterval
+//                                             target:self
+//                                           selector:@selector(syncAwareDB)
+//                                           userInfo:nil
+//                                            repeats:YES];
     return YES;
 }
 
 
 - (BOOL) stopSensor {
+//    if (timer != nil) {
+//        [timer invalidate];
+//        timer = nil;
+//    }
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:EKEventStoreChangedNotification
                                                   object:store];
-    [timer invalidate];
+    store = nil;
     return YES;
 }
 

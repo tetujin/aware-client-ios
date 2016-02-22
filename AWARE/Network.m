@@ -11,7 +11,7 @@
 
 @implementation Network{
     SCNetworkReachability *reachability;
-    NSTimer* uploadTimer;
+//    NSTimer* uploadTimer;
     NSTimer* sensingTimer;
     bool networkState;
     NSNumber* networkType;
@@ -79,21 +79,25 @@
      }];
     
     // Start a data uploader
-    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval
-                                                   target:self
-                                                 selector:@selector(syncAwareDB)
-                                                 userInfo:nil
-                                                  repeats:YES];
+//    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval
+//                                                   target:self
+//                                                 selector:@selector(syncAwareDB)
+//                                                 userInfo:nil
+//                                                  repeats:YES];
     
     return YES;
 }
 
 
 - (BOOL)stopSensor{
-    if (uploadTimer != nil) {
-        [uploadTimer invalidate];
-        uploadTimer = nil;
-    }
+    // Stop a sync timer
+//    if (uploadTimer != nil) {
+//        [uploadTimer invalidate];
+//        uploadTimer = nil;
+//    }
+    // stop a reachability timer
+    reachability = nil;
+    
     return YES;
 }
 

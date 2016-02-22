@@ -8,8 +8,8 @@
 #import "FusedLocations.h"
 
 @implementation FusedLocations {
-    NSTimer *locationDataUploadTimer;
-    NSTimer *visitDataUploadTimer;
+//    NSTimer *locationDataUploadTimer;
+//    NSTimer *visitDataUploadTimer;
     NSTimer *locationTimer;
     IBOutlet CLLocationManager *locationManager;
     
@@ -45,11 +45,11 @@
                                      "label text default '',"
                                      "UNIQUE (timestamp,device_id)"];
     // Start a data uploader
-    locationDataUploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval
-                                                               target:self
-                                                             selector:@selector(syncAwareDBWithLocationTable)
-                                                             userInfo:nil
-                                                              repeats:YES];
+//    locationDataUploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval
+//                                                               target:self
+//                                                             selector:@selector(syncAwareDBWithLocationTable)
+//                                                             userInfo:nil
+//                                                              repeats:YES];
     
     //////////////////////////
     
@@ -70,11 +70,11 @@
                                      "label text default '',"
                                      "UNIQUE (timestamp,device_id)"];
     // Start a data uploader
-    visitDataUploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval
-                                                         target:self
-                                                       selector:@selector(syncAwareDBWithLocationVisitTable)
-                                                        userInfo:nil
-                                                         repeats:YES];
+//    visitDataUploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval
+//                                                         target:self
+//                                                       selector:@selector(syncAwareDBWithLocationVisitTable)
+//                                                        userInfo:nil
+//                                                         repeats:YES];
     
     
     // Get a sensing frequency for a location sensor
@@ -156,15 +156,17 @@
         locationTimer = nil;
     }
     
-    if (locationDataUploadTimer != nil) {
-        [locationDataUploadTimer invalidate];
-        locationDataUploadTimer = nil;
-    }
+//    if (locationDataUploadTimer != nil) {
+//        [locationDataUploadTimer invalidate];
+//        locationDataUploadTimer = nil;
+//    }
+//    
+//    if(visitDataUploadTimer != nil){
+//        [visitDataUploadTimer invalidate];
+//        visitDataUploadTimer = nil;
+//    }
     
-    if(visitDataUploadTimer != nil){
-        [visitDataUploadTimer invalidate];
-        visitDataUploadTimer = nil;
-    }
+    locationManager = nil;
     
     return YES;
 }

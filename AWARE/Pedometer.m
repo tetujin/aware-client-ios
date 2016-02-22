@@ -12,7 +12,7 @@
 #import "AWAREKeys.h"
 
 @implementation Pedometer{
-    NSTimer * timer;
+//    NSTimer * timer;
     NSString* KEY_DEVICE_ID;
     NSString* KEY_TIMESTAMP;
     NSString* KEY_NUMBER_OF_STEPS;
@@ -72,11 +72,11 @@
     [self createTable];
     
     // Start a data uploader
-    timer = [NSTimer scheduledTimerWithTimeInterval:upInterval
-                                             target:self
-                                           selector:@selector(syncAwareDB)
-                                           userInfo:nil
-                                            repeats:YES];
+//    timer = [NSTimer scheduledTimerWithTimeInterval:upInterval
+//                                             target:self
+//                                           selector:@selector(syncAwareDB)
+//                                           userInfo:nil
+//                                            repeats:YES];
     
     // Check a pedometer sensor
     if (![CMPedometer isStepCountingAvailable]) {
@@ -178,11 +178,12 @@
 
 - (BOOL)stopSensor{
     // stop live tracking
-    if (timer != nil) {
-        [timer invalidate];
-        timer = nil;
-    }
+//    if (timer != nil) {
+//        [timer invalidate];
+//        timer = nil;
+//    }
     [_pedometer stopPedometerUpdates];
+    _pedometer = nil;
     return NO;
 }
 

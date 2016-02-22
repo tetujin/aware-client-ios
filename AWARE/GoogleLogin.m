@@ -10,7 +10,7 @@
 #import "AWAREKeys.h"
 
 @implementation GoogleLogin {
-    NSTimer * uploadTimer;
+//    NSTimer * uploadTimer;
     NSString* KEY_GOOGLE_NAME;
     NSString* KEY_GOOGLE_EMAIL;
     NSString* KEY_GOOGLE_BLOB_PICTURE;
@@ -50,11 +50,11 @@
     NSLog(@"[%@] Crate table.", [self getSensorName]);
     
     // Start a data uploader
-    uploadTimer = [NSTimer timerWithTimeInterval:upInterval
-                                          target:self
-                                        selector:@selector(syncAwareDB)
-                                        userInfo:nil
-                                         repeats:YES];
+//    uploadTimer = [NSTimer timerWithTimeInterval:upInterval
+//                                          target:self
+//                                        selector:@selector(syncAwareDB)
+//                                        userInfo:nil
+//                                         repeats:YES];
     return NO;
 }
 
@@ -74,7 +74,10 @@
 }
 
 - (BOOL)stopSensor {
-    [uploadTimer invalidate];
+//    if (uploadTimer != nil) {
+//        [uploadTimer invalidate];
+//        uploadTimer = nil;
+//    }
     return YES;
 }
 

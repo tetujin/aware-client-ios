@@ -13,7 +13,7 @@
 @implementation AWAREPlugin {
     NSMutableArray* awareSensors;
 //    NSMutableArray* awareTimers;
-    NSTimer* timer;
+//    sNSTimer* timer;
 }
 
 /**
@@ -79,16 +79,12 @@
  */
 - (BOOL)startAllSensors:(double)upInterval
            withSettings:(NSArray *)settings{
-//    for (AWARESensor* sensor in awareSensors) {
-//        [sensor startSensor:upInterval withSettings:settings];
-        timer = [NSTimer scheduledTimerWithTimeInterval:upInterval
-                                                          target:self
-                                                        selector:@selector(syncAwareDB)
-                                                        userInfo:nil
-                                                         repeats:YES];
-        [timer fire];
-//        [awareTimers addObject:timer];
-//    }
+//        timer = [NSTimer scheduledTimerWithTimeInterval:upInterval
+//                                                          target:self
+//                                                        selector:@selector(syncAwareDB)
+//                                                        userInfo:nil
+//                                                         repeats:YES];
+//        [timer fire];
     return YES;
 }
 
@@ -112,9 +108,10 @@
  * Stop and remove all sensors
  */
 - (BOOL)stopAndRemoveAllSensors {
-    if (timer != nil) {
-        [timer invalidate];
-    }
+//    if (timer != nil) {
+//        [timer invalidate];
+//        timer = nil;
+//    }
     for (AWARESensor* sensor in awareSensors) {
         [sensor stopSensor];
     }

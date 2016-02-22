@@ -9,7 +9,7 @@
 #import "Timezone.h"
 
 @implementation Timezone{
-    NSTimer * uploadTimer;
+//    NSTimer * uploadTimer;
     NSTimer * sensingTimer;
 }
 
@@ -52,17 +52,21 @@
                                                    repeats:YES];
     
     // Set and start sync timer
-    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval
-                                                   target:self
-                                                 selector:@selector(syncAwareDB)
-                                                 userInfo:nil
-                                                  repeats:YES];
+//    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval
+//                                                   target:self
+//                                                 selector:@selector(syncAwareDB)
+//                                                 userInfo:nil
+//                                                  repeats:YES];
     return YES;
 }
 
 - (BOOL)stopSensor{
-    [uploadTimer invalidate];
+    // Stop a sync timer
+//    [uploadTimer invalidate];
+//    uploadTimer = nil;
+    // Stop a sensing timer
     [sensingTimer invalidate];
+    sensingTimer = nil;
     [UIDevice currentDevice].proximityMonitoringEnabled = NO;
     return YES;
 }

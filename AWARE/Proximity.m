@@ -9,7 +9,7 @@
 #import "proximity.h"
 
 @implementation Proximity {
-    NSTimer * uploadTimer;
+//    NSTimer * uploadTimer;
 }
 
 - (instancetype)initWithSensorName:(NSString *)sensorName withAwareStudy:(AWAREStudy *)study{
@@ -46,17 +46,20 @@
                                                object:nil];
     
     // set and start a data upload timer
-    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval
-                                                   target:self
-                                                 selector:@selector(syncAwareDB)
-                                                 userInfo:nil
-                                                  repeats:YES];
+//    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval
+//                                                   target:self
+//                                                 selector:@selector(syncAwareDB)
+//                                                 userInfo:nil
+//                                                  repeats:YES];
     return YES;
 }
 
 
 - (BOOL)stopSensor{
-    [uploadTimer invalidate];
+    // Stop a sync timer
+//    [uploadTimer invalidate];
+//    uploadTimer = nil;
+    // Remove a notification event from a default center
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:UIDeviceProximityStateDidChangeNotification
                                                   object:nil];

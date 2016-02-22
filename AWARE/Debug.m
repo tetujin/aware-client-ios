@@ -28,7 +28,7 @@
     NSString* KEY_OS_VERSION;
     NSString* KEY_APP_INSTALL;
     
-    NSTimer * timer;
+//    NSTimer * timer;
 }
 
 - (instancetype)initWithAwareStudy:(AWAREStudy *) study {
@@ -81,11 +81,11 @@
     
     // Start a data upload timer
     NSLog(@"[%@] Start Sensor!", [self getSensorName]);
-    timer = [NSTimer scheduledTimerWithTimeInterval:upInterval
-                                             target:self
-                                           selector:@selector(syncAwareDB)
-                                           userInfo:nil
-                                            repeats:YES];
+//    timer = [NSTimer scheduledTimerWithTimeInterval:upInterval
+//                                             target:self
+//                                           selector:@selector(syncAwareDB)
+//                                           userInfo:nil
+//                                            repeats:YES];
     
     // Set a buffer for reducing file access
     [self setBufferSize:10];
@@ -146,11 +146,11 @@
 }
 
 - (BOOL) stopSensor{
-    if (timer != nil) {
-        [timer invalidate];
-        timer = nil;
-    }
-    return NO;
+//    if (timer != nil) {
+//        [timer invalidate];
+//        timer = nil;
+//    }
+    return YES;
 }
 
 

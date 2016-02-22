@@ -16,6 +16,8 @@
 @property (strong, nonatomic) NSString* makeDeviceTableIdentifier;
 @property (strong, nonatomic) NSString* addDeviceTableIdentifier;
 
+- (instancetype) initWithReachability: (BOOL) reachabilityState;
+
 - (BOOL) setStudyInformationWithURL:(NSString*)url;
 - (BOOL) refreshStudy;
 - (BOOL) clearAllSetting;
@@ -30,6 +32,8 @@
 - (NSNumber* ) getMqttQos;
 - (NSString* ) getStudyId;
 - (NSString* ) getWebserviceServer;
+
+- (NSString *) getStudyConfigurationAsText;
 
 // Sensor and plugin infromation
 - (NSArray *) getSensors;

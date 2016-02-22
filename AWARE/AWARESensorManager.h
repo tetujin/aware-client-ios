@@ -18,15 +18,20 @@
     AWAREStudy * awareStudy;
 }
 
-- (void) stopAllSensors;
+- (instancetype)initWithAWAREStudy:(AWAREStudy *) study;
+
+- (void) stopAndRemoveAllSensors;
 - (void) stopASensor:(NSString *) sensorName;
 - (void) addNewSensor:(AWARESensor *) sensor;
 - (bool) addNewSensorWithSensorName:(NSString *)sensorName
-                           settings:(NSArray*)settings
-                            plugins:(NSArray*)plugins
                      uploadInterval:(double) uploadTime;
 - (NSString*)getLatestSensorData:(NSString *)sensorName;
 - (bool) syncAllSensorsWithDBInForeground;
 - (bool) syncAllSensorsWithDBInBackground;
 - (BOOL) isExist :(NSString *) key;
+
+// uploader
+- (void) startUploadTimerWithInterval:(double) interval;
+- (void) stopUploadTimer;
+
 @end

@@ -12,7 +12,7 @@
 
 @implementation Gyroscope{
     CMMotionManager* gyroManager;
-    NSTimer* gTimer;
+//    NSTimer* gTimer;
 }
 
 - (instancetype)initWithSensorName:(NSString *)sensorName withAwareStudy:(AWAREStudy *)study{
@@ -45,11 +45,11 @@
     
     // Set and start a data uploader
     NSLog(@"[%@] Start Gyro Sensor", [self getSensorName]);
-    gTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval
-                                              target:self
-                                            selector:@selector(syncAwareDB)
-                                            userInfo:nil
-                                             repeats:YES];
+//    gTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval
+//                                              target:self
+//                                            selector:@selector(syncAwareDB)
+//                                            userInfo:nil
+//                                             repeats:YES];
     
     // Set a buffer size for reducing file access
     [self setBufferSize:1000];
@@ -88,7 +88,7 @@
 
 - (BOOL)stopSensor{
     [gyroManager stopGyroUpdates];
-    [gTimer invalidate];
+//    [gTimer invalidate];
     return YES;
 }
 

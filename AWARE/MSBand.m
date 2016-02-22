@@ -9,7 +9,7 @@
 #import "MSBand.h"
 
 @implementation MSBand {
-    NSTimer* uploadTimer;
+//    NSTimer* uploadTimer;
     NSString* PLUGIN_MSBAND_SENSORS_CALORIES;
     NSString* PLUGIN_MSBAND_SENSORS_DEVICECONTACT;
     NSString* PLUGIN_MSBAND_SENSORS_DISTANCE;

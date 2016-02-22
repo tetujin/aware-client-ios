@@ -17,7 +17,7 @@
 #import "notify.h"
 
 @implementation Screen {
-    NSTimer * uploadTimer;
+//    NSTimer * uploadTimer;
     int _notifyTokenForDidChangeLockStatus;
     int _notifyTokenForDidChangeDisplayStatus;
 }
@@ -50,18 +50,21 @@
     [self registerAppforDetectDisplayStatus];
     
     // Set and start data upload timer
-    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval
-                                                   target:self
-                                                 selector:@selector(syncAwareDB)
-                                                 userInfo:nil
-                                                  repeats:YES];
+//    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval
+//                                                   target:self
+//                                                 selector:@selector(syncAwareDB)
+//                                                 userInfo:nil
+//                                                  repeats:YES];
     return YES;
 }
 
 - (BOOL) stopSensor {
+    // Stop a sync timer
+//    [uploadTimer invalidate];
+//    uploadTimer = nil;
+    // Unregist event detecters (display and lock status)
     [self unregisterAppforDetectDisplayStatus];
     [self unregisterAppforDetectLockState];
-    [uploadTimer invalidate];
     return YES;
 }
 

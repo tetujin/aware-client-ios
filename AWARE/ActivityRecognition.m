@@ -18,7 +18,7 @@
 
 @implementation ActivityRecognition {
     CMMotionActivityManager *motionActivityManager;
-    NSTimer * uploadTimer;
+//    NSTimer * uploadTimer;
 }
 
 - (instancetype)initWithSensorName:(NSString *)sensorName withAwareStudy:(AWAREStudy *)study{
@@ -48,7 +48,7 @@
     [self createTable];
 
     [self setBufferSize:10];
-    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval target:self selector:@selector(syncAwareDB) userInfo:nil repeats:YES];
+//    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval target:self selector:@selector(syncAwareDB) userInfo:nil repeats:YES];
     /** motion activity */
     if([CMMotionActivityManager isActivityAvailable]){
         motionActivityManager = [CMMotionActivityManager new];
@@ -62,11 +62,14 @@
 
 
 - (BOOL)stopSensor{
-    if (uploadTimer != nil) {
-        [uploadTimer invalidate];
-        uploadTimer = nil;
-    }
+    // Stop a sync timer
+//    if (uploadTimer != nil) {
+//        [uploadTimer invalidate];
+//        uploadTimer = nil;
+//    }
+    // Stop and remove a motion sensor
     [motionActivityManager stopActivityUpdates];
+    motionActivityManager = nil;
     return YES;
 }
 

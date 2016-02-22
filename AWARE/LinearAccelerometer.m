@@ -39,7 +39,7 @@
 
 @implementation LinearAccelerometer {
     CMMotionManager* motionManager;
-    NSTimer * uploadTimer;
+//    NSTimer * uploadTimer;
 }
 
 
@@ -80,11 +80,11 @@
     }
     
     // Set and start a sensor data uploader
-    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval
-                                                   target:self
-                                                 selector:@selector(syncAwareDB)
-                                                 userInfo:nil
-                                                  repeats:YES];
+//    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval
+//                                                   target:self
+//                                                 selector:@selector(syncAwareDB)
+//                                                 userInfo:nil
+//                                                  repeats:YES];
     
     // Set a buffer size for reducing file access
     [self setBufferSize:100];
@@ -114,8 +114,12 @@
 
 
 - (BOOL)stopSensor{
-    [uploadTimer invalidate];
+    // Stop a sync timer
+//    [uploadTimer invalidate];
+//    uploadTimer = nil;
+    // Stop a motion sensor
     [motionManager stopDeviceMotionUpdates];
+    motionManager = nil;
     return YES;
 }
 

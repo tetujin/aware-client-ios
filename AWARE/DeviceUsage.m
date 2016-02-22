@@ -10,7 +10,7 @@
 #import "notify.h"
 
 @implementation DeviceUsage {
-    NSTimer * uploadTimer;
+//    NSTimer * uploadTimer;
     double lastTime;
     int _notifyTokenForDidChangeDisplayStatus;
 }
@@ -43,13 +43,17 @@
     
     [self registerAppforDetectDisplayStatus];
     
-    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval target:self selector:@selector(syncAwareDB) userInfo:nil repeats:YES];
+//    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval
+//                                                   target:self
+//                                                 selector:@selector(syncAwareDB)
+//                                                 userInfo:nil
+//                                                  repeats:YES];
     return YES;
 }
 
 - (BOOL)stopSensor{
     [self unregisterAppforDetectDisplayStatus];
-    [uploadTimer invalidate];
+//    [uploadTimer invalidate];
     return YES;
 }
 

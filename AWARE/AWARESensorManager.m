@@ -47,16 +47,24 @@
 #import "Scheduler.h"
 #import "FusedLocations.h"
 
-@implementation AWARESensorManager
+@implementation AWARESensorManager{
+    NSTimer * uploadTimer;
+}
+
 
 - (instancetype)init {
+    return [self initWithAWAREStudy:[[AWAREStudy alloc]init]];
+}
+
+- (instancetype)initWithAWAREStudy:(AWAREStudy *) study {
     self = [super init];
     if (self) {
         awareSensors = [[NSMutableArray alloc] init];
-        awareStudy = [[AWAREStudy alloc] init];
+        awareStudy = study;
     }
     return self;
 }
+
 
 /**
  * Add a new sensor with upload interval
@@ -68,23 +76,26 @@
  * @return A result of the generation of new sensor
  */
 - (bool) addNewSensorWithSensorName:(NSString *)key
-                           settings:(NSArray*)settings
-                            plugins:(NSArray*)plugins
                      uploadInterval:(double) uploadTime{
     
-    NSString* deviceId = [awareStudy getDeviceId];
-    if (deviceId == NULL) {
+    if ([[awareStudy getStudyId] isEqualToString:@""]) {
         NSLog( @"[%@] ERROR: You did not have a StudyID. Please check your study configuration.", key );
         return NO;
     }
     
+    // sensors settings
+    NSArray *sensors = [awareStudy getSensors];
+    
+    // plugins settings
+    NSArray *plugins = [awareStudy  getPlugins];
+    
     /// start and make a sensor instance
     AWARESensor* awareSensor = nil;
-    for (int i=0; i<settings.count; i++) {
-        NSString *setting = [[settings objectAtIndex:i] objectForKey:@"setting"];
+    for (int i=0; i<sensors.count; i++) {
+        NSString *setting = [[sensors objectAtIndex:i] objectForKey:@"setting"];
         NSString *settingKey = [NSString stringWithFormat:@"status_%@",key];
         if ([setting isEqualToString:settingKey]) {
-            NSString * value = [[settings objectAtIndex:i] objectForKey:@"value"];
+            NSString * value = [[sensors objectAtIndex:i] objectForKey:@"value"];
             bool exit = [self isExist:key];
             if ([value isEqualToString:@"true"] && !exit) {
                 if ([key isEqualToString:SENSOR_ACCELEROMETER]) {
@@ -122,9 +133,9 @@
                 }else if([key isEqualToString:SENSOR_CALLS]){
                     awareSensor = [[Calls alloc] initWithSensorName:SENSOR_CALLS withAwareStudy:awareStudy];
                 }
-                // Start AWARESensor with some delay (0.5 sec) by each sensor for reducing memory stress
+//                 Start AWARESensor with some delay (0.5 sec) by each sensor for reducing memory stress
 //                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, i * 0.5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-                    [awareSensor startSensor:uploadTime withSettings:settings];
+                    [awareSensor startSensor:uploadTime withSettings:sensors];
 //                });
                 break;
             }
@@ -132,7 +143,7 @@
     }
     
     
-    // Start and make a plugin instance
+//     Start and make a plugin instance
     for (int i=0; i<plugins.count; i++) {
         NSDictionary *plugin = [plugins objectAtIndex:i];
         NSArray *pluginSettings = [plugin objectForKey:@"settings"];
@@ -174,6 +185,7 @@
                         awareSensor = [[FusedLocations alloc] initWithSensorName:SENSOR_GOOGLE_FUSED_LOCATION withAwareStudy:awareStudy];
                         [awareSensor startSensor:uploadTime withSettings:pluginSettings];
                     }
+                    
                     break;
                 }
             }
@@ -227,15 +239,18 @@
 /**
  * Remove all sensors from the manager after stop the sensors
  */
-- (void) stopAllSensors {
+- (void) stopAndRemoveAllSensors {
+    NSString * message = nil;
     @autoreleasepool {
         for (AWARESensor* sensor in awareSensors) {
-            NSLog(@"Stop %@ sensor.", [sensor getSensorName]);
+            message = [NSString stringWithFormat:@"[%@] Stop %@ sensor",[sensor getSensorName], [sensor getSensorName]];
+            NSLog(@"%@", message);
+            [sensor saveDebugEventWithText:message type:DebugTypeInfo label:@"stop"];
             [sensor stopSensor];
         }
-        awareSensors = nil;
+        [awareSensors removeAllObjects];
     }
-    awareSensors = [[NSMutableArray alloc] init];
+//    awareSensors = [[NSMutableArray alloc] init];
 }
 
 /**
@@ -330,13 +345,45 @@
  */
 - (bool) syncAllSensorsWithDBInBackground {
     // Sync local stored data with aware server.
-    for ( int i=0; i<awareSensors.count; i++) {
-        AWARESensor* sensor = [awareSensors objectAtIndex:i];
-        [sensor syncAwareDB];
+    if(awareSensors == nil){
+        return NO;
+    }
+    for ( int i=0; i < awareSensors.count; i++) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, i * 5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+            @try {
+                if (i < awareSensors.count ) {
+                    AWARESensor* sensor = [awareSensors objectAtIndex:i];
+                    [sensor syncAwareDB];
+                }else{
+                    NSLog(@"error");
+                }
+            } @catch (NSException *e) {
+                NSLog(@"An exception was appeared: %@",e.name);
+                NSLog(@"The reason: %@",e.reason);
+            }
+        });
     }
     return YES;
 }
 
+
+
+- (void) startUploadTimerWithInterval:(double) interval {
+    if (uploadTimer != nil) {
+        [uploadTimer invalidate];
+        uploadTimer = nil;
+    }
+    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:interval
+                                                   target:self
+                                                 selector:@selector(syncAllSensorsWithDBInBackground)
+                                                 userInfo:nil
+                                                  repeats:YES];
+}
+
+- (void) stopUploadTimer{
+    [uploadTimer invalidate];
+    uploadTimer = nil;
+}
 
 
 @end

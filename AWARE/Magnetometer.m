@@ -10,7 +10,7 @@
 
 @implementation Magnetometer{
     CMMotionManager* manager;
-    NSTimer* timer;
+//    NSTimer* timer;
 }
 
 - (instancetype)initWithSensorName:(NSString *)sensorName withAwareStudy:(AWAREStudy *)study{
@@ -44,11 +44,11 @@
     
 
     // Set and start a data uploader
-    timer = [NSTimer scheduledTimerWithTimeInterval:upInterval
-                                             target:self
-                                           selector:@selector(syncAwareDB)
-                                           userInfo:nil
-                                            repeats:YES];
+//    timer = [NSTimer scheduledTimerWithTimeInterval:upInterval
+//                                             target:self
+//                                           selector:@selector(syncAwareDB)
+//                                           userInfo:nil
+//                                            repeats:YES];
     
     // Set a buffer size for reducing file access
     [self setBufferSize:100];
@@ -88,8 +88,12 @@
 }
 
 - (BOOL)stopSensor{
+    // Stop a sync timer
+//    [timer invalidate];
+//    timer = nil;
+    // Stop a motion sensor
     [manager stopMagnetometerUpdates];
-    [timer invalidate];
+    manager = nil;
     return YES;
 }
 

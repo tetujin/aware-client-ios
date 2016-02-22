@@ -11,7 +11,7 @@
 
 
 @implementation Wifi{
-    NSTimer * uploadTimer;
+//    NSTimer * uploadTimer;
     NSTimer * sensingTimer;
 }
 
@@ -40,30 +40,31 @@
 
 
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
+    // Send a create table query
     NSLog(@"[%@] Create Table", [self getSensorName]);
     [self createTable];
     
     // Get a sensing frequency
-    double interval = 1.0f;
     double frequency = [self getSensorSetting:settings withKey:@"frequency_wifi"];
     if(frequency != -1){
-        NSLog(@"Location sensing requency is %f ", frequency);
-        interval = frequency;
+        NSLog(@"Wi-Fi sensing requency is %f ", frequency);
+    }else{
+        frequency = 60.0f;
     }
     
     // Set a buffer size for reducing file access
-    [self setBufferSize:10];
+//    [self setBufferSize:10];
     
     // Set and start a data uploader with an interval
-    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval
-                                                   target:self
-                                                 selector:@selector(syncAwareDB)
-                                                 userInfo:nil
-                                                  repeats:YES];
+//    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval
+//                                                   target:self
+//                                                 selector:@selector(syncAwareDB)
+//                                                 userInfo:nil
+//                                                  repeats:YES];
     
     // Set and start a data upload interval
     NSLog(@"[%@] Start Wifi Sensor", [self getSensorName]);
-    sensingTimer = [NSTimer scheduledTimerWithTimeInterval:interval
+    sensingTimer = [NSTimer scheduledTimerWithTimeInterval:frequency
                                                     target:self
                                                   selector:@selector(getWifiInfo)
                                                   userInfo:nil
@@ -74,14 +75,16 @@
 
 
 - (BOOL)stopSensor{
+    // Stop a sensing timer
     if (sensingTimer != nil) {
         [sensingTimer invalidate];
         sensingTimer = nil;
     }
-    if (uploadTimer != nil) {
-        [uploadTimer invalidate];
-        uploadTimer = nil;
-    }
+    // Stop a sync timer
+//    if (uploadTimer != nil) {
+//        [uploadTimer invalidate];
+//        uploadTimer = nil;
+//    }
     return YES;
 }
 

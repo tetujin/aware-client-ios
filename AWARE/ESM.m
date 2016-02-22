@@ -9,7 +9,7 @@
 #import "ESM.h"
 
 @implementation ESM {
-    NSTimer * uploadTimer;
+//    NSTimer * uploadTimer;
 }
 
 - (instancetype)initWithSensorName:(NSString *)sensorName withAwareStudy:(AWAREStudy *)study{
@@ -62,17 +62,18 @@
     [self createTable];
     
     NSLog(@"[%@] Start ESM uploader", [self getSensorName]);
-    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval
-                                                   target:self
-                                                 selector:@selector(syncAwareDB)
-                                                 userInfo:nil
-                                                  repeats:YES];
+//    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval
+//                                                   target:self
+//                                                 selector:@selector(syncAwareDB)
+//                                                 userInfo:nil
+//                                                  repeats:YES];
     return YES;
 }
 
 - (BOOL) stopSensor {
-    [uploadTimer invalidate];
-    uploadTimer = nil;
+    // Stop a sync timer
+//    [uploadTimer invalidate];
+//    uploadTimer = nil;
     return YES;
 }
 

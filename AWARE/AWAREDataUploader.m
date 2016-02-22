@@ -230,9 +230,11 @@ didReceiveResponse:(NSURLResponse *)response
         NSString* newStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
         NSLog(@"[%@] %@",sensorName, newStr);
     }
-    //    [session finishTasksAndInvalidate];
-    //    [session invalidateAndCancel];
-    
+    [session finishTasksAndInvalidate];
+    [session invalidateAndCancel];
+    session = nil;
+    dataTask = nil;
+    data = nil;
 }
 
 - (void)URLSession:(NSURLSession *)session
@@ -269,7 +271,8 @@ didReceiveResponse:(NSURLResponse *)response
         return;
         //    completionHandler(NSURLSessionResponseAllow);
     } else if ([session.configuration.identifier isEqualToString:createTableQueryIdentifier]){
-        
+        session = nil;
+        task = nil;
     }
 }
 
@@ -572,6 +575,7 @@ didReceiveResponse:(NSURLResponse *)response
     NSData *postData = nil;
     NSMutableURLRequest *request = nil;
     __weak NSURLSession *session = nil;
+//    NSURLSession *session = nil;
     NSString *postLength = nil;
     NSURLSessionConfiguration *sessionConfig = nil;
     
@@ -594,7 +598,7 @@ didReceiveResponse:(NSURLResponse *)response
     sessionConfig.HTTPMaximumConnectionsPerHost = 60;
     sessionConfig.timeoutIntervalForResource = 60;
     sessionConfig.allowsCellularAccess = NO;
-    sessionConfig.discretionary = YES;
+//    sessionConfig.discretionary = YES;
     
     NSString * debugMessage = [NSString stringWithFormat:@"[%@] Sent a query for creating a table in the background", sensorName];
     [self saveDebugEventWithText:debugMessage type:DebugTypeInfo label:@""];

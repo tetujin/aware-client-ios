@@ -40,6 +40,7 @@
 		164DD6651C1FB1A400ADA92B /* Proximity.m in Sources */ = {isa = PBXBuildFile; fileRef = 164DD6641C1FB1A400ADA92B /* Proximity.m */; };
 		164DD6681C1FBA9100ADA92B /* Timezone.m in Sources */ = {isa = PBXBuildFile; fileRef = 164DD6671C1FBA9100ADA92B /* Timezone.m */; };
 		164DD66A1C1FC1F900ADA92B /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 164DD6691C1FC1F900ADA92B /* MapKit.framework */; };
+		1659150D1C7BAB0B00806744 /* Orientation.m in Sources */ = {isa = PBXBuildFile; fileRef = 1659150C1C7BAB0B00806744 /* Orientation.m */; };
 		165A8B6F1C03B90500898C6C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 165A8B6E1C03B90500898C6C /* GoogleService-Info.plist */; };
 		165A8B701C03B90500898C6C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 165A8B6E1C03B90500898C6C /* GoogleService-Info.plist */; };
 		165A8B711C03B90500898C6C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 165A8B6E1C03B90500898C6C /* GoogleService-Info.plist */; };
@@ -189,6 +190,8 @@
 		164DD6661C1FBA9100ADA92B /* Timezone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Timezone.h; sourceTree = "<group>"; };
 		164DD6671C1FBA9100ADA92B /* Timezone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Timezone.m; sourceTree = "<group>"; };
 		164DD6691C1FC1F900ADA92B /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		1659150B1C7BAB0B00806744 /* Orientation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Orientation.h; sourceTree = "<group>"; };
+		1659150C1C7BAB0B00806744 /* Orientation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Orientation.m; sourceTree = "<group>"; };
 		165A8B6E1C03B90500898C6C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
 		165A8B721C03C0B300898C6C /* GoogleLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GoogleLoginViewController.h; sourceTree = "<group>"; };
 		165A8B731C03C0B300898C6C /* GoogleLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GoogleLoginViewController.m; sourceTree = "<group>"; };
@@ -609,6 +612,15 @@
 			name = BalancedCampusJournal;
 			sourceTree = "<group>";
 		};
+		1659150E1C7BAB0F00806744 /* Orientation */ = {
+			isa = PBXGroup;
+			children = (
+				1659150B1C7BAB0B00806744 /* Orientation.h */,
+				1659150C1C7BAB0B00806744 /* Orientation.m */,
+			);
+			name = Orientation;
+			sourceTree = "<group>";
+		};
 		1677AF2F1C2B4BB500F7C482 /* ESM */ = {
 			isa = PBXGroup;
 			children = (
@@ -638,6 +650,7 @@
 				168C71D91C67B9CC00878DD8 /* AWAREDataUploader.h */,
 				168C71DA1C67B9CC00878DD8 /* AWAREDataUploader.m */,
 				16C1FF911C644F5000C070AA /* Debug */,
+				1659150E1C7BAB0F00806744 /* Orientation */,
 				162B7DE01C4EFA59006972B5 /* Calls */,
 				1602ADB81C45B021002B3121 /* Accelerometer */,
 				1602ADB91C45B030002B3121 /* Gyroscope */,
@@ -1097,6 +1110,7 @@
 				16FCE2771BFE9326005FC71A /* AWARESensorManager.m in Sources */,
 				169A7B2D1BFF219500A7C06D /* Barometer.m in Sources */,
 				169A7B401BFFD55A00A7C06D /* Processor.m in Sources */,
+				1659150D1C7BAB0B00806744 /* Orientation.m in Sources */,
 				16F09B221C249C5F005C1EB8 /* GoogleCalPull.m in Sources */,
 				168683091C08050100CB4266 /* ActivityRecognition.m in Sources */,
 				1671A5D81C3B583C00C41F44 /* GoogleCalPush.m in Sources */,

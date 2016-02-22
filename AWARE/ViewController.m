@@ -9,6 +9,9 @@
 //
 
 // Views
+#import <mach/mach.h>
+#import <mach/mach_host.h>
+
 #import "ViewController.h"
 #import "GoogleLoginViewController.h"
 #import "AWAREEsmViewController.h"
@@ -22,8 +25,12 @@
 // Plugins
 #import "GoogleCalPush.h"
 #import "Pedometer.h"
+#import "Orientation.h"
 #import "Debug.h"
 #import "AWAREHealthKit.h"
+
+// Library
+#import <SVProgressHUD.h>
 
 @interface ViewController ()
 @end
@@ -52,6 +59,8 @@
     /** View */
     /// A timer for updating a list view
     NSTimer *listUpdateTimer;
+    
+    AWAREStudy * awareStudy;
 }
 
 - (void)viewDidLoad {
@@ -70,16 +79,16 @@
      * Every 2AM, AWARE iOS refresh the jointed study in the background.
      * A developer can change the time (2AM to xxxAM/PM) by changing the dailyUpdateTime(NSDate) Object
      */
-    NSDate* dailyUpdateTime = [AWAREUtils getTargetNSDate:[NSDate new] hour:2 minute:0 second:0 nextDay:YES]; //2AM
-    dailyUpdateTimer = [[NSTimer alloc] initWithFireDate:dailyUpdateTime
-                                                interval:60*60*24 // daily
-                                                  target:self
-                                                selector:@selector(pushedStudyRefreshButton:)
-                                                userInfo:nil
-                                                 repeats:YES];
-    NSRunLoop *runLoop = [NSRunLoop currentRunLoop];
-//    [runLoop addTimer:dailyUpdateTimer forMode:NSDefaultRunLoopMode];
-    [runLoop addTimer:dailyUpdateTimer forMode:NSRunLoopCommonModes];
+//    NSDate* dailyUpdateTime = [AWAREUtils getTargetNSDate:[NSDate new] hour:2 minute:0 second:0 nextDay:YES]; //2AM
+//    dailyUpdateTimer = [[NSTimer alloc] initWithFireDate:dailyUpdateTime
+//                                                interval:60*60*24 // daily
+//                                                  target:self
+//                                                selector:@selector(pushedStudyRefreshButton:)
+//                                                userInfo:nil
+//                                                 repeats:YES];
+//    NSRunLoop *runLoop = [NSRunLoop currentRunLoop];
+////    [runLoop addTimer:dailyUpdateTimer forMode:NSDefaultRunLoopMode];
+//    [runLoop addTimer:dailyUpdateTimer forMode:NSRunLoopCommonModes];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
     
@@ -96,12 +105,19 @@
         [userDefaults setInteger:1000 * 100 forKey:KEY_MAX_DATA_SIZE]; // 100 KB
     }
     
+    
+    _sensors = [[NSMutableArray alloc] init];
+    
+    // AWAREStudy manages a study configurate
+    awareStudy = [[AWAREStudy alloc] init];
+//    [awareStudy setStudyInformationWithURL:@"https://api.awareframework.com/index.php/webservice/index/628/rqBnwZw9xNyq"];
+    
     /**
      * Init a Debug Sensor for collecting a debug message.
      * A developer can store debug messages to an aware database
      * by using the -saveDebugEventWithText:type:label: method on the debugSensor.
      */
-    debugSensor = [[Debug alloc] initWithAwareStudy:nil];
+    debugSensor = [[Debug alloc] initWithAwareStudy:awareStudy];
     
     /**
      * Start a location sensor for background sensing.
@@ -111,7 +127,7 @@
     [self initLocationSensor];
     
     /// Init sensor manager for the list view
-    _sensorManager = [[AWARESensorManager alloc] init];
+    _sensorManager = [[AWARESensorManager alloc] initWithAWAREStudy:awareStudy];
     
     /// Set delegates for a navigation bar and table view
     if ([AWAREUtils getCurrentOSVersionAsFloat] >= 9.0) {
@@ -238,9 +254,35 @@
 
 
 - (void)didReceiveMemoryWarning {
+    
     [debugSensor saveDebugEventWithText:@"didReceiveMemoryWarning" type:DebugTypeWarn label:@""];
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+
+- (void) report_memory {
+    mach_port_t host_port;
+    mach_msg_type_number_t host_size;
+    vm_size_t pagesize;
+    
+    host_port = mach_host_self();
+    host_size = sizeof(vm_statistics_data_t) / sizeof(integer_t);
+    host_page_size(host_port, &pagesize);
+    
+    vm_statistics_data_t vm_stat;
+    
+    if (host_statistics(host_port, HOST_VM_INFO, (host_info_t)&vm_stat, &host_size) != KERN_SUCCESS) {
+        NSLog(@"Failed to fetch vm statistics");
+    }
+    
+    /* Stats in bytes */
+    natural_t mem_used = (vm_stat.active_count +
+                          vm_stat.inactive_count +
+                          vm_stat.wire_count) * pagesize;
+    natural_t mem_free = vm_stat.free_count * pagesize;
+    natural_t mem_total = mem_used + mem_free;
+    NSLog(@"used: %u free: %u total: %u", mem_used, mem_free, mem_total);
 }
 
 
@@ -250,7 +292,7 @@
  */
 - (void) initContentsOnTableView {
     // init sensor list
-    _sensors = [[NSMutableArray alloc] init];
+    [_sensors removeAllObjects];
     
     // Get a study and device information from local default storage
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -262,14 +304,12 @@
     if(name == nil) accountInfo = @"";
     if(email == nil) email = @"";
     
-    AWAREStudy *awareStudy = [[AWAREStudy alloc] init];
     NSString *deviceId = [awareStudy getDeviceId];
     NSString *awareStudyId = [awareStudy getStudyId];
     NSString *mqttServerName = [awareStudy getMqttServer];
     if(deviceId == nil) deviceId = @"";
     if(awareStudyId == nil) awareStudyId = @"";
     if(mqttServerName == nil) mqttServerName = @"";
-    awareStudy = nil;
     
     // Get debug state (bool)
     NSString* debugState = @"OFF";
@@ -460,20 +500,57 @@
     return dic;
 }
 
-
+/**
+ * Initialize sensor
+ */
 - (void) initSensors {
+    // Inactivate the refresh button on the navigation bar
+    _refreshButton.enabled = NO;
+//    [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeBlack];
+    [SVProgressHUD showProgress:0 maskType:SVProgressHUDMaskTypeBlack];
     // Get sensors information and plugin information from NSUserDedaults class
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    NSArray *sensors = [userDefaults objectForKey:KEY_SENSORS];
-    NSArray *plugins = [userDefaults objectForKey:KEY_PLUGINS];
     uploadInterval = [userDefaults doubleForKey:SETTING_SYNC_INT];
+    int i = 0;
     for (NSMutableDictionary * sensor in _sensors) {
         // [NOTE] If this sensor is "active", addNewSensorWithSensorName method return TRUE value.
-        NSString * key = [sensor objectForKey:KEY_CEL_SENSOR_NAME];
-        bool state = [_sensorManager addNewSensorWithSensorName:key settings:sensors plugins:plugins uploadInterval:uploadInterval];
-        if (state) {
-            [sensor setObject:@"true" forKey:KEY_CEL_STATE];
-        }
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, i * 0.5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+            // Work this operation in the main thread
+            NSString * key = [sensor objectForKey:KEY_CEL_SENSOR_NAME];
+            bool state = [_sensorManager addNewSensorWithSensorName:key
+                                                     uploadInterval:uploadInterval];
+            if (state) {
+                [sensor setObject:@"true" forKey:KEY_CEL_STATE];
+            }
+            // Set current status
+            NSString * progress = [NSString stringWithFormat:@"%@", key];
+            NSLog(@"%@", progress);
+            [SVProgressHUD showProgress:(float)i/(float)_sensors.count maskType:SVProgressHUDMaskTypeBlack];
+            [SVProgressHUD setStatus:progress];
+            
+            // Event at last sensor
+            if (i >=_sensors.count-1) {
+                // Enable refresh button
+                [self refreshButtonEnableYes];
+                // Set an upload timer
+                [_sensorManager startUploadTimerWithInterval:uploadInterval];
+                // Remove a progress bar
+                [SVProgressHUD showSuccessWithStatus:@"Success to initialize sensors!"];
+                [SVProgressHUD performSelector:@selector(dismiss) withObject:nil afterDelay:3.0f];
+                // Save an event to debug sensor
+                if ([AWAREUtils isForeground]) {
+                    // Save a debug message to a Debug Sensor.
+                    [debugSensor saveDebugEventWithText:@"[study] Refresh in the foreground" type:DebugTypeInfo label:@""];
+                } else {
+                    // Save a debug message to a Debug Sensor.
+                    [debugSensor saveDebugEventWithText:@"[study] Refresh in the background" type:DebugTypeInfo label:@""];
+                    if([debugSensor isDebug]){
+                        [AWAREUtils sendLocalNotificationForMessage:@"The study is refreshed in the background" soundFlag:NO];
+                    }
+                }
+            }
+        });
+        i++;
     }
     
     /**
@@ -482,9 +559,14 @@
      * The "-addNewSensor" method is versy userful for testing and debuging a AWARESensor without registlating a study.
      */
     // Pedometer
-    AWARESensor * steps = [[Pedometer alloc] initWithSensorName:SENSOR_PLUGIN_PEDOMETER withAwareStudy:nil];
+    AWARESensor * steps = [[Pedometer alloc] initWithSensorName:SENSOR_PLUGIN_PEDOMETER withAwareStudy:awareStudy];
     [steps startSensor:60*15 withSettings:nil];
     [_sensorManager addNewSensor:steps];
+    
+    // Orientation Sensor
+//    AWARESensor *orientation = [[Orientation alloc] initWithSensorName:@"orientation" withAwareStudy:awareStudy];
+//    [orientation startSensor:60*15 withSettings:nil];
+//    [_sensorManager addNewSensor:orientation];
     
     // HealthKit
     // AWARESensor * healthKit = [[AWAREHealthKit alloc] initWithPluginName:@"sensor_aware_health_kit" deviceId:@""];
@@ -495,7 +577,7 @@
      * Debug Sensor
      * NOTE: don't remove this sensor. This sensor collects and upload debug message to the server each 15 min.
      */
-    AWARESensor * debug = [[Debug alloc] initWithAwareStudy:nil];
+    AWARESensor * debug = [[Debug alloc] initWithAwareStudy:awareStudy];
     [debug startSensor:60*15 withSettings:nil];
     [_sensorManager addNewSensor:debug];
 }
@@ -506,20 +588,10 @@
  and/or done daily study update), this method is called before the -initList.
  */
 - (IBAction)pushedStudyRefreshButton:(id)sender {
-    
-    // Inactivate the refresh button on the navigation bar
-    _refreshButton.enabled = NO;
-    
     @autoreleasepool {
-        NSLog(@"Atop and remove all sensors from AWARESensorManager.");
-        [_sensorManager stopAllSensors];
-        _sensorManager = [[AWARESensorManager alloc] init];
+        NSLog(@"Stop and remove all sensors from AWARESensorManager.");
+        [_sensorManager stopAndRemoveAllSensors];
     }
-    
-    // Refresh a study: Donwlod configurations and set it on the device
-    AWAREStudy *awareStudy = [[AWAREStudy alloc] init];
-    
-    
     /* [NOTE]:
      * A simulator can not use camera API for reading a study QR code, therefore, a developer has to add a study url directly by youself.
      * Also, a developer can get the url from a AWARE Dashboard. If you want to add the url directly, you should allow following souce code ("===Test code for a simulator===").
@@ -527,11 +599,22 @@
     // === Test code for a simulator ===
 //    [awareStudy setStudyInformationWithURL:@"https://api.awareframework.com/index.php/webservice/index/628/rqBnwZw9xNyq"];
     // =================================
-    
+//    NSString* previousConf = [[awareStudy getStudyConfigurationAsText] copy];
     // =================================
     [awareStudy refreshStudy];
-    awareStudy = nil;
     // =================================
+//    NSString* currentConf = [[awareStudy getStudyConfigurationAsText] copy];
+//    
+//    if ([AWAREUtils isBackground]) {
+//        if ([previousConf isEqualToString:currentConf]) {
+//            [AWAREUtils sendLocalNotificationForMessage:@"The study configuration file is same. You don't need to refresh sensors!" soundFlag:NO];
+//            // Save a debug message to a Debug Sensor.
+//            [debugSensor saveDebugEventWithText:@"[study] The study configuration file is same. You don't need to refresh sensors!" type:DebugTypeInfo label:@""];
+//            [self performSelector:@selector(refreshButtonEnableYes) withObject:0 afterDelay:8];
+//            return;
+//        }
+//    }
+    
     
     // Init sensors
     // TODO: The study refresh and initList is not synced, then if the user calls lots of times during sort time, AWARE make a doublicate sensor and uploader.
@@ -545,22 +628,8 @@
 //    [self.tableView reloadData];
     
     // Activate the refresh button on the navigation bar fater 8 second
-    [self performSelector:@selector(refreshButtonEnableYes) withObject:0 afterDelay:8];
-    
-    if ([AWAREUtils isForeground]) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"AWARE Study"
-                                                        message:@"AWARE Study was refreshed!"
-                                                       delegate:nil
-                                              cancelButtonTitle:@"OK"
-                                              otherButtonTitles:nil];
-        [alert show];
-        // Save a debug message to a Debug Sensor.
-        [debugSensor saveDebugEventWithText:@"[study] Refresh in the foreground" type:DebugTypeInfo label:@""];
-    } else {
-        [AWAREUtils sendLocalNotificationForMessage:@"AWARE Configuration was refreshed in the background!" soundFlag:NO];
-        // Save a debug message to a Debug Sensor.
-        [debugSensor saveDebugEventWithText:@"[study] Refresh in the background" type:DebugTypeInfo label:@""];
-    }
+//    [self performSelector:@selector(refreshButtonEnableYes) withObject:0 afterDelay:8];
+
 }
 
 - (void) refreshButtonEnableYes {

@@ -50,7 +50,7 @@
 
 
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
-    
+    // remove ESMs from temp local storage
     ESMStorageHelper *helper = [[ESMStorageHelper alloc] init];
     [helper removeEsmTexts];
     
@@ -64,64 +64,66 @@
     
     NSMutableDictionary * dic = [[NSMutableDictionary alloc] init];
     [dic setObject:CONFIG_URL forKey:@"configUrl"];
+    
     // --- TEST --
-    //    dailyUpdate = [AWAREUtils getTargetNSDate:[NSDate new] hour:11 minute:40 second:0 nextDay:NO];
-    //    dailyQuestionUpdateTimer = [[NSTimer alloc] initWithFireDate:dailyUpdate
-    //                                                        interval:60*60*24
-    //                                                          target:self
-    //                                                        selector:@selector(setConfigFile:)
-    //                                                        userInfo:dic
-    //                                                         repeats:YES];
-    //    NSRunLoop *runLoop = [NSRunLoop currentRunLoop];
-    //    [runLoop addTimer:dailyQuestionUpdateTimer forMode:NSDefaultRunLoopMode];
+    dailyUpdate = [AWAREUtils getTargetNSDate:[NSDate new] hour:3 minute:0 second:0 nextDay:YES];
+    dailyQuestionUpdateTimer = [[NSTimer alloc] initWithFireDate:dailyUpdate
+                                                        interval:60*60*24
+                                                          target:self
+                                                        selector:@selector(setConfigFile:)
+                                                        userInfo:dic
+                                                         repeats:YES];
+    NSRunLoop *runLoop = [NSRunLoop currentRunLoop];
+//    [runLoop addTimer:dailyQuestionUpdateTimer forMode:NSDefaultRunLoopMode];
+    [runLoop addTimer:dailyQuestionUpdateTimer forMode:NSRunLoopCommonModes];
     
     
-    dailyQuestionUpdateTimer = [NSTimer timerWithTimeInterval:0
-                                                       target:self
-                                                     selector:@selector(setConfigFile:)
-                                                     userInfo:dic
-                                                      repeats:NO];
-    [dailyQuestionUpdateTimer fire];
+    NSTimer* timer = [NSTimer timerWithTimeInterval:0
+                                                   target:self
+                                                 selector:@selector(setConfigFile:)
+                                                 userInfo:dic
+                                                  repeats:NO];
+    [timer fire];
     
-    // init scheduler
-    
-    // Make schdules
-    //    AWARESchedule * test = [self getScheduleForTest];
-    //    AWARESchedule * drinkOne = [self getDringSchedule];
-    //    AWARESchedule * drinkTwo = [self getDringSchedule];
-    //    AWARESchedule * emotionOne = [self getEmotionSchedule];
-    //    AWARESchedule * emotionTwo = [self getEmotionSchedule];
-    //    AWARESchedule * emotionThree = [self getEmotionSchedule];
-    //    AWARESchedule * emotionFour = [self getEmotionSchedule];
-    //
-    //    // Set Notification Time using -getTargetTimeAsNSDate:hour:minute:second method.
-    //    NSDate * now = [NSDate new];
-    //    drinkOne.schedule = [self getTargetTimeAsNSDate:now hour:9];
-    //    drinkTwo.schedule = [self getTargetTimeAsNSDate:now hour:1];
-    //    emotionOne.schedule = [self getTargetTimeAsNSDate:now hour:9];
-    //    emotionTwo.schedule = [self getTargetTimeAsNSDate:now hour:13];
-    //    emotionThree.schedule = [self getTargetTimeAsNSDate:now hour:17];
-    //    emotionFour.schedule = [self getTargetTimeAsNSDate:now hour:21];
-    ////    [emotionFour setScheduleType:SCHEDULE_INTERVAL_TEST];
-    //
-    //    test.schedule = now;
-    ////    drinkTwo.schedule = now; //[self getTargetTimeAsNSDate:now hour:21 minute:52 second:0];
-    ////    emotionFour.schedule = now;//[self getTargetTimeAsNSDate:now hour:13 minute:5 second:0];
-    ////    [emotionFour setScheduleType:SCHEDULE_INTERVAL_TEST];
-    //
-    //    // Add maked schedules to schedules
-    //    // Set a New ESMSchedule to a SchduleManager
-    //    NSMutableArray *schedules = [[NSMutableArray alloc] init]
-    //    ;
-    //    [schedules addObject:test];
-    //    [schedules addObject:drinkOne];
-    //    [schedules addObject:drinkTwo];
-    //    [schedules addObject:emotionOne];
-    //    [schedules addObject:emotionTwo];
-    //    [schedules addObject:emotionThree];
-    //    [schedules addObject:emotionFour];
-    //    
-    //    [self startSchedules:schedules];
+//     init scheduler
+//    
+//     Make schdules
+//        AWARESchedule * test = [self getScheduleForTest];
+//        AWARESchedule * drinkOne = [self getDringSchedule];
+//        AWARESchedule * drinkTwo = [self getDringSchedule];
+//        AWARESchedule * emotionOne = [self getEmotionSchedule];
+//        AWARESchedule * emotionTwo = [self getEmotionSchedule];
+//        AWARESchedule * emotionThree = [self getEmotionSchedule];
+//        AWARESchedule * emotionFour = [self getEmotionSchedule];
+//    
+//        // Set Notification Time using -getTargetTimeAsNSDate:hour:minute:second method.
+//        NSDate * now = [NSDate new];
+//        drinkOne.schedule = [self getTargetTimeAsNSDate:now hour:9];
+//        drinkTwo.schedule = [self getTargetTimeAsNSDate:now hour:1];
+//        emotionOne.schedule = [self getTargetTimeAsNSDate:now hour:9];
+//        emotionTwo.schedule = [self getTargetTimeAsNSDate:now hour:13];
+//        emotionThree.schedule = [self getTargetTimeAsNSDate:now hour:17];
+//        emotionFour.schedule = [self getTargetTimeAsNSDate:now hour:21];
+//    //    [emotionFour setScheduleType:SCHEDULE_INTERVAL_TEST];
+//    
+//        test.schedule = now;
+//    //    drinkTwo.schedule = now; //[self getTargetTimeAsNSDate:now hour:21 minute:52 second:0];
+//    //    emotionFour.schedule = now;//[self getTargetTimeAsNSDate:now hour:13 minute:5 second:0];
+//    //    [emotionFour setScheduleType:SCHEDULE_INTERVAL_TEST];
+//    
+//        // Add maked schedules to schedules
+//        // Set a New ESMSchedule to a SchduleManager
+//        NSMutableArray *schedules = [[NSMutableArray alloc] init]
+//        ;
+//        [schedules addObject:test];
+//        [schedules addObject:drinkOne];
+//        [schedules addObject:drinkTwo];
+//        [schedules addObject:emotionOne];
+//        [schedules addObject:emotionTwo];
+//        [schedules addObject:emotionThree];
+//        [schedules addObject:emotionFour];
+//        
+//        [self startSchedules:schedules];
     
     return NO;
 }
@@ -129,14 +131,17 @@
 
 
 - (BOOL)stopSensor {
+    // stop all scheduler
     for (NSDictionary * dic in scheduleManager) {
-        //        AWARESchedule *schedule = [dic objectForKey:KEY_SCHEDULE];
         NSTimer* timer = [dic objectForKey:KEY_TIMER];
         [timer invalidate];
     }
-    scheduleManager = [[NSMutableArray alloc] init];
-    ESMStorageHelper * helper = [[ESMStorageHelper alloc] init];
-    [helper removeEsmTexts];
+    [scheduleManager removeAllObjects]; //[[NSMutableArray alloc] init];
+    
+    // remove all esm temp storage
+//    ESMStorageHelper * helper = [[ESMStorageHelper alloc] init];
+//    [helper removeEsmTexts];
+    
     return YES;
 }
 
@@ -230,7 +235,6 @@
     NSString *url = [dic objectForKey:@"configUrl"];
     url = [NSString stringWithFormat:@"%@?%f", url, unixtime];
     NSLog(@"--> %@", url);
-    
     __weak NSURLSession *session = nil;
     NSURLSessionConfiguration *sessionConfig = nil;
     

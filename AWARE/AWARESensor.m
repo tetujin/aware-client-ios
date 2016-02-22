@@ -70,7 +70,7 @@
         
         if(study == nil){
             // If the study object is nil(null), the initializer gnerates a new AWAREStudy object.
-            awareStudy = [[AWAREStudy alloc] init];
+            awareStudy = [[AWAREStudy alloc] initWithReachability:NO];
         }else{
             awareStudy = study;
         }

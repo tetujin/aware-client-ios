@@ -10,6 +10,7 @@
 #import "ViewController.h"
 #import "AWAREKeys.h"
 #import "AWAREUtils.h"
+#import "AWAREStudy.h"
 
 // DeployGateSDK Libraries (https://deploygate.com/docs/ios_sdk)
 #import "DeployGateSDK/DeployGateSDK.h"
@@ -23,10 +24,14 @@
 #import "MSBand.h"
 
 
-@implementation AppDelegate
+@implementation AppDelegate{
+    AWAREStudy * awareStudy;
+}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    
+    awareStudy = [[AWAREStudy alloc] init];
     
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     [defaults setBool:YES forKey:@"APP_STATE"];
@@ -95,7 +100,7 @@ void exceptionHandler(NSException *exception) {
 
 
 - (void) powerStateDidChange:(id) sender {
-    Debug * debugSensor = [[Debug alloc] initWithAwareStudy:nil];
+    Debug * debugSensor = [[Debug alloc] initWithAwareStudy:awareStudy];
     if ([[NSProcessInfo processInfo] isLowPowerModeEnabled]) {
         // Low Power Mode is enabled. Start reducing activity to conserve energy.
         [debugSensor saveDebugEventWithText:@"[Low Power Mode] On" type:DebugTypeWarn label:@""];
@@ -202,7 +207,7 @@ void exceptionHandler(NSException *exception) {
         [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm"];
         NSString *formattedDateString = [dateFormatter stringFromDate:[NSDate new]];
         
-        Debug * debug = [[Debug alloc] initWithAwareStudy:nil];
+        Debug * debug = [[Debug alloc] initWithAwareStudy:awareStudy];
         [debug saveDebugEventWithText:@"This is a background fetch" type:DebugTypeInfo label:formattedDateString];
         bool result = [debug syncAwareDBInForeground];
         

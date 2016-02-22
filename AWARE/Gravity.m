@@ -18,7 +18,7 @@
 
 @implementation Gravity {
     CMMotionManager* motionManager;
-    NSTimer * uploadTimer;
+//    NSTimer * uploadTimer;
 }
 
 - (instancetype)initWithSensorName:(NSString *)sensorName withAwareStudy:(AWAREStudy *)study{
@@ -50,11 +50,11 @@
     [self createTable];
     
     // Start a data uploader
-    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval
-                                                   target:self
-                                                 selector:@selector(syncAwareDB)
-                                                 userInfo:nil
-                                                  repeats:YES];
+//    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval
+//                                                   target:self
+//                                                 selector:@selector(syncAwareDB)
+//                                                 userInfo:nil
+//                                                  repeats:YES];
     
     /// Get sensing frequency from settings
     double interval = 0.1f;
@@ -92,8 +92,12 @@
 }
 
 - (BOOL)stopSensor{
-    [uploadTimer invalidate];
+    // Stop a upload timer
+//    [uploadTimer invalidate];
+//    uploadTimer = nil;
+    // Stop a motion sensor
     [motionManager stopDeviceMotionUpdates];
+    motionManager = nil;
     return YES;
 }
 

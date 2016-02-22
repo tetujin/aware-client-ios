@@ -11,7 +11,7 @@
 
 @implementation OpenWeather{
     IBOutlet CLLocationManager *locationManager;
-    NSTimer* syncTimer;
+//    NSTimer* syncTimer;
     NSTimer* sensingTimer;
     NSDictionary* jsonWeatherData;
     NSDate* thisDate;
@@ -125,10 +125,10 @@ int ONE_HOUR = 60*60;
         // [locationManager startUpdatingLocation];
     }
     
-    syncTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval
-                                                 target:self selector:@selector(syncAwareDB)
-                                               userInfo:nil
-                                                repeats:YES];
+//    syncTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval
+//                                                 target:self selector:@selector(syncAwareDB)
+//                                               userInfo:nil
+//                                                repeats:YES];
     
     sensingTimer = [NSTimer scheduledTimerWithTimeInterval:frequencySec
                                                     target:self
@@ -140,8 +140,20 @@ int ONE_HOUR = 60*60;
 }
 
 - (BOOL)stopSensor{
-    [syncTimer invalidate];
+    // stop a sync timer
+//    [syncTimer invalidate];
+//    syncTimer = nil;
+    // stop a sensing timer
     [sensingTimer invalidate];
+    sensingTimer = nil;
+    // stop a location manager
+    if (locationManager != nil) {
+        [locationManager stopUpdatingHeading];
+        [locationManager stopUpdatingLocation];
+        [locationManager stopMonitoringVisits];
+    }
+    locationManager = nil;
+    
     return YES;
 }
 

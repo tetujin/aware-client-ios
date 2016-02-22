@@ -9,7 +9,7 @@
 #import "Barometer.h"
 
 @implementation Barometer{
-    NSTimer *uploadTimer;
+//    NSTimer *uploadTimer;
     CMAltimeter* altitude;
 }
 
@@ -56,11 +56,11 @@
     
     
     // Set and start a data uploader with an interval
-    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval
-                                                   target:self
-                                                 selector:@selector(syncAwareDB)
-                                                 userInfo:nil
-                                                  repeats:YES];
+//    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval
+//                                                   target:self
+//                                                 selector:@selector(syncAwareDB)
+//                                                 userInfo:nil
+//                                                  repeats:YES];
     
     // Set and start a sensor
     NSLog(@"[%@] Start Barometer Sensor", [self getSensorName]);
@@ -88,11 +88,15 @@
 }
 
 - (BOOL)stopSensor{
+    // Stop a sync timer
+//    if (uploadTimer != nil) {
+//        [uploadTimer invalidate];
+//        uploadTimer = nil;
+//    }
+    // Stop a altitude sensor
     [altitude stopRelativeAltitudeUpdates];
-    if (uploadTimer != nil) {
-        [uploadTimer invalidate];
-        uploadTimer = nil;
-    }
+    altitude = nil;
+    
     return YES;
 }
 

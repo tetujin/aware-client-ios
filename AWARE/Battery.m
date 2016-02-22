@@ -12,7 +12,7 @@
 #import "Battery.h"
 
 @implementation Battery {
-    NSTimer *uploadTimer;
+//    NSTimer *uploadTimer;
     
     NSString* BATTERY_DISCHARGERES;
     NSString* BATTERY_CHARGERES;
@@ -115,11 +115,11 @@
     
     
     // Set and start a data upload timer
-    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval
-                                                   target:self
-                                                 selector:@selector(syncAwareDB)
-                                                 userInfo:nil
-                                                  repeats:YES];
+//    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval
+//                                                   target:self
+//                                                 selector:@selector(syncAwareDB)
+//                                                 userInfo:nil
+//                                                  repeats:YES];
     
     
     return YES;
@@ -127,15 +127,20 @@
 
 
 - (BOOL)stopSensor{
-    [uploadTimer invalidate];
-    uploadTimer = nil;
+//    if(uploadTimer != nil){
+//        [uploadTimer invalidate];
+//        uploadTimer = nil;
+//    }
     [NSNotificationCenter.defaultCenter removeObserver:self name:UIDeviceBatteryLevelDidChangeNotification object:nil];
     [NSNotificationCenter.defaultCenter removeObserver:self name:UIDeviceBatteryStateDidChangeNotification object:nil];
-    [UIDevice currentDevice].batteryMonitoringEnabled = NO;
+//    [UIDevice currentDevice].batteryMonitoringEnabled = NO;
     return YES;
 }
 
 
+
+//////////////////////////////
+//////////////////////////////
 
 -(BOOL)syncAwareDBInForeground{
     if(![super syncAwareDBInForeground]){
@@ -157,6 +162,7 @@
     [batteryChargeSensor syncAwareDB];
     [batteryDischargeSensor syncAwareDB];
 }
+
 
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
