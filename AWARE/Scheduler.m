@@ -66,16 +66,16 @@
     [dic setObject:CONFIG_URL forKey:@"configUrl"];
     
     // --- TEST --
-    dailyUpdate = [AWAREUtils getTargetNSDate:[NSDate new] hour:3 minute:0 second:0 nextDay:YES];
-    dailyQuestionUpdateTimer = [[NSTimer alloc] initWithFireDate:dailyUpdate
-                                                        interval:60*60*24
-                                                          target:self
-                                                        selector:@selector(setConfigFile:)
-                                                        userInfo:dic
-                                                         repeats:YES];
-    NSRunLoop *runLoop = [NSRunLoop currentRunLoop];
-//    [runLoop addTimer:dailyQuestionUpdateTimer forMode:NSDefaultRunLoopMode];
-    [runLoop addTimer:dailyQuestionUpdateTimer forMode:NSRunLoopCommonModes];
+//    dailyUpdate = [AWAREUtils getTargetNSDate:[NSDate new] hour:3 minute:0 second:0 nextDay:YES];
+//    dailyQuestionUpdateTimer = [[NSTimer alloc] initWithFireDate:dailyUpdate
+//                                                        interval:60*60*24
+//                                                          target:self
+//                                                        selector:@selector(setConfigFile:)
+//                                                        userInfo:dic
+//                                                         repeats:YES];
+//    NSRunLoop *runLoop = [NSRunLoop currentRunLoop];
+////    [runLoop addTimer:dailyQuestionUpdateTimer forMode:NSDefaultRunLoopMode];
+//    [runLoop addTimer:dailyQuestionUpdateTimer forMode:NSRunLoopCommonModes];
     
     
     NSTimer* timer = [NSTimer timerWithTimeInterval:0

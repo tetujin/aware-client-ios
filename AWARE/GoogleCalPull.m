@@ -90,6 +90,7 @@
                                                     name:EKEventStoreChangedNotification
                                                   object:store];
     store = nil;
+    allEvents = nil;
     return YES;
 }
 

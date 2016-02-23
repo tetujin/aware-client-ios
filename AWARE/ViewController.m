@@ -9,9 +9,6 @@
 //
 
 // Views
-#import <mach/mach.h>
-#import <mach/mach_host.h>
-
 #import "ViewController.h"
 #import "GoogleLoginViewController.h"
 #import "AWAREEsmViewController.h"
@@ -28,6 +25,7 @@
 #import "Orientation.h"
 #import "Debug.h"
 #import "AWAREHealthKit.h"
+#import "Memory.h"
 
 // Library
 #import <SVProgressHUD.h>
@@ -79,16 +77,16 @@
      * Every 2AM, AWARE iOS refresh the jointed study in the background.
      * A developer can change the time (2AM to xxxAM/PM) by changing the dailyUpdateTime(NSDate) Object
      */
-//    NSDate* dailyUpdateTime = [AWAREUtils getTargetNSDate:[NSDate new] hour:2 minute:0 second:0 nextDay:YES]; //2AM
-//    dailyUpdateTimer = [[NSTimer alloc] initWithFireDate:dailyUpdateTime
-//                                                interval:60*60*24 // daily
-//                                                  target:self
-//                                                selector:@selector(pushedStudyRefreshButton:)
-//                                                userInfo:nil
-//                                                 repeats:YES];
-//    NSRunLoop *runLoop = [NSRunLoop currentRunLoop];
-////    [runLoop addTimer:dailyUpdateTimer forMode:NSDefaultRunLoopMode];
-//    [runLoop addTimer:dailyUpdateTimer forMode:NSRunLoopCommonModes];
+    NSDate* dailyUpdateTime = [AWAREUtils getTargetNSDate:[NSDate new] hour:2 minute:0 second:0 nextDay:YES]; //2AM
+    dailyUpdateTimer = [[NSTimer alloc] initWithFireDate:dailyUpdateTime
+                                                interval:60*60*24 // daily
+                                                  target:self
+                                                selector:@selector(pushedStudyRefreshButton:)
+                                                userInfo:nil
+                                                 repeats:YES];
+    NSRunLoop *runLoop = [NSRunLoop currentRunLoop];
+//    [runLoop addTimer:dailyUpdateTimer forMode:NSDefaultRunLoopMode];
+    [runLoop addTimer:dailyUpdateTimer forMode:NSRunLoopCommonModes];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
     
@@ -258,31 +256,6 @@
     [debugSensor saveDebugEventWithText:@"didReceiveMemoryWarning" type:DebugTypeWarn label:@""];
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
-
-- (void) report_memory {
-    mach_port_t host_port;
-    mach_msg_type_number_t host_size;
-    vm_size_t pagesize;
-    
-    host_port = mach_host_self();
-    host_size = sizeof(vm_statistics_data_t) / sizeof(integer_t);
-    host_page_size(host_port, &pagesize);
-    
-    vm_statistics_data_t vm_stat;
-    
-    if (host_statistics(host_port, HOST_VM_INFO, (host_info_t)&vm_stat, &host_size) != KERN_SUCCESS) {
-        NSLog(@"Failed to fetch vm statistics");
-    }
-    
-    /* Stats in bytes */
-    natural_t mem_used = (vm_stat.active_count +
-                          vm_stat.inactive_count +
-                          vm_stat.wire_count) * pagesize;
-    natural_t mem_free = vm_stat.free_count * pagesize;
-    natural_t mem_total = mem_used + mem_free;
-    NSLog(@"used: %u free: %u total: %u", mem_used, mem_free, mem_total);
 }
 
 
@@ -504,6 +477,10 @@
  * Initialize sensor
  */
 - (void) initSensors {
+    double initDelay = 0.5;
+    if ([AWAREUtils isBackground]){
+        initDelay = 10;
+    }
     // Inactivate the refresh button on the navigation bar
     _refreshButton.enabled = NO;
 //    [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeBlack];
@@ -514,7 +491,7 @@
     int i = 0;
     for (NSMutableDictionary * sensor in _sensors) {
         // [NOTE] If this sensor is "active", addNewSensorWithSensorName method return TRUE value.
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, i * 0.5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, i * initDelay * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
             // Work this operation in the main thread
             NSString * key = [sensor objectForKey:KEY_CEL_SENSOR_NAME];
             bool state = [_sensorManager addNewSensorWithSensorName:key
@@ -562,6 +539,11 @@
     AWARESensor * steps = [[Pedometer alloc] initWithSensorName:SENSOR_PLUGIN_PEDOMETER withAwareStudy:awareStudy];
     [steps startSensor:60*15 withSettings:nil];
     [_sensorManager addNewSensor:steps];
+    
+    AWARESensor *memory = [[Memory alloc] initWithSensorName:@"memory" withAwareStudy:awareStudy];
+    [memory startSensor:60*15 withSettings:nil];
+    [_sensorManager addNewSensor:memory];
+    
     
     // Orientation Sensor
 //    AWARESensor *orientation = [[Orientation alloc] initWithSensorName:@"orientation" withAwareStudy:awareStudy];
