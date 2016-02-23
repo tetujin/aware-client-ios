@@ -84,8 +84,10 @@
 //    natural_t
     double mem_used = (vm_stat.active_count +
                           vm_stat.inactive_count +
-                          vm_stat.wire_count) * pagesize /1000/1000/1000;
-    double mem_free = vm_stat.free_count * pagesize *10 /1000/1000/1000 ;
+                          vm_stat.wire_count) * pagesize;
+    double mem_free = vm_stat.free_count * pagesize *10;
+    mem_used =  mem_used/1000/1000/1000;
+    mem_free =  mem_free/1000/1000/1000;
     double mem_total = mem_used + mem_free;
     NSLog(@"used: %f free: %f total: %f", mem_used, mem_free, mem_total);
     
