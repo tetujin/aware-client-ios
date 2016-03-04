@@ -9,25 +9,45 @@
 #import "GoogleCalPush.h"
 #import "Debug.h"
 
+NSString* const PLUGIN_GOOGLE_CAL_PUSH_CAL_NAME = @"BalancedCampusJournal";
+
 @implementation GoogleCalPush {
+    // Variable for a calendar instance
     EKEventStore *store;
+    // Calendar update timer (check calendar condition every 6 hous)
     NSTimer * calendarUpdateTimer;
-    NSString* AWARE_CAL_NAME;
+    // Calendar update trigger time
     NSDate * fireDate;
+    // Notification date
+    NSDate * notificationDate;
+    // Update interval
+    double updateInteval;
+    // Local push notification
+    UILocalNotification * localNotification;
 }
 
+// Initializer
 - (instancetype)initWithSensorName:(NSString *)sensorName withAwareStudy:(AWAREStudy *)study{
     self = [super initWithSensorName:sensorName withAwareStudy:study];
     if (self) {
-        NSDate* date = [NSDate date];
-        fireDate  = [AWAREUtils getTargetNSDate:date hour:20 minute:0 second:0 nextDay:NO];
-    
+        // Set a celendar update trigger time at 8pm
+        fireDate  = [AWAREUtils getTargetNSDate:[NSDate date] hour:19 minute:0 second:0 nextDay:NO];
+        
+        // Set a notification date
+        notificationDate = [AWAREUtils getTargetNSDate:[NSDate date] hour:20 minute:0 second:0 nextDay:YES];
+        
+        // Set an update interval
+        updateInteval = 60*60*24;
+        
+        
+        // Set latest sensor data using -setLatestValue:. The sensor list on the main page of AWARE accesses the value and shows the latest value.
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setDateFormat:@"HH:mm"];
         NSString *formattedDateString = [dateFormatter stringFromDate:fireDate];
         [super setLatestValue:[NSString stringWithFormat:@"Next Calendar Update: %@", formattedDateString]];
         NSLog(@"date: %@", fireDate );
-        AWARE_CAL_NAME = @"BalancedCampusJournal";
+        
+        // Make a calendar instance
         store = [[EKEventStore alloc] init];
         [store requestAccessToEntityType:EKEntityTypeEvent completion:^(BOOL granted, NSError *error){
             if(granted){
@@ -41,120 +61,112 @@
 }
 
 
-
+// Start Sensor
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings {
+    // Set a scheduled local notification for a calendar update
     [self setDailyNotification];
-    return YES;
-}
-
-
-- (BOOL) stopSensor {
-    // Stop a sync timer
-    [calendarUpdateTimer invalidate];
-    calendarUpdateTimer = nil;
-    // calendar object
-    store = nil;
-    return YES;
-}
-
-
-
-//////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////
-
-
-- (BOOL) isTargetCalendarCondition {
-    bool isAvaiable = NO;
-    EKEventStore *tempStore = [[EKEventStore alloc] init];
-    //    for (EKSource *calSource in tempStore.sources) {
-    for (EKCalendar *cal in [tempStore calendarsForEntityType:EKEntityTypeEvent]) {
-        NSLog(@"%@", cal.title);
-        if ([cal.title isEqualToString:@"BalancedCampusJournal"]) {
-            isAvaiable = YES;
-        }
-    }
-    return isAvaiable;
-}
-
-- (void) showTargetCalendarCondition {
-    bool isAvaiable = NO;
-    EKEventStore *tempStore = [[EKEventStore alloc] init];
-    for (EKCalendar *cal in [tempStore calendarsForEntityType:EKEntityTypeEvent]) {
-        NSLog(@"%@", cal.title);
-        if ([cal.title isEqualToString:@"BalancedCampusJournal"]) {
-            isAvaiable = YES;
-        }
-    }
+    // Set a scheduled calendar update timer
+    [self setDailyCalUpdate];
     
-    tempStore = nil;
-    if (isAvaiable) {
-        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Correct"
-                                                         message:@"'BalancedCampusJournal' calendar is available!"
-                                                        delegate:self
-                                               cancelButtonTitle:@"Cancel"
-                                               otherButtonTitles:nil];
-        [alert show];
-    }else{
-        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Miss"
-                                                         message:@"AWARE can not find 'BalancedCampusJournal' calendar."
-                                                        delegate:self
-                                               cancelButtonTitle:@"Cancel"
-                                               otherButtonTitles:nil];
-        [alert show];
+    return YES;
+}
+
+// Stop Sensor
+- (BOOL) stopSensor {
+    // Stop the calendar update timer
+    if (calendarUpdateTimer != nil) {
+        [calendarUpdateTimer invalidate];
+        calendarUpdateTimer = nil;
     }
+    // stop a scheduled local notification
+    if (localNotification != nil) {
+        [AWAREUtils cancelLocalNotification:localNotification];
+    }
+    // remove a calendar instance
+    store = nil;
+    
+    return YES;
 }
 
 
 
+//////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////
 
-- (void) setDailyNotification {
-    // Get fix time
+/**
+ * Set a scheduled time for a calendar update
+ * @discussion  This schedule timer is not stable because sometimes depending on the device status, iOS kills or suspend background application processes. This timer is working on the application background process.
+ */
+- (void) setDailyCalUpdate {
+    // Set a calendar update timer
     calendarUpdateTimer = [[NSTimer alloc] initWithFireDate:fireDate
-                                                   interval:60*60*24
+                                                   interval:updateInteval
                                                      target:self
-                                                   selector:@selector(checkAllEvents:)
+                                                   selector:@selector(checkCalendarEvents:)
                                                    userInfo:nil
                                                     repeats:YES];
-//    [calendarUpdateTimer fire];
-    
     //https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/Timers/Articles/usingTimers.html
     NSRunLoop *runLoop = [NSRunLoop currentRunLoop];
-//    [runLoop addTimer:calendarUpdateTimer forMode:NSDefaultRunLoopMode];
     [runLoop addTimer:calendarUpdateTimer forMode:NSRunLoopCommonModes];
+//    [runLoop addTimer:calendarUpdateTimer forMode:NSDefaultRunLoopMode];
+}
+
+
+/**
+ * Set a daily notification
+ * @discussion  This schedule timer is not stable because sometimes depending on the device status, iOS kills or suspend background application processes. This timer is working on the application background process.
+ */
+- (void) setDailyNotification {
+    NSMutableDictionary * userInfo = [[NSMutableDictionary alloc] init];
+    localNotification = [AWAREUtils sendLocalNotificationForMessage:@"Swipe to make pre-populated events on your calendar!"
+                                                              title:@"Please fill out your calendar"
+                                                          soundFlag:YES
+                                                           category:[self getSensorName]
+                                                           fireDate:notificationDate
+                                                     repeatInterval:NSCalendarUnitDay
+                                                           userInfo:userInfo
+                                                    iconBadgeNumber:0];
+}
+
+///////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////
+
+/**
+ * Check calendar events with a -makePrepopulateEventWith:date method.
+ * @discussion This method is called by "calendarUpdateTimer" method when the tigger time is comming.
+ */
+- (void) checkCalendarEvents:(id) sender {
+    // Get all events
+    NSDate * now = [NSDate new];
+    [self makePrepopulateEvetnsWith:now];
     
     // Make yesterday's pre-popluated events
     NSDate * yesterday = [AWAREUtils getTargetNSDate:[NSDate new] hour:-24 minute:0 second:0 nextDay:NO];
-    [self makePrePopulateEvetnsWith:yesterday];
-    
+    [self makePrepopulateEvetnsWith:yesterday];
 }
 
-
-
-- (void) checkAllEvents:(id) sender {
-    // Get all events
-//    NSLog(@"Cal event id updated !!!");
-    NSDate * now = [NSDate new];
-//    NSDate * yesterday = [AWAREUtils getTargetNSDate:now hour:-24 minute:0 second:0 nextDay:NO];
-    [self makePrePopulateEvetnsWith:now];
-//    [self makePrePopulateEvetnsWith:yesterday];
-}
-
-- (void) makePrePopulateEvetnsWith:(NSDate *) date {
-    
+/**
+ * Make pre-populate events with a target date(NSDate).
+ * @param   NSDate      A target date
+ * @discussion This method called by -checkCalendarEvents: on self or -application:didReceiveLocalNotification: on notificationAppDelegate.m after recieving a local push notification.
+ */
+- (void) makePrepopulateEvetnsWith:(NSDate *) date {
+    // Save a making prepopulate events to a debug sensor
     NSDateFormatter *timeFormat = [[NSDateFormatter alloc] init];
     [timeFormat setDateFormat:@"HH:mm:ss"];
     NSString * debugMessage = [NSString stringWithFormat:@"[%@] BalancedCampusJournal Plugin start to populate events at ", [timeFormat stringFromDate:date]];
     [self saveDebugEventWithText:debugMessage type:DebugTypeInfo label:[timeFormat stringFromDate:date]];
-    
+
+    // Get the target calendar(BalancedCampusCalendar) from local calendars
     EKCalendar * awareCal = nil;
-    // Get the aware calendar in Google Calendars
     for (EKCalendar * cal in [store calendarsForEntityType:EKEntityTypeEvent]) {
         NSLog(@"[%@] %@", cal.title, cal.calendarIdentifier );
-        if ([cal.title isEqualToString:AWARE_CAL_NAME]) {
+        if ([cal.title isEqualToString:PLUGIN_GOOGLE_CAL_PUSH_CAL_NAME]) {
             awareCal = cal;
         }
     }
     
+    // If the target calendar is not existing, this program finishes, and save the event to the debug sensor.
     if (awareCal == nil) {
         NSString* message = @"[ERROR] AWARE iOS can not find a 'BalancedCampusJournal' on your Calendar.";
         NSLog(@"%@", message);
@@ -164,47 +176,45 @@
     }
     
     //http://stackoverflow.com/questions/1889164/get-nsdate-today-yesterday-this-week-last-week-this-month-last-month-var
-    NSCalendar *cal = [NSCalendar currentCalendar];
-    NSDateComponents *components = [cal components:( NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit ) fromDate:date];
-    [components setHour:-[components hour]];
-    [components setMinute:-[components minute]];
-    [components setSecond:-[components second]];
-    NSDate *startDate = [cal dateByAddingComponents:components toDate:date options:0];
-    //This variable should now be pointing at a date object that is the start of today (midnight);
-    
-    [components setDay:1];
-    NSDate *endDate = [cal dateByAddingComponents:components toDate:date options:0];
-    
+    // Get a today's start timestamp (e.g., 2/26/2016 00:00:00)
+    NSDate * startOfNSDate = [AWAREUtils getTargetNSDate:date hour:0 minute:0 second:0 nextDay:NO];
+    // Get a today's end timestamp (e.g., 2/26/2016 24:00:00)
+    NSDate * endOfNSDate = [AWAREUtils getTargetNSDate:date hour:24 minute:0 second:0 nextDay:NO];
+    // Initialize a variable for current events
     NSMutableArray * currentEvents = [[NSMutableArray alloc] init];
+    // Initialize a variable for existing journal events
     NSMutableArray * existingJournalEvents = [[NSMutableArray alloc] init];
+    // Initialize a variable for prepopulate events
     NSMutableArray * prepopulatedEvents = [[NSMutableArray alloc] init];
-    NSPredicate *predicate = [store predicateForEventsWithStartDate:startDate
-                                                            endDate:endDate
+    
+    NSPredicate *predicate = [store predicateForEventsWithStartDate:startOfNSDate
+                                                            endDate:endOfNSDate
                                                           calendars:nil];
     __block bool finished = NO;
     [store enumerateEventsMatchingPredicate:predicate usingBlock:^(EKEvent *ekEvent, BOOL *stop) {
         // Check this event against each ekObjectID in notification
-        //        NSLog(@"%@", ekEvent.title);
+        // NSLog(@"%@", ekEvent.title);
         if (!ekEvent.allDay) {
-            [currentEvents addObject:ekEvent]; // add all events
+            [currentEvents addObject:ekEvent]; // Add all events to curretEvents variable
             if(ekEvent.calendar != awareCal){
-                [existingJournalEvents addObject:ekEvent]; // add existing journal events
+                [existingJournalEvents addObject:ekEvent]; // Add existing journal events excluding events of BalancedCampusJournal to existingJournalEvents variable
             }else{
-                //                NSLog(@"%@", ekEvent.debugDescription);
-                [prepopulatedEvents addObject:ekEvent];
+                // NSLog(@"%@", ekEvent.debugDescription);
+                [prepopulatedEvents addObject:ekEvent]; // Add prepopulated(BalancedCampusJournal's) events to prepopulated events
             }
         }
         finished = stop;
     }];
     
+    // Wait to finish getting all events
     int count = 0;
     bool isEmpty = NO;
     while (!finished ) {
         [NSThread sleepForTimeInterval:0.05];
         NSLog(@"%d",count);
-        if (count > 60) { // wait 60 sec (maximum)
+        if (count > 60) {
             NSString * debugMessage = @"TIMEOUT: Calendar Update";
-            [AWAREUtils sendLocalNotificationForMessage:debugMessage soundFlag:NO];
+            if([self isDebug])[AWAREUtils sendLocalNotificationForMessage:debugMessage soundFlag:NO];
             [self saveDebugEventWithText:debugMessage type:DebugTypeError label:@""];
             isEmpty = YES;
             break;
@@ -215,8 +225,6 @@
     /**
      * Make Null Events to ArrayList
      */
-    NSDate * startOfNSDate = [AWAREUtils getTargetNSDate:date hour:0 minute:0 second:0 nextDay:NO];
-    NSDate * endOfNSDate = [AWAREUtils getTargetNSDate:date hour:24 minute:0 second:0 nextDay:NO];
     NSDate * tempNSDate = startOfNSDate;
     NSMutableArray * nullTimes = [[NSMutableArray alloc] init];
     for ( int i=0; i<currentEvents.count; i++) {
@@ -240,18 +248,15 @@
     }
     
     NSMutableArray * preNullEvents = [[NSMutableArray alloc] init];
-    //    EKEvent *preLastEvent = [EKEvent eventWithEventStore:store];
-    NSDate * nullStartDate = [AWAREUtils getTargetNSDate:date hour:0 minute:0 second:0 nextDay:NO];
-    NSDate * nullEndDate = [AWAREUtils getTargetNSDate:date  hour:0 minute:0 second:0 nextDay:NO];
+    NSDate * nullStartDate = startOfNSDate; //[AWAREUtils getTargetNSDate:date hour:0 minute:0 second:0 nextDay:NO];
+    NSDate * nullEndDate = startOfNSDate; //[AWAREUtils getTargetNSDate:date  hour:0 minute:0 second:0 nextDay:NO];
     for ( EKEvent * event in prepopulatedEvents ) {
-        //        if (preLastEvent != nil) {
         NSDate * nullStart = nullEndDate;
         NSDate * nullEnd = event.startDate;
         int gap = [nullEnd timeIntervalSince1970] - [nullStart timeIntervalSince1970];
         if (gap > 0) {
             [preNullEvents addObject:[[NSArray alloc] initWithObjects:nullStart, nullEnd, nil]];
         }
-        //        }
         nullStartDate = event.startDate;
         nullEndDate = event.endDate;
     }
@@ -272,12 +277,8 @@
     for (int i=0; i<25; i++) {
         NSDate * today = date;
         [hours addObject:[AWAREUtils getTargetNSDate:today hour:i minute:0 second:0 nextDay:NO]];
-        
     }
     
-//    NSDateFormatter *timeFormat = [[NSDateFormatter alloc] init];
-//    [timeFormat setDateFormat:@"HH:mm:ss"];
-    //    NSString * prepopulateTitle = @"#event_category #Location #brief_description";
     NSString * prepopulateTitle = @"#event_category #Location #brief_description";
     
     /**
@@ -354,20 +355,6 @@
         }
     }
     
-    
-    // Add null events: startDate - endDate
-    //    if (lastEvent != nil) {
-    //        NSDate * nullStart = lastEvent.endDate;
-    //        NSDate * nullEnd = event.startDate;
-    //        int gap = [nullEnd timeIntervalSince1970] - [nullStart timeIntervalSince1970];
-    //        if (gap > 0) {
-    //            [nullTimes addObject:[[NSArray alloc] initWithObjects:nullStart, nullEnd, nil]];
-    //        }
-    //    }
-    //    lastEvent = event;
-    
-    
-    
     /**
      * Copy Existing Events
      */
@@ -414,9 +401,62 @@
     
     // == Send Notification ==
     NSString * message = @"Hi! Your Calendar is updated.";
-    [AWAREUtils sendLocalNotificationForMessage:message soundFlag:YES];
+    [AWAREUtils sendLocalNotificationForMessage:message soundFlag:NO];
     [self saveDebugEventWithText:message type:DebugTypeInfo label:[self getSensorName]];
+}
 
+
+
+////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Check an existance of BalancedCampusJournal
+ * @discussion This method is called by main page of AWARE, when the sensor list is pushed.
+ * @return   bool    An existance of BalancedCampusJounal
+ */
+- (BOOL) isTargetCalendarCondition {
+    bool isAvaiable = NO;
+    EKEventStore *tempStore = [[EKEventStore alloc] init];
+    for (EKCalendar *cal in [tempStore calendarsForEntityType:EKEntityTypeEvent]) {
+        NSLog(@"%@", cal.title);
+        if ([cal.title isEqualToString:PLUGIN_GOOGLE_CAL_PUSH_CAL_NAME]) {
+            isAvaiable = YES;
+        }
+    }
+    return isAvaiable;
+}
+
+/**
+ * Show an existance of BalancedCampusJournal with an alert view
+ * @discussion This method is called by main page of AWARE, when the sensor list is pushed.
+ */
+- (void) showTargetCalendarCondition {
+    bool isAvaiable = NO;
+    EKEventStore *tempStore = [[EKEventStore alloc] init];
+    for (EKCalendar *cal in [tempStore calendarsForEntityType:EKEntityTypeEvent]) {
+        NSLog(@"%@", cal.title);
+        if ([cal.title isEqualToString:PLUGIN_GOOGLE_CAL_PUSH_CAL_NAME]) {
+            isAvaiable = YES;
+        }
+    }
+    
+    tempStore = nil;
+    if (isAvaiable) {
+        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Correct"
+                                                         message:@"'BalancedCampusJournal' calendar is available!"
+                                                        delegate:self
+                                               cancelButtonTitle:@"Cancel"
+                                               otherButtonTitles:nil];
+        [alert show];
+    }else{
+        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Miss"
+                                                         message:@"AWARE can not find 'BalancedCampusJournal' calendar."
+                                                        delegate:self
+                                               cancelButtonTitle:@"Cancel"
+                                               otherButtonTitles:nil];
+        [alert show];
+    }
 }
 
 

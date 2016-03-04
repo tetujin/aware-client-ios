@@ -25,7 +25,9 @@
 #import "Orientation.h"
 #import "Debug.h"
 #import "AWAREHealthKit.h"
+#import "Scheduler.h"
 #import "Memory.h"
+#import "Labels.h"
 
 // Library
 #import <SVProgressHUD.h>
@@ -53,7 +55,7 @@
     NSTimer * dailyUpdateTimer;
     /// A Debug sensor object
     Debug *debugSensor;
-    
+
     /** View */
     /// A timer for updating a list view
     NSTimer *listUpdateTimer;
@@ -74,7 +76,7 @@
     
     /// Set a timer for a daily sync update
     /**
-     * Every 2AM, AWARE iOS refresh the jointed study in the background.
+     * Every 2AM, AWARE iOS refresh the joining study in the background.
      * A developer can change the time (2AM to xxxAM/PM) by changing the dailyUpdateTime(NSDate) Object
      */
     NSDate* dailyUpdateTime = [AWAREUtils getTargetNSDate:[NSDate new] hour:2 minute:0 second:0 nextDay:YES]; //2AM
@@ -92,6 +94,7 @@
     
     /// Set defualt settings
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+//    [userDefaults setBool:NO forKey:@"aware_inited"];
     if (![userDefaults boolForKey:@"aware_inited"]) {
         [userDefaults setBool:NO forKey:SETTING_DEBUG_STATE];
         [userDefaults setBool:YES forKey:SETTING_SYNC_WIFI_ONLY];
@@ -103,6 +106,9 @@
         [userDefaults setInteger:1000 * 100 forKey:KEY_MAX_DATA_SIZE]; // 100 KB
     }
     
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+
     
     _sensors = [[NSMutableArray alloc] init];
     
@@ -146,6 +152,7 @@
     
     /// Start an update timer for list view. This timer refreshed the list view every 0.1 sec.
     listUpdateTimer = [NSTimer scheduledTimerWithTimeInterval:0.1f target:self.tableView selector:@selector(reloadData) userInfo:nil repeats:YES];
+    [[NSRunLoop mainRunLoop] addTimer:listUpdateTimer forMode:NSRunLoopCommonModes];
     
     // battery state trigger
     // Set a battery state change event to a notification center
@@ -160,7 +167,8 @@
  * Start data sync with all sensors in the background when the device is started a battery charging.
  */
 - (void) changedBatteryState:(id) sender {
-    if ([UIDevice currentDevice].batteryState == UIDeviceBatteryStateCharging) {
+    NSInteger batteryState = [UIDevice currentDevice].batteryState;
+    if (batteryState == UIDeviceBatteryStateCharging || batteryState == UIDeviceBatteryStateFull) {
         [debugSensor saveDebugEventWithText:@"[Uploader] The battery is charging. AWARE iOS start to upload sensor data." type:DebugTypeInfo label:@""];
         if (_sensorManager != nil) {
             [_sensorManager syncAllSensorsWithDBInBackground];
@@ -191,6 +199,7 @@
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"prefs:root=BATTERY_USAGE"]];
         }
     }
+    
 //    else if (![CLLocationManager locationServicesEnabled]){
 //        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"prefs:root=LOCATION_SERVICES"]];
 //    }
@@ -228,7 +237,7 @@
             [_homeLocationManager requestAlwaysAuthorization];
         }
         // Set a movement threshold for new events.
-        _homeLocationManager.distanceFilter = 300; // meters
+        _homeLocationManager.distanceFilter = 200; // meters
         [_homeLocationManager startUpdatingLocation];
     }
 }
@@ -249,10 +258,7 @@
     }
 }
 
-
-
 - (void)didReceiveMemoryWarning {
-    
     [debugSensor saveDebugEventWithText:@"didReceiveMemoryWarning" type:DebugTypeWarn label:@""];
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -270,6 +276,7 @@
     // Get a study and device information from local default storage
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults synchronize];
+    
     NSString *email = [userDefaults objectForKey:@"GOOGLE_EMAIL"];
     NSString *name = [userDefaults objectForKey:@"GOOGLE_NAME"];
     NSInteger maximumFileSize = [userDefaults integerForKey:KEY_MAX_DATA_SIZE];
@@ -394,7 +401,8 @@
     [_sensors addObject:[self getCelContent:@"Pedometer" desc:@"This plugin collects user's daily steps." image:@"ic_action_steps" key:SENSOR_PLUGIN_PEDOMETER]];
     // communication
     [_sensors addObject:[self getCelContent:@"Communication" desc:@"The Communication sensor logs communication events such as calls and messages, performed by or received by the user." image:@"ic_action_communication" key:SENSOR_CALLS]];
-    // Microsoft Band
+    [_sensors addObject:[self getCelContent:@"Label" desc:@"Save event labels to the AWARE server" image:@"ic_action_label" key:SENSOR_LABELS]];
+     // Microsoft Band
     [_sensors addObject:[self getCelContent:@"Micrsoft Band" desc:@"Wearable sensor data (such as Heart Rate, UV, and Skin Temperature) from Microsoft Band." image:@"ic_action_msband" key:SENSOR_PLUGIN_MSBAND]];
     // Google Login
     [_sensors addObject:[self getCelContent:@"Google Login" desc:@"Multi-device management using Google Account." image:@"google_logo" key:SENSOR_PLUGIN_GOOGLE_LOGIN]];
@@ -406,6 +414,10 @@
     [_sensors addObject:[self getCelContent:@"Balanced Campus ESMs" desc:@"ESM Plugin" image:@"ic_action_campus" key:SENSOR_PLUGIN_CAMPUS]];
     // HealthKit
     [_sensors addObject:[self getCelContent:@"HealthKit" desc:@"This plugin collects stored data in HealthKit App on iOS" image:@"ic_action_health_kit" key:@"sensor_plugin_health_kit"]];
+
+    // [_sensors addObject:[self getCelContent:@"Direction (iOS)" desc:@"Device's direction (0-360)" image:@"safari_copyrighted" key:SENSOR_DIRECTION]];
+    //    [_sensors addObject:[self getCelContent:@"Rotation (iOS)" desc:@"Orientation of the device" image:@"ic_action_rotation" key:SENSOR_ROTATION]];
+    
 
     
     /**
@@ -426,7 +438,7 @@
     // A current version of AWARE iOS
     NSString* version = [NSString stringWithFormat:@"%@",[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]];
     [_sensors addObject:[self getCelContent:@"Version" desc:version image:@"" key:@"STUDY_CELL_VIEW"]];
-    // A manual data upload button
+        // A manual data upload button
     [_sensors addObject:[self getCelContent:@"Manual Data Upload" desc:@"Please push this row for uploading sensor data!" image:@"" key:@"STUDY_CELL_MANULA_UPLOAD"]];
     [_sensors addObject:[self getCelContent:@"General App Settings" desc:@"Move to the Settings app" image:@"" key:@"STUDY_CELL_SETTINGS_APP"]];
     // Auto Study Update
@@ -464,6 +476,7 @@
     [dic setObject:desc forKey:KEY_CEL_DESC];
     [dic setObject:image forKey:KEY_CEL_IMAGE];
     [dic setObject:key forKey:KEY_CEL_SENSOR_NAME];
+
     if(_sensorManager != nil){
         bool exist = [_sensorManager isExist:key];
         if (exist) {
@@ -473,13 +486,15 @@
     return dic;
 }
 
+
 /**
- * Initialize sensor
+ * When a study is refreshed (e.g., pushed refresh button, changed settings, and/or done daily study update), this method is called before the -initList.
  */
 - (void) initSensors {
+    
     double initDelay = 0.5;
     if ([AWAREUtils isBackground]){
-        initDelay = 10;
+        initDelay = 5;
     }
     // Inactivate the refresh button on the navigation bar
     _refreshButton.enabled = NO;
@@ -544,6 +559,9 @@
     [memory startSensor:60*15 withSettings:nil];
     [_sensorManager addNewSensor:memory];
     
+//    AWARESensor * labels = [[Labels alloc] initWithSensorName:SENSOR_LABELS withAwareStudy:awareStudy];
+//    [labels startSensor:60*15 withSettings:nil];
+//    [_sensorManager addNewSensor:labels];
     
     // Orientation Sensor
 //    AWARESensor *orientation = [[Orientation alloc] initWithSensorName:@"orientation" withAwareStudy:awareStudy];
@@ -573,6 +591,7 @@
     @autoreleasepool {
         NSLog(@"Stop and remove all sensors from AWARESensorManager.");
         [_sensorManager stopAndRemoveAllSensors];
+        [debugSensor saveDebugEventWithText:@"Pushed a study refresh button!" type:DebugTypeInfo label:@""];
     }
     /* [NOTE]:
      * A simulator can not use camera API for reading a study QR code, therefore, a developer has to add a study url directly by youself.
@@ -714,6 +733,11 @@
                                                otherButtonTitles:@"YES",nil];
         alert.tag = 10;
         [alert show];
+    }else if([key isEqualToString:SENSOR_LABELS]){
+        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Event Label" message:@"Please edit current your condition!" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Done",nil];
+        alert.alertViewStyle = UIAlertViewStylePlainTextInput;
+        alert.tag = 11;
+        [alert show];
     }
 }
 
@@ -803,6 +827,15 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
 //            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"prefs://"]];
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
         }
+    }else if(alertView.tag == 11){
+        if ( buttonIndex == [alertView cancelButtonIndex]){
+            NSLog(@"Cancel");
+            return;
+        }
+        NSString *label = [alertView textFieldAtIndex:0].text;
+        Labels * labelsSensor = [[Labels alloc] initWithSensorName:SENSOR_LABELS withAwareStudy:awareStudy];
+        [labelsSensor saveLabel:label withKey:@"top" type:@"text" body:@"" triggerTime:[NSDate new] answeredTime:[NSDate new]];
+        [labelsSensor syncAwareDB];
     }
 }
 

@@ -46,8 +46,9 @@
 		165A8B701C03B90500898C6C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 165A8B6E1C03B90500898C6C /* GoogleService-Info.plist */; };
 		165A8B711C03B90500898C6C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 165A8B6E1C03B90500898C6C /* GoogleService-Info.plist */; };
 		165A8B741C03C0B300898C6C /* GoogleLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 165A8B731C03C0B300898C6C /* GoogleLoginViewController.m */; };
+		165DECF61C83AD7D002C88CA /* ExternalAccessory.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 165DECF51C83AD7D002C88CA /* ExternalAccessory.framework */; };
+		165DED001C87C9C5002C88CA /* Labels.m in Sources */ = {isa = PBXBuildFile; fileRef = 165DECFF1C87C9C5002C88CA /* Labels.m */; };
 		1663BB801C2C94C3003F03DF /* ESMStorageHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 1663BB7F1C2C94C3003F03DF /* ESMStorageHelper.m */; };
-		166603F51C751957006A4F25 /* ExternalAccessory.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 166603F41C751957006A4F25 /* ExternalAccessory.framework */; };
 		166F1A701C602B44002124FB /* AWAREHealthKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 166F1A6F1C602B44002124FB /* AWAREHealthKit.m */; };
 		1671A5D81C3B583C00C41F44 /* GoogleCalPush.m in Sources */ = {isa = PBXBuildFile; fileRef = 1671A5D71C3B583C00C41F44 /* GoogleCalPush.m */; };
 		1677AF2E1C2B109A00F7C482 /* SingleESMObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 1677AF2D1C2B109A00F7C482 /* SingleESMObject.m */; };
@@ -58,7 +59,6 @@
 		168C71DB1C67B9CC00878DD8 /* AWAREDataUploader.m in Sources */ = {isa = PBXBuildFile; fileRef = 168C71DA1C67B9CC00878DD8 /* AWAREDataUploader.m */; };
 		169384F01C17C39300A17F2C /* MicrosoftBandKit_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 169384EF1C17C39300A17F2C /* MicrosoftBandKit_iOS.framework */; };
 		169384F31C17C3D300A17F2C /* MSBand.m in Sources */ = {isa = PBXBuildFile; fileRef = 169384F21C17C3D300A17F2C /* MSBand.m */; };
-		169384F51C18DD3D00A17F2C /* awareframework.der in Resources */ = {isa = PBXBuildFile; fileRef = 169384F41C18DD3D00A17F2C /* awareframework.der */; };
 		169A7B241BFF16E700A7C06D /* Gyroscope.m in Sources */ = {isa = PBXBuildFile; fileRef = 169A7B231BFF16E700A7C06D /* Gyroscope.m */; };
 		169A7B271BFF193C00A7C06D /* Magnetometer.m in Sources */ = {isa = PBXBuildFile; fileRef = 169A7B261BFF193C00A7C06D /* Magnetometer.m */; };
 		169A7B2A1BFF1C2300A7C06D /* Battery.m in Sources */ = {isa = PBXBuildFile; fileRef = 169A7B291BFF1C2300A7C06D /* Battery.m */; };
@@ -157,7 +157,6 @@
 		1623CE8D1BFD1B2C00EFAD72 /* AWAREUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AWAREUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1623CE911BFD1B2C00EFAD72 /* AWAREUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AWAREUITests.m; sourceTree = "<group>"; };
 		1623CE931BFD1B2C00EFAD72 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		1623CEA11BFD253A00EFAD72 /* AWARE.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = AWARE.entitlements; sourceTree = "<group>"; };
 		1623CEAD1BFD407900EFAD72 /* QRCodeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QRCodeViewController.h; sourceTree = "<group>"; };
 		1623CEAE1BFD407900EFAD72 /* QRCodeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QRCodeViewController.m; sourceTree = "<group>"; };
 		1623CEB01BFD40FB00EFAD72 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
@@ -198,9 +197,12 @@
 		165A8B6E1C03B90500898C6C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
 		165A8B721C03C0B300898C6C /* GoogleLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GoogleLoginViewController.h; sourceTree = "<group>"; };
 		165A8B731C03C0B300898C6C /* GoogleLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GoogleLoginViewController.m; sourceTree = "<group>"; };
+		165DECF51C83AD7D002C88CA /* ExternalAccessory.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ExternalAccessory.framework; path = System/Library/Frameworks/ExternalAccessory.framework; sourceTree = SDKROOT; };
+		165DECF71C83AD7D002C88CA /* AWARE.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = AWARE.entitlements; sourceTree = "<group>"; };
+		165DECFE1C87C9C5002C88CA /* Labels.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Labels.h; sourceTree = "<group>"; };
+		165DECFF1C87C9C5002C88CA /* Labels.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Labels.m; sourceTree = "<group>"; };
 		1663BB7E1C2C94C3003F03DF /* ESMStorageHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESMStorageHelper.h; sourceTree = "<group>"; };
 		1663BB7F1C2C94C3003F03DF /* ESMStorageHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ESMStorageHelper.m; sourceTree = "<group>"; };
-		166603F41C751957006A4F25 /* ExternalAccessory.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ExternalAccessory.framework; path = System/Library/Frameworks/ExternalAccessory.framework; sourceTree = SDKROOT; };
 		166F1A6E1C602B44002124FB /* AWAREHealthKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AWAREHealthKit.h; sourceTree = "<group>"; };
 		166F1A6F1C602B44002124FB /* AWAREHealthKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AWAREHealthKit.m; sourceTree = "<group>"; };
 		1671A5D61C3B583C00C41F44 /* GoogleCalPush.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GoogleCalPush.h; sourceTree = "<group>"; };
@@ -219,7 +221,6 @@
 		169384EF1C17C39300A17F2C /* MicrosoftBandKit_iOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = MicrosoftBandKit_iOS.framework; sourceTree = "<group>"; };
 		169384F11C17C3D300A17F2C /* MSBand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSBand.h; sourceTree = "<group>"; };
 		169384F21C17C3D300A17F2C /* MSBand.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSBand.m; sourceTree = "<group>"; };
-		169384F41C18DD3D00A17F2C /* awareframework.der */ = {isa = PBXFileReference; lastKnownFileType = file; path = awareframework.der; sourceTree = "<group>"; };
 		169A7B221BFF16E700A7C06D /* Gyroscope.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Gyroscope.h; sourceTree = "<group>"; };
 		169A7B231BFF16E700A7C06D /* Gyroscope.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Gyroscope.m; sourceTree = "<group>"; };
 		169A7B251BFF193C00A7C06D /* Magnetometer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Magnetometer.h; sourceTree = "<group>"; };
@@ -288,7 +289,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				166603F51C751957006A4F25 /* ExternalAccessory.framework in Frameworks */,
+				165DECF61C83AD7D002C88CA /* ExternalAccessory.framework in Frameworks */,
 				1623CEB11BFD40FB00EFAD72 /* AVFoundation.framework in Frameworks */,
 				168683031C07C43600CB4266 /* AudioToolbox.framework in Frameworks */,
 				16C1FF7D1C617FB100C070AA /* Accelerate.framework in Frameworks */,
@@ -526,9 +527,8 @@
 		1623CE681BFD1B2C00EFAD72 /* AWARE */ = {
 			isa = PBXGroup;
 			children = (
-				169384F41C18DD3D00A17F2C /* awareframework.der */,
+				165DECF71C83AD7D002C88CA /* AWARE.entitlements */,
 				165A8B6E1C03B90500898C6C /* GoogleService-Info.plist */,
-				1623CEA11BFD253A00EFAD72 /* AWARE.entitlements */,
 				1623CE721BFD1B2C00EFAD72 /* Main.storyboard */,
 				1623CE7A1BFD1B2C00EFAD72 /* LaunchScreen.storyboard */,
 				1623CE6C1BFD1B2C00EFAD72 /* AppDelegate.h */,
@@ -633,6 +633,15 @@
 			name = Memory;
 			sourceTree = "<group>";
 		};
+		165DED011C87C9CD002C88CA /* Labels */ = {
+			isa = PBXGroup;
+			children = (
+				165DECFE1C87C9C5002C88CA /* Labels.h */,
+				165DECFF1C87C9C5002C88CA /* Labels.m */,
+			);
+			name = Labels;
+			sourceTree = "<group>";
+		};
 		1677AF2F1C2B4BB500F7C482 /* ESM */ = {
 			isa = PBXGroup;
 			children = (
@@ -661,6 +670,7 @@
 				16F3BC141C76D31B005ACEE3 /* LocalCoreDataStorageHelper.m */,
 				168C71D91C67B9CC00878DD8 /* AWAREDataUploader.h */,
 				168C71DA1C67B9CC00878DD8 /* AWAREDataUploader.m */,
+				165DED011C87C9CD002C88CA /* Labels */,
 				165915121C7CBC7300806744 /* Memory */,
 				16C1FF911C644F5000C070AA /* Debug */,
 				1659150E1C7BAB0F00806744 /* Orientation */,
@@ -836,7 +846,7 @@
 		2A3CA9F5620967BACB187EB7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				166603F41C751957006A4F25 /* ExternalAccessory.framework */,
+				165DECF51C83AD7D002C88CA /* ExternalAccessory.framework */,
 				1623FFDC1C5ADB6E00F3E3E4 /* libSystem.tbd */,
 				9ED04F29ED60F3FCC960F6CD /* libPods-AWARE.a */,
 				16C1FF7E1C617FC300C070AA /* GLKit.framework */,
@@ -1014,7 +1024,6 @@
 				165A8B6F1C03B90500898C6C /* GoogleService-Info.plist in Resources */,
 				1623CE791BFD1B2C00EFAD72 /* Assets.xcassets in Resources */,
 				1623CE741BFD1B2C00EFAD72 /* Main.storyboard in Resources */,
-				169384F51C18DD3D00A17F2C /* awareframework.der in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1148,6 +1157,7 @@
 				169A7B491C00591A00A7C06D /* LinearAccelerometer.m in Sources */,
 				1623FFE01C5DCF7900F3E3E4 /* Pedometer.m in Sources */,
 				1623CE6B1BFD1B2C00EFAD72 /* main.m in Sources */,
+				165DED001C87C9C5002C88CA /* Labels.m in Sources */,
 				164DD65F1C1F9F1900ADA92B /* DeviceUsage.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

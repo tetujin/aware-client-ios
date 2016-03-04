@@ -7,17 +7,27 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 @interface AWAREUtils : NSObject
 
 // Application state (foreground or background)
-+ (void) setAppState:(BOOL)state;
+//+ (void) setAppState:(BOOL)state;
 + (BOOL) getAppState;
 + (BOOL) isForeground;
 + (BOOL) isBackground;
 
 // Notification
-+ (void)sendLocalNotificationForMessage:(NSString *)message soundFlag:(BOOL)soundFlag;
++ (UILocalNotification *) sendLocalNotificationForMessage:(NSString *)message soundFlag:(BOOL)soundFlag;
++ (UILocalNotification *) sendLocalNotificationForMessage:(NSString *)message
+                                   title:(NSString *)title
+                               soundFlag:(BOOL)soundFlag
+                                category:(NSString *) category
+                                fireDate:(NSDate*)fireDate
+                          repeatInterval:(NSCalendarUnit)repeatInterval
+                                userInfo:(NSDictionary *) userInfo
+                         iconBadgeNumber:(NSInteger)iconBadgeNumber;
++ (bool) cancelLocalNotification:(UILocalNotification *) notification;
 
 // Device information
 + (float) getCurrentOSVersionAsFloat;

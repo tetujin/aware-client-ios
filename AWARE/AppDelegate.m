@@ -22,6 +22,12 @@
 #import "Debug.h"
 
 #import "MSBand.h"
+#import "Scheduler.h"
+#import "GoogleCalPush.h"
+
+#import "ESMStorageHelper.h"
+#import "AWAREEsmUtils.h"
+#import "Labels.h"
 
 
 @implementation AppDelegate{
@@ -33,27 +39,105 @@
     
     awareStudy = [[AWAREStudy alloc] init];
     
-    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setBool:YES forKey:@"APP_STATE"];
+//    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+//    [defaults setBool:YES forKey:@"APP_STATE"];
     
     [application unregisterForRemoteNotifications];
     
     if ([AWAREUtils getCurrentOSVersionAsFloat] >= 8.0) {
-        // Set Notifications
+        // Set remote notifications
         [application registerForRemoteNotifications];
-        UIUserNotificationType types = UIUserNotificationTypeBadge|
-                                       UIUserNotificationTypeSound|
-                                       UIUserNotificationTypeNone|
-                                       UIUserNotificationTypeAlert;
-        UIUserNotificationSettings *mySettings = [UIUserNotificationSettings settingsForTypes:types categories:nil];
-        [application registerUserNotificationSettings:mySettings];
+        
+        // Set background fetch
         [application setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
+
+        if ([AWAREUtils getCurrentOSVersionAsFloat] >= 9.0) {
+            // For text edit
+            UIMutableUserNotificationAction *addLabelAction = [[UIMutableUserNotificationAction alloc] init];
+            addLabelAction.title = @"Add Label";
+            addLabelAction.activationMode = UIUserNotificationActivationModeBackground;
+            addLabelAction.authenticationRequired = YES;
+            addLabelAction.identifier = @"add_label_action";
+            addLabelAction.behavior = UIUserNotificationActionBehaviorTextInput;
+            
+            UIMutableUserNotificationCategory *labelCategory = [[UIMutableUserNotificationCategory alloc] init];
+            labelCategory.identifier = SENSOR_LABELS_TYPE_TEXT;
+            [labelCategory setActions:@[addLabelAction] forContext:UIUserNotificationActionContextMinimal];
+            
+            // For label yes/no
+            UIMutableUserNotificationAction *addTrueAction = [[UIMutableUserNotificationAction alloc] init];
+            addTrueAction.title = @"YES";
+            addTrueAction.activationMode = UIUserNotificationActivationModeBackground;
+            addTrueAction.authenticationRequired = YES;
+            addTrueAction.identifier = @"add_bool_action_yes";
+            
+            UIMutableUserNotificationAction *addFalseAction = [[UIMutableUserNotificationAction alloc] init];
+            addFalseAction.title = @"NO";
+            addFalseAction.activationMode = UIUserNotificationActivationModeBackground;
+            addFalseAction.authenticationRequired = YES;
+            addFalseAction.destructive = YES;
+            addFalseAction.identifier = @"add_bool_action_no";
+            
+            UIMutableUserNotificationCategory *labelBooleanCategory = [[UIMutableUserNotificationCategory alloc] init];
+            labelBooleanCategory.identifier = SENSOR_LABELS_TYPE_BOOLEAN;
+            [labelBooleanCategory setActions:@[addTrueAction, addFalseAction] forContext:UIUserNotificationActionContextMinimal];
+            
+            // Upload date
+//            UIMutableUserNotificationAction *esmAction = [[UIMutableUserNotificationAction alloc] init];
+//            esmAction.title = @"Answer";
+//            esmAction.identifier = @"esm_action";
+//            esmAction.activationMode = UIUserNotificationActivationModeForeground;
+//            esmAction.authenticationRequired = YES;
+//            esmAction.destructive = NO;
+//            
+//            UIMutableUserNotificationCategory *esmCategory = [[UIMutableUserNotificationCategory alloc] init];
+//            esmCategory.identifier = SENSOR_PLUGIN_CAMPUS;
+//            [esmCategory setActions:@[esmAction] forContext:UIUserNotificationActionContextMinimal];
+            
+            
+            // Upload date
+            UIMutableUserNotificationAction *updateCalendarAction = [[UIMutableUserNotificationAction alloc] init];
+            updateCalendarAction.title = @"Update";
+            updateCalendarAction.identifier = @"calendar_update_action";
+            updateCalendarAction.activationMode = UIUserNotificationActivationModeBackground;
+            updateCalendarAction.authenticationRequired = YES;
+            updateCalendarAction.destructive = NO;
+            
+            UIMutableUserNotificationCategory *category = [[UIMutableUserNotificationCategory alloc] init];
+            category.identifier = SENSOR_PLUGIN_GOOGLE_CAL_PUSH;
+            [category setActions:@[updateCalendarAction] forContext:UIUserNotificationActionContextDefault];
+            
+            
+            // Make a category
+            NSSet *categories = [NSSet setWithObjects: category,labelCategory, labelBooleanCategory, nil];
+            
+            // Set the category to application
+            UIUserNotificationType types = UIUserNotificationTypeBadge|
+            UIUserNotificationTypeSound|
+            UIUserNotificationTypeNone|
+            UIUserNotificationTypeAlert;
+            UIUserNotificationSettings *mySettings = [UIUserNotificationSettings settingsForTypes:types categories:categories];
+            [application registerUserNotificationSettings:mySettings];
+        }else{
+            UIUserNotificationType types = UIUserNotificationTypeBadge|
+            UIUserNotificationTypeSound|
+            UIUserNotificationTypeNone|
+            UIUserNotificationTypeAlert;
+            UIUserNotificationSettings *mySettings = [UIUserNotificationSettings settingsForTypes:types categories:nil];
+            [application registerUserNotificationSettings:mySettings];
+        }
+
+        
+
+        
     }
     
-    // DeployGate SDK
-    [[DeployGateSDK sharedInstance] launchApplicationWithAuthor:@"[user name]" key:@"[api key]"];
+    [[UIApplication sharedApplication] cancelAllLocalNotifications];
     
-    // WIP: Set background fetch
+    // DeployGate SDK
+    [[DeployGateSDK sharedInstance] launchApplicationWithAuthor:@"tetujin" key:@"b268f60ae48ecfca7352c0a01918c86a7bd4bc74"];
+    
+    // Set background fetch for updating debug information
     [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
     
     // Google Login Plugin
@@ -61,11 +145,11 @@
     [[GGLContext sharedInstance] configureWithError: &configureError];
     NSAssert(!configureError, @"Error configuring Google services: %@", configureError);
     [GIDSignIn sharedInstance].delegate = self;
-    
+
     // Microsoft Band Plugin
 //    AWAREStudy * awareStudy = [[AWAREStudy alloc] init];
 //    MSBand * awareSensor = [[MSBand alloc] initWithPluginName:SENSOR_PLUGIN_MSBAND awareStudy:awareStudy];
-//    [awareSensor startSensor:60*15 withSettings:[awareStudy getPlugins]];
+//    [awareSensor startSensor:60*15 withSettings:[awareStudy getPlugins]]; //15min
 //    [awareSensor trackDebugEvents];
     
     
@@ -82,20 +166,22 @@
                                                      name:NSProcessInfoPowerStateDidChangeNotification
                                                    object:nil];
     }
+    
+//    UILocalNotification *notification = [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey]
+    
     return YES;
 }
 
 
 void exceptionHandler(NSException *exception) {
     // http://www.yoheim.net/blog.php?q=20130113
-    NSLog(@"%@", exception.name);
-    NSLog(@"%@", exception.reason);
-    NSLog(@"%@", exception.callStackSymbols);
-    
-    NSString * error = [NSString stringWithFormat:@"[%@] %@ , %@" , exception.name, exception.reason, exception.callStackSymbols];
+//    NSLog(@"%@", exception.name);
+//    NSLog(@"%@", exception.reason);
+//    NSLog(@"%@", exception.callStackSymbols);
+//    NSString * error = [NSString stringWithFormat:@"[%@] %@ , %@" , exception.name, exception.reason, exception.callStackSymbols];
     
     Debug * debugSensor = [[Debug alloc] initWithAwareStudy:nil];
-    [debugSensor saveDebugEventWithText:error type:DebugTypeCrash label:exception.name];
+    [debugSensor saveDebugEventWithText:exception.debugDescription type:DebugTypeCrash label:exception.name];
  }
 
 
@@ -119,7 +205,7 @@ void exceptionHandler(NSException *exception) {
 //    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
 //    [defaults setBool:NO forKey:@"APP_STATE"];
 //    NSLog(@"Go to background 1");
-    [AWAREUtils setAppState:NO];
+//    [AWAREUtils setAppState:NO];
     
 //    NSLog(@"Turn 'ON' the auto sleep mode on this app");
 //    [UIApplication sharedApplication].idleTimerDisabled = NO;
@@ -131,7 +217,7 @@ void exceptionHandler(NSException *exception) {
 //    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
 //    [defaults setBool:NO forKey:@"APP_STATE"];
 //    NSLog(@"Go to background 2");
-    [AWAREUtils setAppState:NO];
+//    [AWAREUtils setAppState:NO];
     
     NSLog(@"Turn 'ON' the auto sleep mode on this app");
     [UIApplication sharedApplication].idleTimerDisabled = NO;
@@ -142,7 +228,7 @@ void exceptionHandler(NSException *exception) {
 //    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
 //    [defaults setBool:YES forKey:@"APP_STATE"];
 //    NSLog(@"Go to fourground");
-    [AWAREUtils setAppState:YES];
+//    [AWAREUtils setAppState:YES];
     
     NSLog(@"Turn 'OFF' the auto sleep mode on this app");
     [UIApplication sharedApplication].idleTimerDisabled = YES;
@@ -153,7 +239,7 @@ void exceptionHandler(NSException *exception) {
     //    http://d.hatena.ne.jp/glass-_-onion/20120405/1333611664
 //    [defaults setBool:YES forKey:@"APP_STATE"];
 //    NSLog(@"Go to fourground");
-    [AWAREUtils setAppState:YES];
+//    [AWAREUtils setAppState:YES];
     
     NSLog(@"Turn 'OFF' the auto sleep mode on this app");
     [UIApplication sharedApplication].idleTimerDisabled = YES;
@@ -170,21 +256,22 @@ void exceptionHandler(NSException *exception) {
 //    [self saveContext];
     UILocalNotification *notification = [[UILocalNotification alloc] init];
     if (notification){
-        //        notification.timeZone = [NSTimeZone defaultTimeZone];
         notification.repeatInterval = 0;
         notification.alertBody = @"Application is stoped! Please reboot this app for logging your acitivties.";
         notification.alertAction = @"Reboot";
         notification.soundName = UILocalNotificationDefaultSoundName;
         notification.applicationIconBadgeNumber = 1;
         [[UIApplication sharedApplication] scheduleLocalNotification:notification];
+        
+        
+        Debug * debugSensor = [[Debug alloc] initWithAwareStudy:awareStudy];
+        [debugSensor saveDebugEventWithText:notification.alertBody type:DebugTypeWarn label:@"stop"];
+        [debugSensor syncAwareDB];
     }
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     [defaults setBool:YES forKey:KEY_APP_TERMINATED];
-    
-//    [defaults setBool:NO forKey:@"APP_STATE"];
-    [AWAREUtils setAppState:NO];
+
     NSLog(@"Stop background task of AWARE....");
-    
     NSLog(@"Turn 'ON' the auto sleep mode on this app");
     [UIApplication sharedApplication].idleTimerDisabled = NO;
 }
@@ -202,6 +289,7 @@ void exceptionHandler(NSException *exception) {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
         
         NSLog(@"Start a background fetch ...");
+        
         /// for 30 sec
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm"];
@@ -287,8 +375,80 @@ handleEventsForBackgroundURLSession:(NSString *)identifier
     NSLog(@"pushInfo: %@", [userInfo description]);
 }
 
+
+
 ////////////////////////////
 ///////////////////////////
+
+/**
+ * Location Notification Event
+ * If you receive local push notification, every time this method is called.
+ * Also, each notification has their category ID. You can do some operation after get the notification.
+ */
+- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification{
+    // Calendar and ESM plugin use this method
+    if ([notification.category isEqualToString:SENSOR_PLUGIN_CAMPUS]) {
+        Scheduler * scheduler = [[Scheduler alloc] initWithSensorName:SENSOR_PLUGIN_SCHEDULER withAwareStudy:awareStudy];
+        [scheduler setESMWithUserInfo:notification.userInfo];
+    } else if ([notification.category isEqualToString:SENSOR_PLUGIN_GOOGLE_CAL_PUSH]){
+        GoogleCalPush * balancedCampusJournal = [[GoogleCalPush alloc] initWithSensorName:SENSOR_PLUGIN_GOOGLE_CAL_PUSH withAwareStudy:awareStudy];
+        [balancedCampusJournal makePrepopulateEvetnsWith:[NSDate new]];
+    }
+}
+
+
+
+
+/**
+ * Actions of LocalNotification.
+ * After using the button on a notification in the lock or notifications screen, this method is called.
+ */
+- (void)application:(UIApplication *)application
+handleActionWithIdentifier:(NSString *)identifier
+forLocalNotification:(UILocalNotification *)notification
+   withResponseInfo:(NSDictionary *)responseInfo
+  completionHandler:(void (^)())completionHandler{
+    // Calendar and ESM plugin use this method
+
+    NSDictionary *userInfo = [(UILocalNotification*)notification userInfo];
+    
+    if ([identifier isEqualToString:@"calendar_update_action"]) {
+        GoogleCalPush * balancedCampusJournal = [[GoogleCalPush alloc] initWithSensorName:SENSOR_PLUGIN_GOOGLE_CAL_PUSH withAwareStudy:awareStudy];
+        [balancedCampusJournal makePrepopulateEvetnsWith:[NSDate new]];
+    } else if ([identifier isEqualToString:@"add_label_action"]) {
+        NSString * inputText = [responseInfo objectForKey:UIUserNotificationActionResponseTypedTextKey];
+        Labels * labelSensor = [[Labels alloc] initWithSensorName:SENSOR_LABELS withAwareStudy:awareStudy];
+        [labelSensor saveLabel:inputText
+                       withKey:[userInfo objectForKey:@"key"]
+                          type:identifier
+                          body:notification.alertBody
+                   triggerTime:notification.fireDate
+                  answeredTime:[NSDate new]];
+    } else if ([identifier isEqualToString:@"add_bool_action_yes"]){
+        Labels * labelSensor = [[Labels alloc] initWithSensorName:SENSOR_LABELS withAwareStudy:awareStudy];
+        [labelSensor saveLabel:@"1"
+                       withKey:[userInfo objectForKey:@"key"]
+                          type:identifier
+                          body:notification.alertBody
+                   triggerTime:notification.fireDate
+                  answeredTime:[NSDate new]];
+    } else if ([identifier isEqualToString:@"add_bool_action_no"]){
+        Labels * labelSensor = [[Labels alloc] initWithSensorName:SENSOR_LABELS withAwareStudy:awareStudy];
+        [labelSensor saveLabel:@"0"
+                       withKey:[userInfo objectForKey:@"key"]
+                          type:identifier
+                          body:notification.alertBody
+                   triggerTime:notification.fireDate
+                  answeredTime:[NSDate new]];
+    }
+//    }else if([identifier isEqualToString:@"esm_action"]){
+//        Scheduler * scheduler = [[Scheduler alloc] initWithSensorName:SENSOR_PLUGIN_SCHEDULER withAwareStudy:awareStudy];
+//        [scheduler setESMWithUserInfo:notification];
+//    }
+    
+    // Must be called when finished
+    completionHandler();
+}
 
 
 

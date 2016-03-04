@@ -17,6 +17,7 @@
 #import "AWAREKeys.h"
 #import "SingleESMObject.h"
 #import "MultiESMObject.h"
+#import "Debug.h"
 
 @implementation ESMStorageHelper
 
@@ -59,6 +60,9 @@
 - (void) removeEsmTexts {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults removeObjectForKey:@"storedEsms"];
+    
+    Debug * debugSensor = [[Debug alloc] initWithAwareStudy:nil];
+    [debugSensor saveDebugEventWithText:@"[esms] Remove all ESMs from a temp-storage." type:DebugTypeInfo label:@""];
 }
 
 
@@ -78,6 +82,9 @@
         }
         [defaults setObject:newEsms forKey:@"storedEsms"];
     }
+    
+    Debug * debugSensor = [[Debug alloc] initWithAwareStudy:nil];
+    [debugSensor saveDebugEventWithText:@"[esms] Remove an ESM from a temp-storage." type:DebugTypeInfo label:@""];
 }
 
 
@@ -143,8 +150,12 @@
     
     // Save the answers to the local storage.
     [esm saveDataWithArray:answers];
+
+    Debug * debugSensor = [[Debug alloc] initWithAwareStudy:nil];
+    [debugSensor saveDebugEventWithText:@"[esms] Save an ESM to main-storage as a timeout ESM" type:DebugTypeInfo label:@""];
+    
     // Sync with AWARE database immediately
-//    [esm performSelector:@selector(syncAwareDB) withObject:0 afterDelay:5];
+    // [esm performSelector:@selector(syncAwareDB) withObject:0 afterDelay:5];
 }
 
 

@@ -11,9 +11,13 @@
 #import <EventKitUI/EventKitUI.h>
 #import <UIKit/UIKit.h>
 
+extern NSString* const PLUGIN_GOOGLE_CAL_PUSH_CALENDAE_NAME;
+
 @interface GoogleCalPush : AWARESensor <AWARESensorDelegate, UIAlertViewDelegate>
 
 - (BOOL) isTargetCalendarCondition;
 - (void) showTargetCalendarCondition;
+
+- (void) makePrepopulateEvetnsWith:(NSDate *) date;
 
 @end

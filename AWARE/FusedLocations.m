@@ -126,6 +126,8 @@
         // Set a movement threshold for new events.
 //         locationManager.distanceFilter = 250;
         [locationManager startMonitoringVisits]; // This method calls didVisit.
+        [locationManager startUpdatingLocation];
+        [fusedLocationsSensor setBufferSize:10];
         // [locationManager startUpdatingHeading];
         
         if(interval > 0){
@@ -134,9 +136,6 @@
                                                            selector:@selector(getGpsData:)
                                                            userInfo:nil
                                                             repeats:YES];
-        }else{
-            [locationManager startUpdatingLocation];
-            [fusedLocationsSensor setBufferSize:10];
         }
     }
     
@@ -299,7 +298,6 @@
 //                      [self sendLocalNotificationForMessage:[NSString stringWithFormat:@"departure date is %@",[NSDate distantFuture]] soundFlag:NO];
                   }
                   
-                  
                   [visitDic setObject:timestamp forKey:@"timestamp"];
                   [visitDic setObject:[self getDeviceId] forKey:@"device_id"];
                   [visitDic setObject:[NSNumber numberWithDouble:visit.coordinate.latitude] forKey:@"double_latitude"];
@@ -324,7 +322,6 @@
 //    //    [sdManager addSensorDataMagx:newHeading.x magy:newHeading.y magz:newHeading.z];
 //    //    [sdManager addHeading: theHeading];
 //}
-
 
 
 @end

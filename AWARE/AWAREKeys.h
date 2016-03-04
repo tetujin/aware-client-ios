@@ -63,6 +63,7 @@ extern NSString* const SENSOR_TIMEZONE;
 extern NSString* const SENSOR_AMBIENT_NOISE;
 extern NSString* const SENSOR_SCHEDULER;
 extern NSString* const SENSOR_CALLS;
+extern NSString* const SENSOR_LABELS;
 extern NSString* const SENSOR_PLUGIN_GOOGLE_ACTIVITY_RECOGNITION;
 extern NSString* const SENSOR_GOOGLE_FUSED_LOCATION;
 extern NSString* const SENSOR_PLUGIN_OPEN_WEATHER;
@@ -73,7 +74,6 @@ extern NSString* const SENSOR_PLUGIN_SCHEDULER;
 extern NSString* const SENSOR_PLUGIN_GOOGLE_CAL_PULL;
 extern NSString* const SENSOR_PLUGIN_GOOGLE_CAL_PUSH;
 extern NSString* const SENSOR_PLUGIN_GOOGLE_LOGIN;
-extern NSString* const SENSOR_PLUGIN_STUDENTLIFE_AUDIO;
 extern NSString* const SENSOR_PLUGIN_CAMPUS;
 extern NSString* const SENSOR_PLUGIN_PEDOMETER;
 extern NSString* const SENSOR_AWARE_DEBUG;
@@ -84,6 +84,10 @@ extern NSString* const SENSOR_APPLICATION_HISTORY;
 extern NSString * const NotificationCategoryIdent;
 extern NSString * const NotificationActionOneIdent;
 extern NSString * const NotificationActionTwoIdent;
+
+extern NSString* const SENSOR_LABELS_TYPE_TEXT;
+extern NSString* const SENSOR_LABELS_TYPE_BOOLEAN;
+
 
 @interface AWAREKeys: NSObject
 

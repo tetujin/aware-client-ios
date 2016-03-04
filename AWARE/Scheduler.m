@@ -16,56 +16,82 @@
 #import "Debug.h"
 
 @implementation Scheduler {
-    NSMutableArray * scheduleManager; // This variable manages NSTimers.
+    // -- Notification Body --
+    NSString * notificationTitle;
+    NSString * body;
+    
+    // -- Daily update function  --
+    // An update timer for daily configuration
+    NSTimer * dailyQuestionUpdateTimer;
+    // A target date for daily update
+    NSDate* dailyUpdate;
+    
+    // -- ESM configuration file management  --
+    // An url for configuration
+    NSString* CONFIG_URL;
+    // A key for latest esm
+    NSString* KEY_LATEST_ESM_JSON_DATA;
+    // A temporaly varibale
+    NSMutableData* resultData;
+    
+    // -- NSTimer based ESM trigger --
+    NSMutableArray * scheduleManager;
     NSString * KEY_SCHEDULE;
     NSString * KEY_TIMER;
     NSString * KEY_PREVIOUS_SCHEDULE_JSON;
-    NSTimer * dailyQuestionUpdateTimer;
-    NSString* CONFIG_URL;
-    NSString* KEY_LATEST_ESM_JSON_JSON_DATA;
-    NSMutableData* resultData;
-    NSDate* dailyUpdate;
-    bool debug;
+
 }
 
+// Initializer
 - (instancetype)initWithSensorName:(NSString *)sensorName withAwareStudy:(AWAREStudy *)study{
     self = [super initWithSensorName:SENSOR_PLUGIN_CAMPUS withAwareStudy:study];
     if (self) {
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        debug = [userDefaults boolForKey:SETTING_DEBUG_STATE];
+        /** Notification Body */
+        notificationTitle = @"BalancedCampus Question";
+        body = @"Tap to answer.";
+        
+        /** Initialize variables for daily update */
+        dailyUpdate = [AWAREUtils getTargetNSDate:[NSDate new] hour:3 nextDay:YES];
+        
+        /** ESM configuration file management */
+        // Initialize a temporaly varibale for configuration file
         resultData = [[NSMutableData alloc] init];
-        scheduleManager = [[NSMutableArray alloc] init];
-//        dailyUpdate = [self getTargetTimeAsNSDate:[NSDate new] hour:3 minute:0 second:0];
+        // Initialize an identifer for a HTTP/POT
         _getConfigFileIdentifier = @"get_config_file_identifier";
+        // Initialize a key for the latest configation file on userDefualt
+        KEY_LATEST_ESM_JSON_DATA = @"key_latest_esm_json_date";
+        // Initialize a link for configuration file (e.g., https://r2d2.hcii.cs.cmu.edu/esm/ad6e5ac2-ca24-436b-9e4f-77848918c7cb/master.json )
+        CONFIG_URL = [NSString stringWithFormat:@"http://r2d2.hcii.cs.cmu.edu/esm/%@/master.json", [self getDeviceId]];
+        
+        /** -- NSTimer based ESM trigger -- */
+        scheduleManager = [[NSMutableArray alloc] init];
         KEY_SCHEDULE = @"key_schedule";
         KEY_TIMER = @"key_timer";
-        KEY_LATEST_ESM_JSON_JSON_DATA = @"key_latest_esm_json_date";
         KEY_PREVIOUS_SCHEDULE_JSON = @"key_previous_schedule_json";
-//        CONFIG_URL = @"https://r2d2.hcii.cs.cmu.edu/esm/ad6e5ac2-ca24-436b-9e4f-77848918c7cb/master.json";
-        CONFIG_URL = [NSString stringWithFormat:@"http://r2d2.hcii.cs.cmu.edu/esm/%@/master.json", [self getDeviceId]];
     }
     return self;
 }
 
 
-
+// Start sensor
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
-    // remove ESMs from temp local storage
-    ESMStorageHelper *helper = [[ESMStorageHelper alloc] init];
-    [helper removeEsmTexts];
     
+    // Remove all scheduled notification
+    [self stopSchedules];
+    
+    // remove ESMs from temp local storage
+//    ESMStorageHelper *helper = [[ESMStorageHelper alloc] init];
+//    [helper removeEsmTexts];
     
     // init
     NSString * debugMessage = @"AWARE initializes ESM schedules with backup ESMs.";
-    if ([self isDebug]) {
-        [self setBackupEsmsWithNotification:debugMessage];
-    }
+    [self setBackupEsmsWithNotification:debugMessage];
     [self saveDebugEventWithText:debugMessage type:DebugTypeInfo label:@""];
+
+    // init config file
+    [self getConfigFile:nil];
     
-    NSMutableDictionary * dic = [[NSMutableDictionary alloc] init];
-    [dic setObject:CONFIG_URL forKey:@"configUrl"];
-    
-    // --- TEST --
+    // Daily update timer
 //    dailyUpdate = [AWAREUtils getTargetNSDate:[NSDate new] hour:3 minute:0 second:0 nextDay:YES];
 //    dailyQuestionUpdateTimer = [[NSTimer alloc] initWithFireDate:dailyUpdate
 //                                                        interval:60*60*24
@@ -76,18 +102,9 @@
 //    NSRunLoop *runLoop = [NSRunLoop currentRunLoop];
 ////    [runLoop addTimer:dailyQuestionUpdateTimer forMode:NSDefaultRunLoopMode];
 //    [runLoop addTimer:dailyQuestionUpdateTimer forMode:NSRunLoopCommonModes];
-    
-    
-    NSTimer* timer = [NSTimer timerWithTimeInterval:0
-                                                   target:self
-                                                 selector:@selector(setConfigFile:)
-                                                 userInfo:dic
-                                                  repeats:NO];
-    [timer fire];
-    
-//     init scheduler
-//    
-//     Make schdules
+   
+
+    // --- TEST --
 //        AWARESchedule * test = [self getScheduleForTest];
 //        AWARESchedule * drinkOne = [self getDringSchedule];
 //        AWARESchedule * drinkTwo = [self getDringSchedule];
@@ -129,43 +146,130 @@
 }
 
 
-
+// Stop sensor
 - (BOOL)stopSensor {
-    // stop all scheduler
-    for (NSDictionary * dic in scheduleManager) {
-        NSTimer* timer = [dic objectForKey:KEY_TIMER];
-        [timer invalidate];
-    }
-    [scheduleManager removeAllObjects]; //[[NSMutableArray alloc] init];
-    
-    // remove all esm temp storage
-//    ESMStorageHelper * helper = [[ESMStorageHelper alloc] init];
-//    [helper removeEsmTexts];
-    
+    [self stopSchedules];
     return YES;
 }
 
 
+- (void) stopSchedules {
+    // Remove all esm notification from sharedApplication
+    for (UILocalNotification *notification in [[UIApplication sharedApplication] scheduledLocalNotifications]) {
+        if([notification.category isEqualToString:[self getSensorName]]) {
+            [[UIApplication sharedApplication] cancelLocalNotification:notification];
+        }
+    }
+    
+    // Invalidate NSTimers
+    if (scheduleManager != nil) {
+        for (NSDictionary * dic in scheduleManager) {
+            NSTimer * timer =  [dic objectForKey:KEY_TIMER];
+            [timer invalidate];
+        }
+        [scheduleManager removeAllObjects];
+    }
+}
+
 
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
 
+/**
+ * Set a daily notification
+ * @discussion  This schedule timer is not stable because sometimes depending on the device status, iOS kills or suspend background application processes. This timer is working on the application background process.
+ */
+- (void) startNotificationSchedules:(NSArray *) schedules {
+    
+    for (AWARESchedule * s in schedules) {
+    
+        NSMutableDictionary * userInfo = [[NSMutableDictionary alloc] init];
+        [userInfo setObject:s.esmStr forKey:@"esm_json_str"];
+        [userInfo setObject:s.scheduleId forKey:@"esm_schedule_id"];
+        [userInfo setObject:s.schedule forKey:@"esm_schedule"];
+        [userInfo setObject:s.scheduleType forKey:@"esm_schedule_type"];
+        [userInfo setObject:s.title forKey:@"esm_schedule_title"];
+        [userInfo setObject:s.body forKey:@"esm_schedule_body"];
+        
+//        NSDate * testFireDate = [AWAREUtils getTargetNSDate:[NSDate new] hour:11 minute:18 second:0 nextDay:YES];
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:@"HH:mm"];
+        NSString *message = [NSString stringWithFormat:@"[%@] %@", [dateFormatter stringFromDate:s.schedule], s.body];
+        [AWAREUtils sendLocalNotificationForMessage:message
+                                           title:s.title
+                                       soundFlag:YES
+                                        category:[self getSensorName]
+                                        fireDate:s.schedule
+                                  repeatInterval:NSCalendarUnitDay
+                                        userInfo:userInfo
+                                 iconBadgeNumber:1];
+    }
+}
 
 
-- (void) startSchedules:(NSArray *) schedules {
+/**
+ * Set an ESM with user info in UILocalNotification
+ * @discussion  You should call this method after recieving an UILocalNotification at -application:didReceiveLocalNotification: method in AppDelegate.m. And also, -startNotificationSchedules: makes the notifications.
+ */
+- (void) setESMWithUserInfo:(NSDictionary*) userInfo {
+    if (userInfo == nil) return;
+    NSString * esmJsonStr = [userInfo objectForKey:@"esm_json_str"];
+    NSString * scheduleId = [userInfo objectForKey:@"esm_schedule_id"];
+    NSDate * esmSchedule = [userInfo objectForKey:@"esm_schedule"];
+    NSString * scheduleType = [userInfo objectForKey:@"esm_schedule_type"];
+    NSString* scheduleTitle = [userInfo objectForKey:@"esm_schedule_title"];
+    NSString* scheduleBody = [userInfo objectForKey:@"esm_schedule_body"];
+    NSNumber* unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
+    
+    // Search the target sechedule by the schedule
+    //    NSString * esmStr = esmJsonStr;
+    NSString* esmStr = [self setEsmApperedTimestamp:esmJsonStr withTimestamp:unixtime];
+    NSNumber* timeout = [self getTimeout:esmJsonStr];
+    
+    // Add esm to local temp storage
+    ESMStorageHelper * helper = [[ESMStorageHelper alloc] init];
+    [helper addEsmText:esmStr withId:scheduleId timeout:timeout];
+    
+    // Save ESM to main storage
+    AWARESchedule *schedule = [[AWARESchedule alloc] initWithScheduleId:scheduleId];
+    [schedule setScheduleAsNormalWithDate:esmSchedule
+                             intervalType:scheduleType
+                                      esm:esmJsonStr
+                                    title:scheduleTitle
+                                     body:scheduleBody
+                               identifier:scheduleId];
+    [AWAREEsmUtils saveEsmObjects:schedule withTimestamp:unixtime];
+    
+    [self saveDebugEventWithText:[NSString stringWithFormat:@"[%@] Set a new esm schedule to temp-local storage", scheduleId] type:DebugTypeInfo label:@""];
+}
+
+
+///////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////
+
+
+/**
+ * Start a scheduled time with NSTimer and NSRunLoop
+ * @discussion  This schedule timer is unstable because sometimes depending on the device status, iOS kills or suspend background application processes. This timer is working on the application background process.
+ */
+- (void) startNStimerSchedules:(NSArray *) schedules {
     for (AWARESchedule * s in schedules) {
         NSMutableDictionary * userInfo = [[NSMutableDictionary alloc] init];
         [userInfo setObject:s.scheduleId forKey:@"schedule_id"];
         NSTimer * notificationTimer = [[NSTimer alloc] initWithFireDate:s.schedule //TODO
                                                                interval:[s.interval doubleValue]
                                                                  target:self
-                                                               selector:@selector(scheduleAction:)
+                                                               selector:@selector(scheduleNSTimerAction:)
                                                                userInfo:userInfo//s.scheduleId
                                                                 repeats:YES];
         
         //https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/Timers/Articles/usingTimers.html
+        //http://stackoverflow.com/questions/7222449/nsdefaultrunloopmode-vs-nsrunloopcommonmodes
+        //http://stackoverflow.com/questions/8304702/how-do-i-create-a-nstimer-on-a-background-thread
+        // TODO
+        //https://developer.apple.com/library/ios/documentation/General/Conceptual/ConcurrencyProgrammingGuide/GCDWorkQueues/GCDWorkQueues.html#//apple_ref/doc/uid/TP40008091-CH103-SW1
         NSRunLoop *runLoop = [NSRunLoop currentRunLoop];
-        //        [runLoop addTimer:notificationTimer forMode:NSDefaultRunLoopMode];
+//         [runLoop addTimer:notificationTimer forMode:NSDefaultRunLoopMode];
         [runLoop addTimer:notificationTimer forMode:NSRunLoopCommonModes];
         
         NSMutableDictionary * dic = [[NSMutableDictionary alloc] init];
@@ -175,38 +279,29 @@
     }
 }
 
-- (void) stopSchedules {
-    // stop old esm schedules
-    for (NSDictionary * dic in scheduleManager) {
-        NSTimer* timer = [dic objectForKey:KEY_TIMER];
-        [timer invalidate];
-    }
-    scheduleManager = [[NSMutableArray alloc] init];
-}
 
-
-
-
-////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////
-
-- (void) scheduleAction: (NSTimer *) sender {
-    // Get a schedule ID
+- (void) scheduleNSTimerAction: (NSTimer *) sender {
+    // Get a schedule_id from userInfo(NSDictionary) in NStimer
     NSMutableDictionary * userInfo = sender.userInfo;
     NSString* scheduleId = [userInfo objectForKey:@"schedule_id"];
+    // Generate an unixtime
     NSNumber* unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
     // Search the target sechedule by the schedule ID
     for (NSDictionary * dic in scheduleManager) {
         AWARESchedule *schedule = [dic objectForKey:KEY_SCHEDULE];
         NSLog(@"%@ - %@", schedule.scheduleId, scheduleId);
-        
+        // compare between the event schdule_id and the schdule_id from scheduleManager
         if ([schedule.scheduleId isEqualToString:scheduleId]) {
             NSString* esmStr = [self setEsmApperedTimestamp:schedule.esmStr withTimestamp:unixtime];
             NSNumber* timeout = [self getTimeout:schedule.esmStr];
             // Add esm text to local storage
             ESMStorageHelper * helper = [[ESMStorageHelper alloc] init];
             [helper addEsmText:esmStr withId:scheduleId timeout:timeout];
-            [self sendLocalNotificationWithSchedule:schedule soundFlag:YES];
+            
+            // Sned notification with schdule_id with the device is debug mode.
+            if([self isDebug]){
+                [AWAREUtils sendLocalNotificationForMessage:scheduleId soundFlag:YES];
+            }
             
             // Save ESM
             [AWAREEsmUtils saveEsmObjects:schedule withTimestamp:unixtime];
@@ -218,44 +313,48 @@
 
 
 
+
+
 ////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
 
-
-- (void) setConfigFile:(id) sender {
-    
+/**
+ * Get new configation file from a server
+ */
+- (void) getConfigFile:(id) sender {
+    // Save debug message to a debug sensor
     [self saveDebugEventWithText:@"[Scheduler] start to set configuration" type:DebugTypeInfo label:@""];
     
     // Get Config URL from NSTimer of userInfo.
     resultData = [[NSMutableData alloc] init];
     
+    // Make an url to a esm configuration file with unixtime (for prevent cash)
     double unixtime = [[NSDate new] timeIntervalSince1970];
-    
-    NSDictionary *dic = [(NSTimer *) sender userInfo];
-    NSString *url = [dic objectForKey:@"configUrl"];
-    url = [NSString stringWithFormat:@"%@?%f", url, unixtime];
-    NSLog(@"--> %@", url);
+    NSString*  url = [NSString stringWithFormat:@"%@?%f", CONFIG_URL, unixtime];
     __weak NSURLSession *session = nil;
     NSURLSessionConfiguration *sessionConfig = nil;
     
+    // Make a http request identifire
     _getConfigFileIdentifier = [NSString stringWithFormat:@"%@%f", _getConfigFileIdentifier, unixtime];
     
+    // Make a query for a http request
     NSString *post = [NSString stringWithFormat:@"timestamp=%f&device_id=%@", unixtime, [self getDeviceId] ];
     NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
     NSString *postLength = [NSString stringWithFormat:@"%ld", [postData length]];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
     [request setURL:[NSURL URLWithString:url]];
-    //    [request setHTTPMethod:@"POST"];
     [request setHTTPMethod:@"POST"];
     [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
     [request setHTTPBody:postData];
+    [request setAllowsCellularAccess:YES];
     
-    if ([self isForeground]) {
+    // A case of foreground
+    if ([AWAREUtils isForeground]) {
         NSURLSession *session = [NSURLSession sharedSession];
         
         [[session dataTaskWithURL:[NSURL URLWithString:url] completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-            NSString* resString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-            NSLog(@"---> %@", resString);
+//            NSString* resString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+//            NSLog(@"---> %@", resString);
             
             if (response && ! error) {
                  [self saveDebugEventWithText:@"[Scheduler] Sucess to upload esm schedule" type:DebugTypeInfo label:@""];
@@ -274,6 +373,7 @@
                 
             }
         }] resume];
+    // A case of Background
     }else{
         sessionConfig = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:_getConfigFileIdentifier];
         sessionConfig.timeoutIntervalForRequest = 60; //180.0;
@@ -332,7 +432,7 @@ didCompleteWithError:(NSError *)error {
             [self setBackupEsmsWithNotification:errorMessage];
         });
     }else{
-        [self saveDebugEventWithText:@"[Scheduler] Sucess to update esm schedules." type:DebugTypeError label:@""];
+        [self saveDebugEventWithText:@"[Scheduler] Sucess to update esm schedules." type:DebugTypeInfo label:@""];
         // NOTE: For registrate a NSTimer in the backgroung, we have to set it in the main thread!
         dispatch_async(dispatch_get_main_queue(), ^{
             [self setEsmSchedulesWithJSONData:resultData];
@@ -344,16 +444,15 @@ didCompleteWithError:(NSError *)error {
 
 
 
-
-
 /////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 
-
+/**
+ * Set ESM with backuped ESM with error message. This method is called after -startSensor or -getConfigFile:. The reason of calling this method at -startSensor is for initialization of ESM configuration file. And also, if the getting a new configation file request in -getConfigFile is failed, this plugin setup esm-schedules with backuped ESMs by using -getLatestEsmJsonData method.
+ * @param NSString  An error message.
+ */
 - (void) setBackupEsmsWithNotification:(NSString*) errorMessage {
-    if (debug) {
-        [self sendLocalNotificationForMessage:errorMessage soundFlag:NO];
-    }
+    if ([self isDebug]) [self sendLocalNotificationForMessage:errorMessage soundFlag:NO];
     NSData * data = [self getLatestEsmJsonData];
     if (data != nil) {
         [self setEsmSchedulesWithJSONData:data];
@@ -361,6 +460,9 @@ didCompleteWithError:(NSError *)error {
 }
 
 
+/**
+ * Set ESM schedule with JSON data. This method is called when getting a new configation file request is sucessed, or -setBackupEsmsWithNotification: is called. You need NSData object for setting ESM schedules that is based on the JSON text.
+ */
 - (void) setEsmSchedulesWithJSONData:(NSData *)data {
     
     NSError * error = nil;
@@ -369,7 +471,7 @@ didCompleteWithError:(NSError *)error {
     if (error != nil) {
         //        NSLog(@"JSON FORMAT ERROR: %@", error.debugDescription);
         NSString * debugMessage = @"JSON Format Error: AWARE iOS sets the schedules with backuped ESMs.";
-        if(debug)[self setBackupEsmsWithNotification:debugMessage];
+        if([self isDebug])[self setBackupEsmsWithNotification:debugMessage];
         [self saveDebugEventWithText:debugMessage type:DebugTypeError label:@""];
         return;
     }else{
@@ -377,25 +479,18 @@ didCompleteWithError:(NSError *)error {
         [self setLatestEsmJsonData:data];
     }
     
-    [self stopSchedules];
-    
+    // Save a debug message to a debug sensor
     NSString * debugMessage = @"AWARE updated ESM schedules.";
-    if(debug) [self sendLocalNotificationForMessage:debugMessage soundFlag:NO];
+    if([self isDebug]) [self sendLocalNotificationForMessage:debugMessage soundFlag:NO];
     [self saveDebugEventWithText:debugMessage type:DebugTypeInfo label:@""];
     
+    // Snitialize a schdule variable data as an AWARESchedule object with NSMutableArray
     NSMutableArray * awareSchedules = [[NSMutableArray alloc] init];
     
-    //TODO
-    //    AWARESchedule * awareSchedule = [self getScheduleForTest];
-    //    awareSchedule.schedule = [NSDate new];
-    //    [awareSchedule setScheduleType:SCHEDULE_INTERVAL_TEST];
-    //    [awareSchedules addObject:awareSchedule];
-    
-    NSString* currentSchedules = @"";//[[NSString alloc] init];
+    // Set esm schueldes to the awareSchedules variable
+    NSMutableString* currentSchedules = [[NSMutableString alloc] init];
     int i = 0;
     for (NSDictionary * schedule in schedules) {
-        NSString * notificationTitle = @"BalancedCampus Question";
-        NSString * body = @"Tap to answer.";
         NSString * identifier = [schedule objectForKey:@"schedule_id"];
         NSArray * hours = [schedule objectForKey:@"hours"];
         NSArray * esmsDic = [schedule objectForKey:@"esms"];
@@ -409,14 +504,10 @@ didCompleteWithError:(NSError *)error {
         for (NSNumber * hour in hours) {
             i++;
             int intHour = [hour intValue]; //TODO
-            //            NSDate * fireDate = [NSDate new];//[self getTargetTimeAsNSDate:[NSDate new] hour:intHour];
-            NSDate * fireDate = [self getTargetTimeAsNSDate:[NSDate new] hour:intHour];
-            NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
-            [dateFormatter setDateFormat:@"h:mm a"];
-            NSString* fireDateString = [dateFormatter stringFromDate:fireDate];
-            NSString * currentSchedule = [NSString stringWithFormat:@"'%@' at '[%@]'\n", identifier, fireDateString];
-            currentSchedules = [NSString stringWithFormat:@"%@%@", currentSchedules, currentSchedule];
+//            NSDate * fireDate = [NSDate new];//[self getTargetTimeAsNSDate:[NSDate new] hour:intHour];
+            NSDate * fireDate = [AWAREUtils getTargetNSDate:[NSDate new] hour:intHour nextDay:YES];
             
+            // Generate a new AWRESchedule object
             AWARESchedule * schedule = [[AWARESchedule alloc] initWithScheduleId:identifier];
             [schedule setScheduleAsNormalWithDate:fireDate
                                      intervalType:SCHEDULE_INTERVAL_DAY
@@ -425,16 +516,46 @@ didCompleteWithError:(NSError *)error {
                                              body:body
                                        identifier:@"---"];
             schedule.schedule = fireDate;
+            
+            // Set current schedules
+            NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+            [dateFormatter setDateFormat:@"HH:mm"];
+            [currentSchedules appendFormat:@"[%@] %@\n", identifier, [dateFormatter stringFromDate:fireDate]];
+            
+            // Add the AWARESchedule object to a list of awareSchdules
             [awareSchedules addObject:schedule];
         }
     }
+    
+    // Set the latest nofication schedules to the debug sensor and the latest value
     NSString *currentEsmSchedules = [NSString stringWithFormat:@"You have %d ESM schedules per one day.\n%@",i, currentSchedules];
     [self setLatestValue:currentEsmSchedules];
     [self saveDebugEventWithText:currentEsmSchedules type:DebugTypeInfo label:@""];
     
-    // start schedules
-    [self startSchedules:awareSchedules];
+    // Stop previus notification schdules
+    [self stopSchedules];
+    
+    /**
+     * Currently, the schdule plugin has a two notification schdulers.
+     * 1. LocalPushNotifiation based schduler
+     * 2. NSTimer+NSLoop based schduler
+     *
+     * NOTE: Both schdulers have some trade off.
+     * 1. LocalPushNotification based schduler(process) is managed by iOS. Probably, this schduler is very stable. However, this schduler can not handle the notification trigger events. After user taps the notification, the application can handle the "which a LocalPushNotification is selected -application:didReceiveLocalNotification:notification method in AppDelegate".
+     *
+     * 2. NSTimer+NSLoop based schaduler(process) is managed by AWARE iOS(application). This schedule timer is unstable because iOS kills or suspend background application processes sometimes depending on the device status.
+     */
+    // start Local Push based ESM schedules
+    [self startNotificationSchedules:awareSchedules];
+    // start NSTimer+NSLoop based ESM schedules
+    [self startNStimerSchedules:awareSchedules];
 }
+
+
+
+
+
+
 
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -535,7 +656,6 @@ didCompleteWithError:(NSError *)error {
         NSDate * expireDate = [[NSDate alloc] initWithTimeIntervalSinceNow:[timeoutSecond doubleValue]];
         timeout =[AWAREUtils getUnixTimestamp:expireDate];
     }
-    
     return timeout;
 }
 
@@ -547,46 +667,13 @@ didCompleteWithError:(NSError *)error {
 
 - (NSData *) getLatestEsmJsonData {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    NSData * data = [userDefaults dataForKey:KEY_LATEST_ESM_JSON_JSON_DATA];
+    NSData * data = [userDefaults dataForKey:KEY_LATEST_ESM_JSON_DATA];
     return data;
 }
 
 -(void) setLatestEsmJsonData: (NSData*) jsonData{
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults setObject:jsonData forKey:KEY_LATEST_ESM_JSON_JSON_DATA];
-}
-
-
-
-///////////////////////////////////////////////////////
-///////////////////////////////////////////////////////
-
-// Notification
-
-- (void) sendLocalNotificationWithSchedule : (AWARESchedule *) schedule
-                                 soundFlag : (BOOL) soundFlag{
-    if (schedule == nil) {
-        return;
-    }
-    
-    UILocalNotification *localNotification = [UILocalNotification new];
-    CGFloat currentVersion = [[[UIDevice currentDevice] systemVersion] floatValue];
-    NSLog(@"OS:%f", currentVersion);
-    if (currentVersion >= 9.0){
-        localNotification.alertTitle = schedule.title;
-        localNotification.alertBody = schedule.body;
-    } else {
-        localNotification.alertBody = schedule.body;
-    }
-    localNotification.fireDate = [NSDate new];
-    localNotification.timeZone = [NSTimeZone localTimeZone];
-    localNotification.category = schedule.scheduleId;
-    if(soundFlag) {
-        localNotification.soundName = UILocalNotificationDefaultSoundName;
-    }
-    localNotification.applicationIconBadgeNumber = 1; //TODO
-    localNotification.hasAction = YES;
-    [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
+    [userDefaults setObject:jsonData forKey:KEY_LATEST_ESM_JSON_DATA];
 }
 
 
@@ -594,46 +681,16 @@ didCompleteWithError:(NSError *)error {
 
 
 
-////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////
-
-- (NSDate *) getTargetTimeAsNSDate:(NSDate *) nsDate
-                              hour:(int) hour {
-    return [self getTargetTimeAsNSDate:nsDate hour:hour minute:0 second:0];
-}
 
 
-- (NSDate *) getTargetTimeAsNSDate:(NSDate *) nsDate
-                              hour:(int) hour
-                            minute:(int) minute
-                            second:(int) second {
-    NSCalendar *calendar = [NSCalendar currentCalendar];
-    NSDateComponents *dateComps = [calendar components:NSYearCalendarUnit |
-                                   NSMonthCalendarUnit  |
-                                   NSDayCalendarUnit    |
-                                   NSHourCalendarUnit   |
-                                   NSMinuteCalendarUnit |
-                                   NSSecondCalendarUnit fromDate:nsDate];
-    [dateComps setDay:dateComps.day];
-    [dateComps setHour:hour];
-    [dateComps setMinute:minute];
-    [dateComps setSecond:second];
-    NSDate * targetNSDate = [calendar dateFromComponents:dateComps];
-    // If the maked target day is newer than now, Aware remakes the target day as same time tomorrow.
-    if ([targetNSDate timeIntervalSince1970] < [nsDate timeIntervalSince1970]) {
-        [dateComps setDay:dateComps.day + 1];
-        NSDate * tomorrowNSDate = [calendar dateFromComponents:dateComps];
-        return tomorrowNSDate;
-    }else{
-        return targetNSDate;
-    }
-}
 
 
-- (BOOL) isForeground {
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    return [userDefaults boolForKey:@"APP_STATE"];
-}
+
+
+
+
+
+
 
 ////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////

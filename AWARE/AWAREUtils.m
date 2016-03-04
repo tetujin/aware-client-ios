@@ -9,7 +9,6 @@
 #import "AWAREUtils.h"
 #import "AWAREKeys.h"
 #import <CommonCrypto/CommonDigest.h>
-#import <UIKit/UIKit.h>
 #import <sys/utsname.h>
 
 @implementation AWAREUtils
@@ -20,16 +19,15 @@
  *
  * @param state 'YES' is foreground. 'NO' is background.
  */
-+ (void)setAppState:(BOOL)state{
-    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setBool:state forKey:@"APP_STATE"];
-    if (state) {
-        NSLog(@"Application is in the foreground!");
-    }else{
-        NSLog(@"Application is in the background!");
-    }
-    
-}
+//+ (void)setAppState:(BOOL)state{
+//    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+//    [defaults setBool:state forKey:@"APP_STATE"];
+//    if (state) {
+//        NSLog(@"Application is in the foreground!");
+//    }else{
+//        NSLog(@"Application is in the background!");
+//    }
+//}
 
 
 /**
@@ -38,8 +36,22 @@
  * @return 'YES' is foreground. 'NO' is background.
  */
 + (BOOL) getAppState {
-    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-    return [defaults boolForKey:@"APP_STATE"];
+//    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+//    return [defaults boolForKey:@"APP_STATE"];
+    UIApplicationState appState = [[UIApplication sharedApplication] applicationState];
+    switch (appState) {
+        case UIApplicationStateActive:
+            NSLog(@"Application is in the foreground!");
+            return YES;
+        case UIApplicationStateInactive:
+            NSLog(@"Application is in the foreground!");
+            return YES;
+        case UIApplicationStateBackground:
+            NSLog(@"Application is in the background!");
+            return NO;
+        default:
+            return NO;
+    }
 }
 
 
@@ -50,15 +62,29 @@
  * @return state 'YES' is foreground. 'NO' is background.
  */
 + (BOOL)isForeground{
-    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-    bool state = [defaults boolForKey:@"APP_STATE"];
-    if (state) {
-        NSLog(@"Application is in the foreground!");
-        return YES;
-    }else{
-        NSLog(@"Application is in the background!");
-        return NO;
-   }
+   UIApplicationState appState = [[UIApplication sharedApplication] applicationState];
+    switch (appState) {
+        case UIApplicationStateActive:
+            NSLog(@"Application is in the foreground!");
+            return YES;
+        case UIApplicationStateInactive:
+            NSLog(@"Application is in the foreground!");
+            return YES;
+        case UIApplicationStateBackground:
+            NSLog(@"Application is in the background!");
+            return NO;
+        default:
+            return NO;
+    }
+//    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+//    bool state = [defaults boolForKey:@"APP_STATE"];
+//    if (state) {
+//        NSLog(@"Application is in the foreground!");
+//        return YES;
+//    }else{
+//        NSLog(@"Application is in the background!");
+//        return NO;
+//    }
 }
 
 /**
@@ -67,15 +93,29 @@
  * @return state 'YES' is background, on the other hand 'NO' is foreground.
  */
 + (BOOL)isBackground{
-    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-    bool state = [defaults boolForKey:@"APP_STATE"];
-    if (state) {
-        NSLog(@"Application is in the foreground!");
-        return NO;
-    }else{
-        NSLog(@"Application is in the background!");
-        return YES;
+    UIApplicationState appState = [[UIApplication sharedApplication] applicationState];
+    switch (appState) {
+        case UIApplicationStateActive:
+            NSLog(@"Application is in the foreground!");
+            return NO;
+        case UIApplicationStateInactive:
+            NSLog(@"Application is in the foreground!");
+            return NO;
+        case UIApplicationStateBackground:
+            NSLog(@"Application is in the background!");
+            return YES;
+        default:
+            return NO;
     }
+//    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+//    bool state = [defaults boolForKey:@"APP_STATE"];
+//    if (state) {
+//        NSLog(@"Application is in the foreground!");
+//        return NO;
+//    }else{
+//        NSLog(@"Application is in the background!");
+//        return YES;
+//    }
 }
 
 
@@ -84,21 +124,58 @@
  @param message text message for notification
  @param sound type of sound for notification
  */
-+ (void)sendLocalNotificationForMessage:(NSString *)message soundFlag:(BOOL)soundFlag {
++ (UILocalNotification *) sendLocalNotificationForMessage:(NSString *)message soundFlag:(BOOL)soundFlag {
+    return [self sendLocalNotificationForMessage:message
+                                    title:nil
+                                soundFlag:soundFlag
+                                 category:nil
+                                 fireDate:[NSDate new]
+                           repeatInterval:0
+                                 userInfo:nil
+                          iconBadgeNumber:0];
+}
+
+
++ (UILocalNotification*) sendLocalNotificationForMessage:(NSString *)message
+                                   title:(NSString *)title
+                               soundFlag:(BOOL)soundFlag
+                                category:(NSString *) category
+                                fireDate:(NSDate*)fireDate
+                          repeatInterval:(NSCalendarUnit)repeatInterval
+                                userInfo:(NSDictionary *) userInfo
+                         iconBadgeNumber:(NSInteger)iconBadgeNumber {
     UILocalNotification *localNotification = [UILocalNotification new];
     localNotification.alertBody = message;
-    //    localNotification.fireDate = [NSDate date];
-    localNotification.repeatInterval = 0;
+    localNotification.fireDate = fireDate;
+    localNotification.repeatInterval = repeatInterval;
+    localNotification.userInfo = userInfo;
+    localNotification.category = category;
+    localNotification.applicationIconBadgeNumber = iconBadgeNumber;
+    if ([AWAREUtils getCurrentOSVersionAsFloat] >= 8.2){
+        localNotification.alertTitle = title;
+    }
     if(soundFlag) {
         localNotification.soundName = UILocalNotificationDefaultSoundName;
     }
-    localNotification.hasAction = YES;
     [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
+    return localNotification;
+}
+
+
+
++ (bool) cancelLocalNotification:(UILocalNotification *) notification {
+    if (notification == nil) {
+        return NO;
+    } else{
+        [[UIApplication sharedApplication] cancelLocalNotification:notification];
+        return YES;
+    }
 }
 
 
 /**
  This method provides current OS version such as iOS8.2, iOS9 or iOS9.1 with float value.
+ (e.g., 8.2, 9.0, and 9.1)
  @return an os version of the device
  */
 + (float) getCurrentOSVersionAsFloat{

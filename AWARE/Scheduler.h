@@ -12,4 +12,6 @@
 
 @property (nonatomic, strong) NSString * getConfigFileIdentifier;
 
+- (void) setESMWithUserInfo:(NSDictionary*) userInfo;
+
 @end

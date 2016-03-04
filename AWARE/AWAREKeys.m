@@ -62,6 +62,7 @@ NSString* const SENSOR_TIMEZONE = @"timezone";
 NSString* const SENSOR_AMBIENT_NOISE = @"plugin_ambient_noise";
 NSString* const SENSOR_SCHEDULER = @"scheduler";
 NSString* const SENSOR_CALLS = @"calls";
+NSString* const SENSOR_LABELS = @"labels";
 NSString* const SENSOR_PLUGIN_GOOGLE_ACTIVITY_RECOGNITION = @"plugin_google_activity_recognition";
 NSString* const SENSOR_GOOGLE_FUSED_LOCATION = @"google_fused_location";
 NSString* const SENSOR_PLUGIN_GOOGLE_CAL_PULL = @"plugin_balancedcampuscalendar";
@@ -83,6 +84,10 @@ NSString* const SENSOR_APPLICATION_HISTORY = @"applications_history";
 NSString * const NotificationCategoryIdent  = @"ACTIONABLE";
 NSString * const NotificationActionOneIdent = @"ACTION_ONE";
 NSString * const NotificationActionTwoIdent = @"ACTION_TWO";
+
+
+NSString* const SENSOR_LABELS_TYPE_TEXT = @"labels_text";
+NSString* const SENSOR_LABELS_TYPE_BOOLEAN = @"labels_boolean";
 
 @implementation AWAREKeys
 
