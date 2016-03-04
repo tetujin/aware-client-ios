@@ -12,7 +12,6 @@
 #import "AWAREKeys.h"
 
 @implementation Pedometer{
-//    NSTimer * timer;
     NSString* KEY_DEVICE_ID;
     NSString* KEY_TIMESTAMP;
     NSString* KEY_NUMBER_OF_STEPS;
@@ -70,14 +69,7 @@
     // Send a table create query
     NSLog(@"[%@] create table!", [self getSensorName]);
     [self createTable];
-    
-    // Start a data uploader
-//    timer = [NSTimer scheduledTimerWithTimeInterval:upInterval
-//                                             target:self
-//                                           selector:@selector(syncAwareDB)
-//                                           userInfo:nil
-//                                            repeats:YES];
-    
+
     // Check a pedometer sensor
     if (![CMPedometer isStepCountingAvailable]) {
         NSLog(@"[%@] Your device is not support this sensor.", [self getSensorName]);
@@ -126,33 +118,41 @@
             }
             
             // pace (s/m)
-            if ([CMPedometer isPaceAvailable] && pedometerData.currentPace) {
-                currentPace = pedometerData.currentPace;
-                if (! currentPace) currentPace = @0;
+            if ([CMPedometer isPaceAvailable]) {
+                if (pedometerData.currentPace) {
+                    currentPace = pedometerData.currentPace;
+                    if (! currentPace) currentPace = @0;
+                }
             } else {
                 NSLog(@"Pace not available.");
             }
             
             // cadence (steps/second)
-            if ([CMPedometer isCadenceAvailable] && pedometerData.currentCadence) {
-                currentCadence = pedometerData.currentCadence;
-                if(!currentCadence) currentCadence = @0;
+            if ([CMPedometer isCadenceAvailable]) {
+                if (pedometerData.currentCadence) {
+                    currentCadence = pedometerData.currentCadence;
+                    if(!currentCadence) currentCadence = @0;
+                }
             } else {
                 NSLog(@"Cadence not available.");
             }
             
             // flights climbed
-            if ([CMPedometer isFloorCountingAvailable] && pedometerData.floorsAscended) {
-                floorsAscended = [NSNumber numberWithInteger:(pedometerData.floorsAscended.integerValue - totalFloorsAscended.integerValue)];
-                totalFloorsAscended = pedometerData.floorsAscended;
+            if ([CMPedometer isFloorCountingAvailable]) {
+                if (pedometerData.floorsAscended) {
+                    floorsAscended = [NSNumber numberWithInteger:(pedometerData.floorsAscended.integerValue - totalFloorsAscended.integerValue)];
+                    totalFloorsAscended = pedometerData.floorsAscended;
+                }
             } else {
                 NSLog(@"Floors ascended not available.");
             }
             
             // floors descended
-            if ([CMPedometer isFloorCountingAvailable] && pedometerData.floorsDescended) {
-                floorsDescended =  [NSNumber numberWithInteger:(pedometerData.floorsDescended.integerValue - totalFllorsDescended.integerValue)];
-                totalFllorsDescended = pedometerData.floorsDescended;
+            if ([CMPedometer isFloorCountingAvailable]) {
+                if (pedometerData.floorsDescended) {
+                    floorsDescended =  [NSNumber numberWithInteger:(pedometerData.floorsDescended.integerValue - totalFllorsDescended.integerValue)];
+                    totalFllorsDescended = pedometerData.floorsDescended;
+                }
             } else {
                 NSLog(@"Floors descended not available.");
             }
@@ -177,11 +177,6 @@
 }
 
 - (BOOL)stopSensor{
-    // stop live tracking
-//    if (timer != nil) {
-//        [timer invalidate];
-//        timer = nil;
-//    }
     [_pedometer stopPedometerUpdates];
     _pedometer = nil;
     return NO;

@@ -46,6 +46,8 @@
     NSString* KEY_TYPE;
     NSString* KEY_LABLES;
     NSString* KEY_OBJECT;
+    
+    int esmNumber;
 }
 
 - (void)viewDidLoad {
@@ -85,6 +87,8 @@
     KEY_TYPE = @"KEY_TYPE";
     KEY_LABLES = @"KEY_LABELS";
     KEY_OBJECT = @"KEY_OBJECT";
+    
+    esmNumber = 0;
 }
 
 
@@ -138,13 +142,17 @@
     
     // Get ESM using an ESMStorageHelper
     ESMStorageHelper *helper = [[ESMStorageHelper alloc] init];
-    NSArray* esms = [helper getEsmTexts];
-    for (NSString *esm in esms) {
-        // Set each ESM elemetns to the viewer
-        [self addEsm:esm];
-        currentTextOfEsm = esm;
-        break;
+    currentTextOfEsm = [helper getEsmTextWithNumber:esmNumber];
+    if (currentTextOfEsm != nil) {
+        [self addEsm:currentTextOfEsm];
     }
+//    NSArray* esms = [helper getEsmTexts];
+//    for (NSString *esm in esms) {
+//        // Set each ESM elemetns to the viewer
+//        [self addEsm:esm];
+//        currentTextOfEsm = esm;
+//        break;
+//    }
 }
 
 /**
@@ -1148,34 +1156,46 @@
     bool result = [esm saveDataWithArray:array];
     
     if ( result ) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Thank for submitting your answer!"
-                                                        message:@""
-                                                       delegate:nil
-                                              cancelButtonTitle:@"OK"
-                                              otherButtonTitles:nil];
-        [alert show];
-        
+
         ESMStorageHelper * helper = [[ESMStorageHelper alloc] init];
-        [helper removeEsmWithText:currentTextOfEsm];
+//        [helper removeEsmWithText:currentTextOfEsm];
         
         /**
          * If the device has other ESM.
          */
-        if([helper getEsmTexts].count > 0){
+//        if([helper getEsmTexts].count > 0){
+//            [self viewDidAppear:NO];
+//            return ;
+//        }else{
+//            [esm performSelector:@selector(syncAwareDB) withObject:0 afterDelay:5];
+//        }
+        esmNumber++;
+        if([helper getNumberOfStoredESMs] > esmNumber){
             [self viewDidAppear:NO];
             return ;
         }else{
+            // Thank You!!
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Thank for submitting your answer!"
+                                                            message:@""
+                                                           delegate:nil
+                                                  cancelButtonTitle:@"OK"
+                                                  otherButtonTitles:nil];
+            [alert show];
+            
+            esmNumber = 0;
             [esm performSelector:@selector(syncAwareDB) withObject:0 afterDelay:5];
         }
+
+        [self.navigationController popToRootViewControllerAnimated:YES];
         
-        CGFloat currentVersion = [[[UIDevice currentDevice] systemVersion] floatValue];
-        if (currentVersion >= 9.0) {
-//            [self.navigationController.navigationBar setDelegate:self];
-            [self.navigationController popToRootViewControllerAnimated:YES];
-        } else{
-            [self dismissViewControllerAnimated:YES completion:nil];
-            [self viewDidAppear:NO];
-        }
+//        CGFloat currentVersion = [[[UIDevice currentDevice] systemVersion] floatValue];
+//        if (currentVersion >= 9.0) {
+////            [self.navigationController.navigationBar setDelegate:self];
+//            [self.navigationController popToRootViewControllerAnimated:YES];
+//        } else{
+//            [self dismissViewControllerAnimated:YES completion:nil];
+//            [self viewDidAppear:NO];
+//        }
        
     } else {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"AWARE can not save your answer" message:@"Please push submit button again." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
@@ -1221,23 +1241,32 @@
     [esm performSelector:@selector(syncAwareDB) withObject:0 afterDelay:5];
     
     // Remove the answerd ESM from local storage.
-    ESMStorageHelper * helper = [[ESMStorageHelper alloc] init];
-    [helper removeEsmWithText:currentTextOfEsm];
+     ESMStorageHelper * helper = [[ESMStorageHelper alloc] init];
+//     [helper removeEsmWithText:currentTextOfEsm];
     
     // If the local esm storage is empty, the UIView move to the top-page.
-    if([helper getEsmTexts].count > 0){
+//    if([helper getEsmTexts].count > 0){
+//        [self viewDidAppear:NO];
+//        return ;
+//    }
+    esmNumber++;
+    if([helper getNumberOfStoredESMs] > esmNumber){
         [self viewDidAppear:NO];
-        return ;
+        return;
+    }else{
+        esmNumber = 0;
     }
     
-    CGFloat currentVersion = [[[UIDevice currentDevice] systemVersion] floatValue];
-    if (currentVersion >= 9.0) {
-        //            [self.navigationController.navigationBar setDelegate:self];
-        [self.navigationController popToRootViewControllerAnimated:YES];
-    } else{
-        [self dismissViewControllerAnimated:YES completion:nil];
-        [self viewDidAppear:NO];
-    }
+    [self.navigationController popToRootViewControllerAnimated:YES];
+
+//    CGFloat currentVersion = [[[UIDevice currentDevice] systemVersion] floatValue];
+//    if (currentVersion >= 9.0) {
+//                    [self.navigationController.navigationBar setDelegate:self];
+//        [self.navigationController popToRootViewControllerAnimated:YES];
+//    } else{
+//        [self dismissViewControllerAnimated:YES completion:nil];
+//        [self viewDidAppear:NO];
+//    }
 }
 
 

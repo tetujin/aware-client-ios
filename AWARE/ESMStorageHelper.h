@@ -17,11 +17,14 @@
  */
 //- (void) addEsmText:(NSString*) esmText;
 - (void) addEsmText:(NSString *)esmText withId:(NSString *)scheduleId timeout:(NSNumber *)timeout;
+- (void) addEsmText:(NSString *)esmText withId:(NSString *)scheduleId;
 - (void) removeEsmTexts;
 - (void) removeEsmWithText:(NSString*) esmText;
 //- (void) removeEsmWithScheduleId:(NSString *)scheduleId;
 - (NSArray *) getEsmTexts;
 /** remove expired schedules */
 // - (NSMutableArray *) removeExpiredEsms:(NSMutableArray*) esms;
-
+- (NSString *) getEsmTextWithNumber:(int)esmNumber;
+- (int) getNumberOfStoredESMs;
+    
 @end

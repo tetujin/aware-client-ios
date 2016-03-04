@@ -276,6 +276,12 @@
         [dic setObject:s forKey:KEY_SCHEDULE];
         [dic setObject:notificationTimer forKey:KEY_TIMER];
         [scheduleManager addObject:dic];
+        
+        
+        // Set ESM texts to temp-esm-storage. (version:1.6.4)
+        ESMStorageHelper * helper = [[ESMStorageHelper alloc] init];
+        [helper addEsmText:s.esmStr withId:s.scheduleId];
+//        [helper addEsmText:esmStr withId:scheduleId timeout:timeout];
     }
 }
 
@@ -531,10 +537,14 @@ didCompleteWithError:(NSError *)error {
     NSString *currentEsmSchedules = [NSString stringWithFormat:@"You have %d ESM schedules per one day.\n%@",i, currentSchedules];
     [self setLatestValue:currentEsmSchedules];
     [self saveDebugEventWithText:currentEsmSchedules type:DebugTypeInfo label:@""];
+
+    // Remove previus ESMs
+    ESMStorageHelper *helper = [[ESMStorageHelper alloc] init];
+    [helper removeEsmTexts];
     
     // Stop previus notification schdules
     [self stopSchedules];
-    
+
     /**
      * Currently, the schdule plugin has a two notification schdulers.
      * 1. LocalPushNotifiation based schduler
@@ -547,6 +557,7 @@ didCompleteWithError:(NSError *)error {
      */
     // start Local Push based ESM schedules
     [self startNotificationSchedules:awareSchedules];
+    
     // start NSTimer+NSLoop based ESM schedules
     [self startNStimerSchedules:awareSchedules];
 }

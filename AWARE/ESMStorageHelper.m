@@ -22,7 +22,10 @@
 @implementation ESMStorageHelper
 
 /**
- * 
+ * Set ESM text (JSON format) to the temp-esm-storage
+ * You can store an ESM text by each schedule_id. If there is the same ESM text in the temp-esm-storage, 
+ * this method removes the ESM text from temp-esm-storage, and save it to main-storage with esm_status="dismiss".
+ * And also, this method stores the latest ESM text to temp-esm-storage.
  */
 - (void) addEsmText:(NSString *)esmText
              withId:(NSString *)scheduleId
@@ -55,7 +58,42 @@
 
 
 /**
- *
+ * Set ESM text (JSON format) to the temp-esm-storage
+ * You can store an ESM text by each schedule_id. If there is the same ESM text in the temp-esm-storage,
+ * this method removes the ESM text from temp-esm-storage. 
+ * And also, this method stores the latest ESM text to temp-esm-storage.
+ * NOTE: This method doesn't save the previus ESM text to main-storage with esm_status="dismiss"
+ */
+- (void) addEsmText:(NSString *)esmText
+             withId:(NSString *)scheduleId {
+    NSMutableArray * newEsms = [[NSMutableArray alloc] init];
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSArray* esms  = [[NSArray alloc] initWithArray:[defaults objectForKey:@"storedEsms"]];
+    if (esms == nil) {
+        esms = [[NSMutableArray alloc] init];
+    }
+    
+    for (NSDictionary * existingEsm in esms) {
+        NSString *existingScheduleId = [existingEsm objectForKey:@"scheduleId"];
+        if (![existingScheduleId isEqualToString:scheduleId]) {
+            [newEsms addObject:existingEsm];
+        }
+    }
+    
+    NSMutableDictionary * dic = [[NSMutableDictionary alloc] init];
+    [dic setObject:esmText forKey:@"esmText"];
+    [dic setObject:scheduleId forKey:@"scheduleId"];
+    [dic setObject:[AWAREUtils getUnixTimestamp:[NSDate new]] forKey:@"timeout"];
+    
+    [newEsms addObject:dic];
+    
+    [defaults setObject:(NSArray *)newEsms forKey:@"storedEsms"];
+}
+
+
+/**
+ * Remove all ESM texts from the temp-esm-storage.
  */
 - (void) removeEsmTexts {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -67,7 +105,7 @@
 
 
 /**
- *
+ * Remove a ESM text from the temp-esm-storage.
  */
 - (void) removeEsmWithText:(NSString *)esmText {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -89,9 +127,9 @@
 
 
 /**
- *
+ * 
  */
-- (NSArray *) getEsmTexts {
+- (NSArray *) getEsmTexts{
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSArray * array =[defaults objectForKey:@"storedEsms"];
     NSMutableArray * esms = [[NSMutableArray alloc] init];
@@ -108,6 +146,25 @@
     }
 }
 
+/**
+ *
+ */
+- (NSString *) getEsmTextWithNumber:(int) esmNumber {
+    NSArray * esmTexts = [self getEsmTexts];
+    if (esmTexts != nil) {
+        if (esmTexts.count > esmNumber ) {
+            return [esmTexts objectAtIndex:esmNumber];
+        }
+    }
+    return nil;
+}
+
+/**
+ *
+ */
+- (int) getNumberOfStoredESMs {
+    return (int)[self getEsmTexts].count;
+}
 
 
 /**
