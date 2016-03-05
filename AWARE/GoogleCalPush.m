@@ -67,6 +67,8 @@ NSString* const PLUGIN_GOOGLE_CAL_PUSH_CAL_NAME = @"BalancedCampusJournal";
     [self setDailyNotification];
     // Set a scheduled calendar update timer
     [self setDailyCalUpdate];
+    // Sheck events
+//    [self checkCalendarEvents:nil];
     
     return YES;
 }
@@ -136,14 +138,18 @@ NSString* const PLUGIN_GOOGLE_CAL_PUSH_CAL_NAME = @"BalancedCampusJournal";
  * @discussion This method is called by "calendarUpdateTimer" method when the tigger time is comming.
  */
 - (void) checkCalendarEvents:(id) sender {
+    
     // Get all events
     NSDate * now = [NSDate new];
-    [self makePrepopulateEvetnsWith:now];
+    if ( [now timeIntervalSince1970] > [[AWAREUtils getTargetNSDate:now hour:18 nextDay:NO] timeIntervalSince1970]) {
+        [self makePrepopulateEvetnsWith:now];
+    }
     
     // Make yesterday's pre-popluated events
     NSDate * yesterday = [AWAREUtils getTargetNSDate:[NSDate new] hour:-24 minute:0 second:0 nextDay:NO];
     [self makePrepopulateEvetnsWith:yesterday];
 }
+
 
 /**
  * Make pre-populate events with a target date(NSDate).
@@ -151,6 +157,9 @@ NSString* const PLUGIN_GOOGLE_CAL_PUSH_CAL_NAME = @"BalancedCampusJournal";
  * @discussion This method called by -checkCalendarEvents: on self or -application:didReceiveLocalNotification: on notificationAppDelegate.m after recieving a local push notification.
  */
 - (void) makePrepopulateEvetnsWith:(NSDate *) date {
+    // Init a dateformatter
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd"];
     // Save a making prepopulate events to a debug sensor
     NSDateFormatter *timeFormat = [[NSDateFormatter alloc] init];
     [timeFormat setDateFormat:@"HH:mm:ss"];
@@ -262,7 +271,7 @@ NSString* const PLUGIN_GOOGLE_CAL_PUSH_CAL_NAME = @"BalancedCampusJournal";
     }
     
     if (preNullEvents.count == 0 && prepopulatedEvents.count > 0) {
-        NSString * debugMessage = @"Your Calandar is already updated today.";
+        NSString * debugMessage = [NSString stringWithFormat:@"[%@] Your Calandar is already updated today.",         [dateFormatter stringFromDate:date]];
         if ([self isDebug]) {
             [AWAREUtils sendLocalNotificationForMessage:debugMessage soundFlag:YES];
         }
@@ -400,7 +409,7 @@ NSString* const PLUGIN_GOOGLE_CAL_PUSH_CAL_NAME = @"BalancedCampusJournal";
     }
     
     // == Send Notification ==
-    NSString * message = @"Hi! Your Calendar is updated.";
+    NSString * message = [NSString stringWithFormat:@"[%@] Hi! Your Calendar is updated.",[dateFormatter stringFromDate:date]];
     [AWAREUtils sendLocalNotificationForMessage:message soundFlag:NO];
     [self saveDebugEventWithText:message type:DebugTypeInfo label:[self getSensorName]];
 }

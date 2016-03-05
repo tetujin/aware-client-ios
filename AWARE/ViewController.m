@@ -173,6 +173,9 @@
         if (_sensorManager != nil) {
             [_sensorManager syncAllSensorsWithDBInBackground];
         }
+        
+        GoogleCalPush * cal = [[GoogleCalPush alloc] initWithSensorName:SENSOR_PLUGIN_GOOGLE_CAL_PUSH withAwareStudy:awareStudy];
+        [cal checkCalendarEvents:nil];
     }
 }
 

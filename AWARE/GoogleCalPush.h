@@ -19,5 +19,6 @@ extern NSString* const PLUGIN_GOOGLE_CAL_PUSH_CALENDAE_NAME;
 - (void) showTargetCalendarCondition;
 
 - (void) makePrepopulateEvetnsWith:(NSDate *) date;
+- (void) checkCalendarEvents:(id) sender;
 
 @end
