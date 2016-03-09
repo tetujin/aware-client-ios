@@ -56,6 +56,7 @@ NSString* const SENSOR_ROTATION = @"rotation";
 NSString* const SENSOR_SCREEN = @"screen";
 NSString* const SENSOR_TELEPHONY = @"telephony";
 NSString* const SENSOR_WIFI = @"wifi";
+NSString* const SENSOR_BLE_HEARTRATE = @"ble_heartrate";
 NSString* const SENSOR_GRAVITY = @"gravity";
 NSString* const SENSOR_LINEAR_ACCELEROMETER = @"linear_accelerometer";
 NSString* const SENSOR_TIMEZONE = @"timezone";

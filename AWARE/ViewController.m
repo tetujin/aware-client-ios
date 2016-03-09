@@ -28,6 +28,7 @@
 #import "Scheduler.h"
 #import "Memory.h"
 #import "Labels.h"
+#import "BLEHeartRate.h"
 
 // Library
 #import <SVProgressHUD.h>
@@ -378,6 +379,7 @@
     [_sensors addObject:[self getCelContent:@"Processor" desc:@"CPU workload for user, system and idle(%)" image:@"ic_action_processor" key:SENSOR_PROCESSOR]];
     // WiFi sensing
     [_sensors addObject:[self getCelContent:@"WiFi" desc:@"Wi-Fi sensing" image:@"ic_action_wifi" key:SENSOR_WIFI]];
+    [_sensors addObject:[self getCelContent:@"BLE Heart Rate" desc:@"Collect heart rate data from an external heart rate sensor via BLE." image:@"ic_action_heartrate" key:SENSOR_BLE_HEARTRATE]];
     
     // [_sensors addObject:[self getCelContent:@"AmbientNoise" desc:@"AmbientNoise sensor" image:@"" key:SENSOR_AMBIENT_NOISE]];
     // [_sensors addObject:[self getCelContent:@"Light" desc:@"Ambient Light (lux)" image:@"ic_action_light"]];
@@ -406,7 +408,7 @@
     [_sensors addObject:[self getCelContent:@"Communication" desc:@"The Communication sensor logs communication events such as calls and messages, performed by or received by the user." image:@"ic_action_communication" key:SENSOR_CALLS]];
     [_sensors addObject:[self getCelContent:@"Label" desc:@"Save event labels to the AWARE server" image:@"ic_action_label" key:SENSOR_LABELS]];
      // Microsoft Band
-    [_sensors addObject:[self getCelContent:@"Micrsoft Band" desc:@"Wearable sensor data (such as Heart Rate, UV, and Skin Temperature) from Microsoft Band." image:@"ic_action_msband" key:SENSOR_PLUGIN_MSBAND]];
+    [_sensors addObject:[self getCelContent:@"Microsoft Band" desc:@"Wearable sensor data (such as Heart Rate, UV, and Skin Temperature) from Microsoft Band." image:@"ic_action_msband" key:SENSOR_PLUGIN_MSBAND]];
     // Google Login
     [_sensors addObject:[self getCelContent:@"Google Login" desc:@"Multi-device management using Google Account." image:@"google_logo" key:SENSOR_PLUGIN_GOOGLE_LOGIN]];
     // Balanced Campus Calendar
@@ -561,6 +563,10 @@
     AWARESensor *memory = [[Memory alloc] initWithSensorName:@"memory" withAwareStudy:awareStudy];
     [memory startSensor:60*15 withSettings:nil];
     [_sensorManager addNewSensor:memory];
+    
+    AWARESensor *bleHeartRate = [[BLEHeartRate alloc] initWithSensorName:SENSOR_BLE_HEARTRATE withAwareStudy:awareStudy];
+    [bleHeartRate startSensor:60*15 withSettings:nil];
+    [_sensorManager addNewSensor:bleHeartRate];
     
 //    AWARESensor * labels = [[Labels alloc] initWithSensorName:SENSOR_LABELS withAwareStudy:awareStudy];
 //    [labels startSensor:60*15 withSettings:nil];

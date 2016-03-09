@@ -72,6 +72,7 @@
 		169A7B431BFFDE8F00A7C06D /* Rotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 169A7B421BFFDE8F00A7C06D /* Rotation.m */; };
 		169A7B461C0052F800A7C06D /* Gravity.m in Sources */ = {isa = PBXBuildFile; fileRef = 169A7B451C0052F800A7C06D /* Gravity.m */; };
 		169A7B491C00591A00A7C06D /* LinearAccelerometer.m in Sources */ = {isa = PBXBuildFile; fileRef = 169A7B481C00591A00A7C06D /* LinearAccelerometer.m */; };
+		169ACDC61C90C92C000072D6 /* BLEHeartRate.m in Sources */ = {isa = PBXBuildFile; fileRef = 169ACDC51C90C92C000072D6 /* BLEHeartRate.m */; };
 		16C1FF7D1C617FB100C070AA /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16C1FF7C1C617FB100C070AA /* Accelerate.framework */; };
 		16C1FF7F1C617FC300C070AA /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16C1FF7E1C617FC300C070AA /* GLKit.framework */; };
 		16C1FF971C64501D00C070AA /* Debug.m in Sources */ = {isa = PBXBuildFile; fileRef = 16C1FF961C64501D00C070AA /* Debug.m */; };
@@ -245,6 +246,8 @@
 		169A7B451C0052F800A7C06D /* Gravity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Gravity.m; sourceTree = "<group>"; };
 		169A7B471C00591A00A7C06D /* LinearAccelerometer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LinearAccelerometer.h; sourceTree = "<group>"; };
 		169A7B481C00591A00A7C06D /* LinearAccelerometer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LinearAccelerometer.m; sourceTree = "<group>"; };
+		169ACDC41C90C92C000072D6 /* BLEHeartRate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BLEHeartRate.h; sourceTree = "<group>"; };
+		169ACDC51C90C92C000072D6 /* BLEHeartRate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BLEHeartRate.m; sourceTree = "<group>"; };
 		16C1FF7C1C617FB100C070AA /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		16C1FF7E1C617FC300C070AA /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		16C1FF951C64501D00C070AA /* Debug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Debug.h; sourceTree = "<group>"; };
@@ -670,6 +673,7 @@
 				16F3BC141C76D31B005ACEE3 /* LocalCoreDataStorageHelper.m */,
 				168C71D91C67B9CC00878DD8 /* AWAREDataUploader.h */,
 				168C71DA1C67B9CC00878DD8 /* AWAREDataUploader.m */,
+				169ACDC71C90C931000072D6 /* HeartRate */,
 				165DED011C87C9CD002C88CA /* Labels */,
 				165915121C7CBC7300806744 /* Memory */,
 				16C1FF911C644F5000C070AA /* Debug */,
@@ -694,6 +698,15 @@
 				1602ADC81C45B0F0002B3121 /* ESM */,
 			);
 			name = Sensors;
+			sourceTree = "<group>";
+		};
+		169ACDC71C90C931000072D6 /* HeartRate */ = {
+			isa = PBXGroup;
+			children = (
+				169ACDC41C90C92C000072D6 /* BLEHeartRate.h */,
+				169ACDC51C90C92C000072D6 /* BLEHeartRate.m */,
+			);
+			name = HeartRate;
 			sourceTree = "<group>";
 		};
 		16C1FDAD1C617D4500C070AA /* HealthKit */ = {
@@ -1136,6 +1149,7 @@
 				1659150D1C7BAB0B00806744 /* Orientation.m in Sources */,
 				16F09B221C249C5F005C1EB8 /* GoogleCalPull.m in Sources */,
 				168683091C08050100CB4266 /* ActivityRecognition.m in Sources */,
+				169ACDC61C90C92C000072D6 /* BLEHeartRate.m in Sources */,
 				1671A5D81C3B583C00C41F44 /* GoogleCalPush.m in Sources */,
 				169A7B2A1BFF1C2300A7C06D /* Battery.m in Sources */,
 				1623CE771BFD1B2C00EFAD72 /* AWARE.xcdatamodeld in Sources */,
