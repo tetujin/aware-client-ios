@@ -8,9 +8,7 @@
 
 #import "ESM.h"
 
-@implementation ESM {
-//    NSTimer * uploadTimer;
-}
+@implementation ESM
 
 - (instancetype)initWithSensorName:(NSString *)sensorName withAwareStudy:(AWAREStudy *)study{
     self = [super initWithSensorName:@"esms" withAwareStudy:study];
@@ -48,7 +46,6 @@
     "esm_scale_max_label text default '',"
     "esm_scale_min_label text default '',"
     "esm_scale_step integer default 0";
-//    NSLog(@"%@", query);
     [super createTable:query];
 }
 
@@ -61,19 +58,11 @@
     NSLog(@"[%@] Create Table", [self getSensorName]);
     [self createTable];
     
-    NSLog(@"[%@] Start ESM uploader", [self getSensorName]);
-//    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval
-//                                                   target:self
-//                                                 selector:@selector(syncAwareDB)
-//                                                 userInfo:nil
-//                                                  repeats:YES];
+//    NSLog(@"[%@] Start ESM uploader", [self getSensorName]);
     return YES;
 }
 
 - (BOOL) stopSensor {
-    // Stop a sync timer
-//    [uploadTimer invalidate];
-//    uploadTimer = nil;
     return YES;
 }
 

@@ -89,6 +89,9 @@ extern NSString * const NotificationActionTwoIdent;
 extern NSString* const SENSOR_LABELS_TYPE_TEXT;
 extern NSString* const SENSOR_LABELS_TYPE_BOOLEAN;
 
+extern NSString* const SENSOR_PLUGIN_CAMPUS_ESM_NOTIFICATION_BOOLEAN;
+extern NSString* const SENSOR_PLUGIN_CAMPUS_ESM_NOTIFICATION_LABEL;
+
 
 @interface AWAREKeys: NSObject
 

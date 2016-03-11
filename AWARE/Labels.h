@@ -17,4 +17,23 @@
        triggerTime:(NSDate *)triggerTime
       answeredTime:(NSDate *)answeredTime;
 
++ (void) cancelAllScheduledNotification;
+
++ (void) sendYesNoQuestionWithNotificationMessage:(NSString *)message
+                                            title:(NSString*)title
+                                        soundFlag:(bool) flag
+                                         fireDate:(NSDate *) fireDate
+                                   repeatInterval:(NSCalendarUnit) calendarUnit
+                                         userInfo:(NSDictionary *)userInfo
+                                  iconBadgeNumber:(NSInteger) iconNumber;
+
+
++ (void) sendEditLabelRequestWithNotificationMessage:(NSString *)message
+                                               title:(NSString*)title
+                                           soundFlag:(bool) flag
+                                            fireDate:(NSDate *) fireDate
+                                      repeatInterval:(NSCalendarUnit) calendarUnit
+                                            userInfo:(NSDictionary *)userInfo
+                                     iconBadgeNumber:(NSInteger) iconNumber;
+
 @end

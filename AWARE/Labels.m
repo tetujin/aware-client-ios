@@ -66,17 +66,63 @@
 //                                 repeatInterval:NSCalendarUnitHour
 //                                       userInfo:[NSDictionary dictionaryWithObject:@"hungry" forKey:@"key"]
 //                                iconBadgeNumber:1];
-    
     return  YES;
 }
 
-- (BOOL) stopSensor{
++ (BOOL) stopSensor {
+    [self cancelAllScheduledNotification];
+    return YES;
+}
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////
+
+
++ (void) cancelAllScheduledNotification {
     for (UILocalNotification *notification in [[UIApplication sharedApplication] scheduledLocalNotifications]) {
-        if([notification.category isEqualToString:[self getSensorName]]) {
+        if([notification.category isEqualToString:SENSOR_LABELS_TYPE_BOOLEAN]) {
+            [[UIApplication sharedApplication] cancelLocalNotification:notification];
+        }else if ([notification.category isEqualToString:SENSOR_LABELS_TYPE_TEXT]){
             [[UIApplication sharedApplication] cancelLocalNotification:notification];
         }
     }
-    return YES;
+}
+
+
++ (void) sendYesNoQuestionWithNotificationMessage:(NSString *)message
+                                            title:(NSString*)title
+                                        soundFlag:(bool) flag
+                                         fireDate:(NSDate *) fireDate
+                                   repeatInterval:(NSCalendarUnit) calendarUnit
+                                         userInfo:(NSDictionary *)userInfo
+                                  iconBadgeNumber:(NSInteger) iconNumber {
+    [AWAREUtils sendLocalNotificationForMessage:message
+                                          title:title
+                                      soundFlag:flag
+                                       category:SENSOR_LABELS_TYPE_BOOLEAN
+                                       fireDate:fireDate
+                                 repeatInterval:calendarUnit
+                                       userInfo:userInfo
+                                iconBadgeNumber:iconNumber];
+}
+
++ (void) sendEditLabelRequestWithNotificationMessage:(NSString *)message
+                                          title:(NSString*)title
+                                      soundFlag:(bool) flag
+                                       fireDate:(NSDate *) fireDate
+                                 repeatInterval:(NSCalendarUnit) calendarUnit
+                                       userInfo:(NSDictionary *)userInfo
+                                iconBadgeNumber:(NSInteger) iconNumber {
+        [AWAREUtils sendLocalNotificationForMessage:message
+                                              title:title
+                                          soundFlag:flag
+                                           category:SENSOR_LABELS_TYPE_TEXT
+                                           fireDate:fireDate
+                                     repeatInterval:calendarUnit
+                                           userInfo:userInfo
+                                    iconBadgeNumber:iconNumber];
 }
 
 

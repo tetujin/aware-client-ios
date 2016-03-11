@@ -90,6 +90,10 @@ NSString * const NotificationActionTwoIdent = @"ACTION_TWO";
 NSString* const SENSOR_LABELS_TYPE_TEXT = @"labels_text";
 NSString* const SENSOR_LABELS_TYPE_BOOLEAN = @"labels_boolean";
 
+
+NSString* const SENSOR_PLUGIN_CAMPUS_ESM_NOTIFICATION_BOOLEAN = @"plugin_cmu_esm_notification_boolean";
+NSString* const SENSOR_PLUGIN_CAMPUS_ESM_NOTIFICATION_LABEL = @"plugin_cmu_esm_notification_label";
+
 @implementation AWAREKeys
 
 @end

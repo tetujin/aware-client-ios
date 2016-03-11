@@ -52,64 +52,7 @@
         [application setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
 
         if ([AWAREUtils getCurrentOSVersionAsFloat] >= 9.0) {
-            // For text edit
-            UIMutableUserNotificationAction *addLabelAction = [[UIMutableUserNotificationAction alloc] init];
-            addLabelAction.title = @"Add Label";
-            addLabelAction.activationMode = UIUserNotificationActivationModeBackground;
-            addLabelAction.authenticationRequired = YES;
-            addLabelAction.identifier = @"add_label_action";
-            addLabelAction.behavior = UIUserNotificationActionBehaviorTextInput;
-            
-            UIMutableUserNotificationCategory *labelCategory = [[UIMutableUserNotificationCategory alloc] init];
-            labelCategory.identifier = SENSOR_LABELS_TYPE_TEXT;
-            [labelCategory setActions:@[addLabelAction] forContext:UIUserNotificationActionContextMinimal];
-            
-            // For label yes/no
-            UIMutableUserNotificationAction *addTrueAction = [[UIMutableUserNotificationAction alloc] init];
-            addTrueAction.title = @"YES";
-            addTrueAction.activationMode = UIUserNotificationActivationModeBackground;
-            addTrueAction.authenticationRequired = YES;
-            addTrueAction.identifier = @"add_bool_action_yes";
-            
-            UIMutableUserNotificationAction *addFalseAction = [[UIMutableUserNotificationAction alloc] init];
-            addFalseAction.title = @"NO";
-            addFalseAction.activationMode = UIUserNotificationActivationModeBackground;
-            addFalseAction.authenticationRequired = YES;
-            addFalseAction.destructive = YES;
-            addFalseAction.identifier = @"add_bool_action_no";
-            
-            UIMutableUserNotificationCategory *labelBooleanCategory = [[UIMutableUserNotificationCategory alloc] init];
-            labelBooleanCategory.identifier = SENSOR_LABELS_TYPE_BOOLEAN;
-            [labelBooleanCategory setActions:@[addTrueAction, addFalseAction] forContext:UIUserNotificationActionContextMinimal];
-            
-            // Upload date
-//            UIMutableUserNotificationAction *esmAction = [[UIMutableUserNotificationAction alloc] init];
-//            esmAction.title = @"Answer";
-//            esmAction.identifier = @"esm_action";
-//            esmAction.activationMode = UIUserNotificationActivationModeForeground;
-//            esmAction.authenticationRequired = YES;
-//            esmAction.destructive = NO;
-//            
-//            UIMutableUserNotificationCategory *esmCategory = [[UIMutableUserNotificationCategory alloc] init];
-//            esmCategory.identifier = SENSOR_PLUGIN_CAMPUS;
-//            [esmCategory setActions:@[esmAction] forContext:UIUserNotificationActionContextMinimal];
-            
-            
-            // Upload date
-            UIMutableUserNotificationAction *updateCalendarAction = [[UIMutableUserNotificationAction alloc] init];
-            updateCalendarAction.title = @"Update";
-            updateCalendarAction.identifier = @"calendar_update_action";
-            updateCalendarAction.activationMode = UIUserNotificationActivationModeBackground;
-            updateCalendarAction.authenticationRequired = YES;
-            updateCalendarAction.destructive = NO;
-            
-            UIMutableUserNotificationCategory *category = [[UIMutableUserNotificationCategory alloc] init];
-            category.identifier = SENSOR_PLUGIN_GOOGLE_CAL_PUSH;
-            [category setActions:@[updateCalendarAction] forContext:UIUserNotificationActionContextDefault];
-            
-            
-            // Make a category
-            NSSet *categories = [NSSet setWithObjects: category,labelCategory, labelBooleanCategory, nil];
+            NSSet *categories = [self getNotificationCategories];
             
             // Set the category to application
             UIUserNotificationType types = UIUserNotificationTypeBadge|
@@ -126,10 +69,6 @@
             UIUserNotificationSettings *mySettings = [UIUserNotificationSettings settingsForTypes:types categories:nil];
             [application registerUserNotificationSettings:mySettings];
         }
-
-        
-
-        
     }
     
     [[UIApplication sharedApplication] cancelAllLocalNotifications];
@@ -198,6 +137,100 @@ void exceptionHandler(NSException *exception) {
     };
 }
 
+
+- (NSSet*) getNotificationCategories {
+    // For text edit
+    UIMutableUserNotificationAction *addLabelAction = [[UIMutableUserNotificationAction alloc] init];
+    addLabelAction.title = @"Add Label";
+    addLabelAction.activationMode = UIUserNotificationActivationModeBackground;
+    addLabelAction.authenticationRequired = YES;
+    addLabelAction.identifier = @"add_label_action";
+    addLabelAction.behavior = UIUserNotificationActionBehaviorTextInput;
+    
+    UIMutableUserNotificationCategory *labelCategory = [[UIMutableUserNotificationCategory alloc] init];
+    labelCategory.identifier = SENSOR_LABELS_TYPE_TEXT;
+    [labelCategory setActions:@[addLabelAction] forContext:UIUserNotificationActionContextMinimal];
+    
+    // For label yes/no
+    UIMutableUserNotificationAction *addTrueAction = [[UIMutableUserNotificationAction alloc] init];
+    addTrueAction.title = @"YES";
+    addTrueAction.activationMode = UIUserNotificationActivationModeBackground;
+    addTrueAction.authenticationRequired = YES;
+    addTrueAction.identifier = @"add_bool_action_yes";
+    
+    UIMutableUserNotificationAction *addFalseAction = [[UIMutableUserNotificationAction alloc] init];
+    addFalseAction.title = @"NO";
+    addFalseAction.activationMode = UIUserNotificationActivationModeBackground;
+    addFalseAction.authenticationRequired = YES;
+    addFalseAction.destructive = YES;
+    addFalseAction.identifier = @"add_bool_action_no";
+    
+    UIMutableUserNotificationCategory *labelBooleanCategory = [[UIMutableUserNotificationCategory alloc] init];
+    labelBooleanCategory.identifier = SENSOR_LABELS_TYPE_BOOLEAN;
+    [labelBooleanCategory setActions:@[addTrueAction, addFalseAction] forContext:UIUserNotificationActionContextMinimal];
+    
+    // Upload date
+    //            UIMutableUserNotificationAction *esmAction = [[UIMutableUserNotificationAction alloc] init];
+    //            esmAction.title = @"Answer";
+    //            esmAction.identifier = @"esm_action";
+    //            esmAction.activationMode = UIUserNotificationActivationModeForeground;
+    //            esmAction.authenticationRequired = YES;
+    //            esmAction.destructive = NO;
+    //
+    //            UIMutableUserNotificationCategory *esmCategory = [[UIMutableUserNotificationCategory alloc] init];
+    //            esmCategory.identifier = SENSOR_PLUGIN_CAMPUS;
+    //            [esmCategory setActions:@[esmAction] forContext:UIUserNotificationActionContextMinimal];
+    
+    
+    // Upload date
+    UIMutableUserNotificationAction *updateCalendarAction = [[UIMutableUserNotificationAction alloc] init];
+    updateCalendarAction.title = @"Update";
+    updateCalendarAction.identifier = @"calendar_update_action";
+    updateCalendarAction.activationMode = UIUserNotificationActivationModeBackground;
+    updateCalendarAction.authenticationRequired = YES;
+    updateCalendarAction.destructive = NO;
+    
+    UIMutableUserNotificationCategory *category = [[UIMutableUserNotificationCategory alloc] init];
+    category.identifier = SENSOR_PLUGIN_GOOGLE_CAL_PUSH;
+    [category setActions:@[updateCalendarAction] forContext:UIUserNotificationActionContextDefault];
+    
+    
+    /** ---- ESM ---- **/
+    // [For quick editing label]
+    // make a action
+    UIMutableUserNotificationAction *esmEditLabelAction = [[UIMutableUserNotificationAction alloc] init];
+    esmEditLabelAction.title = @"Edit";
+    esmEditLabelAction.activationMode = UIUserNotificationActivationModeBackground;
+    esmEditLabelAction.authenticationRequired = YES;
+    esmEditLabelAction.identifier = @"edit_label_action";
+    esmEditLabelAction.behavior = UIUserNotificationActionBehaviorTextInput;
+    // make a notification category
+    UIMutableUserNotificationCategory *esmEditLabelCategory = [[UIMutableUserNotificationCategory alloc] init];
+    esmEditLabelCategory.identifier = SENSOR_PLUGIN_CAMPUS_ESM_NOTIFICATION_LABEL;
+    [esmEditLabelCategory setActions:@[esmEditLabelAction] forContext:UIUserNotificationActionContextMinimal];
+    
+    
+    // [For quick YES/NO question]
+    // make a action
+    UIMutableUserNotificationAction *esmAnswerYesAction = [[UIMutableUserNotificationAction alloc] init];
+    esmAnswerYesAction.title = @"YES";
+    esmAnswerYesAction.activationMode = UIUserNotificationActivationModeBackground;
+    esmAnswerYesAction.authenticationRequired = YES;
+    esmAnswerYesAction.identifier = @"esm_answer_yes_action";
+    // make a action
+    UIMutableUserNotificationAction *esmAnswerNoAction = [[UIMutableUserNotificationAction alloc] init];
+    esmAnswerNoAction.title = @"NO";
+    esmAnswerNoAction.activationMode = UIUserNotificationActivationModeBackground;
+    esmAnswerNoAction.authenticationRequired = YES;
+    esmAnswerNoAction.destructive = YES;
+    esmAnswerNoAction.identifier = @"esm_answer_no_action";
+    // make a notification category
+    UIMutableUserNotificationCategory *esmAnswerBoolQuestionCategory = [[UIMutableUserNotificationCategory alloc] init];
+    esmAnswerBoolQuestionCategory.identifier = SENSOR_PLUGIN_CAMPUS_ESM_NOTIFICATION_BOOLEAN;
+    [esmAnswerBoolQuestionCategory setActions:@[esmAnswerNoAction, esmAnswerYesAction] forContext:UIUserNotificationActionContextMinimal];
+    
+    return [NSSet setWithObjects: category,labelCategory, labelBooleanCategory, esmEditLabelCategory, esmAnswerBoolQuestionCategory, nil];
+}
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
