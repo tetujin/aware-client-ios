@@ -38,7 +38,6 @@
     // Override point for customization after application launch.
     
     awareStudy = [[AWAREStudy alloc] init];
-    
 //    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
 //    [defaults setBool:YES forKey:@"APP_STATE"];
     
@@ -47,7 +46,6 @@
     if ([AWAREUtils getCurrentOSVersionAsFloat] >= 8.0) {
         // Set remote notifications
         [application registerForRemoteNotifications];
-        
         // Set background fetch
         [application setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
 
