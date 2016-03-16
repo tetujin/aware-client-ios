@@ -98,6 +98,11 @@
     [query setObject:[NSNumber numberWithDouble:mem_free] forKey:KEY_MEMORY_FREE];
     [query setObject:[NSNumber numberWithDouble:mem_total] forKey:KEY_MEMORY_TOTAL];
     
+    if ([self isDebug]) {
+        [AWAREUtils sendLocalNotificationForMessage:[NSString stringWithFormat:@"used: %f free: %f total: %f", mem_used, mem_free, mem_total] soundFlag:NO];
+    }
+    
+    
     [self saveData:query];
  
 }

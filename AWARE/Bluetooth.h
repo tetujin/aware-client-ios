@@ -8,10 +8,17 @@
 
 #import "AWARESensor.h"
 #import "AWAREKeys.h"
+// Public Bluetooth API
 #import <CoreBluetooth/CoreBluetooth.h>
 #import <CoreLocation/CoreLocation.h>
+// Private API (for Classic Bluetooth)
+/**
+ * This library(MDBluetoothManager) is made by @michaeldomer under the GPL(ver3) licence.
+ * Also, you can access his original source code from GitHub(https://github.com/michaeldorner/BeeTee) .
+ */
+#import "MDBluetoothManager.h"
 
-@interface Bluetooth : AWARESensor <AWARESensorDelegate, CBCentralManagerDelegate, CBPeripheralDelegate>
+@interface Bluetooth : AWARESensor <AWARESensorDelegate, CBCentralManagerDelegate, CBPeripheralDelegate,MDBluetoothObserverProtocol>
 @property (nonatomic, strong) CBCentralManager *myCentralManager;
 @property (nonatomic, strong) CBPeripheral *peripheralDevice;
 

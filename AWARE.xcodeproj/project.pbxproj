@@ -40,6 +40,14 @@
 		164DD6651C1FB1A400ADA92B /* Proximity.m in Sources */ = {isa = PBXBuildFile; fileRef = 164DD6641C1FB1A400ADA92B /* Proximity.m */; };
 		164DD6681C1FBA9100ADA92B /* Timezone.m in Sources */ = {isa = PBXBuildFile; fileRef = 164DD6671C1FBA9100ADA92B /* Timezone.m */; };
 		164DD66A1C1FC1F900ADA92B /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 164DD6691C1FC1F900ADA92B /* MapKit.framework */; };
+		1658700A1C986D4F008B99D2 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 165870091C986D4F008B99D2 /* QuartzCore.framework */; };
+		165870191C9878F9008B99D2 /* BluetoothManager.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 165870181C9878F9008B99D2 /* BluetoothManager.framework */; };
+		1658701C1C98C280008B99D2 /* MobileWiFi.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1658701B1C98C280008B99D2 /* MobileWiFi.framework */; };
+		165870221C9903D3008B99D2 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 165870211C9903D3008B99D2 /* IOKit.framework */; };
+		165870261C990805008B99D2 /* AmbientLight.m in Sources */ = {isa = PBXBuildFile; fileRef = 165870251C990805008B99D2 /* AmbientLight.m */; };
+		165870801C9A0B96008B99D2 /* BluetoothScanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 1658707A1C9A0B96008B99D2 /* BluetoothScanner.m */; };
+		165870811C9A0B96008B99D2 /* MDBluetoothDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 1658707C1C9A0B96008B99D2 /* MDBluetoothDevice.m */; };
+		165870821C9A0B96008B99D2 /* MDBluetoothManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1658707E1C9A0B96008B99D2 /* MDBluetoothManager.m */; };
 		1659150D1C7BAB0B00806744 /* Orientation.m in Sources */ = {isa = PBXBuildFile; fileRef = 1659150C1C7BAB0B00806744 /* Orientation.m */; };
 		165915111C7CBC6D00806744 /* Memory.m in Sources */ = {isa = PBXBuildFile; fileRef = 165915101C7CBC6D00806744 /* Memory.m */; };
 		165A8B6F1C03B90500898C6C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 165A8B6E1C03B90500898C6C /* GoogleService-Info.plist */; };
@@ -191,6 +199,43 @@
 		164DD6661C1FBA9100ADA92B /* Timezone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Timezone.h; sourceTree = "<group>"; };
 		164DD6671C1FBA9100ADA92B /* Timezone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Timezone.m; sourceTree = "<group>"; };
 		164DD6691C1FC1F900ADA92B /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		165870091C986D4F008B99D2 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		165870181C9878F9008B99D2 /* BluetoothManager.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BluetoothManager.framework; path = System/Library/PrivateFrameworks/BluetoothManager.framework; sourceTree = SDKROOT; };
+		1658701B1C98C280008B99D2 /* MobileWiFi.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileWiFi.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/PrivateFrameworks/MobileWiFi.framework; sourceTree = DEVELOPER_DIR; };
+		1658701D1C98C337008B99D2 /* MobileWiFi.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MobileWiFi.h; path = MobileWiFi/MobileWiFi.h; sourceTree = "<group>"; };
+		1658701E1C98C337008B99D2 /* WiFiDeviceClient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = WiFiDeviceClient.h; path = MobileWiFi/WiFiDeviceClient.h; sourceTree = "<group>"; };
+		1658701F1C98C337008B99D2 /* WiFiManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = WiFiManager.h; path = MobileWiFi/WiFiManager.h; sourceTree = "<group>"; };
+		165870201C98C337008B99D2 /* WiFiNetwork.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = WiFiNetwork.h; path = MobileWiFi/WiFiNetwork.h; sourceTree = "<group>"; };
+		165870211C9903D3008B99D2 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/IOKit.framework; sourceTree = DEVELOPER_DIR; };
+		165870241C990805008B99D2 /* AmbientLight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AmbientLight.h; sourceTree = "<group>"; };
+		165870251C990805008B99D2 /* AmbientLight.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AmbientLight.m; sourceTree = "<group>"; };
+		165870281C9908D7008B99D2 /* IOKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = IOKit.h; path = IOKit/IOKit.h; sourceTree = "<group>"; };
+		165870291C9908D7008B99D2 /* IOKitKeys.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = IOKitKeys.h; path = IOKit/IOKitKeys.h; sourceTree = "<group>"; };
+		1658702A1C9908D7008B99D2 /* IOKitLib.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = IOKitLib.h; path = IOKit/IOKitLib.h; sourceTree = "<group>"; };
+		1658702B1C9908D7008B99D2 /* IOReturn.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = IOReturn.h; path = IOKit/IOReturn.h; sourceTree = "<group>"; };
+		1658702C1C9908D7008B99D2 /* IOTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = IOTypes.h; path = IOKit/IOTypes.h; sourceTree = "<group>"; };
+		1658702D1C9908D7008B99D2 /* OSKext.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OSKext.h; path = IOKit/OSKext.h; sourceTree = "<group>"; };
+		1658702E1C9908D7008B99D2 /* OSMessageNotification.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OSMessageNotification.h; path = IOKit/OSMessageNotification.h; sourceTree = "<group>"; };
+		165870301C9908F2008B99D2 /* IOHIDDisplay.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = IOHIDDisplay.h; path = IOKit/hid/IOHIDDisplay.h; sourceTree = "<group>"; };
+		165870311C9908F2008B99D2 /* IOHIDEvent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = IOHIDEvent.h; path = IOKit/hid/IOHIDEvent.h; sourceTree = "<group>"; };
+		165870321C9908F2008B99D2 /* IOHIDEventData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = IOHIDEventData.h; path = IOKit/hid/IOHIDEventData.h; sourceTree = "<group>"; };
+		165870331C9908F2008B99D2 /* IOHIDEventQueue.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = IOHIDEventQueue.h; path = IOKit/hid/IOHIDEventQueue.h; sourceTree = "<group>"; };
+		165870341C9908F2008B99D2 /* IOHIDEventSystem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = IOHIDEventSystem.h; path = IOKit/hid/IOHIDEventSystem.h; sourceTree = "<group>"; };
+		165870351C9908F2008B99D2 /* IOHIDEventSystemClient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = IOHIDEventSystemClient.h; path = IOKit/hid/IOHIDEventSystemClient.h; sourceTree = "<group>"; };
+		165870361C9908F2008B99D2 /* IOHIDEventTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = IOHIDEventTypes.h; path = IOKit/hid/IOHIDEventTypes.h; sourceTree = "<group>"; };
+		165870371C9908F2008B99D2 /* IOHIDNotification.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = IOHIDNotification.h; path = IOKit/hid/IOHIDNotification.h; sourceTree = "<group>"; };
+		165870381C9908F2008B99D2 /* IOHIDService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = IOHIDService.h; path = IOKit/hid/IOHIDService.h; sourceTree = "<group>"; };
+		165870391C9908F2008B99D2 /* IOHIDSession.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = IOHIDSession.h; path = IOKit/hid/IOHIDSession.h; sourceTree = "<group>"; };
+		1658703A1C9908F2008B99D2 /* IOHIDUserDevice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = IOHIDUserDevice.h; path = IOKit/hid/IOHIDUserDevice.h; sourceTree = "<group>"; };
+		165870771C9A0B96008B99D2 /* BluetoothDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BluetoothDevice.h; path = BluetoothManager/BluetoothDevice.h; sourceTree = "<group>"; };
+		165870781C9A0B96008B99D2 /* BluetoothManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BluetoothManager.h; path = BluetoothManager/BluetoothManager.h; sourceTree = "<group>"; };
+		165870791C9A0B96008B99D2 /* BluetoothScanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BluetoothScanner.h; path = BluetoothManager/BluetoothScanner.h; sourceTree = "<group>"; };
+		1658707A1C9A0B96008B99D2 /* BluetoothScanner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BluetoothScanner.m; path = BluetoothManager/BluetoothScanner.m; sourceTree = "<group>"; };
+		1658707B1C9A0B96008B99D2 /* MDBluetoothDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MDBluetoothDevice.h; path = BluetoothManager/MDBluetoothDevice.h; sourceTree = "<group>"; };
+		1658707C1C9A0B96008B99D2 /* MDBluetoothDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MDBluetoothDevice.m; path = BluetoothManager/MDBluetoothDevice.m; sourceTree = "<group>"; };
+		1658707D1C9A0B96008B99D2 /* MDBluetoothManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MDBluetoothManager.h; path = BluetoothManager/MDBluetoothManager.h; sourceTree = "<group>"; };
+		1658707E1C9A0B96008B99D2 /* MDBluetoothManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MDBluetoothManager.m; path = BluetoothManager/MDBluetoothManager.m; sourceTree = "<group>"; };
+		1658707F1C9A0B96008B99D2 /* MDBluetoothObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MDBluetoothObserver.h; path = BluetoothManager/MDBluetoothObserver.h; sourceTree = "<group>"; };
 		1659150B1C7BAB0B00806744 /* Orientation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Orientation.h; sourceTree = "<group>"; };
 		1659150C1C7BAB0B00806744 /* Orientation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Orientation.m; sourceTree = "<group>"; };
 		1659150F1C7CBC6D00806744 /* Memory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Memory.h; sourceTree = "<group>"; };
@@ -292,6 +337,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				165870221C9903D3008B99D2 /* IOKit.framework in Frameworks */,
+				1658701C1C98C280008B99D2 /* MobileWiFi.framework in Frameworks */,
+				165870191C9878F9008B99D2 /* BluetoothManager.framework in Frameworks */,
+				1658700A1C986D4F008B99D2 /* QuartzCore.framework in Frameworks */,
 				165DECF61C83AD7D002C88CA /* ExternalAccessory.framework in Frameworks */,
 				1623CEB11BFD40FB00EFAD72 /* AVFoundation.framework in Frameworks */,
 				168683031C07C43600CB4266 /* AudioToolbox.framework in Frameworks */,
@@ -398,6 +447,7 @@
 			children = (
 				169A7B391BFFC8B100A7C06D /* Wifi.h */,
 				169A7B3A1BFFC8B100A7C06D /* Wifi.m */,
+				1658701A1C98C22D008B99D2 /* MobileWiFi */,
 			);
 			name = Wifi;
 			sourceTree = "<group>";
@@ -443,6 +493,7 @@
 			children = (
 				160EE9BB1C050B4C00015688 /* Bluetooth.h */,
 				160EE9BC1C050B4C00015688 /* Bluetooth.m */,
+				1658700B1C9878C3008B99D2 /* BluetoothManager */,
 			);
 			name = Bluetooth;
 			sourceTree = "<group>";
@@ -618,6 +669,76 @@
 			name = BalancedCampusJournal;
 			sourceTree = "<group>";
 		};
+		1658700B1C9878C3008B99D2 /* BluetoothManager */ = {
+			isa = PBXGroup;
+			children = (
+				165870771C9A0B96008B99D2 /* BluetoothDevice.h */,
+				165870781C9A0B96008B99D2 /* BluetoothManager.h */,
+				165870791C9A0B96008B99D2 /* BluetoothScanner.h */,
+				1658707A1C9A0B96008B99D2 /* BluetoothScanner.m */,
+				1658707B1C9A0B96008B99D2 /* MDBluetoothDevice.h */,
+				1658707C1C9A0B96008B99D2 /* MDBluetoothDevice.m */,
+				1658707D1C9A0B96008B99D2 /* MDBluetoothManager.h */,
+				1658707E1C9A0B96008B99D2 /* MDBluetoothManager.m */,
+				1658707F1C9A0B96008B99D2 /* MDBluetoothObserver.h */,
+			);
+			name = BluetoothManager;
+			sourceTree = "<group>";
+		};
+		1658701A1C98C22D008B99D2 /* MobileWiFi */ = {
+			isa = PBXGroup;
+			children = (
+				1658701D1C98C337008B99D2 /* MobileWiFi.h */,
+				1658701E1C98C337008B99D2 /* WiFiDeviceClient.h */,
+				1658701F1C98C337008B99D2 /* WiFiManager.h */,
+				165870201C98C337008B99D2 /* WiFiNetwork.h */,
+			);
+			name = MobileWiFi;
+			sourceTree = "<group>";
+		};
+		165870231C9907CD008B99D2 /* AmbientLight */ = {
+			isa = PBXGroup;
+			children = (
+				165870241C990805008B99D2 /* AmbientLight.h */,
+				165870251C990805008B99D2 /* AmbientLight.m */,
+				165870271C9908C8008B99D2 /* IOKit */,
+			);
+			name = AmbientLight;
+			sourceTree = "<group>";
+		};
+		165870271C9908C8008B99D2 /* IOKit */ = {
+			isa = PBXGroup;
+			children = (
+				165870281C9908D7008B99D2 /* IOKit.h */,
+				165870291C9908D7008B99D2 /* IOKitKeys.h */,
+				1658702A1C9908D7008B99D2 /* IOKitLib.h */,
+				1658702B1C9908D7008B99D2 /* IOReturn.h */,
+				1658702C1C9908D7008B99D2 /* IOTypes.h */,
+				1658702D1C9908D7008B99D2 /* OSKext.h */,
+				1658702E1C9908D7008B99D2 /* OSMessageNotification.h */,
+				1658702F1C9908E2008B99D2 /* hid */,
+			);
+			name = IOKit;
+			sourceTree = "<group>";
+		};
+		1658702F1C9908E2008B99D2 /* hid */ = {
+			isa = PBXGroup;
+			children = (
+				165870301C9908F2008B99D2 /* IOHIDDisplay.h */,
+				165870311C9908F2008B99D2 /* IOHIDEvent.h */,
+				165870321C9908F2008B99D2 /* IOHIDEventData.h */,
+				165870331C9908F2008B99D2 /* IOHIDEventQueue.h */,
+				165870341C9908F2008B99D2 /* IOHIDEventSystem.h */,
+				165870351C9908F2008B99D2 /* IOHIDEventSystemClient.h */,
+				165870361C9908F2008B99D2 /* IOHIDEventTypes.h */,
+				165870371C9908F2008B99D2 /* IOHIDNotification.h */,
+				165870381C9908F2008B99D2 /* IOHIDService.h */,
+				165870391C9908F2008B99D2 /* IOHIDSession.h */,
+				1658703A1C9908F2008B99D2 /* IOHIDUserDevice.h */,
+			);
+			name = hid;
+			sourceTree = "<group>";
+		};
 		1659150E1C7BAB0F00806744 /* Orientation */ = {
 			isa = PBXGroup;
 			children = (
@@ -673,6 +794,7 @@
 				16F3BC141C76D31B005ACEE3 /* LocalCoreDataStorageHelper.m */,
 				168C71D91C67B9CC00878DD8 /* AWAREDataUploader.h */,
 				168C71DA1C67B9CC00878DD8 /* AWAREDataUploader.m */,
+				165870231C9907CD008B99D2 /* AmbientLight */,
 				169ACDC71C90C931000072D6 /* HeartRate */,
 				165DED011C87C9CD002C88CA /* Labels */,
 				165915121C7CBC7300806744 /* Memory */,
@@ -859,6 +981,10 @@
 		2A3CA9F5620967BACB187EB7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				165870211C9903D3008B99D2 /* IOKit.framework */,
+				1658701B1C98C280008B99D2 /* MobileWiFi.framework */,
+				165870181C9878F9008B99D2 /* BluetoothManager.framework */,
+				165870091C986D4F008B99D2 /* QuartzCore.framework */,
 				165DECF51C83AD7D002C88CA /* ExternalAccessory.framework */,
 				1623FFDC1C5ADB6E00F3E3E4 /* libSystem.tbd */,
 				9ED04F29ED60F3FCC960F6CD /* libPods-AWARE.a */,
@@ -1112,6 +1238,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1623CEB71BFE175F00EFAD72 /* AWARESensor.m in Sources */,
+				165870261C990805008B99D2 /* AmbientLight.m in Sources */,
 				169A7B351BFFB67800A7C06D /* Network.m in Sources */,
 				166F1A701C602B44002124FB /* AWAREHealthKit.m in Sources */,
 				169A7B3B1BFFC8B100A7C06D /* Wifi.m in Sources */,
@@ -1121,6 +1248,7 @@
 				164810401C20ECC300B830D9 /* AWAREEsmViewController.m in Sources */,
 				16E155331C252B4D00316321 /* AWAREPlugin.m in Sources */,
 				164DD6681C1FBA9100ADA92B /* Timezone.m in Sources */,
+				165870821C9A0B96008B99D2 /* MDBluetoothManager.m in Sources */,
 				16C251BB1C6C45270018D156 /* Reachability.m in Sources */,
 				169384F31C17C3D300A17F2C /* MSBand.m in Sources */,
 				16228A511C22E9FE0081C839 /* AWARESchedule.m in Sources */,
@@ -1155,6 +1283,8 @@
 				1623CE771BFD1B2C00EFAD72 /* AWARE.xcdatamodeld in Sources */,
 				1677AF321C2B4BDE00F7C482 /* MultiESMObject.m in Sources */,
 				16DEA23A1C5535B300B607C9 /* AWAREEsmUtils.m in Sources */,
+				165870811C9A0B96008B99D2 /* MDBluetoothDevice.m in Sources */,
+				165870801C9A0B96008B99D2 /* BluetoothScanner.m in Sources */,
 				1623CEBC1BFE390600EFAD72 /* Accelerometer.m in Sources */,
 				164810851C21C08C00B830D9 /* ESM.m in Sources */,
 				1663BB801C2C94C3003F03DF /* ESMStorageHelper.m in Sources */,
@@ -1321,6 +1451,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
+					"$(SDKROOT)$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks",
 				);
 				INFOPLIST_FILE = AWARE/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -1347,6 +1478,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
+					"$(SDKROOT)$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks",
 				);
 				INFOPLIST_FILE = AWARE/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;

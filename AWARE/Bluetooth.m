@@ -10,13 +10,19 @@
 
 #import "Bluetooth.h"
 
-@implementation Bluetooth{
-//    NSTimer * uploadTimer;
+@implementation Bluetooth {
+    MDBluetoothManager * mdBluetoothManager;
+    NSTimer * scanTimer;
+    int scanDuration;
+    int defaultScanInterval;
 }
 
 - (instancetype)initWithSensorName:(NSString *)sensorName withAwareStudy:(AWAREStudy *)study{
     self = [super initWithSensorName:sensorName withAwareStudy:study];
     if (self) {
+        mdBluetoothManager = [MDBluetoothManager sharedInstance];
+        scanDuration = 30; // 30 second
+        defaultScanInterval = 60*5; // 5 min
     }
     return self;
 }
@@ -37,37 +43,109 @@
 
 
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
+    // Send a table create query (for both BLE and classic Bluetooth)
     NSLog(@"[%@] Create Table", [self getSensorName]);
-    // Send a table create query
     [self createTable];
     
-    NSLog(@"[%@] Start BLE Sensor", [self getSensorName]);
+    double interval = [self getSensorSetting:settings withKey:@"frequency_bluetooth"];
+    if (interval <= 0) {
+        interval = defaultScanInterval;
+    }
+    
+    scanTimer = [NSTimer scheduledTimerWithTimeInterval:interval
+                                                 target:self
+                                               selector:@selector(startToScanBluetooth:)
+                                               userInfo:nil
+                                                repeats:YES];
+    [scanTimer fire];
+    
     // Init a CBCentralManager for sensing BLE devices
+    NSLog(@"[%@] Start BLE Sensor", [self getSensorName]);
     _myCentralManager = [[CBCentralManager alloc] initWithDelegate:self queue:nil];
     
-    // Set and start a data upload timer
-//    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval
-//                                                   target:self
-//                                                 selector:@selector(syncAwareDB)
-//                                                 userInfo:nil repeats:YES];
+    // Set notification events for scanning classic bluetooth devices
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(bluetoothDeviceDiscoveredNotification:) name:@"BluetoothDeviceDiscoveredNotification" object:nil];
+    
     return YES;
 }
 
+
 - (BOOL) stopSensor {
-    // Stop a sync timer
-//    [uploadTimer invalidate];
-//    uploadTimer = nil;
     // Stop a scan ble devices by CBCentralManager
     [_myCentralManager stopScan];
     _myCentralManager = nil;
+    
+    // Stop the scan timer for the classic bluetooth
+    [scanTimer invalidate];
+    scanTimer = nil;
+    // Stop scanning classic bluetooth
+    [mdBluetoothManager endScan];
+    
     return YES;
 }
 
 
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
+// For Classic Bluetooth
 
 
+-(void)startToScanBluetooth:(id)sender{
+    // Set up for a classic bluetooth
+    if (![mdBluetoothManager bluetoothIsPowered]) {
+        [mdBluetoothManager turnBluetoothOn];
+    }
+    
+    if (![mdBluetoothManager isScanning]) {
+        NSString *scanStartMessage = [NSString stringWithFormat:@"Start scanning Bluetooth devices during %d second!", scanDuration];
+        NSLog(@"...Start to scan Bluetooth devices.");
+        if ([self isDebug]){
+           [AWAREUtils sendLocalNotificationForMessage:scanStartMessage soundFlag:NO];
+        }
+        // start to scan Bluetooth devices
+        [mdBluetoothManager startScan];
+        // stop to scan Bluetooth devies after "scanDuration" second.
+        [self performSelector:@selector(stopToScanBluetooth) withObject:0 afterDelay:scanDuration];
+        NSLog(@"...After %d second, the Blueooth scan duration will be end.", scanDuration);
+    }
+}
+
+- (void) stopToScanBluetooth {
+    if ([self isDebug]){
+        [AWAREUtils sendLocalNotificationForMessage:@"Stop scanning Bluetooth devices!" soundFlag:NO];
+    }
+    [mdBluetoothManager endScan];
+}
+
+- (void)bluetoothDeviceDiscoveredNotification:(NSNotification *)notification{
+    NSLog(@"%@", notification.description);
+    
+    // save a bluetooth device information
+    BluetoothDevice * bluetoothDevice = notification.object;
+    NSString* uuid = bluetoothDevice.address;
+    NSString* name = bluetoothDevice.name;
+    if (uuid == nil) uuid = @"";
+    if (name == nil) name = @"";
+    
+    NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
+    NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+    [dic setObject:unixtime forKey:@"timestamp"];
+    [dic setObject:[self getDeviceId] forKey:@"device_id"];
+    [dic setObject:uuid forKey:@"bt_address"]; //varchar
+    [dic setObject:name forKey:@"bt_name"]; //text
+    [dic setObject:@-1  forKey:@"bt_rssi"]; //int
+    [dic setObject:@"Classic Bluetooth" forKey:@"label"]; //text
+    [self setLatestValue:[NSString stringWithFormat:@"%@, %@, %@", name, uuid, @"-1"]];
+    [self saveData:dic toLocalFile:SENSOR_BLUETOOTH];
+    
+    if ([self isDebug]) {
+        [AWAREUtils sendLocalNotificationForMessage:[NSString stringWithFormat:@"Find a new Blueooth device! %@ (%@)", name, uuid] soundFlag:NO];
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+// For BLE
 
 - (void)centralManagerDidUpdateState:(CBCentralManager *)central
 {
@@ -134,11 +212,6 @@
     [dic setObject:@"BLE" forKey:@"label"]; //text
     [self setLatestValue:[NSString stringWithFormat:@"%@, %@, %@", name, uuid, RSSI]];
     [self saveData:dic toLocalFile:SENSOR_BLUETOOTH];
-
-    // only scan
-//    _peripheralDevice = peripheral;
-//    _peripheralDevice.delegate = self;
-//    [_myCentralManager connectPeripheral:_peripheralDevice options:nil];
 }
 
 
@@ -166,24 +239,7 @@
 
 - (void) peripheral:(CBPeripheral *)peripheral didDiscoverCharacteristicsForService:(CBService *)service error:(NSError *)error
 {
-//    for (CBCharacteristic *characteristic in service.characteristics) {
-        //[_peripheralDevice readValueForCharacteristic:characteristic];
-//        if([characteristic.UUID isEqual:[CBUUID UUIDWithString:UUID_HUM_CONF]]){ // 湿度
-//            [peripheral writeValue:enableData forCharacteristic:characteristic type:CBCharacteristicWriteWithResponse];
-//            [peripheral setNotifyValue:YES forCharacteristic:[self getCharateristicWithUUID:UUID_HUM_DATA from:service]];
-//        } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:UUID_IRT_CONF]]){ //気温
-//            [peripheral writeValue:enableData forCharacteristic:characteristic type:CBCharacteristicWriteWithResponse];
-//            [peripheral setNotifyValue:YES forCharacteristic:[self getCharateristicWithUUID:UUID_IRT_DATA from:service]];
-//        } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:UUID_OPT_CONF]]){ // 温度
-//            [peripheral writeValue:enableData forCharacteristic:characteristic type:CBCharacteristicWriteWithResponse];
-//            [peripheral setNotifyValue:YES forCharacteristic:[self getCharateristicWithUUID:UUID_OPT_DATA from:service]];
-//        } else if ( [characteristic.UUID isEqual:[CBUUID UUIDWithString:UUID_BAR_CONF]]){ //気圧
-//            [peripheral writeValue:enableData forCharacteristic:characteristic type:CBCharacteristicWriteWithResponse];
-//            [peripheral setNotifyValue:YES forCharacteristic:[self getCharateristicWithUUID:UUID_BAR_DATA from:service]];
-//        } else if ( [characteristic.UUID isEqual:[CBUUID UUIDWithString:UUID_MOV_CONF]]){ //モーションセン
-//        } else if([characteristic.UUID isEqual:[CBUUID UUIDWithString:UUID_ID_DATA]]){ // ビープ音
-//        }
-//    }
+
 }
 
 
@@ -202,18 +258,7 @@
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic
              error:(NSError *)error
 {
-//    NSLog(@"---");
-//    if([characteristic.UUID isEqual:[CBUUID UUIDWithString:UUID_MOV_DATA]]){
-//        [self getMotionData:characteristic.value];
-//    } else if([characteristic.UUID isEqual:[CBUUID UUIDWithString:UUID_HUM_DATA]]){ // 湿度
-//        [self getHumidityData:characteristic.value];
-//    } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:UUID_IRT_DATA]]){ //気温
-//        [self getTemperatureData:characteristic.value];
-//    } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:UUID_OPT_DATA]]){ //光 Optical Sensor
-//        [self getOpticalData:characteristic.value];
-//    } else if ( [characteristic.UUID isEqual:[CBUUID UUIDWithString:UUID_BAR_DATA]]){ //気圧 Barometric Pressure Sensor
-//        [self getBmpData:characteristic.value];
-//    }
+
 }
 
 

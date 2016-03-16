@@ -15,8 +15,7 @@
     EKSource *awareCalSource;
     NSMutableArray *allEvents;
     EKEvent * dailyNotification;
-//    NSTimer * timer;
-    
+
     NSString* googleCalPullSensorName;
     
     NSString* PRIMARY_GOOGLE_ACCOUNT_NAME;
@@ -278,7 +277,7 @@
     NSDate *endDate = [[NSCalendar currentCalendar] dateByAddingComponents:offsetComponentsEnd toDate:now options:0];
     
     NSDateComponents *offsetComponentsStart = [NSDateComponents new];
-    [offsetComponentsStart setDay:-7];
+    [offsetComponentsStart setDay:-14];
     [offsetComponentsStart setMonth:0];
     [offsetComponentsStart setYear:0];
     NSDate *startDate = [[NSCalendar currentCalendar] dateByAddingComponents:offsetComponentsStart toDate:now options:0];

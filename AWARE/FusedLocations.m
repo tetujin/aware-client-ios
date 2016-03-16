@@ -124,7 +124,7 @@
             [locationManager requestAlwaysAuthorization];
         }
         // Set a movement threshold for new events.
-//         locationManager.distanceFilter = 250;
+        locationManager.distanceFilter = 100; //250
         [locationManager startMonitoringVisits]; // This method calls didVisit.
         [locationManager startUpdatingLocation];
         [fusedLocationsSensor setBufferSize:10];
@@ -154,16 +154,6 @@
         [locationTimer invalidate];
         locationTimer = nil;
     }
-    
-//    if (locationDataUploadTimer != nil) {
-//        [locationDataUploadTimer invalidate];
-//        locationDataUploadTimer = nil;
-//    }
-//    
-//    if(visitDataUploadTimer != nil){
-//        [visitDataUploadTimer invalidate];
-//        visitDataUploadTimer = nil;
-//    }
     
     locationManager = nil;
     
@@ -231,6 +221,10 @@
     [dic setObject:@"" forKey:@"label"];
     [self setLatestValue:[NSString stringWithFormat:@"%f, %f, %f", location.coordinate.latitude, location.coordinate.longitude, location.speed]];
     [fusedLocationsSensor saveData:dic];
+    
+    if ([self isDebug]) {
+        [AWAREUtils sendLocalNotificationForMessage:[NSString stringWithFormat:@"Location: %f, %f, %f", location.coordinate.latitude, location.coordinate.longitude, location.speed] soundFlag:NO];
+    }
 }
 
 

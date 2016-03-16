@@ -29,9 +29,12 @@
 #import "Memory.h"
 #import "Labels.h"
 #import "BLEHeartRate.h"
+#import "AmbientLight.h"
 
 // Library
 #import <SVProgressHUD.h>
+
+#import <QuartzCore/QuartzCore.h>
 
 @interface ViewController ()
 @end
@@ -62,6 +65,10 @@
     NSTimer *listUpdateTimer;
     
     AWAREStudy * awareStudy;
+}
+
+- (void)gridMenu:(RNGridMenu *)gridMenu willDismissWithSelectedItem:(RNGridMenuItem *)item atIndex:(NSInteger)itemIndex {
+    NSLog(@"Dismissed with item %ld: %@", itemIndex, item.title);
 }
 
 - (void)viewDidLoad {
@@ -567,6 +574,10 @@
     AWARESensor *bleHeartRate = [[BLEHeartRate alloc] initWithSensorName:SENSOR_BLE_HEARTRATE withAwareStudy:awareStudy];
     [bleHeartRate startSensor:60*15 withSettings:nil];
     [_sensorManager addNewSensor:bleHeartRate];
+    
+//    AWARESensor * ambientLigth = [[AmbientLight alloc] initWithSensorName:@"ambientLight" withAwareStudy:awareStudy];
+//    [ambientLigth startSensor:60*15 withSettings:nil];
+//    [_sensorManager addNewSensor:ambientLigth];
     
 //    AWARESensor * labels = [[Labels alloc] initWithSensorName:SENSOR_LABELS withAwareStudy:awareStudy];
 //    [labels startSensor:60*15 withSettings:nil];

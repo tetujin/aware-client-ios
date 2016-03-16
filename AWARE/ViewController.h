@@ -11,8 +11,9 @@
 #import <CoreLocation/CoreLocation.h>
 #import <SVProgressHUD.h>
 #import "AWARESensorManager.h"
+#import <RNGridMenu/RNGridMenu.h>
 
-@interface ViewController : UITableViewController <UITableViewDelegate, UITableViewDataSource, UITabBarControllerDelegate, UINavigationBarDelegate, CLLocationManagerDelegate, UIAlertViewDelegate>
+@interface ViewController : UITableViewController <UITableViewDelegate, UITableViewDataSource, UITabBarControllerDelegate, UINavigationBarDelegate, CLLocationManagerDelegate, UIAlertViewDelegate, RNGridMenuDelegate>
 
 @property (nonatomic,strong) NSMutableArray *sensors;
 @property (strong, nonatomic) AWARESensorManager* sensorManager;

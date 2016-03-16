@@ -7,11 +7,9 @@
 //
 
 #import "Wifi.h"
-
-
+#import "MobileWiFi/MobileWiFi.h"
 
 @implementation Wifi{
-//    NSTimer * uploadTimer;
     NSTimer * sensingTimer;
 }
 
@@ -52,16 +50,6 @@
         frequency = 60.0f;
     }
     
-    // Set a buffer size for reducing file access
-//    [self setBufferSize:10];
-    
-    // Set and start a data uploader with an interval
-//    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval
-//                                                   target:self
-//                                                 selector:@selector(syncAwareDB)
-//                                                 userInfo:nil
-//                                                  repeats:YES];
-    
     // Set and start a data upload interval
     NSLog(@"[%@] Start Wifi Sensor", [self getSensorName]);
     sensingTimer = [NSTimer scheduledTimerWithTimeInterval:frequency
@@ -69,6 +57,7 @@
                                                   selector:@selector(getWifiInfo)
                                                   userInfo:nil
                                                    repeats:YES];
+    [self getWifiInfo];
     
     return YES;
 }
@@ -80,11 +69,6 @@
         [sensingTimer invalidate];
         sensingTimer = nil;
     }
-    // Stop a sync timer
-//    if (uploadTimer != nil) {
-//        [uploadTimer invalidate];
-//        uploadTimer = nil;
-//    }
     return YES;
 }
 
@@ -95,11 +79,9 @@
 - (void) getWifiInfo {
     // Get wifi information
     //http://www.heapoverflow.me/question-how-to-get-wifi-ssid-in-ios9-after-captivenetwork-is-depracted-and-calls-for-wif-31555640
-
     NSArray *ifs = (__bridge_transfer id)CNCopySupportedInterfaces();
     for (NSString *ifnam in ifs) {
         NSDictionary *info = (__bridge_transfer id)CNCopyCurrentNetworkInfo((__bridge CFStringRef)ifnam);
-//        NSLog(@"info:%@",info);
         NSString *bssid = @"";
         NSString *ssid = @"";
         
@@ -142,27 +124,64 @@
         [dic setObject:@"" forKey:@"label"]; //text
         [self setLatestValue:[NSString stringWithFormat:@"%@ (%@)",ssid, finalBSSID]];
         [self saveData:dic toLocalFile:SENSOR_WIFI];
+        
+        if ([self isDebug]) {
+            [AWAREUtils sendLocalNotificationForMessage:[NSString stringWithFormat:@"%@ (%@)",ssid, finalBSSID] soundFlag:NO];
+        }
     }
-    
-    //    NSArray * networkInterfaces = [NEHotspotHelper supportedNetworkInterfaces];
-    //    NSLog(@"Networks %@",networkInterfaces);
-    //    for(NEHotspotNetwork *hotspotNetwork in [NEHotspotHelper supportedNetworkInterfaces]) {
-    //        NSString *ssid = hotspotNetwork.SSID;
-    //        NSString *bssid = hotspotNetwork.BSSID;
-    //        BOOL secure = hotspotNetwork.secure;
-    //        BOOL autoJoined = hotspotNetwork.autoJoined;
-    //        double signalStrength = hotspotNetwork.signalStrength;
-    //    }
-    
-    //    CFArrayRef myArray = CNCopySupportedInterfaces();
-    //    CFDictionaryRef captiveNetWork = CNCopyCurrentNetworkInfo(CFArrayGetValueAtIndex(myArray, 0));
-    //    NSLog(@"Connected at : %@", captiveNetWork);
-    //    NSDictionary *myDictionnary = (__bridge NSDictionary *)captiveNetWork;
-    //    NSString *bssid = [myDictionnary objectForKey:@"BSSID"];
-    //    NSLog(@"BSSID : %@", bssid);
 }
 
 
 
+static WiFiManagerRef _manager;
+static void scan_callback(WiFiDeviceClientRef device, CFArrayRef results, CFErrorRef error, void *token);
+
+- (void) scanWifi {
+    _manager = WiFiManagerClientCreate(kCFAllocatorDefault, 0);
+    
+    CFArrayRef devices = WiFiManagerClientCopyDevices(_manager);
+    if (!devices) {
+        fprintf(stderr, "Couldn't get WiFi devices. Bailing.\n");
+//        exit(EXIT_FAILURE);
+        return;
+    }
+    
+    WiFiDeviceClientRef client = (WiFiDeviceClientRef)CFArrayGetValueAtIndex(devices, 0);
+    
+    WiFiManagerClientScheduleWithRunLoop(_manager, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode);
+    WiFiDeviceClientScanAsync(client, (__bridge CFDictionaryRef)[NSDictionary dictionary], scan_callback, 0);
+    
+    CFRelease(devices);
+    
+    CFRunLoopRun();
+}
+
+static void scan_callback(WiFiDeviceClientRef device, CFArrayRef results, CFErrorRef error, void *token)
+{
+    NSLog(@"Finished scanning! networks: %@", results);
+    
+    WiFiManagerClientUnscheduleFromRunLoop(_manager);
+    CFRelease(_manager);
+    
+    CFRunLoopStop(CFRunLoopGetCurrent());
+}
+
+
+//    NSArray * networkInterfaces = [NEHotspotHelper supportedNetworkInterfaces];
+//    NSLog(@"Networks %@",networkInterfaces);
+//    for(NEHotspotNetwork *hotspotNetwork in [NEHotspotHelper supportedNetworkInterfaces]) {
+//        NSString *ssid = hotspotNetwork.SSID;
+//        NSString *bssid = hotspotNetwork.BSSID;
+//        BOOL secure = hotspotNetwork.secure;
+//        BOOL autoJoined = hotspotNetwork.autoJoined;
+//        double signalStrength = hotspotNetwork.signalStrength;
+//    }
+
+//    CFArrayRef myArray = CNCopySupportedInterfaces();
+//    CFDictionaryRef captiveNetWork = CNCopyCurrentNetworkInfo(CFArrayGetValueAtIndex(myArray, 0));
+//    NSLog(@"Connected at : %@", captiveNetWork);
+//    NSDictionary *myDictionnary = (__bridge NSDictionary *)captiveNetWork;
+//    NSString *bssid = [myDictionnary objectForKey:@"BSSID"];
+//    NSLog(@"BSSID : %@", bssid);
 
 @end
