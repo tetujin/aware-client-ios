@@ -50,6 +50,8 @@
 		165870821C9A0B96008B99D2 /* MDBluetoothManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1658707E1C9A0B96008B99D2 /* MDBluetoothManager.m */; };
 		1659150D1C7BAB0B00806744 /* Orientation.m in Sources */ = {isa = PBXBuildFile; fileRef = 1659150C1C7BAB0B00806744 /* Orientation.m */; };
 		165915111C7CBC6D00806744 /* Memory.m in Sources */ = {isa = PBXBuildFile; fileRef = 165915101C7CBC6D00806744 /* Memory.m */; };
+		1659CC6E1C9A130500ABBCEE /* PamSchema.m in Sources */ = {isa = PBXBuildFile; fileRef = 1659CC6D1C9A130500ABBCEE /* PamSchema.m */; };
+		1659CC731C9A14A400ABBCEE /* images in Resources */ = {isa = PBXBuildFile; fileRef = 1659CC721C9A14A400ABBCEE /* images */; };
 		165A8B6F1C03B90500898C6C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 165A8B6E1C03B90500898C6C /* GoogleService-Info.plist */; };
 		165A8B701C03B90500898C6C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 165A8B6E1C03B90500898C6C /* GoogleService-Info.plist */; };
 		165A8B711C03B90500898C6C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 165A8B6E1C03B90500898C6C /* GoogleService-Info.plist */; };
@@ -240,6 +242,9 @@
 		1659150C1C7BAB0B00806744 /* Orientation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Orientation.m; sourceTree = "<group>"; };
 		1659150F1C7CBC6D00806744 /* Memory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Memory.h; sourceTree = "<group>"; };
 		165915101C7CBC6D00806744 /* Memory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Memory.m; sourceTree = "<group>"; };
+		1659CC6C1C9A130500ABBCEE /* PamSchema.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PamSchema.h; path = PAM/PamSchema.h; sourceTree = "<group>"; };
+		1659CC6D1C9A130500ABBCEE /* PamSchema.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PamSchema.m; path = PAM/PamSchema.m; sourceTree = "<group>"; };
+		1659CC721C9A14A400ABBCEE /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; name = images; path = PAM/images; sourceTree = "<group>"; };
 		165A8B6E1C03B90500898C6C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
 		165A8B721C03C0B300898C6C /* GoogleLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GoogleLoginViewController.h; sourceTree = "<group>"; };
 		165A8B731C03C0B300898C6C /* GoogleLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GoogleLoginViewController.m; sourceTree = "<group>"; };
@@ -757,6 +762,16 @@
 			name = Memory;
 			sourceTree = "<group>";
 		};
+		1659CC6F1C9A130A00ABBCEE /* PAM */ = {
+			isa = PBXGroup;
+			children = (
+				1659CC6C1C9A130500ABBCEE /* PamSchema.h */,
+				1659CC6D1C9A130500ABBCEE /* PamSchema.m */,
+				1659CC721C9A14A400ABBCEE /* images */,
+			);
+			name = PAM;
+			sourceTree = "<group>";
+		};
 		165DED011C87C9CD002C88CA /* Labels */ = {
 			isa = PBXGroup;
 			children = (
@@ -779,6 +794,7 @@
 				1663BB7F1C2C94C3003F03DF /* ESMStorageHelper.m */,
 				16DEA2381C5535B300B607C9 /* AWAREEsmUtils.h */,
 				16DEA2391C5535B300B607C9 /* AWAREEsmUtils.m */,
+				1659CC6F1C9A130A00ABBCEE /* PAM */,
 			);
 			name = ESM;
 			sourceTree = "<group>";
@@ -1159,6 +1175,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1659CC731C9A14A400ABBCEE /* images in Resources */,
 				1623CE7C1BFD1B2C00EFAD72 /* LaunchScreen.storyboard in Resources */,
 				165A8B6F1C03B90500898C6C /* GoogleService-Info.plist in Resources */,
 				1623CE791BFD1B2C00EFAD72 /* Assets.xcassets in Resources */,
@@ -1248,6 +1265,7 @@
 				164810401C20ECC300B830D9 /* AWAREEsmViewController.m in Sources */,
 				16E155331C252B4D00316321 /* AWAREPlugin.m in Sources */,
 				164DD6681C1FBA9100ADA92B /* Timezone.m in Sources */,
+				1659CC6E1C9A130500ABBCEE /* PamSchema.m in Sources */,
 				165870821C9A0B96008B99D2 /* MDBluetoothManager.m in Sources */,
 				16C251BB1C6C45270018D156 /* Reachability.m in Sources */,
 				169384F31C17C3D300A17F2C /* MSBand.m in Sources */,

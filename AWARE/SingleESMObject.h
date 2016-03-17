@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 
 extern NSString* const KEY_ESM_TYPE;
+extern NSString* const KEY_ESM_STYLE;
 extern NSString* const KEY_ESM_TITLE;
 extern NSString* const KEY_ESM_SUBMIT;
 extern NSString* const KEY_ESM_INSTRUCTIONS;
@@ -33,11 +34,63 @@ extern NSString* const KEY_ESM_SCALE_STEP;
 extern NSString* const KEY_ESM_IOS;
 
 @interface SingleESMObject : NSObject
+{
+//    //extern NSString* const KEY_ESM_TYPE;
+//    NSNumber* type;
+//    //extern NSString* const KEY_ESM_TITLE;
+//    NSString * title;
+//    //extern NSString* const KEY_ESM_SUBMIT;
+//    NSString * submit;
+//    //extern NSString* const KEY_ESM_INSTRUCTIONS;
+//    NSString * instructions;
+//    //extern NSString* const KEY_ESM_RADIOS;
+//    NSArray * radios;
+//    //extern NSString* const KEY_ESM_CHECKBOXES;
+//    NSArray * checkBoxes;
+//    //extern NSString* const KEY_ESM_LIKERT_MAX;
+//    NSNumber * likertMax;
+//    //extern NSString* const KEY_ESM_LIKERT_MAX_LABEL;
+//    NSNumber * likertMaxLabel;
+//    //extern NSString* const KEY_ESM_LIKERT_MIN_LABEL;
+//    NSString * likertMinLabel;
+//    //extern NSString* const KEY_ESM_LIKERT_STEP;
+//    NSNumber * likerStep;
+//    //extern NSString* const KEY_ESM_QUICK_ANSWERS;
+//    NSArray * quickAnswers;
+//    //extern NSString* const KEY_ESM_EXPIRATION_THRESHOLD;
+//    NSNumber * expirationThreshold;
+//    //extern NSString* const KEY_ESM_STATUS;
+//    NSNumber * status;
+//    //extern NSString* const KEY_DOUBLE_ESM_USER_ANSWER_TIMESTAMP;
+//    NSString * userAnswerTimestamp;
+//    //extern NSString* const KEY_ESM_USER_ANSWER;
+//    NSString * userAnswer;
+//    //extern NSString* const KEY_ESM_TRIGGER;
+//    NSString * esmTrigger;
+//    //extern NSString* const KEY_ESM_SCALE_MIN;
+//    NSNumber * scaleMin;
+//    //extern NSString* const KEY_ESM_SCALE_MAX;
+//    NSNumber * scaleMax;
+//    //extern NSString* const KEY_ESM_SCALE_START;
+//    NSNumber * scaleStart;
+//    //extern NSString* const KEY_ESM_SCALE_MAX_LABEL;
+//    NSString * scaleMaxLabel;
+//    //extern NSString* const KEY_ESM_SCALE_MIN_LABEL;
+//    NSString * scaleMinLabel;
+//    //extern NSString* const KEY_ESM_SCALE_STEP;
+//    NSNumber * scaleStep;
+//    //@property (strong, nonatomic) IBOutlet NSNumber * esmiOS;
+//    
+//    NSMutableDictionary * esmObject;
+//    NSMutableDictionary * esmObjectWithKey;
+}
 
-- (instancetype)initWithEsm:(NSDictionary* )esmObject;
+- (instancetype)initWithEsm:(NSDictionary* )esmObj;
 
 //extern NSString* const KEY_ESM_TYPE;
 @property (strong, nonatomic) IBOutlet NSNumber* type;
+// extern NSString* const KEY_ESM_STYLE;
+@property (strong, nonatomic) IBOutlet NSNumber* style;
 //extern NSString* const KEY_ESM_TITLE;
 @property (strong, nonatomic) IBOutlet NSString * title;
 //extern NSString* const KEY_ESM_SUBMIT;

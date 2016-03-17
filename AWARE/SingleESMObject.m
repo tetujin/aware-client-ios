@@ -9,6 +9,7 @@
 #import "SingleESMObject.h"
 
 NSString* const KEY_ESM_TYPE = @"esm_type";
+NSString* const KEY_ESM_STYLE = @"esm_style";
 NSString* const KEY_ESM_TITLE = @"esm_title";
 NSString* const KEY_ESM_SUBMIT = @"esm_submit";
 NSString* const KEY_ESM_INSTRUCTIONS = @"esm_instructions";
@@ -34,44 +35,94 @@ NSString* const KEY_ESM_SCALE_STEP = @"esm_scale_step";
 
 @implementation SingleESMObject
 
-- (instancetype)initWithEsm:(NSDictionary* )esmObject
+@synthesize type;
+@synthesize style;
+//extern NSString* const KEY_ESM_TITLE;
+@synthesize title;
+//extern NSString* const KEY_ESM_SUBMIT;
+@synthesize submit;
+//extern NSString* const KEY_ESM_INSTRUCTIONS;
+@synthesize instructions;
+//extern NSString* const KEY_ESM_RADIOS;
+@synthesize radios;
+//extern NSString* const KEY_ESM_CHECKBOXES;
+@synthesize checkBoxes;
+//extern NSString* const KEY_ESM_LIKERT_MAX;
+@synthesize likertMax;
+//extern NSString* const KEY_ESM_LIKERT_MAX_LABEL;
+@synthesize likertMaxLabel;
+//extern NSString* const KEY_ESM_LIKERT_MIN_LABEL;
+@synthesize likertMinLabel;
+//extern NSString* const KEY_ESM_LIKERT_STEP;
+@synthesize likerStep;
+//extern NSString* const KEY_ESM_QUICK_ANSWERS;
+@synthesize quickAnswers;
+//extern NSString* const KEY_ESM_EXPIRATION_THRESHOLD;
+@synthesize expirationThreshold;
+//extern NSString* const KEY_ESM_STATUS;
+@synthesize status;
+//extern NSString* const KEY_DOUBLE_ESM_USER_ANSWER_TIMESTAMP;
+@synthesize userAnswerTimestamp;
+//extern NSString* const KEY_ESM_USER_ANSWER;
+@synthesize userAnswer;
+//extern NSString* const KEY_ESM_TRIGGER;
+@synthesize esmTrigger;
+//extern NSString* const KEY_ESM_SCALE_MIN;
+@synthesize scaleMin;
+//extern NSString* const KEY_ESM_SCALE_MAX;
+@synthesize scaleMax;
+//extern NSString* const KEY_ESM_SCALE_START;
+@synthesize scaleStart;
+//extern NSString* const KEY_ESM_SCALE_MAX_LABEL;
+@synthesize scaleMaxLabel;
+//extern NSString* const KEY_ESM_SCALE_MIN_LABEL;
+@synthesize scaleMinLabel;
+//extern NSString* const KEY_ESM_SCALE_STEP;
+@synthesize scaleStep;
+//@property (strong, nonatomic) IBOutlet NSNumber * esmiOS;
+
+@synthesize esmObject;
+@synthesize esmObjectWithKey;
+
+- (instancetype)initWithEsm:(NSDictionary* )esmObj
 {
     self = [super init];
     if (self) {
-        [self setEsm:esmObject];
+        [self setEsm:esmObj];
     }
     return self;
 }
 
 
-- (void) setEsm:(NSDictionary *) esmObject {
+- (void) setEsm:(NSDictionary *) esmObj {
     
-    NSDictionary * esm = [esmObject objectForKey:@"esm"];
+    NSDictionary * esm = [esmObj objectForKey:@"esm"];
     
-    _esmObjectWithKey = [[NSMutableDictionary alloc] initWithDictionary:esmObject];
-    _esmObject = [[NSMutableDictionary alloc] initWithDictionary:esm];
-    _type = [NSNumber numberWithInteger:[[esm objectForKey:KEY_ESM_TYPE] integerValue]];
-    _title = [esm objectForKey:KEY_ESM_TITLE];
-    _submit = [esm objectForKey:KEY_ESM_SUBMIT];
-    _instructions = [esm objectForKey:KEY_ESM_INSTRUCTIONS];
-    _radios = [esm objectForKey:KEY_ESM_RADIOS];
-    _checkBoxes = [esm objectForKey:KEY_ESM_CHECKBOXES];
-    _likertMax = [NSNumber numberWithInteger:[[esm objectForKey:KEY_ESM_LIKERT_MAX] integerValue]];
-    _likertMaxLabel = [esm objectForKey:KEY_ESM_LIKERT_MAX_LABEL];
-    _likertMinLabel = [esm objectForKey:KEY_ESM_LIKERT_MIN_LABEL];
-    _likerStep = [NSNumber numberWithInteger:[[esm objectForKey:KEY_ESM_LIKERT_STEP] integerValue]];
-    _quickAnswers = [esm objectForKey:KEY_ESM_QUICK_ANSWERS];
-    _expirationThreshold = [NSNumber numberWithInteger:[[esm objectForKey:KEY_ESM_EXPIRATION_THRESHOLD] integerValue]];
-    _status = [NSNumber numberWithInteger:[[esm objectForKey:KEY_ESM_STATUS] integerValue]];
-    _userAnswerTimestamp = [esm objectForKey:KEY_ESM_USER_ANSWER_TIMESTAMP];
-    _userAnswer = [esm objectForKey:KEY_ESM_USER_ANSWER];
-    _esmTrigger = [esm objectForKey:KEY_ESM_TRIGGER];
-    _scaleMin = [NSNumber numberWithInteger:[[esm objectForKey:KEY_ESM_SCALE_MIN] integerValue]];
-    _scaleMax = [NSNumber numberWithInteger:[[esm objectForKey:KEY_ESM_SCALE_MAX] integerValue]];
-    _scaleStart = [NSNumber numberWithInteger:[[esm objectForKey:KEY_ESM_SCALE_START] integerValue]];
-    _scaleMaxLabel = [esm objectForKey:KEY_ESM_SCALE_MAX_LABEL];
-    _scaleMinLabel = [esm objectForKey:KEY_ESM_SCALE_MIN_LABEL];
-    _scaleStep = [NSNumber numberWithInteger:[[esm objectForKey:KEY_ESM_SCALE_STEP] integerValue]];
+    esmObjectWithKey = [[NSMutableDictionary alloc] initWithDictionary:esmObject];
+    esmObject = [[NSMutableDictionary alloc] initWithDictionary:esm];
+    type = [NSNumber numberWithInteger:[[esm objectForKey:KEY_ESM_TYPE] integerValue]];
+    style = [NSNumber numberWithInteger:[[esm objectForKey:KEY_ESM_STYLE] integerValue]];
+    title = [esm objectForKey:KEY_ESM_TITLE];
+    submit = [esm objectForKey:KEY_ESM_SUBMIT];
+    instructions = [esm objectForKey:KEY_ESM_INSTRUCTIONS];
+    radios = [esm objectForKey:KEY_ESM_RADIOS];
+    checkBoxes = [esm objectForKey:KEY_ESM_CHECKBOXES];
+    likertMax = [NSNumber numberWithInteger:[[esm objectForKey:KEY_ESM_LIKERT_MAX] integerValue]];
+    likertMaxLabel = [esm objectForKey:KEY_ESM_LIKERT_MAX_LABEL];
+    likertMinLabel = [esm objectForKey:KEY_ESM_LIKERT_MIN_LABEL];
+    likerStep = [NSNumber numberWithInteger:[[esm objectForKey:KEY_ESM_LIKERT_STEP] integerValue]];
+    quickAnswers = [esm objectForKey:KEY_ESM_QUICK_ANSWERS];
+    expirationThreshold = [NSNumber numberWithInteger:[[esm objectForKey:KEY_ESM_EXPIRATION_THRESHOLD] integerValue]];
+    status = [NSNumber numberWithInteger:[[esm objectForKey:KEY_ESM_STATUS] integerValue]];
+    userAnswerTimestamp = [esm objectForKey:KEY_ESM_USER_ANSWER_TIMESTAMP];
+    userAnswer = [esm objectForKey:KEY_ESM_USER_ANSWER];
+    esmTrigger = [esm objectForKey:KEY_ESM_TRIGGER];
+    scaleMin = [NSNumber numberWithInteger:[[esm objectForKey:KEY_ESM_SCALE_MIN] integerValue]];
+    scaleMax = [NSNumber numberWithInteger:[[esm objectForKey:KEY_ESM_SCALE_MAX] integerValue]];
+    scaleStart = [NSNumber numberWithInteger:[[esm objectForKey:KEY_ESM_SCALE_START] integerValue]];
+    scaleMaxLabel = [esm objectForKey:KEY_ESM_SCALE_MAX_LABEL];
+    scaleMinLabel = [esm objectForKey:KEY_ESM_SCALE_MIN_LABEL];
+    scaleStep = [NSNumber numberWithInteger:[[esm objectForKey:KEY_ESM_SCALE_STEP] integerValue]];
 //    _esmiOS = [NSNumber numberWithInteger:[[esm objectForKey:KEY_ESM_IOS] integerValue]];
 }
 

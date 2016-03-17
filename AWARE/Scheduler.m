@@ -158,8 +158,13 @@
     for (UILocalNotification *notification in [[UIApplication sharedApplication] scheduledLocalNotifications]) {
         if([notification.category isEqualToString:[self getSensorName]]) {
             [[UIApplication sharedApplication] cancelLocalNotification:notification];
+        } else if([notification.category isEqualToString:SENSOR_PLUGIN_CAMPUS_ESM_NOTIFICATION_LABEL]){
+            [[UIApplication sharedApplication] cancelLocalNotification:notification];
+        } else if ([notification.category isEqualToString:SENSOR_PLUGIN_CAMPUS_ESM_NOTIFICATION_BOOLEAN]){
+            [[UIApplication sharedApplication] cancelLocalNotification:notification];
         }
     }
+    
     
     // Invalidate NSTimers
     if (scheduleManager != nil) {
@@ -203,6 +208,9 @@
                                   repeatInterval:NSCalendarUnitDay
                                         userInfo:userInfo
                                  iconBadgeNumber:1];
+        
+        // Check the esm_style ( esm_type=1&&esm_style=1 || esm_type=5&&esm_style=1)
+        [self setQuickNotificationAnswerWithSchedule:s];
     }
 }
 
@@ -243,6 +251,38 @@
     [self saveDebugEventWithText:[NSString stringWithFormat:@"[%@] Set a new esm schedule to temp-local storage", scheduleId] type:DebugTypeInfo label:@""];
 }
 
+
+
+- (void) setQuickNotificationAnswerWithSchedule:(AWARESchedule *) schedule{
+
+    for (SingleESMObject* esm in schedule.esmObject.esms) {
+        int esmType = [esm.type intValue];
+        int esmStyle = [esm.style intValue];
+        if ( esmType == 1 && esmStyle == 1) { // Quick free text with notification
+            //        NSString* const SENSOR_PLUGIN_CAMPUS_ESM_NOTIFICATION_LABEL = @"plugin_cmu_esm_notification_label";
+            NSLog(@"%d %d", esmType, esmStyle);
+            [AWAREUtils sendLocalNotificationForMessage:esm.instructions
+                                                  title:esm.title
+                                              soundFlag:YES
+                                               category:SENSOR_PLUGIN_CAMPUS_ESM_NOTIFICATION_LABEL
+                                               fireDate:[NSDate new]//schedule.schedule
+                                         repeatInterval:NSCalendarUnitDay
+                                               userInfo:esm.esmObject
+                                        iconBadgeNumber:1];
+        } else if ( esmType == 5 && esmStyle == 1 ){ // Quick YES/NO question
+            //        NSString* const SENSOR_PLUGIN_CAMPUS_ESM_NOTIFICATION_BOOLEAN = @"plugin_cmu_esm_notification_boolean";
+            NSLog(@"%d %d", esmType, esmStyle);
+            [AWAREUtils sendLocalNotificationForMessage:esm.instructions
+                                                  title:esm.title
+                                              soundFlag:YES
+                                               category:SENSOR_PLUGIN_CAMPUS_ESM_NOTIFICATION_BOOLEAN
+                                               fireDate:[NSDate new]//schedule.schedule
+                                         repeatInterval:NSCalendarUnitDay
+                                               userInfo:esm.esmObject
+                                        iconBadgeNumber:1];
+        }
+    }
+}
 
 ///////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////

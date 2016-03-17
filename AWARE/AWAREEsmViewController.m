@@ -15,6 +15,9 @@
 #import "SingleESMObject.h"
 #import "ESMStorageHelper.h"
 
+#import "PamSchema.h"
+#import "QuartzCore/CALayer.h"
+
 @interface AWAREEsmViewController ()
 
 @end
@@ -209,6 +212,10 @@
             case 7: //timepicker
                 NSLog(@"Timer Picker");
                 [self addTimePickerElement:dic withTag:tag];
+                break;
+            case 8: //PAM
+                NSLog(@"PAM");
+                [self addPAMElement:dic withTag:tag];
                 break;
             default:
             break;
@@ -660,14 +667,12 @@
         UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(mainContentRect.origin.x, totalHight, buttonRect.size.width, buttonRect.size.height)];
         [button setTitle:answers forState:UIControlStateNormal];
         [button setBackgroundColor:[UIColor lightGrayColor]];
-//        [button addTarget:self action:@selector(pushedQuickAnswerButtons:) forControlEvents:UIControlEventTouchUpInside];
+        [button addTarget:self action:@selector(pushedQuickAnswerButtons:) forControlEvents:UIControlEventTouchUpInside];
+        button.tag = tag;
         [_mainScrollView addSubview:button];
         [self setContentSizeWithAdditionalHeight:buttonRect.size.height + 5];
         [elements addObject:button];
         [labels addObject:answers];
-        
-//        [button addTarget:self action:@selector(changeButton:) forControlEvents:UIControlEventValueChanged];
-    
     }
     
     NSMutableDictionary * uiElement = [[NSMutableDictionary alloc] init];
@@ -681,6 +686,20 @@
 }
 
 
+- (void) pushedQuickAnswerButtons:(UIButton *) button  {
+    int tag = (int)button.tag;
+    NSMutableDictionary * dic = [uiElements objectAtIndex:tag];
+    NSMutableArray * buttons = [dic objectForKey:KEY_ELEMENT];
+    for (UIButton * b in buttons) {
+        b.selected = NO;
+        b.layer.borderWidth = 0;
+        if ([button.titleLabel isEqual:b.titleLabel]) {
+            b.selected = YES;
+            b.layer.borderColor = [UIColor redColor].CGColor;
+            b.layer.borderWidth = 5.0;
+        }
+    }
+}
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -789,7 +808,7 @@
 
 
 /**
- * esm_type=6 : Add a Time Picker (WIP)
+ * esm_type=7 : Add a Time Picker (WIP)
  *
  * @param dic NSDictionary for ESM Object which needs <i>esm_type, esm_title, esm_instructions, esm_submit, esm_expiration_threshold, and esm_trigger.</i>
  * @param tag An tag for identification of the ESM element
@@ -863,6 +882,113 @@
 }
 
 
+
+
+/**
+ * esm_type=8: Add a PAM (WIP)
+ *
+ * @param dic NSDictionary for ESM Object which needs <i>esm_type, esm_title, esm_instructions, esm_submit, esm_expiration_threshold, and esm_trigger.</i>
+ * @param tag An tag for identification of the ESM element
+ */
+
+- (void) addPAMElement:(NSDictionary *)dic withTag:(int)tag{
+    [self addCommonContents:dic];
+    
+    NSMutableArray * buttons = [[NSMutableArray alloc] init];
+    
+    int column = 4;
+    int row = 4;
+//    NSInteger cellWidth = mainContentRect.size.width/column;//self.view.frame.size.width
+    NSInteger cellWidth = self.view.frame.size.width/column;//
+    NSInteger cellHeight = cellWidth;
+    
+    int pamNum = 1;
+    
+    for (int rowNum=0; rowNum<row; rowNum++ ) {
+        for (int columnNum=0; columnNum<column; columnNum++) {
+            // 1. Get random number between 1 and 3
+            int randomNum = arc4random() % 3 + 1;
+            NSString * emotion = [PamSchema getEmotionString:(NSInteger)pamNum];
+            NSString * imagePath = [NSString stringWithFormat:@"images/%d_%@/%d_%d.jpg",pamNum,emotion,pamNum, randomNum];
+            UIButton * button = [[UIButton alloc] initWithFrame:CGRectMake(cellWidth*columnNum, totalHight+cellHeight*rowNum, cellWidth, cellHeight)];
+//            button.imageView.image = [UIImage imageNamed:@"ic_launcher-web"];
+            [button setImage:[UIImage imageNamed:imagePath] forState:UIControlStateNormal];
+            button.tag = tag;
+            button.titleLabel.text = [NSString stringWithFormat:@"%d", pamNum];
+            [button addTarget:self
+                        action:@selector(pushedPamImage:)
+                 forControlEvents:UIControlEventTouchUpInside];
+            [buttons addObject:button];
+            [_mainScrollView addSubview:button];
+            pamNum++;
+        }
+    }
+    
+    [self setContentSizeWithAdditionalHeight:(int)cellHeight*(int)row];
+
+    NSMutableDictionary * uiElement = [[NSMutableDictionary alloc] init];
+    [uiElement setObject:[NSNumber numberWithInt:tag] forKey:KEY_TAG];
+    [uiElement setObject:@8 forKey:KEY_TYPE];
+    [uiElement setObject:buttons forKey:KEY_ELEMENT];
+//    [uiElement setObject:labels forKey:KEY_LABLES];
+    [uiElement setObject:dic forKey:KEY_OBJECT];
+    [uiElements addObject:uiElement];
+    
+    
+//    NSMutableArray *elements = [[NSMutableArray alloc] init];
+//    NSMutableArray *labels = [[NSMutableArray alloc] init];
+//    
+//    NSArray * checkBoxItems = [dic objectForKey:KEY_ESM_CHECKBOXES];
+//    for (int i=0; i<checkBoxItems.count; i++) {
+//        NSString* checkBoxItem  = @"";
+//        //        if ( i == checkBoxItems.count ) {
+//        //            checkBoxItem = @"N/A";
+//        //        } else {
+//        checkBoxItem = [checkBoxItems objectAtIndex:i];
+//        //        }
+//        UIButton *s = [[UIButton alloc] initWithFrame:CGRectMake(mainContentRect.origin.x + 10 , totalHight, 30, 30)];
+//        [s setImage:[UIImage imageNamed:@"unchecked_box"] forState:UIControlStateNormal];
+//        [s addTarget:self action:@selector(pushedCheckBox:) forControlEvents:UIControlEventTouchUpInside];
+//        s.tag = tag;
+//        
+//        UILabel * label = [[UILabel alloc] initWithFrame:CGRectMake(mainContentRect.origin.x + 10 + 60, totalHight, mainContentRect.size.width - 90, 30)];
+//        label.adjustsFontSizeToFitWidth = YES;
+//        label.text = checkBoxItem;
+//        [labels addObject:label];
+//        
+//        [_mainScrollView addSubview:s];
+//        [_mainScrollView addSubview:label];
+//        [self setContentSizeWithAdditionalHeight:31+9]; // 9 is buffer.
+//        
+//        [elements addObject:s];
+//    }
+//    
+//    NSMutableDictionary * uiElement = [[NSMutableDictionary alloc] init];
+//    [uiElement setObject:[NSNumber numberWithInt:tag] forKey:KEY_TAG];
+//    [uiElement setObject:@3 forKey:KEY_TYPE];
+//    [uiElement setObject:elements forKey:KEY_ELEMENT];
+//    [uiElement setObject:labels forKey:KEY_LABLES];
+//    [uiElement setObject:dic forKey:KEY_OBJECT];
+//    
+//    [uiElements addObject:uiElement];
+}
+
+
+- (void) pushedPamImage:(UIButton *) sender {
+    NSLog(@"%ld %@", sender.tag, sender.titleLabel.text);
+    NSMutableDictionary * elements = [uiElements objectAtIndex:sender.tag];
+    NSMutableArray * buttons = [elements objectForKey:KEY_ELEMENT];
+    NSString *  selected = sender.titleLabel.text;
+    for (UIButton * uiButton in buttons) {
+        uiButton.layer.borderWidth = 0;
+        uiButton.selected = NO;
+        if ([uiButton.titleLabel.text isEqualToString:selected]) {
+            uiButton.layer.borderColor = [UIColor redColor].CGColor;
+            uiButton.layer.borderWidth = 5.0;
+            uiButton.selected = YES;
+        }
+    }
+}
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -1099,6 +1225,26 @@
             }
         } else if ([type isEqualToNumber:@5]) {
             NSLog(@"Get Quick button data");
+            if (contents != nil) {
+                if ( contents.count > 1) {
+                    // DatePicker Value
+                    NSString * title = nil;
+                    for (UIButton * uiButton in contents) {
+                        if (uiButton.selected) {
+                            title = uiButton.titleLabel.text;
+                            break;
+                        }
+                    }
+                    
+                    if (title == nil) { // dismissed
+                        [dic setObject:@1 forKey:KEY_ESM_STATUS];
+                        [dic setObject:@"" forKey:KEY_ESM_USER_ANSWER];
+                    } else if (title != nil){ // answered
+                        [dic setObject:title forKey:KEY_ESM_USER_ANSWER];
+                        [dic setObject:@2 forKey:KEY_ESM_STATUS];
+                    }
+                }
+            }
         } else if ([type isEqualToNumber:@6]) {
             NSLog(@"Get Scale data");
             if (contents != nil) {
@@ -1142,6 +1288,53 @@
                         [dic setObject:@"NA" forKey:KEY_ESM_USER_ANSWER];
                         [dic setObject:@2 forKey:KEY_ESM_STATUS];
                     }
+                }
+            }
+        } else if ([type isEqual:@8]){ // PAM
+            NSLog(@"Get PAM data");
+            if (contents != nil) {
+                if ( contents.count > 1) {
+                    // DatePicker Value
+                    int pamNumber = 0;
+                    for (UIButton * uiButton in contents) {
+                        if (uiButton.selected) {
+                            pamNumber = [uiButton.titleLabel.text intValue];
+                            break;
+                        }
+                    }
+                    
+                    if (pamNumber == 0) { // dismissed
+                        [dic setObject:@1 forKey:KEY_ESM_STATUS];
+                        [dic setObject:@"" forKey:KEY_ESM_USER_ANSWER];
+                    } else if (pamNumber >= 1 && pamNumber <= 16){ // answered
+                        NSString * emotionStr = [PamSchema getEmotionString:pamNumber];
+                        [dic setObject:emotionStr forKey:KEY_ESM_USER_ANSWER];
+                        [dic setObject:@2 forKey:KEY_ESM_STATUS];
+                    } else {// errored
+                        NSLog(@"error");
+                        [dic setObject:@"" forKey:KEY_ESM_USER_ANSWER];
+                        [dic setObject:@1 forKey:KEY_ESM_STATUS];
+                    }
+                    
+                    // Get N/A button value and set N/A condition
+//                    UIButton* naButton = [contents objectAtIndex:1];
+//                    if(naButton.selected){
+//                        [dic setObject:@"NA" forKey:KEY_ESM_USER_ANSWER];
+//                        [dic setObject:@2 forKey:KEY_ESM_STATUS];
+//                    }
+                    
+//                    NSNumber *zero = @0;
+//                    if ( [contents objectAtIndex:0] != zero ){
+//                        //                        UIDatePicker * datePicker = [contents objectAtIndex:0];
+//                        //                        double selectedDate = [datePicker.date timeIntervalSince1970];
+//                        [dic setObject:[[contents objectAtIndex:0] stringValue] forKey:KEY_ESM_USER_ANSWER];
+//                        [dic setObject:@2 forKey:KEY_ESM_STATUS];
+//                        NSLog(@"selecte date => %@", [contents objectAtIndex:0]);
+//                    }else{
+//                        [dic setObject:@"0" forKey:KEY_ESM_USER_ANSWER];
+//                        [dic setObject:@1 forKey:KEY_ESM_STATUS];
+//                    }
+//
                 }
             }
         } else {

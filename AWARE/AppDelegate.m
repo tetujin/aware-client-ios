@@ -28,6 +28,7 @@
 #import "ESMStorageHelper.h"
 #import "AWAREEsmUtils.h"
 #import "Labels.h"
+#import "ESM.h"
 
 
 @implementation AppDelegate{
@@ -471,7 +472,43 @@ forLocalNotification:(UILocalNotification *)notification
                           body:notification.alertBody
                    triggerTime:notification.fireDate
                   answeredTime:[NSDate new]];
+    } else if ([identifier isEqualToString:@"edit_label_action"]){
+        NSString * inputText = [responseInfo objectForKey:UIUserNotificationActionResponseTypedTextKey];
+        ESM * esm = [[ESM alloc] initWithSensorName:SENSOR_ESMS withAwareStudy:awareStudy];
+        NSMutableDictionary *dic =  [AWAREEsmUtils getEsmFormatDictionary:(NSMutableDictionary *)notification.userInfo
+                                                    withTimesmap:[AWAREUtils getUnixTimestamp:notification.fireDate]
+                                                         devieId:[awareStudy getDeviceId]];
+        //        [dic setObject:unixtime forKey:@"timestamp"];
+        [dic setObject:[AWAREUtils getUnixTimestamp:[NSDate new]] forKey:KEY_ESM_USER_ANSWER_TIMESTAMP];
+        [dic setObject:[awareStudy getDeviceId] forKey:@"device_id"];
+        [dic setObject:@2 forKey:KEY_ESM_STATUS];
+        [dic setObject:inputText forKey:KEY_ESM_USER_ANSWER];
+        [esm saveData:dic];
+    } else if ([identifier isEqualToString:@"esm_answer_yes_action"]){
+        ESM * esm = [[ESM alloc] initWithSensorName:SENSOR_ESMS withAwareStudy:awareStudy];
+        NSMutableDictionary *dic =  [AWAREEsmUtils getEsmFormatDictionary:(NSMutableDictionary *)notification.userInfo
+                                                             withTimesmap:[AWAREUtils getUnixTimestamp:notification.fireDate]
+                                                                  devieId:[awareStudy getDeviceId]];
+        //        [dic setObject:unixtime forKey:@"timestamp"];
+        [dic setObject:[AWAREUtils getUnixTimestamp:[NSDate new]] forKey:KEY_ESM_USER_ANSWER_TIMESTAMP];
+        [dic setObject:[awareStudy getDeviceId] forKey:@"device_id"];
+        [dic setObject:@2 forKey:KEY_ESM_STATUS];
+        [dic setObject:@"YES" forKey:KEY_ESM_USER_ANSWER];
+        [esm saveData:dic];
+    } else if ([identifier isEqualToString:@"esm_answer_no_action"]){
+        ESM * esm = [[ESM alloc] initWithSensorName:SENSOR_ESMS withAwareStudy:awareStudy];
+        NSMutableDictionary *dic =  [AWAREEsmUtils getEsmFormatDictionary:(NSMutableDictionary *)notification.userInfo
+                                                             withTimesmap:[AWAREUtils getUnixTimestamp:notification.fireDate]
+                                                                  devieId:[awareStudy getDeviceId]];
+        //        [dic setObject:unixtime forKey:@"timestamp"];
+        [dic setObject:[AWAREUtils getUnixTimestamp:[NSDate new]] forKey:KEY_ESM_USER_ANSWER_TIMESTAMP];
+        [dic setObject:[awareStudy getDeviceId] forKey:@"device_id"];
+        [dic setObject:@2 forKey:KEY_ESM_STATUS];
+        [dic setObject:@"NO" forKey:KEY_ESM_USER_ANSWER];
+        [esm saveData:dic];
     }
+    
+    
 //    }else if([identifier isEqualToString:@"esm_action"]){
 //        Scheduler * scheduler = [[Scheduler alloc] initWithSensorName:SENSOR_PLUGIN_SCHEDULER withAwareStudy:awareStudy];
 //        [scheduler setESMWithUserInfo:notification];
