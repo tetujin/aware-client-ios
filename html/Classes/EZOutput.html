@@ -1,0 +1,1521 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<title>EZOutput Class Reference</title>
+
+	<link rel="stylesheet" href="../css/style.css">
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1.4">
+	<meta name="generator" content="appledoc 2.2.1 (build 1334)">
+</head>
+<body class="appledoc">
+	<header>
+		<div class="container" class="hide-in-xcode">
+			
+			<h1 id="library-title">
+				<a href="../index.html">AWARE Client iOS </a>
+			</h1>
+
+			<p id="developer-home">
+				<a href="../index.html">AWARE</a>
+			</p>
+			
+		</div>
+	</header>
+
+	<aside>
+		<div class="container">
+			<nav>
+				<ul id="header-buttons" role="toolbar">
+					<li><a href="../index.html">Index</a></li>
+<li><a href="../hierarchy.html">Hierarchy</a></li>
+
+					<li id="on-this-page" role="navigation">
+						<label>
+							On This Page
+
+							<div class="chevron">
+								<div class="chevy chevron-left"></div>
+								<div class="chevy chevron-right"></div>
+							</div>
+
+							<select id="jump-to">
+	<option value="top">Jump To&#133;</option>
+	
+	<option value="overview">Overview</option>
+	
+
+	
+	
+	<option value="tasks">Tasks</option>
+	
+	
+
+	
+	
+	<optgroup label="Properties">
+		
+		<option value="//api/name/clientFormat">clientFormat</option>
+		
+		<option value="//api/name/converterAudioUnit">converterAudioUnit</option>
+		
+		<option value="//api/name/dataSource">dataSource</option>
+		
+		<option value="//api/name/delegate">delegate</option>
+		
+		<option value="//api/name/device">device</option>
+		
+		<option value="//api/name/graph">graph</option>
+		
+		<option value="//api/name/inputFormat">inputFormat</option>
+		
+		<option value="//api/name/isPlaying">isPlaying</option>
+		
+		<option value="//api/name/mixerAudioUnit">mixerAudioUnit</option>
+		
+		<option value="//api/name/outputAudioUnit">outputAudioUnit</option>
+		
+		<option value="//api/name/pan">pan</option>
+		
+		<option value="//api/name/volume">volume</option>
+		
+	</optgroup>
+	
+
+	
+	<optgroup label="Class Methods">
+		
+		<option value="//api/name/output">+ output</option>
+		
+		<option value="//api/name/outputWithDataSource:">+ outputWithDataSource:</option>
+		
+		<option value="//api/name/outputWithDataSource:inputFormat:">+ outputWithDataSource:inputFormat:</option>
+		
+		<option value="//api/name/sharedOutput">+ sharedOutput</option>
+		
+	</optgroup>
+	
+
+	
+	<optgroup label="Instance Methods">
+		
+		<option value="//api/name/connectOutputOfSourceNode:sourceNodeOutputBus:toDestinationNode:destinationNodeInputBus:inGraph:">- connectOutputOfSourceNode:sourceNodeOutputBus:toDestinationNode:destinationNodeInputBus:inGraph:</option>
+		
+		<option value="//api/name/defaultClientFormat">- defaultClientFormat</option>
+		
+		<option value="//api/name/defaultInputFormat">- defaultInputFormat</option>
+		
+		<option value="//api/name/initWithDataSource:">- initWithDataSource:</option>
+		
+		<option value="//api/name/initWithDataSource:inputFormat:">- initWithDataSource:inputFormat:</option>
+		
+		<option value="//api/name/outputAudioUnitSubType">- outputAudioUnitSubType</option>
+		
+		<option value="//api/name/startPlayback">- startPlayback</option>
+		
+		<option value="//api/name/stopPlayback">- stopPlayback</option>
+		
+	</optgroup>
+	
+	
+</select>
+						</label>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</aside>
+
+	<article>
+		<div id="overview_contents" class="container">
+			<div id="content">
+				<main role="main">
+					<h1 class="title">EZOutput Class Reference</h1>
+
+					
+					<div class="section section-specification"><table cellspacing="0"><tbody>
+						<tr>
+	<th>Inherits from</th>
+	<td>NSObject</td>
+</tr><tr>
+	<th>Declared in</th>
+	<td>EZOutput.h<br />EZOutput.m</td>
+</tr>
+						</tbody></table></div>
+					
+
+                    
+					
+					<div class="section section-overview">
+						<a title="Overview" name="overview"></a>
+						<h2 class="subtitle subtitle-overview">Overview</h2>
+						<p>The EZOutput component provides a generic <a href="#//api/name/output">output</a> to glue all the other <a href="../Classes/EZAudio.html">EZAudio</a> components together and push whatever sound you&rsquo;ve created to the default <a href="#//api/name/output">output</a> <a href="#//api/name/device">device</a> (think opposite of the microphone). The <a href="../Protocols/EZOutputDataSource.html">EZOutputDataSource</a> provides the required AudioBufferList needed to populate the <a href="#//api/name/output">output</a> buffer while the <a href="../Protocols/EZOutputDelegate.html">EZOutputDelegate</a> provides the same kind of mechanism as the <a href="../Protocols/EZMicrophoneDelegate.html">EZMicrophoneDelegate</a> or <a href="../Protocols/EZAudioFileDelegate.html">EZAudioFileDelegate</a> in that you will receive a callback that provides non-interleaved, float data for visualizing the <a href="#//api/name/output">output</a> (done using an internal float converter). As of 0.4.0 the EZOutput has been simplified to a single <a href="../Protocols/EZOutputDataSource.html">EZOutputDataSource</a> method and now uses an AUGraph to provide format conversion from the <a href="#//api/name/inputFormat"><code>inputFormat</code></a> to the playback graph&rsquo;s <a href="#//api/name/clientFormat"><code>clientFormat</code></a> linear PCM formats, mixer controls for setting <a href="#//api/name/volume">volume</a> and <a href="#//api/name/pan">pan</a> settings, hooks to add in any number of effect audio units (see the <a href="#//api/name/connectOutputOfSourceNode:sourceNodeOutputBus:toDestinationNode:destinationNodeInputBus:inGraph:"><code>connectOutputOfSourceNode:sourceNodeOutputBus:toDestinationNode:destinationNodeInputBus:inGraph:</code></a> subclass method), and hardware <a href="#//api/name/device">device</a> toggling (via <a href="../Classes/EZAudioDevice.html">EZAudioDevice</a>).</p>
+					</div>
+					
+					
+
+					
+					
+					<div class="section section-tasks">
+						<a title="Tasks" name="tasks"></a>
+						
+
+						<a title="Initializers" name="task_Initializers"></a>
+						<h2 class="task-title">Initializers</h2>
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/initWithDataSource:" title="initWithDataSource:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/initWithDataSource:">&ndash;&nbsp;initWithDataSource:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Creates a new instance of the EZOutput and allows the caller to specify an <a href="../Protocols/EZOutputDataSource.html">EZOutputDataSource</a>.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (instancetype)initWithDataSource:(id&lt;EZOutputDataSource&gt;)<em>dataSource</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>dataSource</code></th>
+						<td><p>The <a href="../Protocols/EZOutputDataSource.html">EZOutputDataSource</a> that will be used to pull the audio data for the <a href="#//api/name/output">output</a> callback.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>A newly created instance of the EZOutput class.</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Creates a new instance of the EZOutput and allows the caller to specify an <a href="../Protocols/EZOutputDataSource.html">EZOutputDataSource</a>.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZOutput.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/initWithDataSource:inputFormat:" title="initWithDataSource:inputFormat:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/initWithDataSource:inputFormat:">&ndash;&nbsp;initWithDataSource:inputFormat:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Creates a new instance of the EZOutput and allows the caller to specify an <a href="../Protocols/EZOutputDataSource.html">EZOutputDataSource</a>.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (instancetype)initWithDataSource:(id&lt;EZOutputDataSource&gt;)<em>dataSource</em> inputFormat:(AudioStreamBasicDescription)<em>inputFormat</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>dataSource</code></th>
+						<td><p>The <a href="../Protocols/EZOutputDataSource.html">EZOutputDataSource</a> that will be used to pull the audio data for the <a href="#//api/name/output">output</a> callback.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>inputFormat</code></th>
+						<td><p>The AudioStreamBasicDescription of the EZOutput.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>A newly created instance of the EZOutput class.</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Creates a new instance of the EZOutput and allows the caller to specify an <a href="../Protocols/EZOutputDataSource.html">EZOutputDataSource</a>.</p><div class="warning"><p><strong>Warning:</strong> AudioStreamBasicDescription input formats must be linear PCM!</p></div>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZOutput.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+
+						<a title="Class Initializers" name="task_Class Initializers"></a>
+						<h2 class="task-title">Class Initializers</h2>
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/output" title="output"></a>
+	<h3 class="method-title"><code><a href="#//api/name/output">+&nbsp;output</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Class method to create a new instance of the EZOutput</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (instancetype)output</code></div>
+
+		    
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>A newly created instance of the EZOutput class.</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Class method to create a new instance of the EZOutput</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZOutput.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/outputWithDataSource:" title="outputWithDataSource:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/outputWithDataSource:">+&nbsp;outputWithDataSource:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Class method to create a new instance of the EZOutput and allows the caller to specify an <a href="../Protocols/EZOutputDataSource.html">EZOutputDataSource</a>.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (instancetype)outputWithDataSource:(id&lt;EZOutputDataSource&gt;)<em>dataSource</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>dataSource</code></th>
+						<td><p>The <a href="../Protocols/EZOutputDataSource.html">EZOutputDataSource</a> that will be used to pull the audio data for the <a href="#//api/name/output">output</a> callback.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>A newly created instance of the EZOutput class.</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Class method to create a new instance of the EZOutput and allows the caller to specify an <a href="../Protocols/EZOutputDataSource.html">EZOutputDataSource</a>.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZOutput.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/outputWithDataSource:inputFormat:" title="outputWithDataSource:inputFormat:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/outputWithDataSource:inputFormat:">+&nbsp;outputWithDataSource:inputFormat:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Class method to create a new instance of the EZOutput and allows the caller to specify an <a href="../Protocols/EZOutputDataSource.html">EZOutputDataSource</a>.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (instancetype)outputWithDataSource:(id&lt;EZOutputDataSource&gt;)<em>dataSource</em> inputFormat:(AudioStreamBasicDescription)<em>inputFormat</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>dataSource</code></th>
+						<td><p>The <a href="../Protocols/EZOutputDataSource.html">EZOutputDataSource</a> that will be used to pull the audio data for the <a href="#//api/name/output">output</a> callback.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>audioStreamBasicDescription</code></th>
+						<td><p>The AudioStreamBasicDescription of the EZOutput.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>A newly created instance of the EZOutput class.</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Class method to create a new instance of the EZOutput and allows the caller to specify an <a href="../Protocols/EZOutputDataSource.html">EZOutputDataSource</a>.</p><div class="warning"><p><strong>Warning:</strong> AudioStreamBasicDescriptions that are invalid will cause the EZOutput to fail to initialize</p></div>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZOutput.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+
+						<a title="Shared Instance" name="task_Shared Instance"></a>
+						<h2 class="task-title">Shared Instance</h2>
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/sharedOutput" title="sharedOutput"></a>
+	<h3 class="method-title"><code><a href="#//api/name/sharedOutput">+&nbsp;sharedOutput</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Creates a shared instance of the EZOutput (one app will usually only need one <a href="#//api/name/output">output</a> and share the role of the <a href="../Protocols/EZOutputDataSource.html">EZOutputDataSource</a>).</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (instancetype)sharedOutput</code></div>
+
+		    
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>The shared instance of the EZOutput class.</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Creates a shared instance of the EZOutput (one app will usually only need one <a href="#//api/name/output">output</a> and share the role of the <a href="../Protocols/EZOutputDataSource.html">EZOutputDataSource</a>).</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZOutput.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+
+						<a title="Setting/Getting The Stream Formats" name="task_Setting/Getting The Stream Formats"></a>
+						<h2 class="task-title">Setting/Getting The Stream Formats</h2>
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/inputFormat" title="inputFormat"></a>
+	<h3 class="method-title"><code><a href="#//api/name/inputFormat">&nbsp;&nbsp;inputFormat</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Provides the AudioStreamBasicDescription structure used at the beginning of the playback <a href="#//api/name/graph">graph</a> which is then converted into the <a href="#//api/name/clientFormat"><code>clientFormat</code></a> using the AUConverter audio unit.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (nonatomic, readwrite) AudioStreamBasicDescription inputFormat</code></div>
+
+		    
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>An AudioStreamBasicDescription structure describing</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Provides the AudioStreamBasicDescription structure used at the beginning of the playback <a href="#//api/name/graph">graph</a> which is then converted into the <a href="#//api/name/clientFormat"><code>clientFormat</code></a> using the AUConverter audio unit.</p><div class="warning"><p><strong>Warning:</strong> The AudioStreamBasicDescription set here must be linear PCM. Compressed formats are not supported&hellip;the EZAudioFile&rsquo;s <a href="#//api/name/clientFormat">clientFormat</a> performs the audio conversion on the fly from compressed to linear PCM so there is no additional work to be done there.</p></div>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZOutput.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/clientFormat" title="clientFormat"></a>
+	<h3 class="method-title"><code><a href="#//api/name/clientFormat">&nbsp;&nbsp;clientFormat</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Provides the AudioStreamBasicDescription structure that serves as the common format used throughout the playback <a href="#//api/name/graph">graph</a> (similar to how the <a href="../Classes/EZAudioFile.html">EZAudioFile</a> as a clientFormat that is linear PCM to be shared amongst other components). The <a href="#//api/name/inputFormat"><code>inputFormat</code></a> is converted into this format at the beginning of the playback <a href="#//api/name/graph">graph</a> using an AUConverter audio unit. Defaults to the whatever the <a href="#//api/name/defaultClientFormat"><code>defaultClientFormat</code></a> method returns is if a custom one isn&rsquo;t explicitly set.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (nonatomic, readwrite) AudioStreamBasicDescription clientFormat</code></div>
+
+		    
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>An AudioStreamBasicDescription structure describing the common client format for the playback <a href="#//api/name/graph">graph</a>.</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Provides the AudioStreamBasicDescription structure that serves as the common format used throughout the playback <a href="#//api/name/graph">graph</a> (similar to how the <a href="../Classes/EZAudioFile.html">EZAudioFile</a> as a clientFormat that is linear PCM to be shared amongst other components). The <a href="#//api/name/inputFormat"><code>inputFormat</code></a> is converted into this format at the beginning of the playback <a href="#//api/name/graph">graph</a> using an AUConverter audio unit. Defaults to the whatever the <a href="#//api/name/defaultClientFormat"><code>defaultClientFormat</code></a> method returns is if a custom one isn&rsquo;t explicitly set.</p><div class="warning"><p><strong>Warning:</strong> The AudioStreamBasicDescription set here must be linear PCM. Compressed formats are not supported by Audio Units.</p></div>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZOutput.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+
+						<a title="Setting/Getting The Data Source and Delegate" name="task_Setting/Getting The Data Source and Delegate"></a>
+						<h2 class="task-title">Setting/Getting The Data Source and Delegate</h2>
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/dataSource" title="dataSource"></a>
+	<h3 class="method-title"><code><a href="#//api/name/dataSource">&nbsp;&nbsp;dataSource</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>The <a href="../Protocols/EZOutputDataSource.html">EZOutputDataSource</a> that provides the audio data in the <a href="#//api/name/inputFormat"><code>inputFormat</code></a> for the EZOutput to play. If an <a href="../Protocols/EZOutputDataSource.html">EZOutputDataSource</a> is not specified then the EZOutput will just <a href="#//api/name/output">output</a> silence.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (nonatomic, weak) id&lt;EZOutputDataSource&gt; dataSource</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>The <a href="../Protocols/EZOutputDataSource.html">EZOutputDataSource</a> that provides the audio data in the <a href="#//api/name/inputFormat"><code>inputFormat</code></a> for the EZOutput to play. If an <a href="../Protocols/EZOutputDataSource.html">EZOutputDataSource</a> is not specified then the EZOutput will just <a href="#//api/name/output">output</a> silence.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZOutput.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/delegate" title="delegate"></a>
+	<h3 class="method-title"><code><a href="#//api/name/delegate">&nbsp;&nbsp;delegate</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>The <a href="../Protocols/EZOutputDelegate.html">EZOutputDelegate</a> for which to handle the <a href="#//api/name/output">output</a> callbacks</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (nonatomic, weak) id&lt;EZOutputDelegate&gt; delegate</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>The <a href="../Protocols/EZOutputDelegate.html">EZOutputDelegate</a> for which to handle the <a href="#//api/name/output">output</a> callbacks</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZOutput.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/isPlaying" title="isPlaying"></a>
+	<h3 class="method-title"><code><a href="#//api/name/isPlaying">&nbsp;&nbsp;isPlaying</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Provides a flag indicating whether the EZOutput is pulling audio data from the <a href="../Protocols/EZOutputDataSource.html">EZOutputDataSource</a> for playback.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (readonly) BOOL isPlaying</code></div>
+
+		    
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>YES if the EZOutput is running, NO if it is stopped</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Provides a flag indicating whether the EZOutput is pulling audio data from the <a href="../Protocols/EZOutputDataSource.html">EZOutputDataSource</a> for playback.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZOutput.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/pan" title="pan"></a>
+	<h3 class="method-title"><code><a href="#//api/name/pan">&nbsp;&nbsp;pan</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Provides the current pan from the audio player&rsquo;s mixer audio unit in the playback <a href="#//api/name/graph">graph</a>. Setting the pan adjusts the direction of the audio signal from left (0) to right (1). Default is 0.5 (middle).</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (nonatomic, assign) float pan</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Provides the current pan from the audio player&rsquo;s mixer audio unit in the playback <a href="#//api/name/graph">graph</a>. Setting the pan adjusts the direction of the audio signal from left (0) to right (1). Default is 0.5 (middle).</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZOutput.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/volume" title="volume"></a>
+	<h3 class="method-title"><code><a href="#//api/name/volume">&nbsp;&nbsp;volume</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Provides the current volume from the audio player&rsquo;s mixer audio unit in the playback <a href="#//api/name/graph">graph</a>. Setting the volume adjusts the gain of the <a href="#//api/name/output">output</a> between 0 and 1. Default is 1.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (nonatomic, assign) float volume</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Provides the current volume from the audio player&rsquo;s mixer audio unit in the playback <a href="#//api/name/graph">graph</a>. Setting the volume adjusts the gain of the <a href="#//api/name/output">output</a> between 0 and 1. Default is 1.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZOutput.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+
+						<a title="Core Audio Properties" name="task_Core Audio Properties"></a>
+						<h2 class="task-title">Core Audio Properties</h2>
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/graph" title="graph"></a>
+	<h3 class="method-title"><code><a href="#//api/name/graph">&nbsp;&nbsp;graph</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>The AUGraph used to chain together the converter, mixer, and <a href="#//api/name/output">output</a> audio units.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (readonly) AUGraph graph</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>The AUGraph used to chain together the converter, mixer, and <a href="#//api/name/output">output</a> audio units.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZOutput.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/converterAudioUnit" title="converterAudioUnit"></a>
+	<h3 class="method-title"><code><a href="#//api/name/converterAudioUnit">&nbsp;&nbsp;converterAudioUnit</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>The AudioUnit that is being used to convert the audio data coming into the output&rsquo;s playback <a href="#//api/name/graph">graph</a>.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (readonly) AudioUnit converterAudioUnit</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>The AudioUnit that is being used to convert the audio data coming into the output&rsquo;s playback <a href="#//api/name/graph">graph</a>.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZOutput.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/mixerAudioUnit" title="mixerAudioUnit"></a>
+	<h3 class="method-title"><code><a href="#//api/name/mixerAudioUnit">&nbsp;&nbsp;mixerAudioUnit</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>The AudioUnit that is being used as the mixer to adjust the <a href="#//api/name/volume">volume</a> on the output&rsquo;s playback <a href="#//api/name/graph">graph</a>.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (readonly) AudioUnit mixerAudioUnit</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>The AudioUnit that is being used as the mixer to adjust the <a href="#//api/name/volume">volume</a> on the output&rsquo;s playback <a href="#//api/name/graph">graph</a>.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZOutput.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/outputAudioUnit" title="outputAudioUnit"></a>
+	<h3 class="method-title"><code><a href="#//api/name/outputAudioUnit">&nbsp;&nbsp;outputAudioUnit</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>The AudioUnit that is being used as the hardware <a href="#//api/name/output">output</a> for the output&rsquo;s playback <a href="#//api/name/graph">graph</a>.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (readonly) AudioUnit outputAudioUnit</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>The AudioUnit that is being used as the hardware <a href="#//api/name/output">output</a> for the output&rsquo;s playback <a href="#//api/name/graph">graph</a>.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZOutput.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+
+						<a title="Getting/Setting The Output&apos;s Hardware Device" name="task_Getting/Setting The Output&apos;s Hardware Device"></a>
+						<h2 class="task-title">Getting/Setting The Output&apos;s Hardware Device</h2>
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/device" title="device"></a>
+	<h3 class="method-title"><code><a href="#//api/name/device">&nbsp;&nbsp;device</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>An <a href="../Classes/EZAudioDevice.html">EZAudioDevice</a> instance that is used to route the audio data out to the speaker. To find a list of available <a href="#//api/name/output">output</a> devices see the <a href="../Classes/EZAudioDevice.html">EZAudioDevice</a> <code>outputDevices</code> method.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (nonatomic, strong, readwrite) EZAudioDevice *device</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>An <a href="../Classes/EZAudioDevice.html">EZAudioDevice</a> instance that is used to route the audio data out to the speaker. To find a list of available <a href="#//api/name/output">output</a> devices see the <a href="../Classes/EZAudioDevice.html">EZAudioDevice</a> <code>outputDevices</code> method.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZOutput.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+
+						<a title="Starting/Stopping The Output" name="task_Starting/Stopping The Output"></a>
+						<h2 class="task-title">Starting/Stopping The Output</h2>
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/startPlayback" title="startPlayback"></a>
+	<h3 class="method-title"><code><a href="#//api/name/startPlayback">&ndash;&nbsp;startPlayback</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Starts pulling audio data from the <a href="../Protocols/EZOutputDataSource.html">EZOutputDataSource</a> to the default <a href="#//api/name/device">device</a> <a href="#//api/name/output">output</a>.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)startPlayback</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Starts pulling audio data from the <a href="../Protocols/EZOutputDataSource.html">EZOutputDataSource</a> to the default <a href="#//api/name/device">device</a> <a href="#//api/name/output">output</a>.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZOutput.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/stopPlayback" title="stopPlayback"></a>
+	<h3 class="method-title"><code><a href="#//api/name/stopPlayback">&ndash;&nbsp;stopPlayback</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Stops pulling audio data from the <a href="../Protocols/EZOutputDataSource.html">EZOutputDataSource</a> to the default <a href="#//api/name/device">device</a> <a href="#//api/name/output">output</a>.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)stopPlayback</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Stops pulling audio data from the <a href="../Protocols/EZOutputDataSource.html">EZOutputDataSource</a> to the default <a href="#//api/name/device">device</a> <a href="#//api/name/output">output</a>.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZOutput.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+
+						<a title="Subclass" name="task_Subclass"></a>
+						<h2 class="task-title">Subclass</h2>
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/connectOutputOfSourceNode:sourceNodeOutputBus:toDestinationNode:destinationNodeInputBus:inGraph:" title="connectOutputOfSourceNode:sourceNodeOutputBus:toDestinationNode:destinationNodeInputBus:inGraph:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/connectOutputOfSourceNode:sourceNodeOutputBus:toDestinationNode:destinationNodeInputBus:inGraph:">&ndash;&nbsp;connectOutputOfSourceNode:sourceNodeOutputBus:toDestinationNode:destinationNodeInputBus:inGraph:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>This method handles connecting the converter node to the mixer node within the AUGraph that is being used as the playback <a href="#//api/name/graph">graph</a>. Subclasses can override this method and insert their custom nodes to perform effects processing on the audio data being rendered.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (OSStatus)connectOutputOfSourceNode:(AUNode)<em>sourceNode</em> sourceNodeOutputBus:(UInt32)<em>sourceNodeOutputBus</em> toDestinationNode:(AUNode)<em>destinationNode</em> destinationNodeInputBus:(UInt32)<em>destinationNodeInputBus</em> inGraph:(AUGraph)<em>graph</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>sourceNode</code></th>
+						<td><p>An AUNode representing the node the audio data is coming from.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>sourceNodeOutputBus</code></th>
+						<td><p>A UInt32 representing the <a href="#//api/name/output">output</a> bus from the source node that should be connected into the next node&rsquo;s input bus.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>destinationNode</code></th>
+						<td><p>An AUNode representing the node the audio data should be connected to.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>destinationNodeInputBus</code></th>
+						<td><p>A UInt32 representing the input bus the source node&rsquo;s <a href="#//api/name/output">output</a> bus should be connecting to.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>graph</code></th>
+						<td><p>The AUGraph that is being used to hold the playback <a href="#//api/name/graph">graph</a>. Same as from the <a href="#//api/name/graph"><code>graph</code></a> property.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>An OSStatus code. For no error return back <code>noErr</code>.</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>This method handles connecting the converter node to the mixer node within the AUGraph that is being used as the playback graph. Subclasses can override this method and insert their custom nodes to perform effects processing on the audio data being rendered.</p>
+
+<p>This was inspired by Daniel Kennett&rsquo;s blog post on how to add a custom equalizer to a CocoaLibSpotify SPCoreAudioController&rsquo;s AUGraph. For more information see Daniel&rsquo;s post and example code here: <a href="http://ikennd.ac/blog/2012/04/augraph-basics-in-cocoalibspotify/.">http://ikennd.ac/blog/2012/04/augraph-basics-in-cocoalibspotify/.</a></p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZOutput.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/defaultClientFormat" title="defaultClientFormat"></a>
+	<h3 class="method-title"><code><a href="#//api/name/defaultClientFormat">&ndash;&nbsp;defaultClientFormat</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>The default AudioStreamBasicDescription set as the client format of the <a href="#//api/name/output">output</a> if no custom <a href="#//api/name/clientFormat"><code>clientFormat</code></a> is set. Defaults to a 44.1 kHz stereo, non-interleaved, float format.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (AudioStreamBasicDescription)defaultClientFormat</code></div>
+
+		    
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>An AudioStreamBasicDescription that will be used as the default stream format.</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>The default AudioStreamBasicDescription set as the client format of the <a href="#//api/name/output">output</a> if no custom <a href="#//api/name/clientFormat"><code>clientFormat</code></a> is set. Defaults to a 44.1 kHz stereo, non-interleaved, float format.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZOutput.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/defaultInputFormat" title="defaultInputFormat"></a>
+	<h3 class="method-title"><code><a href="#//api/name/defaultInputFormat">&ndash;&nbsp;defaultInputFormat</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>The default AudioStreamBasicDescription set as the <a href="#//api/name/inputFormat"><code>inputFormat</code></a> of the <a href="#//api/name/output">output</a> if no custom <a href="#//api/name/inputFormat"><code>inputFormat</code></a> is set. Defaults to a 44.1 kHz stereo, non-interleaved, float format.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (AudioStreamBasicDescription)defaultInputFormat</code></div>
+
+		    
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>An AudioStreamBasicDescription that will be used as the default stream format.</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>The default AudioStreamBasicDescription set as the <a href="#//api/name/inputFormat"><code>inputFormat</code></a> of the <a href="#//api/name/output">output</a> if no custom <a href="#//api/name/inputFormat"><code>inputFormat</code></a> is set. Defaults to a 44.1 kHz stereo, non-interleaved, float format.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZOutput.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/outputAudioUnitSubType" title="outputAudioUnitSubType"></a>
+	<h3 class="method-title"><code><a href="#//api/name/outputAudioUnitSubType">&ndash;&nbsp;outputAudioUnitSubType</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>The default value used as the AudioUnit subtype when creating the hardware <a href="#//api/name/output">output</a> component. By default this is kAudioUnitSubType_RemoteIO for iOS and kAudioUnitSubType_HALOutput for OSX.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (OSType)outputAudioUnitSubType</code></div>
+
+		    
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>An OSType that represents the AudioUnit subtype for the hardware <a href="#//api/name/output">output</a> component.</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>The default value used as the AudioUnit subtype when creating the hardware <a href="#//api/name/output">output</a> component. By default this is kAudioUnitSubType_RemoteIO for iOS and kAudioUnitSubType_HALOutput for OSX.</p><div class="warning"><p><strong>Warning:</strong> If you change this to anything other than kAudioUnitSubType_HALOutput for OSX you will get a failed assertion because devices can only be set when using the HAL audio unit.</p></div>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZOutput.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+					</div>
+					
+					
+
+                    
+                    
+          
+				</main>
+
+				<footer>
+					<div class="footer-copyright">
+						
+						<p class="copyright">Copyright &copy; 2016 AWARE. All rights reserved. Updated: 2016-03-17</p>
+						
+						
+						<p class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2.1 (build 1334)</a>.</p>
+						
+					</div>
+				</footer>
+			</div>
+		</div>
+	</article>
+
+	<script src="../js/script.js"></script>
+</body>
+</html>

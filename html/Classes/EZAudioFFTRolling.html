@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<title>EZAudioFFTRolling Class Reference</title>
+
+	<link rel="stylesheet" href="../css/style.css">
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1.4">
+	<meta name="generator" content="appledoc 2.2.1 (build 1334)">
+</head>
+<body class="appledoc">
+	<header>
+		<div class="container" class="hide-in-xcode">
+			
+			<h1 id="library-title">
+				<a href="../index.html">AWARE Client iOS </a>
+			</h1>
+
+			<p id="developer-home">
+				<a href="../index.html">AWARE</a>
+			</p>
+			
+		</div>
+	</header>
+
+	<aside>
+		<div class="container">
+			<nav>
+				<ul id="header-buttons" role="toolbar">
+					<li><a href="../index.html">Index</a></li>
+<li><a href="../hierarchy.html">Hierarchy</a></li>
+
+					<li id="on-this-page" role="navigation">
+						<label>
+							On This Page
+
+							<div class="chevron">
+								<div class="chevy chevron-left"></div>
+								<div class="chevy chevron-right"></div>
+							</div>
+
+							<select id="jump-to">
+	<option value="top">Jump To&#133;</option>
+	
+	<option value="overview">Overview</option>
+	
+
+	
+	
+	<option value="tasks">Tasks</option>
+	
+	
+
+	
+	
+	<optgroup label="Properties">
+		
+		<option value="//api/name/timeDomainBufferSize">timeDomainBufferSize</option>
+		
+		<option value="//api/name/timeDomainData">timeDomainData</option>
+		
+		<option value="//api/name/windowSize">windowSize</option>
+		
+	</optgroup>
+	
+
+	
+	<optgroup label="Class Methods">
+		
+		<option value="//api/name/fftWithWindowSize:historyBufferSize:sampleRate:">+ fftWithWindowSize:historyBufferSize:sampleRate:</option>
+		
+		<option value="//api/name/fftWithWindowSize:historyBufferSize:sampleRate:delegate:">+ fftWithWindowSize:historyBufferSize:sampleRate:delegate:</option>
+		
+		<option value="//api/name/fftWithWindowSize:sampleRate:">+ fftWithWindowSize:sampleRate:</option>
+		
+		<option value="//api/name/fftWithWindowSize:sampleRate:delegate:">+ fftWithWindowSize:sampleRate:delegate:</option>
+		
+	</optgroup>
+	
+
+	
+	<optgroup label="Instance Methods">
+		
+		<option value="//api/name/computeFFTWithBuffer:withBufferSize:">- computeFFTWithBuffer:withBufferSize:</option>
+		
+		<option value="//api/name/initWithWindowSize:historyBufferSize:sampleRate:">- initWithWindowSize:historyBufferSize:sampleRate:</option>
+		
+		<option value="//api/name/initWithWindowSize:historyBufferSize:sampleRate:delegate:">- initWithWindowSize:historyBufferSize:sampleRate:delegate:</option>
+		
+		<option value="//api/name/initWithWindowSize:sampleRate:">- initWithWindowSize:sampleRate:</option>
+		
+		<option value="//api/name/initWithWindowSize:sampleRate:delegate:">- initWithWindowSize:sampleRate:delegate:</option>
+		
+	</optgroup>
+	
+	
+</select>
+						</label>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</aside>
+
+	<article>
+		<div id="overview_contents" class="container">
+			<div id="content">
+				<main role="main">
+					<h1 class="title">EZAudioFFTRolling Class Reference</h1>
+
+					
+					<div class="section section-specification"><table cellspacing="0"><tbody>
+						<tr>
+	<th>Inherits from</th>
+	<td><a href="../Classes/EZAudioFFT.html">EZAudioFFT</a> : NSObject</td>
+</tr><tr>
+	<th>Declared in</th>
+	<td>EZAudioFFT.h<br />EZAudioFFT.m</td>
+</tr>
+						</tbody></table></div>
+					
+
+                    
+					
+					<div class="section section-overview">
+						<a title="Overview" name="overview"></a>
+						<h2 class="subtitle subtitle-overview">Overview</h2>
+						<p>The EZAudioFFTRolling, a subclass of <a href="../Classes/EZAudioFFT.html">EZAudioFFT</a>, provides a class to calculate an FFT for an incoming audio signal while maintaining a history of audio data to allow much higher resolution FFTs. For instance, the <a href="../Classes/EZMicrophone.html">EZMicrophone</a> typically provides 512 frames at a time, but you would probably want to provide 2048 or 4096 frames for a decent looking FFT if you&rsquo;re trying to extract precise frequency components. You will typically be using this class for variable length FFTs instead of the <a href="../Classes/EZAudioFFT.html">EZAudioFFT</a> base class.</p>
+					</div>
+					
+					
+
+					
+					
+					<div class="section section-tasks">
+						<a title="Tasks" name="tasks"></a>
+						
+
+						<a title="Initializers" name="task_Initializers"></a>
+						<h2 class="task-title">Initializers</h2>
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/initWithWindowSize:sampleRate:" title="initWithWindowSize:sampleRate:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/initWithWindowSize:sampleRate:">&ndash;&nbsp;initWithWindowSize:sampleRate:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Initializes an EZAudioFFTRolling instance with a window size and a sample rate. The EZAudioFFTRolling has an internal EZPlotHistoryInfo data structure that writes audio data to a circular buffer and manages sliding windows of audio data to support efficient, large FFT calculations. Here you provide a window size that represents how many audio sample will be used to calculate the FFT and a float representing the sample rate of the incoming audio (can be 0 if you don&rsquo;t care about the <code>maxFrequency</code> property). The history buffer size in this case is the <a href="#//api/name/windowSize"><code>windowSize</code></a> * 8, which is pretty good for most cases.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (instancetype)initWithWindowSize:(vDSP_Length)<em>windowSize</em> sampleRate:(float)<em>sampleRate</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>windowSize</code></th>
+						<td><p>A vDSP_Length (unsigned long) representing the size of the window (i.e. the resolution) of data that should be used to calculate the FFT. A typical value for this would be something like 1024 - 4096 (or higher for an even higher resolution FFT).</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>sampleRate</code></th>
+						<td><p>A float representing the sample rate of the incoming audio signal.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>A newly created EZAudioFFTRolling instance.</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Initializes an EZAudioFFTRolling instance with a window size and a sample rate. The EZAudioFFTRolling has an internal EZPlotHistoryInfo data structure that writes audio data to a circular buffer and manages sliding windows of audio data to support efficient, large FFT calculations. Here you provide a window size that represents how many audio sample will be used to calculate the FFT and a float representing the sample rate of the incoming audio (can be 0 if you don&rsquo;t care about the <code>maxFrequency</code> property). The history buffer size in this case is the <a href="#//api/name/windowSize"><code>windowSize</code></a> * 8, which is pretty good for most cases.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZAudioFFT.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/initWithWindowSize:sampleRate:delegate:" title="initWithWindowSize:sampleRate:delegate:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/initWithWindowSize:sampleRate:delegate:">&ndash;&nbsp;initWithWindowSize:sampleRate:delegate:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Initializes an EZAudioFFTRolling instance with a window size, a sample rate, and an <a href="../Protocols/EZAudioFFTDelegate.html">EZAudioFFTDelegate</a>. The EZAudioFFTRolling has an internal EZPlotHistoryInfo data structure that writes audio data to a circular buffer and manages sliding windows of audio data to support efficient, large FFT calculations. Here you provide a window size that represents how many audio sample will be used to calculate the FFT, a float representing the sample rate of the incoming audio (can be 0 if you don&rsquo;t care about the <code>maxFrequency</code> property), and an <a href="../Protocols/EZAudioFFTDelegate.html">EZAudioFFTDelegate</a> to receive a callback anytime the FFT is calculated. The history buffer size in this case is the <a href="#//api/name/windowSize"><code>windowSize</code></a> * 8, which is pretty good for most cases.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (instancetype)initWithWindowSize:(vDSP_Length)<em>windowSize</em> sampleRate:(float)<em>sampleRate</em> delegate:(id&lt;EZAudioFFTDelegate&gt;)<em>delegate</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>windowSize</code></th>
+						<td><p>A vDSP_Length (unsigned long) representing the size of the window (i.e. the resolution) of data that should be used to calculate the FFT. A typical value for this would be something like 1024 - 4096 (or higher for an even higher resolution FFT).</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>sampleRate</code></th>
+						<td><p>A float representing the sample rate of the incoming audio signal.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>delegate</code></th>
+						<td><p>An <a href="../Protocols/EZAudioFFTDelegate.html">EZAudioFFTDelegate</a> to receive an event whenever the FFT is calculated.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>A newly created EZAudioFFTRolling instance.</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Initializes an EZAudioFFTRolling instance with a window size, a sample rate, and an <a href="../Protocols/EZAudioFFTDelegate.html">EZAudioFFTDelegate</a>. The EZAudioFFTRolling has an internal EZPlotHistoryInfo data structure that writes audio data to a circular buffer and manages sliding windows of audio data to support efficient, large FFT calculations. Here you provide a window size that represents how many audio sample will be used to calculate the FFT, a float representing the sample rate of the incoming audio (can be 0 if you don&rsquo;t care about the <code>maxFrequency</code> property), and an <a href="../Protocols/EZAudioFFTDelegate.html">EZAudioFFTDelegate</a> to receive a callback anytime the FFT is calculated. The history buffer size in this case is the <a href="#//api/name/windowSize"><code>windowSize</code></a> * 8, which is pretty good for most cases.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZAudioFFT.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/initWithWindowSize:historyBufferSize:sampleRate:" title="initWithWindowSize:historyBufferSize:sampleRate:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/initWithWindowSize:historyBufferSize:sampleRate:">&ndash;&nbsp;initWithWindowSize:historyBufferSize:sampleRate:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Initializes an EZAudioFFTRolling instance with a window size, a history buffer size, and a sample rate. The EZAudioFFTRolling has an internal EZPlotHistoryInfo data structure that writes audio data to a circular buffer and manages sliding windows of audio data to support efficient, large FFT calculations. Here you provide a window size that represents how many audio sample will be used to calculate the FFT, a history buffer size representing the maximum length of the sliding window&rsquo;s underlying circular buffer, and a float representing the sample rate of the incoming audio (can be 0 if you don&rsquo;t care about the <code>maxFrequency</code> property).</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (instancetype)initWithWindowSize:(vDSP_Length)<em>windowSize</em> historyBufferSize:(vDSP_Length)<em>historyBufferSize</em> sampleRate:(float)<em>sampleRate</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>windowSize</code></th>
+						<td><p>A vDSP_Length (unsigned long) representing the size of the window (i.e. the resolution) of data that should be used to calculate the FFT. A typical value for this would be something like 1024 - 4096 (or higher for an even higher resolution FFT).</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>historyBufferSize</code></th>
+						<td><p>A vDSP_Length (unsigned long) representing the length of the history buffer. This should be AT LEAST the size of the window. A recommended value for this would be at least 8x greater than the <a href="#//api/name/windowSize"><code>windowSize</code></a> argument.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>sampleRate</code></th>
+						<td><p>A float representing the sample rate of the incoming audio signal.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>A newly created EZAudioFFTRolling instance.</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Initializes an EZAudioFFTRolling instance with a window size, a history buffer size, and a sample rate. The EZAudioFFTRolling has an internal EZPlotHistoryInfo data structure that writes audio data to a circular buffer and manages sliding windows of audio data to support efficient, large FFT calculations. Here you provide a window size that represents how many audio sample will be used to calculate the FFT, a history buffer size representing the maximum length of the sliding window&rsquo;s underlying circular buffer, and a float representing the sample rate of the incoming audio (can be 0 if you don&rsquo;t care about the <code>maxFrequency</code> property).</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZAudioFFT.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/initWithWindowSize:historyBufferSize:sampleRate:delegate:" title="initWithWindowSize:historyBufferSize:sampleRate:delegate:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/initWithWindowSize:historyBufferSize:sampleRate:delegate:">&ndash;&nbsp;initWithWindowSize:historyBufferSize:sampleRate:delegate:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Initializes an EZAudioFFTRolling instance with a window size, a history buffer size, a sample rate, and an <a href="../Protocols/EZAudioFFTDelegate.html">EZAudioFFTDelegate</a>. The EZAudioFFTRolling has an internal EZPlotHistoryInfo data structure that writes audio data to a circular buffer and manages sliding windows of audio data to support efficient, large FFT calculations. Here you provide a window size that represents how many audio sample will be used to calculate the FFT, a history buffer size representing the maximum length of the sliding window&rsquo;s underlying circular buffer, a float representing the sample rate of the incoming audio (can be 0 if you don&rsquo;t care about the <code>maxFrequency</code> property), and an <a href="../Protocols/EZAudioFFTDelegate.html">EZAudioFFTDelegate</a> to receive a callback anytime the FFT is calculated.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (instancetype)initWithWindowSize:(vDSP_Length)<em>windowSize</em> historyBufferSize:(vDSP_Length)<em>historyBufferSize</em> sampleRate:(float)<em>sampleRate</em> delegate:(id&lt;EZAudioFFTDelegate&gt;)<em>delegate</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>windowSize</code></th>
+						<td><p>A vDSP_Length (unsigned long) representing the size of the window (i.e. the resolution) of data that should be used to calculate the FFT. A typical value for this would be something like 1024 - 4096 (or higher for an even higher resolution FFT).</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>historyBufferSize</code></th>
+						<td><p>A vDSP_Length (unsigned long) representing the length of the history buffer. This should be AT LEAST the size of the window. A recommended value for this would be at least 8x greater than the <a href="#//api/name/windowSize"><code>windowSize</code></a> argument.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>sampleRate</code></th>
+						<td><p>A float representing the sample rate of the incoming audio signal.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>delegate</code></th>
+						<td><p>An <a href="../Protocols/EZAudioFFTDelegate.html">EZAudioFFTDelegate</a> to receive an event whenever the FFT is calculated.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>A newly created EZAudioFFTRolling instance.</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Initializes an EZAudioFFTRolling instance with a window size, a history buffer size, a sample rate, and an <a href="../Protocols/EZAudioFFTDelegate.html">EZAudioFFTDelegate</a>. The EZAudioFFTRolling has an internal EZPlotHistoryInfo data structure that writes audio data to a circular buffer and manages sliding windows of audio data to support efficient, large FFT calculations. Here you provide a window size that represents how many audio sample will be used to calculate the FFT, a history buffer size representing the maximum length of the sliding window&rsquo;s underlying circular buffer, a float representing the sample rate of the incoming audio (can be 0 if you don&rsquo;t care about the <code>maxFrequency</code> property), and an <a href="../Protocols/EZAudioFFTDelegate.html">EZAudioFFTDelegate</a> to receive a callback anytime the FFT is calculated.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZAudioFFT.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+
+						<a title="Class Initializers" name="task_Class Initializers"></a>
+						<h2 class="task-title">Class Initializers</h2>
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/fftWithWindowSize:sampleRate:" title="fftWithWindowSize:sampleRate:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/fftWithWindowSize:sampleRate:">+&nbsp;fftWithWindowSize:sampleRate:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Class method to initialize an EZAudioFFTRolling instance with a window size and a sample rate. The EZAudioFFTRolling has an internal EZPlotHistoryInfo data structure that writes audio data to a circular buffer and manages sliding windows of audio data to support efficient, large FFT calculations. Here you provide a window size that represents how many audio sample will be used to calculate the FFT and a float representing the sample rate of the incoming audio (can be 0 if you don&rsquo;t care about the <code>maxFrequency</code> property). The history buffer size in this case is the <a href="#//api/name/windowSize"><code>windowSize</code></a> * 8, which is pretty good for most cases.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (instancetype)fftWithWindowSize:(vDSP_Length)<em>windowSize</em> sampleRate:(float)<em>sampleRate</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>windowSize</code></th>
+						<td><p>A vDSP_Length (unsigned long) representing the size of the window (i.e. the resolution) of data that should be used to calculate the FFT. A typical value for this would be something like 1024 - 4096 (or higher for an even higher resolution FFT).</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>sampleRate</code></th>
+						<td><p>A float representing the sample rate of the incoming audio signal.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>A newly created EZAudioFFTRolling instance.</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Class method to initialize an EZAudioFFTRolling instance with a window size and a sample rate. The EZAudioFFTRolling has an internal EZPlotHistoryInfo data structure that writes audio data to a circular buffer and manages sliding windows of audio data to support efficient, large FFT calculations. Here you provide a window size that represents how many audio sample will be used to calculate the FFT and a float representing the sample rate of the incoming audio (can be 0 if you don&rsquo;t care about the <code>maxFrequency</code> property). The history buffer size in this case is the <a href="#//api/name/windowSize"><code>windowSize</code></a> * 8, which is pretty good for most cases.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZAudioFFT.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/fftWithWindowSize:sampleRate:delegate:" title="fftWithWindowSize:sampleRate:delegate:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/fftWithWindowSize:sampleRate:delegate:">+&nbsp;fftWithWindowSize:sampleRate:delegate:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Class method to initialize an EZAudioFFTRolling instance with a window size, a sample rate, and an <a href="../Protocols/EZAudioFFTDelegate.html">EZAudioFFTDelegate</a>. The EZAudioFFTRolling has an internal EZPlotHistoryInfo data structure that writes audio data to a circular buffer and manages sliding windows of audio data to support efficient, large FFT calculations. Here you provide a window size that represents how many audio sample will be used to calculate the FFT, a float representing the sample rate of the incoming audio (can be 0 if you don&rsquo;t care about the <code>maxFrequency</code> property), and an <a href="../Protocols/EZAudioFFTDelegate.html">EZAudioFFTDelegate</a> to receive a callback anytime the FFT is calculated. The history buffer size in this case is the <a href="#//api/name/windowSize"><code>windowSize</code></a> * 8, which is pretty good for most cases.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (instancetype)fftWithWindowSize:(vDSP_Length)<em>windowSize</em> sampleRate:(float)<em>sampleRate</em> delegate:(id&lt;EZAudioFFTDelegate&gt;)<em>delegate</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>windowSize</code></th>
+						<td><p>A vDSP_Length (unsigned long) representing the size of the window (i.e. the resolution) of data that should be used to calculate the FFT. A typical value for this would be something like 1024 - 4096 (or higher for an even higher resolution FFT).</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>sampleRate</code></th>
+						<td><p>A float representing the sample rate of the incoming audio signal.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>delegate</code></th>
+						<td><p>An <a href="../Protocols/EZAudioFFTDelegate.html">EZAudioFFTDelegate</a> to receive an event whenever the FFT is calculated.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>A newly created EZAudioFFTRolling instance.</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Class method to initialize an EZAudioFFTRolling instance with a window size, a sample rate, and an <a href="../Protocols/EZAudioFFTDelegate.html">EZAudioFFTDelegate</a>. The EZAudioFFTRolling has an internal EZPlotHistoryInfo data structure that writes audio data to a circular buffer and manages sliding windows of audio data to support efficient, large FFT calculations. Here you provide a window size that represents how many audio sample will be used to calculate the FFT, a float representing the sample rate of the incoming audio (can be 0 if you don&rsquo;t care about the <code>maxFrequency</code> property), and an <a href="../Protocols/EZAudioFFTDelegate.html">EZAudioFFTDelegate</a> to receive a callback anytime the FFT is calculated. The history buffer size in this case is the <a href="#//api/name/windowSize"><code>windowSize</code></a> * 8, which is pretty good for most cases.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZAudioFFT.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/fftWithWindowSize:historyBufferSize:sampleRate:" title="fftWithWindowSize:historyBufferSize:sampleRate:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/fftWithWindowSize:historyBufferSize:sampleRate:">+&nbsp;fftWithWindowSize:historyBufferSize:sampleRate:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Class method to initialize an EZAudioFFTRolling instance with a window size, a history buffer size, and a sample rate. The EZAudioFFTRolling has an internal EZPlotHistoryInfo data structure that writes audio data to a circular buffer and manages sliding windows of audio data to support efficient, large FFT calculations. Here you provide a window size that represents how many audio sample will be used to calculate the FFT, a history buffer size representing the maximum length of the sliding window&rsquo;s underlying circular buffer, and a float representing the sample rate of the incoming audio (can be 0 if you don&rsquo;t care about the <code>maxFrequency</code> property).</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (instancetype)fftWithWindowSize:(vDSP_Length)<em>windowSize</em> historyBufferSize:(vDSP_Length)<em>historyBufferSize</em> sampleRate:(float)<em>sampleRate</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>windowSize</code></th>
+						<td><p>A vDSP_Length (unsigned long) representing the size of the window (i.e. the resolution) of data that should be used to calculate the FFT. A typical value for this would be something like 1024 - 4096 (or higher for an even higher resolution FFT).</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>historyBufferSize</code></th>
+						<td><p>A vDSP_Length (unsigned long) representing the length of the history buffer. This should be AT LEAST the size of the window. A recommended value for this would be at least 8x greater than the <a href="#//api/name/windowSize"><code>windowSize</code></a> argument.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>sampleRate</code></th>
+						<td><p>A float representing the sample rate of the incoming audio signal.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>A newly created EZAudioFFTRolling instance.</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Class method to initialize an EZAudioFFTRolling instance with a window size, a history buffer size, and a sample rate. The EZAudioFFTRolling has an internal EZPlotHistoryInfo data structure that writes audio data to a circular buffer and manages sliding windows of audio data to support efficient, large FFT calculations. Here you provide a window size that represents how many audio sample will be used to calculate the FFT, a history buffer size representing the maximum length of the sliding window&rsquo;s underlying circular buffer, and a float representing the sample rate of the incoming audio (can be 0 if you don&rsquo;t care about the <code>maxFrequency</code> property).</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZAudioFFT.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/fftWithWindowSize:historyBufferSize:sampleRate:delegate:" title="fftWithWindowSize:historyBufferSize:sampleRate:delegate:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/fftWithWindowSize:historyBufferSize:sampleRate:delegate:">+&nbsp;fftWithWindowSize:historyBufferSize:sampleRate:delegate:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Class method to initialize an EZAudioFFTRolling instance with a window size, a history buffer size, a sample rate, and an <a href="../Protocols/EZAudioFFTDelegate.html">EZAudioFFTDelegate</a>. The EZAudioFFTRolling has an internal EZPlotHistoryInfo data structure that writes audio data to a circular buffer and manages sliding windows of audio data to support efficient, large FFT calculations. Here you provide a window size that represents how many audio sample will be used to calculate the FFT, a history buffer size representing the maximum length of the sliding window&rsquo;s underlying circular buffer, a float representing the sample rate of the incoming audio (can be 0 if you don&rsquo;t care about the <code>maxFrequency</code> property), and an <a href="../Protocols/EZAudioFFTDelegate.html">EZAudioFFTDelegate</a> to receive a callback anytime the FFT is calculated.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (instancetype)fftWithWindowSize:(vDSP_Length)<em>windowSize</em> historyBufferSize:(vDSP_Length)<em>historyBufferSize</em> sampleRate:(float)<em>sampleRate</em> delegate:(id&lt;EZAudioFFTDelegate&gt;)<em>delegate</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>windowSize</code></th>
+						<td><p>A vDSP_Length (unsigned long) representing the size of the window (i.e. the resolution) of data that should be used to calculate the FFT. A typical value for this would be something like 1024 - 4096 (or higher for an even higher resolution FFT).</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>historyBufferSize</code></th>
+						<td><p>A vDSP_Length (unsigned long) representing the length of the history buffer. This should be AT LEAST the size of the window. A recommended value for this would be at least 8x greater than the <a href="#//api/name/windowSize"><code>windowSize</code></a> argument.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>sampleRate</code></th>
+						<td><p>A float representing the sample rate of the incoming audio signal.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>delegate</code></th>
+						<td><p>An <a href="../Protocols/EZAudioFFTDelegate.html">EZAudioFFTDelegate</a> to receive an event whenever the FFT is calculated.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>A newly created EZAudioFFTRolling instance.</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Class method to initialize an EZAudioFFTRolling instance with a window size, a history buffer size, a sample rate, and an <a href="../Protocols/EZAudioFFTDelegate.html">EZAudioFFTDelegate</a>. The EZAudioFFTRolling has an internal EZPlotHistoryInfo data structure that writes audio data to a circular buffer and manages sliding windows of audio data to support efficient, large FFT calculations. Here you provide a window size that represents how many audio sample will be used to calculate the FFT, a history buffer size representing the maximum length of the sliding window&rsquo;s underlying circular buffer, a float representing the sample rate of the incoming audio (can be 0 if you don&rsquo;t care about the <code>maxFrequency</code> property), and an <a href="../Protocols/EZAudioFFTDelegate.html">EZAudioFFTDelegate</a> to receive a callback anytime the FFT is calculated.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZAudioFFT.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+
+						<a title="Properties" name="task_Properties"></a>
+						<h2 class="task-title">Properties</h2>
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/windowSize" title="windowSize"></a>
+	<h3 class="method-title"><code><a href="#//api/name/windowSize">&nbsp;&nbsp;windowSize</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>A vDSP_Length (unsigned long) representing the length of the FFT window.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (readonly, nonatomic) vDSP_Length windowSize</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>A vDSP_Length (unsigned long) representing the length of the FFT window.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZAudioFFT.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/timeDomainData" title="timeDomainData"></a>
+	<h3 class="method-title"><code><a href="#//api/name/timeDomainData">&nbsp;&nbsp;timeDomainData</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>A float array representing the audio data in the internal circular buffer used to perform the FFT. This will increase as more data is appended to the internal circular buffer via the <a href="#//api/name/computeFFTWithBuffer:withBufferSize:"><code>computeFFTWithBuffer:withBufferSize:</code></a> method. The length of this array is the <a href="#//api/name/timeDomainBufferSize"><code>timeDomainBufferSize</code></a> property.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (readonly, nonatomic) float *timeDomainData</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>A float array representing the audio data in the internal circular buffer used to perform the FFT. This will increase as more data is appended to the internal circular buffer via the <a href="#//api/name/computeFFTWithBuffer:withBufferSize:"><code>computeFFTWithBuffer:withBufferSize:</code></a> method. The length of this array is the <a href="#//api/name/timeDomainBufferSize"><code>timeDomainBufferSize</code></a> property.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZAudioFFT.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/timeDomainBufferSize" title="timeDomainBufferSize"></a>
+	<h3 class="method-title"><code><a href="#//api/name/timeDomainBufferSize">&nbsp;&nbsp;timeDomainBufferSize</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>A UInt32 representing the length of the audio data used to perform the FFT.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (readonly, nonatomic) UInt32 timeDomainBufferSize</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>A UInt32 representing the length of the audio data used to perform the FFT.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZAudioFFT.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+
+						
+						<h2 class="task-title">Other Methods</h2>
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/computeFFTWithBuffer:withBufferSize:" title="computeFFTWithBuffer:withBufferSize:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/computeFFTWithBuffer:withBufferSize:">&ndash;&nbsp;computeFFTWithBuffer:withBufferSize:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Computes the FFT for a float array representing an incoming audio signal. This will trigger the <a href="../Protocols/EZAudioFFTDelegate.html">EZAudioFFTDelegate</a> method <code>fft:updatedWithFFTData:bufferSize:</code>.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (float *)computeFFTWithBuffer:(float *)<em>buffer</em> withBufferSize:(UInt32)<em>bufferSize</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>buffer</code></th>
+						<td><p>A float array representing the audio data.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>bufferSize</code></th>
+						<td><p>The length of the float array of audio data.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>A float array containing the computed FFT data. The length of the output will be half the incoming buffer (half the <code>bufferSize</code> argument).</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Computes the FFT for a float array representing an incoming audio signal. This will trigger the <a href="../Protocols/EZAudioFFTDelegate.html">EZAudioFFTDelegate</a> method <code>fft:updatedWithFFTData:bufferSize:</code>.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZAudioFFT.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+					</div>
+					
+					
+
+                    
+                    
+          
+				</main>
+
+				<footer>
+					<div class="footer-copyright">
+						
+						<p class="copyright">Copyright &copy; 2016 AWARE. All rights reserved. Updated: 2016-03-17</p>
+						
+						
+						<p class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2.1 (build 1334)</a>.</p>
+						
+					</div>
+				</footer>
+			</div>
+		</div>
+	</article>
+
+	<script src="../js/script.js"></script>
+</body>
+</html>

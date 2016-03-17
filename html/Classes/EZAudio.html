@@ -1,0 +1,2416 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<title>EZAudio Class Reference</title>
+
+	<link rel="stylesheet" href="../css/style.css">
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1.4">
+	<meta name="generator" content="appledoc 2.2.1 (build 1334)">
+</head>
+<body class="appledoc">
+	<header>
+		<div class="container" class="hide-in-xcode">
+			
+			<h1 id="library-title">
+				<a href="../index.html">AWARE Client iOS </a>
+			</h1>
+
+			<p id="developer-home">
+				<a href="../index.html">AWARE</a>
+			</p>
+			
+		</div>
+	</header>
+
+	<aside>
+		<div class="container">
+			<nav>
+				<ul id="header-buttons" role="toolbar">
+					<li><a href="../index.html">Index</a></li>
+<li><a href="../hierarchy.html">Hierarchy</a></li>
+
+					<li id="on-this-page" role="navigation">
+						<label>
+							On This Page
+
+							<div class="chevron">
+								<div class="chevy chevron-left"></div>
+								<div class="chevy chevron-right"></div>
+							</div>
+
+							<select id="jump-to">
+	<option value="top">Jump To&#133;</option>
+	
+	<option value="overview">Overview</option>
+	
+
+	
+	
+	<option value="tasks">Tasks</option>
+	
+	
+
+	
+	
+
+	
+	<optgroup label="Class Methods">
+		
+		<option value="//api/name/AIFFFormatWithNumberOfChannels:sampleRate:">+ AIFFFormatWithNumberOfChannels:sampleRate:</option>
+		
+		<option value="//api/name/M4AFormatWithNumberOfChannels:sampleRate:">+ M4AFormatWithNumberOfChannels:sampleRate:</option>
+		
+		<option value="//api/name/MAP:leftMin:leftMax:rightMin:rightMax:">+ MAP:leftMin:leftMax:rightMin:rightMax:</option>
+		
+		<option value="//api/name/RMS:length:">+ RMS:length:</option>
+		
+		<option value="//api/name/SGN:">+ SGN:</option>
+		
+		<option value="//api/name/appendBufferAndShift:withBufferSize:toScrollHistory:withScrollHistorySize:">+ appendBufferAndShift:withBufferSize:toScrollHistory:withScrollHistorySize:</option>
+		
+		<option value="//api/name/appendDataToCircularBuffer:fromAudioBufferList:">+ appendDataToCircularBuffer:fromAudioBufferList:</option>
+		
+		<option value="//api/name/appendValue:toScrollHistory:withScrollHistorySize:">+ appendValue:toScrollHistory:withScrollHistorySize:</option>
+		
+		<option value="//api/name/audioBufferListWithNumberOfFrames:numberOfChannels:interleaved:">+ audioBufferListWithNumberOfFrames:numberOfChannels:interleaved:</option>
+		
+		<option value="//api/name/checkResult:operation:">+ checkResult:operation:</option>
+		
+		<option value="//api/name/circularBuffer:withSize:">+ circularBuffer:withSize:</option>
+		
+		<option value="//api/name/displayTimeStringFromSeconds:">+ displayTimeStringFromSeconds:</option>
+		
+		<option value="//api/name/floatBuffersWithNumberOfFrames:numberOfChannels:">+ floatBuffersWithNumberOfFrames:numberOfChannels:</option>
+		
+		<option value="//api/name/floatFormatWithNumberOfChannels:sampleRate:">+ floatFormatWithNumberOfChannels:sampleRate:</option>
+		
+		<option value="//api/name/freeBufferList:">+ freeBufferList:</option>
+		
+		<option value="//api/name/freeCircularBuffer:">+ freeCircularBuffer:</option>
+		
+		<option value="//api/name/freeFloatBuffers:numberOfChannels:">+ freeFloatBuffers:numberOfChannels:</option>
+		
+		<option value="//api/name/iLBCFormatWithSampleRate:">+ iLBCFormatWithSampleRate:</option>
+		
+		<option value="//api/name/isFloatFormat:">+ isFloatFormat:</option>
+		
+		<option value="//api/name/isInterleaved:">+ isInterleaved:</option>
+		
+		<option value="//api/name/isLinearPCM:">+ isLinearPCM:</option>
+		
+		<option value="//api/name/monoCanonicalFormatWithSampleRate:">+ monoCanonicalFormatWithSampleRate:</option>
+		
+		<option value="//api/name/monoFloatFormatWithSampleRate:">+ monoFloatFormatWithSampleRate:</option>
+		
+		<option value="//api/name/printASBD:">+ printASBD:</option>
+		
+		<option value="//api/name/setCanonicalAudioStreamBasicDescription:numberOfChannels:interleaved:">+ setCanonicalAudioStreamBasicDescription:numberOfChannels:interleaved:</option>
+		
+		<option value="//api/name/setShouldExitOnCheckResultFail:">+ setShouldExitOnCheckResultFail:</option>
+		
+		<option value="//api/name/shouldExitOnCheckResultFail">+ shouldExitOnCheckResultFail</option>
+		
+		<option value="//api/name/stereoCanonicalNonInterleavedFormatWithSampleRate:">+ stereoCanonicalNonInterleavedFormatWithSampleRate:</option>
+		
+		<option value="//api/name/stereoFloatInterleavedFormatWithSampleRate:">+ stereoFloatInterleavedFormatWithSampleRate:</option>
+		
+		<option value="//api/name/stereoFloatNonInterleavedFormatWithSampleRate:">+ stereoFloatNonInterleavedFormatWithSampleRate:</option>
+		
+		<option value="//api/name/stringForAudioStreamBasicDescription:">+ stringForAudioStreamBasicDescription:</option>
+		
+		<option value="//api/name/stringFromUInt32Code:">+ stringFromUInt32Code:</option>
+		
+		<option value="//api/name/updateScrollHistory:withLength:atIndex:withBuffer:withBufferSize:isResolutionChanging:">+ updateScrollHistory:withLength:atIndex:withBuffer:withBufferSize:isResolutionChanging:</option>
+		
+	</optgroup>
+	
+
+	
+	
+</select>
+						</label>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</aside>
+
+	<article>
+		<div id="overview_contents" class="container">
+			<div id="content">
+				<main role="main">
+					<h1 class="title">EZAudio Class Reference</h1>
+
+					
+					<div class="section section-specification"><table cellspacing="0"><tbody>
+						<tr>
+	<th>Inherits from</th>
+	<td>NSObject</td>
+</tr><tr>
+	<th>Declared in</th>
+	<td>EZAudio.h<br />EZAudio.m</td>
+</tr>
+						</tbody></table></div>
+					
+
+                    
+					
+					<div class="section section-overview">
+						<a title="Overview" name="overview"></a>
+						<h2 class="subtitle subtitle-overview">Overview</h2>
+						<p>EZAudio is a simple, intuitive framework for iOS and OSX. The goal of EZAudio was to provide a modular, cross-platform framework to simplify performing everyday audio operations like getting microphone input, creating audio waveforms, recording/playing audio files, etc. The visualization tools like the <a href="../Classes/EZAudioPlot.html">EZAudioPlot</a> and <a href="../Classes/EZAudioPlotGL.html">EZAudioPlotGL</a> were created to plug right into the framework&rsquo;s various components and provide highly optimized drawing routines that work in harmony with audio callback loops. All components retain the same namespace whether you&rsquo;re on an iOS device or a Mac computer so an <a href="../Classes/EZAudioPlot.html">EZAudioPlot</a> understands it will subclass an UIView on an iOS device or an NSView on a Mac.</p>
+
+<p>Class methods for EZAudio are provided as utility methods used throughout the other modules within the framework. For instance, these methods help make sense of error codes (<a href="#//api/name/checkResult:operation:">checkResult:operation:</a>), map values betwen coordinate systems (<a href="#//api/name/MAP:leftMin:leftMax:rightMin:rightMax:">MAP:leftMin:leftMax:rightMin:rightMax:</a>), calculate root mean squared values for buffers (<a href="#//api/name/RMS:length:">RMS:length:</a>), etc.</p><div class="warning"><p><strong>Warning:</strong> As of 1.0 these methods have been moved over to <a href="../Classes/EZAudioUtilities.html"><code>EZAudioUtilities</code></a> to allow using specific modules without requiring the whole library.</p></div>
+					</div>
+					
+					
+
+					
+					
+					<div class="section section-tasks">
+						<a title="Tasks" name="tasks"></a>
+						
+
+						<a title="Debugging EZAudio" name="task_Debugging EZAudio"></a>
+						<h2 class="task-title">Debugging EZAudio</h2>
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/setShouldExitOnCheckResultFail:" title="setShouldExitOnCheckResultFail:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/setShouldExitOnCheckResultFail:">+&nbsp;setShouldExitOnCheckResultFail:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Globally sets whether or not the program should exit if a <a href="#//api/name/checkResult:operation:"><code>checkResult:operation:</code></a> operation fails. Currently the behavior on EZAudio is to quit if a <a href="#//api/name/checkResult:operation:"><code>checkResult:operation:</code></a> fails, but this is not desirable in any production environment. Internally there are a lot of <a href="#//api/name/checkResult:operation:"><code>checkResult:operation:</code></a> operations used on all the core classes. This should only ever be set to NO in production environments since a <a href="#//api/name/checkResult:operation:"><code>checkResult:operation:</code></a> failing means something breaking has likely happened. (<b class="deprecated">Deprecated:</b><span class="deprecated"> This method is deprecated starting in version 0.1.0.</span>)</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (void)setShouldExitOnCheckResultFail:(BOOL)<em>shouldExitOnCheckResultFail</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>shouldExitOnCheckResultFail</code></th>
+						<td><p>A BOOL indicating whether or not the running program should exist due to a <a href="#//api/name/checkResult:operation:"><code>checkResult:operation:</code></a> fail.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Globally sets whether or not the program should exit if a <a href="#//api/name/checkResult:operation:"><code>checkResult:operation:</code></a> operation fails. Currently the behavior on EZAudio is to quit if a <a href="#//api/name/checkResult:operation:"><code>checkResult:operation:</code></a> fails, but this is not desirable in any production environment. Internally there are a lot of <a href="#//api/name/checkResult:operation:"><code>checkResult:operation:</code></a> operations used on all the core classes. This should only ever be set to NO in production environments since a <a href="#//api/name/checkResult:operation:"><code>checkResult:operation:</code></a> failing means something breaking has likely happened.</p><div class="note"><p><strong>Note:</strong> Please use same method in <a href="../Classes/EZAudioUtilities.html">EZAudioUtilities</a> class instead.</p></div>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZAudio.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/shouldExitOnCheckResultFail" title="shouldExitOnCheckResultFail"></a>
+	<h3 class="method-title"><code><a href="#//api/name/shouldExitOnCheckResultFail">+&nbsp;shouldExitOnCheckResultFail</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Provides a flag indicating whether or not the program will exit if a <a href="#//api/name/checkResult:operation:"><code>checkResult:operation:</code></a> fails. (<b class="deprecated">Deprecated:</b><span class="deprecated"> This method is deprecated starting in version 0.1.0.</span>)</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (BOOL)shouldExitOnCheckResultFail</code></div>
+
+		    
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>A BOOL indicating whether or not the program will exit if a <a href="#//api/name/checkResult:operation:"><code>checkResult:operation:</code></a> fails.</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Provides a flag indicating whether or not the program will exit if a <a href="#//api/name/checkResult:operation:"><code>checkResult:operation:</code></a> fails.</p><div class="note"><p><strong>Note:</strong> Please use same method in <a href="../Classes/EZAudioUtilities.html">EZAudioUtilities</a> class instead.</p></div>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZAudio.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+
+						<a title="AudioBufferList Utility" name="task_AudioBufferList Utility"></a>
+						<h2 class="task-title">AudioBufferList Utility</h2>
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/audioBufferListWithNumberOfFrames:numberOfChannels:interleaved:" title="audioBufferListWithNumberOfFrames:numberOfChannels:interleaved:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/audioBufferListWithNumberOfFrames:numberOfChannels:interleaved:">+&nbsp;audioBufferListWithNumberOfFrames:numberOfChannels:interleaved:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Allocates an AudioBufferList structure. Make sure to call freeBufferList when done using AudioBufferList or it will leak. (<b class="deprecated">Deprecated:</b><span class="deprecated"> This method is deprecated starting in version 0.1.0.</span>)</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (AudioBufferList *)audioBufferListWithNumberOfFrames:(UInt32)<em>frames</em> numberOfChannels:(UInt32)<em>channels</em> interleaved:(BOOL)<em>interleaved</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>frames</code></th>
+						<td><p>The number of frames that will be stored within each audio buffer</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>channels</code></th>
+						<td><p>The number of channels (e.g. 2 for stereo, 1 for mono, etc.)</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>interleaved</code></th>
+						<td><p>Whether the samples will be interleaved (if not it will be assumed to be non-interleaved and each channel will have an AudioBuffer allocated)</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>An AudioBufferList struct that has been allocated in memory</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Allocates an AudioBufferList structure. Make sure to call freeBufferList when done using AudioBufferList or it will leak.</p><div class="note"><p><strong>Note:</strong> Please use same method in <a href="../Classes/EZAudioUtilities.html">EZAudioUtilities</a> class instead.</p></div>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZAudio.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/floatBuffersWithNumberOfFrames:numberOfChannels:" title="floatBuffersWithNumberOfFrames:numberOfChannels:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/floatBuffersWithNumberOfFrames:numberOfChannels:">+&nbsp;floatBuffersWithNumberOfFrames:numberOfChannels:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Allocates an array of float arrays given the number of frames needed to store in each float array. (<b class="deprecated">Deprecated:</b><span class="deprecated"> This method is deprecated starting in version 0.1.0.</span>)</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (float **)floatBuffersWithNumberOfFrames:(UInt32)<em>frames</em> numberOfChannels:(UInt32)<em>channels</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>frames</code></th>
+						<td><p>A UInt32 representing the number of frames to store in each float buffer</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>channels</code></th>
+						<td><p>A UInt32 representing the number of channels (i.e. the number of float arrays to allocate)</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>An array of float arrays, each the length of the number of frames specified</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Allocates an array of float arrays given the number of frames needed to store in each float array.</p><div class="note"><p><strong>Note:</strong> Please use same method in <a href="../Classes/EZAudioUtilities.html">EZAudioUtilities</a> class instead.</p></div>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZAudio.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/freeBufferList:" title="freeBufferList:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/freeBufferList:">+&nbsp;freeBufferList:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Deallocates an AudioBufferList structure from memory. (<b class="deprecated">Deprecated:</b><span class="deprecated"> This method is deprecated starting in version 0.1.0.</span>)</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (void)freeBufferList:(AudioBufferList *)<em>bufferList</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>bufferList</code></th>
+						<td><p>A pointer to the buffer list you would like to free</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Deallocates an AudioBufferList structure from memory.</p><div class="note"><p><strong>Note:</strong> Please use same method in <a href="../Classes/EZAudioUtilities.html">EZAudioUtilities</a> class instead.</p></div>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZAudio.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/freeFloatBuffers:numberOfChannels:" title="freeFloatBuffers:numberOfChannels:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/freeFloatBuffers:numberOfChannels:">+&nbsp;freeFloatBuffers:numberOfChannels:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Deallocates an array of float buffers (<b class="deprecated">Deprecated:</b><span class="deprecated"> This method is deprecated starting in version 0.1.0.</span>)</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (void)freeFloatBuffers:(float **)<em>buffers</em> numberOfChannels:(UInt32)<em>channels</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>buffers</code></th>
+						<td><p>An array of float arrays</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>channels</code></th>
+						<td><p>A UInt32 representing the number of channels (i.e. the number of float arrays to deallocate)</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Deallocates an array of float buffers</p><div class="note"><p><strong>Note:</strong> Please use same method in <a href="../Classes/EZAudioUtilities.html">EZAudioUtilities</a> class instead.</p></div>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZAudio.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+
+						<a title="Creating An AudioStreamBasicDescription" name="task_Creating An AudioStreamBasicDescription"></a>
+						<h2 class="task-title">Creating An AudioStreamBasicDescription</h2>
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/AIFFFormatWithNumberOfChannels:sampleRate:" title="AIFFFormatWithNumberOfChannels:sampleRate:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/AIFFFormatWithNumberOfChannels:sampleRate:">+&nbsp;AIFFFormatWithNumberOfChannels:sampleRate:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Creates a signed-integer, interleaved AudioStreamBasicDescription for the number of channels specified for an AIFF format. (<b class="deprecated">Deprecated:</b><span class="deprecated"> This method is deprecated starting in version 0.1.0.</span>)</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (AudioStreamBasicDescription)AIFFFormatWithNumberOfChannels:(UInt32)<em>channels</em> sampleRate:(float)<em>sampleRate</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>channels</code></th>
+						<td><p>The desired number of channels</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>sampleRate</code></th>
+						<td><p>A float representing the sample rate.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>A new AudioStreamBasicDescription with the specified format.</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Creates a signed-integer, interleaved AudioStreamBasicDescription for the number of channels specified for an AIFF format.</p><div class="note"><p><strong>Note:</strong> Please use same method in <a href="../Classes/EZAudioUtilities.html">EZAudioUtilities</a> class instead.</p></div>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZAudio.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/iLBCFormatWithSampleRate:" title="iLBCFormatWithSampleRate:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/iLBCFormatWithSampleRate:">+&nbsp;iLBCFormatWithSampleRate:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Creates an AudioStreamBasicDescription for the iLBC narrow band speech codec. (<b class="deprecated">Deprecated:</b><span class="deprecated"> This method is deprecated starting in version 0.1.0.</span>)</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (AudioStreamBasicDescription)iLBCFormatWithSampleRate:(float)<em>sampleRate</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>sampleRate</code></th>
+						<td><p>A float representing the sample rate.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>A new AudioStreamBasicDescription with the specified format.</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Creates an AudioStreamBasicDescription for the iLBC narrow band speech codec.</p><div class="note"><p><strong>Note:</strong> Please use same method in <a href="../Classes/EZAudioUtilities.html">EZAudioUtilities</a> class instead.</p></div>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZAudio.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/floatFormatWithNumberOfChannels:sampleRate:" title="floatFormatWithNumberOfChannels:sampleRate:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/floatFormatWithNumberOfChannels:sampleRate:">+&nbsp;floatFormatWithNumberOfChannels:sampleRate:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Creates a float-based, non-interleaved AudioStreamBasicDescription for the number of channels specified. (<b class="deprecated">Deprecated:</b><span class="deprecated"> This method is deprecated starting in version 0.1.0.</span>)</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (AudioStreamBasicDescription)floatFormatWithNumberOfChannels:(UInt32)<em>channels</em> sampleRate:(float)<em>sampleRate</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>channels</code></th>
+						<td><p>A UInt32 representing the number of channels.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>sampleRate</code></th>
+						<td><p>A float representing the sample rate.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>A float-based AudioStreamBasicDescription with the number of channels specified.</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Creates a float-based, non-interleaved AudioStreamBasicDescription for the number of channels specified.</p><div class="note"><p><strong>Note:</strong> Please use same method in <a href="../Classes/EZAudioUtilities.html">EZAudioUtilities</a> class instead.</p></div>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZAudio.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/M4AFormatWithNumberOfChannels:sampleRate:" title="M4AFormatWithNumberOfChannels:sampleRate:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/M4AFormatWithNumberOfChannels:sampleRate:">+&nbsp;M4AFormatWithNumberOfChannels:sampleRate:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Creates an AudioStreamBasicDescription for an M4A AAC format. (<b class="deprecated">Deprecated:</b><span class="deprecated"> This method is deprecated starting in version 0.1.0.</span>)</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (AudioStreamBasicDescription)M4AFormatWithNumberOfChannels:(UInt32)<em>channels</em> sampleRate:(float)<em>sampleRate</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>channels</code></th>
+						<td><p>The desired number of channels</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>sampleRate</code></th>
+						<td><p>A float representing the sample rate.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>A new AudioStreamBasicDescription with the specified format.</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Creates an AudioStreamBasicDescription for an M4A AAC format.</p><div class="note"><p><strong>Note:</strong> Please use same method in <a href="../Classes/EZAudioUtilities.html">EZAudioUtilities</a> class instead.</p></div>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZAudio.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/monoFloatFormatWithSampleRate:" title="monoFloatFormatWithSampleRate:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/monoFloatFormatWithSampleRate:">+&nbsp;monoFloatFormatWithSampleRate:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Creates a single-channel, float-based AudioStreamBasicDescription. (<b class="deprecated">Deprecated:</b><span class="deprecated"> This method is deprecated starting in version 0.1.0.</span>)</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (AudioStreamBasicDescription)monoFloatFormatWithSampleRate:(float)<em>sampleRate</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>sampleRate</code></th>
+						<td><p>A float representing the sample rate.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>A new AudioStreamBasicDescription with the specified format.</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Creates a single-channel, float-based AudioStreamBasicDescription.</p><div class="note"><p><strong>Note:</strong> Please use same method in <a href="../Classes/EZAudioUtilities.html">EZAudioUtilities</a> class instead.</p></div>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZAudio.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/monoCanonicalFormatWithSampleRate:" title="monoCanonicalFormatWithSampleRate:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/monoCanonicalFormatWithSampleRate:">+&nbsp;monoCanonicalFormatWithSampleRate:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Creates a single-channel, float-based AudioStreamBasicDescription (as of 0.0.6 this is the same as <a href="#//api/name/monoFloatFormatWithSampleRate:"><code>monoFloatFormatWithSampleRate:</code></a>). (<b class="deprecated">Deprecated:</b><span class="deprecated"> This method is deprecated starting in version 0.1.0.</span>)</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (AudioStreamBasicDescription)monoCanonicalFormatWithSampleRate:(float)<em>sampleRate</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>sampleRate</code></th>
+						<td><p>A float representing the sample rate.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>A new AudioStreamBasicDescription with the specified format.</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Creates a single-channel, float-based AudioStreamBasicDescription (as of 0.0.6 this is the same as <a href="#//api/name/monoFloatFormatWithSampleRate:"><code>monoFloatFormatWithSampleRate:</code></a>).</p><div class="note"><p><strong>Note:</strong> Please use same method in <a href="../Classes/EZAudioUtilities.html">EZAudioUtilities</a> class instead.</p></div>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZAudio.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/stereoCanonicalNonInterleavedFormatWithSampleRate:" title="stereoCanonicalNonInterleavedFormatWithSampleRate:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/stereoCanonicalNonInterleavedFormatWithSampleRate:">+&nbsp;stereoCanonicalNonInterleavedFormatWithSampleRate:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Creates a two-channel, non-interleaved, float-based AudioStreamBasicDescription (as of 0.0.6 this is the same as <a href="#//api/name/stereoFloatNonInterleavedFormatWithSampleRate:"><code>stereoFloatNonInterleavedFormatWithSampleRate:</code></a>). (<b class="deprecated">Deprecated:</b><span class="deprecated"> This method is deprecated starting in version 0.1.0.</span>)</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (AudioStreamBasicDescription)stereoCanonicalNonInterleavedFormatWithSampleRate:(float)<em>sampleRate</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>sampleRate</code></th>
+						<td><p>A float representing the sample rate.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>A new AudioStreamBasicDescription with the specified format.</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Creates a two-channel, non-interleaved, float-based AudioStreamBasicDescription (as of 0.0.6 this is the same as <a href="#//api/name/stereoFloatNonInterleavedFormatWithSampleRate:"><code>stereoFloatNonInterleavedFormatWithSampleRate:</code></a>).</p><div class="note"><p><strong>Note:</strong> Please use same method in <a href="../Classes/EZAudioUtilities.html">EZAudioUtilities</a> class instead.</p></div>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZAudio.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/stereoFloatInterleavedFormatWithSampleRate:" title="stereoFloatInterleavedFormatWithSampleRate:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/stereoFloatInterleavedFormatWithSampleRate:">+&nbsp;stereoFloatInterleavedFormatWithSampleRate:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Creates a two-channel, interleaved, float-based AudioStreamBasicDescription. (<b class="deprecated">Deprecated:</b><span class="deprecated"> This method is deprecated starting in version 0.1.0.</span>)</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (AudioStreamBasicDescription)stereoFloatInterleavedFormatWithSampleRate:(float)<em>sampleRate</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>sampleRate</code></th>
+						<td><p>A float representing the sample rate.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>A new AudioStreamBasicDescription with the specified format.</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Creates a two-channel, interleaved, float-based AudioStreamBasicDescription.</p><div class="note"><p><strong>Note:</strong> Please use same method in <a href="../Classes/EZAudioUtilities.html">EZAudioUtilities</a> class instead.</p></div>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZAudio.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/stereoFloatNonInterleavedFormatWithSampleRate:" title="stereoFloatNonInterleavedFormatWithSampleRate:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/stereoFloatNonInterleavedFormatWithSampleRate:">+&nbsp;stereoFloatNonInterleavedFormatWithSampleRate:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Creates a two-channel, non-interleaved, float-based AudioStreamBasicDescription. (<b class="deprecated">Deprecated:</b><span class="deprecated"> This method is deprecated starting in version 0.1.0.</span>)</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (AudioStreamBasicDescription)stereoFloatNonInterleavedFormatWithSampleRate:(float)<em>sampleRate</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>sampleRate</code></th>
+						<td><p>A float representing the sample rate.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>A new AudioStreamBasicDescription with the specified format.</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Creates a two-channel, non-interleaved, float-based AudioStreamBasicDescription.</p><div class="note"><p><strong>Note:</strong> Please use same method in <a href="../Classes/EZAudioUtilities.html">EZAudioUtilities</a> class instead.</p></div>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZAudio.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/isFloatFormat:" title="isFloatFormat:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/isFloatFormat:">+&nbsp;isFloatFormat:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Checks an AudioStreamBasicDescription to see if it is a float-based format (as opposed to a signed integer based format). (<b class="deprecated">Deprecated:</b><span class="deprecated"> This method is deprecated starting in version 0.1.0.</span>)</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (BOOL)isFloatFormat:(AudioStreamBasicDescription)<em>asbd</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>asbd</code></th>
+						<td><p>A valid AudioStreamBasicDescription</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>A BOOL indicating whether or not the AudioStreamBasicDescription is a float format.</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Checks an AudioStreamBasicDescription to see if it is a float-based format (as opposed to a signed integer based format).</p><div class="note"><p><strong>Note:</strong> Please use same method in <a href="../Classes/EZAudioUtilities.html">EZAudioUtilities</a> class instead.</p></div>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZAudio.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/isInterleaved:" title="isInterleaved:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/isInterleaved:">+&nbsp;isInterleaved:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Checks an AudioStreamBasicDescription to check for an interleaved flag (samples are
+stored in one buffer one after another instead of two (or n channels) parallel buffers (<b class="deprecated">Deprecated:</b><span class="deprecated"> This method is deprecated starting in version 0.1.0.</span>)</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (BOOL)isInterleaved:(AudioStreamBasicDescription)<em>asbd</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>asbd</code></th>
+						<td><p>A valid AudioStreamBasicDescription</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>A BOOL indicating whether or not the AudioStreamBasicDescription is interleaved</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Checks an AudioStreamBasicDescription to check for an interleaved flag (samples are
+stored in one buffer one after another instead of two (or n channels) parallel buffers</p><div class="note"><p><strong>Note:</strong> Please use same method in <a href="../Classes/EZAudioUtilities.html">EZAudioUtilities</a> class instead.</p></div>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZAudio.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/isLinearPCM:" title="isLinearPCM:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/isLinearPCM:">+&nbsp;isLinearPCM:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Checks an AudioStreamBasicDescription to see if it is a linear PCM format (uncompressed,
+1 frame per packet) (<b class="deprecated">Deprecated:</b><span class="deprecated"> This method is deprecated starting in version 0.1.0.</span>)</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (BOOL)isLinearPCM:(AudioStreamBasicDescription)<em>asbd</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>asbd</code></th>
+						<td><p>A valid AudioStreamBasicDescription</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>A BOOL indicating whether or not the AudioStreamBasicDescription is linear PCM.</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Checks an AudioStreamBasicDescription to see if it is a linear PCM format (uncompressed,
+1 frame per packet)</p><div class="note"><p><strong>Note:</strong> Please use same method in <a href="../Classes/EZAudioUtilities.html">EZAudioUtilities</a> class instead.</p></div>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZAudio.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+
+						<a title="AudioStreamBasicDescription Utilities" name="task_AudioStreamBasicDescription Utilities"></a>
+						<h2 class="task-title">AudioStreamBasicDescription Utilities</h2>
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/printASBD:" title="printASBD:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/printASBD:">+&nbsp;printASBD:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Nicely logs out the contents of an AudioStreamBasicDescription struct (<b class="deprecated">Deprecated:</b><span class="deprecated"> This method is deprecated starting in version 0.1.0.</span>)</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (void)printASBD:(AudioStreamBasicDescription)<em>asbd</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>asbd</code></th>
+						<td><p>The AudioStreamBasicDescription struct with content to print out</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Nicely logs out the contents of an AudioStreamBasicDescription struct</p><div class="note"><p><strong>Note:</strong> Please use same method in <a href="../Classes/EZAudioUtilities.html">EZAudioUtilities</a> class instead.</p></div>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZAudio.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/displayTimeStringFromSeconds:" title="displayTimeStringFromSeconds:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/displayTimeStringFromSeconds:">+&nbsp;displayTimeStringFromSeconds:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Converts seconds into a string formatted as MM:SS (<b class="deprecated">Deprecated:</b><span class="deprecated"> This method is deprecated starting in version 0.1.0.</span>)</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (NSString *)displayTimeStringFromSeconds:(NSTimeInterval)<em>seconds</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>seconds</code></th>
+						<td><p>An NSTimeInterval representing the number of seconds</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>An NSString instance formatted as MM:SS from the seconds provided.</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Converts seconds into a string formatted as MM:SS</p><div class="note"><p><strong>Note:</strong> Please use same method in <a href="../Classes/EZAudioUtilities.html">EZAudioUtilities</a> class instead.</p></div>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZAudio.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/stringForAudioStreamBasicDescription:" title="stringForAudioStreamBasicDescription:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/stringForAudioStreamBasicDescription:">+&nbsp;stringForAudioStreamBasicDescription:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Creates a string to use when logging out the contents of an AudioStreamBasicDescription (<b class="deprecated">Deprecated:</b><span class="deprecated"> This method is deprecated starting in version 0.1.0.</span>)</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (NSString *)stringForAudioStreamBasicDescription:(AudioStreamBasicDescription)<em>asbd</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>asbd</code></th>
+						<td><p>A valid AudioStreamBasicDescription struct.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>An NSString representing the contents of the AudioStreamBasicDescription.</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Creates a string to use when logging out the contents of an AudioStreamBasicDescription</p><div class="note"><p><strong>Note:</strong> Please use same method in <a href="../Classes/EZAudioUtilities.html">EZAudioUtilities</a> class instead.</p></div>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZAudio.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/setCanonicalAudioStreamBasicDescription:numberOfChannels:interleaved:" title="setCanonicalAudioStreamBasicDescription:numberOfChannels:interleaved:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/setCanonicalAudioStreamBasicDescription:numberOfChannels:interleaved:">+&nbsp;setCanonicalAudioStreamBasicDescription:numberOfChannels:interleaved:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Just a wrapper around the setCanonical function provided in the Core Audio Utility C++ class. (<b class="deprecated">Deprecated:</b><span class="deprecated"> This method is deprecated starting in version 0.1.0.</span>)</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (void)setCanonicalAudioStreamBasicDescription:(AudioStreamBasicDescription *)<em>asbd</em> numberOfChannels:(UInt32)<em>nChannels</em> interleaved:(BOOL)<em>interleaved</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>asbd</code></th>
+						<td><p>The AudioStreamBasicDescription structure to modify</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>nChannels</code></th>
+						<td><p>The number of expected channels on the description</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>interleaved</code></th>
+						<td><p>A flag indicating whether the stereo samples should be interleaved in the buffer</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Just a wrapper around the setCanonical function provided in the Core Audio Utility C++ class.</p><div class="note"><p><strong>Note:</strong> Please use same method in <a href="../Classes/EZAudioUtilities.html">EZAudioUtilities</a> class instead.</p></div>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZAudio.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+
+						<a title="Math Utilities" name="task_Math Utilities"></a>
+						<h2 class="task-title">Math Utilities</h2>
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/appendBufferAndShift:withBufferSize:toScrollHistory:withScrollHistorySize:" title="appendBufferAndShift:withBufferSize:toScrollHistory:withScrollHistorySize:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/appendBufferAndShift:withBufferSize:toScrollHistory:withScrollHistorySize:">+&nbsp;appendBufferAndShift:withBufferSize:toScrollHistory:withScrollHistorySize:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Appends an array of values to a history buffer and performs an internal shift to add the values to the tail and removes the same number of values from the head. (<b class="deprecated">Deprecated:</b><span class="deprecated"> This method is deprecated starting in version 0.1.0.</span>)</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (void)appendBufferAndShift:(float *)<em>buffer</em> withBufferSize:(int)<em>bufferLength</em> toScrollHistory:(float *)<em>scrollHistory</em> withScrollHistorySize:(int)<em>scrollHistoryLength</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>buffer</code></th>
+						<td><p>A float array of values to append to the tail of the history buffer</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>bufferLength</code></th>
+						<td><p>The length of the float array being appended to the history buffer</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>scrollHistory</code></th>
+						<td><p>The target history buffer in which to append the values</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>scrollHistoryLength</code></th>
+						<td><p>The length of the target history buffer</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Appends an array of values to a history buffer and performs an internal shift to add the values to the tail and removes the same number of values from the head.</p><div class="note"><p><strong>Note:</strong> Please use same method in <a href="../Classes/EZAudioUtilities.html">EZAudioUtilities</a> class instead.</p></div>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZAudio.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/appendValue:toScrollHistory:withScrollHistorySize:" title="appendValue:toScrollHistory:withScrollHistorySize:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/appendValue:toScrollHistory:withScrollHistorySize:">+&nbsp;appendValue:toScrollHistory:withScrollHistorySize:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Appends a value to a history buffer and performs an internal shift to add the value to the tail and remove the 0th value. (<b class="deprecated">Deprecated:</b><span class="deprecated"> This method is deprecated starting in version 0.1.0.</span>)</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (void)appendValue:(float)<em>value</em> toScrollHistory:(float *)<em>scrollHistory</em> withScrollHistorySize:(int)<em>scrollHistoryLength</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>value</code></th>
+						<td><p>The float value to append to the history array</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>scrollHistory</code></th>
+						<td><p>The target history buffer in which to append the values</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>scrollHistoryLength</code></th>
+						<td><p>The length of the target history buffer</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Appends a value to a history buffer and performs an internal shift to add the value to the tail and remove the 0th value.</p><div class="note"><p><strong>Note:</strong> Please use same method in <a href="../Classes/EZAudioUtilities.html">EZAudioUtilities</a> class instead.</p></div>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZAudio.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/MAP:leftMin:leftMax:rightMin:rightMax:" title="MAP:leftMin:leftMax:rightMin:rightMax:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/MAP:leftMin:leftMax:rightMin:rightMax:">+&nbsp;MAP:leftMin:leftMax:rightMin:rightMax:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Maps a value from one coordinate system into another one. Takes in the current value to map, the minimum and maximum values of the first coordinate system, and the minimum and maximum values of the second coordinate system and calculates the mapped value in the second coordinate system&rsquo;s constraints. (<b class="deprecated">Deprecated:</b><span class="deprecated"> This method is deprecated starting in version 0.1.0.</span>)</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (float)MAP:(float)<em>value</em> leftMin:(float)<em>leftMin</em> leftMax:(float)<em>leftMax</em> rightMin:(float)<em>rightMin</em> rightMax:(float)<em>rightMax</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>value</code></th>
+						<td><p>The value expressed in the first coordinate system</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>leftMin</code></th>
+						<td><p>The minimum of the first coordinate system</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>leftMax</code></th>
+						<td><p>The maximum of the first coordinate system</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>rightMin</code></th>
+						<td><p>The minimum of the second coordindate system</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>rightMax</code></th>
+						<td><p>The maximum of the second coordinate system</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>The mapped value in terms of the second coordinate system</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Maps a value from one coordinate system into another one. Takes in the current value to map, the minimum and maximum values of the first coordinate system, and the minimum and maximum values of the second coordinate system and calculates the mapped value in the second coordinate system&rsquo;s constraints.</p><div class="note"><p><strong>Note:</strong> Please use same method in <a href="../Classes/EZAudioUtilities.html">EZAudioUtilities</a> class instead.</p></div>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZAudio.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/RMS:length:" title="RMS:length:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/RMS:length:">+&nbsp;RMS:length:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Calculates the root mean squared for a buffer. (<b class="deprecated">Deprecated:</b><span class="deprecated"> This method is deprecated starting in version 0.1.0.</span>)</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (float)RMS:(float *)<em>buffer</em> length:(int)<em>bufferSize</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>buffer</code></th>
+						<td><p>A float buffer array of values whose root mean squared to calculate</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>bufferSize</code></th>
+						<td><p>The size of the float buffer</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>The root mean squared of the buffer</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Calculates the root mean squared for a buffer.</p><div class="note"><p><strong>Note:</strong> Please use same method in <a href="../Classes/EZAudioUtilities.html">EZAudioUtilities</a> class instead.</p></div>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZAudio.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/SGN:" title="SGN:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/SGN:">+&nbsp;SGN:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Calculate the sign function sgn(x) =
+{  -1 , x &lt; 0,
+{   0 , x = 0,
+{   1 , x > 0 (<b class="deprecated">Deprecated:</b><span class="deprecated"> This method is deprecated starting in version 0.1.0.</span>)</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (float)SGN:(float)<em>value</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>value</code></th>
+						<td><p>The float value for which to use as x</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>The float sign value</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Calculate the sign function sgn(x) =
+{  -1 , x &lt; 0,
+{   0 , x = 0,
+{   1 , x > 0</p><div class="note"><p><strong>Note:</strong> Please use same method in <a href="../Classes/EZAudioUtilities.html">EZAudioUtilities</a> class instead.</p></div>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZAudio.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+
+						<a title="OSStatus Utility" name="task_OSStatus Utility"></a>
+						<h2 class="task-title">OSStatus Utility</h2>
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/checkResult:operation:" title="checkResult:operation:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/checkResult:operation:">+&nbsp;checkResult:operation:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Basic check result function useful for checking each step of the audio setup process (<b class="deprecated">Deprecated:</b><span class="deprecated"> This method is deprecated starting in version 0.1.0.</span>)</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (void)checkResult:(OSStatus)<em>result</em> operation:(const char *)<em>operation</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>result</code></th>
+						<td><p>The OSStatus representing the result of an operation</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>operation</code></th>
+						<td><p>A string (const char, not NSString) describing the operation taking place (will print if fails)</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Basic check result function useful for checking each step of the audio setup process</p><div class="note"><p><strong>Note:</strong> Please use same method in <a href="../Classes/EZAudioUtilities.html">EZAudioUtilities</a> class instead.</p></div>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZAudio.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/stringFromUInt32Code:" title="stringFromUInt32Code:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/stringFromUInt32Code:">+&nbsp;stringFromUInt32Code:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Provides a string representation of the often cryptic Core Audio error codes (<b class="deprecated">Deprecated:</b><span class="deprecated"> This method is deprecated starting in version 0.1.0.</span>)</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (NSString *)stringFromUInt32Code:(UInt32)<em>code</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>code</code></th>
+						<td><p>A UInt32 representing an error code</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>An NSString with a human readable version of the error code.</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Provides a string representation of the often cryptic Core Audio error codes</p><div class="note"><p><strong>Note:</strong> Please use same method in <a href="../Classes/EZAudioUtilities.html">EZAudioUtilities</a> class instead.</p></div>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZAudio.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+
+						<a title="Plot Utility" name="task_Plot Utility"></a>
+						<h2 class="task-title">Plot Utility</h2>
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/updateScrollHistory:withLength:atIndex:withBuffer:withBufferSize:isResolutionChanging:" title="updateScrollHistory:withLength:atIndex:withBuffer:withBufferSize:isResolutionChanging:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/updateScrollHistory:withLength:atIndex:withBuffer:withBufferSize:isResolutionChanging:">+&nbsp;updateScrollHistory:withLength:atIndex:withBuffer:withBufferSize:isResolutionChanging:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Given a buffer representing a window of float history data this append the RMS of a buffer of incoming float data&hellip;This will likely be deprecated in a future version of EZAudio for a circular buffer based approach. (<b class="deprecated">Deprecated:</b><span class="deprecated"> This method is deprecated starting in version 0.1.0.</span>)</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (void)updateScrollHistory:(float **)<em>scrollHistory</em> withLength:(int)<em>scrollHistoryLength</em> atIndex:(int *)<em>index</em> withBuffer:(float *)<em>buffer</em> withBufferSize:(int)<em>bufferSize</em> isResolutionChanging:(BOOL *)<em>isChanging</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>scrollHistory</code></th>
+						<td><p>An array of float arrays being used to hold the history values for each channel.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>scrollHistoryLength</code></th>
+						<td><p>An int representing the length of the history window.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>index</code></th>
+						<td><p>An int pointer to the index of the current read index of the history buffer.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>buffer</code></th>
+						<td><p>A float array representing the incoming audio data.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>bufferSize</code></th>
+						<td><p>An int representing the length of the incoming audio data.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>isChanging</code></th>
+						<td><p>A BOOL pointer representing whether the resolution (length of the history window) is currently changing.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Given a buffer representing a window of float history data this append the RMS of a buffer of incoming float data&hellip;This will likely be deprecated in a future version of EZAudio for a circular buffer based approach.</p><div class="note"><p><strong>Note:</strong> Please use same method in <a href="../Classes/EZAudioUtilities.html">EZAudioUtilities</a> class instead.</p></div>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZAudio.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+
+						<a title="TPCircularBuffer Utility" name="task_TPCircularBuffer Utility"></a>
+						<h2 class="task-title">TPCircularBuffer Utility</h2>
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/appendDataToCircularBuffer:fromAudioBufferList:" title="appendDataToCircularBuffer:fromAudioBufferList:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/appendDataToCircularBuffer:fromAudioBufferList:">+&nbsp;appendDataToCircularBuffer:fromAudioBufferList:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Appends the data from the audio buffer list to the circular buffer (<b class="deprecated">Deprecated:</b><span class="deprecated"> This method is deprecated starting in version 0.1.0.</span>)</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (void)appendDataToCircularBuffer:(TPCircularBuffer *)<em>circularBuffer</em> fromAudioBufferList:(AudioBufferList *)<em>audioBufferList</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>circularBuffer</code></th>
+						<td><p>Pointer to the instance of the TPCircularBuffer to add the audio data to</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>audioBufferList</code></th>
+						<td><p>Pointer to the instance of the AudioBufferList with the audio data</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Appends the data from the audio buffer list to the circular buffer</p><div class="note"><p><strong>Note:</strong> Please use same method in <a href="../Classes/EZAudioUtilities.html">EZAudioUtilities</a> class instead.</p></div>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZAudio.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/circularBuffer:withSize:" title="circularBuffer:withSize:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/circularBuffer:withSize:">+&nbsp;circularBuffer:withSize:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Initializes the circular buffer (just a wrapper around the C method) (<b class="deprecated">Deprecated:</b><span class="deprecated"> This method is deprecated starting in version 0.1.0.</span>)</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (void)circularBuffer:(TPCircularBuffer *)<em>circularBuffer</em> withSize:(int)<em>size</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>circularBuffer</code></th>
+						<td><p>Pointer to an instance of the TPCircularBuffer</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>size</code></th>
+						<td><p>The length of the TPCircularBuffer (usually 1024)</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Initializes the circular buffer (just a wrapper around the C method)</p><div class="note"><p><strong>Note:</strong> Please use same method in <a href="../Classes/EZAudioUtilities.html">EZAudioUtilities</a> class instead.</p></div>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZAudio.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/freeCircularBuffer:" title="freeCircularBuffer:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/freeCircularBuffer:">+&nbsp;freeCircularBuffer:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Frees a circular buffer (<b class="deprecated">Deprecated:</b><span class="deprecated"> This method is deprecated starting in version 0.1.0.</span>)</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (void)freeCircularBuffer:(TPCircularBuffer *)<em>circularBuffer</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>circularBuffer</code></th>
+						<td><p>Pointer to the circular buffer to clear</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Frees a circular buffer</p><div class="note"><p><strong>Note:</strong> Please use same method in <a href="../Classes/EZAudioUtilities.html">EZAudioUtilities</a> class instead.</p></div>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZAudio.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+					</div>
+					
+					
+
+                    
+                    
+          
+				</main>
+
+				<footer>
+					<div class="footer-copyright">
+						
+						<p class="copyright">Copyright &copy; 2016 AWARE. All rights reserved. Updated: 2016-03-17</p>
+						
+						
+						<p class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2.1 (build 1334)</a>.</p>
+						
+					</div>
+				</footer>
+			</div>
+		</div>
+	</article>
+
+	<script src="../js/script.js"></script>
+</body>
+</html>

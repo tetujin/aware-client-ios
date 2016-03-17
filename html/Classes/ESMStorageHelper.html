@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<title>ESMStorageHelper Class Reference</title>
+
+	<link rel="stylesheet" href="../css/style.css">
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1.4">
+	<meta name="generator" content="appledoc 2.2.1 (build 1334)">
+</head>
+<body class="appledoc">
+	<header>
+		<div class="container" class="hide-in-xcode">
+			
+			<h1 id="library-title">
+				<a href="../index.html">AWARE Client iOS </a>
+			</h1>
+
+			<p id="developer-home">
+				<a href="../index.html">AWARE</a>
+			</p>
+			
+		</div>
+	</header>
+
+	<aside>
+		<div class="container">
+			<nav>
+				<ul id="header-buttons" role="toolbar">
+					<li><a href="../index.html">Index</a></li>
+<li><a href="../hierarchy.html">Hierarchy</a></li>
+
+					<li id="on-this-page" role="navigation">
+						<label>
+							On This Page
+
+							<div class="chevron">
+								<div class="chevy chevron-left"></div>
+								<div class="chevy chevron-right"></div>
+							</div>
+
+							<select id="jump-to">
+	<option value="top">Jump To&#133;</option>
+	
+
+	
+	
+	<option value="tasks">Tasks</option>
+	
+	
+
+	
+	
+
+	
+
+	
+	<optgroup label="Instance Methods">
+		
+		<option value="//api/name/addEsmText:withId:">- addEsmText:withId:</option>
+		
+		<option value="//api/name/addEsmText:withId:timeout:">- addEsmText:withId:timeout:</option>
+		
+		<option value="//api/name/getEsmTextWithNumber:">- getEsmTextWithNumber:</option>
+		
+		<option value="//api/name/getEsmTexts">- getEsmTexts</option>
+		
+		<option value="//api/name/getNumberOfStoredESMs">- getNumberOfStoredESMs</option>
+		
+		<option value="//api/name/getUnixtimeInEsm:">- getUnixtimeInEsm:</option>
+		
+		<option value="//api/name/removeEsmTexts">- removeEsmTexts</option>
+		
+		<option value="//api/name/removeEsmWithText:">- removeEsmWithText:</option>
+		
+		<option value="//api/name/storeEsmAsTimeout:">- storeEsmAsTimeout:</option>
+		
+	</optgroup>
+	
+	
+</select>
+						</label>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</aside>
+
+	<article>
+		<div id="overview_contents" class="container">
+			<div id="content">
+				<main role="main">
+					<h1 class="title">ESMStorageHelper Class Reference</h1>
+
+					
+					<div class="section section-specification"><table cellspacing="0"><tbody>
+						<tr>
+	<th>Inherits from</th>
+	<td>NSObject</td>
+</tr><tr>
+	<th>Declared in</th>
+	<td>ESMStorageHelper.h<br />ESMStorageHelper.m</td>
+</tr>
+						</tbody></table></div>
+					
+
+                    
+
+					
+					
+					<div class="section section-tasks">
+						<a title="Tasks" name="tasks"></a>
+						
+
+						
+						<h2 class="task-title">Other Methods</h2>
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/addEsmText:withId:timeout:" title="addEsmText:withId:timeout:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/addEsmText:withId:timeout:">&ndash;&nbsp;addEsmText:withId:timeout:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<hr />
+
+<h1>for ESMs</h1>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)addEsmText:(NSString *)<em>esmText</em> withId:(NSString *)<em>scheduleId</em> timeout:(NSNumber *)<em>timeout</em></code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<hr />
+
+<h1>for ESMs</h1>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">ESMStorageHelper.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/addEsmText:withId:" title="addEsmText:withId:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/addEsmText:withId:">&ndash;&nbsp;addEsmText:withId:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Set <a href="../Classes/ESM.html">ESM</a> text (JSON format) to the temp-esm-storage
+You can store an <a href="../Classes/ESM.html">ESM</a> text by each schedule_id. If there is the same <a href="../Classes/ESM.html">ESM</a> text in the temp-esm-storage,
+this method removes the <a href="../Classes/ESM.html">ESM</a> text from temp-esm-storage.
+And also, this method stores the latest <a href="../Classes/ESM.html">ESM</a> text to temp-esm-storage.
+NOTE: This method doesn&rsquo;t save the previus <a href="../Classes/ESM.html">ESM</a> text to main-storage with esm_status=&ldquo;dismiss&rdquo;</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)addEsmText:(NSString *)<em>esmText</em> withId:(NSString *)<em>scheduleId</em></code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Set <a href="../Classes/ESM.html">ESM</a> text (JSON format) to the temp-esm-storage
+You can store an <a href="../Classes/ESM.html">ESM</a> text by each schedule_id. If there is the same <a href="../Classes/ESM.html">ESM</a> text in the temp-esm-storage,
+this method removes the <a href="../Classes/ESM.html">ESM</a> text from temp-esm-storage.
+And also, this method stores the latest <a href="../Classes/ESM.html">ESM</a> text to temp-esm-storage.
+NOTE: This method doesn&rsquo;t save the previus <a href="../Classes/ESM.html">ESM</a> text to main-storage with esm_status=&ldquo;dismiss&rdquo;</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">ESMStorageHelper.m</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/removeEsmTexts" title="removeEsmTexts"></a>
+	<h3 class="method-title"><code><a href="#//api/name/removeEsmTexts">&ndash;&nbsp;removeEsmTexts</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Remove all <a href="../Classes/ESM.html">ESM</a> texts from the temp-esm-storage.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)removeEsmTexts</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Remove all <a href="../Classes/ESM.html">ESM</a> texts from the temp-esm-storage.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">ESMStorageHelper.m</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/removeEsmWithText:" title="removeEsmWithText:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/removeEsmWithText:">&ndash;&nbsp;removeEsmWithText:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Remove a <a href="../Classes/ESM.html">ESM</a> text from the temp-esm-storage.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)removeEsmWithText:(NSString *)<em>esmText</em></code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Remove a <a href="../Classes/ESM.html">ESM</a> text from the temp-esm-storage.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">ESMStorageHelper.m</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/getEsmTexts" title="getEsmTexts"></a>
+	<h3 class="method-title"><code><a href="#//api/name/getEsmTexts">&ndash;&nbsp;getEsmTexts</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (NSArray *)getEsmTexts</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">ESMStorageHelper.m</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/getEsmTextWithNumber:" title="getEsmTextWithNumber:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/getEsmTextWithNumber:">&ndash;&nbsp;getEsmTextWithNumber:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>remove expired schedules</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (NSString *)getEsmTextWithNumber:(int)<em>esmNumber</em></code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>remove expired schedules</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">ESMStorageHelper.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/getNumberOfStoredESMs" title="getNumberOfStoredESMs"></a>
+	<h3 class="method-title"><code><a href="#//api/name/getNumberOfStoredESMs">&ndash;&nbsp;getNumberOfStoredESMs</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (int)getNumberOfStoredESMs</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">ESMStorageHelper.m</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+
+						
+						<h2 class="task-title">Other Methods</h2>
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/storeEsmAsTimeout:" title="storeEsmAsTimeout:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/storeEsmAsTimeout:">&ndash;&nbsp;storeEsmAsTimeout:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)storeEsmAsTimeout:(NSString *)<em>esmStr</em></code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">ESMStorageHelper.m</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/getUnixtimeInEsm:" title="getUnixtimeInEsm:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/getUnixtimeInEsm:">&ndash;&nbsp;getUnixtimeInEsm:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (NSNumber *)getUnixtimeInEsm:(NSString *)<em>jsonStr</em></code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">ESMStorageHelper.m</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+					</div>
+					
+					
+
+                    
+                    
+          
+				</main>
+
+				<footer>
+					<div class="footer-copyright">
+						
+						<p class="copyright">Copyright &copy; 2016 AWARE. All rights reserved. Updated: 2016-03-17</p>
+						
+						
+						<p class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2.1 (build 1334)</a>.</p>
+						
+					</div>
+				</footer>
+			</div>
+		</div>
+	</article>
+
+	<script src="../js/script.js"></script>
+</body>
+</html>

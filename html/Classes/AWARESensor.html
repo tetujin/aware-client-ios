@@ -1,0 +1,1184 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<title>AWARESensor Class Reference</title>
+
+	<link rel="stylesheet" href="../css/style.css">
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1.4">
+	<meta name="generator" content="appledoc 2.2.1 (build 1334)">
+</head>
+<body class="appledoc">
+	<header>
+		<div class="container" class="hide-in-xcode">
+			
+			<h1 id="library-title">
+				<a href="../index.html">AWARE Client iOS </a>
+			</h1>
+
+			<p id="developer-home">
+				<a href="../index.html">AWARE</a>
+			</p>
+			
+		</div>
+	</header>
+
+	<aside>
+		<div class="container">
+			<nav>
+				<ul id="header-buttons" role="toolbar">
+					<li><a href="../index.html">Index</a></li>
+<li><a href="../hierarchy.html">Hierarchy</a></li>
+
+					<li id="on-this-page" role="navigation">
+						<label>
+							On This Page
+
+							<div class="chevron">
+								<div class="chevy chevron-left"></div>
+								<div class="chevy chevron-right"></div>
+							</div>
+
+							<select id="jump-to">
+	<option value="top">Jump To&#133;</option>
+	
+	<option value="overview">Overview</option>
+	
+
+	
+	
+	<option value="tasks">Tasks</option>
+	
+	
+
+	
+	
+
+	
+
+	
+	<optgroup label="Instance Methods">
+		
+		<option value="//api/name/clearTable">- clearTable</option>
+		
+		<option value="//api/name/convertMotionSensorFrequecyFromAndroid:">- convertMotionSensorFrequecyFromAndroid:</option>
+		
+		<option value="//api/name/createTable:">- createTable:</option>
+		
+		<option value="//api/name/createTable:withTableName:">- createTable:withTableName:</option>
+		
+		<option value="//api/name/getDeviceId">- getDeviceId</option>
+		
+		<option value="//api/name/getLatestValue">- getLatestValue</option>
+		
+		<option value="//api/name/getSensorName">- getSensorName</option>
+		
+		<option value="//api/name/getSensorSetting:withKey:">- getSensorSetting:withKey:</option>
+		
+		<option value="//api/name/isDebug">- isDebug</option>
+		
+		<option value="//api/name/saveDataWithArray:">- saveDataWithArray:</option>
+		
+		<option value="//api/name/saveDebugEventWithText:type:label:">- saveDebugEventWithText:type:label:</option>
+		
+		<option value="//api/name/sendLocalNotificationForMessage:soundFlag:">- sendLocalNotificationForMessage:soundFlag:</option>
+		
+		<option value="//api/name/setBufferSize:">- setBufferSize:</option>
+		
+		<option value="//api/name/setLatestValue:">- setLatestValue:</option>
+		
+		<option value="//api/name/startSensor:withSettings:">- startSensor:withSettings:</option>
+		
+		<option value="//api/name/stopSensor">- stopSensor</option>
+		
+		<option value="//api/name/syncAwareDB">- syncAwareDB</option>
+		
+		<option value="//api/name/syncAwareDBInForeground">- syncAwareDBInForeground</option>
+		
+		<option value="//api/name/trackDebugEvents">- trackDebugEvents</option>
+		
+	</optgroup>
+	
+	
+</select>
+						</label>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</aside>
+
+	<article>
+		<div id="overview_contents" class="container">
+			<div id="content">
+				<main role="main">
+					<h1 class="title">AWARESensor Class Reference</h1>
+
+					
+					<div class="section section-specification"><table cellspacing="0"><tbody>
+						<tr>
+	<th>Inherits from</th>
+	<td>NSObject</td>
+</tr><tr>
+	<th>Conforms to</th>
+	<td>AWARESensorDelegate<br />UIAlertViewDelegate</td>
+</tr><tr>
+	<th>Declared in</th>
+	<td>AWARESensor.h<br />AWARESensor.m</td>
+</tr>
+						</tbody></table></div>
+					
+
+                    
+					
+					<div class="section section-overview">
+						<a title="Overview" name="overview"></a>
+						<h2 class="subtitle subtitle-overview">Overview</h2>
+						<p>sensor data uploader</p>
+
+<p>2/16/2016 by Yuuki NISHIYAMA</p>
+
+<p>The AWARESensor class is the super class of aware sensors, and wraps to access
+local storages(<a href="../Classes/LocalFileStorageHelper.html">LocalFileStorageHelper</a>) and to upload sensor data to
+an AWARE server(<a href="../Classes/AWAREDataUploader.html">AWAREDataUploader</a>).</p>
+
+<p><a href="../Classes/LocalFileStorageHelper.html">LocalFileStorageHelper</a>:
+LocalFileStoragehelper is a text file based local storage. And also, a developer can store
+a sensor data with a NSDictionary Object using -(bool)saveData:(NSDictionary *)data;.
+[WIP] Now I&rsquo;m making a CoreData based storage for more stable data management.</p>
+
+<p><a href="../Classes/AWAREDataUploader.html">AWAREDataUploader</a>:
+This class supports data upload in the background/foreground. You can upload data by using -(void)<a href="#//api/name/syncAwareDB">syncAwareDB</a>;
+or -(BOOL)<a href="#//api/name/syncAwareDBInForeground">syncAwareDBInForeground</a>;. <a href="../Classes/AWAREDataUploader.html">AWAREDataUploader</a> obtains uploading sensor data from <a href="../Classes/LocalFileStorageHelper.html">LocalFileStorageHelper</a>
+by -(NSMutableString *)getSensorDataForPost;</p>
+					</div>
+					
+					
+
+					
+					
+					<div class="section section-tasks">
+						<a title="Tasks" name="tasks"></a>
+						
+
+						
+						<h2 class="task-title">Other Methods</h2>
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/trackDebugEvents" title="trackDebugEvents"></a>
+	<h3 class="method-title"><code><a href="#//api/name/trackDebugEvents">&ndash;&nbsp;trackDebugEvents</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Start a debug event tracker</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)trackDebugEvents</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Start a debug event tracker</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">AWARESensor.m</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/saveDebugEventWithText:type:label:" title="saveDebugEventWithText:type:label:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/saveDebugEventWithText:type:label:">&ndash;&nbsp;saveDebugEventWithText:type:label:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>A wrapper method for saving debug message</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (bool)saveDebugEventWithText:(NSString *)<em>eventText</em> type:(NSInteger)<em>type</em> label:(NSString *)<em>label</em></code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>A wrapper method for saving debug message</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">AWARESensor.m</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/getLatestValue" title="getLatestValue"></a>
+	<h3 class="method-title"><code><a href="#//api/name/getLatestValue">&ndash;&nbsp;getLatestValue</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Get the latest sensor value as a NSString</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (NSString *)getLatestValue</code></div>
+
+		    
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>The latest sensor data as a NSString</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Get the latest sensor value as a NSString</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">AWARESensor.m</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/getDeviceId" title="getDeviceId"></a>
+	<h3 class="method-title"><code><a href="#//api/name/getDeviceId">&ndash;&nbsp;getDeviceId</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Get a device_id</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (NSString *)getDeviceId</code></div>
+
+		    
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>A device_id</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Get a device_id</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">AWARESensor.m</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/getSensorName" title="getSensorName"></a>
+	<h3 class="method-title"><code><a href="#//api/name/getSensorName">&ndash;&nbsp;getSensorName</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Get a sensor name of this sensor</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (NSString *)getSensorName</code></div>
+
+		    
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>A sensor name of this AWARESensor</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Get a sensor name of this sensor</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">AWARESensor.m</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/getSensorSetting:withKey:" title="getSensorSetting:withKey:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/getSensorSetting:withKey:">&ndash;&nbsp;getSensorSetting:withKey:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Get a sensor setting(such as a sensing frequency) from settings with Key</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (double)getSensorSetting:(NSArray *)<em>settings</em> withKey:(NSString *)<em>key</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>NSArray</code></th>
+						<td><p>Settings</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>NSString</code></th>
+						<td><p>A key for the target setting</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>A double value of the setting.</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Get a sensor setting(such as a sensing frequency) from settings with Key</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">AWARESensor.m</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/createTable:withTableName:" title="createTable:withTableName:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/createTable:withTableName:">&ndash;&nbsp;createTable:withTableName:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Send a query for creating a table of this sensor on an AWARE Server (MySQL) with a sensor name.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)createTable:(NSString *)<em>query</em> withTableName:(NSString *)<em>tableName</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>NSString</code></th>
+						<td><p>A query for creating a database table</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Send a query for creating a table of this sensor on an AWARE Server (MySQL) with a sensor name.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">AWARESensor.m</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/createTable:" title="createTable:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/createTable:">&ndash;&nbsp;createTable:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Send a query for creating a table of this sensor on an AWARE Server (MySQL).</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)createTable:(NSString *)<em>query</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>NSString</code></th>
+						<td><p>A query for creating a database table</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Send a query for creating a table of this sensor on an AWARE Server (MySQL).</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">AWARESensor.m</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/clearTable" title="clearTable"></a>
+	<h3 class="method-title"><code><a href="#//api/name/clearTable">&ndash;&nbsp;clearTable</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>DEFAULT:</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (BOOL)clearTable</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>DEFAULT:</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">AWARESensor.m</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/setBufferSize:" title="setBufferSize:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/setBufferSize:">&ndash;&nbsp;setBufferSize:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Set buffer size of sensor data
+NOTE: If you use high sampling rate sensor (such as an accelerometer, gyroscope, and magnetic-field),
+you shold use to set buffer value.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)setBufferSize:(int)<em>size</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>int</code></th>
+						<td><p>A buffer size</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Set buffer size of sensor data
+NOTE: If you use high sampling rate sensor (such as an accelerometer, gyroscope, and magnetic-field),
+you shold use to set buffer value.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">AWARESensor.m</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/isDebug" title="isDebug"></a>
+	<h3 class="method-title"><code><a href="#//api/name/isDebug">&ndash;&nbsp;isDebug</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Get a debug sensor state</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (bool)isDebug</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Get a debug sensor state</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">AWARESensor.m</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/saveDataWithArray:" title="saveDataWithArray:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/saveDataWithArray:">&ndash;&nbsp;saveDataWithArray:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>/ save data</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (bool)saveDataWithArray:(NSArray *)<em>array</em></code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>/ save data</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">AWARESensor.m</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/setLatestValue:" title="setLatestValue:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/setLatestValue:">&ndash;&nbsp;setLatestValue:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Set the latest sensor data</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)setLatestValue:(NSString *)<em>valueStr</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>NSString</code></th>
+						<td><p>The latest sensor value as a NSString value</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Set the latest sensor data</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">AWARESensor.m</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/syncAwareDB" title="syncAwareDB"></a>
+	<h3 class="method-title"><code><a href="#//api/name/syncAwareDB">&ndash;&nbsp;syncAwareDB</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)syncAwareDB</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">AWARESensor.m</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/syncAwareDBInForeground" title="syncAwareDBInForeground"></a>
+	<h3 class="method-title"><code><a href="#//api/name/syncAwareDBInForeground">&ndash;&nbsp;syncAwareDBInForeground</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (BOOL)syncAwareDBInForeground</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">AWARESensor.m</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/convertMotionSensorFrequecyFromAndroid:" title="convertMotionSensorFrequecyFromAndroid:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/convertMotionSensorFrequecyFromAndroid:">&ndash;&nbsp;convertMotionSensorFrequecyFromAndroid:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Convert an iOS motion sensor frequency from an Androind frequency.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (double)convertMotionSensorFrequecyFromAndroid:(double)<em>frequency</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>double</code></th>
+						<td><p>A sensing frequency for Andrind</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>double  A sensing frequency for iOS</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Convert an iOS motion sensor frequency from an Androind frequency.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">AWARESensor.m</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/sendLocalNotificationForMessage:soundFlag:" title="sendLocalNotificationForMessage:soundFlag:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/sendLocalNotificationForMessage:soundFlag:">&ndash;&nbsp;sendLocalNotificationForMessage:soundFlag:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Local push notification method</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)sendLocalNotificationForMessage:(NSString *)<em>message</em> soundFlag:(BOOL)<em>soundFlag</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>message</code></th>
+						<td><p>text message for notification</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>sound</code></th>
+						<td><p>type of sound for notification</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Local push notification method</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">AWARESensor.m</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+
+						
+						<h2 class="task-title">Other Methods</h2>
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/startSensor:withSettings:" title="startSensor:withSettings:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/startSensor:withSettings:">&ndash;&nbsp;startSensor:withSettings:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>DEFAULT:</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (BOOL)startSensor:(double)<em>upInterval</em> withSettings:(NSArray *)<em>settings</em></code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>DEFAULT:</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">AWARESensor.m</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/stopSensor" title="stopSensor"></a>
+	<h3 class="method-title"><code><a href="#//api/name/stopSensor">&ndash;&nbsp;stopSensor</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>DEFAULT:</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (BOOL)stopSensor</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>DEFAULT:</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">AWARESensor.m</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+					</div>
+					
+					
+
+                    
+                    
+          
+				</main>
+
+				<footer>
+					<div class="footer-copyright">
+						
+						<p class="copyright">Copyright &copy; 2016 AWARE. All rights reserved. Updated: 2016-03-17</p>
+						
+						
+						<p class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2.1 (build 1334)</a>.</p>
+						
+					</div>
+				</footer>
+			</div>
+		</div>
+	</article>
+
+	<script src="../js/script.js"></script>
+</body>
+</html>

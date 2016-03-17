@@ -1,0 +1,3442 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<title>GCDAsyncSocket Class Reference</title>
+
+	<link rel="stylesheet" href="../css/style.css">
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1.4">
+	<meta name="generator" content="appledoc 2.2.1 (build 1334)">
+</head>
+<body class="appledoc">
+	<header>
+		<div class="container" class="hide-in-xcode">
+			
+			<h1 id="library-title">
+				<a href="../index.html">AWARE Client iOS </a>
+			</h1>
+
+			<p id="developer-home">
+				<a href="../index.html">AWARE</a>
+			</p>
+			
+		</div>
+	</header>
+
+	<aside>
+		<div class="container">
+			<nav>
+				<ul id="header-buttons" role="toolbar">
+					<li><a href="../index.html">Index</a></li>
+<li><a href="../hierarchy.html">Hierarchy</a></li>
+
+					<li id="on-this-page" role="navigation">
+						<label>
+							On This Page
+
+							<div class="chevron">
+								<div class="chevy chevron-left"></div>
+								<div class="chevy chevron-right"></div>
+							</div>
+
+							<select id="jump-to">
+	<option value="top">Jump To&#133;</option>
+	
+
+	
+	
+	<option value="tasks">Tasks</option>
+	
+	
+
+	
+	
+	<optgroup label="Properties">
+		
+		<option value="//api/name/IPv4Enabled">IPv4Enabled</option>
+		
+		<option value="//api/name/autoDisconnectOnClosedReadStream">autoDisconnectOnClosedReadStream</option>
+		
+		<option value="//api/name/connectedAddress">connectedAddress</option>
+		
+		<option value="//api/name/connectedHost">connectedHost</option>
+		
+		<option value="//api/name/isDisconnected">isDisconnected</option>
+		
+		<option value="//api/name/isIPv4">isIPv4</option>
+		
+		<option value="//api/name/isSecure">isSecure</option>
+		
+		<option value="//api/name/userData">userData</option>
+		
+	</optgroup>
+	
+
+	
+	<optgroup label="Class Methods">
+		
+		<option value="//api/name/CRLFData">+ CRLFData</option>
+		
+		<option value="//api/name/hostFromAddress:">+ hostFromAddress:</option>
+		
+		<option value="//api/name/lookupHost:port:error:">+ lookupHost:port:error:</option>
+		
+	</optgroup>
+	
+
+	
+	<optgroup label="Instance Methods">
+		
+		<option value="//api/name/acceptOnInterface:port:error:">- acceptOnInterface:port:error:</option>
+		
+		<option value="//api/name/acceptOnPort:error:">- acceptOnPort:error:</option>
+		
+		<option value="//api/name/acceptOnUrl:error:">- acceptOnUrl:error:</option>
+		
+		<option value="//api/name/connectToAddress:error:">- connectToAddress:error:</option>
+		
+		<option value="//api/name/connectToAddress:viaInterface:withTimeout:error:">- connectToAddress:viaInterface:withTimeout:error:</option>
+		
+		<option value="//api/name/connectToAddress:withTimeout:error:">- connectToAddress:withTimeout:error:</option>
+		
+		<option value="//api/name/connectToHost:onPort:error:">- connectToHost:onPort:error:</option>
+		
+		<option value="//api/name/connectToHost:onPort:viaInterface:withTimeout:error:">- connectToHost:onPort:viaInterface:withTimeout:error:</option>
+		
+		<option value="//api/name/connectToHost:onPort:withTimeout:error:">- connectToHost:onPort:withTimeout:error:</option>
+		
+		<option value="//api/name/connectToUrl:withTimeout:error:">- connectToUrl:withTimeout:error:</option>
+		
+		<option value="//api/name/disconnect">- disconnect</option>
+		
+		<option value="//api/name/disconnectAfterReading">- disconnectAfterReading</option>
+		
+		<option value="//api/name/disconnectAfterReadingAndWriting">- disconnectAfterReadingAndWriting</option>
+		
+		<option value="//api/name/disconnectAfterWriting">- disconnectAfterWriting</option>
+		
+		<option value="//api/name/enableBackgroundingOnSocket">- enableBackgroundingOnSocket</option>
+		
+		<option value="//api/name/getInterfaceAddress4:address6:fromDescription:port:">- getInterfaceAddress4:address6:fromDescription:port:</option>
+		
+		<option value="//api/name/init">- init</option>
+		
+		<option value="//api/name/lookup:didFail:">- lookup:didFail:</option>
+		
+		<option value="//api/name/markSocketQueueTargetQueue:">- markSocketQueueTargetQueue:</option>
+		
+		<option value="//api/name/maybeClose">- maybeClose</option>
+		
+		<option value="//api/name/maybeDequeueRead">- maybeDequeueRead</option>
+		
+		<option value="//api/name/performBlock:">- performBlock:</option>
+		
+		<option value="//api/name/preConnectWithInterface:error:">- preConnectWithInterface:error:</option>
+		
+		<option value="//api/name/progressOfReadReturningTag:bytesDone:total:">- progressOfReadReturningTag:bytesDone:total:</option>
+		
+		<option value="//api/name/progressOfWriteReturningTag:bytesDone:total:">- progressOfWriteReturningTag:bytesDone:total:</option>
+		
+		<option value="//api/name/readDataToData:withTimeout:buffer:bufferOffset:maxLength:tag:">- readDataToData:withTimeout:buffer:bufferOffset:maxLength:tag:</option>
+		
+		<option value="//api/name/readDataToData:withTimeout:buffer:bufferOffset:tag:">- readDataToData:withTimeout:buffer:bufferOffset:tag:</option>
+		
+		<option value="//api/name/readDataToData:withTimeout:maxLength:tag:">- readDataToData:withTimeout:maxLength:tag:</option>
+		
+		<option value="//api/name/readDataToData:withTimeout:tag:">- readDataToData:withTimeout:tag:</option>
+		
+		<option value="//api/name/readDataToLength:withTimeout:buffer:bufferOffset:tag:">- readDataToLength:withTimeout:buffer:bufferOffset:tag:</option>
+		
+		<option value="//api/name/readDataToLength:withTimeout:tag:">- readDataToLength:withTimeout:tag:</option>
+		
+		<option value="//api/name/readDataWithTimeout:buffer:bufferOffset:maxLength:tag:">- readDataWithTimeout:buffer:bufferOffset:maxLength:tag:</option>
+		
+		<option value="//api/name/readDataWithTimeout:buffer:bufferOffset:tag:">- readDataWithTimeout:buffer:bufferOffset:tag:</option>
+		
+		<option value="//api/name/readDataWithTimeout:tag:">- readDataWithTimeout:tag:</option>
+		
+		<option value="//api/name/readMaxedOutError">- readMaxedOutError</option>
+		
+		<option value="//api/name/readStream">- readStream</option>
+		
+		<option value="//api/name/readTimeoutError">- readTimeoutError</option>
+		
+		<option value="//api/name/socketFD">- socketFD</option>
+		
+		<option value="//api/name/sslContext">- sslContext</option>
+		
+		<option value="//api/name/startTLS:">- startTLS:</option>
+		
+		<option value="//api/name/synchronouslySetDelegate:">- synchronouslySetDelegate:</option>
+		
+		<option value="//api/name/writeData:withTimeout:tag:">- writeData:withTimeout:tag:</option>
+		
+		<option value="//api/name/writeTimeoutError">- writeTimeoutError</option>
+		
+	</optgroup>
+	
+	
+</select>
+						</label>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</aside>
+
+	<article>
+		<div id="overview_contents" class="container">
+			<div id="content">
+				<main role="main">
+					<h1 class="title">GCDAsyncSocket Class Reference</h1>
+
+					
+					<div class="section section-specification"><table cellspacing="0"><tbody>
+						<tr>
+	<th>Inherits from</th>
+	<td>NSObject</td>
+</tr><tr>
+	<th>Declared in</th>
+	<td>GCDAsyncSocket.h<br />GCDAsyncSocket.m</td>
+</tr>
+						</tbody></table></div>
+					
+
+                    
+
+					
+					
+					<div class="section section-tasks">
+						<a title="Tasks" name="tasks"></a>
+						
+
+						
+						<h2 class="task-title">Other Methods</h2>
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/init" title="init"></a>
+	<h3 class="method-title"><code><a href="#//api/name/init">&ndash;&nbsp;init</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>GCD<a href="../Classes/AsyncSocket.html">AsyncSocket</a> uses the standard <a href="#//api/name/delegate">delegate</a> paradigm,
+but executes all <a href="#//api/name/delegate">delegate</a> callbacks on a given <a href="#//api/name/delegate">delegate</a> dispatch queue.
+This allows for maximum concurrency, while at the same time providing easy thread safety.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (id)init</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>GCD<a href="../Classes/AsyncSocket.html">AsyncSocket</a> uses the standard <a href="#//api/name/delegate">delegate</a> paradigm,
+but executes all <a href="#//api/name/delegate">delegate</a> callbacks on a given <a href="#//api/name/delegate">delegate</a> dispatch queue.
+This allows for maximum concurrency, while at the same time providing easy thread safety.</p>
+
+<p>You MUST set a <a href="#//api/name/delegate">delegate</a> AND <a href="#//api/name/delegate">delegate</a> dispatch queue before attempting to
+use the socket, or you will get an error.</p>
+
+<p>The socket queue is optional.
+If you pass NULL, GCD<a href="../Classes/AsyncSocket.html">AsyncSocket</a> will automatically create it&rsquo;s own socket queue.
+If you choose to provide a socket queue, the socket queue must not be a concurrent queue.
+If you choose to provide a socket queue, and the socket queue has a configured target queue,
+then please see the discussion for the method markSocketQueueTargetQueue.</p>
+
+<p>The <a href="#//api/name/delegate">delegate</a> queue and socket queue can optionally be the same.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">GCDAsyncSocket.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/synchronouslySetDelegate:" title="synchronouslySetDelegate:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/synchronouslySetDelegate:">&ndash;&nbsp;synchronouslySetDelegate:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>If you are setting the delegate to nil within the delegate&rsquo;s <a href="#//api/name/dealloc">dealloc</a> method,
+you may need to use the synchronous versions below.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)synchronouslySetDelegate:(id)<em>delegate</em></code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>If you are setting the delegate to nil within the delegate&rsquo;s <a href="#//api/name/dealloc">dealloc</a> method,
+you may need to use the synchronous versions below.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">GCDAsyncSocket.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/IPv4Enabled" title="IPv4Enabled"></a>
+	<h3 class="method-title"><code><a href="#//api/name/IPv4Enabled">&nbsp;&nbsp;IPv4Enabled</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>By default, both IPv4 and IPv6 are enabled.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (atomic, assign, readwrite, getter=isIPv4Enabled) BOOL IPv4Enabled</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>By default, both IPv4 and IPv6 are enabled.</p>
+
+<p>For accepting incoming connections, this means GCD<a href="../Classes/AsyncSocket.html">AsyncSocket</a> automatically supports both protocols,
+and can simulataneously accept incoming connections on either protocol.</p>
+
+<p>For outgoing connections, this means GCD<a href="../Classes/AsyncSocket.html">AsyncSocket</a> can connect to remote hosts running either protocol.
+If a DNS lookup returns only IPv4 results, GCD<a href="../Classes/AsyncSocket.html">AsyncSocket</a> will automatically use IPv4.
+If a DNS lookup returns only IPv6 results, GCD<a href="../Classes/AsyncSocket.html">AsyncSocket</a> will automatically use IPv6.
+If a DNS lookup returns both IPv4 and IPv6 results, the preferred protocol will be chosen.
+By default, the preferred protocol is IPv4, but may be configured as desired.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">GCDAsyncSocket.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/userData" title="userData"></a>
+	<h3 class="method-title"><code><a href="#//api/name/userData">&nbsp;&nbsp;userData</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>User data allows you to associate arbitrary information with the socket.
+This data is not used internally by socket in any way.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (atomic, strong, readwrite) id userData</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>User data allows you to associate arbitrary information with the socket.
+This data is not used internally by socket in any way.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">GCDAsyncSocket.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/acceptOnPort:error:" title="acceptOnPort:error:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/acceptOnPort:error:">&ndash;&nbsp;acceptOnPort:error:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Tells the socket to begin listening and accepting connections on the given port.
+When a connection is accepted, a new instance of GCD<a href="../Classes/AsyncSocket.html">AsyncSocket</a> will be spawned to handle it,
+and the socket:didAcceptNewSocket: delegate method will be invoked.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (BOOL)acceptOnPort:(uint16_t)<em>port</em> error:(NSError **)<em>errPtr</em></code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Tells the socket to begin listening and accepting connections on the given port.
+When a connection is accepted, a new instance of GCD<a href="../Classes/AsyncSocket.html">AsyncSocket</a> will be spawned to handle it,
+and the socket:didAcceptNewSocket: delegate method will be invoked.</p>
+
+<p>The socket will listen on all available interfaces (e.g. wifi, ethernet, etc)</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">GCDAsyncSocket.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/acceptOnInterface:port:error:" title="acceptOnInterface:port:error:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/acceptOnInterface:port:error:">&ndash;&nbsp;acceptOnInterface:port:error:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>This method is the same as <a href="#//api/name/acceptOnPort:error:">acceptOnPort:error:</a> with the
+additional option of specifying which interface to listen on.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (BOOL)acceptOnInterface:(NSString *)<em>interface</em> port:(uint16_t)<em>port</em> error:(NSError **)<em>errPtr</em></code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>This method is the same as <a href="#//api/name/acceptOnPort:error:">acceptOnPort:error:</a> with the
+additional option of specifying which interface to listen on.</p>
+
+<p>For example, you could specify that the socket should only accept connections over ethernet,
+and not other interfaces such as wifi.</p>
+
+<p>The interface may be specified by name (e.g. &ldquo;en1&rdquo; or &ldquo;lo0&rdquo;) or by IP address (e.g. &ldquo;192.168.4.34&rdquo;).
+You may also use the special strings &ldquo;localhost&rdquo; or &ldquo;loopback&rdquo; to specify that
+the socket only accept connections from the local machine.</p>
+
+<p>You can see the list of interfaces via the command line utility &ldquo;ifconfig&rdquo;,
+or programmatically via the getifaddrs() function.</p>
+
+<p>To accept connections on any interface pass nil, or simply use the <a href="#//api/name/acceptOnPort:error:">acceptOnPort:error:</a> method.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">GCDAsyncSocket.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/acceptOnUrl:error:" title="acceptOnUrl:error:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/acceptOnUrl:error:">&ndash;&nbsp;acceptOnUrl:error:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Tells the socket to begin listening and accepting connections on the unix domain at the given url.
+When a connection is accepted, a new instance of GCD<a href="../Classes/AsyncSocket.html">AsyncSocket</a> will be spawned to handle it,
+and the socket:didAcceptNewSocket: delegate method will be invoked.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (BOOL)acceptOnUrl:(NSURL *)<em>url</em> error:(NSError **)<em>errPtr</em></code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Tells the socket to begin listening and accepting connections on the unix domain at the given url.
+When a connection is accepted, a new instance of GCD<a href="../Classes/AsyncSocket.html">AsyncSocket</a> will be spawned to handle it,
+and the socket:didAcceptNewSocket: delegate method will be invoked.</p>
+
+<p>The socket will listen on all available interfaces (e.g. wifi, ethernet, etc)</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">GCDAsyncSocket.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/connectToHost:onPort:error:" title="connectToHost:onPort:error:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/connectToHost:onPort:error:">&ndash;&nbsp;connectToHost:onPort:error:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Connects to the given host and port.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (BOOL)connectToHost:(NSString *)<em>host</em> onPort:(uint16_t)<em>port</em> error:(NSError **)<em>errPtr</em></code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Connects to the given host and port.</p>
+
+<p>This method invokes <a href="#//api/name/connectToHost:onPort:viaInterface:withTimeout:error:">connectToHost:onPort:viaInterface:withTimeout:error:</a>
+and uses the default interface, and no timeout.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">GCDAsyncSocket.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/connectToHost:onPort:withTimeout:error:" title="connectToHost:onPort:withTimeout:error:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/connectToHost:onPort:withTimeout:error:">&ndash;&nbsp;connectToHost:onPort:withTimeout:error:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Connects to the given host and port with an optional timeout.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (BOOL)connectToHost:(NSString *)<em>host</em> onPort:(uint16_t)<em>port</em> withTimeout:(NSTimeInterval)<em>timeout</em> error:(NSError **)<em>errPtr</em></code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Connects to the given host and port with an optional timeout.</p>
+
+<p>This method invokes <a href="#//api/name/connectToHost:onPort:viaInterface:withTimeout:error:">connectToHost:onPort:viaInterface:withTimeout:error:</a> and uses the default interface.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">GCDAsyncSocket.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/connectToHost:onPort:viaInterface:withTimeout:error:" title="connectToHost:onPort:viaInterface:withTimeout:error:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/connectToHost:onPort:viaInterface:withTimeout:error:">&ndash;&nbsp;connectToHost:onPort:viaInterface:withTimeout:error:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Connects to the given host &amp; port, via the optional interface, with an optional timeout.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (BOOL)connectToHost:(NSString *)<em>host</em> onPort:(uint16_t)<em>port</em> viaInterface:(NSString *)<em>interface</em> withTimeout:(NSTimeInterval)<em>timeout</em> error:(NSError **)<em>errPtr</em></code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Connects to the given host &amp; port, via the optional interface, with an optional timeout.</p>
+
+<p>The host may be a domain name (e.g. &ldquo;deusty.com&rdquo;) or an IP address string (e.g. &ldquo;192.168.0.2&rdquo;).
+The host may also be the special strings &ldquo;localhost&rdquo; or &ldquo;loopback&rdquo; to specify connecting
+to a service on the local machine.</p>
+
+<p>The interface may be a name (e.g. &ldquo;en1&rdquo; or &ldquo;lo0&rdquo;) or the corresponding IP address (e.g. &ldquo;192.168.4.35&rdquo;).
+The interface may also be used to specify the local port (see below).</p>
+
+<p>To not time out use a negative time interval.</p>
+
+<p>This method will return NO if an error is detected, and set the error pointer (if one was given).
+Possible errors would be a nil host, invalid interface, or socket is already connected.</p>
+
+<p>If no errors are detected, this method will start a background connect operation and immediately return YES.
+The delegate callbacks are used to notify you when the socket connects, or if the host was unreachable.</p>
+
+<p>Since this class supports queued reads and writes, you can immediately start reading and/or writing.
+All read/write operations will be queued, and upon socket connection,
+the operations will be dequeued and processed in order.</p>
+
+<p>The interface may optionally contain a port number at the end of the string, separated by a colon.
+This allows you to specify the local port that should be used for the outgoing connection. (read paragraph to end)
+To specify both interface and local port: &ldquo;en1:8082&rdquo; or &ldquo;192.168.4.35:2424&rdquo;.
+To specify only local port: &ldquo;:8082&rdquo;.
+Please note this is an advanced feature, and is somewhat hidden on purpose.
+You should understand that 99.999% of the time you should NOT specify the local port for an outgoing connection.
+If you think you need to, there is a very good chance you have a fundamental misunderstanding somewhere.
+Local ports do NOT need to match remote ports. In fact, they almost never do.
+This feature is here for networking professionals using very advanced techniques.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">GCDAsyncSocket.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/connectToAddress:error:" title="connectToAddress:error:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/connectToAddress:error:">&ndash;&nbsp;connectToAddress:error:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Connects to the given address, specified as a sockaddr structure wrapped in a NSData object.
+For example, a NSData object returned from NSNetService&rsquo;s addresses method.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (BOOL)connectToAddress:(NSData *)<em>remoteAddr</em> error:(NSError **)<em>errPtr</em></code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Connects to the given address, specified as a sockaddr structure wrapped in a NSData object.
+For example, a NSData object returned from NSNetService&rsquo;s addresses method.</p>
+
+<p>If you have an existing struct sockaddr you can convert it to a NSData object like so:
+struct sockaddr sa  -> NSData <em>dsa = [NSData dataWithBytes:&amp;remoteAddr length:remoteAddr.sa_len];
+struct sockaddr </em>sa -> NSData *dsa = [NSData dataWithBytes:remoteAddr length:remoteAddr->sa_len];</p>
+
+<p>This method invokes connectToAdd</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">GCDAsyncSocket.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/connectToAddress:withTimeout:error:" title="connectToAddress:withTimeout:error:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/connectToAddress:withTimeout:error:">&ndash;&nbsp;connectToAddress:withTimeout:error:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>This method is the same as <a href="#//api/name/connectToAddress:error:">connectToAddress:error:</a> with an additional timeout option.
+To not time out use a negative time interval, or simply use the <a href="#//api/name/connectToAddress:error:">connectToAddress:error:</a> method.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (BOOL)connectToAddress:(NSData *)<em>remoteAddr</em> withTimeout:(NSTimeInterval)<em>timeout</em> error:(NSError **)<em>errPtr</em></code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>This method is the same as <a href="#//api/name/connectToAddress:error:">connectToAddress:error:</a> with an additional timeout option.
+To not time out use a negative time interval, or simply use the <a href="#//api/name/connectToAddress:error:">connectToAddress:error:</a> method.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">GCDAsyncSocket.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/connectToAddress:viaInterface:withTimeout:error:" title="connectToAddress:viaInterface:withTimeout:error:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/connectToAddress:viaInterface:withTimeout:error:">&ndash;&nbsp;connectToAddress:viaInterface:withTimeout:error:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Connects to the given address, using the specified interface and timeout.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (BOOL)connectToAddress:(NSData *)<em>remoteAddr</em> viaInterface:(NSString *)<em>interface</em> withTimeout:(NSTimeInterval)<em>timeout</em> error:(NSError **)<em>errPtr</em></code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Connects to the given address, using the specified interface and timeout.</p>
+
+<p>The address is specified as a sockaddr structure wrapped in a NSData object.
+For example, a NSData object returned from NSNetService&rsquo;s addresses method.</p>
+
+<p>If you have an existing struct sockaddr you can convert it to a NSData object like so:
+struct sockaddr sa  -> NSData <em>dsa = [NSData dataWithBytes:&amp;remoteAddr length:remoteAddr.sa_len];
+struct sockaddr </em>sa -> NSData *dsa = [NSData dataWithBytes:remoteAddr length:remoteAddr->sa_len];</p>
+
+<p>The interface may be a name (e.g. &ldquo;en1&rdquo; or &ldquo;lo0&rdquo;) or the corresponding IP address (e.g. &ldquo;192.168.4.35&rdquo;).
+The interface may also be used to specify the local port (see below).</p>
+
+<p>The timeout is optional. To not time out use a negative time interval.</p>
+
+<p>This method will return NO if an error is detected, and set the error pointer (if one was given).
+Possible errors would be a nil host, invalid interface, or socket is already connected.</p>
+
+<p>If no errors are detected, this method will start a background connect operation and immediately return YES.
+The delegate callbacks are used to notify you when the socket connects, or if the host was unreachable.</p>
+
+<p>Since this class supports queued reads and writes, you can immediately start reading and/or writing.
+All read/write operations will be queued, and upon socket connection,
+the operations will be dequeued and processed in order.</p>
+
+<p>The interface may optionally contain a port number at the end of the string, separated by a colon.
+This allows you to specify the local port that should be used for the outgoing connection. (read paragraph to end)
+To specify both interface and local port: &ldquo;en1:8082&rdquo; or &ldquo;192.168.4.35:2424&rdquo;.
+To specify only local port: &ldquo;:8082&rdquo;.
+Please note this is an advanced feature, and is somewhat hidden on purpose.
+You should understand that 99.999% of the time you should NOT specify the local port for an outgoing connection.
+If you think you need to, there is a very good chance you have a fundamental misunderstanding somewhere.
+Local ports do NOT need to match remote ports. In fact, they almost never do.
+This feature is here for networking professionals using very advanced techniques.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">GCDAsyncSocket.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/connectToUrl:withTimeout:error:" title="connectToUrl:withTimeout:error:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/connectToUrl:withTimeout:error:">&ndash;&nbsp;connectToUrl:withTimeout:error:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Connects to the unix domain socket at the given url, using the specified timeout.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (BOOL)connectToUrl:(NSURL *)<em>url</em> withTimeout:(NSTimeInterval)<em>timeout</em> error:(NSError **)<em>errPtr</em></code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Connects to the unix domain socket at the given url, using the specified timeout.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">GCDAsyncSocket.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/disconnect" title="disconnect"></a>
+	<h3 class="method-title"><code><a href="#//api/name/disconnect">&ndash;&nbsp;disconnect</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Disconnects immediately (synchronously). Any pending reads or writes are dropped.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)disconnect</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Disconnects immediately (synchronously). Any pending reads or writes are dropped.</p>
+
+<p>If the socket is not already disconnected, an invocation to the socketDidDisconnect:withError: delegate method
+will be queued onto the delegateQueue asynchronously (behind any previously queued delegate methods).
+In other words, the disconnected delegate method will be invoked sometime shortly after this method returns.</p>
+
+<p>Please note the recommended way of releasing a GCDAsyncSocket instance (e.g. in a dealloc method)
+[asyncSocket setDelegate:nil];
+[asyncSocket disconnect];
+[asyncSocket release];</p>
+
+<p>If you plan on disconnecting the socket, and then immediately asking it to connect again,
+you&rsquo;ll likely want to do so like this:
+[asyncSocket setDelegate:nil];
+[asyncSocket disconnect];
+[asyncSocket setDelegate:self];
+[asyncSocket connect&hellip;];</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">GCDAsyncSocket.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/disconnectAfterReading" title="disconnectAfterReading"></a>
+	<h3 class="method-title"><code><a href="#//api/name/disconnectAfterReading">&ndash;&nbsp;disconnectAfterReading</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Disconnects after all pending reads have completed.
+After calling this, the read and write methods will do nothing.
+The socket will <a href="#//api/name/disconnect">disconnect</a> even if there are still pending writes.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)disconnectAfterReading</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Disconnects after all pending reads have completed.
+After calling this, the read and write methods will do nothing.
+The socket will <a href="#//api/name/disconnect">disconnect</a> even if there are still pending writes.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">GCDAsyncSocket.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/disconnectAfterWriting" title="disconnectAfterWriting"></a>
+	<h3 class="method-title"><code><a href="#//api/name/disconnectAfterWriting">&ndash;&nbsp;disconnectAfterWriting</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Disconnects after all pending writes have completed.
+After calling this, the read and write methods will do nothing.
+The socket will <a href="#//api/name/disconnect">disconnect</a> even if there are still pending reads.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)disconnectAfterWriting</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Disconnects after all pending writes have completed.
+After calling this, the read and write methods will do nothing.
+The socket will <a href="#//api/name/disconnect">disconnect</a> even if there are still pending reads.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">GCDAsyncSocket.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/disconnectAfterReadingAndWriting" title="disconnectAfterReadingAndWriting"></a>
+	<h3 class="method-title"><code><a href="#//api/name/disconnectAfterReadingAndWriting">&ndash;&nbsp;disconnectAfterReadingAndWriting</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Disconnects after all pending reads and writes have completed.
+After calling this, the read and write methods will do nothing.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)disconnectAfterReadingAndWriting</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Disconnects after all pending reads and writes have completed.
+After calling this, the read and write methods will do nothing.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">GCDAsyncSocket.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/isDisconnected" title="isDisconnected"></a>
+	<h3 class="method-title"><code><a href="#//api/name/isDisconnected">&nbsp;&nbsp;isDisconnected</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Returns whether the socket is disconnected or connected.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (atomic, readonly) BOOL isDisconnected</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Returns whether the socket is disconnected or connected.</p>
+
+<p>A disconnected socket may be recycled.
+That is, it can used again for connecting or listening.</p>
+
+<p>If a socket is in the process of connecting, it may be neither disconnected nor connected.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">GCDAsyncSocket.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/connectedHost" title="connectedHost"></a>
+	<h3 class="method-title"><code><a href="#//api/name/connectedHost">&nbsp;&nbsp;connectedHost</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Returns the local or remote host and port to which this socket is connected, or nil and 0 if not connected.
+The host will be an IP address.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (atomic, readonly) NSString *connectedHost</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Returns the local or remote host and port to which this socket is connected, or nil and 0 if not connected.
+The host will be an IP address.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">GCDAsyncSocket.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/connectedAddress" title="connectedAddress"></a>
+	<h3 class="method-title"><code><a href="#//api/name/connectedAddress">&nbsp;&nbsp;connectedAddress</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Returns the local or remote address to which this socket is connected,
+specified as a sockaddr structure wrapped in a NSData object.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (atomic, readonly) NSData *connectedAddress</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Returns the local or remote address to which this socket is connected,
+specified as a sockaddr structure wrapped in a NSData object.</p>
+
+<p>@seealso <a href="#//api/name/connectedHost">connectedHost</a>
+@seealso connectedPort
+@seealso localHost
+@seealso localPort</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">GCDAsyncSocket.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/isIPv4" title="isIPv4"></a>
+	<h3 class="method-title"><code><a href="#//api/name/isIPv4">&nbsp;&nbsp;isIPv4</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Returns whether the socket is IPv4 or IPv6.
+An accepting socket may be both.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (atomic, readonly) BOOL isIPv4</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Returns whether the socket is IPv4 or IPv6.
+An accepting socket may be both.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">GCDAsyncSocket.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/isSecure" title="isSecure"></a>
+	<h3 class="method-title"><code><a href="#//api/name/isSecure">&nbsp;&nbsp;isSecure</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Returns whether or not the socket has been secured via SSL/TLS.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (atomic, readonly) BOOL isSecure</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Returns whether or not the socket has been secured via SSL/TLS.</p>
+
+<p>See also the startTLS method.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">GCDAsyncSocket.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/readDataWithTimeout:tag:" title="readDataWithTimeout:tag:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/readDataWithTimeout:tag:">&ndash;&nbsp;readDataWithTimeout:tag:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Reads the first available bytes that become available on the socket.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)readDataWithTimeout:(NSTimeInterval)<em>timeout</em> tag:(long)<em>tag</em></code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Reads the first available bytes that become available on the socket.</p>
+
+<p>If the timeout value is negative, the read operation will not use a timeout.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">GCDAsyncSocket.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/readDataWithTimeout:buffer:bufferOffset:tag:" title="readDataWithTimeout:buffer:bufferOffset:tag:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/readDataWithTimeout:buffer:bufferOffset:tag:">&ndash;&nbsp;readDataWithTimeout:buffer:bufferOffset:tag:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Reads the first available bytes that become available on the socket.
+The bytes will be appended to the given byte buffer starting at the given offset.
+The given buffer will automatically be increased in size if needed.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)readDataWithTimeout:(NSTimeInterval)<em>timeout</em> buffer:(NSMutableData *)<em>buffer</em> bufferOffset:(NSUInteger)<em>offset</em> tag:(long)<em>tag</em></code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Reads the first available bytes that become available on the socket.
+The bytes will be appended to the given byte buffer starting at the given offset.
+The given buffer will automatically be increased in size if needed.</p>
+
+<p>If the timeout value is negative, the read operation will not use a timeout.
+If the buffer if nil, the socket will create a buffer for you.</p>
+
+<p>If the bufferOffset is greater than the length of the given buffer,
+the method will do nothing, and the delegate will not be called.</p>
+
+<p>If you pass a buffer, you must not alter it in any way while the socket is using it.
+After completion, the data returned in socket:didReadData:withTag: will be a subset of the given buffer.
+That is, it will reference the bytes that were appended to the given buffer via
+the method [NSData dataWithBytesNoCopy:length:freeWhenDone:NO].</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">GCDAsyncSocket.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/readDataWithTimeout:buffer:bufferOffset:maxLength:tag:" title="readDataWithTimeout:buffer:bufferOffset:maxLength:tag:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/readDataWithTimeout:buffer:bufferOffset:maxLength:tag:">&ndash;&nbsp;readDataWithTimeout:buffer:bufferOffset:maxLength:tag:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Reads the first available bytes that become available on the socket.
+The bytes will be appended to the given byte buffer starting at the given offset.
+The given buffer will automatically be increased in size if needed.
+A maximum of length bytes will be read.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)readDataWithTimeout:(NSTimeInterval)<em>timeout</em> buffer:(NSMutableData *)<em>buffer</em> bufferOffset:(NSUInteger)<em>offset</em> maxLength:(NSUInteger)<em>length</em> tag:(long)<em>tag</em></code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Reads the first available bytes that become available on the socket.
+The bytes will be appended to the given byte buffer starting at the given offset.
+The given buffer will automatically be increased in size if needed.
+A maximum of length bytes will be read.</p>
+
+<p>If the timeout value is negative, the read operation will not use a timeout.
+If the buffer if nil, a buffer will automatically be created for you.
+If maxLength is zero, no length restriction is enforced.</p>
+
+<p>If the bufferOffset is greater than the length of the given buffer,
+the method will do nothing, and the delegate will not be called.</p>
+
+<p>If you pass a buffer, you must not alter it in any way while the socket is using it.
+After completion, the data returned in socket:didReadData:withTag: will be a subset of the given buffer.
+That is, it will reference the bytes that were appended to the given buffer  via
+the method [NSData dataWithBytesNoCopy:length:freeWhenDone:NO].</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">GCDAsyncSocket.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/readDataToLength:withTimeout:tag:" title="readDataToLength:withTimeout:tag:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/readDataToLength:withTimeout:tag:">&ndash;&nbsp;readDataToLength:withTimeout:tag:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Reads the given number of bytes.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)readDataToLength:(NSUInteger)<em>length</em> withTimeout:(NSTimeInterval)<em>timeout</em> tag:(long)<em>tag</em></code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Reads the given number of bytes.</p>
+
+<p>If the timeout value is negative, the read operation will not use a timeout.</p>
+
+<p>If the length is 0, this method does nothing and the delegate is not called.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">GCDAsyncSocket.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/readDataToLength:withTimeout:buffer:bufferOffset:tag:" title="readDataToLength:withTimeout:buffer:bufferOffset:tag:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/readDataToLength:withTimeout:buffer:bufferOffset:tag:">&ndash;&nbsp;readDataToLength:withTimeout:buffer:bufferOffset:tag:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Reads the given number of bytes.
+The bytes will be appended to the given byte buffer starting at the given offset.
+The given buffer will automatically be increased in size if needed.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)readDataToLength:(NSUInteger)<em>length</em> withTimeout:(NSTimeInterval)<em>timeout</em> buffer:(NSMutableData *)<em>buffer</em> bufferOffset:(NSUInteger)<em>offset</em> tag:(long)<em>tag</em></code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Reads the given number of bytes.
+The bytes will be appended to the given byte buffer starting at the given offset.
+The given buffer will automatically be increased in size if needed.</p>
+
+<p>If the timeout value is negative, the read operation will not use a timeout.
+If the buffer if nil, a buffer will automatically be created for you.</p>
+
+<p>If the length is 0, this method does nothing and the delegate is not called.
+If the bufferOffset is greater than the length of the given buffer,
+the method will do nothing, and the delegate will not be called.</p>
+
+<p>If you pass a buffer, you must not alter it in any way while AsyncSocket is using it.
+After completion, the data returned in socket:didReadData:withTag: will be a subset of the given buffer.
+That is, it will reference the bytes that were appended to the given buffer via
+the method [NSData dataWithBytesNoCopy:length:freeWhenDone:NO].</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">GCDAsyncSocket.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/readDataToData:withTimeout:tag:" title="readDataToData:withTimeout:tag:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/readDataToData:withTimeout:tag:">&ndash;&nbsp;readDataToData:withTimeout:tag:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Reads bytes until (and including) the passed &ldquo;data&rdquo; parameter, which acts as a separator.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)readDataToData:(NSData *)<em>data</em> withTimeout:(NSTimeInterval)<em>timeout</em> tag:(long)<em>tag</em></code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Reads bytes until (and including) the passed &ldquo;data&rdquo; parameter, which acts as a separator.</p>
+
+<p>If the timeout value is negative, the read operation will not use a timeout.</p>
+
+<p>If you pass nil or zero-length data as the &ldquo;data&rdquo; parameter,
+the method will do nothing (except maybe print a warning), and the delegate will not be called.</p>
+
+<p>To read a line from the socket, use the line separator (e.g. CRLF for HTTP, see below) as the &ldquo;data&rdquo; parameter.
+If you&rsquo;re developing your own custom protocol, be sure your separator can not occur naturally as
+part of the data between separators.
+For example, imagine you want to send several small documents over a socket.
+Using CRLF as a separator is likely unwise, as a CRLF could easily exist within the documents.
+In this particular example, it would be better to use a protocol similar to HTTP with
+a header that includes the length of the document.
+Also be careful that your separator cannot occur naturally as part of the encoding for a character.</p>
+
+<p>The given data (separator) parameter should be immutable.
+For performance reasons, the socket will retain it, not copy it.
+So if it is immutable, don&rsquo;t modify it while the socket is using it.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">GCDAsyncSocket.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/readDataToData:withTimeout:buffer:bufferOffset:tag:" title="readDataToData:withTimeout:buffer:bufferOffset:tag:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/readDataToData:withTimeout:buffer:bufferOffset:tag:">&ndash;&nbsp;readDataToData:withTimeout:buffer:bufferOffset:tag:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Reads bytes until (and including) the passed &ldquo;data&rdquo; parameter, which acts as a separator.
+The bytes will be appended to the given byte buffer starting at the given offset.
+The given buffer will automatically be increased in size if needed.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)readDataToData:(NSData *)<em>data</em> withTimeout:(NSTimeInterval)<em>timeout</em> buffer:(NSMutableData *)<em>buffer</em> bufferOffset:(NSUInteger)<em>offset</em> tag:(long)<em>tag</em></code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Reads bytes until (and including) the passed &ldquo;data&rdquo; parameter, which acts as a separator.
+The bytes will be appended to the given byte buffer starting at the given offset.
+The given buffer will automatically be increased in size if needed.</p>
+
+<p>If the timeout value is negative, the read operation will not use a timeout.
+If the buffer if nil, a buffer will automatically be created for you.</p>
+
+<p>If the bufferOffset is greater than the length of the given buffer,
+the method will do nothing (except maybe print a warning), and the delegate will not be called.</p>
+
+<p>If you pass a buffer, you must not alter it in any way while the socket is using it.
+After completion, the data returned in socket:didReadData:withTag: will be a subset of the given buffer.
+That is, it will reference the bytes that were appended to the given buffer via
+the method [NSData dataWithBytesNoCopy:length:freeWhenDone:NO].</p>
+
+<p>To read a line from the socket, use the line separator (e.g. CRLF for HTTP, see below) as the &ldquo;data&rdquo; parameter.
+If you&rsquo;re developing your own custom protocol, be sure your separator can not occur naturally as
+part of the data between separators.
+For example, imagine you want to send several small documents over a socket.
+Using CRLF as a separator is likely unwise, as a CRLF could easily exist within the documents.
+In this particular example, it would be better to use a protocol similar to HTTP with
+a header that includes the length of the document.
+Also be careful that your separator cannot occur naturally as part of the encoding for a character.</p>
+
+<p>The given data (separator) parameter should be immutable.
+For performance reasons, the socket will retain it, not copy it.
+So if it is immutable, don&rsquo;t modify it while the socket is using it.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">GCDAsyncSocket.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/readDataToData:withTimeout:maxLength:tag:" title="readDataToData:withTimeout:maxLength:tag:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/readDataToData:withTimeout:maxLength:tag:">&ndash;&nbsp;readDataToData:withTimeout:maxLength:tag:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Reads bytes until (and including) the passed &ldquo;data&rdquo; parameter, which acts as a separator.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)readDataToData:(NSData *)<em>data</em> withTimeout:(NSTimeInterval)<em>timeout</em> maxLength:(NSUInteger)<em>length</em> tag:(long)<em>tag</em></code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Reads bytes until (and including) the passed &ldquo;data&rdquo; parameter, which acts as a separator.</p>
+
+<p>If the timeout value is negative, the read operation will not use a timeout.</p>
+
+<p>If maxLength is zero, no length restriction is enforced.
+Otherwise if maxLength bytes are read without completing the read,
+it is treated similarly to a timeout - the socket is closed with a GCDAsyncSocketReadMaxedOutError.
+The read will complete successfully if exactly maxLength bytes are read and the given data is found at the end.</p>
+
+<p>If you pass nil or zero-length data as the &ldquo;data&rdquo; parameter,
+the method will do nothing (except maybe print a warning), and the delegate will not be called.
+If you pass a maxLength parameter that is less than the length of the data parameter,
+the method will do nothing (except maybe print a warning), and the delegate will not be called.</p>
+
+<p>To read a line from the socket, use the line separator (e.g. CRLF for HTTP, see below) as the &ldquo;data&rdquo; parameter.
+If you&rsquo;re developing your own custom protocol, be sure your separator can not occur naturally as
+part of the data between separators.
+For example, imagine you want to send several small documents over a socket.
+Using CRLF as a separator is likely unwise, as a CRLF could easily exist within the documents.
+In this particular example, it would be better to use a protocol similar to HTTP with
+a header that includes the length of the document.
+Also be careful that your separator cannot occur naturally as part of the encoding for a character.</p>
+
+<p>The given data (separator) parameter should be immutable.
+For performance reasons, the socket will retain it, not copy it.
+So if it is immutable, don&rsquo;t modify it while the socket is using it.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">GCDAsyncSocket.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/readDataToData:withTimeout:buffer:bufferOffset:maxLength:tag:" title="readDataToData:withTimeout:buffer:bufferOffset:maxLength:tag:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/readDataToData:withTimeout:buffer:bufferOffset:maxLength:tag:">&ndash;&nbsp;readDataToData:withTimeout:buffer:bufferOffset:maxLength:tag:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Reads bytes until (and including) the passed &ldquo;data&rdquo; parameter, which acts as a separator.
+The bytes will be appended to the given byte buffer starting at the given offset.
+The given buffer will automatically be increased in size if needed.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)readDataToData:(NSData *)<em>data</em> withTimeout:(NSTimeInterval)<em>timeout</em> buffer:(NSMutableData *)<em>buffer</em> bufferOffset:(NSUInteger)<em>offset</em> maxLength:(NSUInteger)<em>length</em> tag:(long)<em>tag</em></code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Reads bytes until (and including) the passed &ldquo;data&rdquo; parameter, which acts as a separator.
+The bytes will be appended to the given byte buffer starting at the given offset.
+The given buffer will automatically be increased in size if needed.</p>
+
+<p>If the timeout value is negative, the read operation will not use a timeout.
+If the buffer if nil, a buffer will automatically be created for you.</p>
+
+<p>If maxLength is zero, no length restriction is enforced.
+Otherwise if maxLength bytes are read without completing the read,
+it is treated similarly to a timeout - the socket is closed with a GCDAsyncSocketReadMaxedOutError.
+The read will complete successfully if exactly maxLength bytes are read and the given data is found at the end.</p>
+
+<p>If you pass a maxLength parameter that is less than the length of the data (separator) parameter,
+the method will do nothing (except maybe print a warning), and the delegate will not be called.
+If the bufferOffset is greater than the length of the given buffer,
+the method will do nothing (except maybe print a warning), and the delegate will not be called.</p>
+
+<p>If you pass a buffer, you must not alter it in any way while the socket is using it.
+After completion, the data returned in socket:didReadData:withTag: will be a subset of the given buffer.
+That is, it will reference the bytes that were appended to the given buffer via
+the method [NSData dataWithBytesNoCopy:length:freeWhenDone:NO].</p>
+
+<p>To read a line from the socket, use the line separator (e.g. CRLF for HTTP, see below) as the &ldquo;data&rdquo; parameter.
+If you&rsquo;re developing your own custom protocol, be sure your separator can not occur naturally as
+part of the data between separators.
+For example, imagine you want to send several small documents over a socket.
+Using CRLF as a separator is likely unwise, as a CRLF could easily exist within the documents.
+In this particular example, it would be better to use a protocol similar to HTTP with
+a header that includes the length of the document.
+Also be careful that your separator cannot occur naturally as part of the encoding for a character.</p>
+
+<p>The given data (separator) parameter should be immutable.
+For performance reasons, the socket will retain it, not copy it.
+So if it is immutable, don&rsquo;t modify it while the socket is using it.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">GCDAsyncSocket.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/progressOfReadReturningTag:bytesDone:total:" title="progressOfReadReturningTag:bytesDone:total:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/progressOfReadReturningTag:bytesDone:total:">&ndash;&nbsp;progressOfReadReturningTag:bytesDone:total:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Returns progress of the current read, from 0.0 to 1.0, or NaN if no current read (use isnan() to check).
+The parameters &ldquo;tag&rdquo;, &ldquo;done&rdquo; and &ldquo;total&rdquo; will be filled in if they aren&rsquo;t NULL.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (float)progressOfReadReturningTag:(long *)<em>tagPtr</em> bytesDone:(NSUInteger *)<em>donePtr</em> total:(NSUInteger *)<em>totalPtr</em></code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Returns progress of the current read, from 0.0 to 1.0, or NaN if no current read (use isnan() to check).
+The parameters &ldquo;tag&rdquo;, &ldquo;done&rdquo; and &ldquo;total&rdquo; will be filled in if they aren&rsquo;t NULL.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">GCDAsyncSocket.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/writeData:withTimeout:tag:" title="writeData:withTimeout:tag:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/writeData:withTimeout:tag:">&ndash;&nbsp;writeData:withTimeout:tag:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Writes data to the socket, and calls the delegate when finished.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)writeData:(NSData *)<em>data</em> withTimeout:(NSTimeInterval)<em>timeout</em> tag:(long)<em>tag</em></code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Writes data to the socket, and calls the delegate when finished.</p>
+
+<p>If you pass in nil or zero-length data, this method does nothing and the delegate will not be called.
+If the timeout value is negative, the write operation will not use a timeout.</p>
+
+<p>Thread-Safety Note:
+If the given data parameter is mutable (NSMutableData) then you MUST NOT alter the data while
+the socket is writing it. In other words, it&rsquo;s not safe to alter the data until after the delegate method
+socket:didWriteDataWithTag: is invoked signifying that this particular write operation has completed.
+This is due to the fact that GCD<a href="../Classes/AsyncSocket.html">AsyncSocket</a> does NOT copy the data. It simply retains it.
+This is for performance reasons. Often times, if NSMutableData is passed, it is because
+a request/response was built up in memory. Copying this data adds an unwanted/unneeded overhead.
+If you need to write data from an immutable buffer, and you need to alter the buffer before the socket
+completes writing the bytes (which is NOT immediately after this method returns, but rather at a later time
+when the delegate method notifies you), then you should first copy the bytes, and pass the copy to this method.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">GCDAsyncSocket.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/progressOfWriteReturningTag:bytesDone:total:" title="progressOfWriteReturningTag:bytesDone:total:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/progressOfWriteReturningTag:bytesDone:total:">&ndash;&nbsp;progressOfWriteReturningTag:bytesDone:total:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Returns progress of the current write, from 0.0 to 1.0, or NaN if no current write (use isnan() to check).
+The parameters &ldquo;tag&rdquo;, &ldquo;done&rdquo; and &ldquo;total&rdquo; will be filled in if they aren&rsquo;t NULL.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (float)progressOfWriteReturningTag:(long *)<em>tagPtr</em> bytesDone:(NSUInteger *)<em>donePtr</em> total:(NSUInteger *)<em>totalPtr</em></code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Returns progress of the current write, from 0.0 to 1.0, or NaN if no current write (use isnan() to check).
+The parameters &ldquo;tag&rdquo;, &ldquo;done&rdquo; and &ldquo;total&rdquo; will be filled in if they aren&rsquo;t NULL.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">GCDAsyncSocket.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/startTLS:" title="startTLS:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/startTLS:">&ndash;&nbsp;startTLS:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Secures the connection using SSL/TLS.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)startTLS:(NSDictionary *)<em>tlsSettings</em></code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Secures the connection using SSL/TLS.</p>
+
+<p>This method may be called at any time, and the TLS handshake will occur after all pending reads and writes
+are finished. This allows one the option of sending a protocol dependent StartTLS message, and queuing
+the upgrade to TLS at the same time, without having to wait for the write to finish.
+Any reads or writes scheduled after this method is called will occur over the secured connection.</p>
+
+<p>==== The available TOP-LEVEL KEYS are:</p>
+
+<ul>
+<li>GCDAsyncSocketManuallyEvaluateTrust
+The value must be of type NSNumber, encapsulating a BOOL value.
+If you set this to YES, then the underlying SecureTransport system will not evaluate the SecTrustRef of the peer.
+Instead it will pause at the moment evaulation would typically occur,
+and allow us to handle the security evaluation however we see fit.
+So GCDAsyncSocket will invoke the delegate method socket:shouldTrustPeer: passing the SecTrustRef.</li>
+</ul>
+
+
+<p>Note that if you set this option, then all other configuration keys are ignored.
+Evaluation will be completely up to you during the socket:didReceiveTrust:completionHandler: delegate method.</p>
+
+<p>For more information on trust evaluation see:
+Apple&rsquo;s Technical Note TN2232 - HTTPS Server Trust Evaluation
+<a href="https://developer.apple.com/library/ios/technotes/tn2232/_index.html">https://developer.apple.com/library/ios/technotes/tn2232/_index.html</a></p>
+
+<p>If unspecified, the default value is NO.</p>
+
+<ul>
+<li>GCDAsyncSocketUseCFStreamForTLS (iOS only)
+The value must be of type NSNumber, encapsulating a BOOL value.
+By default GCD<a href="../Classes/AsyncSocket.html">AsyncSocket</a> will use the SecureTransport layer to perform encryption.
+This gives us more control over the security protocol (many more configuration options),
+plus it allows us to optimize things like sys calls and buffer allocation.</li>
+</ul>
+
+
+<p>However, if you absolutely must, you can instruct GCD<a href="../Classes/AsyncSocket.html">AsyncSocket</a> to use the old-fashioned encryption
+technique by going through the CFStream instead. So instead of using SecureTransport, GCD<a href="../Classes/AsyncSocket.html">AsyncSocket</a>
+will instead setup a CFRead/CFWriteStream. And then set the kCFStreamPropertySSLSettings property
+(via CFReadStreamSetProperty / CFWriteStreamSetProperty) and will pass the given options to this method.</p>
+
+<p>Thus all the other keys in the given dictionary will be ignored by GCD<a href="../Classes/AsyncSocket.html">AsyncSocket</a>,
+and will passed directly CFReadStreamSetProperty / CFWriteStreamSetProperty.
+For more infomation on these keys, please see the documentation for kCFStreamPropertySSLSettings.</p>
+
+<p>If unspecified, the default value is NO.</p>
+
+<p>==== The available CONFIGURATION KEYS are:</p>
+
+<ul>
+<li><p>kCFStreamSSLPeerName
+The value must be of type NSString.
+It should match the name in the X.509 certificate given by the remote party.
+See Apple&rsquo;s documentation for SSLSetPeerDomainName.</p></li>
+<li><p>kCFStreamSSLCertificates
+The value must be of type NSArray.
+See Apple&rsquo;s documentation for SSLSetCertificate.</p></li>
+<li><p>kCFStreamSSLIsServer
+The value must be of type NSNumber, encapsulationg a BOOL value.
+See Apple&rsquo;s documentation for SSLCreateContext for iOS.
+This is optional for iOS. If not supplied, a NO value is the default.
+This is not needed for Mac OS X, and the value is ignored.</p></li>
+<li><p>GCDAsyncSocketSSLPeerID
+The value must be of type NSData.
+You must set this value if you want to use TLS session resumption.
+See Apple&rsquo;s documentation for SSLSetPeerID.</p></li>
+<li><p>GCDAsyncSocketSSLProtocolVersionMin</p></li>
+<li><p>GCDAsyncSocketSSLProtocolVersionMax
+The value(s) must be of type NSNumber, encapsulting a SSLProtocol value.
+See Apple&rsquo;s documentation for SSLSetProtocolVersionMin &amp; SSLSetProtocolVersionMax.
+See also the SSLProtocol typedef.</p></li>
+<li><p>GCDAsyncSocketSSLSessionOptionFalseStart
+The value must be of type NSNumber, encapsulating a BOOL value.
+See Apple&rsquo;s documentation for kSSLSessionOptionFalseStart.</p></li>
+<li><p>GCDAsyncSocketSSLSessionOptionSendOneByteRecord
+The value must be of type NSNumber, encapsulating a BOOL value.
+See Apple&rsquo;s documentation for kSSLSessionOptionSendOneByteRecord.</p></li>
+<li><p>GCDAsyncSocketSSLCipherSuites
+The values must be of type NSArray.
+Each item within the array must be a NSNumber, encapsulating
+See Apple&rsquo;s documentation for SSLSetEnabledCiphers.
+See also the SSLCipherSuite typedef.</p></li>
+<li><p>GCDAsyncSocketSSLDiffieHellmanParameters (Mac OS X only)
+The value must be of type NSData.
+See Apple&rsquo;s documentation for SSLSetDiffieHellmanParams.</p></li>
+</ul>
+
+
+<p>==== The following UNAVAILABLE KEYS are: (with throw an exception)</p>
+
+<ul>
+<li><p>kCFStreamSSLAllowsAnyRoot (UNAVAILABLE)
+You MUST use manual trust evaluation instead (see GCDAsyncSocketManuallyEvaluateTrust).
+Corresponding deprecated method: SSLSetAllowsAnyRoot</p></li>
+<li><p>kCFStreamSSLAllowsExpiredRoots (UNAVAILABLE)
+You MUST use manual trust evaluation instead (see GCDAsyncSocketManuallyEvaluateTrust).
+Corresponding deprecated method: SSLSetAllowsExpiredRoots</p></li>
+<li><p>kCFStreamSSLAllowsExpiredCertificates (UNAVAILABLE)
+You MUST use manual trust evaluation instead (see GCDAsyncSocketManuallyEvaluateTrust).
+Corresponding deprecated method: SSLSetAllowsExpiredCerts</p></li>
+<li><p>kCFStreamSSLValidatesCertificateChain (UNAVAILABLE)
+You MUST use manual trust evaluation instead (see GCDAsyncSocketManuallyEvaluateTrust).
+Corresponding deprecated method: SSLSetEnableCertVerify</p></li>
+<li><p>kCFStreamSSLLevel (UNAVAILABLE)
+You MUST use GCDAsyncSocketSSLProtocolVersionMin &amp; GCDAsyncSocketSSLProtocolVersionMin instead.
+Corresponding deprecated method: SSLSetProtocolVersionEnabled</p></li>
+</ul>
+
+
+<p>Please refer to Apple&rsquo;s documentation for corresponding SSLFunctions.</p>
+
+<p>If you pass in nil or an empty dictionary, the default settings will be used.</p>
+
+<p>IMPORTANT SECURITY NOTE:
+The default settings will check to make sure the remote party&rsquo;s certificate is signed by a
+trusted 3rd party certificate agency (e.g. verisign) and that the certificate is not expired.
+However it will not verify the name on the certificate unless you
+give it a name to verify against via the kCFStreamSSLPeerName key.
+The security implications of this are important to understand.
+Imagine you are attempting to create a secure connection to MySecureServer.com,
+but your socket gets directed to MaliciousServer.com because of a hacked DNS server.
+If you simply use the default settings, and MaliciousServer.com has a valid certificate,
+the default settings will not detect any problems since the certificate is valid.
+To properly secure your connection in this particular scenario you
+should set the kCFStreamSSLPeerName property to &ldquo;MySecureServer.com&rdquo;.</p>
+
+<p>You can also perform additional validation in socketDidSecure.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">GCDAsyncSocket.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/autoDisconnectOnClosedReadStream" title="autoDisconnectOnClosedReadStream"></a>
+	<h3 class="method-title"><code><a href="#//api/name/autoDisconnectOnClosedReadStream">&nbsp;&nbsp;autoDisconnectOnClosedReadStream</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Traditionally sockets are not closed until the conversation is over.
+However, it is technically possible for the remote enpoint to close its write stream.
+Our socket would then be notified that there is no more data to be read,
+but our socket would still be writeable and the remote endpoint could continue to receive our data.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (atomic, assign, readwrite) BOOL autoDisconnectOnClosedReadStream</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Traditionally sockets are not closed until the conversation is over.
+However, it is technically possible for the remote enpoint to close its write stream.
+Our socket would then be notified that there is no more data to be read,
+but our socket would still be writeable and the remote endpoint could continue to receive our data.</p>
+
+<p>The argument for this confusing functionality stems from the idea that a client could shut down its
+write stream after sending a request to the server, thus notifying the server there are to be no further requests.
+In practice, however, this technique did little to help server developers.</p>
+
+<p>To make matters worse, from a TCP perspective there is no way to tell the difference from a read stream close
+and a full socket close. They both result in the TCP stack receiving a FIN packet. The only way to tell
+is by continuing to write to the socket. If it was only a read stream close, then writes will continue to work.
+Otherwise an error will be occur shortly (when the remote end sends us a RST packet).</p>
+
+<p>In addition to the technical challenges and confusion, many high level socket/stream API&rsquo;s provide
+no support for dealing with the problem. If the read stream is closed, the API immediately declares the
+socket to be closed, and shuts down the write stream as well. In fact, this is what Apple&rsquo;s CFStream API does.
+It might sound like poor design at first, but in fact it simplifies development.</p>
+
+<p>The vast majority of the time if the read stream is closed it&rsquo;s because the remote endpoint closed its socket.
+Thus it actually makes sense to close the socket at this point.
+And in fact this is what most networking developers want and expect to happen.
+However, if you are writing a server that interacts with a plethora of clients,
+you might encounter a client that uses the discouraged technique of shutting down its write stream.
+If this is the case, you can set this property to NO,
+and make use of the socketDidCloseReadStream delegate method.</p>
+
+<p>The default value is YES.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">GCDAsyncSocket.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/markSocketQueueTargetQueue:" title="markSocketQueueTargetQueue:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/markSocketQueueTargetQueue:">&ndash;&nbsp;markSocketQueueTargetQueue:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>GCD<a href="../Classes/AsyncSocket.html">AsyncSocket</a> maintains thread safety by using an internal serial dispatch_queue.
+In most cases, the instance creates this queue itself.
+However, to allow for maximum flexibility, the internal queue may be passed in the <a href="#//api/name/init">init</a> method.
+This allows for some advanced options such as controlling socket priority via target queues.
+However, when one begins to use target queues like this, they open the door to some specific deadlock issues.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)markSocketQueueTargetQueue:(dispatch_queue_t)<em>socketQueuesPreConfiguredTargetQueue</em></code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>GCD<a href="../Classes/AsyncSocket.html">AsyncSocket</a> maintains thread safety by using an internal serial dispatch_queue.
+In most cases, the instance creates this queue itself.
+However, to allow for maximum flexibility, the internal queue may be passed in the <a href="#//api/name/init">init</a> method.
+This allows for some advanced options such as controlling socket priority via target queues.
+However, when one begins to use target queues like this, they open the door to some specific deadlock issues.</p>
+
+<p>For example, imagine there are 2 queues:
+dispatch_queue_t socketQueue;
+dispatch_queue_t socketTargetQueue;</p>
+
+<p>If you do this (pseudo-code):
+socketQueue.targetQueue = socketTargetQueue;</p>
+
+<p>Then all socketQueue operations will actually get run on the given socketTargetQueue.
+This is fine and works great in most situations.
+But if you run code directly from within the socketTargetQueue that accesses the socket,
+you could potentially get deadlock. Imagine the following code:</p>
+
+<ul>
+<li>(BOOL)socketHasSomething
+{
+__block BOOL result = NO;
+dispatch_block_t block = ^{
+result = [self someInternalMethodToBeRunOnlyOnSocketQueue];
+}
+if (is_executing_on_queue(socketQueue))
+block();
+else
+dispatch_sync(socketQueue, block);</li>
+</ul>
+
+
+<p>return result;
+}</p>
+
+<p>What happens if you call this method from the socketTargetQueue? The result is deadlock.
+This is because the GCD API offers no mechanism to discover a queue&rsquo;s targetQueue.
+Thus we have no idea if our socketQueue is configured with a targetQueue.
+If we had this information, we could easily avoid deadlock.
+But, since these API&rsquo;s are missing or unfeasible, you&rsquo;ll have to explicitly set it.</p>
+
+<p>IF you pass a socketQueue via the <a href="#//api/name/init">init</a> method,
+AND you&rsquo;ve configured the passed socketQueue with a targetQueue,
+THEN you should pass the end queue in the target hierarchy.</p>
+
+<p>For example, consider the following queue hierarchy:
+socketQueue -> ipQueue -> moduleQueue</p>
+
+<p>This example demonstrates priority shaping within some server.
+All incoming client connections from the same IP address are executed on the same target queue.
+And all connections for a particular module are executed on the same target queue.
+Thus, the priority of all networking for the entire module can be changed on the fly.
+Additionally, networking traffic from a single IP cannot monopolize the module.</p>
+
+<p>Here&rsquo;s how you would accomplish something like that:
+- (dispatch_queue_t)newSocketQueueForConnectionFromAddress:(NSData <em>)address onSocket:(GCD<a href="../Classes/AsyncSocket.html">AsyncSocket</a> </em>)sock
+{
+dispatch_queue_t socketQueue = dispatch_queue_create(&ldquo;&rdquo;, NULL);
+dispatch_queue_t ipQueue = [self ipQueueForAddress:address];</p>
+
+<p>dispatch_set_target_queue(socketQueue, ipQueue);
+dispatch_set_target_queue(iqQueue, moduleQueue);</p>
+
+<p>return socketQueue;
+}
+- (void)socket:(GCD<a href="../Classes/AsyncSocket.html">AsyncSocket</a> <em>)sock didAcceptNewSocket:(GCD<a href="../Classes/AsyncSocket.html">AsyncSocket</a> </em>)newSocket
+{
+[clientConnections addObject:newSocket];
+[newSocket markSocketQueueTargetQueue:moduleQueue];
+}</p>
+
+<p>Note: This workaround is ONLY needed if you intend to execute code directly on the ipQueue or moduleQueue.
+This is often NOT the case, as such queues are used solely for execution shaping.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">GCDAsyncSocket.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/performBlock:" title="performBlock:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/performBlock:">&ndash;&nbsp;performBlock:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>It&rsquo;s not thread-safe to access certain variables from outside the socket&rsquo;s internal queue.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)performBlock:(dispatch_block_t)<em>block</em></code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>It&rsquo;s not thread-safe to access certain variables from outside the socket&rsquo;s internal queue.</p>
+
+<p>For example, the socket file descriptor.
+File descriptors are simply integers which reference an index in the per-process file table.
+However, when one requests a new file descriptor (by opening a file or socket),
+the file descriptor returned is guaranteed to be the lowest numbered unused descriptor.
+So if we&rsquo;re not careful, the following could be possible:</p>
+
+<ul>
+<li>Thread A invokes a method which returns the socket&rsquo;s file descriptor.</li>
+<li>The socket is closed via the socket&rsquo;s internal queue on thread B.</li>
+<li>Thread C opens a file, and subsequently receives the file descriptor that was previously the socket&rsquo;s FD.</li>
+<li>Thread A is now accessing/altering the file instead of the socket.</li>
+</ul>
+
+
+<p>In addition to this, other variables are not actually objects,
+and thus cannot be retained/released or even autoreleased.
+An example is the <a href="#//api/name/sslContext">sslContext</a>, of type SSLContextRef, which is actually a malloc&rsquo;d struct.</p>
+
+<p>Although there are internal variables that make it difficult to maintain thread-safety,
+it is important to provide access to these variables
+to ensure this class can be used in a wide array of environments.
+This method helps to accomplish this by invoking the current block on the socket&rsquo;s internal queue.
+The methods below can be invoked from within the block to access
+those generally thread-unsafe internal variables in a thread-safe manner.
+The given block will be invoked synchronously on the socket&rsquo;s internal queue.</p>
+
+<p>If you save references to any protected variables and use them outside the block, you do so at your own peril.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">GCDAsyncSocket.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/socketFD" title="socketFD"></a>
+	<h3 class="method-title"><code><a href="#//api/name/socketFD">&ndash;&nbsp;socketFD</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>These methods are only available from within the context of a <a href="#//api/name/performBlock:">performBlock:</a> invocation.
+See the documentation for the <a href="#//api/name/performBlock:">performBlock:</a> method above.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (int)socketFD</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>These methods are only available from within the context of a <a href="#//api/name/performBlock:">performBlock:</a> invocation.
+See the documentation for the <a href="#//api/name/performBlock:">performBlock:</a> method above.</p>
+
+<p>Provides access to the socket&rsquo;s file descriptor(s).
+If the socket is a server socket (is accepting incoming connections),
+it might actually have multiple internal socket file descriptors - one for IPv4 and one for IPv6.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">GCDAsyncSocket.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/readStream" title="readStream"></a>
+	<h3 class="method-title"><code><a href="#//api/name/readStream">&ndash;&nbsp;readStream</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>These methods are only available from within the context of a <a href="#//api/name/performBlock:">performBlock:</a> invocation.
+See the documentation for the <a href="#//api/name/performBlock:">performBlock:</a> method above.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (CFReadStreamRef)readStream</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>These methods are only available from within the context of a <a href="#//api/name/performBlock:">performBlock:</a> invocation.
+See the documentation for the <a href="#//api/name/performBlock:">performBlock:</a> method above.</p>
+
+<p>Provides access to the socket&rsquo;s internal CFReadStream/CFWriteStream.</p>
+
+<p>These streams are only used as workarounds for specific iOS shortcomings:</p>
+
+<ul>
+<li><p>Apple has decided to keep the SecureTransport framework private is iOS.
+This means the only supplied way to do SSL/TLS is via CFStream or some other API layered on top of it.
+Thus, in order to provide SSL/TLS support on iOS we are forced to rely on CFStream,
+instead of the preferred and faster and more powerful SecureTransport.</p></li>
+<li><p>If a socket doesn&rsquo;t have backgrounding enabled, and that socket is closed while the app is backgrounded,
+Apple only bothers to notify us via the CFStream API.
+The faster and more powerful GCD API isn&rsquo;t notified properly in this case.</p></li>
+</ul>
+
+
+<p>See also: (BOOL)<a href="#//api/name/enableBackgroundingOnSocket">enableBackgroundingOnSocket</a></p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">GCDAsyncSocket.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/enableBackgroundingOnSocket" title="enableBackgroundingOnSocket"></a>
+	<h3 class="method-title"><code><a href="#//api/name/enableBackgroundingOnSocket">&ndash;&nbsp;enableBackgroundingOnSocket</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>This method is only available from within the context of a <a href="#//api/name/performBlock:">performBlock:</a> invocation.
+See the documentation for the <a href="#//api/name/performBlock:">performBlock:</a> method above.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (BOOL)enableBackgroundingOnSocket</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>This method is only available from within the context of a <a href="#//api/name/performBlock:">performBlock:</a> invocation.
+See the documentation for the <a href="#//api/name/performBlock:">performBlock:</a> method above.</p>
+
+<p>Configures the socket to allow it to operate when the iOS application has been backgrounded.
+In other words, this method creates a read &amp; write stream, and invokes:</p>
+
+<p>CFReadStreamSetProperty(<a href="#//api/name/readStream">readStream</a>, kCFStreamNetworkServiceType, kCFStreamNetworkServiceTypeVoIP);
+CFWriteStreamSetProperty(writeStream, kCFStreamNetworkServiceType, kCFStreamNetworkServiceTypeVoIP);</p>
+
+<p>Returns YES if successful, NO otherwise.</p>
+
+<p>Note: Apple does not officially support backgrounding server sockets.
+That is, if your socket is accepting incoming connections, Apple does not officially support
+allowing iOS applications to accept incoming connections while an app is backgrounded.</p>
+
+<p>Example usage:</p>
+
+<ul>
+<li>(void)socket:(GCD<a href="../Classes/AsyncSocket.html">AsyncSocket</a> <em>)sock didConnectToHost:(NSString </em>)host port:(uint16_t)port
+{
+[asyncSocket performBlock:^{
+[asyncSocket enableBackgroundingOnSocket];
+}];
+}</li>
+</ul>
+
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">GCDAsyncSocket.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/sslContext" title="sslContext"></a>
+	<h3 class="method-title"><code><a href="#//api/name/sslContext">&ndash;&nbsp;sslContext</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>This method is only available from within the context of a <a href="#//api/name/performBlock:">performBlock:</a> invocation.
+See the documentation for the <a href="#//api/name/performBlock:">performBlock:</a> method above.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (SSLContextRef)sslContext</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>This method is only available from within the context of a <a href="#//api/name/performBlock:">performBlock:</a> invocation.
+See the documentation for the <a href="#//api/name/performBlock:">performBlock:</a> method above.</p>
+
+<p>Provides access to the socket&rsquo;s SSLContext, if SSL/TLS has been started on the socket.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">GCDAsyncSocket.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/lookupHost:port:error:" title="lookupHost:port:error:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/lookupHost:port:error:">+&nbsp;lookupHost:port:error:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>The address lookup utility used by the class.
+This method is synchronous, so it&rsquo;s recommended you use it on a background thread/queue.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (NSMutableArray *)lookupHost:(NSString *)<em>host</em> port:(uint16_t)<em>port</em> error:(NSError **)<em>errPtr</em></code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>The address lookup utility used by the class.
+This method is synchronous, so it&rsquo;s recommended you use it on a background thread/queue.</p>
+
+<p>The special strings &ldquo;localhost&rdquo; and &ldquo;loopback&rdquo; return the loopback address for IPv4 and IPv6.</p>
+
+<p>@returns
+A mutable array with all IPv4 and IPv6 addresses returned by getaddrinfo.
+The addresses are specifically for TCP connections.
+You can filter the addresses, if needed, using the other utility methods provided by the class.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">GCDAsyncSocket.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/hostFromAddress:" title="hostFromAddress:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/hostFromAddress:">+&nbsp;hostFromAddress:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Extracting host and port information from raw address data.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (NSString *)hostFromAddress:(NSData *)<em>address</em></code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Extracting host and port information from raw address data.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">GCDAsyncSocket.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/CRLFData" title="CRLFData"></a>
+	<h3 class="method-title"><code><a href="#//api/name/CRLFData">+&nbsp;CRLFData</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>A few common line separators, for use with the readDataToData:&hellip; methods.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (NSData *)CRLFData</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>A few common line separators, for use with the readDataToData:&hellip; methods.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">GCDAsyncSocket.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+
+						
+						<h2 class="task-title">Other Methods</h2>
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/preConnectWithInterface:error:" title="preConnectWithInterface:error:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/preConnectWithInterface:error:">&ndash;&nbsp;preConnectWithInterface:error:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>This method runs through the various checks required prior to a connection attempt.
+It is shared between the connectToHost and connectToAddress methods.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (BOOL)preConnectWithInterface:(NSString *)<em>interface</em> error:(NSError **)<em>errPtr</em></code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>This method runs through the various checks required prior to a connection attempt.
+It is shared between the connectToHost and connectToAddress methods.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">GCDAsyncSocket.m</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/lookup:didFail:" title="lookup:didFail:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/lookup:didFail:">&ndash;&nbsp;lookup:didFail:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>This method is called if the DNS lookup fails.
+This method is executed on the socketQueue.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)lookup:(int)<em>aStateIndex</em> didFail:(NSError *)<em>error</em></code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>This method is called if the DNS lookup fails.
+This method is executed on the socketQueue.</p>
+
+<p>Since the DNS lookup executed synchronously on a global concurrent queue,
+the original connection request may have already been cancelled or timed-out by the time this method is invoked.
+The lookupIndex tells us whether the lookup is still valid or not.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">GCDAsyncSocket.m</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/maybeClose" title="maybeClose"></a>
+	<h3 class="method-title"><code><a href="#//api/name/maybeClose">&ndash;&nbsp;maybeClose</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Closes the socket if possible.
+That is, if all writes have completed, and we&rsquo;re set to <a href="#//api/name/disconnect">disconnect</a> after writing,
+or if all reads have completed, and we&rsquo;re set to <a href="#//api/name/disconnect">disconnect</a> after reading.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)maybeClose</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Closes the socket if possible.
+That is, if all writes have completed, and we&rsquo;re set to <a href="#//api/name/disconnect">disconnect</a> after writing,
+or if all reads have completed, and we&rsquo;re set to <a href="#//api/name/disconnect">disconnect</a> after reading.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">GCDAsyncSocket.m</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/readMaxedOutError" title="readMaxedOutError"></a>
+	<h3 class="method-title"><code><a href="#//api/name/readMaxedOutError">&ndash;&nbsp;readMaxedOutError</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Returns a standard <a href="../Classes/AsyncSocket.html">AsyncSocket</a> maxed out error.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (NSError *)readMaxedOutError</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Returns a standard <a href="../Classes/AsyncSocket.html">AsyncSocket</a> maxed out error.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">GCDAsyncSocket.m</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/readTimeoutError" title="readTimeoutError"></a>
+	<h3 class="method-title"><code><a href="#//api/name/readTimeoutError">&ndash;&nbsp;readTimeoutError</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Returns a standard <a href="../Classes/AsyncSocket.html">AsyncSocket</a> write timeout error.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (NSError *)readTimeoutError</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Returns a standard <a href="../Classes/AsyncSocket.html">AsyncSocket</a> write timeout error.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">GCDAsyncSocket.m</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/writeTimeoutError" title="writeTimeoutError"></a>
+	<h3 class="method-title"><code><a href="#//api/name/writeTimeoutError">&ndash;&nbsp;writeTimeoutError</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Returns a standard <a href="../Classes/AsyncSocket.html">AsyncSocket</a> write timeout error.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (NSError *)writeTimeoutError</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Returns a standard <a href="../Classes/AsyncSocket.html">AsyncSocket</a> write timeout error.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">GCDAsyncSocket.m</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/getInterfaceAddress4:address6:fromDescription:port:" title="getInterfaceAddress4:address6:fromDescription:port:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/getInterfaceAddress4:address6:fromDescription:port:">&ndash;&nbsp;getInterfaceAddress4:address6:fromDescription:port:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Finds the address of an interface description.
+An inteface description may be an interface name (en0, en1, lo0) or corresponding IP (192.168.4.34).</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)getInterfaceAddress4:(NSMutableData **)<em>interfaceAddr4Ptr</em> address6:(NSMutableData **)<em>interfaceAddr6Ptr</em> fromDescription:(NSString *)<em>interfaceDescription</em> port:(uint16_t)<em>port</em></code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Finds the address of an interface description.
+An inteface description may be an interface name (en0, en1, lo0) or corresponding IP (192.168.4.34).</p>
+
+<p>The interface description may optionally contain a port number at the end, separated by a colon.
+If a non-zero port parameter is provided, any port number in the interface description is ignored.</p>
+
+<p>The returned value is a &lsquo;struct sockaddr&rsquo; wrapped in an NSMutableData object.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">GCDAsyncSocket.m</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/maybeDequeueRead" title="maybeDequeueRead"></a>
+	<h3 class="method-title"><code><a href="#//api/name/maybeDequeueRead">&ndash;&nbsp;maybeDequeueRead</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>This method starts a new read, if needed.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)maybeDequeueRead</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>This method starts a new read, if needed.</p>
+
+<p>It is called when:
+- a user requests a read
+- after a read request has finished (to handle the next request)
+- immediately after the socket opens to handle any pending requests</p>
+
+<p>This method also handles auto<a href="#//api/name/disconnect">disconnect</a> post read/write completion.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">GCDAsyncSocket.m</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+					</div>
+					
+					
+
+                    
+                    
+          
+				</main>
+
+				<footer>
+					<div class="footer-copyright">
+						
+						<p class="copyright">Copyright &copy; 2016 AWARE. All rights reserved. Updated: 2016-03-17</p>
+						
+						
+						<p class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2.1 (build 1334)</a>.</p>
+						
+					</div>
+				</footer>
+			</div>
+		</div>
+	</article>
+
+	<script src="../js/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<title>EZAudioPlayerDelegate Protocol Reference</title>
+
+	<link rel="stylesheet" href="../css/style.css">
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1.4">
+	<meta name="generator" content="appledoc 2.2.1 (build 1334)">
+</head>
+<body class="appledoc">
+	<header>
+		<div class="container" class="hide-in-xcode">
+			
+			<h1 id="library-title">
+				<a href="../index.html">AWARE Client iOS </a>
+			</h1>
+
+			<p id="developer-home">
+				<a href="../index.html">AWARE</a>
+			</p>
+			
+		</div>
+	</header>
+
+	<aside>
+		<div class="container">
+			<nav>
+				<ul id="header-buttons" role="toolbar">
+					<li><a href="../index.html">Index</a></li>
+<li><a href="../hierarchy.html">Hierarchy</a></li>
+
+					<li id="on-this-page" role="navigation">
+						<label>
+							On This Page
+
+							<div class="chevron">
+								<div class="chevy chevron-left"></div>
+								<div class="chevy chevron-right"></div>
+							</div>
+
+							<select id="jump-to">
+	<option value="top">Jump To&#133;</option>
+	
+	<option value="overview">Overview</option>
+	
+
+	
+	
+	<option value="tasks">Tasks</option>
+	
+	
+
+	
+	
+
+	
+
+	
+	<optgroup label="Instance Methods">
+		
+		<option value="//api/name/audioPlayer:playedAudio:withBufferSize:withNumberOfChannels:inAudioFile:">- audioPlayer:playedAudio:withBufferSize:withNumberOfChannels:inAudioFile:</option>
+		
+		<option value="//api/name/audioPlayer:reachedEndOfAudioFile:">- audioPlayer:reachedEndOfAudioFile:</option>
+		
+		<option value="//api/name/audioPlayer:updatedPosition:inAudioFile:">- audioPlayer:updatedPosition:inAudioFile:</option>
+		
+	</optgroup>
+	
+	
+</select>
+						</label>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</aside>
+
+	<article>
+		<div id="overview_contents" class="container">
+			<div id="content">
+				<main role="main">
+					<h1 class="title">EZAudioPlayerDelegate Protocol Reference</h1>
+
+					
+					<div class="section section-specification"><table cellspacing="0"><tbody>
+						<tr>
+	<th>Conforms to</th>
+	<td>NSObject</td>
+</tr><tr>
+	<th>Declared in</th>
+	<td>EZAudioPlayer.h</td>
+</tr>
+						</tbody></table></div>
+					
+
+                    
+					
+					<div class="section section-overview">
+						<a title="Overview" name="overview"></a>
+						<h2 class="subtitle subtitle-overview">Overview</h2>
+						<p>The EZAudioPlayerDelegate provides event callbacks for the <a href="../Classes/EZAudioPlayer.html">EZAudioPlayer</a>. Since 0.5.0 the EZAudioPlayerDelegate provides a smaller set of delegate methods in favor of notifications to allow multiple receivers of the <a href="../Classes/EZAudioPlayer.html">EZAudioPlayer</a> event callbacks since only one player is typically used in an application. Specifically, these methods are provided for high frequency callbacks that wrap the EZAudioPlayer&rsquo;s internal <a href="../Classes/EZAudioFile.html">EZAudioFile</a> and <a href="../Classes/EZOutput.html">EZOutput</a> instances.</p><div class="warning"><p><strong>Warning:</strong> These callbacks don&rsquo;t necessarily occur on the main thread so make sure you wrap any UI code in a GCD block like: dispatch_async(dispatch_get_main_queue(), ^{ // Update UI });</p></div>
+					</div>
+					
+					
+
+					
+					
+					<div class="section section-tasks">
+						<a title="Tasks" name="tasks"></a>
+						
+
+						
+						
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/audioPlayer:playedAudio:withBufferSize:withNumberOfChannels:inAudioFile:" title="audioPlayer:playedAudio:withBufferSize:withNumberOfChannels:inAudioFile:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/audioPlayer:playedAudio:withBufferSize:withNumberOfChannels:inAudioFile:">&ndash;&nbsp;audioPlayer:playedAudio:withBufferSize:withNumberOfChannels:inAudioFile:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Triggered by the EZAudioPlayer&rsquo;s internal EZAudioFile&rsquo;s <a href="../Protocols/EZAudioFileDelegate.html">EZAudioFileDelegate</a> callback and notifies the delegate of the read audio data as a float array instead of a buffer list. Common use case of this would be to visualize the float data using an audio plot or audio data dependent OpenGL sketch.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)audioPlayer:(EZAudioPlayer *)<em>audioPlayer</em> playedAudio:(float **)<em>buffer</em> withBufferSize:(UInt32)<em>bufferSize</em> withNumberOfChannels:(UInt32)<em>numberOfChannels</em> inAudioFile:(EZAudioFile *)<em>audioFile</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>audioPlayer</code></th>
+						<td><p>The instance of the <a href="../Classes/EZAudioPlayer.html">EZAudioPlayer</a> that triggered the event</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>buffer</code></th>
+						<td><p>A float array of float arrays holding the audio data. buffer[0] would be the left channel&rsquo;s float array while buffer[1] would be the right channel&rsquo;s float array in a stereo file.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>bufferSize</code></th>
+						<td><p>The length of the buffers float arrays</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>numberOfChannels</code></th>
+						<td><p>The number of channels. 2 for stereo, 1 for mono.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>audioFile</code></th>
+						<td><p>The instance of the <a href="../Classes/EZAudioFile.html">EZAudioFile</a> that the event was triggered from</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Triggered by the EZAudioPlayer&rsquo;s internal EZAudioFile&rsquo;s <a href="../Protocols/EZAudioFileDelegate.html">EZAudioFileDelegate</a> callback and notifies the delegate of the read audio data as a float array instead of a buffer list. Common use case of this would be to visualize the float data using an audio plot or audio data dependent OpenGL sketch.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZAudioPlayer.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/audioPlayer:updatedPosition:inAudioFile:" title="audioPlayer:updatedPosition:inAudioFile:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/audioPlayer:updatedPosition:inAudioFile:">&ndash;&nbsp;audioPlayer:updatedPosition:inAudioFile:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Triggered by EZAudioPlayer&rsquo;s internal EZAudioFile&rsquo;s <a href="../Protocols/EZAudioFileDelegate.html">EZAudioFileDelegate</a> callback and notifies the delegate of the current playback position. The framePosition provides the current frame position and can be calculated against the EZAudioPlayer&rsquo;s total frames using the <code>totalFrames</code> function from the <a href="../Classes/EZAudioPlayer.html">EZAudioPlayer</a>.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)audioPlayer:(EZAudioPlayer *)<em>audioPlayer</em> updatedPosition:(SInt64)<em>framePosition</em> inAudioFile:(EZAudioFile *)<em>audioFile</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>audioPlayer</code></th>
+						<td><p>The instance of the <a href="../Classes/EZAudioPlayer.html">EZAudioPlayer</a> that triggered the event</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>framePosition</code></th>
+						<td><p>The new frame index as a 64-bit signed integer</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>audioFile</code></th>
+						<td><p>The instance of the <a href="../Classes/EZAudioFile.html">EZAudioFile</a> that the event was triggered from</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Triggered by EZAudioPlayer&rsquo;s internal EZAudioFile&rsquo;s <a href="../Protocols/EZAudioFileDelegate.html">EZAudioFileDelegate</a> callback and notifies the delegate of the current playback position. The framePosition provides the current frame position and can be calculated against the EZAudioPlayer&rsquo;s total frames using the <code>totalFrames</code> function from the <a href="../Classes/EZAudioPlayer.html">EZAudioPlayer</a>.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZAudioPlayer.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/audioPlayer:reachedEndOfAudioFile:" title="audioPlayer:reachedEndOfAudioFile:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/audioPlayer:reachedEndOfAudioFile:">&ndash;&nbsp;audioPlayer:reachedEndOfAudioFile:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Triggered by EZAudioPlayer&rsquo;s internal EZAudioFile&rsquo;s <a href="../Protocols/EZAudioFileDelegate.html">EZAudioFileDelegate</a> callback and notifies the delegate that the end of the file has been reached.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)audioPlayer:(EZAudioPlayer *)<em>audioPlayer</em> reachedEndOfAudioFile:(EZAudioFile *)<em>audioFile</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>audioPlayer</code></th>
+						<td><p>The instance of the <a href="../Classes/EZAudioPlayer.html">EZAudioPlayer</a> that triggered the event</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>audioFile</code></th>
+						<td><p>The instance of the <a href="../Classes/EZAudioFile.html">EZAudioFile</a> that the event was triggered from</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Triggered by EZAudioPlayer&rsquo;s internal EZAudioFile&rsquo;s <a href="../Protocols/EZAudioFileDelegate.html">EZAudioFileDelegate</a> callback and notifies the delegate that the end of the file has been reached.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZAudioPlayer.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+					</div>
+					
+					
+
+                    
+                    
+          
+				</main>
+
+				<footer>
+					<div class="footer-copyright">
+						
+						<p class="copyright">Copyright &copy; 2016 AWARE. All rights reserved. Updated: 2016-03-17</p>
+						
+						
+						<p class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2.1 (build 1334)</a>.</p>
+						
+					</div>
+				</footer>
+			</div>
+		</div>
+	</article>
+
+	<script src="../js/script.js"></script>
+</body>
+</html>

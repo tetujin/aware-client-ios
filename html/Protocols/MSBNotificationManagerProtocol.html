@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<title>MSBNotificationManagerProtocol Protocol Reference</title>
+
+	<link rel="stylesheet" href="../css/style.css">
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1.4">
+	<meta name="generator" content="appledoc 2.2.1 (build 1334)">
+</head>
+<body class="appledoc">
+	<header>
+		<div class="container" class="hide-in-xcode">
+			
+			<h1 id="library-title">
+				<a href="../index.html">AWARE Client iOS </a>
+			</h1>
+
+			<p id="developer-home">
+				<a href="../index.html">AWARE</a>
+			</p>
+			
+		</div>
+	</header>
+
+	<aside>
+		<div class="container">
+			<nav>
+				<ul id="header-buttons" role="toolbar">
+					<li><a href="../index.html">Index</a></li>
+<li><a href="../hierarchy.html">Hierarchy</a></li>
+
+					<li id="on-this-page" role="navigation">
+						<label>
+							On This Page
+
+							<div class="chevron">
+								<div class="chevy chevron-left"></div>
+								<div class="chevy chevron-right"></div>
+							</div>
+
+							<select id="jump-to">
+	<option value="top">Jump To&#133;</option>
+	
+
+	
+	
+	<option value="tasks">Tasks</option>
+	
+	
+
+	
+	
+
+	
+
+	
+	<optgroup label="Instance Methods">
+		
+		<option value="//api/name/registerNotificationWithCompletionHandler:">- registerNotificationWithCompletionHandler:</option>
+		
+		<option value="//api/name/registerNotificationWithTileID:completionHandler:">- registerNotificationWithTileID:completionHandler:</option>
+		
+		<option value="//api/name/sendMessageWithTileID:title:body:timeStamp:flags:completionHandler:">- sendMessageWithTileID:title:body:timeStamp:flags:completionHandler:</option>
+		
+		<option value="//api/name/showDialogWithTileID:title:body:completionHandler:">- showDialogWithTileID:title:body:completionHandler:</option>
+		
+		<option value="//api/name/unregisterNotificationWithCompletionHandler:">- unregisterNotificationWithCompletionHandler:</option>
+		
+		<option value="//api/name/vibrateWithType:completionHandler:">- vibrateWithType:completionHandler:</option>
+		
+	</optgroup>
+	
+	
+</select>
+						</label>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</aside>
+
+	<article>
+		<div id="overview_contents" class="container">
+			<div id="content">
+				<main role="main">
+					<h1 class="title">MSBNotificationManagerProtocol Protocol Reference</h1>
+
+					
+					<div class="section section-specification"><table cellspacing="0"><tbody>
+						<tr>
+	<th>Conforms to</th>
+	<td>NSObject</td>
+</tr><tr>
+	<th>Declared in</th>
+	<td>MSBNotificationManagerProtocol.h</td>
+</tr>
+						</tbody></table></div>
+					
+
+                    
+
+					
+					
+					<div class="section section-tasks">
+						<a title="Tasks" name="tasks"></a>
+						
+
+						
+						
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/vibrateWithType:completionHandler:" title="vibrateWithType:completionHandler:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/vibrateWithType:completionHandler:">&ndash;&nbsp;vibrateWithType:completionHandler:</a></code>
+<span class="task-item-suffix">required method</span></h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Sent a customized vibration to Band.
+@vibrationType     see MSBVibrationType</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)vibrateWithType:(MSBNotificationVibrationType)<em>vibrationType</em> completionHandler:(void ( ^ ) ( NSError *error ))<em>completionHandler</em></code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Sent a customized vibration to Band.
+@vibrationType     see MSBVibrationType</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">MSBNotificationManagerProtocol.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/showDialogWithTileID:title:body:completionHandler:" title="showDialogWithTileID:title:body:completionHandler:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/showDialogWithTileID:title:body:completionHandler:">&ndash;&nbsp;showDialogWithTileID:title:body:completionHandler:</a></code>
+<span class="task-item-suffix">required method</span></h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Show a pop up Dialog Notification to Band. This dialog will disappear either timeout or user dismiss it.
+@tileID        identifier of the Tile which app has added.
+@title         title of the dialog. see MSBNotificationDialogTitleLengthMax
+@body          body of the dialog. see MSBNotificationDialogBodyLengthMax</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)showDialogWithTileID:(NSUUID *)<em>tileID</em> title:(NSString *)<em>title</em> body:(NSString *)<em>body</em> completionHandler:(void ( ^ ) ( NSError *error ))<em>completionHandler</em></code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Show a pop up Dialog Notification to Band. This dialog will disappear either timeout or user dismiss it.
+@tileID        identifier of the Tile which app has added.
+@title         title of the dialog. see MSBNotificationDialogTitleLengthMax
+@body          body of the dialog. see MSBNotificationDialogBodyLengthMax</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">MSBNotificationManagerProtocol.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/sendMessageWithTileID:title:body:timeStamp:flags:completionHandler:" title="sendMessageWithTileID:title:body:timeStamp:flags:completionHandler:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/sendMessageWithTileID:title:body:timeStamp:flags:completionHandler:">&ndash;&nbsp;sendMessageWithTileID:title:body:timeStamp:flags:completionHandler:</a></code>
+<span class="task-item-suffix">required method</span></h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Send a Message Notification to a Tile on the Band, with the options to include Pop up Dialog.
+@tileID        identifier of the Tile which app has added.
+@title         title of the message. see MSBNotificationMessageTitleLengthMax
+@body          body of the message. see MSBNotificationMessageBodyLengthMax
+@timeStamp     optional timeStamp of the message. Default to [NSDate date]
+@flags         options of the message. see <a href="../Constants/MSBNotificationMessageFlags.html">MSBNotificationMessageFlags</a></p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)sendMessageWithTileID:(NSUUID *)<em>tileID</em> title:(NSString *)<em>title</em> body:(NSString *)<em>body</em> timeStamp:(NSDate *)<em>timeStamp</em> flags:(MSBNotificationMessageFlags)<em>flags</em> completionHandler:(void ( ^ ) ( NSError *error ))<em>completionHandler</em></code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Send a Message Notification to a Tile on the Band, with the options to include Pop up Dialog.
+@tileID        identifier of the Tile which app has added.
+@title         title of the message. see MSBNotificationMessageTitleLengthMax
+@body          body of the message. see MSBNotificationMessageBodyLengthMax
+@timeStamp     optional timeStamp of the message. Default to [NSDate date]
+@flags         options of the message. see <a href="../Constants/MSBNotificationMessageFlags.html">MSBNotificationMessageFlags</a></p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">MSBNotificationManagerProtocol.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/registerNotificationWithTileID:completionHandler:" title="registerNotificationWithTileID:completionHandler:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/registerNotificationWithTileID:completionHandler:">&ndash;&nbsp;registerNotificationWithTileID:completionHandler:</a></code>
+<span class="task-item-suffix">required method</span></h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>register Push Notifications of the current App to Band, Notifications will be sent to specified Tile
+@tileID        identifier of the Tile which app has added.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)registerNotificationWithTileID:(NSUUID *)<em>tileID</em> completionHandler:(void ( ^ ) ( NSError *error ))<em>completionHandler</em></code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>register Push Notifications of the current App to Band, Notifications will be sent to specified Tile
+@tileID        identifier of the Tile which app has added.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">MSBNotificationManagerProtocol.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/registerNotificationWithCompletionHandler:" title="registerNotificationWithCompletionHandler:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/registerNotificationWithCompletionHandler:">&ndash;&nbsp;registerNotificationWithCompletionHandler:</a></code>
+<span class="task-item-suffix">required method</span></h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>register Push Notifications of the current App to Band, Notifications will be sent to the Tile created by the app.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)registerNotificationWithCompletionHandler:(void ( ^ ) ( NSError *error ))<em>completionHandler</em></code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>register Push Notifications of the current App to Band, Notifications will be sent to the Tile created by the app.</p><p>use this method is the current App only has one Tile on Band. If the app has added more than one Tile, use <a href="#//api/name/registerNotificationWithTileID:completionHandler:">registerNotificationWithTileID:completionHandler:</a>.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">MSBNotificationManagerProtocol.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/unregisterNotificationWithCompletionHandler:" title="unregisterNotificationWithCompletionHandler:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/unregisterNotificationWithCompletionHandler:">&ndash;&nbsp;unregisterNotificationWithCompletionHandler:</a></code>
+<span class="task-item-suffix">required method</span></h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Unregister Push Notifications of the current App from the Band.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)unregisterNotificationWithCompletionHandler:(void ( ^ ) ( NSError *error ))<em>completionHandler</em></code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Unregister Push Notifications of the current App from the Band.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">MSBNotificationManagerProtocol.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+					</div>
+					
+					
+
+                    
+                    
+          
+				</main>
+
+				<footer>
+					<div class="footer-copyright">
+						
+						<p class="copyright">Copyright &copy; 2016 AWARE. All rights reserved. Updated: 2016-03-17</p>
+						
+						
+						<p class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2.1 (build 1334)</a>.</p>
+						
+					</div>
+				</footer>
+			</div>
+		</div>
+	</article>
+
+	<script src="../js/script.js"></script>
+</body>
+</html>

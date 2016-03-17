@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<title>EZAudioFileDelegate Protocol Reference</title>
+
+	<link rel="stylesheet" href="../css/style.css">
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1.4">
+	<meta name="generator" content="appledoc 2.2.1 (build 1334)">
+</head>
+<body class="appledoc">
+	<header>
+		<div class="container" class="hide-in-xcode">
+			
+			<h1 id="library-title">
+				<a href="../index.html">AWARE Client iOS </a>
+			</h1>
+
+			<p id="developer-home">
+				<a href="../index.html">AWARE</a>
+			</p>
+			
+		</div>
+	</header>
+
+	<aside>
+		<div class="container">
+			<nav>
+				<ul id="header-buttons" role="toolbar">
+					<li><a href="../index.html">Index</a></li>
+<li><a href="../hierarchy.html">Hierarchy</a></li>
+
+					<li id="on-this-page" role="navigation">
+						<label>
+							On This Page
+
+							<div class="chevron">
+								<div class="chevy chevron-left"></div>
+								<div class="chevy chevron-right"></div>
+							</div>
+
+							<select id="jump-to">
+	<option value="top">Jump To&#133;</option>
+	
+	<option value="overview">Overview</option>
+	
+
+	
+	
+	<option value="tasks">Tasks</option>
+	
+	
+
+	
+	
+
+	
+
+	
+	<optgroup label="Instance Methods">
+		
+		<option value="//api/name/audioFile:readAudio:withBufferSize:withNumberOfChannels:">- audioFile:readAudio:withBufferSize:withNumberOfChannels:</option>
+		
+		<option value="//api/name/audioFile:updatedPosition:">- audioFile:updatedPosition:</option>
+		
+		<option value="//api/name/audioFileUpdatedPosition:">- audioFileUpdatedPosition:</option>
+		
+	</optgroup>
+	
+	
+</select>
+						</label>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</aside>
+
+	<article>
+		<div id="overview_contents" class="container">
+			<div id="content">
+				<main role="main">
+					<h1 class="title">EZAudioFileDelegate Protocol Reference</h1>
+
+					
+					<div class="section section-specification"><table cellspacing="0"><tbody>
+						<tr>
+	<th>Conforms to</th>
+	<td>NSObject</td>
+</tr><tr>
+	<th>Declared in</th>
+	<td>EZAudioFile.h</td>
+</tr>
+						</tbody></table></div>
+					
+
+                    
+					
+					<div class="section section-overview">
+						<a title="Overview" name="overview"></a>
+						<h2 class="subtitle subtitle-overview">Overview</h2>
+						<p>The EZAudioFileDelegate provides event callbacks for the <a href="../Classes/EZAudioFile.html">EZAudioFile</a> object. These type of events are triggered by reads and seeks on the file and gives feedback such as the audio data read as a float array for visualizations and the new seek position for UI updating.</p>
+					</div>
+					
+					
+
+					
+					
+					<div class="section section-tasks">
+						<a title="Tasks" name="tasks"></a>
+						
+
+						
+						
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/audioFile:readAudio:withBufferSize:withNumberOfChannels:" title="audioFile:readAudio:withBufferSize:withNumberOfChannels:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/audioFile:readAudio:withBufferSize:withNumberOfChannels:">&ndash;&nbsp;audioFile:readAudio:withBufferSize:withNumberOfChannels:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Triggered from the <a href="../Classes/EZAudioFile.html">EZAudioFile</a> function <code>readFrames:audioBufferList:bufferSize:eof:</code> to notify the delegate of the read audio data as a float array instead of a buffer list. Common use case of this would be to visualize the float data using an audio plot or audio data dependent OpenGL sketch.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)audioFile:(EZAudioFile *)<em>audioFile</em> readAudio:(float **)<em>buffer</em> withBufferSize:(UInt32)<em>bufferSize</em> withNumberOfChannels:(UInt32)<em>numberOfChannels</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>audioFile</code></th>
+						<td><p>The instance of the <a href="../Classes/EZAudioFile.html">EZAudioFile</a> that triggered the event.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>buffer</code></th>
+						<td><p>A float array of float arrays holding the audio data. buffer[0] would be the left channel&rsquo;s float array while buffer[1] would be the right channel&rsquo;s float array in a stereo file.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>bufferSize</code></th>
+						<td><p>The length of the buffers float arrays</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>numberOfChannels</code></th>
+						<td><p>The number of channels. 2 for stereo, 1 for mono.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Triggered from the <a href="../Classes/EZAudioFile.html">EZAudioFile</a> function <code>readFrames:audioBufferList:bufferSize:eof:</code> to notify the delegate of the read audio data as a float array instead of a buffer list. Common use case of this would be to visualize the float data using an audio plot or audio data dependent OpenGL sketch.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZAudioFile.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/audioFileUpdatedPosition:" title="audioFileUpdatedPosition:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/audioFileUpdatedPosition:">&ndash;&nbsp;audioFileUpdatedPosition:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Occurs when the audio file&rsquo;s internal seek position has been updated by the <a href="../Classes/EZAudioFile.html">EZAudioFile</a> functions <code>readFrames:audioBufferList:bufferSize:eof:</code> or <a href="../Protocols/EZAudioFileDelegate.html#//api/name/audioFile:updatedPosition:"><code>audioFile:updatedPosition:</code></a>. As of 0.8.0 this is the preferred method of listening for position updates on the audio file since a user may want the pull the currentTime, formattedCurrentTime, or the frame index from the <a href="../Classes/EZAudioFile.html">EZAudioFile</a> instance provided.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)audioFileUpdatedPosition:(EZAudioFile *)<em>audioFile</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>audioFile</code></th>
+						<td><p>The instance of the <a href="../Classes/EZAudio.html">EZAudio</a> in which the change occured.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Occurs when the audio file&rsquo;s internal seek position has been updated by the <a href="../Classes/EZAudioFile.html">EZAudioFile</a> functions <code>readFrames:audioBufferList:bufferSize:eof:</code> or <a href="../Protocols/EZAudioFileDelegate.html#//api/name/audioFile:updatedPosition:"><code>audioFile:updatedPosition:</code></a>. As of 0.8.0 this is the preferred method of listening for position updates on the audio file since a user may want the pull the currentTime, formattedCurrentTime, or the frame index from the <a href="../Classes/EZAudioFile.html">EZAudioFile</a> instance provided.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZAudioFile.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/audioFile:updatedPosition:" title="audioFile:updatedPosition:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/audioFile:updatedPosition:">&ndash;&nbsp;audioFile:updatedPosition:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Occurs when the audio file&rsquo;s internal seek position has been updated by the <a href="../Classes/EZAudioFile.html">EZAudioFile</a> functions <code>readFrames:audioBufferList:bufferSize:eof:</code> or <code>audioFile:updatedPosition:</code>. (<b class="deprecated">Deprecated:</b><span class="deprecated"> This property is deprecated starting in version 0.8.0.</span>)</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)audioFile:(EZAudioFile *)<em>audioFile</em> updatedPosition:(SInt64)<em>framePosition</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>audioFile</code></th>
+						<td><p>The instance of the <a href="../Classes/EZAudio.html">EZAudio</a> in which the change occured</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>framePosition</code></th>
+						<td><p>The new frame index as a 64-bit signed integer</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Occurs when the audio file&rsquo;s internal seek position has been updated by the <a href="../Classes/EZAudioFile.html">EZAudioFile</a> functions <code>readFrames:audioBufferList:bufferSize:eof:</code> or <code>audioFile:updatedPosition:</code>.</p><div class="note"><p><strong>Note:</strong> Please use <a href="#//api/name/audioFileUpdatedPosition:"><code>audioFileUpdatedPosition:</code></a> property instead.</p></div>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZAudioFile.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+					</div>
+					
+					
+
+                    
+                    
+          
+				</main>
+
+				<footer>
+					<div class="footer-copyright">
+						
+						<p class="copyright">Copyright &copy; 2016 AWARE. All rights reserved. Updated: 2016-03-17</p>
+						
+						
+						<p class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2.1 (build 1334)</a>.</p>
+						
+					</div>
+				</footer>
+			</div>
+		</div>
+	</article>
+
+	<script src="../js/script.js"></script>
+</body>
+</html>

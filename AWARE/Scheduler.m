@@ -265,7 +265,7 @@
                                                   title:esm.title
                                               soundFlag:YES
                                                category:SENSOR_PLUGIN_CAMPUS_ESM_NOTIFICATION_LABEL
-                                               fireDate:[NSDate new]//schedule.schedule
+                                               fireDate:schedule.schedule
                                          repeatInterval:NSCalendarUnitDay
                                                userInfo:esm.esmObject
                                         iconBadgeNumber:1];
@@ -276,7 +276,7 @@
                                                   title:esm.title
                                               soundFlag:YES
                                                category:SENSOR_PLUGIN_CAMPUS_ESM_NOTIFICATION_BOOLEAN
-                                               fireDate:[NSDate new]//schedule.schedule
+                                               fireDate:schedule.schedule
                                          repeatInterval:NSCalendarUnitDay
                                                userInfo:esm.esmObject
                                         iconBadgeNumber:1];

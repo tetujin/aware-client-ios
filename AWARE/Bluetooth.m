@@ -98,7 +98,7 @@
     
     if (![mdBluetoothManager isScanning]) {
         NSString *scanStartMessage = [NSString stringWithFormat:@"Start scanning Bluetooth devices during %d second!", scanDuration];
-        NSLog(@"...Start to scan Bluetooth devices.");
+        NSLog(@"...Start scanning Bluetooth devices.");
         if ([self isDebug]){
            [AWAREUtils sendLocalNotificationForMessage:scanStartMessage soundFlag:NO];
         }
@@ -106,7 +106,7 @@
         [mdBluetoothManager startScan];
         // stop to scan Bluetooth devies after "scanDuration" second.
         [self performSelector:@selector(stopToScanBluetooth) withObject:0 afterDelay:scanDuration];
-        NSLog(@"...After %d second, the Blueooth scan duration will be end.", scanDuration);
+        NSLog(@"...After %d second, the Blueooth scan will be end.", scanDuration);
     }
 }
 
