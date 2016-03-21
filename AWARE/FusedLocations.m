@@ -127,7 +127,8 @@
         locationManager.distanceFilter = 100; //250
         [locationManager startMonitoringVisits]; // This method calls didVisit.
         [locationManager startUpdatingLocation];
-        [fusedLocationsSensor setBufferSize:10];
+        [locationManager startMonitoringSignificantLocationChanges];
+//        [fusedLocationsSensor setBufferSize:10];
         // [locationManager startUpdatingHeading];
         
         if(interval > 0){

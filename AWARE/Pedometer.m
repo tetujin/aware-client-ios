@@ -117,26 +117,28 @@
                 NSLog(@"Distance estimate not available.");
             }
             
-            // pace (s/m)
-            if ([CMPedometer isPaceAvailable]) {
-                if (pedometerData.currentPace) {
-                    currentPace = pedometerData.currentPace;
-                    if (! currentPace) currentPace = @0;
+            if ([AWAREUtils getCurrentOSVersionAsFloat] > 9.0) {
+                // pace (s/m)
+                if ([CMPedometer isPaceAvailable]) {
+                    if (pedometerData.currentPace) {
+                        currentPace = pedometerData.currentPace;
+                        if (! currentPace) currentPace = @0;
+                    }
+                } else {
+                    NSLog(@"Pace not available.");
                 }
-            } else {
-                NSLog(@"Pace not available.");
-            }
-            
-            // cadence (steps/second)
-            if ([CMPedometer isCadenceAvailable]) {
-                if (pedometerData.currentCadence) {
-                    currentCadence = pedometerData.currentCadence;
-                    if(!currentCadence) currentCadence = @0;
+                
+                // cadence (steps/second)
+                if ([CMPedometer isCadenceAvailable]) {
+                    if (pedometerData.currentCadence) {
+                        currentCadence = pedometerData.currentCadence;
+                        if(!currentCadence) currentCadence = @0;
+                    }
+                } else {
+                    NSLog(@"Cadence not available.");
                 }
-            } else {
-                NSLog(@"Cadence not available.");
             }
-            
+                                      
             // flights climbed
             if ([CMPedometer isFloorCountingAvailable]) {
                 if (pedometerData.floorsAscended) {

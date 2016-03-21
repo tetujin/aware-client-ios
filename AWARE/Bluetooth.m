@@ -69,7 +69,6 @@
     return YES;
 }
 
-
 - (BOOL) stopSensor {
     // Stop a scan ble devices by CBCentralManager
     [_myCentralManager stopScan];
@@ -90,12 +89,17 @@
 // For Classic Bluetooth
 
 
+/**
+ * @param   sender  A NSTimer sender
+ * @discussion  Start to scan the claasic blueooth devices with private APIs. Also, the method is called by NSTimer class which is initialized at the startSensor method in Bluetooth sensor.
+ */
 -(void)startToScanBluetooth:(id)sender{
     // Set up for a classic bluetooth
     if (![mdBluetoothManager bluetoothIsPowered]) {
         [mdBluetoothManager turnBluetoothOn];
     }
     
+    // start scanning classic bluetooth devices.
     if (![mdBluetoothManager isScanning]) {
         NSString *scanStartMessage = [NSString stringWithFormat:@"Start scanning Bluetooth devices during %d second!", scanDuration];
         NSLog(@"...Start scanning Bluetooth devices.");
@@ -109,6 +113,7 @@
         NSLog(@"...After %d second, the Blueooth scan will be end.", scanDuration);
     }
 }
+
 
 - (void) stopToScanBluetooth {
     if ([self isDebug]){

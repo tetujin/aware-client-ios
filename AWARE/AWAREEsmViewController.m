@@ -975,7 +975,7 @@
 
 
 - (void) pushedPamImage:(UIButton *) sender {
-    NSLog(@"%ld %@", sender.tag, sender.titleLabel.text);
+//    NSLog(@"%ld %@", sender.tag, sender.titleLabel.text);
     NSMutableDictionary * elements = [uiElements objectAtIndex:sender.tag];
     NSMutableArray * buttons = [elements objectForKey:KEY_ELEMENT];
     NSString *  selected = sender.titleLabel.text;
