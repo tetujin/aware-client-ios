@@ -14,7 +14,7 @@ pod 'DeployGateSDK'
 pod 'ios-ntp'
 pod 'EZAudio'
 pod 'SVProgressHUD'
-pod 'RNGridMenu', '~> 0.1.2'
+#pod 'RNGridMenu', '~> 0.1.2'
 
 
 

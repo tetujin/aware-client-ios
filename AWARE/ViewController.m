@@ -67,9 +67,6 @@
     AWAREStudy * awareStudy;
 }
 
-- (void)gridMenu:(RNGridMenu *)gridMenu willDismissWithSelectedItem:(RNGridMenuItem *)item atIndex:(NSInteger)itemIndex {
-    NSLog(@"Dismissed with item %ld: %@", itemIndex, item.title);
-}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -511,7 +508,8 @@
     // Inactivate the refresh button on the navigation bar
     _refreshButton.enabled = NO;
 //    [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeBlack];
-    [SVProgressHUD showProgress:0 maskType:SVProgressHUDMaskTypeBlack];
+//    [SVProgressHUD showProgress:0 maskType:SVProgressHUDMaskTypeBlack];
+    [SVProgressHUD setDefaultMaskType:SVProgressHUDMaskTypeBlack];
     // Get sensors information and plugin information from NSUserDedaults class
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     uploadInterval = [userDefaults doubleForKey:SETTING_SYNC_INT];
@@ -529,9 +527,9 @@
             // Set current status
             NSString * progress = [NSString stringWithFormat:@"%@", key];
             NSLog(@"%@", progress);
-            [SVProgressHUD showProgress:(float)i/(float)_sensors.count maskType:SVProgressHUDMaskTypeBlack];
-            [SVProgressHUD setStatus:progress];
-            
+//            [SVProgressHUD showProgress:(float)i/(float)_sensors.count maskType:SVProgressHUDMaskTypeBlack];
+//            [SVProgressHUD setStatus:progress];
+            [SVProgressHUD showProgress:(float)i/(float)_sensors.count status:progress];
             // Event at last sensor
             if (i >=_sensors.count-1) {
                 // Enable refresh button
