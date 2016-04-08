@@ -67,11 +67,11 @@
 /**
  * AWARE URL makers
  */
-//- (NSString *) getWebserviceUrl;
-//- (NSString *) getInsertUrl:(NSString *)sensorName;
-//- (NSString *) getLatestDataUrl:(NSString *)sensorName;
-//- (NSString *) getCreateTableUrl:(NSString *)sensorName;
-//- (NSString *) getClearTableUrl:(NSString *)sensorName;
+- (NSString *) getWebserviceUrl;
+- (NSString *) getInsertUrl:(NSString *)sensorName;
+- (NSString *) getLatestDataUrl:(NSString *)sensorName;
+- (NSString *) getCreateTableUrl:(NSString *)sensorName;
+- (NSString *) getClearTableUrl:(NSString *)sensorName;
 
 
 @end

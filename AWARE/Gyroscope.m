@@ -24,6 +24,8 @@
 }
 
 - (void) createTable{
+    // Send a table create query
+    NSLog(@"[%@] Create Table", [self getSensorName]);
     NSString *query = [[NSString alloc] init];
     query = @"_id integer primary key autoincrement,"
     "timestamp real default 0,"
@@ -39,9 +41,7 @@
 
 
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
-    // Send a table create query
-    NSLog(@"[%@] Create Table", [self getSensorName]);
-    [self createTable];
+
     
     // Set and start a data uploader
     NSLog(@"[%@] Start Gyro Sensor", [self getSensorName]);

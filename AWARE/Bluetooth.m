@@ -27,8 +27,10 @@
     return self;
 }
 
-
 - (void) createTable{
+    // Send a table create query (for both BLE and classic Bluetooth)
+    NSLog(@"[%@] Create Table", [self getSensorName]);
+    
     NSString *query = [[NSString alloc] init];
     query = @"_id integer primary key autoincrement,"
     "timestamp real default 0,"
@@ -43,10 +45,7 @@
 
 
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
-    // Send a table create query (for both BLE and classic Bluetooth)
-    NSLog(@"[%@] Create Table", [self getSensorName]);
-    [self createTable];
-    
+
     double interval = [self getSensorSetting:settings withKey:@"frequency_bluetooth"];
     if (interval <= 0) {
         interval = defaultScanInterval;
@@ -57,14 +56,16 @@
                                                selector:@selector(startToScanBluetooth:)
                                                userInfo:nil
                                                 repeats:YES];
-    [scanTimer fire];
+//    [scanTimer fire];
     
     // Init a CBCentralManager for sensing BLE devices
     NSLog(@"[%@] Start BLE Sensor", [self getSensorName]);
-    _myCentralManager = [[CBCentralManager alloc] initWithDelegate:self queue:nil];
+//    _myCentralManager = [[CBCentralManager alloc] initWithDelegate:self queue:nil];
+//    [_myCentralManager performSelector:@selector(stopScan) withObject:nil afterDelay:scanDuration];
     
     // Set notification events for scanning classic bluetooth devices
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(bluetoothDeviceDiscoveredNotification:) name:@"BluetoothDeviceDiscoveredNotification" object:nil];
+
     
     return YES;
 }
@@ -79,6 +80,8 @@
     scanTimer = nil;
     // Stop scanning classic bluetooth
     [mdBluetoothManager endScan];
+    // remove notification observer from notification center
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"BluetoothDeviceDiscoveredNotification" object:nil];
     
     return YES;
 }
@@ -112,6 +115,11 @@
         [self performSelector:@selector(stopToScanBluetooth) withObject:0 afterDelay:scanDuration];
         NSLog(@"...After %d second, the Blueooth scan will be end.", scanDuration);
     }
+    
+    
+    // start scanning ble devices.
+    _myCentralManager = [[CBCentralManager alloc] initWithDelegate:self queue:nil];
+    [_myCentralManager performSelector:@selector(stopScan) withObject:nil afterDelay:scanDuration];
 }
 
 
@@ -119,7 +127,27 @@
     if ([self isDebug]){
         [AWAREUtils sendLocalNotificationForMessage:@"Stop scanning Bluetooth devices!" soundFlag:NO];
     }
+    
     [mdBluetoothManager endScan];
+}
+
+- (void)receivedBluetoothNotification:(MDBluetoothNotification)bluetoothNotification{
+    switch (bluetoothNotification) {
+        case MDBluetoothPowerChangedNotification:
+            NSLog(@"changed");
+            break;
+        case MDBluetoothDeviceUpdatedNotification:
+            NSLog(@"update");
+            break;
+        case MDBluetoothDeviceRemovedNotification:
+            NSLog(@"remove");
+            break;
+        case MDBluetoothDeviceDiscoveredNotification:
+            NSLog(@"discoverd");
+            break;
+        default:
+            break;
+    }
 }
 
 - (void)bluetoothDeviceDiscoveredNotification:(NSNotification *)notification{
@@ -154,7 +182,7 @@
 
 - (void)centralManagerDidUpdateState:(CBCentralManager *)central
 {
-    NSLog(@"centralManagerDidUpdateState");
+//    NSLog(@"centralManagerDidUpdateState");
     if([central state] == CBCentralManagerStatePoweredOff){
         NSLog(@"CoreBluetooth BLE hardware is powered off");
     }else if([central state] == CBCentralManagerStatePoweredOn){

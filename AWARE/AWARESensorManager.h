@@ -13,25 +13,42 @@
 #import "AWARESensor.h"
 #import "AWAREStudy.h"
 
-@interface AWARESensorManager : NSObject{
-    NSMutableArray* awareSensors;
-    AWAREStudy * awareStudy;
-}
+@interface AWARESensorManager : NSObject
 
+/** Initializer */
 - (instancetype)initWithAWAREStudy:(AWAREStudy *) study;
+
+// lock and unlock the sensor manager
+- (void) lock;
+- (void) unlock;
+- (BOOL) isLocked;
+
+// add a new sensor
+- (void) addNewSensor:(AWARESensor *) sensor;
+- (BOOL) isExist :(NSString *) key;
+//- (bool) addNewSensorWithSensorName:(NSString *)sensorName
+//                     uploadInterval:(double) uploadTime;
+
+
+// sensor manager (start and stop)
+- (BOOL) startAllSensors;
+- (BOOL) startAllSensorsWithStudy:(AWAREStudy *) study;
+- (BOOL) createAllTables;
 
 - (void) stopAndRemoveAllSensors;
 - (void) stopASensor:(NSString *) sensorName;
-- (void) addNewSensor:(AWARESensor *) sensor;
-- (bool) addNewSensorWithSensorName:(NSString *)sensorName
-                     uploadInterval:(double) uploadTime;
-- (NSString*)getLatestSensorData:(NSString *)sensorName;
+
+
+// uploader in the foreground and background
 - (bool) syncAllSensorsWithDBInForeground;
 - (bool) syncAllSensorsWithDBInBackground;
-- (BOOL) isExist :(NSString *) key;
 
-// uploader
+// upload timer
 - (void) startUploadTimerWithInterval:(double) interval;
 - (void) stopUploadTimer;
+
+// get latest sensor data with sensor name
+- (NSString*)getLatestSensorData:(NSString *)sensorName;
+
 
 @end

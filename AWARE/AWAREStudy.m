@@ -6,11 +6,13 @@
 //  Copyright © 2015 Yuuki NISHIYAMA. All rights reserved.
 //
 
+#import <SCNetworkReachability.h>
+#import "AppDelegate.h"
 #import "AWAREStudy.h"
 #import "AWAREKeys.h"
+#import "AWARESensorManager.h"
 #import "SSLManager.h"
 #import "AWAREUtils.h"
-#import <SCNetworkReachability.h>
 
 @implementation AWAREStudy {
     NSString *mqttPassword;
@@ -24,16 +26,17 @@
     bool readingState;
     
     SCNetworkReachability * reachability;
+    
     bool wifiReachable;
     NSInteger networkState;
 }
 
 
-- (instancetype)init {
-    return [self initWithReachability:YES];
-}
+//- (instancetype)init {
+//    return [self initWithReachability:YES sensorManager:nil];
+//}
 
-- (instancetype) initWithReachability: (BOOL) reachabilityState {
+- (instancetype) initWithReachability: (BOOL) reachabilityState{
     self = [super init];
     if (self) {
         _getSettingIdentifier = @"set_setting_identifier";
@@ -134,7 +137,9 @@
             if (response && ! error) {
                 NSString *responseString = [[NSString alloc] initWithData: data  encoding: NSUTF8StringEncoding];
                 NSLog(@"Success: %@", responseString);
+                
                 [self setStudySettings:data];
+                
             // Error
             } else {
                 NSLog(@"Error: %@", error);
@@ -240,6 +245,18 @@ didCompleteWithError:(NSError *)error {
     id obj = [NSJSONSerialization JSONObjectWithData:resData options:NSJSONReadingMutableContainers error:nil];
     NSData *data = [NSJSONSerialization dataWithJSONObject:obj options:0 error:nil];
     NSString * studyConfiguration = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    
+    
+    // compare the latest configuration string with the previous configuration string.
+    NSString * previousConfig = [self removeStudyStartTimeFromConfig:[self getStudyConfigurationAsText]];
+    NSString * currentConfig = [self removeStudyStartTimeFromConfig:studyConfiguration];
+    if([previousConfig isEqualToString:currentConfig]){
+        NSLog(@"The study configuration is same as previous configuration!");
+        return ;
+    }else{
+        NSLog(@"The study configuration is updated!");
+    }
+    
     [self setStudyConfiguration:studyConfiguration];
     NSLog( @"%@", studyConfiguration );
     
@@ -283,6 +300,11 @@ didCompleteWithError:(NSError *)error {
     }else{
         NSLog(@"This device ID is already regited to the AWARE server.");
     }
+    
+    // compare the new configuration with previus configuration in the local storage.
+    
+    
+    // save the new configuration to the local storage
     [userDefaults setObject:mqttServer forKey:KEY_MQTT_SERVER];
     [userDefaults setObject:mqttPassword forKey:KEY_MQTT_PASS];
     [userDefaults setObject:mqttUsername forKey:KEY_MQTT_USERNAME];
@@ -291,10 +313,19 @@ didCompleteWithError:(NSError *)error {
     [userDefaults setObject:[NSNumber numberWithInt:mqttQos] forKey:KEY_MQTT_QOS];
     [userDefaults setObject:studyId forKey:KEY_STUDY_ID];
     [userDefaults setObject:webserviceServer forKey:KEY_WEBSERVICE_SERVER];
-    [userDefaults synchronize];
-    
     [userDefaults setObject:array forKey:KEY_SENSORS];
     [userDefaults setObject:plugins forKey:KEY_PLUGINS];
+    [userDefaults synchronize];
+
+    
+    // run in the main thread
+    dispatch_async(dispatch_get_main_queue(), ^{
+        AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+        AWARESensorManager * manager = delegate.sharedSensorManager;
+        [manager stopAndRemoveAllSensors];
+        [manager startAllSensorsWithStudy:self];
+        [manager createAllTables];
+    });
     
     readingState = YES;
 }
@@ -476,8 +507,16 @@ didCompleteWithError:(NSError *)error {
     return NO;
 }
 
-
-
+//- (BOOL)refreshStudyWithSensorManager:(AWARESensorManager *)manager{
+//    sensorManager = manager;
+//    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+//    NSString *url = [userDefaults objectForKey:KEY_STUDY_QR_CODE];
+//    if (url != nil) {
+//        [self setStudyInformationWithURL:url];
+//        return YES;
+//    }
+//    return NO;
+//}
 
 
 ///////////////////////////////////////////////////////////////////////
@@ -500,7 +539,7 @@ didCompleteWithError:(NSError *)error {
  * Get an address of MQTT server (e.g,. "api.awareframework.com")
  * @return an address of mqtt server
  */
-- (NSString* ) getMqttServer{
+- (NSString* ) getMqttServer {
     return mqttServer;
 }
 
@@ -702,6 +741,23 @@ didCompleteWithError:(NSError *)error {
     }else{
         return NO;
     }
+}
+
+- (NSString *) removeStudyStartTimeFromConfig:(NSString*) configStr {
+    if (configStr == nil) return @"";
+    NSError *error = nil;
+    NSString* pattern = @"(\\{\"setting\":\"study_start\",\"value\":\"\\d{4,}\"\\},)";
+//    NSString* pattern = @"setting";
+    NSRegularExpression* regex = [NSRegularExpression regularExpressionWithPattern:pattern options:0 error:&error];
+    if (error == nil){
+        NSArray *matches = [regex matchesInString:configStr options:0 range:NSMakeRange(0, configStr.length)];
+        for (NSTextCheckingResult *match in matches){
+            NSMutableString* str = [[NSMutableString alloc] initWithString:configStr];
+            [str deleteCharactersInRange:match.range];
+            configStr = str;
+        }
+    }
+    return configStr;
 }
 
 @end

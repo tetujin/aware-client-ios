@@ -23,6 +23,8 @@
 
 
 - (void) createTable{
+    // Send a query for creating table
+    NSLog(@"[%@] Create Table", [self getSensorName]);
     NSString *query = [[NSString alloc] init];
     query =
         @"_id integer primary key autoincrement,"
@@ -43,10 +45,6 @@
 
 
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings {
-    // Send a query for creating table
-    NSLog(@"[%@] Create Table", [self getSensorName]);
-    [self createTable];
-    
     
     // Get a sensing frequency from settings
     double interval = 0;

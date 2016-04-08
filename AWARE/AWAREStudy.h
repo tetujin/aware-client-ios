@@ -44,4 +44,5 @@
 - (bool) isWifiReachable;
 - (NSString *) getNetworkReachabilityAsText;
 
+
 @end

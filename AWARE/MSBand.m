@@ -50,6 +50,9 @@
 }
 
 
+- (void)createTable{
+    
+}
 
 - (BOOL) startAllSensors:(double)upInterval withSettings:(NSArray *)settings {
     NSLog(@"Start MSBand Sensor!");

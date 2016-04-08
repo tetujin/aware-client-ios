@@ -31,6 +31,7 @@
 }
 
 - (void) createTable{
+    NSLog(@"[%@] Create Table", [self getSensorName]);
     NSString *query = [[NSString alloc] init];
     query = @"_id integer primary key autoincrement,"
     "timestamp real default 0,"
@@ -46,9 +47,6 @@
 }
 
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
-    NSLog(@"[%@] Create Table", [self getSensorName]);
-    [self createTable];
-    
     // Get a sensing frequency
     int interval = 0.1f;
     double frequency = [self getSensorSetting:settings withKey:@"frequency_rotation"];

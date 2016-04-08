@@ -19,6 +19,7 @@
 
 
 - (void) createTable {
+    NSLog(@"[%@] Create Table", [self getSensorName]);
     NSString *query = [[NSString alloc] init];
     query =
     @"_id integer primary key autoincrement,"
@@ -55,9 +56,6 @@
 }
 
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
-    NSLog(@"[%@] Create Table", [self getSensorName]);
-    [self createTable];
-    
 //    NSLog(@"[%@] Start ESM uploader", [self getSensorName]);
     return YES;
 }

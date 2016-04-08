@@ -8,8 +8,6 @@
 #import "FusedLocations.h"
 
 @implementation FusedLocations {
-//    NSTimer *locationDataUploadTimer;
-//    NSTimer *visitDataUploadTimer;
     NSTimer *locationTimer;
     IBOutlet CLLocationManager *locationManager;
     
@@ -23,60 +21,48 @@
     self = [super initWithSensorName:@"google_fused_location" withAwareStudy:study];
     awareStudy = study;
     if (self) {
+        // Make a fused location sensor
+        fusedLocationsSensor = [[AWARESensor alloc] initWithSensorName:@"locations" withAwareStudy:awareStudy];
+        // Make a visit location sensor
+        visitLocationSensor = [[AWARESensor alloc] initWithSensorName:@"locations_visit" withAwareStudy:awareStudy];
     }
     return self;
 }
 
-
-- (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings {
-    // Make a fused location sensor
-    fusedLocationsSensor = [[AWARESensor alloc] initWithSensorName:@"locations" withAwareStudy:awareStudy];
+- (void)createTable{
     // Send a table create query
     [fusedLocationsSensor createTable:@"_id integer primary key autoincrement,"
-                                     "timestamp real default 0,"
-                                     "device_id text default '',"
-                                     "double_latitude real default 0,"
-                                     "double_longitude real default 0,"
-                                     "double_bearing real default 0,"
-                                     "double_speed real default 0,"
-                                     "double_altitude real default 0,"
-                                     "provider text default '',"
-                                     "accuracy integer default 0,"
-                                     "label text default '',"
-                                     "UNIQUE (timestamp,device_id)"];
-    // Start a data uploader
-//    locationDataUploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval
-//                                                               target:self
-//                                                             selector:@selector(syncAwareDBWithLocationTable)
-//                                                             userInfo:nil
-//                                                              repeats:YES];
-    
+     "timestamp real default 0,"
+     "device_id text default '',"
+     "double_latitude real default 0,"
+     "double_longitude real default 0,"
+     "double_bearing real default 0,"
+     "double_speed real default 0,"
+     "double_altitude real default 0,"
+     "provider text default '',"
+     "accuracy integer default 0,"
+     "label text default '',"
+     "UNIQUE (timestamp,device_id)"];
     //////////////////////////
     
-    // Make a visit location sensor
-    visitLocationSensor = [[AWARESensor alloc] initWithSensorName:@"locations_visit" withAwareStudy:awareStudy];
     // Send a table create query
     [visitLocationSensor createTable:@"_id integer primary key autoincrement,"
-                                     "timestamp real default 0,"
-                                     "device_id text default '',"
-                                     "double_latitude real default 0,"
-                                     "double_longitude real default 0,"
-                                     "double_arrival real default 0,"
-                                     "double_departure real default 0,"
-                                     "address text default '',"
-                                     "name text default '',"
-                                     "provider text default '',"
-                                     "accuracy integer default 0,"
-                                     "label text default '',"
-                                     "UNIQUE (timestamp,device_id)"];
-    // Start a data uploader
-//    visitDataUploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval
-//                                                         target:self
-//                                                       selector:@selector(syncAwareDBWithLocationVisitTable)
-//                                                        userInfo:nil
-//                                                         repeats:YES];
-    
-    
+     "timestamp real default 0,"
+     "device_id text default '',"
+     "double_latitude real default 0,"
+     "double_longitude real default 0,"
+     "double_arrival real default 0,"
+     "double_departure real default 0,"
+     "address text default '',"
+     "name text default '',"
+     "provider text default '',"
+     "accuracy integer default 0,"
+     "label text default '',"
+     "UNIQUE (timestamp,device_id)"];
+}
+
+- (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings {
+
     // Get a sensing frequency for a location sensor
     double interval = 0;
     double frequency = [self getSensorSetting:settings withKey:@"frequency_google_fused_location"];

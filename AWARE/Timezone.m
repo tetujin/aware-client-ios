@@ -22,6 +22,7 @@
 }
 
 - (void) createTable{
+    NSLog(@"[%@] Create Table", [self getSensorName]);
     NSString *query = [[NSString alloc] init];
     query = @"_id integer primary key autoincrement,"
     "timestamp real default 0,"
@@ -33,9 +34,6 @@
 
 
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
-    NSLog(@"[%@] Create Table", [self getSensorName]);
-    [self createTable];
-    
     // Get a frequency of data upload from settings
     double frequency = [self getSensorSetting:settings withKey:@"frequency_timezone"];
     if (frequency == -1) {

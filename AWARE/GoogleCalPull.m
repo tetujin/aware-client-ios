@@ -57,34 +57,25 @@
     return self;
 }
 
-
-- (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings {
+- (void)createTable{
     // Send a create table query
     NSLog(@"[%@] Create table", [self getSensorName]);
     CalEvent *calEvent = [[CalEvent alloc] init];
     [self createTable:[calEvent getCreateTableQuery]];
-    
+}
+
+- (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings {
+
     // Update existing events after 5 sec
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
         [self updateExistingEvents];
     });
 
-    
-    // Start a data uploader
-//    timer = [NSTimer scheduledTimerWithTimeInterval:upInterval
-//                                             target:self
-//                                           selector:@selector(syncAwareDB)
-//                                           userInfo:nil
-//                                            repeats:YES];
     return YES;
 }
 
 
 - (BOOL) stopSensor {
-//    if (timer != nil) {
-//        [timer invalidate];
-//        timer = nil;
-//    }
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:EKEventStoreChangedNotification
                                                   object:store];

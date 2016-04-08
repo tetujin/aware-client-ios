@@ -8,12 +8,7 @@
 
 #import "AmbientNoise.h"
 
-
-//ambient_noise
-
-
 @implementation AmbientNoise{
-//    NSTimer *timer;
     NSTimer *sensingTimer;
     AudioQueueRef _queue;
     NSTimer *_timer;
@@ -52,8 +47,6 @@ static void AudioInputCallback(
 
 -(BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
     NSLog(@"Start Anbient Sensor!");
-//    timer = [NSTimer scheduledTimerWithTimeInterval:upInterval
-//                                             target:self selector:@selector(syncAwareDB) userInfo:nil repeats:YES];
     [self setBufferSize:10];
     [self startUpdatingVolume];
 //    [audioController setInputEnabled:NO];

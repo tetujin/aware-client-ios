@@ -52,6 +52,7 @@
 }
 
 - (void) createTable{
+    NSLog(@"[%@] Create Table", [self getSensorName]);
     NSString *query = @"_id integer primary key autoincrement,"
                         "timestamp real default 0,"
                         "device_id text default '',"
@@ -66,10 +67,6 @@
 
 
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
-    NSLog(@"[%@] Create Table", [self getSensorName]);
-    // Send a table create query
-    [self createTable];
-    
     // Get sensing interval(frequency) from settings
     double interval = 0.1f; //default interval
     double frequency = [self getSensorSetting:settings withKey:@"frequency_linear_accelerometer"];

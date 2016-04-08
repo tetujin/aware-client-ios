@@ -45,7 +45,7 @@
 }
 
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
-    [self createTable];
+//    [self createTable];
     // start sensor
     sensingTimer = [NSTimer scheduledTimerWithTimeInterval:60*5
                                                     target:self
