@@ -11,18 +11,14 @@
 #import <CoreLocation/CoreLocation.h>
 #import <SVProgressHUD.h>
 #import "AWARESensorManager.h"
-#import <RNGridMenu/RNGridMenu.h>
 
-@interface ViewController : UITableViewController <UITableViewDelegate, UITableViewDataSource, UITabBarControllerDelegate, UINavigationBarDelegate, CLLocationManagerDelegate, UIAlertViewDelegate, RNGridMenuDelegate>
-
-@property (nonatomic,strong) NSMutableArray *sensors;
-@property (strong, nonatomic) AWARESensorManager* sensorManager;
-@property (strong, nonatomic) CLLocationManager *homeLocationManager;
+@interface ViewController : UITableViewController <UITableViewDelegate, UITableViewDataSource, UITabBarControllerDelegate, UINavigationBarDelegate, UIAlertViewDelegate>
 
 - (IBAction)pushedStudyRefreshButton:(id)sender;
 - (IBAction)pushedGoogleLogin:(id)sender;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *refreshButton;
 
+@property (nonatomic,strong) NSMutableArray *sensors;
 @property MQTTClient *client;
 
 @end

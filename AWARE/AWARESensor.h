@@ -16,6 +16,10 @@
 - (BOOL) startSensor:(double)upInterval withSettings:(NSArray *)settings;
 - (BOOL) stopSensor;
 - (void) syncAwareDB;
+- (void) createTable;
+
+- (NSString *) getSensorName;
+
 @end
 
 @interface AWARESensor : NSObject <AWARESensorDelegate, UIAlertViewDelegate>
@@ -30,7 +34,6 @@
 - (NSString *) getNetworkReachabilityAsText;
 - (NSString *) getLatestValue;
 - (NSString *) getDeviceId;
-- (NSString *) getSensorName;
 - (double) getSensorSetting:(NSArray *)settings withKey:(NSString *)key;
 - (bool) isUploading;
 
@@ -67,5 +70,13 @@
 // Utils
 - (double) convertMotionSensorFrequecyFromAndroid:(double)frequency;
 - (void) sendLocalNotificationForMessage:(NSString *)message soundFlag:(BOOL)soundFlag;
+
+
+// url
+- (NSString *) getWebserviceUrl;
+- (NSString *) getInsertUrl:(NSString *)sensorName;
+- (NSString *) getLatestDataUrl:(NSString *)sensorName;
+- (NSString *) getCreateTableUrl:(NSString *)sensorName;
+- (NSString *) getClearTableUrl:(NSString *)sensorName;
 
 @end

@@ -54,6 +54,13 @@
 
 
 - (void) createTable{
+    // Send a create table queries (battery_level, battery_charging, and battery_discharging)
+    [self createBatteryTable];
+    [self createCargeTable];
+    [self createDichargeTable];
+}
+
+- (void) createBatteryTable{
     NSString *query = [[NSString alloc] init];
     query = @"_id integer primary key autoincrement,"
     "timestamp real default 0,"
@@ -97,11 +104,7 @@
 }
 
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
-    // Send a create table queries (battery_level, battery_charging, and battery_discharging)
-    [self createTable];
-    [self createCargeTable];
-    [self createDichargeTable];
-    
+
     // Set a battery level change event to a notification center
     [UIDevice currentDevice].batteryMonitoringEnabled = YES;
     [[NSNotificationCenter defaultCenter] addObserver:self

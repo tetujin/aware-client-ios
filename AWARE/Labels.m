@@ -48,7 +48,7 @@
 }
 
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
-    [self createTable];
+//    [self createTable];
 //    [AWAREUtils sendLocalNotificationForMessage:@"Swipe and edit your label"
 //                                          title:@"What is your current circumstances?"
 //                                      soundFlag:NO

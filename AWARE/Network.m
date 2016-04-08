@@ -30,6 +30,8 @@
 
 
 - (void) createTable{
+    // Send a create table query
+    NSLog(@"[%@] Cretate Table", [self getSensorName]);
     NSString *query = [[NSString alloc] init];
     query = @"_id integer primary key autoincrement,"
     "timestamp real default 0,"
@@ -43,10 +45,6 @@
 
 
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings {
-    // Send a create table query
-    NSLog(@"[%@] Cretate Table", [self getSensorName]);
-    [self createTable];
-    
     // Set and start a network reachability sensor
     NSLog(@"Start Network Sensing!");
     reachability = [[SCNetworkReachability alloc] initWithHost:@"https://github.com"];

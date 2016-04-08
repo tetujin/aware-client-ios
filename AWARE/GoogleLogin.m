@@ -29,6 +29,8 @@
 }
 
 - (void) createTable {
+    // Send a table create query
+    NSLog(@"[%@] Crate table.", [self getSensorName]);
     NSMutableString* query = [[NSMutableString alloc] init];
     [query appendFormat:@"_id integer primary key autoincrement,"];
     [query appendFormat:@"timestamp real default 0,"];
@@ -45,16 +47,6 @@
 }
 
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
-    // Send a table create query
-    [self createTable];
-    NSLog(@"[%@] Crate table.", [self getSensorName]);
-    
-    // Start a data uploader
-//    uploadTimer = [NSTimer timerWithTimeInterval:upInterval
-//                                          target:self
-//                                        selector:@selector(syncAwareDB)
-//                                        userInfo:nil
-//                                         repeats:YES];
     return NO;
 }
 
@@ -74,10 +66,6 @@
 }
 
 - (BOOL)stopSensor {
-//    if (uploadTimer != nil) {
-//        [uploadTimer invalidate];
-//        uploadTimer = nil;
-//    }
     return YES;
 }
 

@@ -50,6 +50,8 @@
 
 
 - (void) createTable{
+    // Send a table create query
+    NSLog(@"[%@] create table!", [self getSensorName]);
     NSMutableString *query = [[NSMutableString alloc] init];
     [query appendString:@"_id integer primary key autoincrement,"];
     [query appendFormat:@"%@ real default 0,", KEY_TIMESTAMP];
@@ -66,10 +68,6 @@
 
 
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
-    // Send a table create query
-    NSLog(@"[%@] create table!", [self getSensorName]);
-    [self createTable];
-
     // Check a pedometer sensor
     if (![CMPedometer isStepCountingAvailable]) {
         NSLog(@"[%@] Your device is not support this sensor.", [self getSensorName]);

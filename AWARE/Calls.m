@@ -31,6 +31,9 @@ NSString* const KEY_CALLS_TRACE = @"trace";
 }
 
 - (void) createTable{
+    
+    NSLog(@"[%@] Create Telephony Sensor Table", [self getSensorName]);
+    
     NSMutableString *query = [[NSMutableString alloc] init];
     [query appendString:@"_id integer primary key autoincrement,"];
     [query appendString:[NSString stringWithFormat:@"%@ real default 0,", KEY_CALLS_TIMESTAMP]];
@@ -46,8 +49,7 @@ NSString* const KEY_CALLS_TRACE = @"trace";
 
 -(BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
     // Send a table create query
-    NSLog(@"[%@] Create Telephony Sensor Table", [self getSensorName]);
-    [self createTable];
+//    [self createTable];
     
     // Start a data uploader
 //    timer = [NSTimer scheduledTimerWithTimeInterval:upInterval

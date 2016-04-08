@@ -89,7 +89,6 @@
 }
 
 
-
 //////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////
 
@@ -184,6 +183,10 @@
 
 //////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////
+
+- (void) createTable {
+    
+}
 
 /**
  * Send a query for creating a table of this sensor on an AWARE Server (MySQL).
@@ -381,5 +384,24 @@
     return debug;
 }
 
+- (NSString *) getWebserviceUrl{
+    return [uploader getWebserviceUrl];
+}
+
+- (NSString *) getInsertUrl:(NSString *)sensorName{
+    return [uploader getInsertUrl:sensorName];
+}
+
+- (NSString *) getLatestDataUrl:(NSString *)sensorName{
+    return [uploader getLatestDataUrl:sensorName];
+}
+
+- (NSString *) getCreateTableUrl:(NSString *)sensorName{
+    return [uploader getCreateTableUrl:sensorName];
+}
+
+- (NSString *) getClearTableUrl:(NSString *)sensorName{
+    return [uploader getCreateTableUrl:sensorName];
+}
 
 @end

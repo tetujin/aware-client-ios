@@ -29,19 +29,20 @@
 #import "AWAREEsmUtils.h"
 #import "Labels.h"
 #import "ESM.h"
+#import "Observer.h"
 
 
 @implementation AppDelegate{
     AWAREStudy * awareStudy;
+    Observer * observer;
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     
-    awareStudy = [[AWAREStudy alloc] init];
-//    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-//    [defaults setBool:YES forKey:@"APP_STATE"];
-    
+    awareStudy = [[AWAREStudy alloc] initWithReachability:YES];
+    observer = [[Observer alloc] initWithSensorName:@"" withAwareStudy:awareStudy];
+
     [application unregisterForRemoteNotifications];
     
     if ([AWAREUtils getCurrentOSVersionAsFloat] >= 8.0) {
@@ -83,13 +84,6 @@
     [[GGLContext sharedInstance] configureWithError: &configureError];
     NSAssert(!configureError, @"Error configuring Google services: %@", configureError);
     [GIDSignIn sharedInstance].delegate = self;
-
-    // Microsoft Band Plugin
-//    AWAREStudy * awareStudy = [[AWAREStudy alloc] init];
-//    MSBand * awareSensor = [[MSBand alloc] initWithPluginName:SENSOR_PLUGIN_MSBAND awareStudy:awareStudy];
-//    [awareSensor startSensor:60*15 withSettings:[awareStudy getPlugins]]; //15min
-//    [awareSensor trackDebugEvents];
-    
     
     NSLog(@"Turn 'OFF' the auto sleep mode on this app");
     [UIApplication sharedApplication].idleTimerDisabled = YES;
@@ -105,9 +99,36 @@
                                                    object:nil];
     }
     
+    // battery state trigger
+    // Set a battery state change event to a notification center
+    [UIDevice currentDevice].batteryMonitoringEnabled = YES;
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(changedBatteryState:)
+                                                 name:UIDeviceBatteryStateDidChangeNotification object:nil];
+    
+    /**
+     * Start a location sensor for background sensing.
+     * On the iOS, we have to turn on the location sensor
+     * for using application in the background.
+     */
+    [self initLocationSensor];
+    
 //    UILocalNotification *notification = [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey]
+//    AWARESensorManager * manager = [self sharedSensorManager];
+    [self.sharedSensorManager startAllSensors];
     
     return YES;
+}
+
+
+@synthesize sharedSensorManager = _sharedSensorManager;
+
+- (AWARESensorManager *) sharedSensorManager {
+    AWAREStudy * study = [[AWAREStudy alloc] initWithReachability:YES];
+    if(_sharedSensorManager == nil){
+        _sharedSensorManager = [[AWARESensorManager alloc] initWithAWAREStudy:study];
+    }
+    return _sharedSensorManager;
 }
 
 
@@ -134,6 +155,23 @@ void exceptionHandler(NSException *exception) {
         // Low Power Mode is not enabled.
         [debugSensor saveDebugEventWithText:@"[Low Power Mode] Off" type:DebugTypeWarn label:@""];
     };
+}
+
+
+/**
+ * Start data sync with all sensors in the background when the device is started a battery charging.
+ */
+- (void) changedBatteryState:(id) sender {
+    NSInteger batteryState = [UIDevice currentDevice].batteryState;
+    if (batteryState == UIDeviceBatteryStateCharging || batteryState == UIDeviceBatteryStateFull) {
+        Debug * debugSensor = [[Debug alloc] initWithAwareStudy:awareStudy];
+        [debugSensor saveDebugEventWithText:@"[Uploader] The battery is charging. AWARE iOS start to upload sensor data." type:DebugTypeInfo label:@""];
+        if (_sharedSensorManager != nil) {
+            [_sharedSensorManager syncAllSensorsWithDBInBackground];
+        }
+        GoogleCalPush * cal = [[GoogleCalPush alloc] initWithSensorName:SENSOR_PLUGIN_GOOGLE_CAL_PUSH withAwareStudy:awareStudy];
+        [cal checkCalendarEvents:nil];
+    }
 }
 
 
@@ -318,11 +356,15 @@ void exceptionHandler(NSException *exception) {
 
 - (void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
+    /// NOTE: A background fetch method can work for 30 second. Also, the method is called randomly by OS.
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
         
         NSLog(@"Start a background fetch ...");
         
-        /// for 30 sec
+        // Send a survival signal to the AWARE server
+        [observer sendSurvivalSignal];
+        
+        // Upload debug messagaes in the background (Wi-Fi is required for this upload process.)
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm"];
         NSString *formattedDateString = [dateFormatter stringFromDate:[NSDate new]];
@@ -624,5 +666,50 @@ didDisconnectWithUser:(GIDGoogleUser *)user
 
 //////////////
 /////////////
+
+
+/**
+ * This method is an initializers for a location sensor.
+ * On the iOS, we have to turn on the location sensor
+ * for using application in the background.
+ * And also, this sensing interval is the most low level.
+ */
+- (void) initLocationSensor {
+    NSLog(@"start location sensing!");
+    if ( nil == _homeLocationManager ) {
+        _homeLocationManager = [[CLLocationManager alloc] init];
+        _homeLocationManager.delegate = self;
+        _homeLocationManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers;
+        _homeLocationManager.pausesLocationUpdatesAutomatically = NO;
+        _homeLocationManager.activityType = CLActivityTypeOther;
+        if ([AWAREUtils getCurrentOSVersionAsFloat] >= 9.0) {
+            /// After iOS 9.0, we have to set "YES" for background sensing.
+            _homeLocationManager.allowsBackgroundLocationUpdates = YES;
+        }
+        if ([_homeLocationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
+            [_homeLocationManager requestAlwaysAuthorization];
+        }
+        // Set a movement threshold for new events.
+        _homeLocationManager.distanceFilter = 200; // meters
+        [_homeLocationManager startUpdatingLocation];
+    }
+}
+
+/**
+ * The method is called by location sensor when the device location is changed.
+ */
+- (void) locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    bool appTerminated = [userDefaults boolForKey:KEY_APP_TERMINATED];
+    if (appTerminated) {
+        NSString * message = @"AWARE iOS is rebooted!";
+        [AWAREUtils sendLocalNotificationForMessage:message soundFlag:YES];
+        Debug * debugSensor = [[Debug alloc] initWithAwareStudy:nil];
+        [debugSensor saveDebugEventWithText:message type:DebugTypeInfo label:@""];
+        [userDefaults setBool:NO forKey:KEY_APP_TERMINATED];
+    }else{
+        //        [self sendLocalNotificationForMessage:@"" soundFlag:YES];
+    }
+}
 
 @end

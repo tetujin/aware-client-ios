@@ -67,7 +67,7 @@
 
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
     // Send a table create query
-    [self createTable];
+//    [self createTable];
     
     [self setBufferSize:60];
     

@@ -7,7 +7,7 @@
 //
 
 #import "Wifi.h"
-#import "MobileWiFi/MobileWiFi.h"
+//#import "MobileWiFi/MobileWiFi.h"
 
 @implementation Wifi{
     NSTimer * sensingTimer;
@@ -21,7 +21,9 @@
 }
 
 
-- (void) createTable{
+- (void) createTable {
+    // Send a create table query
+    NSLog(@"[%@] Create Table", [self getSensorName]);
     NSString *query = [[NSString alloc] init];
     query = @"_id integer primary key autoincrement,"
     "timestamp real default 0,"
@@ -38,10 +40,7 @@
 
 
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
-    // Send a create table query
-    NSLog(@"[%@] Create Table", [self getSensorName]);
-    [self createTable];
-    
+
     // Get a sensing frequency
     double frequency = [self getSensorSetting:settings withKey:@"frequency_wifi"];
     if(frequency != -1){
@@ -130,41 +129,41 @@
         }
     }
 }
-
-
-
-static WiFiManagerRef _manager;
-static void scan_callback(WiFiDeviceClientRef device, CFArrayRef results, CFErrorRef error, void *token);
-
-- (void) scanWifi {
-    _manager = WiFiManagerClientCreate(kCFAllocatorDefault, 0);
-    
-    CFArrayRef devices = WiFiManagerClientCopyDevices(_manager);
-    if (!devices) {
-        fprintf(stderr, "Couldn't get WiFi devices. Bailing.\n");
-//        exit(EXIT_FAILURE);
-        return;
-    }
-    
-    WiFiDeviceClientRef client = (WiFiDeviceClientRef)CFArrayGetValueAtIndex(devices, 0);
-    
-    WiFiManagerClientScheduleWithRunLoop(_manager, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode);
-    WiFiDeviceClientScanAsync(client, (__bridge CFDictionaryRef)[NSDictionary dictionary], scan_callback, 0);
-    
-    CFRelease(devices);
-    
-    CFRunLoopRun();
-}
-
-static void scan_callback(WiFiDeviceClientRef device, CFArrayRef results, CFErrorRef error, void *token)
-{
-    NSLog(@"Finished scanning! networks: %@", results);
-    
-    WiFiManagerClientUnscheduleFromRunLoop(_manager);
-    CFRelease(_manager);
-    
-    CFRunLoopStop(CFRunLoopGetCurrent());
-}
+//
+//
+//
+//static WiFiManagerRef _manager;
+//static void scan_callback(WiFiDeviceClientRef device, CFArrayRef results, CFErrorRef error, void *token);
+//
+//- (void) scanWifi {
+//    _manager = WiFiManagerClientCreate(kCFAllocatorDefault, 0);
+//    
+//    CFArrayRef devices = WiFiManagerClientCopyDevices(_manager);
+//    if (!devices) {
+//        fprintf(stderr, "Couldn't get WiFi devices. Bailing.\n");
+////        exit(EXIT_FAILURE);
+//        return;
+//    }
+//    
+//    WiFiDeviceClientRef client = (WiFiDeviceClientRef)CFArrayGetValueAtIndex(devices, 0);
+//    
+//    WiFiManagerClientScheduleWithRunLoop(_manager, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode);
+//    WiFiDeviceClientScanAsync(client, (__bridge CFDictionaryRef)[NSDictionary dictionary], scan_callback, 0);
+//    
+//    CFRelease(devices);
+//    
+//    CFRunLoopRun();
+//}
+//
+//static void scan_callback(WiFiDeviceClientRef device, CFArrayRef results, CFErrorRef error, void *token)
+//{
+//    NSLog(@"Finished scanning! networks: %@", results);
+//    
+//    WiFiManagerClientUnscheduleFromRunLoop(_manager);
+//    CFRelease(_manager);
+//    
+//    CFRunLoopStop(CFRunLoopGetCurrent());
+//}
 
 
 //    NSArray * networkInterfaces = [NEHotspotHelper supportedNetworkInterfaces];

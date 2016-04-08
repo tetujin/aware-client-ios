@@ -23,6 +23,7 @@
 }
 
 - (void) createTable{
+    NSLog(@"[%@] Create Table", [self getSensorName]);
     NSString *query = [[NSString alloc] init];
     query = @"_id integer primary key autoincrement,"
     "timestamp real default 0,"
@@ -35,9 +36,6 @@
 
 
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
-    NSLog(@"[%@] Create Table", [self getSensorName]);
-    [self createTable];
-    
     NSLog(@"[%@] Start Device Usage Sensor", [self getSensorName]);
     lastTime = [[[NSDate alloc] init] timeIntervalSince1970];
     

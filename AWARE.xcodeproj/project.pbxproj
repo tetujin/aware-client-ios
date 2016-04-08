@@ -41,8 +41,6 @@
 		164DD6681C1FBA9100ADA92B /* Timezone.m in Sources */ = {isa = PBXBuildFile; fileRef = 164DD6671C1FBA9100ADA92B /* Timezone.m */; };
 		164DD66A1C1FC1F900ADA92B /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 164DD6691C1FC1F900ADA92B /* MapKit.framework */; };
 		1658700A1C986D4F008B99D2 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 165870091C986D4F008B99D2 /* QuartzCore.framework */; };
-		165870191C9878F9008B99D2 /* BluetoothManager.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 165870181C9878F9008B99D2 /* BluetoothManager.framework */; };
-		1658701C1C98C280008B99D2 /* MobileWiFi.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1658701B1C98C280008B99D2 /* MobileWiFi.framework */; };
 		165870221C9903D3008B99D2 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 165870211C9903D3008B99D2 /* IOKit.framework */; };
 		165870261C990805008B99D2 /* AmbientLight.m in Sources */ = {isa = PBXBuildFile; fileRef = 165870251C990805008B99D2 /* AmbientLight.m */; };
 		165870801C9A0B96008B99D2 /* BluetoothScanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 1658707A1C9A0B96008B99D2 /* BluetoothScanner.m */; };
@@ -67,7 +65,6 @@
 		168683061C07C48900CB4266 /* AmbientNoise.m in Sources */ = {isa = PBXBuildFile; fileRef = 168683051C07C48900CB4266 /* AmbientNoise.m */; };
 		168683091C08050100CB4266 /* ActivityRecognition.m in Sources */ = {isa = PBXBuildFile; fileRef = 168683081C08050100CB4266 /* ActivityRecognition.m */; };
 		168C71DB1C67B9CC00878DD8 /* AWAREDataUploader.m in Sources */ = {isa = PBXBuildFile; fileRef = 168C71DA1C67B9CC00878DD8 /* AWAREDataUploader.m */; };
-		169384F01C17C39300A17F2C /* MicrosoftBandKit_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 169384EF1C17C39300A17F2C /* MicrosoftBandKit_iOS.framework */; };
 		169384F31C17C3D300A17F2C /* MSBand.m in Sources */ = {isa = PBXBuildFile; fileRef = 169384F21C17C3D300A17F2C /* MSBand.m */; };
 		169A7B241BFF16E700A7C06D /* Gyroscope.m in Sources */ = {isa = PBXBuildFile; fileRef = 169A7B231BFF16E700A7C06D /* Gyroscope.m */; };
 		169A7B271BFF193C00A7C06D /* Magnetometer.m in Sources */ = {isa = PBXBuildFile; fileRef = 169A7B261BFF193C00A7C06D /* Magnetometer.m */; };
@@ -83,12 +80,15 @@
 		169A7B461C0052F800A7C06D /* Gravity.m in Sources */ = {isa = PBXBuildFile; fileRef = 169A7B451C0052F800A7C06D /* Gravity.m */; };
 		169A7B491C00591A00A7C06D /* LinearAccelerometer.m in Sources */ = {isa = PBXBuildFile; fileRef = 169A7B481C00591A00A7C06D /* LinearAccelerometer.m */; };
 		169ACDC61C90C92C000072D6 /* BLEHeartRate.m in Sources */ = {isa = PBXBuildFile; fileRef = 169ACDC51C90C92C000072D6 /* BLEHeartRate.m */; };
+		16A4810B1CB4ACA400F04B6E /* Observer.m in Sources */ = {isa = PBXBuildFile; fileRef = 16A4810A1CB4ACA400F04B6E /* Observer.m */; };
 		16C1FF7D1C617FB100C070AA /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16C1FF7C1C617FB100C070AA /* Accelerate.framework */; };
 		16C1FF7F1C617FC300C070AA /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16C1FF7E1C617FC300C070AA /* GLKit.framework */; };
 		16C1FF971C64501D00C070AA /* Debug.m in Sources */ = {isa = PBXBuildFile; fileRef = 16C1FF961C64501D00C070AA /* Debug.m */; };
 		16C251BB1C6C45270018D156 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 16C251BA1C6C45270018D156 /* Reachability.m */; };
 		16D810241C06242500605DE2 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16D810231C06242500605DE2 /* CFNetwork.framework */; };
 		16D810261C06242F00605DE2 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16D810251C06242F00605DE2 /* Security.framework */; };
+		16D91B5E1CA9447A00A5FD4F /* MicrosoftBandKit_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16D91B5D1CA9447A00A5FD4F /* MicrosoftBandKit_iOS.framework */; };
+		16D91B641CA9454D00A5FD4F /* BluetoothManager.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16D91B631CA9454D00A5FD4F /* BluetoothManager.framework */; };
 		16DEA2371C54557B00B607C9 /* AWAREUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 16DEA2361C54557B00B607C9 /* AWAREUtils.m */; };
 		16DEA23A1C5535B300B607C9 /* AWAREEsmUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 16DEA2391C5535B300B607C9 /* AWAREEsmUtils.m */; };
 		16E155331C252B4D00316321 /* AWAREPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 16E155321C252B4D00316321 /* AWAREPlugin.m */; };
@@ -202,8 +202,6 @@
 		164DD6671C1FBA9100ADA92B /* Timezone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Timezone.m; sourceTree = "<group>"; };
 		164DD6691C1FC1F900ADA92B /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		165870091C986D4F008B99D2 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		165870181C9878F9008B99D2 /* BluetoothManager.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BluetoothManager.framework; path = System/Library/PrivateFrameworks/BluetoothManager.framework; sourceTree = SDKROOT; };
-		1658701B1C98C280008B99D2 /* MobileWiFi.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileWiFi.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/PrivateFrameworks/MobileWiFi.framework; sourceTree = DEVELOPER_DIR; };
 		1658701D1C98C337008B99D2 /* MobileWiFi.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MobileWiFi.h; path = MobileWiFi/MobileWiFi.h; sourceTree = "<group>"; };
 		1658701E1C98C337008B99D2 /* WiFiDeviceClient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = WiFiDeviceClient.h; path = MobileWiFi/WiFiDeviceClient.h; sourceTree = "<group>"; };
 		1658701F1C98C337008B99D2 /* WiFiManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = WiFiManager.h; path = MobileWiFi/WiFiManager.h; sourceTree = "<group>"; };
@@ -269,7 +267,6 @@
 		168683081C08050100CB4266 /* ActivityRecognition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActivityRecognition.m; sourceTree = "<group>"; };
 		168C71D91C67B9CC00878DD8 /* AWAREDataUploader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AWAREDataUploader.h; sourceTree = "<group>"; };
 		168C71DA1C67B9CC00878DD8 /* AWAREDataUploader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AWAREDataUploader.m; sourceTree = "<group>"; };
-		169384EF1C17C39300A17F2C /* MicrosoftBandKit_iOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = MicrosoftBandKit_iOS.framework; sourceTree = "<group>"; };
 		169384F11C17C3D300A17F2C /* MSBand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSBand.h; sourceTree = "<group>"; };
 		169384F21C17C3D300A17F2C /* MSBand.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSBand.m; sourceTree = "<group>"; };
 		169A7B221BFF16E700A7C06D /* Gyroscope.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Gyroscope.h; sourceTree = "<group>"; };
@@ -298,6 +295,8 @@
 		169A7B481C00591A00A7C06D /* LinearAccelerometer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LinearAccelerometer.m; sourceTree = "<group>"; };
 		169ACDC41C90C92C000072D6 /* BLEHeartRate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BLEHeartRate.h; sourceTree = "<group>"; };
 		169ACDC51C90C92C000072D6 /* BLEHeartRate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BLEHeartRate.m; sourceTree = "<group>"; };
+		16A481091CB4ACA400F04B6E /* Observer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Observer.h; sourceTree = "<group>"; };
+		16A4810A1CB4ACA400F04B6E /* Observer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Observer.m; sourceTree = "<group>"; };
 		16C1FF7C1C617FB100C070AA /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		16C1FF7E1C617FC300C070AA /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		16C1FF951C64501D00C070AA /* Debug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Debug.h; sourceTree = "<group>"; };
@@ -306,6 +305,8 @@
 		16C251BA1C6C45270018D156 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		16D810231C06242500605DE2 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		16D810251C06242F00605DE2 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		16D91B5D1CA9447A00A5FD4F /* MicrosoftBandKit_iOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MicrosoftBandKit_iOS.framework; path = ThirdPatyFrameworks/MicrosoftBandKit_iOS.framework; sourceTree = "<group>"; };
+		16D91B631CA9454D00A5FD4F /* BluetoothManager.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BluetoothManager.framework; path = PrivateFrameworks/BluetoothManager.framework; sourceTree = "<group>"; };
 		16DEA2351C54557B00B607C9 /* AWAREUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AWAREUtils.h; sourceTree = "<group>"; };
 		16DEA2361C54557B00B607C9 /* AWAREUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AWAREUtils.m; sourceTree = "<group>"; };
 		16DEA2381C5535B300B607C9 /* AWAREEsmUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AWAREEsmUtils.h; sourceTree = "<group>"; };
@@ -343,8 +344,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				165870221C9903D3008B99D2 /* IOKit.framework in Frameworks */,
-				1658701C1C98C280008B99D2 /* MobileWiFi.framework in Frameworks */,
-				165870191C9878F9008B99D2 /* BluetoothManager.framework in Frameworks */,
 				1658700A1C986D4F008B99D2 /* QuartzCore.framework in Frameworks */,
 				165DECF61C83AD7D002C88CA /* ExternalAccessory.framework in Frameworks */,
 				1623CEB11BFD40FB00EFAD72 /* AVFoundation.framework in Frameworks */,
@@ -362,7 +361,8 @@
 				164DD66A1C1FC1F900ADA92B /* MapKit.framework in Frameworks */,
 				16D810261C06242F00605DE2 /* Security.framework in Frameworks */,
 				169A7B3D1BFFC9F900A7C06D /* SystemConfiguration.framework in Frameworks */,
-				169384F01C17C39300A17F2C /* MicrosoftBandKit_iOS.framework in Frameworks */,
+				16D91B5E1CA9447A00A5FD4F /* MicrosoftBandKit_iOS.framework in Frameworks */,
+				16D91B641CA9454D00A5FD4F /* BluetoothManager.framework in Frameworks */,
 				FC2AF85D761397B784DECBD3 /* libPods-AWARE.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -811,6 +811,9 @@
 				168C71D91C67B9CC00878DD8 /* AWAREDataUploader.h */,
 				168C71DA1C67B9CC00878DD8 /* AWAREDataUploader.m */,
 				165870231C9907CD008B99D2 /* AmbientLight */,
+				1602ADBC1C45B06C002B3121 /* Barometter */,
+				1602ADBB1C45B063002B3121 /* Battery */,
+				1602ADC41C45B0D1002B3121 /* Bluetooth */,
 				169ACDC71C90C931000072D6 /* HeartRate */,
 				165DED011C87C9CD002C88CA /* Labels */,
 				165915121C7CBC7300806744 /* Memory */,
@@ -820,8 +823,6 @@
 				1602ADB81C45B021002B3121 /* Accelerometer */,
 				1602ADB91C45B030002B3121 /* Gyroscope */,
 				1602ADBA1C45B03A002B3121 /* Magnetometer */,
-				1602ADBB1C45B063002B3121 /* Battery */,
-				1602ADBC1C45B06C002B3121 /* Barometter */,
 				1602ADBD1C45B089002B3121 /* Locations */,
 				1602ADBE1C45B090002B3121 /* Network */,
 				1602ADBF1C45B099002B3121 /* Wifi */,
@@ -829,7 +830,6 @@
 				1602ADC11C45B0B0002B3121 /* Rotation */,
 				1602ADC21C45B0B8002B3121 /* Gravity */,
 				1602ADC31C45B0CD002B3121 /* LinearAccelerometer */,
-				1602ADC41C45B0D1002B3121 /* Bluetooth */,
 				1602ADC51C45B0D8002B3121 /* Screen */,
 				1602ADC61C45B0E2002B3121 /* Proximity */,
 				1602ADC71C45B0EB002B3121 /* Timezone */,
@@ -927,6 +927,8 @@
 				1607944B1C19274C0021816F /* AWAREStudy.m */,
 				16FCE2751BFE9326005FC71A /* AWARESensorManager.h */,
 				16FCE2761BFE9326005FC71A /* AWARESensorManager.m */,
+				16A481091CB4ACA400F04B6E /* Observer.h */,
+				16A4810A1CB4ACA400F04B6E /* Observer.m */,
 			);
 			name = Study;
 			sourceTree = "<group>";
@@ -997,9 +999,9 @@
 		2A3CA9F5620967BACB187EB7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				16D91B631CA9454D00A5FD4F /* BluetoothManager.framework */,
+				16D91B5D1CA9447A00A5FD4F /* MicrosoftBandKit_iOS.framework */,
 				165870211C9903D3008B99D2 /* IOKit.framework */,
-				1658701B1C98C280008B99D2 /* MobileWiFi.framework */,
-				165870181C9878F9008B99D2 /* BluetoothManager.framework */,
 				165870091C986D4F008B99D2 /* QuartzCore.framework */,
 				165DECF51C83AD7D002C88CA /* ExternalAccessory.framework */,
 				1623FFDC1C5ADB6E00F3E3E4 /* libSystem.tbd */,
@@ -1012,7 +1014,6 @@
 				16E155381C27C2AC00316321 /* EventKitUI.framework */,
 				164DD6691C1FC1F900ADA92B /* MapKit.framework */,
 				1607944D1C1A240F0021816F /* AudioUnit.framework */,
-				169384EF1C17C39300A17F2C /* MicrosoftBandKit_iOS.framework */,
 				168683021C07C43600CB4266 /* AudioToolbox.framework */,
 				16D810251C06242F00605DE2 /* Security.framework */,
 				16D810231C06242500605DE2 /* CFNetwork.framework */,
@@ -1287,6 +1288,7 @@
 				160EE9C31C052DAA00015688 /* OpenWeather.m in Sources */,
 				165915111C7CBC6D00806744 /* Memory.m in Sources */,
 				16EB1E5A1C4A930500966A07 /* LocalFileStorageHelper.m in Sources */,
+				16A4810B1CB4ACA400F04B6E /* Observer.m in Sources */,
 				1623CE6E1BFD1B2C00EFAD72 /* AppDelegate.m in Sources */,
 				1607944C1C19274C0021816F /* AWAREStudy.m in Sources */,
 				16FCE2771BFE9326005FC71A /* AWARESensorManager.m in Sources */,
@@ -1461,6 +1463,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = EE6BA2397CB9F7AB5C901B47 /* Pods-AWARE.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = AWARE/AWARE.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -1470,6 +1473,8 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 					"$(SDKROOT)$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks",
+					"$(PROJECT_DIR)/PrivateFrameworks",
+					"$(PROJECT_DIR)/ThirdPatyFrameworks",
 				);
 				INFOPLIST_FILE = AWARE/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -1477,6 +1482,9 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/build/Debug-iphoneos",
+					"$(PROJECT_DIR)/ThirdPatyFrameworks",
+					"$(PROJECT_DIR)/PrivateFrameworks",
+					"$(SDKROOT)$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = jp.ac.keio.sfc.ht.tetujin.AWARE;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1488,6 +1496,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 9B5BAD09F1FBEE0838867ACF /* Pods-AWARE.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = AWARE/AWARE.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -1497,6 +1506,8 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 					"$(SDKROOT)$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks",
+					"$(PROJECT_DIR)/PrivateFrameworks",
+					"$(PROJECT_DIR)/ThirdPatyFrameworks",
 				);
 				INFOPLIST_FILE = AWARE/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -1504,6 +1515,9 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/build/Debug-iphoneos",
+					"$(PROJECT_DIR)/ThirdPatyFrameworks",
+					"$(PROJECT_DIR)/PrivateFrameworks",
+					"$(SDKROOT)$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = jp.ac.keio.sfc.ht.tetujin.AWARE;
 				PRODUCT_NAME = "$(TARGET_NAME)";

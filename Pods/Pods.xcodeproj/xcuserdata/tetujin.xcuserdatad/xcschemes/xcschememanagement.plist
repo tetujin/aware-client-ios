@@ -24,11 +24,6 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>RNGridMenu.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
 		<key>SCNetworkReachability.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -73,11 +68,6 @@
 			<true/>
 		</dict>
 		<key>74CD2F578138157E0B27CCEE08C069EF</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>900758F2D30DEA6EED1D98A71B2E594A</key>
 		<dict>
 			<key>primary</key>
 			<true/>

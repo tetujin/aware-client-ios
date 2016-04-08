@@ -41,7 +41,7 @@
 // Start sensor
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings {
     // start table
-    [self createTable];
+//    [self createTable];
     [self setBufferSize:5];
     
     

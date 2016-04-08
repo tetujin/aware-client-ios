@@ -18,6 +18,8 @@
 #import "AWAREKeys.h"
 #import "AWAREUtils.h"
 #import "ESMStorageHelper.h"
+#import "AppDelegate.h"
+#import "Observer.h"
 
 // Plugins
 #import "GoogleCalPush.h"
@@ -65,10 +67,8 @@
     NSTimer *listUpdateTimer;
     
     AWAREStudy * awareStudy;
-}
-
-- (void)gridMenu:(RNGridMenu *)gridMenu willDismissWithSelectedItem:(RNGridMenuItem *)item atIndex:(NSInteger)itemIndex {
-    NSLog(@"Dismissed with item %ld: %@", itemIndex, item.title);
+    
+    AWARESensorManager * sensorManager;
 }
 
 - (void)viewDidLoad {
@@ -117,12 +117,11 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
 
-    
+    // A sensor list for table view
     _sensors = [[NSMutableArray alloc] init];
     
     // AWAREStudy manages a study configurate
-    awareStudy = [[AWAREStudy alloc] init];
-//    [awareStudy setStudyInformationWithURL:@"https://api.awareframework.com/index.php/webservice/index/628/rqBnwZw9xNyq"];
+    awareStudy = [[AWAREStudy alloc] initWithReachability:YES];
     
     /**
      * Init a Debug Sensor for collecting a debug message.
@@ -131,60 +130,21 @@
      */
     debugSensor = [[Debug alloc] initWithAwareStudy:awareStudy];
     
-    /**
-     * Start a location sensor for background sensing.
-     * On the iOS, we have to turn on the location sensor 
-     * for using application in the background.
-     */
-    [self initLocationSensor];
-    
     /// Init sensor manager for the list view
-    _sensorManager = [[AWARESensorManager alloc] initWithAWAREStudy:awareStudy];
+    AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+    sensorManager = delegate.sharedSensorManager;
+    
+    [self initContentsOnTableView];
     
     /// Set delegates for a navigation bar and table view
     if ([AWAREUtils getCurrentOSVersionAsFloat] >= 9.0) {
         [self.navigationController.navigationBar setDelegate:self];
     }
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-    
-    /**
-     * The "-initList" method **initialize contetns of list view**, and **starts/stops sensors**.
-     * WIP: I want to split a "list view initializer" and "sensor initializer".
-     */
-    [self initContentsOnTableView];
-    [self initSensors];
-    
-    _refreshButton.enabled = NO;
-    [self performSelector:@selector(refreshButtonEnableYes) withObject:0 afterDelay:8];
     
     /// Start an update timer for list view. This timer refreshed the list view every 0.1 sec.
     listUpdateTimer = [NSTimer scheduledTimerWithTimeInterval:0.1f target:self.tableView selector:@selector(reloadData) userInfo:nil repeats:YES];
     [[NSRunLoop mainRunLoop] addTimer:listUpdateTimer forMode:NSRunLoopCommonModes];
-    
-    // battery state trigger
-    // Set a battery state change event to a notification center
-    [UIDevice currentDevice].batteryMonitoringEnabled = YES;
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(changedBatteryState:)
-                                                 name:UIDeviceBatteryStateDidChangeNotification object:nil];
-}
 
-
-/**
- * Start data sync with all sensors in the background when the device is started a battery charging.
- */
-- (void) changedBatteryState:(id) sender {
-    NSInteger batteryState = [UIDevice currentDevice].batteryState;
-    if (batteryState == UIDeviceBatteryStateCharging || batteryState == UIDeviceBatteryStateFull) {
-        [debugSensor saveDebugEventWithText:@"[Uploader] The battery is charging. AWARE iOS start to upload sensor data." type:DebugTypeInfo label:@""];
-        if (_sensorManager != nil) {
-            [_sensorManager syncAllSensorsWithDBInBackground];
-        }
-        
-        GoogleCalPush * cal = [[GoogleCalPush alloc] initWithSensorName:SENSOR_PLUGIN_GOOGLE_CAL_PUSH withAwareStudy:awareStudy];
-        [cal checkCalendarEvents:nil];
-    }
 }
 
 
@@ -210,64 +170,18 @@
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"prefs:root=BATTERY_USAGE"]];
         }
     }
-    
-//    else if (![CLLocationManager locationServicesEnabled]){
-//        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"prefs:root=LOCATION_SERVICES"]];
-//    }
-//    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"prefs:root=AWARE"]];
 }
 
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     NSLog(@" Hello ESM view !");
     if ([segue.identifier isEqualToString:@"esmView"]) {
-        AWAREEsmViewController *esmView = [segue destinationViewController];    // <- 1
+//        AWAREEsmViewController *esmView = [segue destinationViewController];    // <- 1
     }
 }
 
 
-/**
- * This method is an initializers for a location sensor.
- * On the iOS, we have to turn on the location sensor
- * for using application in the background.
- * And also, this sensing interval is the most low level.
- */
-- (void) initLocationSensor {
-    NSLog(@"start location sensing!");
-    if ( nil == _homeLocationManager ) {
-        _homeLocationManager = [[CLLocationManager alloc] init];
-        _homeLocationManager.delegate = self;
-        _homeLocationManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers;
-        _homeLocationManager.pausesLocationUpdatesAutomatically = NO;
-        _homeLocationManager.activityType = CLActivityTypeOther;
-        if ([AWAREUtils getCurrentOSVersionAsFloat] >= 9.0) {
-             /// After iOS 9.0, we have to set "YES" for background sensing.
-            _homeLocationManager.allowsBackgroundLocationUpdates = YES;
-        }
-        if ([_homeLocationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
-            [_homeLocationManager requestAlwaysAuthorization];
-        }
-        // Set a movement threshold for new events.
-        _homeLocationManager.distanceFilter = 200; // meters
-        [_homeLocationManager startUpdatingLocation];
-    }
-}
 
-/**
- * The method is called by location sensor when the device location is changed.
- */
-- (void) locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations{
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    bool appTerminated = [userDefaults boolForKey:KEY_APP_TERMINATED];
-    if (appTerminated) {
-        NSString * message = @"AWARE iOS is rebooted!";
-        [AWAREUtils sendLocalNotificationForMessage:message soundFlag:YES];
-        [debugSensor saveDebugEventWithText:message type:DebugTypeInfo label:@""];
-        [userDefaults setBool:NO forKey:KEY_APP_TERMINATED];
-    }else{
-//        [self sendLocalNotificationForMessage:@"" soundFlag:YES];
-    }
-}
 
 - (void)didReceiveMemoryWarning {
     [debugSensor saveDebugEventWithText:@"didReceiveMemoryWarning" type:DebugTypeWarn label:@""];
@@ -419,7 +333,7 @@
     // Google Login
     [_sensors addObject:[self getCelContent:@"Google Login" desc:@"Multi-device management using Google Account." image:@"google_logo" key:SENSOR_PLUGIN_GOOGLE_LOGIN]];
     // Balanced Campus Calendar
-    [_sensors addObject:[self getCelContent:@"Balanced Campus Calendar" desc:@"This plugin gathers calendar events from all Google Calendars from the phone." image:@"ic_action_google_cal_grab" key:SENSOR_PLUGIN_GOOGLE_CAL_PULL]];
+    [_sensors addObject:[self getCelContent:@"Balanced Campus Calendar" desc:@"This plugin gathers calendar events from all Google Calendars from the phone." image:@"ic_action_google_cal_grab" key:@"balancedcampuscalendar"]];
     // Balanced Campus Journal
     [_sensors addObject:[self getCelContent:@"Balanced Campus Journal" desc:@"This plugin creates new events in the journal calendar and sends a reminder email to the user to update the journal." image:@"ic_action_google_cal_push" key:SENSOR_PLUGIN_GOOGLE_CAL_PUSH]];
     // Balanced Campus ESMs (ESM Scheduler)
@@ -489,8 +403,8 @@
     [dic setObject:image forKey:KEY_CEL_IMAGE];
     [dic setObject:key forKey:KEY_CEL_SENSOR_NAME];
 
-    if(_sensorManager != nil){
-        bool exist = [_sensorManager isExist:key];
+    if(sensorManager != nil){
+        bool exist = [sensorManager isExist:key];
         if (exist) {
             [dic setObject:@"true" forKey:KEY_CEL_STATE];
         }
@@ -500,157 +414,16 @@
 
 
 /**
- * When a study is refreshed (e.g., pushed refresh button, changed settings, and/or done daily study update), this method is called before the -initList.
- */
-- (void) initSensors {
-    
-    double initDelay = 0.5;
-    if ([AWAREUtils isBackground]){
-        initDelay = 5;
-    }
-    // Inactivate the refresh button on the navigation bar
-    _refreshButton.enabled = NO;
-//    [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeBlack];
-    [SVProgressHUD showProgress:0 maskType:SVProgressHUDMaskTypeBlack];
-    // Get sensors information and plugin information from NSUserDedaults class
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    uploadInterval = [userDefaults doubleForKey:SETTING_SYNC_INT];
-    int i = 0;
-    for (NSMutableDictionary * sensor in _sensors) {
-        // [NOTE] If this sensor is "active", addNewSensorWithSensorName method return TRUE value.
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, i * initDelay * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-            // Work this operation in the main thread
-            NSString * key = [sensor objectForKey:KEY_CEL_SENSOR_NAME];
-            bool state = [_sensorManager addNewSensorWithSensorName:key
-                                                     uploadInterval:uploadInterval];
-            if (state) {
-                [sensor setObject:@"true" forKey:KEY_CEL_STATE];
-            }
-            // Set current status
-            NSString * progress = [NSString stringWithFormat:@"%@", key];
-            NSLog(@"%@", progress);
-            [SVProgressHUD showProgress:(float)i/(float)_sensors.count maskType:SVProgressHUDMaskTypeBlack];
-            [SVProgressHUD setStatus:progress];
-            
-            // Event at last sensor
-            if (i >=_sensors.count-1) {
-                // Enable refresh button
-                [self refreshButtonEnableYes];
-                // Set an upload timer
-                [_sensorManager startUploadTimerWithInterval:uploadInterval];
-                // Remove a progress bar
-                [SVProgressHUD showSuccessWithStatus:@"Success to initialize sensors!"];
-                [SVProgressHUD performSelector:@selector(dismiss) withObject:nil afterDelay:3.0f];
-                // Save an event to debug sensor
-                if ([AWAREUtils isForeground]) {
-                    // Save a debug message to a Debug Sensor.
-                    [debugSensor saveDebugEventWithText:@"[study] Refresh in the foreground" type:DebugTypeInfo label:@""];
-                } else {
-                    // Save a debug message to a Debug Sensor.
-                    [debugSensor saveDebugEventWithText:@"[study] Refresh in the background" type:DebugTypeInfo label:@""];
-                    if([debugSensor isDebug]){
-                        [AWAREUtils sendLocalNotificationForMessage:@"The study is refreshed in the background" soundFlag:NO];
-                    }
-                }
-            }
-        });
-        i++;
-    }
-    
-    /**
-     * [Additional hidden sensors]
-     * You can add your own AWARESensor and AWAREPlugin to AWARESensorManager directly using following source code.
-     * The "-addNewSensor" method is versy userful for testing and debuging a AWARESensor without registlating a study.
-     */
-    // Pedometer
-    AWARESensor * steps = [[Pedometer alloc] initWithSensorName:SENSOR_PLUGIN_PEDOMETER withAwareStudy:awareStudy];
-    [steps startSensor:60*15 withSettings:nil];
-    [_sensorManager addNewSensor:steps];
-    
-    AWARESensor *memory = [[Memory alloc] initWithSensorName:@"memory" withAwareStudy:awareStudy];
-    [memory startSensor:60*15 withSettings:nil];
-    [_sensorManager addNewSensor:memory];
-    
-    AWARESensor *bleHeartRate = [[BLEHeartRate alloc] initWithSensorName:SENSOR_BLE_HEARTRATE withAwareStudy:awareStudy];
-    [bleHeartRate startSensor:60*15 withSettings:nil];
-    [_sensorManager addNewSensor:bleHeartRate];
-    
-//    AWARESensor * ambientLigth = [[AmbientLight alloc] initWithSensorName:@"ambientLight" withAwareStudy:awareStudy];
-//    [ambientLigth startSensor:60*15 withSettings:nil];
-//    [_sensorManager addNewSensor:ambientLigth];
-    
-//    AWARESensor * labels = [[Labels alloc] initWithSensorName:SENSOR_LABELS withAwareStudy:awareStudy];
-//    [labels startSensor:60*15 withSettings:nil];
-//    [_sensorManager addNewSensor:labels];
-    
-    // Orientation Sensor
-//    AWARESensor *orientation = [[Orientation alloc] initWithSensorName:@"orientation" withAwareStudy:awareStudy];
-//    [orientation startSensor:60*15 withSettings:nil];
-//    [_sensorManager addNewSensor:orientation];
-    
-    // HealthKit
-    // AWARESensor * healthKit = [[AWAREHealthKit alloc] initWithPluginName:@"sensor_aware_health_kit" deviceId:@""];
-    // [healthKit startSensor:60 withSettings:nil];
-    
-    
-    /**
-     * Debug Sensor
-     * NOTE: don't remove this sensor. This sensor collects and upload debug message to the server each 15 min.
-     */
-    AWARESensor * debug = [[Debug alloc] initWithAwareStudy:awareStudy];
-    [debug startSensor:60*15 withSettings:nil];
-    [_sensorManager addNewSensor:debug];
-}
-
-
-/**
  When a study is refreshed (e.g., pushed refresh button, changed settings, 
  and/or done daily study update), this method is called before the -initList.
  */
 - (IBAction)pushedStudyRefreshButton:(id)sender {
-    @autoreleasepool {
-        NSLog(@"Stop and remove all sensors from AWARESensorManager.");
-        [_sensorManager stopAndRemoveAllSensors];
-        [debugSensor saveDebugEventWithText:@"Pushed a study refresh button!" type:DebugTypeInfo label:@""];
-    }
-    /* [NOTE]:
-     * A simulator can not use camera API for reading a study QR code, therefore, a developer has to add a study url directly by youself.
-     * Also, a developer can get the url from a AWARE Dashboard. If you want to add the url directly, you should allow following souce code ("===Test code for a simulator===").
-     */
-    // === Test code for a simulator ===
-//    [awareStudy setStudyInformationWithURL:@"https://api.awareframework.com/index.php/webservice/index/628/rqBnwZw9xNyq"];
-    // =================================
-//    NSString* previousConf = [[awareStudy getStudyConfigurationAsText] copy];
-    // =================================
+    // Refresh the study information
     [awareStudy refreshStudy];
-    // =================================
-//    NSString* currentConf = [[awareStudy getStudyConfigurationAsText] copy];
-//    
-//    if ([AWAREUtils isBackground]) {
-//        if ([previousConf isEqualToString:currentConf]) {
-//            [AWAREUtils sendLocalNotificationForMessage:@"The study configuration file is same. You don't need to refresh sensors!" soundFlag:NO];
-//            // Save a debug message to a Debug Sensor.
-//            [debugSensor saveDebugEventWithText:@"[study] The study configuration file is same. You don't need to refresh sensors!" type:DebugTypeInfo label:@""];
-//            [self performSelector:@selector(refreshButtonEnableYes) withObject:0 afterDelay:8];
-//            return;
-//        }
-//    }
     
-    
-    // Init sensors
-    // TODO: The study refresh and initList is not synced, then if the user calls lots of times during sort time, AWARE make a doublicate sensor and uploader.
-    //    [self performSelector:@selector(initContentsOnTableView) withObject:0 afterDelay:2];
-    //    [self performSelector:@selector(initSensors) withObject:0 afterDelay:3];
-    [self initContentsOnTableView];
-    [self initSensors];
-    
-    // Refresh the table view after 4 second
-//    [self.tableView performSelector:@selector(reloadData) withObject:0 afterDelay:4];
-//    [self.tableView reloadData];
-    
-    // Activate the refresh button on the navigation bar fater 8 second
-//    [self performSelector:@selector(refreshButtonEnableYes) withObject:0 afterDelay:8];
-
+    _refreshButton.enabled = NO;
+    [self performSelector:@selector(initContentsOnTableView) withObject:0 afterDelay:5];
+    [self performSelector:@selector(refreshButtonEnableYes) withObject:0 afterDelay:10];
 }
 
 - (void) refreshButtonEnableYes {
@@ -732,7 +505,7 @@
         [googlePush showTargetCalendarCondition];
     // Google Calendar Calendar Plugin
     }else if([key isEqualToString:SENSOR_PLUGIN_CAMPUS]){
-        NSString* schedules = [_sensorManager getLatestSensorData:SENSOR_PLUGIN_CAMPUS];
+        NSString* schedules = [sensorManager getLatestSensorData:SENSOR_PLUGIN_CAMPUS];
         UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Current ESM Schedules" message:schedules delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
         alert.tag = 7;
         [alert show];
@@ -771,7 +544,7 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
     if([title isEqualToString:@"Debug Statement"]){
-        NSLog(@"%ld", buttonIndex);
+//        NSLog(@"%ld", buttonIndex);
         if (buttonIndex == 1){ //yes
             [userDefaults setBool:YES forKey:SETTING_DEBUG_STATE];
 //            [self initContentsOnTableView];
@@ -797,7 +570,7 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
         [userDefaults setObject:[NSNumber numberWithDouble:syncInterval] forKey:SETTING_SYNC_INT];
         [self pushedStudyRefreshButton:alertView];
     }else if(alertView.tag == 3){
-        NSLog(@"%ld", buttonIndex);
+//        NSLog(@"%ld", buttonIndex);
         if (buttonIndex == 1){ //yes
             [userDefaults setBool:YES forKey:SETTING_SYNC_WIFI_ONLY];
             [self pushedStudyRefreshButton:alertView];
@@ -811,7 +584,7 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
             NSLog(@"Cancel");
         }
     }else if (alertView.tag == 9){ // Set Sync Setting
-        NSLog(@"%ld", buttonIndex);
+//        NSLog(@"%ld", buttonIndex);
         if (buttonIndex == 1){ //yes
             [userDefaults setBool:YES forKey:SETTING_SYNC_BATTERY_CHARGING_ONLY];
             [self initContentsOnTableView];
@@ -838,7 +611,7 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
         if (buttonIndex == [alertView cancelButtonIndex]) {
             
         }else if (buttonIndex == 1){
-            [_sensorManager syncAllSensorsWithDBInForeground];
+            [sensorManager syncAllSensorsWithDBInForeground];
         }
     }else if(alertView.tag == 10){
         if (buttonIndex == [alertView cancelButtonIndex]) {
@@ -909,7 +682,7 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
         
         //update latest sensor data
         NSString *sensorKey = [item objectForKey:KEY_CEL_SENSOR_NAME];
-        NSString* latestSensorData = [_sensorManager getLatestSensorData:sensorKey];
+        NSString* latestSensorData = [sensorManager getLatestSensorData:sensorKey];
         if(![latestSensorData isEqualToString:@""]){
             [cell.detailTextLabel setText:latestSensorData];
         }

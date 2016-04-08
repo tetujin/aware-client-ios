@@ -21,74 +21,97 @@
     if(self){
         // Add your HealthKit code here
         healthStore = [[HKHealthStore alloc] init];
+        if(NSClassFromString(@"HKHealthStore") && [HKHealthStore isHealthDataAvailable])
+        {
+            NSSet *readDataTypes = [self allDataTypesToRead];
+            
+            // Request access
+            [healthStore requestAuthorizationToShareTypes:nil
+                                                readTypes:readDataTypes
+                                               completion:^(BOOL success, NSError *error) {
+                                                   
+                                                   if(success == YES)
+                                                   {
+                                                       // ...
+                                                       [self readAllDate];
+                                                   }
+                                                   else
+                                                   {
+                                                       // Determine if it was an error or if the
+                                                       // user just canceld the authorization request
+                                                   }
+                                                   
+                                               }];
+        }
     }
     return self;
 }
 
 
-- (BOOL)startAllSensors:(double)upInterval withSettings:(NSArray *)settings{
-    if(NSClassFromString(@"HKHealthStore") && [HKHealthStore isHealthDataAvailable])
-    {
-        NSSet *readDataTypes = [self allDataTypesToRead];
-        
-        // Request access
-        [healthStore requestAuthorizationToShareTypes:nil
-                                            readTypes:readDataTypes
-                                           completion:^(BOOL success, NSError *error) {
-                                               
-                                               if(success == YES)
-                                               {
-                                                   // ...
-                                                   [self readAllDate];
-                                               }
-                                               else
-                                               {
-                                                   // Determine if it was an error or if the
-                                                   // user just canceld the authorization request
-                                               }
-                                               
-                                           }];
-    }
+- (void)createTable {
+    
+}
+
+- (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
+    timer = [NSTimer scheduledTimerWithTimeInterval:60
+                                             target:self
+                                           selector:@selector(readAllDate)
+                                           userInfo:nil
+                                            repeats:YES];
     return YES;
 }
 
 - (BOOL)stopSensor{
+    [timer invalidate];
+    timer = nil;
     healthStore = nil;
     return YES;
 }
 
+
+
+
+
+
+///////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////
+
 - (void) readAllDate {
     // Set your start and end date for your query of interest
-//    NSDate *startDate, *endDate;
-//    // Use the sample type for step count
-//    HKSampleType *sampleType = [HKSampleType quantityTypeForIdentifier:HKQuantityTypeIdentifierStepCount];
-//    
-//    // Create a predicate to set start/end date bounds of the query
-//    NSPredicate *predicate = [HKQuery predicateForSamplesWithStartDate:startDate endDate:endDate options:HKQueryOptionStrictStartDate];
-//    
-//    // Create a sort descriptor for sorting by start date
-//    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:HKSampleSortIdentifierStartDate ascending:YES];
-//    
-//    
-//    HKSampleQuery *sampleQuery = [[HKSampleQuery alloc] initWithSampleType:sampleType
-//                                                                 predicate:predicate
-//                                                                     limit:HKObjectQueryNoLimit
-//                                                           sortDescriptors:@[sortDescriptor]
-//                                                            resultsHandler:^(HKSampleQuery *query, NSArray *results, NSError *error) {
-//                                                                
-//                                                                if(!error && results)
-//                                                                {
-//                                                                    for(HKQuantitySample *samples in results)
-//                                                                    {
-//                                                                        // your code here
-//                                                                        NSLog(@"%@", samples);
-//                                                                    }
-//                                                                }
-//                                                                
-//                                                            }];
-//    
-//    // Execute the query
-//    [healthStore executeQuery:sampleQuery];
+    NSDate *startDate, *endDate;
+    startDate = [NSDate dateWithTimeIntervalSinceNow:-60*60*24];
+    endDate = [NSDate new];
+    
+    // Use the sample type for step count
+    HKSampleType *sampleType = [HKSampleType quantityTypeForIdentifier:HKQuantityTypeIdentifierStepCount];
+    
+    // Create a predicate to set start/end date bounds of the query
+    NSPredicate *predicate = [HKQuery predicateForSamplesWithStartDate:startDate endDate:endDate options:HKQueryOptionStrictStartDate];
+    
+    // Create a sort descriptor for sorting by start date
+    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:HKSampleSortIdentifierStartDate ascending:YES];
+    
+    
+    HKSampleQuery *sampleQuery = [[HKSampleQuery alloc] initWithSampleType:sampleType
+                                                                 predicate:predicate
+                                                                     limit:HKObjectQueryNoLimit
+                                                           sortDescriptors:@[sortDescriptor]
+                                                            resultsHandler:^(HKSampleQuery *query, NSArray *results, NSError *error) {
+                                                                
+                                                                if(!error && results)
+                                                                {
+                                                                    for(HKQuantitySample *samples in results)
+                                                                    {
+                                                                        // your code here
+                                                                        NSLog(@"%@", samples);
+                                                                        
+                                                                    }
+                                                                }
+                                                                
+                                                            }];
+    
+    // Execute the query
+    [healthStore executeQuery:sampleQuery];
 }
 
 

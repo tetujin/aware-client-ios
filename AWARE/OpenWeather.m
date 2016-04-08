@@ -8,6 +8,7 @@
 
 #import "OpenWeather.h"
 #import "AWAREKeys.h"
+#import "AppDelegate.h"
 
 @implementation OpenWeather{
     IBOutlet CLLocationManager *locationManager;
@@ -71,6 +72,7 @@ int ONE_HOUR = 60*60;
 
 
 - (void) createTable{
+    NSLog(@"Start Open Weather Map");
     NSString *query = [[NSString alloc] init];
     query =
     @"_id integer primary key autoincrement,"
@@ -97,38 +99,34 @@ int ONE_HOUR = 60*60;
 
 
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
-    NSLog(@"Start Open Weather Map");
-    [self createTable];
-    
     double frequencyMin = [self getSensorSetting:settings withKey:@"plugin_openweather_frequency"];
     double frequencySec = 60.0f * frequencyMin;
     if (frequencyMin == -1) {
         frequencySec = 60.0f*15.0f;
     }
     
-    if (locationManager == nil){
-        locationManager = [[CLLocationManager alloc] init];
-        locationManager.delegate = self;
-        // locationManager.desiredAccuracy = kCLLocationAccuracyKilometer;
-        locationManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers;
-        locationManager.pausesLocationUpdatesAutomatically = NO;
-        CGFloat currentVersion = [[[UIDevice currentDevice] systemVersion] floatValue];
-        NSLog(@"OS:%f", currentVersion);
-        if (currentVersion >= 9.0) {
-            locationManager.allowsBackgroundLocationUpdates = YES; //This variable is an important method for background sensing
-        }
-        locationManager.activityType = CLActivityTypeOther;
-        if ([locationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
-            [locationManager requestAlwaysAuthorization];
-        }
-        locationManager.distanceFilter = 300; // meters
-        // [locationManager startUpdatingLocation];
-    }
+    AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+    locationManager = delegate.homeLocationManager;
     
-//    syncTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval
-//                                                 target:self selector:@selector(syncAwareDB)
-//                                               userInfo:nil
-//                                                repeats:YES];
+    
+//    if (locationManager == nil){
+//        locationManager = [[CLLocationManager alloc] init];
+//        locationManager.delegate = self;
+//        // locationManager.desiredAccuracy = kCLLocationAccuracyKilometer;
+//        locationManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers;
+//        locationManager.pausesLocationUpdatesAutomatically = NO;
+//        CGFloat currentVersion = [[[UIDevice currentDevice] systemVersion] floatValue];
+//        NSLog(@"OS:%f", currentVersion);
+//        if (currentVersion >= 9.0) {
+//            locationManager.allowsBackgroundLocationUpdates = YES; //This variable is an important method for background sensing
+//        }
+//        locationManager.activityType = CLActivityTypeOther;
+//        if ([locationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
+//            [locationManager requestAlwaysAuthorization];
+//        }
+//        locationManager.distanceFilter = 300; // meters
+//        // [locationManager startUpdatingLocation];
+//    }
     
     sensingTimer = [NSTimer scheduledTimerWithTimeInterval:frequencySec
                                                     target:self
@@ -140,19 +138,16 @@ int ONE_HOUR = 60*60;
 }
 
 - (BOOL)stopSensor{
-    // stop a sync timer
-//    [syncTimer invalidate];
-//    syncTimer = nil;
     // stop a sensing timer
     [sensingTimer invalidate];
     sensingTimer = nil;
+    
     // stop a location manager
-    if (locationManager != nil) {
-        [locationManager stopUpdatingHeading];
-        [locationManager stopUpdatingLocation];
-        [locationManager stopMonitoringVisits];
-    }
-    locationManager = nil;
+    // NOTE: We are using location manager on AppDelegate, then we don't need to stop the location manager.
+//    if (locationManager != nil) {
+//        [locationManager stopUpdatingLocation];
+//    }
+//    locationManager = nil;
     
     return YES;
 }
@@ -165,11 +160,13 @@ int ONE_HOUR = 60*60;
 
 
 - (void) getNewWeatherData {
-    CLLocation* location = [locationManager location];
-    NSDate *now = [NSDate new];
-    [self updateWeatherData:now
-                        Lat:location.coordinate.latitude
-                        Lon:location.coordinate.longitude];
+    if (locationManager != nil) {
+        CLLocation* location = [locationManager location];
+        NSDate *now = [NSDate new];
+        [self updateWeatherData:now
+                            Lat:location.coordinate.latitude
+                            Lon:location.coordinate.longitude];
+    }
 }
 
 - (void)updateWeatherData:(NSDate *)date Lat:(double)lat Lon:(double)lon
