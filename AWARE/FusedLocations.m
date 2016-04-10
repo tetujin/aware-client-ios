@@ -114,7 +114,7 @@
         [locationManager startMonitoringVisits]; // This method calls didVisit.
         [locationManager startUpdatingLocation];
         [locationManager startMonitoringSignificantLocationChanges];
-//        [fusedLocationsSensor setBufferSize:10];
+        [fusedLocationsSensor setBufferSize:3];
         // [locationManager startUpdatingHeading];
         
         if(interval > 0){
