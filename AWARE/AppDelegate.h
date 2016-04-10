@@ -21,7 +21,8 @@
 
 @property (strong, nonatomic) CLLocationManager *homeLocationManager;
 
-@property (strong, nonatomic)  AWARESensorManager * sharedSensorManager;
+@property (strong, nonatomic) AWARESensorManager * sharedSensorManager;
+@property (strong, nonatomic) NSTimer* dailyUpdateTimer;
 
 @end
 

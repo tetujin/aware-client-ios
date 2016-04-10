@@ -57,11 +57,11 @@
     /** Study Settings */
     /// A deault intrval for uploading sensor data
     double uploadInterval;
-    /// A timer for a daily sync
-    NSTimer * dailyUpdateTimer;
     /// A Debug sensor object
     Debug *debugSensor;
-
+    //
+    NSTimer * dailyUpdateTimer;
+    
     /** View */
     /// A timer for updating a list view
     NSTimer *listUpdateTimer;
@@ -80,39 +80,12 @@
     KEY_CEL_IMAGE = @"image";
     KEY_CEL_STATE = @"state";
     KEY_CEL_SENSOR_NAME = @"sensorName";
-    uploadInterval = 60*15;
     
-    /// Set a timer for a daily sync update
-    /**
-     * Every 2AM, AWARE iOS refresh the joining study in the background.
-     * A developer can change the time (2AM to xxxAM/PM) by changing the dailyUpdateTime(NSDate) Object
-     */
-    NSDate* dailyUpdateTime = [AWAREUtils getTargetNSDate:[NSDate new] hour:2 minute:0 second:0 nextDay:YES]; //2AM
-    dailyUpdateTimer = [[NSTimer alloc] initWithFireDate:dailyUpdateTime
-                                                interval:60*60*24 // daily
-                                                  target:self
-                                                selector:@selector(pushedStudyRefreshButton:)
-                                                userInfo:nil
-                                                 repeats:YES];
-    NSRunLoop *runLoop = [NSRunLoop currentRunLoop];
-//    [runLoop addTimer:dailyUpdateTimer forMode:NSDefaultRunLoopMode];
-    [runLoop addTimer:dailyUpdateTimer forMode:NSRunLoopCommonModes];
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    uploadInterval = [userDefaults doubleForKey:SETTING_SYNC_INT];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
-    
-    /// Set defualt settings
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-//    [userDefaults setBool:NO forKey:@"aware_inited"];
-    if (![userDefaults boolForKey:@"aware_inited"]) {
-        [userDefaults setBool:NO forKey:SETTING_DEBUG_STATE];
-        [userDefaults setBool:YES forKey:SETTING_SYNC_WIFI_ONLY];
-        [userDefaults setBool:YES forKey:SETTING_SYNC_BATTERY_CHARGING_ONLY];
-        [userDefaults setDouble:uploadInterval forKey:SETTING_SYNC_INT];
-        [userDefaults setBool:YES forKey:@"aware_inited"];
-        [userDefaults setBool:NO forKey:KEY_APP_TERMINATED];
-        [userDefaults setInteger:0 forKey:KEY_UPLOAD_MARK];
-        [userDefaults setInteger:1000 * 100 forKey:KEY_MAX_DATA_SIZE]; // 100 KB
-    }
+
     
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -133,6 +106,7 @@
     /// Init sensor manager for the list view
     AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
     sensorManager = delegate.sharedSensorManager;
+    dailyUpdateTimer = delegate.dailyUpdateTimer;
     
     [self initContentsOnTableView];
     
@@ -568,7 +542,9 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
         }
         double syncInterval = [interval doubleValue] * 60.0f;
         [userDefaults setObject:[NSNumber numberWithDouble:syncInterval] forKey:SETTING_SYNC_INT];
-        [self pushedStudyRefreshButton:alertView];
+//        [self pushedStudyRefreshButton:alertView];
+        [self initContentsOnTableView];
+        [sensorManager startUploadTimerWithInterval:syncInterval];
     }else if(alertView.tag == 3){
 //        NSLog(@"%ld", buttonIndex);
         if (buttonIndex == 1){ //yes

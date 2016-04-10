@@ -91,6 +91,21 @@
     // Error Tacking
     NSSetUncaughtExceptionHandler(&exceptionHandler);
     
+    /// Set defualt settings
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    if (![userDefaults boolForKey:@"aware_inited"]) {
+        [userDefaults setBool:NO forKey:SETTING_DEBUG_STATE];                 // Default Value: NO
+        [userDefaults setBool:YES forKey:SETTING_SYNC_WIFI_ONLY];             // Default Value: YES
+        [userDefaults setBool:YES forKey:SETTING_SYNC_BATTERY_CHARGING_ONLY]; // Default Value: YES
+        [userDefaults setDouble:60*15 forKey:SETTING_SYNC_INT];               // Default Value: 60*15 (sec)
+        [userDefaults setBool:NO forKey:KEY_APP_TERMINATED];                  // Default Value: NO
+        [userDefaults setInteger:0 forKey:KEY_UPLOAD_MARK];                   // Defualt Value: 0
+        [userDefaults setInteger:1000 * 100 forKey:KEY_MAX_DATA_SIZE];        // Defualt Value: 1000*100 (byte) (100 KB)
+        
+        [userDefaults setBool:YES forKey:@"aware_inited"];
+    }
+    double uploadInterval = [userDefaults doubleForKey:SETTING_SYNC_INT];
+    
     // Battery Save Mode
     if([AWAREUtils getCurrentOSVersionAsFloat] >= 9.0){
         [[NSNotificationCenter defaultCenter] addObserver:self
@@ -113,9 +128,26 @@
      */
     [self initLocationSensor];
     
-//    UILocalNotification *notification = [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey]
-//    AWARESensorManager * manager = [self sharedSensorManager];
+    // start sensors
     [self.sharedSensorManager startAllSensors];
+    [self.sharedSensorManager startUploadTimerWithInterval:uploadInterval];
+    
+    
+    /// Set a timer for a daily sync update
+    /**
+     * Every 2AM, AWARE iOS refresh the joining study in the background.
+     * A developer can change the time (2AM to xxxAM/PM) by changing the dailyUpdateTime(NSDate) Object
+     */
+    NSDate* dailyUpdateTime = [AWAREUtils getTargetNSDate:[NSDate new] hour:2 minute:0 second:0 nextDay:YES]; //2AM
+    _dailyUpdateTimer = [[NSTimer alloc] initWithFireDate:dailyUpdateTime
+                                                interval:60*60*24 // daily
+                                                  target:awareStudy
+                                                selector:@selector(refreshStudy)
+                                                userInfo:nil
+                                                 repeats:YES];
+    NSRunLoop *runLoop = [NSRunLoop currentRunLoop];
+    //    [runLoop addTimer:dailyUpdateTimer forMode:NSDefaultRunLoopMode];
+    [runLoop addTimer:_dailyUpdateTimer forMode:NSRunLoopCommonModes];
     
     return YES;
 }
