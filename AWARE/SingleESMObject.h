@@ -143,7 +143,7 @@ extern NSString* const KEY_ESM_IOS;
 //- (NSMutableDictionary*) getEsmDictionaryWithDeviceId:(NSString*)deviceId timestamp:(double) timestamp;
 
 
-- (NSMutableDictionary*) getEsmDictionaryWithDeviceId:(NSString*)deviceId
++ (NSMutableDictionary*) getEsmDictionaryWithDeviceId:(NSString*)deviceId
                                             timestamp:(double) timestamp
                                                  type:(NSNumber *) type
                                                 title:(NSString *) title
@@ -152,7 +152,7 @@ extern NSString* const KEY_ESM_IOS;
                                               trigger:(NSString*) trigger;
 
 
-- (NSMutableDictionary*) getEsmDictionaryAsFreeTextWithDeviceId:(NSString*)deviceId
++ (NSMutableDictionary*) getEsmDictionaryAsFreeTextWithDeviceId:(NSString*)deviceId
                                                       timestamp:(double) timestamp
                                                           title:(NSString *) title
                                                    instructions:(NSString *) instructions
@@ -160,7 +160,7 @@ extern NSString* const KEY_ESM_IOS;
                                             expirationThreshold:(NSNumber *) expirationThreshold
                                                         trigger:(NSString*) trigger;
 
-- (NSMutableDictionary*) getEsmDictionaryAsRadioWithDeviceId:(NSString*)deviceId
++ (NSMutableDictionary*) getEsmDictionaryAsRadioWithDeviceId:(NSString*)deviceId
                                                    timestamp:(double) timestamp
                                                        title:(NSString *) title
                                                 instructions:(NSString *) instructions
@@ -170,7 +170,7 @@ extern NSString* const KEY_ESM_IOS;
                                                       radios:(NSArray *) radios;
 
 
-- (NSMutableDictionary *) getEsmDictionaryAsCheckBoxWithDeviceId:(NSString*)deviceId
++ (NSMutableDictionary *) getEsmDictionaryAsCheckBoxWithDeviceId:(NSString*)deviceId
                                                        timestamp:(double) timestamp
                                                            title:(NSString *) title
                                                     instructions:(NSString *) instructions
@@ -181,7 +181,7 @@ extern NSString* const KEY_ESM_IOS;
 
 
 
-- (NSMutableDictionary *) getEsmDictionaryAsLikertScaleWithDeviceId:(NSString*)deviceId
++ (NSMutableDictionary *) getEsmDictionaryAsLikertScaleWithDeviceId:(NSString*)deviceId
                                                           timestamp:(double) timestamp
                                                               title:(NSString *) title
                                                        instructions:(NSString *) instructions
@@ -194,7 +194,7 @@ extern NSString* const KEY_ESM_IOS;
                                                          likertStep:(NSNumber *) likertStep;
 
 
-- (NSMutableDictionary *) getEsmDictionaryAsQuickAnswerWithDeviceId:(NSString*)deviceId
++ (NSMutableDictionary *) getEsmDictionaryAsQuickAnswerWithDeviceId:(NSString*)deviceId
                                                           timestamp:(double) timestamp
                                                               title:(NSString *) title
                                                        instructions:(NSString *) instructions
@@ -204,7 +204,7 @@ extern NSString* const KEY_ESM_IOS;
                                                        quickAnswers:(NSArray *) quickAnswers;
 
 
-- (NSMutableDictionary *) getEsmDictionaryAsScaleWithDeviceId:(NSString*)deviceId
++ (NSMutableDictionary *) getEsmDictionaryAsScaleWithDeviceId:(NSString*)deviceId
                                                     timestamp:(double) timestamp
                                                         title:(NSString *) title
                                                  instructions:(NSString *) instructions
@@ -219,7 +219,7 @@ extern NSString* const KEY_ESM_IOS;
                                                     scaleStep:(NSNumber *) scaleStep;
 
 
-- (NSMutableDictionary *) getEsmDictionaryAsDatePickerWithDeviceId:(NSString*)deviceId
++ (NSMutableDictionary *) getEsmDictionaryAsDatePickerWithDeviceId:(NSString*)deviceId
                                                          timestamp:(double) timestamp
                                                              title:(NSString *) title
                                                       instructions:(NSString *) instructions

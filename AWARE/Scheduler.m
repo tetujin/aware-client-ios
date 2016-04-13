@@ -749,14 +749,13 @@ didCompleteWithError:(NSError *)error {
 /// test
 
 - (AWARESchedule *) getDringSchedule{
-    SingleESMObject *esmObject = [[SingleESMObject alloc] init];
     NSString * deviceId = @"";
     double timestamp = 0;
     NSString * submit = @"Next";
     NSString * trigger = @"AWARE Tester";
     
     // Scale
-    NSMutableDictionary *startDatePicker = [esmObject getEsmDictionaryAsDatePickerWithDeviceId:deviceId
+    NSMutableDictionary *startDatePicker = [SingleESMObject getEsmDictionaryAsDatePickerWithDeviceId:deviceId
                                                                                      timestamp:timestamp
                                                                                          title:@""
                                                                                   instructions:@"Did you drink any alcohol yesterday? If so, approximately what time did you START drinking?"
@@ -764,7 +763,7 @@ didCompleteWithError:(NSError *)error {
                                                                            expirationThreshold:@60
                                                                                        trigger:trigger];
     
-    NSMutableDictionary *stopDatePicker = [esmObject getEsmDictionaryAsDatePickerWithDeviceId:deviceId
+    NSMutableDictionary *stopDatePicker = [SingleESMObject getEsmDictionaryAsDatePickerWithDeviceId:deviceId
                                                                                     timestamp:timestamp
                                                                                         title:@""
                                                                                  instructions:@"Approximately what time did you STOP drinking?"
@@ -772,7 +771,7 @@ didCompleteWithError:(NSError *)error {
                                                                           expirationThreshold:@60
                                                                                       trigger:trigger];
     
-    NSMutableDictionary *drinks = [esmObject getEsmDictionaryAsScaleWithDeviceId:deviceId
+    NSMutableDictionary *drinks = [SingleESMObject getEsmDictionaryAsScaleWithDeviceId:deviceId
                                                                        timestamp:timestamp
                                                                            title:@""
                                                                     instructions:@"How many drinks did you have over this time period?"
@@ -787,7 +786,7 @@ didCompleteWithError:(NSError *)error {
                                                                        scaleStep:@1];
     
     // radio
-    NSMutableDictionary *dicRadio = [esmObject getEsmDictionaryAsRadioWithDeviceId:deviceId
+    NSMutableDictionary *dicRadio = [SingleESMObject getEsmDictionaryAsRadioWithDeviceId:deviceId
                                                                          timestamp:timestamp
                                                                              title:@""
                                                                       instructions:@"Mark any of the reasons you drink alcohol"
@@ -796,14 +795,14 @@ didCompleteWithError:(NSError *)error {
                                                                            trigger:trigger
                                                                             radios:[NSArray arrayWithObjects:@"Because it makes social events more fun", @"To forget about my problems", @"Because like the feeling", @"So I won't feel left out", @"None", @"Other", nil]];
     
-    NSArray* arrayForJson = [[NSArray alloc] initWithObjects:startDatePicker, stopDatePicker, drinks, dicRadio, nil];
-    NSMutableArray * esm = [[NSMutableArray alloc] init];
-    for (NSDictionary * esmObj in arrayForJson) {
-        NSMutableDictionary * dic = [[NSMutableDictionary alloc] init];
-        [dic setObject:esmObj forKey:@"esm"];
-        [esm addObject:dic];
-    }
-    NSData *data = [NSJSONSerialization dataWithJSONObject:esm options:0 error:nil];
+    NSArray* esms = [[NSArray alloc] initWithObjects:startDatePicker, stopDatePicker, drinks, dicRadio, nil];
+//    NSMutableArray * esm = [[NSMutableArray alloc] init];
+//    for (NSDictionary * esmObj in arrayForJson) {
+//        NSMutableDictionary * dic = [[NSMutableDictionary alloc] init];
+//        [dic setObject:esmObj forKey:@"esm"];
+//        [esm addObject:dic];
+//    }
+    NSData *data = [NSJSONSerialization dataWithJSONObject:esms options:0 error:nil];
     NSString* jsonStr =  [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
 
     AWARESchedule * schedule = [[AWARESchedule alloc] initWithScheduleId:@"drink"];
@@ -818,7 +817,7 @@ didCompleteWithError:(NSError *)error {
 
 
 
-- (AWARESchedule *) getEmotionSchedule{
+- (AWARESchedule *) getEmotionSchedule {
     //    // Likert scale
     NSString * title = @"During the past hour, I would describe myself as..."
     "(Scale: 1=Disagree strongly; 2=Disagree slightly; 3=Neither agree nor disagree; 4=Agree slightly; 5=Agree strongly)";
@@ -833,10 +832,10 @@ didCompleteWithError:(NSError *)error {
     NSString *likertMaxLabel = @"3";
     NSString *likertMinLabel = @"";
     NSNumber *likertStep = @0;
-    SingleESMObject *esmObject = [[SingleESMObject alloc] init];
+//    SingleESMObject *esmObject = [[SingleESMObject alloc] init];
     
 
-    NSDictionary * quietLikert = [esmObject getEsmDictionaryAsLikertScaleWithDeviceId:deviceId
+    NSDictionary * quietLikert = [SingleESMObject getEsmDictionaryAsLikertScaleWithDeviceId:deviceId
                                                                       timestamp:timestamp
                                                                           title:title
                                                                    instructions:@"Quiet, reserved"
@@ -849,7 +848,7 @@ didCompleteWithError:(NSError *)error {
                                                                      likertStep:likertStep];
     
 
-    NSDictionary * compassionateLikert = [esmObject getEsmDictionaryAsLikertScaleWithDeviceId:deviceId
+    NSDictionary * compassionateLikert = [SingleESMObject getEsmDictionaryAsLikertScaleWithDeviceId:deviceId
                                                                             timestamp:timestamp
                                                                                 title:@""
                                                                          instructions:@"Compassionate, has a soft heart"
@@ -861,7 +860,7 @@ didCompleteWithError:(NSError *)error {
                                                                        likertMinLabel:likertMinLabel
                                                                            likertStep:likertStep];
 
-    NSDictionary * disorganizedLikert = [esmObject getEsmDictionaryAsLikertScaleWithDeviceId:deviceId
+    NSDictionary * disorganizedLikert = [SingleESMObject getEsmDictionaryAsLikertScaleWithDeviceId:deviceId
                                                                                timestamp:timestamp
                                                                                    title:@""
                                                                             instructions:@"Disorganized, indifferent"
@@ -874,7 +873,7 @@ didCompleteWithError:(NSError *)error {
                                                                               likertStep:likertStep];
     
 
-    NSDictionary * emotionallyLikert = [esmObject getEsmDictionaryAsLikertScaleWithDeviceId:deviceId
+    NSDictionary * emotionallyLikert = [SingleESMObject getEsmDictionaryAsLikertScaleWithDeviceId:deviceId
                                                                               timestamp:timestamp
                                                                                   title:@""
                                                                            instructions:@"Emotionally stable, not easily upset"
@@ -887,7 +886,7 @@ didCompleteWithError:(NSError *)error {
                                                                              likertStep:likertStep];
 
     
-    NSDictionary * interestLikert = [esmObject getEsmDictionaryAsLikertScaleWithDeviceId:deviceId
+    NSDictionary * interestLikert = [SingleESMObject getEsmDictionaryAsLikertScaleWithDeviceId:deviceId
                                                                             timestamp:timestamp
                                                                                 title:@""
                                                                          instructions:@"Having little interest in abstract ideas"
@@ -901,7 +900,7 @@ didCompleteWithError:(NSError *)error {
     
     
 
-    NSDictionary * stressedLikert = [esmObject getEsmDictionaryAsLikertScaleWithDeviceId:deviceId
+    NSDictionary * stressedLikert = [SingleESMObject getEsmDictionaryAsLikertScaleWithDeviceId:deviceId
                                                                           timestamp:timestamp
                                                                               title:title2
                                                                        instructions:@"Stressed, overwhelmed"
@@ -914,7 +913,7 @@ didCompleteWithError:(NSError *)error {
                                                                          likertStep:likertStep];
     
 
-    NSDictionary * productiveLikert = [esmObject getEsmDictionaryAsLikertScaleWithDeviceId:deviceId
+    NSDictionary * productiveLikert = [SingleESMObject getEsmDictionaryAsLikertScaleWithDeviceId:deviceId
                                                                            timestamp:timestamp
                                                                                title:@""
                                                                         instructions:@"Productive, curious, focused, attentive"
@@ -927,7 +926,7 @@ didCompleteWithError:(NSError *)error {
                                                                           likertStep:likertStep];
     
 
-    NSDictionary * boredLikert = [esmObject getEsmDictionaryAsLikertScaleWithDeviceId:deviceId
+    NSDictionary * boredLikert = [SingleESMObject getEsmDictionaryAsLikertScaleWithDeviceId:deviceId
                                                                             timestamp:timestamp
                                                                                 title:@""
                                                                          instructions:@"Bored"
@@ -940,7 +939,7 @@ didCompleteWithError:(NSError *)error {
                                                                            likertStep:likertStep];
                  
     
-    NSDictionary * havingRadio = [esmObject getEsmDictionaryAsRadioWithDeviceId:deviceId
+    NSDictionary * havingRadio = [SingleESMObject getEsmDictionaryAsRadioWithDeviceId:deviceId
                                                                        timestamp:timestamp
                                                                            title:@"Arousal and Positive/Negative Affect"
                                                                     instructions:@"During the past hour, I have been having..."
@@ -949,7 +948,7 @@ didCompleteWithError:(NSError *)error {
                                                                          trigger:trigger
                                                                           radios: [[NSArray alloc] initWithObjects:@"Low energy", @"Somewhat low energy", @"Neutral", @"Somewhat high energy", @"High Energy", nil]];
     
-    NSDictionary * feeringRadio = [esmObject getEsmDictionaryAsRadioWithDeviceId:deviceId
+    NSDictionary * feeringRadio = [SingleESMObject getEsmDictionaryAsRadioWithDeviceId:deviceId
                                                                        timestamp:timestamp
                                                                            title:@""
                                                                     instructions:@"During the past hour, I have been feeling..."
@@ -958,15 +957,14 @@ didCompleteWithError:(NSError *)error {
                                                                          trigger:trigger
                                                                           radios: [[NSArray alloc] initWithObjects:@"Negative", @"Somewhat negative", @"Neutral", @"Somewhat positive", @"Positive", nil]];
     
-    NSArray* arrayForJson = [[NSArray alloc] initWithObjects:quietLikert, compassionateLikert, disorganizedLikert,emotionallyLikert, interestLikert, stressedLikert, productiveLikert, boredLikert, havingRadio, feeringRadio, nil];
-    NSMutableArray * esm = [[NSMutableArray alloc] init];
-    for (NSDictionary * esmObj in arrayForJson) {
-        NSMutableDictionary * dic = [[NSMutableDictionary alloc] init];
-        [dic setObject:esmObj forKey:@"esm"];
-        [esm addObject:dic];
-    }
-    NSData *data = [NSJSONSerialization dataWithJSONObject:esm options:0 error:nil];
-//    NSData *data = [NSJSONSerialization dataWithJSONObject:arrayForJson options:0 error:nil];
+    NSArray* esms = [[NSArray alloc] initWithObjects:quietLikert, compassionateLikert, disorganizedLikert,emotionallyLikert, interestLikert, stressedLikert, productiveLikert, boredLikert, havingRadio, feeringRadio, nil];
+//    NSMutableArray * esms = [[NSMutableArray alloc] init];
+//    for (NSDictionary * esmObj in arrayForJson) {
+//        NSMutableDictionary * dic = [[NSMutableDictionary alloc] init];
+//        [dic setObject:esmObj forKey:@"esm"];
+//        [esm addObject:dic];
+//    }
+    NSData *data = [NSJSONSerialization dataWithJSONObject:esms options:0 error:nil];
     NSString* jsonStr =  [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     
     AWARESchedule * schedule = [[AWARESchedule alloc] initWithScheduleId:@"emotion"];
@@ -987,9 +985,9 @@ didCompleteWithError:(NSError *)error {
     double timestamp = 0;
     NSNumber * exprationThreshold = [NSNumber numberWithInt:60];
     NSString * trigger = @"trigger";
-    SingleESMObject *esmObject = [[SingleESMObject alloc] init];
+//    SingleESMObject *esmObject = [[SingleESMObject alloc] init];
     
-    NSMutableDictionary *dicFreeText = [esmObject getEsmDictionaryAsFreeTextWithDeviceId:deviceId
+    NSMutableDictionary *dicFreeText = [SingleESMObject getEsmDictionaryAsFreeTextWithDeviceId:deviceId
                                                                               timestamp:timestamp
                                                                                   title:@"ESM Freetext"
                                                                            instructions:@"The user can answer an open ended question." submit:submit
@@ -997,7 +995,7 @@ didCompleteWithError:(NSError *)error {
                                                                                 trigger:trigger];
     
     //    NSMutableDictionary *dicRadio = [[NSMutableDictionary alloc] init];
-    NSMutableDictionary *dicRadio = [esmObject getEsmDictionaryAsRadioWithDeviceId:deviceId
+    NSMutableDictionary *dicRadio = [SingleESMObject getEsmDictionaryAsRadioWithDeviceId:deviceId
                                                                          timestamp:timestamp
                                                                              title:@"ESM Radio"
                                                                       instructions:@"The user can only choose one option."
@@ -1007,7 +1005,7 @@ didCompleteWithError:(NSError *)error {
                                                                             radios:[NSArray arrayWithObjects:@"Aston Martin", @"Lotus", @"Jaguar", nil]];
     
     //    NSMutableDictionary *dicCheckBox = [[NSMutableDictionary alloc] init];
-    NSMutableDictionary *dicCheckBox = [esmObject getEsmDictionaryAsCheckBoxWithDeviceId:deviceId
+    NSMutableDictionary *dicCheckBox = [SingleESMObject getEsmDictionaryAsCheckBoxWithDeviceId:deviceId
                                                                                timestamp:timestamp
                                                                                    title:@"ESM Checkbox"
                                                                             instructions:@"The user can choose multiple options."
@@ -1017,7 +1015,7 @@ didCompleteWithError:(NSError *)error {
                                                                               checkBoxes:[NSArray arrayWithObjects:@"One", @"Two", @"Three", nil]];
     
     //    NSMutableDictionary *dicLikert = [[NSMutableDictionary alloc] init];
-    NSMutableDictionary *dicLikert = [esmObject getEsmDictionaryAsLikertScaleWithDeviceId:deviceId
+    NSMutableDictionary *dicLikert = [SingleESMObject getEsmDictionaryAsLikertScaleWithDeviceId:deviceId
                                                                                 timestamp:timestamp
                                                                                     title:@"ESM Likert"
                                                                              instructions:@"User rating 1 to 5 or 7 at 1 step increments."
@@ -1030,7 +1028,7 @@ didCompleteWithError:(NSError *)error {
                                                                                likertStep:@1];
     
     //    NSMutableDictionary *dicQuick = [[NSMutableDictionary alloc] init];
-    NSMutableDictionary *dicQuick = [esmObject getEsmDictionaryAsQuickAnswerWithDeviceId:deviceId
+    NSMutableDictionary *dicQuick = [SingleESMObject getEsmDictionaryAsQuickAnswerWithDeviceId:deviceId
                                                                                timestamp:timestamp
                                                                                    title:@"ESM Quick Answer"
                                                                             instructions:@"One touch answer."
@@ -1040,7 +1038,7 @@ didCompleteWithError:(NSError *)error {
                                                                             quickAnswers:[NSArray arrayWithObjects:@"Yes", @"No", @"Maybe", nil]];
     
     //    NSMutableDictionary *dicScale = [[NSMutableDictionary alloc] init];
-    NSMutableDictionary *dicScale = [esmObject getEsmDictionaryAsScaleWithDeviceId:deviceId
+    NSMutableDictionary *dicScale = [SingleESMObject getEsmDictionaryAsScaleWithDeviceId:deviceId
                                                                          timestamp:timestamp
                                                                              title:@"ESM Scale"
                                                                       instructions:@"Between 0 and 10 with 2 increments."
@@ -1055,7 +1053,7 @@ didCompleteWithError:(NSError *)error {
                                                                          scaleStep:@1];
     
     //    NSMutableDictionary *datePicker = [[NSMutableDictionary alloc] init];
-    NSMutableDictionary *dicDatePicker = [esmObject getEsmDictionaryAsDatePickerWithDeviceId:deviceId
+    NSMutableDictionary *dicDatePicker = [SingleESMObject getEsmDictionaryAsDatePickerWithDeviceId:deviceId
                                                                                    timestamp:timestamp
                                                                                        title:@"ESM Date Picker"
                                                                                 instructions:@"The user selects date and time."
@@ -1064,15 +1062,15 @@ didCompleteWithError:(NSError *)error {
                                                                                      trigger:trigger];
     
     
-    NSArray* arrayForJson = [[NSArray alloc] initWithObjects:dicFreeText, dicRadio, dicCheckBox,dicLikert, dicQuick, dicScale, dicDatePicker, nil];
-    NSMutableArray * esm = [[NSMutableArray alloc] init];
-    for (NSDictionary * esmObj in arrayForJson) {
-        NSMutableDictionary * dic = [[NSMutableDictionary alloc] init];
-        [dic setObject:esmObj forKey:@"esm"];
-        [esm addObject:dic];
-    }
+    NSArray* esms = [[NSArray alloc] initWithObjects:dicFreeText, dicRadio, dicCheckBox,dicLikert, dicQuick, dicScale, dicDatePicker, nil];
+//    NSMutableArray * esm = [[NSMutableArray alloc] init];
+//    for (NSDictionary * esmObj in arrayForJson) {
+//        NSMutableDictionary * dic = [[NSMutableDictionary alloc] init];
+//        [dic setObject:esmObj forKey:@"esm"];
+//        [esm addObject:dic];
+//    }
 //    [esm setObject:arrayForJson forKey:@"esm"];
-    NSData *data = [NSJSONSerialization dataWithJSONObject:esm options:0 error:nil];
+    NSData *data = [NSJSONSerialization dataWithJSONObject:esms options:0 error:nil];
 //    NSData *data = [NSJSONSerialization dataWithJSONObject:arrayForJson options:0 error:nil];
     NSString* jsonStr =  [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     

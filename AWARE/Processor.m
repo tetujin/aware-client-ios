@@ -57,7 +57,7 @@
     NSLog(@"[%@] Sensing requency is %f ",[self getSensorName], frequency);
     
     // Set a buffer size for reducing file access
-    [self setBufferSize:100];
+    [self setBufferSize:1000];
     
     // Set and start data uploader with a data upload interval
 //    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval
