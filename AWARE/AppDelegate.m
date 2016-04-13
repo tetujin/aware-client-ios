@@ -131,7 +131,7 @@
     // start sensors
     [self.sharedSensorManager startAllSensors];
     [self.sharedSensorManager startUploadTimerWithInterval:uploadInterval];
-    
+    [self.sharedSensorManager syncAllSensorsWithDBInBackground];
     
     /// Set a timer for a daily sync update
     /**

@@ -142,7 +142,7 @@ NSString* const KEY_ESM_SCALE_STEP = @"esm_scale_step";
  * @param   trigger         An unique label for a trigger
  * @return A skelton (NSMutableDictionary) of an ESM
  */
-- (NSMutableDictionary*) getEsmDictionaryWithDeviceId:(NSString*)deviceId
++ (NSMutableDictionary*) getEsmDictionaryWithDeviceId:(NSString*)deviceId
                                             timestamp:(double) timestamp
                                                  type:(NSNumber *) type
                                                 title:(NSString *) title
@@ -193,7 +193,7 @@ NSString* const KEY_ESM_SCALE_STEP = @"esm_scale_step";
  * @param   trigger         An unique label for a trigger
  * @return  A NSMutableDictonary of an ESM Free Text (esm_type=1)
  */
-- (NSMutableDictionary*) getEsmDictionaryAsFreeTextWithDeviceId:(NSString*)deviceId
++ (NSMutableDictionary*) getEsmDictionaryAsFreeTextWithDeviceId:(NSString*)deviceId
                                                  timestamp:(double) timestamp
                                                      title:(NSString *) title
                                               instructions:(NSString *) instructions
@@ -207,7 +207,7 @@ NSString* const KEY_ESM_SCALE_STEP = @"esm_scale_step";
                                                              instructions:instructions
                                                       expirationThreshold:expirationThreshold
                                                                   trigger:trigger];
-    return freeTextEsm;
+    return [NSMutableDictionary dictionaryWithObject:freeTextEsm forKey:@"esm"];
 }
 
 
@@ -225,7 +225,7 @@ NSString* const KEY_ESM_SCALE_STEP = @"esm_scale_step";
  * @param   radios          Labels for radio button
  * @return  A NSMutableDictonary of an ESM Radio Button (esm_type=2)
  */
-- (NSMutableDictionary*) getEsmDictionaryAsRadioWithDeviceId:(NSString*)deviceId
++ (NSMutableDictionary*) getEsmDictionaryAsRadioWithDeviceId:(NSString*)deviceId
                                                    timestamp:(double) timestamp
                                                        title:(NSString *) title
                                                 instructions:(NSString *) instructions
@@ -241,7 +241,7 @@ NSString* const KEY_ESM_SCALE_STEP = @"esm_scale_step";
                                                   expirationThreshold:expirationThreshold
                                                               trigger:trigger];
     [radiosEsm setObject:radios forKey:KEY_ESM_RADIOS];
-    return radiosEsm;
+    return [NSMutableDictionary dictionaryWithObject:radiosEsm forKey:@"esm"];;
 }
 
 
@@ -260,7 +260,7 @@ NSString* const KEY_ESM_SCALE_STEP = @"esm_scale_step";
  * @param   checkBoxes      Labels for check boxes
  * @return  NSMutableDictonary of an ESM Check Box (esm_type=3)
  */
-- (NSMutableDictionary *) getEsmDictionaryAsCheckBoxWithDeviceId:(NSString*)deviceId
++ (NSMutableDictionary *) getEsmDictionaryAsCheckBoxWithDeviceId:(NSString*)deviceId
                                                        timestamp:(double) timestamp
                                                            title:(NSString *) title
                                                     instructions:(NSString *) instructions
@@ -276,7 +276,7 @@ NSString* const KEY_ESM_SCALE_STEP = @"esm_scale_step";
                                                        expirationThreshold:expirationThreshold
                                                                    trigger:trigger];
     [checkBoxEsm setObject:checkBoxes forKey:KEY_ESM_CHECKBOXES];
-    return checkBoxEsm;
+    return [NSMutableDictionary dictionaryWithObject:checkBoxEsm forKey:@"esm"];;
 }
 
 
@@ -298,7 +298,7 @@ NSString* const KEY_ESM_SCALE_STEP = @"esm_scale_step";
  * @param   likertStep      A likert steps
  * @return  NSMutableDictonary of an ESM Quick Answer (esm_type=4)
  */
-- (NSMutableDictionary *) getEsmDictionaryAsLikertScaleWithDeviceId:(NSString*)deviceId
++ (NSMutableDictionary *) getEsmDictionaryAsLikertScaleWithDeviceId:(NSString*)deviceId
                                                           timestamp:(double) timestamp
                                                               title:(NSString *) title
                                                        instructions:(NSString *) instructions
@@ -320,7 +320,7 @@ NSString* const KEY_ESM_SCALE_STEP = @"esm_scale_step";
     [likertEsm setObject:likertMaxLabel forKey:KEY_ESM_LIKERT_MAX_LABEL];
     [likertEsm setObject:likertMinLabel forKey:KEY_ESM_LIKERT_MIN_LABEL];
     [likertEsm setObject:likertStep forKey:KEY_ESM_LIKERT_STEP];
-    return likertEsm;
+    return [NSMutableDictionary dictionaryWithObject:likertEsm forKey:@"esm"];;
 }
 
 
@@ -339,7 +339,7 @@ NSString* const KEY_ESM_SCALE_STEP = @"esm_scale_step";
  * @param   quickAnswers    Labels for quick answer
  * @return  NSMutableDictonary of an ESM Quick Answer (esm_type=5)
  */
-- (NSMutableDictionary *) getEsmDictionaryAsQuickAnswerWithDeviceId:(NSString*)deviceId
++ (NSMutableDictionary *) getEsmDictionaryAsQuickAnswerWithDeviceId:(NSString*)deviceId
                                                           timestamp:(double) timestamp
                                                               title:(NSString *) title
                                                        instructions:(NSString *) instructions
@@ -355,7 +355,7 @@ NSString* const KEY_ESM_SCALE_STEP = @"esm_scale_step";
                                                           expirationThreshold:expirationThreshold
                                                                       trigger:trigger];
     [quickAnswerEsm setObject:quickAnswers forKey:KEY_ESM_QUICK_ANSWERS];
-    return quickAnswerEsm;
+    return [NSMutableDictionary dictionaryWithObject:quickAnswerEsm forKey:@"esm"];;
 }
 
 
@@ -379,7 +379,7 @@ NSString* const KEY_ESM_SCALE_STEP = @"esm_scale_step";
  * @param   scaleStep       A scale of step
  * @return  NSMutableDictonary of an ESM Scale (esm_type=6)
  */
-- (NSMutableDictionary *) getEsmDictionaryAsScaleWithDeviceId:(NSString*)deviceId
++ (NSMutableDictionary *) getEsmDictionaryAsScaleWithDeviceId:(NSString*)deviceId
                                                     timestamp:(double) timestamp
                                                         title:(NSString *) title
                                                  instructions:(NSString *) instructions
@@ -405,7 +405,7 @@ NSString* const KEY_ESM_SCALE_STEP = @"esm_scale_step";
     [scaleEsm setObject:minLabel forKey:KEY_ESM_SCALE_MIN_LABEL];
     [scaleEsm setObject:maxLabel forKey:KEY_ESM_SCALE_MAX_LABEL];
     [scaleEsm setObject:scaleStep forKey:KEY_ESM_SCALE_STEP];
-    return scaleEsm;
+    return [NSMutableDictionary dictionaryWithObject:scaleEsm forKey:@"esm"];;
 }
 
 /**
@@ -419,7 +419,7 @@ NSString* const KEY_ESM_SCALE_STEP = @"esm_scale_step";
  * @param   trigger         An unique label for a trigger
  * @return  NSMutableDictonary of a sample ESM Object for DatePicker (esm_type=7)
  */
-- (NSMutableDictionary *) getEsmDictionaryAsDatePickerWithDeviceId:(NSString*)deviceId
++ (NSMutableDictionary *) getEsmDictionaryAsDatePickerWithDeviceId:(NSString*)deviceId
                                                          timestamp:(double) timestamp
                                                              title:(NSString *) title
                                                       instructions:(NSString *) instructions
@@ -433,7 +433,7 @@ NSString* const KEY_ESM_SCALE_STEP = @"esm_scale_step";
                                                                 instructions:instructions
                                                          expirationThreshold:expirationThreshold
                                                                      trigger:trigger];
-    return datePickerEsm;
+    return [NSMutableDictionary dictionaryWithObject:datePickerEsm forKey:@"esm"];;
 }
 
 @end

@@ -84,7 +84,7 @@
 //                                                  repeats:YES];
     
     // Set a buffer size for reducing file access
-    [self setBufferSize:100];
+    [self setBufferSize:1000];
     
     // Start a motion sensor
     NSLog(@"[%@] Start Linear Acc Sensor", [self getSensorName]);

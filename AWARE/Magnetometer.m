@@ -48,7 +48,7 @@
 //                                            repeats:YES];
     
     // Set a buffer size for reducing file access
-    [self setBufferSize:100];
+    [self setBufferSize:1000];
     
     // Get and set a sensng frequency to CMMotionManager
     double frequency = [self getSensorSetting:settings withKey:@"frequency_magnetometer"];

@@ -65,7 +65,7 @@
     }
     
     // Set a buffer size for reducing file access
-    [self setBufferSize:100];
+    [self setBufferSize:1000];
     
     // Set and start motion sensor
     NSLog(@"[%@] Start Gravity Sensor", [self getSensorName]);

@@ -50,7 +50,7 @@
 //                                           userInfo:nil
 //                                            repeats:YES];
     // Set buffer size for reducing file access
-    [self setBufferSize:100];
+    [self setBufferSize:1000];
     
     // Get a sensing frequency from settings
     double frequency = [self getSensorSetting:settings withKey:@"frequency_accelerometer"];

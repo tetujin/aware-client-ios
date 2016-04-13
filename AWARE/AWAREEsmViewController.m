@@ -1480,8 +1480,8 @@
                                     withTimesmap:(NSNumber *)unixtime
                                          devieId:(NSString*) deviceId{
     // make base dictionary from SingleEsmObject with device ID and timestamp
-    SingleESMObject *singleObject = [[SingleESMObject alloc] init];
-    NSMutableDictionary * dic = [singleObject getEsmDictionaryWithDeviceId:deviceId
+//    SingleESMObject *singleObject = [[SingleESMObject alloc] init];
+    NSMutableDictionary * dic = [SingleESMObject getEsmDictionaryWithDeviceId:deviceId
                                                                  timestamp:[unixtime doubleValue]
                                                                       type:@0
                                                                      title:@""
