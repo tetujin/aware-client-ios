@@ -167,8 +167,10 @@
             [dic setObject:floorsAscended forKey:KEY_FLOORS_ASCENDED];
             [dic setObject:floorsDescended forKey:KEY_FLOORS_DESCENDED];
             
-            [self saveData:dic];
-            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self saveData:dic];
+            });
+                                      
             NSString * message = [NSString stringWithFormat:@"%@(%@) %@(%@) %@ %@ %@(%@) %@(%@)", numberOfSteps, totalSteps, distance, totalDistance, currentPace, currentCadence, floorsAscended,totalFloorsAscended, floorsDescended, totalFllorsDescended];
             // [self sendLocalNotificationForMessage:message soundFlag:NO];
             [self setLatestValue:[NSString stringWithFormat:@"%@", message]];

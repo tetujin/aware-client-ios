@@ -29,6 +29,8 @@
 		1623CEB91BFE319100EFAD72 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1623CEB81BFE319100EFAD72 /* CoreMotion.framework */; };
 		1623CEBC1BFE390600EFAD72 /* Accelerometer.m in Sources */ = {isa = PBXBuildFile; fileRef = 1623CEBB1BFE390600EFAD72 /* Accelerometer.m */; };
 		1623FFE01C5DCF7900F3E3E4 /* Pedometer.m in Sources */ = {isa = PBXBuildFile; fileRef = 1623FFDF1C5DCF7900F3E3E4 /* Pedometer.m */; };
+		162603B91CBE6A1200EF233C /* ESMSchedule.m in Sources */ = {isa = PBXBuildFile; fileRef = 162603B81CBE6A1200EF233C /* ESMSchedule.m */; };
+		162603BC1CBE6A3400EF233C /* ESMManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 162603BB1CBE6A3400EF233C /* ESMManager.m */; };
 		162B7DDC1C4EF792006972B5 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 162B7DDB1C4EF792006972B5 /* CoreTelephony.framework */; };
 		162B7DDF1C4EFA46006972B5 /* Calls.m in Sources */ = {isa = PBXBuildFile; fileRef = 162B7DDE1C4EFA46006972B5 /* Calls.m */; };
 		1643959F1C22EEC40039E113 /* Scheduler.m in Sources */ = {isa = PBXBuildFile; fileRef = 1643959E1C22EEC40039E113 /* Scheduler.m */; };
@@ -181,6 +183,10 @@
 		1623FFDC1C5ADB6E00F3E3E4 /* libSystem.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libSystem.tbd; path = usr/lib/libSystem.tbd; sourceTree = SDKROOT; };
 		1623FFDE1C5DCF7900F3E3E4 /* Pedometer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Pedometer.h; sourceTree = "<group>"; };
 		1623FFDF1C5DCF7900F3E3E4 /* Pedometer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Pedometer.m; sourceTree = "<group>"; };
+		162603B71CBE6A1200EF233C /* ESMSchedule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESMSchedule.h; sourceTree = "<group>"; };
+		162603B81CBE6A1200EF233C /* ESMSchedule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ESMSchedule.m; sourceTree = "<group>"; };
+		162603BA1CBE6A3400EF233C /* ESMManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESMManager.h; sourceTree = "<group>"; };
+		162603BB1CBE6A3400EF233C /* ESMManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ESMManager.m; sourceTree = "<group>"; };
 		162B7DDB1C4EF792006972B5 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		162B7DDD1C4EFA46006972B5 /* Calls.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Calls.h; sourceTree = "<group>"; };
 		162B7DDE1C4EFA46006972B5 /* Calls.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Calls.m; sourceTree = "<group>"; };
@@ -535,6 +541,10 @@
 			children = (
 				164810831C21C08C00B830D9 /* ESM.h */,
 				164810841C21C08C00B830D9 /* ESM.m */,
+				162603B71CBE6A1200EF233C /* ESMSchedule.h */,
+				162603B81CBE6A1200EF233C /* ESMSchedule.m */,
+				162603BA1CBE6A3400EF233C /* ESMManager.h */,
+				162603BB1CBE6A3400EF233C /* ESMManager.m */,
 			);
 			name = ESM;
 			sourceTree = "<group>";
@@ -1272,6 +1282,7 @@
 				169384F31C17C3D300A17F2C /* MSBand.m in Sources */,
 				16228A511C22E9FE0081C839 /* AWARESchedule.m in Sources */,
 				165A8B741C03C0B300898C6C /* GoogleLoginViewController.m in Sources */,
+				162603BC1CBE6A3400EF233C /* ESMManager.m in Sources */,
 				169A7B271BFF193C00A7C06D /* Magnetometer.m in Sources */,
 				1623CEAF1BFD407900EFAD72 /* QRCodeViewController.m in Sources */,
 				160794511C1A4E380021816F /* AWAREMqtt.m in Sources */,
@@ -1307,6 +1318,7 @@
 				165870801C9A0B96008B99D2 /* BluetoothScanner.m in Sources */,
 				1623CEBC1BFE390600EFAD72 /* Accelerometer.m in Sources */,
 				164810851C21C08C00B830D9 /* ESM.m in Sources */,
+				162603B91CBE6A1200EF233C /* ESMSchedule.m in Sources */,
 				1663BB801C2C94C3003F03DF /* ESMStorageHelper.m in Sources */,
 				164DD6621C1FA72D00ADA92B /* NTPTime.m in Sources */,
 				16EB1E5D1C4AC12500966A07 /* CalEvent.m in Sources */,

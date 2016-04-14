@@ -32,6 +32,7 @@
 #import "Labels.h"
 #import "BLEHeartRate.h"
 #import "AmbientLight.h"
+#import "ESM.h"
 
 // Library
 #import <SVProgressHUD.h>
@@ -132,7 +133,8 @@
     ESMStorageHelper * helper = [[ESMStorageHelper alloc] init];
     NSArray * storedEsms = [helper getEsmTexts];
     if(storedEsms != nil){
-        if (storedEsms.count > 0) {
+        if (storedEsms.count > 0 && ![ESM isAppearedThisSection]) {
+            [ESM setAppearedState:YES];
             [self performSegueWithIdentifier:@"esmView" sender:self];
         }
     }else{
@@ -153,8 +155,6 @@
 //        AWAREEsmViewController *esmView = [segue destinationViewController];    // <- 1
     }
 }
-
-
 
 
 - (void)didReceiveMemoryWarning {

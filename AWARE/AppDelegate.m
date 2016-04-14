@@ -323,6 +323,8 @@ void exceptionHandler(NSException *exception) {
     
     NSLog(@"Turn 'ON' the auto sleep mode on this app");
     [UIApplication sharedApplication].idleTimerDisabled = NO;
+    
+    [ESM setAppearedState:NO];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {

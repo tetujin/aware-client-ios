@@ -14,7 +14,7 @@
 - (instancetype) initWithStorageName:(NSString *) storageName;
 
 // An array list for a buffer
-@property (weak, nonatomic) NSMutableArray * bufferArray;
+//@property (weak, nonatomic) NSMutableArray * bufferArray;
 
 /// create file
 - (BOOL) createNewFile:(NSString*)fileName;

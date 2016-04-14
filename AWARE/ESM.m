@@ -11,16 +11,19 @@
 #import "AWARESchedule.h"
 #import "ESMStorageHelper.h"
 #import "Debug.h"
-
+#import "ESMSchedule.h"
+#import "ESMManager.h"
 
 @implementation ESM {
     ESMStorageHelper * helper;
+    ESMManager * esmManager;
 }
 
 - (instancetype)initWithSensorName:(NSString *)sensorName withAwareStudy:(AWAREStudy *)study{
     self = [super initWithSensorName:@"esms" withAwareStudy:study];
     if (self) {
         helper = [[ESMStorageHelper alloc] init];
+        esmManager = [[ESMManager alloc] init];
     }
     return self;
 }
@@ -65,43 +68,39 @@
 
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
     
-//    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-//    [dateFormatter setDateFormat:@"HH:mm"];
+//    [helper removeEsmTexts];
 //    
 //    NSString * esmId = @"test_esm";
 //    NSString * notificationTitle = @"ESM from AWARE iOS client";
 //    NSString * notificationBody = @"Tap to answer!";
-//    NSString * esmJsonStr = [self getESMStringForTest];
-//    NSDate   * fireDate = [AWAREUtils getTargetNSDate:[NSDate new] hour:10 minute:0 second:0 nextDay:YES];
-//    NSString * notificationMessage = [NSString stringWithFormat:@"[%@] %@", [dateFormatter stringFromDate:fireDate], notificationBody];
+//    NSMutableArray * esms = [self getESMStringForTest];
+//    NSDate * now = [NSDate new];
+//    NSArray * hours = [NSArray arrayWithObjects:@1,@2,@3,@4,@5,@6,@7,@8,@9,@10,@11,@12,@13,@14,@15,@16,@17,@18,@19,@20,@21,@22,@23,nil];
+//    NSMutableArray * fireHours = [[NSMutableArray alloc] init];
+//    for (NSNumber * hour in hours) {
+//        [fireHours addObject:[AWAREUtils getTargetNSDate:now hour:[hour intValue] nextDay:YES]];
+//    }
+//    NSInteger timeout = 60*10;
 //    
-//    // Set notification
-//    [AWAREUtils sendLocalNotificationForMessage:notificationMessage
-//                                          title:notificationTitle
-//                                      soundFlag:YES
-//                                       category:[self getSensorName]
-//                                       fireDate:fireDate
-//                                 repeatInterval:NSCalendarUnitDay
-//                                       userInfo:nil
-//                                iconBadgeNumber:1];
+//    ESMSchedule * schedule = [[ESMSchedule alloc] initWithIdentifier:esmId
+//                                                        scheduledESMs:esms
+//                                                        fireDates:fireHours
+//                                                        title:notificationTitle
+//                                                        body:notificationBody
+//                                                        interval:NSCalendarUnitDay
+//                                                        category:[self getSensorName]
+//                                                                icon:1
+//                                                             timeout:timeout];
+//    [esmManager addESMSchedules:schedule];
 //    
-//    // Add esm text to local storage
-//    [helper addEsmText:esmJsonStr withId:esmId timeout:@0];
+//    [esmManager startAllESMSchedules];
     
     return YES;
 }
 
 - (BOOL) stopSensor {
     
-    // Remove all ESMs from
-//    [helper removeEsmTexts];
-//    
-//    // Remove all ESM notification from sharedApplication
-//    for (UILocalNotification *notification in [[UIApplication sharedApplication] scheduledLocalNotifications]) {
-//        if([notification.category isEqualToString:[self getSensorName]]) {
-//            [[UIApplication sharedApplication] cancelLocalNotification:notification];
-//        }
-//    }
+//    [esmManager stopAllESMSchedules];
     
     return YES;
 }
@@ -109,7 +108,7 @@
 ////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////
 
-- (NSString *) getESMStringForTest {
+- (NSMutableArray *) getESMStringForTest {
     NSString * deviceId = @"";
     NSString * submit = @"Next";
     double timestamp = 0;
@@ -185,12 +184,23 @@
                                                                                      trigger:trigger];
     
     
-    NSArray* esms = [[NSArray alloc] initWithObjects:dicFreeText, dicRadio, dicCheckBox,dicLikert, dicQuick, dicScale, dicDatePicker, nil];
+    NSMutableArray* esms = [[NSMutableArray alloc] initWithObjects:dicFreeText, dicRadio, dicCheckBox,dicLikert, dicQuick, dicScale, dicDatePicker, nil];
     
-    NSData *esmsData = [NSJSONSerialization dataWithJSONObject:esms options:0 error:nil];
-    NSString* esmsJsonStr =  [[NSString alloc] initWithData:esmsData encoding:NSUTF8StringEncoding];
-    
-    return esmsJsonStr;
+    return esms;
+}
+
+///////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+
+
++ (BOOL)isAppearedThisSection{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    return [userDefaults boolForKey:@"key_esm_appeared_section"];
+}
+
++ (void)setAppearedState:(BOOL)state{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setBool:state forKey:@"key_esm_appeared_section"];
 }
 
 

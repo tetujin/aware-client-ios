@@ -81,7 +81,9 @@
                                                                     accelerometerData.acceleration.x,
                                                                 accelerometerData.acceleration.y,
                                                                 accelerometerData.acceleration.z]];
+                                            dispatch_async(dispatch_get_main_queue(), ^{
                                               [self saveData:dic];
+                                            });
                                         }
                                   }];
     return YES;

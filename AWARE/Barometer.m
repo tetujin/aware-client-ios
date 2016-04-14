@@ -72,6 +72,7 @@
         altitude = [[CMAltimeter alloc] init];
         [altitude startRelativeAltitudeUpdatesToQueue:[NSOperationQueue mainQueue]
                                            withHandler:^(CMAltitudeData *altitudeData, NSError *error) {
+                                               
                                                NSNumber *pressure_value = altitudeData.pressure;
                                                double pressure_f = [pressure_value doubleValue];
                                                NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
@@ -82,7 +83,10 @@
                                                [dic setObject:@0 forKey:@"accuracy"];
                                                [dic setObject:@"" forKey:@"label"];
                                                [self setLatestValue:[NSString stringWithFormat:@"%f", pressure_f*10.0f]];
-                                               [self saveData:dic];
+                                               
+                                               dispatch_async(dispatch_get_main_queue(), ^{
+                                                   [self saveData:dic];
+                                               });
                                            }];
     }
 

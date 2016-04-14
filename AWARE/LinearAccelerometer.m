@@ -103,7 +103,9 @@
                                                [dic setObject:@0 forKey:@"accuracy"];//int
                                                [dic setObject:@"" forKey:@"label"]; //text
                                                [self setLatestValue:[NSString stringWithFormat:@"%f, %f, %f",motion.userAcceleration.x, motion.userAcceleration.y,motion.userAcceleration.z]];
-                                               [self saveData:dic toLocalFile:SENSOR_LINEAR_ACCELEROMETER];
+                                               dispatch_async(dispatch_get_main_queue(), ^{
+                                                   [self saveData:dic toLocalFile:SENSOR_LINEAR_ACCELEROMETER];
+                                               });
                                            }];
     }
     return YES;

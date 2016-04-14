@@ -84,7 +84,9 @@
                                                 [dic setObject:@0 forKey:@"accuracy"];//int
                                                 [dic setObject:@"" forKey:@"label"]; //text
                                                 [self setLatestValue:[NSString stringWithFormat:@"%f, %f, %f",motion.attitude.pitch, motion.attitude.roll,motion.attitude.yaw]];
-                                                [self saveData:dic toLocalFile:SENSOR_ROTATION];
+                                                dispatch_async(dispatch_get_main_queue(), ^{
+                                                    [self saveData:dic toLocalFile:SENSOR_ROTATION];
+                                                });
                                             }];
     }
     return YES;
