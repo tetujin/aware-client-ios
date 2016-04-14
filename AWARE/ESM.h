@@ -10,5 +10,7 @@
 
 @interface ESM : AWARESensor <AWARESensorDelegate>
 
++ (BOOL) isAppearedThisSection;
++ (void) setAppearedState:(BOOL)state;
 
 @end

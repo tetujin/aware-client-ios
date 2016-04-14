@@ -37,7 +37,9 @@
     if (esms == nil) {
         esms = [[NSMutableArray alloc] init];
     }
+    
     for (NSDictionary * existingEsm in esms) {
+        // Get an existingScheduleId from the stored esms
         NSString *existingScheduleId = [existingEsm objectForKey:@"scheduleId"];
         if ([existingScheduleId isEqualToString:scheduleId]) {
             NSString* esmStr = [existingEsm objectForKey:@"esmText"];

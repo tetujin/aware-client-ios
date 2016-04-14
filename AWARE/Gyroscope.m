@@ -80,7 +80,9 @@
             [dic setObject:@0 forKey:@"accuracy"];
             [dic setObject:@"" forKey:@"label"];
             [self setLatestValue:[NSString stringWithFormat:@"%f, %f, %f",gyroData.rotationRate.x,gyroData.rotationRate.y,gyroData.rotationRate.z]];
-            [self saveData:dic];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self saveData:dic];
+            });
         }
     }];
     return YES;

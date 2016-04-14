@@ -20,7 +20,7 @@
     // A sensor name
     NSString * sensorName;
     
-//    NSMutableArray * bufferArray;
+    NSMutableArray * bufferArray;
     // A buffer size for an array list
     int bufferSize;
     
@@ -48,7 +48,8 @@
         // make an original losted text length marker for each sensor
         KEY_SENSOR_UPLOAD_LOSTED_TEXT_LENGTH = [NSString stringWithFormat:@"key_sensor_upload_losted_text_length_%@", sensorName];
         // init buffer array
-        _bufferArray = [[NSMutableArray alloc] init];
+        bufferArray = [[NSMutableArray alloc] init];
+//        _bufferArray = bufferArray;
         // init size of buffer
         bufferSize = 0;
         // last text length
@@ -104,12 +105,17 @@
 //        NSLog(@"[%@] This sensor is Locked now!", [self getSensorName]);
         return NO;
     }
-    [_bufferArray addObject:data];
     
-    if ( _bufferArray.count >  bufferSize) {
+    if(bufferArray == nil){
+        bufferArray = [[NSMutableArray alloc] init];
+    }
+    
+    [bufferArray addObject:data];
+    
+    if ( bufferArray.count >  bufferSize) {
         
         NSError*error=nil;
-        NSData*d=[NSJSONSerialization dataWithJSONObject:_bufferArray options:2 error:&error];
+        NSData*d=[NSJSONSerialization dataWithJSONObject:bufferArray options:2 error:&error];
         NSMutableString* jsonstr = nil;
         if (!error) {
             jsonstr = [[NSMutableString alloc] initWithData:d encoding:NSUTF8StringEncoding];
@@ -132,7 +138,7 @@
         
         // init buffer array
         
-        [_bufferArray removeAllObjects];
+        [bufferArray removeAllObjects];
     }
     return YES;
 }

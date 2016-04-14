@@ -50,7 +50,9 @@
         motionActivityManager = [CMMotionActivityManager new];
         [motionActivityManager startActivityUpdatesToQueue:[NSOperationQueue new]
                                                 withHandler:^(CMMotionActivity *activity) {
-                                                    [self addMotionActivity:activity];
+                                                    dispatch_async(dispatch_get_main_queue(), ^{
+                                                        [self addMotionActivity:activity];
+                                                    });
                                                 }];
     }
     return YES;
