@@ -226,4 +226,12 @@ extern NSString* const KEY_ESM_IOS;
                                                             submit:(NSString *) submit
                                                expirationThreshold:(NSNumber *) expirationThreshold
                                                            trigger:(NSString*) trigger;
+
++ (NSMutableDictionary *) getEsmDictionaryAsPAMWithDeviceId:(NSString*)deviceId
+                                                         timestamp:(double) timestamp
+                                                             title:(NSString *) title
+                                                      instructions:(NSString *) instructions
+                                                            submit:(NSString *) submit
+                                               expirationThreshold:(NSNumber *) expirationThreshold
+                                                           trigger:(NSString*) trigger;
 @end
