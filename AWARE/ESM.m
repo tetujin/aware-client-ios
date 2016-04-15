@@ -64,43 +64,43 @@
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
     
     // Remove all esms from the local-temp storage
-    [helper removeEsmTexts];
-    
-    // Make ESM configurations
-    NSString * esmId = @"test_esm"; //Identifer of a notification
-    NSString * notificationTitle = @"ESM from AWARE iOS client"; // Notification title (iOS9 or later are support this function)
-    NSString * notificationBody = @"Tap to answer!"; // Notification Body
-    NSMutableArray * esms = [self getESMDictionaries]; // Generate ESM objects. Please refer to the -getESMDictionaries.
-    NSDate * now = [NSDate new];
-    NSArray * hours = [NSArray arrayWithObjects:@1,@2,@3,@4,@5,@6,@7,@8,@9,@10,@11,@12,@13,@14,@15,@16,@17,@18,@19,@20,@21,@22,@23,nil];
-    NSMutableArray * fireHours = [[NSMutableArray alloc] init]; // Generate fire NSDates
-    for (NSNumber * hour in hours) {
-        [fireHours addObject:[AWAREUtils getTargetNSDate:now hour:[hour intValue] nextDay:YES]];
-    }
-    NSInteger timeout = 60*10; // Timeout
-    
-    // Set the information to ESMSchedule
-    ESMSchedule * schedule = [[ESMSchedule alloc] initWithIdentifier:esmId
-                                                        scheduledESMs:esms
-                                                        fireDates:fireHours
-                                                        title:notificationTitle
-                                                        body:notificationBody
-                                                        interval:NSCalendarUnitDay
-                                                        category:[self getSensorName]
-                                                                icon:1
-                                                             timeout:timeout];
-    // Add the schedule to ESMManager
-    [esmManager addESMSchedules:schedule];
-    
-    // Start the schedules using -startAllESMSchedules on ESMManager
-    [esmManager startAllESMSchedules];
+//    [helper removeEsmTexts];
+//    
+//    // Make ESM configurations
+//    NSString * esmId = @"test_esm"; //Identifer of a notification
+//    NSString * notificationTitle = @"ESM from AWARE iOS client"; // Notification title (iOS9 or later are support this function)
+//    NSString * notificationBody = @"Tap to answer!"; // Notification Body
+//    NSMutableArray * esms = [self getESMDictionaries]; // Generate ESM objects. Please refer to the -getESMDictionaries.
+//    NSDate * now = [NSDate new];
+//    NSArray * hours = [NSArray arrayWithObjects:@1,@2,@3,@4,@5,@6,@7,@8,@9,@10,@11,@12,@13,@14,@15,@16,@17,@18,@19,@20,@21,@22,@23,nil];
+//    NSMutableArray * fireHours = [[NSMutableArray alloc] init]; // Generate fire NSDates
+//    for (NSNumber * hour in hours) {
+//        [fireHours addObject:[AWAREUtils getTargetNSDate:now hour:[hour intValue] nextDay:YES]];
+//    }
+//    NSInteger timeout = 60*10; // Timeout
+//    
+//    // Set the information to ESMSchedule
+//    ESMSchedule * schedule = [[ESMSchedule alloc] initWithIdentifier:esmId
+//                                                        scheduledESMs:esms
+//                                                        fireDates:fireHours
+//                                                        title:notificationTitle
+//                                                        body:notificationBody
+//                                                        interval:NSCalendarUnitDay
+//                                                        category:[self getSensorName]
+//                                                                icon:1
+//                                                             timeout:timeout];
+//    // Add the schedule to ESMManager
+//    [esmManager addESMSchedules:schedule];
+//    
+//    // Start the schedules using -startAllESMSchedules on ESMManager
+//    [esmManager startAllESMSchedules];
     
     return YES;
 }
 
 - (BOOL) stopSensor {
     
-    [esmManager stopAllESMSchedules];
+//    [esmManager stopAllESMSchedules];
     
     return YES;
 }
