@@ -89,7 +89,7 @@
             if (response && ! error) {
                 NSString *responseString = [[NSString alloc] initWithData: data  encoding: NSUTF8StringEncoding];
                 NSLog(@"Success: %@", responseString);
-                [self sendLocalNotificationForMessage:@"[Sucess] Send a survival signal." soundFlag:NO];
+                [self sendLocalNotificationForMessage:@"[Success] Send a survival signal." soundFlag:NO];
             }else{
                 [self sendLocalNotificationForMessage:@"[Fail] Send a survival signal" soundFlag:NO];
             }

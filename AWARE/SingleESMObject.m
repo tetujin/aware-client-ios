@@ -433,7 +433,36 @@ NSString* const KEY_ESM_SCALE_STEP = @"esm_scale_step";
                                                                 instructions:instructions
                                                          expirationThreshold:expirationThreshold
                                                                      trigger:trigger];
-    return [NSMutableDictionary dictionaryWithObject:datePickerEsm forKey:@"esm"];;
+    return [NSMutableDictionary dictionaryWithObject:datePickerEsm forKey:@"esm"];
+}
+
+
+/**
+ * Make a sample ESM Object (NSMutableDictionary) for a DatePicker
+ *
+ * @param   deviceId        A device_id for an aware study
+ * @param   timestamp       A timestamp value
+ * @param   instructions    An instructions for the esm
+ * @param   submit          A text for submit button
+ * @param   expirationThreshold An expiration threshold value as a second
+ * @param   trigger         An unique label for a trigger
+ * @return  NSMutableDictonary of a sample ESM Object for DatePicker (esm_type=7)
+ */
++ (NSMutableDictionary *) getEsmDictionaryAsPAMWithDeviceId:(NSString*)deviceId
+                                                         timestamp:(double) timestamp
+                                                             title:(NSString *) title
+                                                      instructions:(NSString *) instructions
+                                                            submit:(NSString *) submit
+                                               expirationThreshold:(NSNumber *) expirationThreshold
+                                                           trigger:(NSString*) trigger{
+    NSMutableDictionary * datePickerEsm = [self getEsmDictionaryWithDeviceId:deviceId
+                                                                   timestamp:timestamp
+                                                                        type:@8
+                                                                       title:title
+                                                                instructions:instructions
+                                                         expirationThreshold:expirationThreshold
+                                                                     trigger:trigger];
+    return [NSMutableDictionary dictionaryWithObject:datePickerEsm forKey:@"esm"];
 }
 
 @end
