@@ -561,6 +561,7 @@
 		160794491C1926840021816F /* AWAREFramework */ = {
 			isa = PBXGroup;
 			children = (
+				16C5416C1CC1014C008FEF57 /* View */,
 				16E7AF861C3D563F005C9EDC /* Study */,
 				16E7AF851C3D54E0005C9EDC /* Utils */,
 				1677AF2F1C2B4BB500F7C482 /* ESM */,
@@ -602,14 +603,8 @@
 				1623CE7A1BFD1B2C00EFAD72 /* LaunchScreen.storyboard */,
 				1623CE6C1BFD1B2C00EFAD72 /* AppDelegate.h */,
 				1623CE6D1BFD1B2C00EFAD72 /* AppDelegate.m */,
-				1623CE6F1BFD1B2C00EFAD72 /* ViewController.h */,
 				1623CE701BFD1B2C00EFAD72 /* ViewController.m */,
-				165A8B721C03C0B300898C6C /* GoogleLoginViewController.h */,
-				165A8B731C03C0B300898C6C /* GoogleLoginViewController.m */,
-				1623CEAD1BFD407900EFAD72 /* QRCodeViewController.h */,
-				1623CEAE1BFD407900EFAD72 /* QRCodeViewController.m */,
-				1648103E1C20ECC300B830D9 /* AWAREEsmViewController.h */,
-				1648103F1C20ECC300B830D9 /* AWAREEsmViewController.m */,
+				1623CE6F1BFD1B2C00EFAD72 /* ViewController.h */,
 				160794491C1926840021816F /* AWAREFramework */,
 				1623CE781BFD1B2C00EFAD72 /* Assets.xcassets */,
 				1623CE7D1BFD1B2C00EFAD72 /* Info.plist */,
@@ -873,6 +868,19 @@
 				16C1FF961C64501D00C070AA /* Debug.m */,
 			);
 			name = Debug;
+			sourceTree = "<group>";
+		};
+		16C5416C1CC1014C008FEF57 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				165A8B721C03C0B300898C6C /* GoogleLoginViewController.h */,
+				165A8B731C03C0B300898C6C /* GoogleLoginViewController.m */,
+				1623CEAD1BFD407900EFAD72 /* QRCodeViewController.h */,
+				1623CEAE1BFD407900EFAD72 /* QRCodeViewController.m */,
+				1648103E1C20ECC300B830D9 /* AWAREEsmViewController.h */,
+				1648103F1C20ECC300B830D9 /* AWAREEsmViewController.m */,
+			);
+			name = View;
 			sourceTree = "<group>";
 		};
 		16E155341C252B5B00316321 /* Plugins */ = {

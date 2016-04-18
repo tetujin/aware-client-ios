@@ -60,9 +60,11 @@
 		
 		<option value="//api/name/addNewSensor:">- addNewSensor:</option>
 		
-		<option value="//api/name/addNewSensorWithSensorName:uploadInterval:">- addNewSensorWithSensorName:uploadInterval:</option>
+		<option value="//api/name/createAllTables">- createAllTables</option>
 		
 		<option value="//api/name/getLatestSensorData:">- getLatestSensorData:</option>
+		
+		<option value="//api/name/initWithAWAREStudy:">- initWithAWAREStudy:</option>
 		
 		<option value="//api/name/isExist:">- isExist:</option>
 		
@@ -116,8 +118,8 @@
 
 						<div class="task-list">
 							<div class="section-method">
-	<a name="//api/name/stopAndRemoveAllSensors" title="stopAndRemoveAllSensors"></a>
-	<h3 class="method-title"><code><a href="#//api/name/stopAndRemoveAllSensors">&ndash;&nbsp;stopAndRemoveAllSensors</a></code>
+	<a name="//api/name/initWithAWAREStudy:" title="initWithAWAREStudy:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/initWithAWAREStudy:">&ndash;&nbsp;initWithAWAREStudy:</a></code>
 </h3>
 
 	<div class="method-info">
@@ -127,12 +129,12 @@
 			
 			
 			<div class="method-subsection brief-description">
-				<p>Remove all sensors from the manager after stop the sensors</p>
+				<p>Initializer</p>
 			</div>
 			
 		    
 
-			<div class="method-subsection method-declaration"><code>- (void)stopAndRemoveAllSensors</code></div>
+			<div class="method-subsection method-declaration"><code>- (instancetype)initWithAWAREStudy:(AWAREStudy *)<em>study</em></code></div>
 
 		    
 			
@@ -144,7 +146,7 @@
 			
 			<div class="method-subsection discussion-section">
 				<h4 class="method-subtitle">Discussion</h4>
-				<p>Remove all sensors from the manager after stop the sensors</p>
+				<p>Initializer</p>
 			</div>
 			
 
@@ -155,67 +157,7 @@
 			
 			<div class="method-subsection declared-in-section">
 				<h4 class="method-subtitle">Declared In</h4>
-				<p><code class="declared-in-ref">AWARESensorManager.m</code></p>
-			</div>
-			
-			
-		</div>
-	</div>
-</div><div class="section-method">
-	<a name="//api/name/stopASensor:" title="stopASensor:"></a>
-	<h3 class="method-title"><code><a href="#//api/name/stopASensor:">&ndash;&nbsp;stopASensor:</a></code>
-</h3>
-
-	<div class="method-info">
-		<div class="pointy-thing"></div>
-
-		<div class="method-info-container">
-			
-			
-			<div class="method-subsection brief-description">
-				<p>Stop a sensor with the sensor name.
-You can find the sensor name (key) on <a href="../Classes/AWAREKeys.html">AWAREKeys</a>.h and .m.</p>
-			</div>
-			
-		    
-
-			<div class="method-subsection method-declaration"><code>- (void)stopASensor:(NSString *)<em>sensorName</em></code></div>
-
-		    
-			
-			<div class="method-subsection arguments-section parameters">
-				<h4 class="method-subtitle parameter-title">Parameters</h4>
-				<table class="argument-def parameter-def">
-				
-					<tr>
-						<th scope="row" class="argument-name"><code>sensorName</code></th>
-						<td><p>A NSString sensor name (key)</p></td>
-					</tr>
-				
-				</table>
-			</div>
-			
-
-			
-
-			
-
-			
-			<div class="method-subsection discussion-section">
-				<h4 class="method-subtitle">Discussion</h4>
-				<p>Stop a sensor with the sensor name.
-You can find the sensor name (key) on <a href="../Classes/AWAREKeys.html">AWAREKeys</a>.h and .m.</p>
-			</div>
-			
-
-			
-
-			
-
-			
-			<div class="method-subsection declared-in-section">
-				<h4 class="method-subtitle">Declared In</h4>
-				<p><code class="declared-in-ref">AWARESensorManager.m</code></p>
+				<p><code class="declared-in-ref">AWARESensorManager.h</code></p>
 			</div>
 			
 			
@@ -280,8 +222,8 @@ You can find the sensor name (key) on <a href="../Classes/AWAREKeys.html">AWAREK
 		</div>
 	</div>
 </div><div class="section-method">
-	<a name="//api/name/addNewSensorWithSensorName:uploadInterval:" title="addNewSensorWithSensorName:uploadInterval:"></a>
-	<h3 class="method-title"><code><a href="#//api/name/addNewSensorWithSensorName:uploadInterval:">&ndash;&nbsp;addNewSensorWithSensorName:uploadInterval:</a></code>
+	<a name="//api/name/isExist:" title="isExist:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/isExist:">&ndash;&nbsp;isExist:</a></code>
 </h3>
 
 	<div class="method-info">
@@ -291,12 +233,13 @@ You can find the sensor name (key) on <a href="../Classes/AWAREKeys.html">AWAREK
 			
 			
 			<div class="method-subsection brief-description">
-				<p>Add a new sensor with upload interval</p>
+				<p>Check an existance of a sensor by a sensor name
+You can find and edit the keys on AWAREKeys.h and AWAREKeys.m</p>
 			</div>
 			
 		    
 
-			<div class="method-subsection method-declaration"><code>- (bool)addNewSensorWithSensorName:(NSString *)<em>key</em> uploadInterval:(double)<em>uploadTime</em></code></div>
+			<div class="method-subsection method-declaration"><code>- (BOOL)isExist:(NSString *)<em>key</em></code></div>
 
 		    
 			
@@ -306,22 +249,7 @@ You can find the sensor name (key) on <a href="../Classes/AWAREKeys.html">AWAREK
 				
 					<tr>
 						<th scope="row" class="argument-name"><code>key</code></th>
-						<td><p>A key for a sensor with NSString</p></td>
-					</tr>
-				
-					<tr>
-						<th scope="row" class="argument-name"><code>uploadTime</code></th>
-						<td><p>An upload insterval (second) with double</p></td>
-					</tr>
-				
-					<tr>
-						<th scope="row" class="argument-name"><code>settings</code></th>
-						<td><p>Settings of AWARE Study with NSArray</p></td>
-					</tr>
-				
-					<tr>
-						<th scope="row" class="argument-name"><code>plugings</code></th>
-						<td><p>Plugin sessings of AWARE Setudy with NSArray</p></td>
+						<td><p>A NSString key for a sensor</p></td>
 					</tr>
 				
 				</table>
@@ -331,7 +259,7 @@ You can find the sensor name (key) on <a href="../Classes/AWAREKeys.html">AWAREK
 			
 			<div class="method-subsection return">
 				<h4 class="method-subtitle parameter-title">Return Value</h4>
-				<p>A result of the generation of new sensor</p>
+				<p>An existance of the target sensor as a boolean value</p>
 			</div>
 			
 
@@ -340,7 +268,8 @@ You can find the sensor name (key) on <a href="../Classes/AWAREKeys.html">AWAREK
 			
 			<div class="method-subsection discussion-section">
 				<h4 class="method-subtitle">Discussion</h4>
-				<p>Add a new sensor with upload interval</p>
+				<p>Check an existance of a sensor by a sensor name
+You can find and edit the keys on AWAREKeys.h and AWAREKeys.m</p>
 			</div>
 			
 
@@ -358,8 +287,8 @@ You can find the sensor name (key) on <a href="../Classes/AWAREKeys.html">AWAREK
 		</div>
 	</div>
 </div><div class="section-method">
-	<a name="//api/name/getLatestSensorData:" title="getLatestSensorData:"></a>
-	<h3 class="method-title"><code><a href="#//api/name/getLatestSensorData:">&ndash;&nbsp;getLatestSensorData:</a></code>
+	<a name="//api/name/createAllTables" title="createAllTables"></a>
+	<h3 class="method-title"><code><a href="#//api/name/createAllTables">&ndash;&nbsp;createAllTables</a></code>
 </h3>
 
 	<div class="method-info">
@@ -369,13 +298,107 @@ You can find the sensor name (key) on <a href="../Classes/AWAREKeys.html">AWAREK
 			
 			
 			<div class="method-subsection brief-description">
-				<p>Provide latest sensor data by each sensor as NSString value.
-You can access the data by using sensor names (keys) on <a href="../Classes/AWAREKeys.html">AWAREKeys</a>.h and .m.</p>
+				<p><a href="../Classes/Debug.html">Debug</a> Sensor
+NOTE: don&rsquo;t remove this sensor. This sensor collects and upload debug message to the server each 15 min.</p>
 			</div>
 			
 		    
 
-			<div class="method-subsection method-declaration"><code>- (NSString *)getLatestSensorData:(NSString *)<em>sensorName</em></code></div>
+			<div class="method-subsection method-declaration"><code>- (BOOL)createAllTables</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p><a href="../Classes/Debug.html">Debug</a> Sensor
+NOTE: don&rsquo;t remove this sensor. This sensor collects and upload debug message to the server each 15 min.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">AWARESensorManager.m</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/stopAndRemoveAllSensors" title="stopAndRemoveAllSensors"></a>
+	<h3 class="method-title"><code><a href="#//api/name/stopAndRemoveAllSensors">&ndash;&nbsp;stopAndRemoveAllSensors</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Remove all sensors from the manager after stop the sensors</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)stopAndRemoveAllSensors</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Remove all sensors from the manager after stop the sensors</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">AWARESensorManager.m</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/stopASensor:" title="stopASensor:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/stopASensor:">&ndash;&nbsp;stopASensor:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Stop a sensor with the sensor name.
+You can find the sensor name (key) on AWAREKeys.h and .m.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)stopASensor:(NSString *)<em>sensorName</em></code></div>
 
 		    
 			
@@ -393,19 +416,14 @@ You can access the data by using sensor names (keys) on <a href="../Classes/AWAR
 			
 
 			
-			<div class="method-subsection return">
-				<h4 class="method-subtitle parameter-title">Return Value</h4>
-				<p>A latest sensor value as</p>
-			</div>
-			
 
 			
 
 			
 			<div class="method-subsection discussion-section">
 				<h4 class="method-subtitle">Discussion</h4>
-				<p>Provide latest sensor data by each sensor as NSString value.
-You can access the data by using sensor names (keys) on <a href="../Classes/AWAREKeys.html">AWAREKeys</a>.h and .m.</p>
+				<p>Stop a sensor with the sensor name.
+You can find the sensor name (key) on AWAREKeys.h and .m.</p>
 			</div>
 			
 
@@ -519,8 +537,8 @@ During an uploading process, an AWARE can not access to the file.</p>
 		</div>
 	</div>
 </div><div class="section-method">
-	<a name="//api/name/isExist:" title="isExist:"></a>
-	<h3 class="method-title"><code><a href="#//api/name/isExist:">&ndash;&nbsp;isExist:</a></code>
+	<a name="//api/name/getLatestSensorData:" title="getLatestSensorData:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/getLatestSensorData:">&ndash;&nbsp;getLatestSensorData:</a></code>
 </h3>
 
 	<div class="method-info">
@@ -530,13 +548,13 @@ During an uploading process, an AWARE can not access to the file.</p>
 			
 			
 			<div class="method-subsection brief-description">
-				<p>Check an existance of a sensor by a sensor name
-You can find and edit the keys on <a href="../Classes/AWAREKeys.html">AWAREKeys</a>.h and <a href="../Classes/AWAREKeys.html">AWAREKeys</a>.m</p>
+				<p>Provide latest sensor data by each sensor as NSString value.
+You can access the data by using sensor names (keys) on AWAREKeys.h and .m.</p>
 			</div>
 			
 		    
 
-			<div class="method-subsection method-declaration"><code>- (BOOL)isExist:(NSString *)<em>key</em></code></div>
+			<div class="method-subsection method-declaration"><code>- (NSString *)getLatestSensorData:(NSString *)<em>sensorName</em></code></div>
 
 		    
 			
@@ -545,8 +563,8 @@ You can find and edit the keys on <a href="../Classes/AWAREKeys.html">AWAREKeys<
 				<table class="argument-def parameter-def">
 				
 					<tr>
-						<th scope="row" class="argument-name"><code>key</code></th>
-						<td><p>A NSString key for a sensor</p></td>
+						<th scope="row" class="argument-name"><code>sensorName</code></th>
+						<td><p>A NSString sensor name (key)</p></td>
 					</tr>
 				
 				</table>
@@ -556,7 +574,7 @@ You can find and edit the keys on <a href="../Classes/AWAREKeys.html">AWAREKeys<
 			
 			<div class="method-subsection return">
 				<h4 class="method-subtitle parameter-title">Return Value</h4>
-				<p>An existance of the target sensor as a boolean value</p>
+				<p>A latest sensor value as</p>
 			</div>
 			
 
@@ -565,8 +583,8 @@ You can find and edit the keys on <a href="../Classes/AWAREKeys.html">AWAREKeys<
 			
 			<div class="method-subsection discussion-section">
 				<h4 class="method-subtitle">Discussion</h4>
-				<p>Check an existance of a sensor by a sensor name
-You can find and edit the keys on <a href="../Classes/AWAREKeys.html">AWAREKeys</a>.h and <a href="../Classes/AWAREKeys.html">AWAREKeys</a>.m</p>
+				<p>Provide latest sensor data by each sensor as NSString value.
+You can access the data by using sensor names (keys) on AWAREKeys.h and .m.</p>
 			</div>
 			
 
@@ -598,7 +616,7 @@ You can find and edit the keys on <a href="../Classes/AWAREKeys.html">AWAREKeys<
 				<footer>
 					<div class="footer-copyright">
 						
-						<p class="copyright">Copyright &copy; 2016 AWARE. All rights reserved. Updated: 2016-03-17</p>
+						<p class="copyright">Copyright &copy; 2016 AWARE. All rights reserved. Updated: 2016-04-16</p>
 						
 						
 						<p class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2.1 (build 1334)</a>.</p>

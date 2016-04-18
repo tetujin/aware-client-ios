@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="14F1605" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="deG-VO-c8c">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="deG-VO-c8c">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
         <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
     </dependencies>
     <scenes>
@@ -19,7 +19,7 @@
                                 <rect key="frame" x="0.0" y="92" width="600" height="95"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Jlv-Hb-QNm" id="9JS-s5-0aB">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="94.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="95"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>
@@ -30,10 +30,9 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="AWARE" id="tQb-LZ-vWa">
-                        <barButtonItem key="leftBarButtonItem" image="user_male_circle" id="9xQ-aR-t9x">
+                        <barButtonItem key="leftBarButtonItem" image="esm_icon_menubar" id="dLq-Iu-AXX">
                             <connections>
-                                <action selector="pushedGoogleLogin:" destination="68D-Qb-jCP" id="yYo-5p-SGp"/>
-                                <segue destination="Civ-lf-EA0" kind="push" id="cpt-8w-Epg"/>
+                                <action selector="pushedEsmButtonOnNavigationBar:" destination="68D-Qb-jCP" id="qDy-Bd-Cmg"/>
                             </connections>
                         </barButtonItem>
                         <rightBarButtonItems>
@@ -52,11 +51,12 @@
                     <connections>
                         <outlet property="refreshButton" destination="bHX-ZG-1pZ" id="r6I-AI-x2T"/>
                         <segue destination="z9G-jw-719" kind="push" identifier="esmView" id="tu2-01-ZjG"/>
+                        <segue destination="Civ-lf-EA0" kind="push" identifier="googleLogin" id="ci2-wr-KRg"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eTN-Zo-OWZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1988" y="-150"/>
+            <point key="canvasLocation" x="2025" y="-130"/>
         </scene>
         <!--Esm View Controller-->
         <scene sceneID="vio-2b-1Ih">
@@ -90,7 +90,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OOG-hI-93n" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1954" y="881"/>
+            <point key="canvasLocation" x="2025" y="599"/>
         </scene>
         <!--Code View Controller-->
         <scene sceneID="lwO-zc-Y6Y">
@@ -214,7 +214,7 @@
     </scenes>
     <resources>
         <image name="QR_code_filled" width="32" height="32"/>
+        <image name="esm_icon_menubar" width="31" height="31"/>
         <image name="ic_launcher_aware-web" width="512" height="512"/>
-        <image name="user_male_circle" width="32" height="32"/>
     </resources>
 </document>

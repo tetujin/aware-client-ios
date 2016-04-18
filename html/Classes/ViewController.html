@@ -62,23 +62,15 @@
 		
 		<option value="//api/name/appDidBecomeActive:">- appDidBecomeActive:</option>
 		
-		<option value="//api/name/changedBatteryState:">- changedBatteryState:</option>
-		
 		<option value="//api/name/getCelContent:desc:image:key:">- getCelContent:desc:image:key:</option>
 		
-		<option value="//api/name/gridMenu:willDismissWithSelectedItem:atIndex:">- gridMenu:willDismissWithSelectedItem:atIndex:</option>
-		
 		<option value="//api/name/initContentsOnTableView">- initContentsOnTableView</option>
-		
-		<option value="//api/name/initLocationSensor">- initLocationSensor</option>
-		
-		<option value="//api/name/initSensors">- initSensors</option>
-		
-		<option value="//api/name/locationManager:didUpdateLocations:">- locationManager:didUpdateLocations:</option>
 		
 		<option value="//api/name/pushedStudyRefreshButton:">- pushedStudyRefreshButton:</option>
 		
 		<option value="//api/name/tableView:didSelectRowAtIndexPath:">- tableView:didSelectRowAtIndexPath:</option>
+		
+		<option value="//api/name/viewDidLoad">- viewDidLoad</option>
 		
 	</optgroup>
 	
@@ -104,7 +96,7 @@
 	<td>UITableViewController</td>
 </tr><tr>
 	<th>Conforms to</th>
-	<td>CLLocationManagerDelegate<br />RNGridMenuDelegate<br />UIAlertViewDelegate<br />UINavigationBarDelegate<br />UITabBarControllerDelegate<br />UITableViewDataSource<br />UITableViewDelegate</td>
+	<td>UIAlertViewDelegate<br />UINavigationBarDelegate<br />UITabBarControllerDelegate<br />UITableViewDataSource<br />UITableViewDelegate</td>
 </tr><tr>
 	<th>Declared in</th>
 	<td>ViewController.h<br />ViewController.m</td>
@@ -181,8 +173,8 @@ and/or done daily study update), this method is called before the -initList.</p>
 
 						<div class="task-list">
 							<div class="section-method">
-	<a name="//api/name/gridMenu:willDismissWithSelectedItem:atIndex:" title="gridMenu:willDismissWithSelectedItem:atIndex:"></a>
-	<h3 class="method-title"><code><a href="#//api/name/gridMenu:willDismissWithSelectedItem:atIndex:">&ndash;&nbsp;gridMenu:willDismissWithSelectedItem:atIndex:</a></code>
+	<a name="//api/name/viewDidLoad" title="viewDidLoad"></a>
+	<h3 class="method-title"><code><a href="#//api/name/viewDidLoad">&ndash;&nbsp;viewDidLoad</a></code>
 </h3>
 
 	<div class="method-info">
@@ -197,7 +189,7 @@ and/or done daily study update), this method is called before the -initList.</p>
 			
 		    
 
-			<div class="method-subsection method-declaration"><code>- (void)gridMenu:(RNGridMenu *)<em>gridMenu</em> willDismissWithSelectedItem:(RNGridMenuItem *)<em>item</em> atIndex:(NSInteger)<em>itemIndex</em></code></div>
+			<div class="method-subsection method-declaration"><code>- (void)viewDidLoad</code></div>
 
 		    
 			
@@ -210,52 +202,6 @@ and/or done daily study update), this method is called before the -initList.</p>
 			<div class="method-subsection discussion-section">
 				<h4 class="method-subtitle">Discussion</h4>
 				<p>A timer for updating a list view</p>
-			</div>
-			
-
-			
-
-			
-
-			
-			<div class="method-subsection declared-in-section">
-				<h4 class="method-subtitle">Declared In</h4>
-				<p><code class="declared-in-ref">ViewController.m</code></p>
-			</div>
-			
-			
-		</div>
-	</div>
-</div><div class="section-method">
-	<a name="//api/name/changedBatteryState:" title="changedBatteryState:"></a>
-	<h3 class="method-title"><code><a href="#//api/name/changedBatteryState:">&ndash;&nbsp;changedBatteryState:</a></code>
-</h3>
-
-	<div class="method-info">
-		<div class="pointy-thing"></div>
-
-		<div class="method-info-container">
-			
-			
-			<div class="method-subsection brief-description">
-				<p>Start data sync with all sensors in the background when the device is started a battery charging.</p>
-			</div>
-			
-		    
-
-			<div class="method-subsection method-declaration"><code>- (void)changedBatteryState:(id)<em>sender</em></code></div>
-
-		    
-			
-
-			
-
-			
-
-			
-			<div class="method-subsection discussion-section">
-				<h4 class="method-subtitle">Discussion</h4>
-				<p>Start data sync with all sensors in the background when the device is started a battery charging.</p>
 			</div>
 			
 
@@ -306,104 +252,6 @@ If an <a href="../Classes/ESM.html">ESM</a> is existed, AWARE iOS move to the <a
 				<p>This method is called when application did becase active.
 And also, this method check <a href="../Classes/ESM.html">ESM</a> existance using <a href="../Classes/ESMStorageHelper.html">ESMStorageHelper</a>.
 If an <a href="../Classes/ESM.html">ESM</a> is existed, AWARE iOS move to the <a href="../Classes/ESM.html">ESM</a> answer page.</p>
-			</div>
-			
-
-			
-
-			
-
-			
-			<div class="method-subsection declared-in-section">
-				<h4 class="method-subtitle">Declared In</h4>
-				<p><code class="declared-in-ref">ViewController.m</code></p>
-			</div>
-			
-			
-		</div>
-	</div>
-</div><div class="section-method">
-	<a name="//api/name/initLocationSensor" title="initLocationSensor"></a>
-	<h3 class="method-title"><code><a href="#//api/name/initLocationSensor">&ndash;&nbsp;initLocationSensor</a></code>
-</h3>
-
-	<div class="method-info">
-		<div class="pointy-thing"></div>
-
-		<div class="method-info-container">
-			
-			
-			<div class="method-subsection brief-description">
-				<p>This method is an initializers for a location sensor.
-On the iOS, we have to turn on the location sensor
-for using application in the background.
-And also, this sensing interval is the most low level.</p>
-			</div>
-			
-		    
-
-			<div class="method-subsection method-declaration"><code>- (void)initLocationSensor</code></div>
-
-		    
-			
-
-			
-
-			
-
-			
-			<div class="method-subsection discussion-section">
-				<h4 class="method-subtitle">Discussion</h4>
-				<p>This method is an initializers for a location sensor.
-On the iOS, we have to turn on the location sensor
-for using application in the background.
-And also, this sensing interval is the most low level.</p>
-			</div>
-			
-
-			
-
-			
-
-			
-			<div class="method-subsection declared-in-section">
-				<h4 class="method-subtitle">Declared In</h4>
-				<p><code class="declared-in-ref">ViewController.m</code></p>
-			</div>
-			
-			
-		</div>
-	</div>
-</div><div class="section-method">
-	<a name="//api/name/locationManager:didUpdateLocations:" title="locationManager:didUpdateLocations:"></a>
-	<h3 class="method-title"><code><a href="#//api/name/locationManager:didUpdateLocations:">&ndash;&nbsp;locationManager:didUpdateLocations:</a></code>
-</h3>
-
-	<div class="method-info">
-		<div class="pointy-thing"></div>
-
-		<div class="method-info-container">
-			
-			
-			<div class="method-subsection brief-description">
-				<p>The method is called by location sensor when the device location is changed.</p>
-			</div>
-			
-		    
-
-			<div class="method-subsection method-declaration"><code>- (void)locationManager:(CLLocationManager *)<em>manager</em> didUpdateLocations:(NSArray&lt;CLLocation*&gt; *)<em>locations</em></code></div>
-
-		    
-			
-
-			
-
-			
-
-			
-			<div class="method-subsection discussion-section">
-				<h4 class="method-subtitle">Discussion</h4>
-				<p>The method is called by location sensor when the device location is changed.</p>
 			</div>
 			
 
@@ -549,52 +397,6 @@ And also, this method return the document type variable for the sensor list.</p>
 		</div>
 	</div>
 </div><div class="section-method">
-	<a name="//api/name/initSensors" title="initSensors"></a>
-	<h3 class="method-title"><code><a href="#//api/name/initSensors">&ndash;&nbsp;initSensors</a></code>
-</h3>
-
-	<div class="method-info">
-		<div class="pointy-thing"></div>
-
-		<div class="method-info-container">
-			
-			
-			<div class="method-subsection brief-description">
-				<p>When a study is refreshed (e.g., pushed refresh button, changed settings, and/or done daily study update), this method is called before the -initList.</p>
-			</div>
-			
-		    
-
-			<div class="method-subsection method-declaration"><code>- (void)initSensors</code></div>
-
-		    
-			
-
-			
-
-			
-
-			
-			<div class="method-subsection discussion-section">
-				<h4 class="method-subtitle">Discussion</h4>
-				<p>When a study is refreshed (e.g., pushed refresh button, changed settings, and/or done daily study update), this method is called before the -initList.</p>
-			</div>
-			
-
-			
-
-			
-
-			
-			<div class="method-subsection declared-in-section">
-				<h4 class="method-subtitle">Declared In</h4>
-				<p><code class="declared-in-ref">ViewController.m</code></p>
-			</div>
-			
-			
-		</div>
-	</div>
-</div><div class="section-method">
 	<a name="//api/name/tableView:didSelectRowAtIndexPath:" title="tableView:didSelectRowAtIndexPath:"></a>
 	<h3 class="method-title"><code><a href="#//api/name/tableView:didSelectRowAtIndexPath:">&ndash;&nbsp;tableView:didSelectRowAtIndexPath:</a></code>
 </h3>
@@ -703,7 +505,7 @@ If an <a href="../Classes/AWARESensor.html">AWARESensor</a> need specific fancti
 				<footer>
 					<div class="footer-copyright">
 						
-						<p class="copyright">Copyright &copy; 2016 AWARE. All rights reserved. Updated: 2016-03-17</p>
+						<p class="copyright">Copyright &copy; 2016 AWARE. All rights reserved. Updated: 2016-04-16</p>
 						
 						
 						<p class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2.1 (build 1334)</a>.</p>
