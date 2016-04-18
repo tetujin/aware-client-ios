@@ -15,8 +15,8 @@
 @interface ViewController : UITableViewController <UITableViewDelegate, UITableViewDataSource, UITabBarControllerDelegate, UINavigationBarDelegate, UIAlertViewDelegate>
 
 - (IBAction)pushedStudyRefreshButton:(id)sender;
-- (IBAction)pushedGoogleLogin:(id)sender;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *refreshButton;
+- (IBAction)pushedEsmButtonOnNavigationBar:(id)sender;
 
 @property (nonatomic,strong) NSMutableArray *sensors;
 @property MQTTClient *client;

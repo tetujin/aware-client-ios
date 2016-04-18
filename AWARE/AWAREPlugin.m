@@ -12,8 +12,6 @@
 
 @implementation AWAREPlugin {
     NSMutableArray* awareSensors;
-//    NSMutableArray* awareTimers;
-//    sNSTimer* timer;
 }
 
 /**
@@ -53,7 +51,9 @@
  * Add new AWARE Sensor
  */
 - (void) addAnAwareSensor:(AWARESensor *) sensor {
-    [awareSensors addObject:sensor];
+    if (sensor != nil) {
+        [awareSensors addObject:sensor];
+    }
 }
 //
 //
