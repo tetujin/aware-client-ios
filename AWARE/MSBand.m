@@ -23,6 +23,9 @@
     NSString* PLUGIN_MSBAND_SENSORS_ALTIMETER;
     NSString* PLUGIN_MSBAND_SENSORS_BAROMETER;
     
+    double intervalMin;
+    double activeMin;
+    
     AWAREStudy * awareStudy;
     
     // sensors
@@ -56,6 +59,9 @@
         PLUGIN_MSBAND_SENSORS_GSR = @"plugin_msband_sensors_gsr";
         PLUGIN_MSBAND_SENSORS_ALTIMETER = @"plugin_msband_sensors_altimeter";
         PLUGIN_MSBAND_SENSORS_BAROMETER = @"plugin_msband_sensors_barometer";
+        
+        intervalMin = 10;
+        activeMin = 1;
         
         [MSBClientManager sharedManager].delegate = self;
         NSArray	*clients = [[MSBClientManager sharedManager] attachedClients];
@@ -135,7 +141,13 @@
         NSLog(@"Start MSBand Sensor!");
     }
     
-    timer = [NSTimer scheduledTimerWithTimeInterval:60.0f * 10.0f
+    // active_time_interval_in_minute
+    intervalMin = [self getSensorSetting:settings withKey:@"active_time_interval_in_minute"];
+    
+    // active_time_in_minute
+    activeMin = [self getSensorSetting:settings withKey:@"active_time_in_minute"];
+    
+    timer = [NSTimer scheduledTimerWithTimeInterval:60.0f * intervalMin
                                              target:self
                                            selector:@selector(startDutyCycle)
                                            userInfo:nil
@@ -143,12 +155,6 @@
     [timer fire];
     
     return YES;
-}
-
-- (void) startDutyCycle {
-    NSLog(@"Start a duty cycle...");
-    [self startMSBSensors];
-    [self performSelector:@selector(stopMSBSensors) withObject:nil afterDelay:60.0f];
 }
 
 - (BOOL) stopAllSensors{
@@ -159,37 +165,9 @@
     return YES;
 }
 
-
-- (void)syncAwareDB{
-    [super syncAwareDB];
+- (BOOL)stopSensor{
+    return [self stopAllSensors];
 }
-
-- (BOOL)syncAwareDBInForeground{
-    return [super syncAwareDBInForeground];
-}
-
-
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
-
-
-/**
- * MSBand Delegate
- */
-- (void)clientManager:(MSBClientManager *)clientManager
-               client:(MSBClient *)client
-didFailToConnectWithError:(NSError *)error{
-    
-}
-
-- (void) clientManager:(MSBClientManager *)clientManager clientDidConnect:(MSBClient *)client {
-    NSLog(@"Microsoft Band is connected!");
-}
-
-- (void) clientManager:(MSBClientManager *)clientManager clientDidDisconnect:(MSBClient *)client{
-    NSLog(@"Microsoft Band is disconnected!");
-}
-
 
 
 /////////////////////////////////////////////////////////////////////////
@@ -230,6 +208,52 @@ didFailToConnectWithError:(NSError *)error{
     [self.client.sensorManager stopSkinTempUpdatesErrorRef:nil];
     [self.client.sensorManager stopUVUpdatesErrorRef:nil];
 }
+
+
+
+//////////////////////////////////////
+/////////////////////////////////////
+
+- (void)syncAwareDB{
+    [super syncAwareDB];
+}
+
+- (BOOL)syncAwareDBInForeground{
+    return [super syncAwareDBInForeground];
+}
+
+
+///////////////////////////////////////////
+///////////////////////////////////////////
+
+- (void) startDutyCycle {
+    NSLog(@"Start a duty cycle...");
+    [self startMSBSensors];
+    [self performSelector:@selector(stopMSBSensors) withObject:nil afterDelay:activeMin*60.0f];
+}
+
+
+///////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////
+
+
+/**
+ * MSBand Delegate
+ */
+- (void)clientManager:(MSBClientManager *)clientManager
+               client:(MSBClient *)client
+didFailToConnectWithError:(NSError *)error{
+    
+}
+
+- (void) clientManager:(MSBClientManager *)clientManager clientDidConnect:(MSBClient *)client {
+    NSLog(@"Microsoft Band is connected!");
+}
+
+- (void) clientManager:(MSBClientManager *)clientManager clientDidDisconnect:(MSBClient *)client{
+    NSLog(@"Microsoft Band is disconnected!");
+}
+
 
 
 
