@@ -79,12 +79,6 @@
  */
 - (BOOL)startAllSensors:(double)upInterval
            withSettings:(NSArray *)settings{
-//        timer = [NSTimer scheduledTimerWithTimeInterval:upInterval
-//                                                          target:self
-//                                                        selector:@selector(syncAwareDB)
-//                                                        userInfo:nil
-//                                                         repeats:YES];
-//        [timer fire];
     return YES;
 }
 
