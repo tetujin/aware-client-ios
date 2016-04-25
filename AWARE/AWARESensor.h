@@ -17,6 +17,8 @@
 - (BOOL) stopSensor;
 - (void) syncAwareDB;
 - (void) createTable;
+- (void) changedBatteryState;
+- (void) calledBackgroundFetch;
 
 - (NSString *) getSensorName;
 

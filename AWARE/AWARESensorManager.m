@@ -228,9 +228,9 @@
      */
     
     // Pedometer
-    AWARESensor * steps = [[Pedometer alloc] initWithSensorName:SENSOR_PLUGIN_PEDOMETER withAwareStudy:awareStudy];
-    [steps startSensor:uploadInterval withSettings:nil];
-    [self addNewSensor:steps];
+//    AWARESensor * steps = [[Pedometer alloc] initWithSensorName:SENSOR_PLUGIN_PEDOMETER withAwareStudy:awareStudy];
+//    [steps startSensor:uploadInterval withSettings:nil];
+//    [self addNewSensor:steps];
     
     // HealthKit
 //    AWARESensor *healthKit = [[AWAREHealthKit alloc] initWithSensorName:@"plugin_health_kit" withAwareStudy:awareStudy];
@@ -457,6 +457,13 @@
 - (void) stopUploadTimer{
     [uploadTimer invalidate];
     uploadTimer = nil;
+}
+
+- (void)runBatteryStateChangeEvents{
+    if(awareSensors == nil) return;
+    for (AWARESensor * sensor in awareSensors) {
+        [sensor changedBatteryState];
+    }
 }
 
 
