@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		1607944C1C19274C0021816F /* AWAREStudy.m in Sources */ = {isa = PBXBuildFile; fileRef = 1607944B1C19274C0021816F /* AWAREStudy.m */; };
 		160794511C1A4E380021816F /* AWAREMqtt.m in Sources */ = {isa = PBXBuildFile; fileRef = 160794501C1A4E380021816F /* AWAREMqtt.m */; };
+		160E1A011CD1D9C700D825BA /* libEZAudio.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 160E1A001CD1D9C700D825BA /* libEZAudio.a */; };
+		160E1A051CD1F28100D825BA /* AudioAnalysis.m in Sources */ = {isa = PBXBuildFile; fileRef = 160E1A041CD1F28100D825BA /* AudioAnalysis.m */; };
 		160EE9BD1C050B4C00015688 /* Bluetooth.m in Sources */ = {isa = PBXBuildFile; fileRef = 160EE9BC1C050B4C00015688 /* Bluetooth.m */; };
 		160EE9BF1C050B9000015688 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 160EE9BE1C050B9000015688 /* CoreBluetooth.framework */; };
 		160EE9C31C052DAA00015688 /* OpenWeather.m in Sources */ = {isa = PBXBuildFile; fileRef = 160EE9C21C052DAA00015688 /* OpenWeather.m */; };
@@ -145,6 +147,9 @@
 		1607944D1C1A240F0021816F /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
 		1607944F1C1A4E380021816F /* AWAREMqtt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AWAREMqtt.h; sourceTree = "<group>"; };
 		160794501C1A4E380021816F /* AWAREMqtt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AWAREMqtt.m; sourceTree = "<group>"; };
+		160E1A001CD1D9C700D825BA /* libEZAudio.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libEZAudio.a; path = "../../../../../Library/Developer/Xcode/DerivedData/AWARE-evlxgvvrprnzwggplvxmzqjujmcn/Build/Products/Debug-iphoneos/libEZAudio.a"; sourceTree = "<group>"; };
+		160E1A031CD1F28100D825BA /* AudioAnalysis.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioAnalysis.h; sourceTree = "<group>"; };
+		160E1A041CD1F28100D825BA /* AudioAnalysis.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioAnalysis.m; sourceTree = "<group>"; };
 		160EE9BB1C050B4C00015688 /* Bluetooth.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bluetooth.h; sourceTree = "<group>"; };
 		160EE9BC1C050B4C00015688 /* Bluetooth.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Bluetooth.m; sourceTree = "<group>"; };
 		160EE9BE1C050B9000015688 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
@@ -349,6 +354,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				160E1A011CD1D9C700D825BA /* libEZAudio.a in Frameworks */,
 				165870221C9903D3008B99D2 /* IOKit.framework in Frameworks */,
 				1658700A1C986D4F008B99D2 /* QuartzCore.framework in Frameworks */,
 				165DECF61C83AD7D002C88CA /* ExternalAccessory.framework in Frameworks */,
@@ -974,6 +980,8 @@
 			children = (
 				168683041C07C48900CB4266 /* AmbientNoise.h */,
 				168683051C07C48900CB4266 /* AmbientNoise.m */,
+				160E1A031CD1F28100D825BA /* AudioAnalysis.h */,
+				160E1A041CD1F28100D825BA /* AudioAnalysis.m */,
 			);
 			name = AmbientNoise;
 			sourceTree = "<group>";
@@ -1017,6 +1025,7 @@
 		2A3CA9F5620967BACB187EB7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				160E1A001CD1D9C700D825BA /* libEZAudio.a */,
 				16D91B631CA9454D00A5FD4F /* BluetoothManager.framework */,
 				16D91B5D1CA9447A00A5FD4F /* MicrosoftBandKit_iOS.framework */,
 				165870211C9903D3008B99D2 /* IOKit.framework */,
@@ -1341,6 +1350,7 @@
 				169A7B491C00591A00A7C06D /* LinearAccelerometer.m in Sources */,
 				1623FFE01C5DCF7900F3E3E4 /* Pedometer.m in Sources */,
 				1623CE6B1BFD1B2C00EFAD72 /* main.m in Sources */,
+				160E1A051CD1F28100D825BA /* AudioAnalysis.m in Sources */,
 				165DED001C87C9C5002C88CA /* Labels.m in Sources */,
 				164DD65F1C1F9F1900ADA92B /* DeviceUsage.m in Sources */,
 			);

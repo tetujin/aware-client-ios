@@ -50,6 +50,7 @@
 #import "BLEHeartRate.h"
 #import "Memory.h"
 #import "AWAREHealthKit.h"
+#import "AmbientNoise.h"
 
 #import "Observer.h"
 
@@ -209,6 +210,8 @@
                 awareSensor = [[Scheduler alloc] initWithSensorName:SENSOR_PLUGIN_CAMPUS withAwareStudy:awareStudy];
             }else if([pluginName isEqualToString:[NSString stringWithFormat:@"status_%@",SENSOR_GOOGLE_FUSED_LOCATION]]){
                 awareSensor = [[FusedLocations alloc] initWithSensorName:SENSOR_GOOGLE_FUSED_LOCATION withAwareStudy:awareStudy];
+            }else if([pluginName isEqualToString:[NSString stringWithFormat:@"status_%@",SENSOR_AMBIENT_NOISE]]){
+                awareSensor = [[AmbientNoise alloc] initWithSensorName:SENSOR_AMBIENT_NOISE withAwareStudy:awareStudy];
             }
             
             if(awareSensor != nil){
@@ -243,9 +246,9 @@
     [self addNewSensor:memory];
     
     // BLE Heart Rate
-    AWARESensor *bleHeartRate = [[BLEHeartRate alloc] initWithSensorName:SENSOR_BLE_HEARTRATE withAwareStudy:awareStudy];
-    [bleHeartRate startSensor:uploadInterval withSettings:nil];
-    [self addNewSensor:bleHeartRate];
+//    AWARESensor *bleHeartRate = [[BLEHeartRate alloc] initWithSensorName:SENSOR_BLE_HEARTRATE withAwareStudy:awareStudy];
+//    [bleHeartRate startSensor:uploadInterval withSettings:nil];
+//    [self addNewSensor:bleHeartRate];
     
     // Observer
     AWARESensor *observer = [[Observer alloc] initWithSensorName:@"" withAwareStudy:awareStudy];

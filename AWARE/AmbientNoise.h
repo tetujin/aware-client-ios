@@ -8,8 +8,37 @@
 
 #import "AWARESensor.h"
 #import "AWAREKeys.h"
+#import <Accelerate/Accelerate.h>
 #import <AudioToolbox/AudioToolbox.h>
+#import <AVFoundation/AVFoundation.h>
+#import <GLKit/GLKit.h>
+#include <EZAudio/EZAudio.h>
 
-@interface AmbientNoise : AWARESensor <AWARESensorDelegate>
+//
+// By default this will record a file to the application's documents directory
+// (within the application's sandbox)
+//
+#define kAudioFilePath @"rawAudioData.m4a"
+
+@interface AmbientNoise : AWARESensor <AWARESensorDelegate, EZMicrophoneDelegate, EZRecorderDelegate, EZAudioFFTDelegate>
+//
+// The microphone component
+//
+@property (nonatomic, strong) EZMicrophone *microphone;
+
+//
+// The recorder component
+//
+@property (nonatomic, strong) EZRecorder *recorder;
+
+//
+// Used to calculate a rolling FFT of the incoming audio data.
+//
+@property (nonatomic, strong) EZAudioFFTRolling *fft;
+
+//
+// A flag indicating whether we are recording or not
+//
+@property (nonatomic, assign) BOOL isRecording;
 
 @end

@@ -147,37 +147,37 @@
     if (motionActivity.unknown){
         motionName = @"unknown";
         motionType = @4;
-        [activities addObject:[self getActivityDicWithName:motionName confidence:motionConfidence]];
+//        [activities addObject:[self getActivityDicWithName:motionName confidence:motionConfidence]];
     }
     
     if (motionActivity.stationary){
         motionName = @"still";
         motionType = @3;
-        [activities addObject:[self getActivityDicWithName:motionName confidence:motionConfidence]];
+//        [activities addObject:[self getActivityDicWithName:motionName confidence:motionConfidence]];
     }
     
     if (motionActivity.running){
         motionName = @"running";
         motionType = @8;
-        [activities addObject:[self getActivityDicWithName:motionName confidence:motionConfidence]];
+//        [activities addObject:[self getActivityDicWithName:motionName confidence:motionConfidence]];
     }
     
     if (motionActivity.walking){
         motionName = @"walking";
         motionType = @7;
-        [activities addObject:[self getActivityDicWithName:motionName confidence:motionConfidence]];
+//        [activities addObject:[self getActivityDicWithName:motionName confidence:motionConfidence]];
     }
     
     if (motionActivity.automotive){
         motionName = @"in_vehicle";
         motionType = @1;
-        [activities addObject:[self getActivityDicWithName:motionName confidence:motionConfidence]];
+//        [activities addObject:[self getActivityDicWithName:motionName confidence:motionConfidence]];
     }
     
     if (motionActivity.cycling){
         motionName = @"on_bicycle";
         motionType = @1;
-        [activities addObject:[self getActivityDicWithName:motionName confidence:motionConfidence]];
+//        [activities addObject:[self getActivityDicWithName:motionName confidence:motionConfidence]];
     }
     
     NSString * activitiesStr = @"";

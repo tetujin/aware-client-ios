@@ -467,10 +467,11 @@ handleEventsForBackgroundURLSession:(NSString *)identifier
     token = [token stringByReplacingOccurrencesOfString:@"<" withString:@""];
     token = [token stringByReplacingOccurrencesOfString:@">" withString:@""];
     token = [token stringByReplacingOccurrencesOfString:@" " withString:@""];
-    NSLog(@"%@", token);
+    
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     [defaults setObject:token forKey:KEY_APNS_TOKEN];
     [defaults synchronize];
+    
     NSLog(@"deviceToken: %@", token);
 }
 
