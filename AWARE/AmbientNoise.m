@@ -8,6 +8,7 @@
 
 #import "AmbientNoise.h"
 #import "AudioAnalysis.h"
+#import "AppDelegate.h"
 
 static vDSP_Length const FFTViewControllerFFTWindowSize = 4096;
 
@@ -33,8 +34,9 @@ static vDSP_Length const FFTViewControllerFFTWindowSize = 4096;
     
     float recordingSampleRate;
     float targetSampleRate;
-    long lastSetAudioSessionTime;
+//    long lastSetAudioSessionTime;
     
+    int currentSecond;
     
     float maxFrequency;
     double db;
@@ -75,6 +77,8 @@ static vDSP_Length const FFTViewControllerFFTWindowSize = 4096;
         frequencyMin = 5;
         sampleSize = 30;
         silenceThreshold = 50;
+        
+        currentSecond = 0;
         
         recordingSampleRate = 44100;
         targetSampleRate = 8000;
@@ -139,12 +143,7 @@ static vDSP_Length const FFTViewControllerFFTWindowSize = 4096;
     
     [self setupMicrophone];
     
-    // Initialize the microphone instance and assign it a delegate to receive the audio data
-    // callbacks
-//    self.microphone = [EZMicrophone microphoneWithDelegate:self];
-    
-    // Starts fetching audio from the default device microphone and sends data to EZMicrophoneDelegate
-//    [self.microphone startFetchingAudio];
+    currentSecond = 0;
     
     timer = [NSTimer scheduledTimerWithTimeInterval: 60.0f * frequencyMin
                                              target:self
@@ -165,6 +164,15 @@ static vDSP_Length const FFTViewControllerFFTWindowSize = 4096;
     return YES;
 }
 
+
+//- (void)syncAwareDB{
+////    [uploader syncDBInBackground];
+//}
+//
+//- (BOOL)syncAwareDBInForeground{
+////    [uploader syncDBInBackground];
+//    return YES;
+//}
 
 /////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////
@@ -195,14 +203,15 @@ static vDSP_Length const FFTViewControllerFFTWindowSize = 4096;
 }
 
 
+/**
+ * Start recording ambient noise
+ */
 - (void) startRecording:(id)sender{
-    NSLog(@"Start Recording");
-    
     if (self.microphone == nil) {
         [self setupMicrophone];
     }
-    
-    if ([self isDebug]) {
+    if ([self isDebug] && currentSecond == 0) {
+        NSLog(@"Start Recording");
         [AWAREUtils sendLocalNotificationForMessage:@"[Ambient Noise] Start Recording" soundFlag:NO];
     }
     //
@@ -218,33 +227,43 @@ static vDSP_Length const FFTViewControllerFFTWindowSize = 4096;
                                        fileType:EZRecorderFileTypeM4A
                                        delegate:self];
     _isRecording = YES;
-    [self performSelector:@selector(stopRecording:) withObject:nil afterDelay:sampleSize];
+    [self performSelector:@selector(stopRecording:) withObject:nil afterDelay:1];
     
 }
 
+
+/**
+ * Stop recording ambient noise
+ */
 - (void) stopRecording:(id)sender{
-    NSLog(@"Stop Recording");
-    if ([self isDebug]) {
-        [AWAREUtils sendLocalNotificationForMessage:@"[Ambient Noise] Stop Recording" soundFlag:NO];
-    }
+    // stop fetching audio
     [self.microphone stopFetchingAudio];
+    // stop recording audio
     [self.recorder closeAudioFile];
-    
+    // Save audio data
     [self saveAudioData];
     
-    _isRecording = NO;
-    self.fft = nil;
+    // init variables
     self.recorder = nil;
     maxFrequency = 0;
     db = 0;
     rms = 0;
     lastdb = 0;
     
-    // Stop fetching audio
-    // [self.microphone stopFetchingAudio];
-    
-
+    // check a dutyCycle
+    if( sampleSize > currentSecond ){
+        currentSecond++;
+        [self startRecording:nil];
+    }else{
+        NSLog(@"Stop Recording");
+        currentSecond = 0;
+        _isRecording = NO;
+        if ([self isDebug]) {
+            [AWAREUtils sendLocalNotificationForMessage:@"[Ambient Noise] Stop Recording" soundFlag:NO];
+        }
+    }
 }
+
 
 ////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
@@ -259,9 +278,43 @@ static vDSP_Length const FFTViewControllerFFTWindowSize = 4096;
     [dic setObject:[NSNumber numberWithDouble:rms] forKey:KEY_AMBIENT_NOISE_RMS];
     [dic setObject:[NSNumber numberWithBool:[AudioAnalysis isSilent:rms threshold:silenceThreshold]] forKey:KEY_AMBIENT_NOISE_SILENT];
     [dic setObject:[NSNumber numberWithInteger:silenceThreshold] forKey:KEY_AMBIENT_NOISE_SILENT_THRESHOLD];
-    [dic setObject:[[NSNull alloc] init] forKey:KEY_AMBIENT_NOISE_RAW];
-    [self setLatestValue:[NSString stringWithFormat:@"dB:%f, RMS:%f, Frequency:%f", db, rms, maxFrequency]];
+//    NSData * data = [NSData dataWithContentsOfURL:[self testFilePathURL]];
+//    NSString *base64Encoded = [data base64EncodedStringWithOptions:0];
+//    if(base64Encoded != nil){
+//        [dic setObject:base64Encoded forKey:KEY_AMBIENT_NOISE_RAW];
+//    }else{
+        [dic setObject:[[NSNull alloc] init] forKey:KEY_AMBIENT_NOISE_RAW];
+//    }
     [self saveData:dic];
+    
+    
+//    AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+//    PluginAmbientNoise * ambientNoise = [NSEntityDescription insertNewObjectForEntityForName:@"PluginAmbientNoise"
+//                                                inManagedObjectContext:delegate.managedObjectContext];
+//    ambientNoise.device_id = [self getDeviceId];
+//    ambientNoise.timestamp = unixtime;
+//    ambientNoise.double_frequency = [NSNumber numberWithFloat:maxFrequency];
+//    ambientNoise.double_decibels = [NSNumber numberWithDouble:db];
+//    ambientNoise.double_RMS = [NSNumber numberWithDouble:rms];
+//    ambientNoise.is_silent = [NSNumber numberWithBool:[AudioAnalysis isSilent:rms threshold:silenceThreshold]];
+//    ambientNoise.silent_threshold = [NSNumber numberWithInteger:silenceThreshold];
+//    NSData * data = [NSData dataWithContentsOfURL:[self testFilePathURL]];
+////    NSString *base64Encoded = [data base64EncodedStringWithOptions:0];
+//    ambientNoise.raw = [data base64EncodedStringWithOptions:0];
+    
+    [self setLatestValue:[NSString stringWithFormat:@"dB:%f, RMS:%f, Frequency:%f", db, rms, maxFrequency]];
+    
+    if ([self isDebug] && sampleSize<=currentSecond) {
+        [AWAREUtils sendLocalNotificationForMessage:[NSString stringWithFormat:@"dB:%f, RMS:%f, Frequency:%f", db, rms, maxFrequency] soundFlag:NO];
+    }
+    
+//    if(sampleSize<=currentSecond){
+//        NSError * error = nil;
+//        [delegate.managedObjectContext save:&error];
+//        if (error) {
+//            NSLog(@"%@", error.description);
+//        }
+//    }
 }
 
 
@@ -322,20 +375,26 @@ static vDSP_Length const FFTViewControllerFFTWindowSize = 4096;
         withBufferSize:(UInt32)bufferSize
   withNumberOfChannels:(UInt32)numberOfChannels{
     __weak typeof (self) weakSelf = self;
+    // Getting audio data as an array of float buffer arrays that can be fed into the
+    // EZAudioPlot, EZAudioPlotGL, or whatever visualization you would like to do with
+    // the microphone data.
+    
     //
     // Calculate the FFT, will trigger EZAudioFFTDelegate
     //
     [self.fft computeFFTWithBuffer:buffer[0] withBufferSize:bufferSize];
-    // Getting audio data as an array of float buffer arrays that can be fed into the
-    // EZAudioPlot, EZAudioPlotGL, or whatever visualization you would like to do with
-    // the microphone data.
-    AudioAnalysis * audioAnalysis = [[AudioAnalysis alloc] initWithBuffer:*buffer bufferSize:bufferSize];
-//    db = [audioAnalysis getdB];
-    rms = [audioAnalysis getRMS];
     
-    //https://github.com/syedhali/EZAudio/issues/50
+    //
+    // Calculate the RMS with buffer and bufferSize
+    // NOTE: 1000
+    //
+    rms = [EZAudioUtilities RMS:*buffer length:bufferSize] * 1000;
+    // NSLog(@"%f", rms);
     
+    //
     // Decibel Calculation.
+    // https://github.com/syedhali/EZAudio/issues/50
+    //
     float one       = 1.0;
     float meanVal = 0.0;
     float tiny = 0.1;
@@ -345,33 +404,15 @@ static vDSP_Length const FFTViewControllerFFTWindowSize = 4096;
     vDSP_vdbcon(&meanVal, 1, &one, &meanVal, 1, 1, 0);
     
     float currentdb = 1.0 - (fabs(meanVal)/100);
-//    NSLog(@"%f", db);
-//    if (db < 0.1) {
-//        NSLog(@"-");
-//    } else if (db < 0.2){
-//        NSLog(@"--");
-//    } else if (db < 0.3){
-//        NSLog(@"---");
-//    } else if (db < 0.4){
-//        NSLog(@"----");
-//    } else if (db < 0.5){
-//        NSLog(@"-----");
-//    } else if (db < 0.6){
-//        NSLog(@"------");
-//    } else if (db < 0.7){
-//        NSLog(@"-------");
-//    }
     
     if (lastdb == INFINITY || lastdb == -INFINITY || isnan(lastdb)) {
         lastdb = 0.0;
     }
     db =   ((1.0 - tiny)*lastdb) + tiny*currentdb;
     lastdb = db;
-//    NSLog(@"dbval:  %f",db);
     
     dispatch_async(dispatch_get_main_queue(),^{
         // Visualize this data brah, buffer[0] = left channel, buffer[1] = right channel
-//        NSLog(@"%d", bufferSize);
 //        [weakSelf.audioPlot updateBuffer:buffer[0] withBufferSize:bufferSize];
         [self setLatestValue:[NSString stringWithFormat:@"dB:%f, RMS:%f, Frequency:%f", db, rms, maxFrequency]];
     });
@@ -440,6 +481,7 @@ static vDSP_Length const FFTViewControllerFFTWindowSize = 4096;
                                    [self applicationDocumentsDirectory],
                                    kAudioFilePath]];
 }
+
 
 /////////////////////////////////////////////
 ///////////////////////////////////////////////

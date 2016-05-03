@@ -35,6 +35,7 @@
 #import "Timezone.h"
 #import "Calls.h"
 #import "ESM.h"
+#import "PushNotification.h"
 
 // AWARE Plugins
 #import "ActivityRecognition.h"
@@ -241,9 +242,9 @@
 //    [self addNewSensor:healthKit];
     
     // Memory
-    AWARESensor *memory = [[Memory alloc] initWithSensorName:@"memory" withAwareStudy:awareStudy];
-    [memory startSensor:uploadInterval withSettings:nil];
-    [self addNewSensor:memory];
+//    AWARESensor *memory = [[Memory alloc] initWithSensorName:@"memory" withAwareStudy:awareStudy];
+//    [memory startSensor:uploadInterval withSettings:nil];
+//    [self addNewSensor:memory];
     
     // BLE Heart Rate
 //    AWARESensor *bleHeartRate = [[BLEHeartRate alloc] initWithSensorName:SENSOR_BLE_HEARTRATE withAwareStudy:awareStudy];
@@ -254,6 +255,9 @@
     AWARESensor *observer = [[Observer alloc] initWithSensorName:@"" withAwareStudy:awareStudy];
     [self addNewSensor:observer];
 
+    // Push Notification
+    AWARESensor * pushNotification = [[PushNotification alloc] initWithSensorName:nil withAwareStudy:awareStudy];
+    [self addNewSensor:pushNotification];
     
     /**
      * Debug Sensor

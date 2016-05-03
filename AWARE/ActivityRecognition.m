@@ -47,20 +47,9 @@
 
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
     NSLog(@"Start Motion Activity Manager! ");
-    
     [self setBufferSize:10];
-    
     [self getMotionActivity:nil];
-    
-//    int frequency = [self getSensorSetting:settings withKey:@"frequency_plugin_google_activity_recognition"];
-//    if (frequency < 60*15) {
-//        frequency = 60*15;
-//    }
-//    timer = [NSTimer scheduledTimerWithTimeInterval:frequency
-//                                             target:self
-//                                           selector:@selector(getMotionActivity:)
-//                                           userInfo:nil
-//                                            repeats:YES];
+
     
     /** motion activity */
     if([CMMotionActivityManager isActivityAvailable]){
@@ -88,7 +77,7 @@
 }
 
 - (void)changedBatteryState{
-    [self getMotionActivity:nil];
+//    [self getMotionActivity:nil];
 }
 
 
@@ -147,37 +136,37 @@
     if (motionActivity.unknown){
         motionName = @"unknown";
         motionType = @4;
-//        [activities addObject:[self getActivityDicWithName:motionName confidence:motionConfidence]];
+        [activities addObject:[self getActivityDicWithName:motionName confidence:motionConfidence]];
     }
     
     if (motionActivity.stationary){
         motionName = @"still";
         motionType = @3;
-//        [activities addObject:[self getActivityDicWithName:motionName confidence:motionConfidence]];
+        [activities addObject:[self getActivityDicWithName:motionName confidence:motionConfidence]];
     }
     
     if (motionActivity.running){
         motionName = @"running";
         motionType = @8;
-//        [activities addObject:[self getActivityDicWithName:motionName confidence:motionConfidence]];
+        [activities addObject:[self getActivityDicWithName:motionName confidence:motionConfidence]];
     }
     
     if (motionActivity.walking){
         motionName = @"walking";
         motionType = @7;
-//        [activities addObject:[self getActivityDicWithName:motionName confidence:motionConfidence]];
+        [activities addObject:[self getActivityDicWithName:motionName confidence:motionConfidence]];
     }
     
     if (motionActivity.automotive){
         motionName = @"in_vehicle";
         motionType = @1;
-//        [activities addObject:[self getActivityDicWithName:motionName confidence:motionConfidence]];
+        [activities addObject:[self getActivityDicWithName:motionName confidence:motionConfidence]];
     }
     
     if (motionActivity.cycling){
         motionName = @"on_bicycle";
         motionType = @1;
-//        [activities addObject:[self getActivityDicWithName:motionName confidence:motionConfidence]];
+        [activities addObject:[self getActivityDicWithName:motionName confidence:motionConfidence]];
     }
     
     NSString * activitiesStr = @"";
@@ -203,9 +192,27 @@
     [dic setObject:motionName forKey:@"activity_name"]; //varchar
     [dic setObject:motionType forKey:@"activity_type"]; //text
     [dic setObject:motionConfidence forKey:@"confidence"]; //int
-    [dic setObject:activitiesStr forKey:@"activities"]; //text
+    [dic setObject:@"" forKey:@"activities"]; //text
     [self setLatestValue:[NSString stringWithFormat:@"%@, %@, %@", motionName, motionType, motionConfidence]];
     [self saveData:dic toLocalFile:SENSOR_PLUGIN_GOOGLE_ACTIVITY_RECOGNITION];
+    
+    
+//    AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+//    PluginActivityRecognition * activity = [NSEntityDescription insertNewObjectForEntityForName:@"ActivityRecognition" inManagedObjectContext:delegate.managedObjectContext];
+//    activity.device_id = [self getDeviceId];
+//    activity.timestamp = unixtime;
+//    activity.confidence = motionConfidence;
+//    activity.activities = activitiesStr;
+//    activity.activity_name = motionName;
+//    activity.activity_type = [motionType stringValue];
+//    
+//    NSError * error = nil;
+//    [delegate.managedObjectContext save:&error];
+//    if (error) {
+//        NSLog(@"%@", error.description);
+//    }
+    
+    [self setLatestValue:[NSString stringWithFormat:@"%@, %@, %@", motionName, motionType, motionConfidence]];
 }
 
 -(NSString*)timestamp2date:(NSDate*)date{
