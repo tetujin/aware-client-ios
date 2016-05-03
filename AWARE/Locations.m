@@ -9,7 +9,6 @@
 #import "Locations.h"
 
 @implementation Locations{
-//    NSTimer *uploadTimer;
     NSTimer *locationTimer;
     IBOutlet CLLocationManager *locationManager;
 }
@@ -61,14 +60,6 @@
     }else{
         minAccuracy = 25;
     }
-    
-    // Set and start a data uploader
-//    uploadTimer = [NSTimer scheduledTimerWithTimeInterval:upInterval
-//                                                   target:self
-//                                                 selector:@selector(syncAwareDB)
-//                                                 userInfo:nil
-//                                                  repeats:YES];
-    
     
     // Set and start a location sensor with the senseing frequency and min GPS accuracy
     NSLog(@"[%@] Start Location Sensor!", [self getSensorName]);

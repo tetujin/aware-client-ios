@@ -20,7 +20,8 @@
 
 @interface Bluetooth : AWARESensor <AWARESensorDelegate, CBCentralManagerDelegate, CBPeripheralDelegate,MDBluetoothObserverProtocol>
 @property (nonatomic, strong) CBCentralManager *myCentralManager;
-@property (nonatomic, strong) CBPeripheral *peripheralDevice;
+//@property (nonatomic, strong) CBPeripheral *peripheralDevice;
+@property (strong,nonatomic) NSMutableArray *peripherals;
 
 //https://developer.bluetooth.org/gatt/services/Pages/ServicesHome.aspx
 

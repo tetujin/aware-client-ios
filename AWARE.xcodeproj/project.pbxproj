@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		1607944C1C19274C0021816F /* AWAREStudy.m in Sources */ = {isa = PBXBuildFile; fileRef = 1607944B1C19274C0021816F /* AWAREStudy.m */; };
 		160794511C1A4E380021816F /* AWAREMqtt.m in Sources */ = {isa = PBXBuildFile; fileRef = 160794501C1A4E380021816F /* AWAREMqtt.m */; };
+		160E1A011CD1D9C700D825BA /* libEZAudio.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 160E1A001CD1D9C700D825BA /* libEZAudio.a */; };
+		160E1A051CD1F28100D825BA /* AudioAnalysis.m in Sources */ = {isa = PBXBuildFile; fileRef = 160E1A041CD1F28100D825BA /* AudioAnalysis.m */; };
+		160E1A291CD4E44700D825BA /* AWARECoreDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 160E1A281CD4E44700D825BA /* AWARECoreDataManager.m */; };
 		160EE9BD1C050B4C00015688 /* Bluetooth.m in Sources */ = {isa = PBXBuildFile; fileRef = 160EE9BC1C050B4C00015688 /* Bluetooth.m */; };
 		160EE9BF1C050B9000015688 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 160EE9BE1C050B9000015688 /* CoreBluetooth.framework */; };
 		160EE9C31C052DAA00015688 /* OpenWeather.m in Sources */ = {isa = PBXBuildFile; fileRef = 160EE9C21C052DAA00015688 /* OpenWeather.m */; };
@@ -87,6 +90,7 @@
 		16C1FF7F1C617FC300C070AA /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16C1FF7E1C617FC300C070AA /* GLKit.framework */; };
 		16C1FF971C64501D00C070AA /* Debug.m in Sources */ = {isa = PBXBuildFile; fileRef = 16C1FF961C64501D00C070AA /* Debug.m */; };
 		16C251BB1C6C45270018D156 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 16C251BA1C6C45270018D156 /* Reachability.m */; };
+		16C81FF71CD6DD5E0013A87C /* PushNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 16C81FF61CD6DD5E0013A87C /* PushNotification.m */; };
 		16D810241C06242500605DE2 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16D810231C06242500605DE2 /* CFNetwork.framework */; };
 		16D810261C06242F00605DE2 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16D810251C06242F00605DE2 /* Security.framework */; };
 		16D91B5E1CA9447A00A5FD4F /* MicrosoftBandKit_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16D91B5D1CA9447A00A5FD4F /* MicrosoftBandKit_iOS.framework */; };
@@ -145,6 +149,11 @@
 		1607944D1C1A240F0021816F /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
 		1607944F1C1A4E380021816F /* AWAREMqtt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AWAREMqtt.h; sourceTree = "<group>"; };
 		160794501C1A4E380021816F /* AWAREMqtt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AWAREMqtt.m; sourceTree = "<group>"; };
+		160E1A001CD1D9C700D825BA /* libEZAudio.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libEZAudio.a; path = "../../../../../Library/Developer/Xcode/DerivedData/AWARE-evlxgvvrprnzwggplvxmzqjujmcn/Build/Products/Debug-iphoneos/libEZAudio.a"; sourceTree = "<group>"; };
+		160E1A031CD1F28100D825BA /* AudioAnalysis.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioAnalysis.h; sourceTree = "<group>"; };
+		160E1A041CD1F28100D825BA /* AudioAnalysis.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioAnalysis.m; sourceTree = "<group>"; };
+		160E1A271CD4E44700D825BA /* AWARECoreDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AWARECoreDataManager.h; sourceTree = "<group>"; };
+		160E1A281CD4E44700D825BA /* AWARECoreDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AWARECoreDataManager.m; sourceTree = "<group>"; };
 		160EE9BB1C050B4C00015688 /* Bluetooth.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bluetooth.h; sourceTree = "<group>"; };
 		160EE9BC1C050B4C00015688 /* Bluetooth.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Bluetooth.m; sourceTree = "<group>"; };
 		160EE9BE1C050B9000015688 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
@@ -309,6 +318,9 @@
 		16C1FF961C64501D00C070AA /* Debug.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Debug.m; sourceTree = "<group>"; };
 		16C251B91C6C45270018D156 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		16C251BA1C6C45270018D156 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
+		16C81FF41CD6B32D0013A87C /* AWARE_v2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = AWARE_v2.xcdatamodel; sourceTree = "<group>"; };
+		16C81FF51CD6DD5E0013A87C /* PushNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PushNotification.h; sourceTree = "<group>"; };
+		16C81FF61CD6DD5E0013A87C /* PushNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PushNotification.m; sourceTree = "<group>"; };
 		16D810231C06242500605DE2 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		16D810251C06242F00605DE2 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		16D91B5D1CA9447A00A5FD4F /* MicrosoftBandKit_iOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MicrosoftBandKit_iOS.framework; path = ThirdPatyFrameworks/MicrosoftBandKit_iOS.framework; sourceTree = "<group>"; };
@@ -349,6 +361,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				160E1A011CD1D9C700D825BA /* libEZAudio.a in Frameworks */,
 				165870221C9903D3008B99D2 /* IOKit.framework in Frameworks */,
 				1658700A1C986D4F008B99D2 /* QuartzCore.framework in Frameworks */,
 				165DECF61C83AD7D002C88CA /* ExternalAccessory.framework in Frameworks */,
@@ -458,7 +471,6 @@
 			children = (
 				169A7B391BFFC8B100A7C06D /* Wifi.h */,
 				169A7B3A1BFFC8B100A7C06D /* Wifi.m */,
-				1658701A1C98C22D008B99D2 /* MobileWiFi */,
 			);
 			name = Wifi;
 			sourceTree = "<group>";
@@ -603,7 +615,6 @@
 				1623CE7A1BFD1B2C00EFAD72 /* LaunchScreen.storyboard */,
 				1623CE6C1BFD1B2C00EFAD72 /* AppDelegate.h */,
 				1623CE6D1BFD1B2C00EFAD72 /* AppDelegate.m */,
-				1623CE701BFD1B2C00EFAD72 /* ViewController.m */,
 				1623CE6F1BFD1B2C00EFAD72 /* ViewController.h */,
 				165A8B721C03C0B300898C6C /* GoogleLoginViewController.h */,
 				165A8B731C03C0B300898C6C /* GoogleLoginViewController.m */,
@@ -821,30 +832,34 @@
 				16F3BC141C76D31B005ACEE3 /* LocalCoreDataStorageHelper.m */,
 				168C71D91C67B9CC00878DD8 /* AWAREDataUploader.h */,
 				168C71DA1C67B9CC00878DD8 /* AWAREDataUploader.m */,
+				160E1A271CD4E44700D825BA /* AWARECoreDataManager.h */,
+				160E1A281CD4E44700D825BA /* AWARECoreDataManager.m */,
+				1602ADB81C45B021002B3121 /* Accelerometer */,
 				165870231C9907CD008B99D2 /* AmbientLight */,
 				1602ADBC1C45B06C002B3121 /* Barometter */,
 				1602ADBB1C45B063002B3121 /* Battery */,
 				1602ADC41C45B0D1002B3121 /* Bluetooth */,
-				169ACDC71C90C931000072D6 /* HeartRate */,
-				165DED011C87C9CD002C88CA /* Labels */,
-				165915121C7CBC7300806744 /* Memory */,
-				16C1FF911C644F5000C070AA /* Debug */,
-				1659150E1C7BAB0F00806744 /* Orientation */,
 				162B7DE01C4EFA59006972B5 /* Calls */,
-				1602ADB81C45B021002B3121 /* Accelerometer */,
-				1602ADB91C45B030002B3121 /* Gyroscope */,
-				1602ADBA1C45B03A002B3121 /* Magnetometer */,
-				1602ADBD1C45B089002B3121 /* Locations */,
-				1602ADBE1C45B090002B3121 /* Network */,
-				1602ADBF1C45B099002B3121 /* Wifi */,
-				1602ADC01C45B09F002B3121 /* Processor */,
-				1602ADC11C45B0B0002B3121 /* Rotation */,
-				1602ADC21C45B0B8002B3121 /* Gravity */,
-				1602ADC31C45B0CD002B3121 /* LinearAccelerometer */,
-				1602ADC51C45B0D8002B3121 /* Screen */,
-				1602ADC61C45B0E2002B3121 /* Proximity */,
-				1602ADC71C45B0EB002B3121 /* Timezone */,
+				16C1FF911C644F5000C070AA /* Debug */,
 				1602ADC81C45B0F0002B3121 /* ESM */,
+				169ACDC71C90C931000072D6 /* HeartRate */,
+				1602ADC21C45B0B8002B3121 /* Gravity */,
+				1602ADB91C45B030002B3121 /* Gyroscope */,
+				165DED011C87C9CD002C88CA /* Labels */,
+				1602ADBD1C45B089002B3121 /* Locations */,
+				1602ADC31C45B0CD002B3121 /* LinearAccelerometer */,
+				1602ADBA1C45B03A002B3121 /* Magnetometer */,
+				165915121C7CBC7300806744 /* Memory */,
+				1602ADBE1C45B090002B3121 /* Network */,
+				1659150E1C7BAB0F00806744 /* Orientation */,
+				1602ADC01C45B09F002B3121 /* Processor */,
+				1602ADC61C45B0E2002B3121 /* Proximity */,
+				16C81FF81CD6DD740013A87C /* PushNotification */,
+				1602ADC11C45B0B0002B3121 /* Rotation */,
+				1602ADC51C45B0D8002B3121 /* Screen */,
+				1602ADC71C45B0EB002B3121 /* Timezone */,
+				1658701A1C98C22D008B99D2 /* MobileWiFi */,
+				1602ADBF1C45B099002B3121 /* Wifi */,
 			);
 			name = Sensors;
 			sourceTree = "<group>";
@@ -887,6 +902,15 @@
 				1648103F1C20ECC300B830D9 /* AWAREEsmViewController.m */,
 			);
 			name = View;
+			sourceTree = "<group>";
+		};
+		16C81FF81CD6DD740013A87C /* PushNotification */ = {
+			isa = PBXGroup;
+			children = (
+				16C81FF51CD6DD5E0013A87C /* PushNotification.h */,
+				16C81FF61CD6DD5E0013A87C /* PushNotification.m */,
+			);
+			name = PushNotification;
 			sourceTree = "<group>";
 		};
 		16E155341C252B5B00316321 /* Plugins */ = {
@@ -980,6 +1004,8 @@
 			children = (
 				168683041C07C48900CB4266 /* AmbientNoise.h */,
 				168683051C07C48900CB4266 /* AmbientNoise.m */,
+				160E1A031CD1F28100D825BA /* AudioAnalysis.h */,
+				160E1A041CD1F28100D825BA /* AudioAnalysis.m */,
 			);
 			name = AmbientNoise;
 			sourceTree = "<group>";
@@ -1023,6 +1049,7 @@
 		2A3CA9F5620967BACB187EB7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				160E1A001CD1D9C700D825BA /* libEZAudio.a */,
 				16D91B631CA9454D00A5FD4F /* BluetoothManager.framework */,
 				16D91B5D1CA9447A00A5FD4F /* MicrosoftBandKit_iOS.framework */,
 				165870211C9903D3008B99D2 /* IOKit.framework */,
@@ -1294,6 +1321,7 @@
 				165870821C9A0B96008B99D2 /* MDBluetoothManager.m in Sources */,
 				16C251BB1C6C45270018D156 /* Reachability.m in Sources */,
 				169384F31C17C3D300A17F2C /* MSBand.m in Sources */,
+				160E1A291CD4E44700D825BA /* AWARECoreDataManager.m in Sources */,
 				16228A511C22E9FE0081C839 /* AWARESchedule.m in Sources */,
 				165A8B741C03C0B300898C6C /* GoogleLoginViewController.m in Sources */,
 				162603BC1CBE6A3400EF233C /* ESMManager.m in Sources */,
@@ -1303,6 +1331,7 @@
 				16E7AF901C3DB8E5005C9EDC /* GoogleLogin.m in Sources */,
 				1623CE711BFD1B2C00EFAD72 /* ViewController.m in Sources */,
 				16E7AF841C3D54D4005C9EDC /* SSLManager.m in Sources */,
+				16C81FF71CD6DD5E0013A87C /* PushNotification.m in Sources */,
 				16E7AF941C3DF7A0005C9EDC /* LocationModel.xcdatamodeld in Sources */,
 				160EE9BD1C050B4C00015688 /* Bluetooth.m in Sources */,
 				16F3BC151C76D31B005ACEE3 /* LocalCoreDataStorageHelper.m in Sources */,
@@ -1347,6 +1376,7 @@
 				169A7B491C00591A00A7C06D /* LinearAccelerometer.m in Sources */,
 				1623FFE01C5DCF7900F3E3E4 /* Pedometer.m in Sources */,
 				1623CE6B1BFD1B2C00EFAD72 /* main.m in Sources */,
+				160E1A051CD1F28100D825BA /* AudioAnalysis.m in Sources */,
 				165DED001C87C9C5002C88CA /* Labels.m in Sources */,
 				164DD65F1C1F9F1900ADA92B /* DeviceUsage.m in Sources */,
 			);
@@ -1644,6 +1674,7 @@
 		1623CE751BFD1B2C00EFAD72 /* AWARE.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				16C81FF41CD6B32D0013A87C /* AWARE_v2.xcdatamodel */,
 				1623CE761BFD1B2C00EFAD72 /* AWARE.xcdatamodel */,
 			);
 			currentVersion = 1623CE761BFD1B2C00EFAD72 /* AWARE.xcdatamodel */;

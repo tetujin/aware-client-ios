@@ -43,6 +43,9 @@
 - (bool) syncAllSensorsWithDBInForeground;
 - (bool) syncAllSensorsWithDBInBackground;
 
+- (void) runBatteryStateChangeEvents;
+
+
 // upload timer
 - (void) startUploadTimerWithInterval:(double) interval;
 - (void) stopUploadTimer;

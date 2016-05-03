@@ -208,10 +208,32 @@
     [dic setObject:@"" forKey:@"label"];
     [self setLatestValue:[NSString stringWithFormat:@"%f, %f, %f", location.coordinate.latitude, location.coordinate.longitude, location.speed]];
     [fusedLocationsSensor saveData:dic];
+
+    
+//    AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+//    SensorLocations * locationData = [NSEntityDescription insertNewObjectForEntityForName:@"SensorLocations" inManagedObjectContext:delegate.managedObjectContext];
+//    locationData.device_id = [self getDeviceId];
+//    locationData.timestamp = unixtime;
+//    locationData.double_latitude = [NSNumber numberWithDouble:location.coordinate.latitude];
+//    locationData.double_longitude = [NSNumber numberWithDouble:location.coordinate.longitude];
+//    locationData.double_bearing = [NSNumber numberWithDouble:location.course];
+//    locationData.double_speed = [NSNumber numberWithDouble:location.speed];
+//    locationData.double_altitude = [NSNumber numberWithDouble:location.altitude];
+//    locationData.provider = @"fused";
+//    locationData.accuracy = [NSNumber numberWithInt:location.verticalAccuracy];
+//    locationData.label = @"";
+//    
+//    NSError * error = nil;
+//    [delegate.managedObjectContext save:&error];
+//    if (error) {
+//        NSLog(@"%@", error.description);
+//    }
+    
     
     if ([self isDebug]) {
         [AWAREUtils sendLocalNotificationForMessage:[NSString stringWithFormat:@"Location: %f, %f, %f", location.coordinate.latitude, location.coordinate.longitude, location.speed] soundFlag:NO];
     }
+
 }
 
 

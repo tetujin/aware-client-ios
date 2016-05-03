@@ -11,7 +11,6 @@
 
 @implementation Accelerometer{
     CMMotionManager *manager;
-//    NSTimer *timer;
 }
 
 - (instancetype)initWithSensorName:(NSString *)sensorName withAwareStudy:(AWAREStudy *)study{
@@ -39,16 +38,8 @@
 
 
 -(BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
-    // Send a create table query
-//    [self createTable];
-    
     // Set and start a data uploader
     NSLog(@"[%@] Start Sensor!", [self getSensorName]);
-//    timer = [NSTimer scheduledTimerWithTimeInterval:upInterval
-//                                             target:self
-//                                           selector:@selector(syncAwareDB)
-//                                           userInfo:nil
-//                                            repeats:YES];
     // Set buffer size for reducing file access
     [self setBufferSize:1000];
     
@@ -84,6 +75,27 @@
                                             dispatch_async(dispatch_get_main_queue(), ^{
                                               [self saveData:dic];
                                             });
+                                          
+                                          
+//                                          AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+//                                          NSManagedObject * acc = [NSEntityDescription insertNewObjectForEntityForName:@"Accelerometer" inManagedObjectContext:delegate.managedObjectContext];
+//                                          [acc setValue:[self getDeviceId] forKey:@"device_id"];
+//                                          [acc setValue:[AWAREUtils getUnixTimestamp:[NSDate new]] forKey:@"timestamp"];
+//                                          [acc setValue:[NSNumber numberWithDouble:accelerometerData.acceleration.x] forKey:@"double_values_0"];
+//                                          [acc setValue:[NSNumber numberWithDouble:accelerometerData.acceleration.y] forKey:@"double_values_1"];
+//                                          [acc setValue:[NSNumber numberWithDouble:accelerometerData.acceleration.z] forKey:@"double_values_2"];
+//                                          [acc setValue:@0 forKey:@"accuracy"];
+//                                          [acc setValue:@"" forKey:@"label"];
+//                                          [self setLatestValue:[NSString stringWithFormat:@"%f, %f, %f",accelerometerData.acceleration.x,accelerometerData.acceleration.y,accelerometerData.acceleration.z]];
+//                                          
+//                                          
+//                                          NSError * error = nil;
+//                                          [delegate.managedObjectContext save:&error];
+//                                          if (error) {
+//                                              NSLog(@"%@", error.description);
+//                                          }
+
+                                          
                                         }
                                   }];
     return YES;
@@ -91,7 +103,6 @@
 
 -(BOOL) stopSensor{
     [manager stopAccelerometerUpdates];
-//    [timer invalidate];
     return YES;
 }
 
