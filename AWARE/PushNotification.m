@@ -41,6 +41,17 @@
 }
 
 
+- (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
+    [self saveStoredPushNotificationDeviceToken];
+    [self allowsCellularAccess];
+    [self syncAwareDB];
+    return YES;
+}
+
+
+//////////////////////////////////////////////////
+//////////////////////////////////////////////////
+
 /**
  * Save a device token for push notification
  * @param NSString  A device token

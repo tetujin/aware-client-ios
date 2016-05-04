@@ -258,6 +258,7 @@
 
     // Push Notification
     AWARESensor * pushNotification = [[PushNotification alloc] initWithSensorName:nil withAwareStudy:awareStudy];
+    [pushNotification startSensor:0 withSettings:nil];
     [self addNewSensor:pushNotification];
     
     /**

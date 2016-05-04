@@ -302,12 +302,6 @@ didCompleteWithError:(NSError *)error {
         NSLog(@"This device ID is already regited to the AWARE server.");
     }
     
-    // compare the new configuration with previus configuration in the local storage.
-    PushNotification * pushNotification = [[PushNotification alloc] initWithSensorName:nil withAwareStudy:self];
-    [pushNotification saveStoredPushNotificationDeviceToken];
-    [pushNotification allowsCellularAccess];
-    [pushNotification syncAwareDB];
-    
     // save the new configuration to the local storage
     [userDefaults setObject:mqttServer forKey:KEY_MQTT_SERVER];
     [userDefaults setObject:mqttPassword forKey:KEY_MQTT_PASS];
