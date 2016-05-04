@@ -20,6 +20,9 @@
 - (void) lockBackgroundUpload;
 - (void) unlockBackgroundUpload;
 
+- (void) allowsCellularAccess;
+- (void) forbidCellularAccess;
+
 /**
  * Background data upload
  */

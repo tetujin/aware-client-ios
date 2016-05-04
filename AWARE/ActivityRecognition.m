@@ -47,8 +47,10 @@
 
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
     NSLog(@"Start Motion Activity Manager! ");
+    
     [self setBufferSize:10];
-    [self getMotionActivity:nil];
+    
+//    [self getMotionActivity:nil];
 
     
     /** motion activity */

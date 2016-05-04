@@ -305,6 +305,7 @@ didCompleteWithError:(NSError *)error {
     // compare the new configuration with previus configuration in the local storage.
     PushNotification * pushNotification = [[PushNotification alloc] initWithSensorName:nil withAwareStudy:self];
     [pushNotification saveStoredPushNotificationDeviceToken];
+    [pushNotification allowsCellularAccess];
     [pushNotification syncAwareDB];
     
     // save the new configuration to the local storage

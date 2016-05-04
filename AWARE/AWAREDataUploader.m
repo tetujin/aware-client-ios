@@ -28,6 +28,8 @@
     BOOL isLock;
     BOOL isSyncWithOnlyBatteryCharging;
     
+    BOOL isWifiOnly;
+    
     Debug * debugSensor;
 }
 
@@ -37,12 +39,13 @@
         sensorName = [localStorage getSensorName];
         awareStudy = study;
         awareLocalStorage = localStorage;
-        isUploading = false;
+        isUploading = NO;
         syncDataQueryIdentifier = [NSString stringWithFormat:@"sync_data_query_identifier_%@", sensorName];
         createTableQueryIdentifier = [NSString stringWithFormat:@"create_table_query_identifier_%@",  sensorName];
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         isDebug = [userDefaults boolForKey:SETTING_DEBUG_STATE];
-        isSyncWithOnlyBatteryCharging = [userDefaults boolForKey:SETTING_SYNC_BATTERY_CHARGING_ONLY];
+        isSyncWithOnlyBatteryCharging  = [userDefaults boolForKey:SETTING_SYNC_BATTERY_CHARGING_ONLY];
+        isWifiOnly = [userDefaults boolForKey:SETTING_SYNC_WIFI_ONLY];
     }
     return self;
 }
@@ -67,6 +70,16 @@
 
 - (void) unlockBackgroundUpload{
     isLock = NO;
+}
+
+
+- (void) allowsCellularAccess{
+    isWifiOnly = NO;
+}
+
+
+- (void) forbidCellularAccess{
+    isWifiOnly = YES;
 }
 
 /////////////////////////////////
@@ -94,7 +107,7 @@
     }
     
     // chekc wifi state
-    if (![awareStudy isWifiReachable]) {
+    if (![awareStudy isWifiReachable] && isWifiOnly) {
         NSString * message = [NSString stringWithFormat:@"[%@] Wifi is not availabe.", name];
         NSLog(@"%@", message);
         [self saveDebugEventWithText:message type:DebugTypeInfo  label:@""];
@@ -146,7 +159,11 @@
     sessionConfig.timeoutIntervalForRequest = 60 * 3;
     sessionConfig.HTTPMaximumConnectionsPerHost = 60 * 3;
     sessionConfig.timeoutIntervalForResource = 60 * 3;
-    sessionConfig.allowsCellularAccess = NO;
+    if (isWifiOnly) {
+        sessionConfig.allowsCellularAccess = NO;
+    } else {
+        sessionConfig.allowsCellularAccess = YES;
+    }
     
     // set HTTP/POST body information
     NSString* post = [NSString stringWithFormat:@"device_id=%@&data=%@", deviceId, formatedSensorData];
@@ -429,7 +446,11 @@ didReceiveResponse:(NSURLResponse *)response
         [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
         [request setHTTPBody:postData];
         [request setTimeoutInterval:60*3];
-        [request setAllowsCellularAccess:NO];
+        if(isWifiOnly){
+            [request setAllowsCellularAccess:NO];
+        }else{
+            [request setAllowsCellularAccess:YES];
+        }
         
         NSHTTPURLResponse *response = nil;
         NSData *resData = [NSURLConnection sendSynchronousRequest:request
@@ -597,7 +618,7 @@ didReceiveResponse:(NSURLResponse *)response
     sessionConfig.timeoutIntervalForRequest = 180.0;
     sessionConfig.HTTPMaximumConnectionsPerHost = 60;
     sessionConfig.timeoutIntervalForResource = 60;
-    sessionConfig.allowsCellularAccess = NO;
+    sessionConfig.allowsCellularAccess = YES;
 //    sessionConfig.discretionary = YES;
     
     NSString * debugMessage = [NSString stringWithFormat:@"[%@] Sent a query for creating a table in the background", sensorName];
