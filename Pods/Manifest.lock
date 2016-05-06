@@ -13,12 +13,12 @@ PODS:
   - EZAudio/Full (1.1.5):
     - EZAudio/Core
     - TPCircularBuffer (= 1.1)
-  - Google/Core (2.0.3):
+  - Google/Core (2.0.4):
     - GoogleInterchangeUtilities (~> 1.0)
     - GoogleNetworkingUtilities (~> 1.0)
     - GoogleSymbolUtilities (~> 1.0)
     - GoogleUtilities (~> 1.1)
-  - Google/SignIn (2.0.3):
+  - Google/SignIn (2.0.4):
     - Google/Core
     - GoogleSignIn (~> 3.0)
   - GoogleAppUtilities (1.1.0):
@@ -36,7 +36,7 @@ PODS:
     - GoogleNetworkingUtilities (~> 1.0)
     - GoogleUtilities (~> 1.0)
   - GoogleSymbolUtilities (1.1.0)
-  - GoogleUtilities (1.2.0):
+  - GoogleUtilities (1.3.0):
     - GoogleSymbolUtilities (~> 1.0)
   - ios-ntp (1.1.1):
     - CocoaAsyncSocket (~> 7.4.1)
@@ -71,14 +71,14 @@ SPEC CHECKSUMS:
   CocoaAsyncSocket: a18c75dca4b08723628a0bacca6e94803d90be91
   DeployGateSDK: df3d5838db7e35c05a711c35a3bdeef3c2b016ba
   EZAudio: 3b1cb4b6d7ebca68f0c2478576d75940aad4aa99
-  Google: 61379f0072bc561a7e174d23a6cbe41bd6d8599c
+  Google: d0932824c5b97c96be489aa6f4e8cd6c294d637d
   GoogleAppUtilities: 974598e8ed618c74ead33541d9caffbc3d144266
   GoogleAuthUtilities: 79e4143c77a08081a480b08df27a066cc8944f43
   GoogleInterchangeUtilities: 427382e42d8a340038bec37c6fdfd316e14b5fa2
   GoogleNetworkingUtilities: ec1e9911aca811eb18b7144394fee6168b607785
   GoogleSignIn: 3d571172b8603be39dcb1705d8217146bb76fe62
   GoogleSymbolUtilities: eb3965ea12710569c7b80db198a39e39b18613f7
-  GoogleUtilities: 85f8ad6b251544286a97163133d042ec95f889c5
+  GoogleUtilities: 5c653f7df2eedf0ce0efdfe5afe4f831f375fd7a
   ios-ntp: 5f2f4fecf0432169b358eb3b564f12b94157108f
   macros_blocks: da2106a0975514e16f3669f2f50a02efaff642cf
   MQTTKit: 513ffc31464db7adeffefac986e228fdf6cd87e5

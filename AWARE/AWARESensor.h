@@ -62,6 +62,8 @@
 // sync options
 - (void) allowsCellularAccess;
 - (void) forbidCellularAccess;
+- (void) allowsDateUploadWithoutBatteryCharging;
+- (void) forbidDatauploadWithoutBatteryCharging;
 
 // show progress of uploading
 - (NSString *) getSyncProgressAsText;

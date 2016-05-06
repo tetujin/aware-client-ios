@@ -10,6 +10,21 @@
 	<string>46</string>
 	<key>objects</key>
 	<dict>
+		<key>01ED856C9C59720AC43D6A7A5B8ED930</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>archive.ar</string>
+			<key>name</key>
+			<string>libGTM_NSStringXML_external.a</string>
+			<key>path</key>
+			<string>Libraries/libGTM_NSStringXML_external.a</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
 		<key>02017377481A3BDA5C737999B1A19AE3</key>
 		<dict>
 			<key>includeInIndex</key>
@@ -37,6 +52,21 @@
 			<string>GIDSignInButton.h</string>
 			<key>path</key>
 			<string>Headers/Public/GIDSignInButton.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>02AD7BEB35BBC3F7F13AC4CB445A2ED6</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>archive.ar</string>
+			<key>name</key>
+			<string>libGTM_iPhone_external.a</string>
+			<key>path</key>
+			<string>Libraries/libGTM_iPhone_external.a</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
@@ -357,6 +387,21 @@
 				</array>
 			</dict>
 		</dict>
+		<key>0FC75E5FD23CABE5B8D551F33C8691A9</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>archive.ar</string>
+			<key>name</key>
+			<string>libGTM_core_external.a</string>
+			<key>path</key>
+			<string>Libraries/libGTM_core_external.a</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
 		<key>1028CE4986FCECEA8ACE48FC11B1D9B5</key>
 		<dict>
 			<key>includeInIndex</key>
@@ -531,21 +576,6 @@
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
-		<key>1407A5A2078F5DC7CEA9FA48E76C492A</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>archive.ar</string>
-			<key>name</key>
-			<string>libGTM_NSStringHTML_external.a</string>
-			<key>path</key>
-			<string>Libraries/libGTM_NSStringHTML_external.a</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
 		<key>14CD92D7BD6C4D75E38E8EE95EB32E4D</key>
 		<dict>
 			<key>buildConfigurations</key>
@@ -601,6 +631,21 @@
 					<string>Public</string>
 				</array>
 			</dict>
+		</dict>
+		<key>16A7B7C22A0CA26FECE7BBA067FBA704</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>archive.ar</string>
+			<key>name</key>
+			<string>libGTM_DebugUtils_external.a</string>
+			<key>path</key>
+			<string>Libraries/libGTM_DebugUtils_external.a</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
 		</dict>
 		<key>16F7908079FAA34089141088EF50EC59</key>
 		<dict>
@@ -663,7 +708,7 @@
 		<dict>
 			<key>children</key>
 			<array>
-				<string>EFB2F6C5939A5D4391306F32F70A1B8B</string>
+				<string>5325AAC4E1BA3B214DE9F3EE5CFC9686</string>
 			</array>
 			<key>isa</key>
 			<string>PBXGroup</string>
@@ -821,21 +866,6 @@
 			<string>GIDSignIn.h</string>
 			<key>path</key>
 			<string>Headers/Public/GIDSignIn.h</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>202ECE927E45A2B0D7CA9A64A67F4AAA</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>archive.ar</string>
-			<key>name</key>
-			<string>libGTM_DebugUtils_external.a</string>
-			<key>path</key>
-			<string>Libraries/libGTM_DebugUtils_external.a</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
@@ -999,21 +1029,6 @@
 			<string>sourcecode.c.h</string>
 			<key>path</key>
 			<string>SVProgressHUD-prefix.pch</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>2726665A300F0942EDDAC0E6B825428F</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>archive.ar</string>
-			<key>name</key>
-			<string>libGTM_GTMURLBuilder_external.a</string>
-			<key>path</key>
-			<string>Libraries/libGTM_GTMURLBuilder_external.a</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
@@ -1810,6 +1825,21 @@
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
+		<key>4833587957008787F1E406255E7C3D5B</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>archive.ar</string>
+			<key>name</key>
+			<string>libGTM_NSDictionary+URLArguments_external.a</string>
+			<key>path</key>
+			<string>Libraries/libGTM_NSDictionary+URLArguments_external.a</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
 		<key>48F687CDE9990BD471D7883061F7E5D4</key>
 		<dict>
 			<key>buildConfigurationList</key>
@@ -2023,6 +2053,35 @@
 			<key>isa</key>
 			<string>XCConfigurationList</string>
 		</dict>
+		<key>5325AAC4E1BA3B214DE9F3EE5CFC9686</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>CBF49B795064795B5A603C5C5F034C78</string>
+				<string>0FC75E5FD23CABE5B8D551F33C8691A9</string>
+				<string>16A7B7C22A0CA26FECE7BBA067FBA704</string>
+				<string>874082B6CA735D18A1ABB0C0606CC117</string>
+				<string>02AD7BEB35BBC3F7F13AC4CB445A2ED6</string>
+				<string>EFFB68C1691ADC20B89A92FD8B5965C0</string>
+				<string>B4492CB81F53BE9D64CD61B55FB053B2</string>
+				<string>4833587957008787F1E406255E7C3D5B</string>
+				<string>D6256153CC134E581EBB4C0866FF1927</string>
+				<string>557C80C678298821E214B01842768115</string>
+				<string>01ED856C9C59720AC43D6A7A5B8ED930</string>
+				<string>B09F8D35A4FFC45D3E1D30804FF43B43</string>
+				<string>C6076F51F61C0162B5F1EBEF21E4B735</string>
+				<string>C842E72099818BA85F12640F3B3DE3AC</string>
+				<string>CD7812B3257037E1F9591856592DCC00</string>
+				<string>997495A9211F4F1639F94DD2AD20CCD4</string>
+				<string>6E6CD599EF3BE6B10A370D89D111D488</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>name</key>
+			<string>Frameworks</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
 		<key>53E271703CD8E290D4DDC83DD08E0881</key>
 		<dict>
 			<key>includeInIndex</key>
@@ -2064,6 +2123,21 @@
 			<string>EZAudioPlot.m</string>
 			<key>path</key>
 			<string>EZAudio/EZAudioPlot.m</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>557C80C678298821E214B01842768115</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>archive.ar</string>
+			<key>name</key>
+			<string>libGTM_NSStringHTML_external.a</string>
+			<key>path</key>
+			<string>Libraries/libGTM_NSStringHTML_external.a</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
@@ -2431,21 +2505,6 @@
 			<string>FB0582FFFFC4F7603F19D328B0BA4198</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
-		</dict>
-		<key>631D34D0BDB4930D28BF4B7505E17B80</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>archive.ar</string>
-			<key>name</key>
-			<string>libGTM_UIFont+LineHeight_external.a</string>
-			<key>path</key>
-			<string>Libraries/libGTM_UIFont+LineHeight_external.a</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
 		</dict>
 		<key>637771C32F474339C19574D76AD68B2A</key>
 		<dict>
@@ -2871,6 +2930,21 @@
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
+		<key>6E6CD599EF3BE6B10A370D89D111D488</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>archive.ar</string>
+			<key>name</key>
+			<string>libGTMStackTrace_external.a</string>
+			<key>path</key>
+			<string>Libraries/libGTMStackTrace_external.a</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
 		<key>6FFB5FE96C5D3CA8B5151698F4B59389</key>
 		<dict>
 			<key>includeInIndex</key>
@@ -2934,42 +3008,12 @@
 				</array>
 			</dict>
 		</dict>
-		<key>706D5BD99A5F1627D881064F9E33886A</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>archive.ar</string>
-			<key>name</key>
-			<string>libGTM_SystemVersion_external.a</string>
-			<key>path</key>
-			<string>Libraries/libGTM_SystemVersion_external.a</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
 		<key>7085236B5A8317AD282B66536D968576</key>
 		<dict>
 			<key>fileRef</key>
 			<string>2F0E9E2EC973CD5BB571CFE9563503B1</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
-		</dict>
-		<key>714127D8D268235198900E4330AF2BCE</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>archive.ar</string>
-			<key>name</key>
-			<string>libGTM_RoundedRectPath_external.a</string>
-			<key>path</key>
-			<string>Libraries/libGTM_RoundedRectPath_external.a</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
 		</dict>
 		<key>714918A347C09F379F4AE8BD9055830E</key>
 		<dict>
@@ -3498,6 +3542,21 @@
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
+		<key>874082B6CA735D18A1ABB0C0606CC117</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>archive.ar</string>
+			<key>name</key>
+			<string>libGTM_GTMURLBuilder_external.a</string>
+			<key>path</key>
+			<string>Libraries/libGTM_GTMURLBuilder_external.a</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
 		<key>87D1B380B7FB0CA191EFB0B82D4D4184</key>
 		<dict>
 			<key>fileRef</key>
@@ -3667,21 +3726,6 @@
 			<string>ios-ntp</string>
 			<key>path</key>
 			<string>ios-ntp</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>8DAABC5861BD1BBD529C4F9994784EA8</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>archive.ar</string>
-			<key>name</key>
-			<string>libGTM_NSStringXML_external.a</string>
-			<key>path</key>
-			<string>Libraries/libGTM_NSStringXML_external.a</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
@@ -4073,6 +4117,21 @@
 					<string>Public</string>
 				</array>
 			</dict>
+		</dict>
+		<key>997495A9211F4F1639F94DD2AD20CCD4</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>archive.ar</string>
+			<key>name</key>
+			<string>libGTM_UIFont+LineHeight_external.a</string>
+			<key>path</key>
+			<string>Libraries/libGTM_UIFont+LineHeight_external.a</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
 		</dict>
 		<key>99B650EB9318D919CBC8B3A98DD02A53</key>
 		<dict>
@@ -4666,21 +4725,6 @@
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
-		<key>AEBE834B81B167007F2B7695A947B8BC</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>archive.ar</string>
-			<key>name</key>
-			<string>libGTM_NSScannerJSON_external.a</string>
-			<key>path</key>
-			<string>Libraries/libGTM_NSScannerJSON_external.a</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
 		<key>AECC9D6992DC4E9726CC44E4BFF534C9</key>
 		<dict>
 			<key>includeInIndex</key>
@@ -4727,6 +4771,21 @@
 			<string>XCBuildConfiguration</string>
 			<key>name</key>
 			<string>Debug</string>
+		</dict>
+		<key>B09F8D35A4FFC45D3E1D30804FF43B43</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>archive.ar</string>
+			<key>name</key>
+			<string>libGTM_Regex_external.a</string>
+			<key>path</key>
+			<string>Libraries/libGTM_Regex_external.a</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
 		</dict>
 		<key>B29F1AFB14F420412EC2AF82F033076A</key>
 		<dict>
@@ -4778,6 +4837,21 @@
 			<string>500418AF00C5A07C35903372036CF3D1</string>
 			<key>remoteInfo</key>
 			<string>SCNetworkReachability</string>
+		</dict>
+		<key>B4492CB81F53BE9D64CD61B55FB053B2</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>archive.ar</string>
+			<key>name</key>
+			<string>libGTM_NSData+zlib.a</string>
+			<key>path</key>
+			<string>Libraries/libGTM_NSData+zlib.a</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
 		</dict>
 		<key>B6D0EB0915574B09D1E9A9BFCCE1573D</key>
 		<dict>
@@ -4846,21 +4920,6 @@
 			<string>SOURCE_ROOT</string>
 			<key>xcLanguageSpecificationIdentifier</key>
 			<string>xcode.lang.ruby</string>
-		</dict>
-		<key>BAC1A82F256FC5781DC897468DE4AFAA</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>archive.ar</string>
-			<key>name</key>
-			<string>libGTM_KVO_external.a</string>
-			<key>path</key>
-			<string>Libraries/libGTM_KVO_external.a</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
 		</dict>
 		<key>BAFEE8A38F941BDC5062E084B43C34DD</key>
 		<dict>
@@ -4963,21 +5022,6 @@
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 		</dict>
-		<key>BFC0B36BCFE42F316759A8A2C8768DA8</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>archive.ar</string>
-			<key>name</key>
-			<string>libGTM_NSData+zlib_external.a</string>
-			<key>path</key>
-			<string>Libraries/libGTM_NSData+zlib_external.a</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
 		<key>BFC5F75D3A368EC52C555F4979DD1E06</key>
 		<dict>
 			<key>fileRef</key>
@@ -4998,21 +5042,6 @@
 			<string>D28CDB472AB3AC60A770F13DCC6D7336</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
-		</dict>
-		<key>C1BC17E00E07AC0C69615E07233AAE56</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>archive.ar</string>
-			<key>name</key>
-			<string>libGTM_iPhone_external.a</string>
-			<key>path</key>
-			<string>Libraries/libGTM_iPhone_external.a</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
 		</dict>
 		<key>C1D0972DE0101D7B36418CDBF31C1FDC</key>
 		<dict>
@@ -5097,6 +5126,21 @@
 				</array>
 			</dict>
 		</dict>
+		<key>C6076F51F61C0162B5F1EBEF21E4B735</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>archive.ar</string>
+			<key>name</key>
+			<string>libGTM_RoundedRectPath_external.a</string>
+			<key>path</key>
+			<string>Libraries/libGTM_RoundedRectPath_external.a</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
 		<key>C70624D2FCE51ACAEE1499BE2F2CB268</key>
 		<dict>
 			<key>fileRef</key>
@@ -5136,6 +5180,21 @@
 			<string>Core.h</string>
 			<key>path</key>
 			<string>Headers/GGLCore/Public/Core.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>C842E72099818BA85F12640F3B3DE3AC</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>archive.ar</string>
+			<key>name</key>
+			<string>libGTM_StringEncoding_external.a</string>
+			<key>path</key>
+			<string>Libraries/libGTM_StringEncoding_external.a</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
@@ -5287,6 +5346,21 @@
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
+		<key>CBF49B795064795B5A603C5C5F034C78</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>archive.ar</string>
+			<key>name</key>
+			<string>libGTM_AddressBook_external.a</string>
+			<key>path</key>
+			<string>Libraries/libGTM_AddressBook_external.a</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
 		<key>CC7237F38D6990B7A9B08D0328932994</key>
 		<dict>
 			<key>includeInIndex</key>
@@ -5333,7 +5407,7 @@
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
-		<key>CD52CC6AE63F486CF4A87022EE6682D6</key>
+		<key>CD7812B3257037E1F9591856592DCC00</key>
 		<dict>
 			<key>includeInIndex</key>
 			<string>1</string>
@@ -5342,9 +5416,9 @@
 			<key>lastKnownFileType</key>
 			<string>archive.ar</string>
 			<key>name</key>
-			<string>libGTMStackTrace_external.a</string>
+			<string>libGTM_SystemVersion_external.a</string>
 			<key>path</key>
-			<string>Libraries/libGTMStackTrace_external.a</string>
+			<string>Libraries/libGTM_SystemVersion_external.a</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
@@ -5414,21 +5488,6 @@
 					<string>Project</string>
 				</array>
 			</dict>
-		</dict>
-		<key>CF3A341C5F81508D7AFE6C57A76C4BCE</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>archive.ar</string>
-			<key>name</key>
-			<string>libGTM_AddressBook_external.a</string>
-			<key>path</key>
-			<string>Libraries/libGTM_AddressBook_external.a</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
 		</dict>
 		<key>D0AA7859787CF3EC266380C200790A18</key>
 		<dict>
@@ -5669,6 +5728,21 @@
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 		</dict>
+		<key>D6256153CC134E581EBB4C0866FF1927</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>archive.ar</string>
+			<key>name</key>
+			<string>libGTM_NSScannerJSON_external.a</string>
+			<key>path</key>
+			<string>Libraries/libGTM_NSScannerJSON_external.a</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
 		<key>D6FB9006BB524C21F983CF85F405CFD1</key>
 		<dict>
 			<key>fileRef</key>
@@ -5810,21 +5884,6 @@
 			<string>macros_blocks</string>
 			<key>path</key>
 			<string>macros_blocks</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>DBFE78585899A0B3F3383F1265DDC365</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>archive.ar</string>
-			<key>name</key>
-			<string>libGTM_StringEncoding_external.a</string>
-			<key>path</key>
-			<string>Libraries/libGTM_StringEncoding_external.a</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
@@ -6198,21 +6257,6 @@
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
-		<key>E8A3ECC409B5D1EA6F5F73C5935F6EDD</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>archive.ar</string>
-			<key>name</key>
-			<string>libGTM_core_external.a</string>
-			<key>path</key>
-			<string>Libraries/libGTM_core_external.a</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
 		<key>E9010458398C90D6BAFF32ED269FB508</key>
 		<dict>
 			<key>isa</key>
@@ -6290,32 +6334,18 @@
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 		</dict>
-		<key>EFB2F6C5939A5D4391306F32F70A1B8B</key>
+		<key>EFFB68C1691ADC20B89A92FD8B5965C0</key>
 		<dict>
-			<key>children</key>
-			<array>
-				<string>CF3A341C5F81508D7AFE6C57A76C4BCE</string>
-				<string>E8A3ECC409B5D1EA6F5F73C5935F6EDD</string>
-				<string>202ECE927E45A2B0D7CA9A64A67F4AAA</string>
-				<string>2726665A300F0942EDDAC0E6B825428F</string>
-				<string>C1BC17E00E07AC0C69615E07233AAE56</string>
-				<string>BAC1A82F256FC5781DC897468DE4AFAA</string>
-				<string>BFC0B36BCFE42F316759A8A2C8768DA8</string>
-				<string>F7718CCEDDBF2F4A04FB3EEA2E848FB1</string>
-				<string>AEBE834B81B167007F2B7695A947B8BC</string>
-				<string>1407A5A2078F5DC7CEA9FA48E76C492A</string>
-				<string>8DAABC5861BD1BBD529C4F9994784EA8</string>
-				<string>FECB61BDC86850A7F72E2545C93E2DC3</string>
-				<string>714127D8D268235198900E4330AF2BCE</string>
-				<string>DBFE78585899A0B3F3383F1265DDC365</string>
-				<string>706D5BD99A5F1627D881064F9E33886A</string>
-				<string>631D34D0BDB4930D28BF4B7505E17B80</string>
-				<string>CD52CC6AE63F486CF4A87022EE6682D6</string>
-			</array>
+			<key>includeInIndex</key>
+			<string>1</string>
 			<key>isa</key>
-			<string>PBXGroup</string>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>archive.ar</string>
 			<key>name</key>
-			<string>Frameworks</string>
+			<string>libGTM_KVO_external.a</string>
+			<key>path</key>
+			<string>Libraries/libGTM_KVO_external.a</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
@@ -6500,21 +6530,6 @@
 			<string>libSVProgressHUD.a</string>
 			<key>sourceTree</key>
 			<string>BUILT_PRODUCTS_DIR</string>
-		</dict>
-		<key>F7718CCEDDBF2F4A04FB3EEA2E848FB1</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>archive.ar</string>
-			<key>name</key>
-			<string>libGTM_NSDictionary+URLArguments_external.a</string>
-			<key>path</key>
-			<string>Libraries/libGTM_NSDictionary+URLArguments_external.a</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
 		</dict>
 		<key>F77D145CF9C1ED7E15F8ADF3C8E1609B</key>
 		<dict>
@@ -6781,21 +6796,6 @@
 			<string>PBXGroup</string>
 			<key>name</key>
 			<string>Targets Support Files</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>FECB61BDC86850A7F72E2545C93E2DC3</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>archive.ar</string>
-			<key>name</key>
-			<string>libGTM_Regex_external.a</string>
-			<key>path</key>
-			<string>Libraries/libGTM_Regex_external.a</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>

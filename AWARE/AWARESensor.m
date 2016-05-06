@@ -290,6 +290,15 @@
 }
 
 
+- (void) allowsDateUploadWithoutBatteryCharging{
+    [uploader allowsDateUploadWithoutBatteryCharging];
+}
+
+- (void) forbidDatauploadWithoutBatteryCharging{
+    [uploader forbidDatauploadWithoutBatteryCharging];
+}
+
+
 //////////////////////////////////////////
 ////////////////////////////////////////
 

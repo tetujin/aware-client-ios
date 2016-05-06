@@ -478,6 +478,7 @@ handleEventsForBackgroundURLSession:(NSString *)identifier
     PushNotification * pushNotification = [[PushNotification alloc] initWithSensorName:nil withAwareStudy:awareStudy];
     [pushNotification savePushNotificationDeviceToken:token];
     [pushNotification allowsCellularAccess];
+    [pushNotification allowsDateUploadWithoutBatteryCharging];
     [pushNotification syncAwareDB];
     
     NSLog(@"deviceToken: %@", token);

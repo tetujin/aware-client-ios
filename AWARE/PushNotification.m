@@ -44,6 +44,7 @@
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
     [self saveStoredPushNotificationDeviceToken];
     [self allowsCellularAccess];
+    [self allowsDateUploadWithoutBatteryCharging];
     [self syncAwareDB];
     return YES;
 }

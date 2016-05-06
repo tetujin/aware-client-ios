@@ -82,6 +82,14 @@
     isWifiOnly = YES;
 }
 
+- (void) allowsDateUploadWithoutBatteryCharging{
+    isSyncWithOnlyBatteryCharging = NO;
+}
+
+- (void) forbidDatauploadWithoutBatteryCharging{
+    isSyncWithOnlyBatteryCharging = YES;
+}
+
 /////////////////////////////////
 /////////////////////////////////
 
