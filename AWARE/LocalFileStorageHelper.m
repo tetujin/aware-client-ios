@@ -132,7 +132,7 @@
         [jsonstr deleteCharactersInRange:deleteRangeTail];
         // append "," to the tail of object
         [jsonstr appendFormat:@","];
-        
+//        NSLog(@"%@", jsonstr);
         // save the data to local storage
         [self appendLine:jsonstr];
         
@@ -164,10 +164,6 @@
         [fh seekToEndOfFile];
         NSData * tempdataLine = [line dataUsingEncoding:NSUTF8StringEncoding];
         [fh writeData:tempdataLine];
-        
-        NSString * oneLine = [[NSString alloc] initWithString:[NSString stringWithFormat:@"%@", line]];
-        NSData *data = [oneLine dataUsingEncoding:NSUTF8StringEncoding];
-        [fh writeData:data];
         [fh synchronizeFile];
         [fh closeFile];
         return YES;
