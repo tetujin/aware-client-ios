@@ -48,21 +48,34 @@
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
     NSLog(@"Start Motion Activity Manager! ");
     
-    [self setBufferSize:10];
+//    [self setBufferSize:3];
     
-//    [self getMotionActivity:nil];
+    [self getMotionActivity:nil];
 
+    double frequency = [self getSensorSetting:settings withKey:@"frequency_plugin_google_activity_recognition"];
+    if (frequency < 180) {
+        frequency = 180;
+    }
+    
+    timer = [NSTimer scheduledTimerWithTimeInterval:frequency
+                                             target:self
+                                           selector:@selector(getMotionActivity:)
+                                           userInfo:nil
+                                            repeats:YES];
+    
     
     /** motion activity */
-    if([CMMotionActivityManager isActivityAvailable]){
-        motionActivityManager = [CMMotionActivityManager new];
-        [motionActivityManager startActivityUpdatesToQueue:[NSOperationQueue new]
-                                                withHandler:^(CMMotionActivity *activity) {
-                                                    dispatch_async(dispatch_get_main_queue(), ^{
-                                                        [self addMotionActivity:activity];
-                                                    });
-                                                }];
-    }
+//    if([CMMotionActivityManager isActivityAvailable]){
+//        motionActivityManager = [CMMotionActivityManager new];
+//        [motionActivityManager startActivityUpdatesToQueue:[NSOperationQueue new]
+//                                                withHandler:^(CMMotionActivity *activity) {
+//                                                    dispatch_async(dispatch_get_main_queue(), ^{
+//                                                        [self addMotionActivity:activity];
+//                                                    });
+//                                                }];
+//    }
+    
+   
     return YES;
 }
 
@@ -79,7 +92,7 @@
 }
 
 - (void)changedBatteryState{
-//    [self getMotionActivity:nil];
+    [self getMotionActivity:nil];
 }
 
 
@@ -99,7 +112,8 @@
             if (activities!=nil && error==nil) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     if ([self isDebug]) {
-                        NSString * message = [NSString stringWithFormat:@"Activity Recognition Sensor is called by a timer. (%ld activites)" ,activities.count];
+                        NSInteger count = activities.count;
+                        NSString * message = [NSString stringWithFormat:@"Activity Recognition Sensor is called by a timer. (%ld activites)" ,count];
                         [AWAREUtils sendLocalNotificationForMessage:message soundFlag:YES];
                         
                     }

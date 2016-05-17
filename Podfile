@@ -14,6 +14,7 @@ pod 'DeployGateSDK'
 pod 'ios-ntp'
 pod 'EZAudio'
 pod 'SVProgressHUD'
+pod 'Google/CloudMessaging'
 #pod 'RNGridMenu', '~> 0.1.2'
 
 
