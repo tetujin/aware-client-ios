@@ -36,6 +36,7 @@
 		162603BC1CBE6A3400EF233C /* ESMManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 162603BB1CBE6A3400EF233C /* ESMManager.m */; };
 		162B7DDC1C4EF792006972B5 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 162B7DDB1C4EF792006972B5 /* CoreTelephony.framework */; };
 		162B7DDF1C4EFA46006972B5 /* Calls.m in Sources */ = {isa = PBXBuildFile; fileRef = 162B7DDE1C4EFA46006972B5 /* Calls.m */; };
+		162E7CB61CF12AF5006B883A /* WebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 162E7CB51CF12AF5006B883A /* WebViewController.m */; };
 		1643959F1C22EEC40039E113 /* Scheduler.m in Sources */ = {isa = PBXBuildFile; fileRef = 1643959E1C22EEC40039E113 /* Scheduler.m */; };
 		164810401C20ECC300B830D9 /* AWAREEsmViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1648103F1C20ECC300B830D9 /* AWAREEsmViewController.m */; };
 		164810851C21C08C00B830D9 /* ESM.m in Sources */ = {isa = PBXBuildFile; fileRef = 164810841C21C08C00B830D9 /* ESM.m */; };
@@ -110,6 +111,7 @@
 		16F09B221C249C5F005C1EB8 /* GoogleCalPull.m in Sources */ = {isa = PBXBuildFile; fileRef = 16F09B211C249C5F005C1EB8 /* GoogleCalPull.m */; };
 		16F3BC151C76D31B005ACEE3 /* LocalCoreDataStorageHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 16F3BC141C76D31B005ACEE3 /* LocalCoreDataStorageHelper.m */; };
 		16FCE2771BFE9326005FC71A /* AWARESensorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 16FCE2761BFE9326005FC71A /* AWARESensorManager.m */; };
+		16FD37561CF0B1F700EEB416 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 16FD37541CF0B1DE00EEB416 /* Settings.bundle */; };
 		FC2AF85D761397B784DECBD3 /* libPods-AWARE.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9ED04F29ED60F3FCC960F6CD /* libPods-AWARE.a */; };
 /* End PBXBuildFile section */
 
@@ -199,6 +201,8 @@
 		162B7DDB1C4EF792006972B5 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		162B7DDD1C4EFA46006972B5 /* Calls.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Calls.h; sourceTree = "<group>"; };
 		162B7DDE1C4EFA46006972B5 /* Calls.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Calls.m; sourceTree = "<group>"; };
+		162E7CB41CF12AF5006B883A /* WebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewController.h; sourceTree = "<group>"; };
+		162E7CB51CF12AF5006B883A /* WebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewController.m; sourceTree = "<group>"; };
 		1643959D1C22EEC40039E113 /* Scheduler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Scheduler.h; sourceTree = "<group>"; };
 		1643959E1C22EEC40039E113 /* Scheduler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Scheduler.m; sourceTree = "<group>"; };
 		1648103E1C20ECC300B830D9 /* AWAREEsmViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AWAREEsmViewController.h; sourceTree = "<group>"; };
@@ -351,6 +355,7 @@
 		16F3BC141C76D31B005ACEE3 /* LocalCoreDataStorageHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalCoreDataStorageHelper.m; sourceTree = "<group>"; };
 		16FCE2751BFE9326005FC71A /* AWARESensorManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AWARESensorManager.h; sourceTree = "<group>"; };
 		16FCE2761BFE9326005FC71A /* AWARESensorManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AWARESensorManager.m; sourceTree = "<group>"; };
+		16FD37541CF0B1DE00EEB416 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		9B5BAD09F1FBEE0838867ACF /* Pods-AWARE.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AWARE.release.xcconfig"; path = "Pods/Target Support Files/Pods-AWARE/Pods-AWARE.release.xcconfig"; sourceTree = "<group>"; };
 		9ED04F29ED60F3FCC960F6CD /* libPods-AWARE.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AWARE.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EE6BA2397CB9F7AB5C901B47 /* Pods-AWARE.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AWARE.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AWARE/Pods-AWARE.debug.xcconfig"; sourceTree = "<group>"; };
@@ -630,6 +635,7 @@
 			isa = PBXGroup;
 			children = (
 				1623CE6A1BFD1B2C00EFAD72 /* main.m */,
+				16FD37541CF0B1DE00EEB416 /* Settings.bundle */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -895,6 +901,8 @@
 				1623CEAE1BFD407900EFAD72 /* QRCodeViewController.m */,
 				1648103E1C20ECC300B830D9 /* AWAREEsmViewController.h */,
 				1648103F1C20ECC300B830D9 /* AWAREEsmViewController.m */,
+				162E7CB41CF12AF5006B883A /* WebViewController.h */,
+				162E7CB51CF12AF5006B883A /* WebViewController.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -1226,6 +1234,7 @@
 				1623CE7C1BFD1B2C00EFAD72 /* LaunchScreen.storyboard in Resources */,
 				165A8B6F1C03B90500898C6C /* GoogleService-Info.plist in Resources */,
 				1623CE791BFD1B2C00EFAD72 /* Assets.xcassets in Resources */,
+				16FD37561CF0B1F700EEB416 /* Settings.bundle in Resources */,
 				1623CE741BFD1B2C00EFAD72 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1302,6 +1311,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1623CEB71BFE175F00EFAD72 /* AWARESensor.m in Sources */,
+				162E7CB61CF12AF5006B883A /* WebViewController.m in Sources */,
 				165870261C990805008B99D2 /* AmbientLight.m in Sources */,
 				169A7B351BFFB67800A7C06D /* Network.m in Sources */,
 				166F1A701C602B44002124FB /* AWAREHealthKit.m in Sources */,

@@ -9,6 +9,16 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>EAIntroView.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>EARestrictedScrollView.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>EZAudio.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -47,7 +57,17 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>3F38C496AC06681CAEE7767614EDE9F0</key>
+		<key>066EE8EF0B6469B50BD9A827F6EE5DF6</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>1BF13B35F364BA0B42EF9AC24C7DA945</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>3935BDF21A5D6A5E00CD4F252F7087E6</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -62,7 +82,7 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>500418AF00C5A07C35903372036CF3D1</key>
+		<key>4C9E99CC2B5F0FA4FC11C2E24D4EF986</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -82,7 +102,7 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>C8A08542DA0C58497F9940339B35C59F</key>
+		<key>D1EC2572C5166CE2498C72FAF128EABE</key>
 		<dict>
 			<key>primary</key>
 			<true/>

@@ -105,11 +105,32 @@
     if([CMMotionActivityManager isActivityAvailable]){
         // from data
         NSDate * fromDate = [self getLastUpdate];
+//        NSDate * fromDate = [AWAREUtils getTargetNSDate:[NSDate new] hour:-7*24 nextDay:NO];
         // to date
         NSDate * toDate = [NSDate new];
         motionActivityManager = [CMMotionActivityManager new];
         [motionActivityManager queryActivityStartingFromDate:fromDate toDate:toDate toQueue:operationQueueUpdate withHandler:^(NSArray<CMMotionActivity *> * _Nullable activities, NSError * _Nullable error) {
             if (activities!=nil && error==nil) {
+                [[[NSOperationQueue alloc] init] addOperationWithBlock:^{
+                    
+                    if(activities.count > 1000){
+                        [self setBufferSize:1000];
+                    }else if(activities.count > 100){
+                        [self setBufferSize:100];
+                    }else if (activities.count > 50) {
+                        [self setBufferSize:50];
+                    }else if(activities.count > 10){
+                        [self setBufferSize:10];
+                    }else{
+                        [self setBufferSize:0];
+                    }
+                    
+                    for (CMMotionActivity * activity in activities) {
+                        [self addMotionActivity:activity];
+                    }
+                    [self setLastUpdateWithDate:toDate];
+                    [self setBufferSize:0];
+                }];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     if ([self isDebug]) {
                         NSInteger count = activities.count;
@@ -117,10 +138,6 @@
                         [AWAREUtils sendLocalNotificationForMessage:message soundFlag:YES];
                         
                     }
-                    for (CMMotionActivity * activity in activities) {
-                        [self addMotionActivity:activity];
-                    }
-                    [self setLastUpdateWithDate:toDate];
                 });
             }
         }];

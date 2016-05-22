@@ -201,9 +201,6 @@ void exceptionHandler(NSException *exception) {
         if (_sharedSensorManager != nil) {
             [_sharedSensorManager syncAllSensorsWithDBInBackground];
         }
-        GoogleCalPush * cal = [[GoogleCalPush alloc] initWithSensorName:SENSOR_PLUGIN_GOOGLE_CAL_PUSH withAwareStudy:awareStudy];
-        [cal checkCalendarEvents:nil];
-        
         [_sharedSensorManager runBatteryStateChangeEvents];
     }
 }
@@ -629,35 +626,33 @@ didSignInForUser:(GIDGoogleUser *)user
     NSString *idToken = user.authentication.idToken; // Safe to send to the server
     NSString *name = user.profile.name;
     NSString *email = user.profile.email;
-
-//    NSLog(@"user id is %@", userId);
-//    NSLog(@"name is %@", name);
-//    NSLog(@"email is %@", email);
-//    NSLog(@"idToken is %@", idToken);
     
     if (name != nil ) {
         NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-        [defaults setObject:userId forKey:@"GOOGLE_ID"];
-        [defaults setObject:name forKey:@"GOOGLE_NAME"];
-        [defaults setObject:email forKey:@"GOOGLE_EMAIL"];
+        [defaults setObject:userId  forKey:@"GOOGLE_ID"];
+        [defaults setObject:name    forKey:@"GOOGLE_NAME"];
+        [defaults setObject:email   forKey:@"GOOGLE_EMAIL"];
         [defaults setObject:idToken forKey:@"GOOGLE_ID_TOKEN"];
+        [defaults setObject:@""     forKey:@"GOOGLE_PHONE"];
         
-        NSString* phoneNumber = [defaults objectForKey:@"GOOGLE_PHONE"];
+        GoogleLogin * googleLogin = [[GoogleLogin alloc] initWithSensorName:SENSOR_PLUGIN_GOOGLE_LOGIN withAwareStudy:awareStudy];
+        // Save the google account information to google login plugin
+        [googleLogin saveName:name withEmail:email phoneNumber:@""];
         
-        // Get Phone Number by using a notification with text field.
-        UIAlertView *av = [[UIAlertView alloc]initWithTitle:@"Please write your phonenumber"
-                                                    message:nil
-                                                   delegate:self
-                                          cancelButtonTitle:@"Cancel"
-                                          otherButtonTitles:@"OK", nil];
-        av.alertViewStyle = UIAlertViewStylePlainTextInput;
-        [av textFieldAtIndex:0].delegate = self;
-        if (phoneNumber != nil) {
-            [av textFieldAtIndex:0].text = phoneNumber;
-        }
-        UITextField* tf = [av textFieldAtIndex:0];
-        tf.keyboardType = UIKeyboardTypeNumberPad;
-        [av show];
+//        // Get Phone Number by using a notification with text field.
+//        UIAlertView *av = [[UIAlertView alloc]initWithTitle:@"Please write your phonenumber"
+//                                                    message:nil
+//                                                   delegate:self
+//                                          cancelButtonTitle:@"Cancel"
+//                                          otherButtonTitles:@"OK", nil];
+//        av.alertViewStyle = UIAlertViewStylePlainTextInput;
+//        [av textFieldAtIndex:0].delegate = self;
+//        if (phoneNumber != nil) {
+//            [av textFieldAtIndex:0].text = phoneNumber;
+//        }
+//        UITextField* tf = [av textFieldAtIndex:0];
+//        tf.keyboardType = UIKeyboardTypeNumberPad;
+//        [av show];
         
 
     }
@@ -667,25 +662,25 @@ didSignInForUser:(GIDGoogleUser *)user
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
     NSLog(@"%@",[alertView textFieldAtIndex:0].text);
     if (buttonIndex != 0) {
-        NSString * phonenumber = [alertView textFieldAtIndex:0].text;
-        GoogleLogin * googleLogin = [[GoogleLogin alloc] initWithSensorName:SENSOR_PLUGIN_GOOGLE_LOGIN withAwareStudy:nil];
-        NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-//        NSString *userId = [defaults objectForKey:@"GOOGLE_ID"];                  // For client-side use only!
-//        NSString *idToken = [defaults objectForKey:@"GOOGLE_ID_TOKEN"]; // Safe to send to the server
-        NSString *name = [defaults objectForKey:@"GOOGLE_NAME"];
-        NSString *email = [defaults objectForKey:@"GOOGLE_EMAIL"];
-        [defaults setObject:phonenumber forKey:@"GOOGLE_PHONE"];
-        
-        // Save the google account information to google login plugin
-        [googleLogin saveName:name withEmail:email phoneNumber:phonenumber];
+//        NSString * phonenumber = [alertView textFieldAtIndex:0].text;
+//        GoogleLogin * googleLogin = [[GoogleLogin alloc] initWithSensorName:SENSOR_PLUGIN_GOOGLE_LOGIN withAwareStudy:nil];
+//        NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+////        NSString *userId = [defaults objectForKey:@"GOOGLE_ID"];                  // For client-side use only!
+////        NSString *idToken = [defaults objectForKey:@"GOOGLE_ID_TOKEN"]; // Safe to send to the server
+//        NSString *name = [defaults objectForKey:@"GOOGLE_NAME"];
+//        NSString *email = [defaults objectForKey:@"GOOGLE_EMAIL"];
+//        [defaults setObject:phonenumber forKey:@"GOOGLE_PHONE"];
+//        
+//        // Save the google account information to google login plugin
+//        [googleLogin saveName:name withEmail:email phoneNumber:phonenumber];
         
         // Show go back alert
-        UIAlertView *av = [[UIAlertView alloc]initWithTitle:@"Success"
-                                                    message:@"Please go back to the toppage"
-                                                   delegate:self
-                                          cancelButtonTitle:nil
-                                          otherButtonTitles:@"OK", nil];
-        [av show];
+//        UIAlertView *av = [[UIAlertView alloc]initWithTitle:@"Success"
+//                                                    message:@"Please go back to the toppage"
+//                                                   delegate:self
+//                                          cancelButtonTitle:nil
+//                                          otherButtonTitles:@"OK", nil];
+//        [av show];
     }
 }
 

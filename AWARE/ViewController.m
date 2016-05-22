@@ -12,6 +12,7 @@
 #import "ViewController.h"
 #import "GoogleLoginViewController.h"
 #import "AWAREEsmViewController.h"
+#import "WebViewController.h"
 
 // Util
 #import "AWAREStudy.h"
@@ -70,6 +71,8 @@
     AWAREStudy * awareStudy;
     
     AWARESensorManager * sensorManager;
+    
+    NSURL * webViewURL;
 }
 
 - (void)viewDidLoad {
@@ -81,6 +84,8 @@
     KEY_CEL_IMAGE = @"image";
     KEY_CEL_STATE = @"state";
     KEY_CEL_SENSOR_NAME = @"sensorName";
+    
+    webViewURL = [NSURL URLWithString:@"http://www.awareframework.com"];
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     uploadInterval = [userDefaults doubleForKey:SETTING_SYNC_INT];
@@ -95,7 +100,9 @@
     _sensors = [[NSMutableArray alloc] init];
     
     // AWAREStudy manages a study configurate
-    awareStudy = [[AWAREStudy alloc] initWithReachability:YES];
+     awareStudy = [[AWAREStudy alloc] initWithReachability:YES];
+    
+    
     
     /**
      * Init a Debug Sensor for collecting a debug message.
@@ -153,6 +160,9 @@
     NSLog(@" Hello ESM view !");
     if ([segue.identifier isEqualToString:@"esmView"]) {
 //        AWAREEsmViewController *esmView = [segue destinationViewController];    // <- 1
+    } else if ([segue.identifier isEqualToString:@"webView"]) {
+        WebViewController *webViewController = [segue destinationViewController];
+        webViewController.url = webViewURL;
     }
 }
 
@@ -286,7 +296,7 @@
      * Plugins
      */
     // Google Fused Location
-    [_sensors addObject:[self getCelContent:@"Google Fused Location" desc:@"Google's Locations API provider. This plugin provides the user's current location in an energy efficient way." image:@"ic_action_google_fused_location" key:SENSOR_GOOGLE_FUSED_LOCATION]];
+    [_sensors addObject:[self getCelContent:@"Fused Location" desc:@"Locations API provider. This plugin provides the user's current location in an energy efficient way." image:@"ic_action_google_fused_location" key:SENSOR_GOOGLE_FUSED_LOCATION]];
     // Ambient Noise
     [_sensors addObject:[self getCelContent:@"Ambient Noise" desc:@"Anbient noise sensing by using a microphone on a smartphone." image:@"ic_action_ambient_noise" key:SENSOR_AMBIENT_NOISE]];
     // Activity Recognition
@@ -298,7 +308,7 @@
     // NTPTime
     [_sensors addObject:[self getCelContent:@"NTPTime" desc:@"Measure device's clock drift from an NTP server." image:@"ic_action_ntptime" key:SENSOR_PLUGIN_NTPTIME]];
     // Pedometer
-    [_sensors addObject:[self getCelContent:@"Pedometer" desc:@"This plugin collects user's daily steps." image:@"ic_action_steps" key:SENSOR_PLUGIN_PEDOMETER]];
+//    [_sensors addObject:[self getCelContent:@"Pedometer" desc:@"This plugin collects user's daily steps." image:@"ic_action_steps" key:SENSOR_PLUGIN_PEDOMETER]];
     // communication
     [_sensors addObject:[self getCelContent:@"Communication" desc:@"The Communication sensor logs communication events such as calls and messages, performed by or received by the user." image:@"ic_action_communication" key:SENSOR_CALLS]];
     [_sensors addObject:[self getCelContent:@"Label" desc:@"Save event labels to the AWARE server" image:@"ic_action_label" key:SENSOR_LABELS]];
@@ -313,7 +323,7 @@
     // Balanced Campus ESMs (ESM Scheduler)
     [_sensors addObject:[self getCelContent:@"Balanced Campus ESMs" desc:@"ESM Plugin" image:@"ic_action_campus" key:SENSOR_PLUGIN_CAMPUS]];
     // HealthKit
-    [_sensors addObject:[self getCelContent:@"HealthKit" desc:@"This plugin collects stored data in HealthKit App on iOS" image:@"ic_action_health_kit" key:@"sensor_plugin_health_kit"]];
+//    [_sensors addObject:[self getCelContent:@"HealthKit" desc:@"This plugin collects stored data in HealthKit App on iOS" image:@"ic_action_health_kit" key:@"sensor_plugin_health_kit"]];
 
     // [_sensors addObject:[self getCelContent:@"Direction (iOS)" desc:@"Device's direction (0-360)" image:@"safari_copyrighted" key:SENSOR_DIRECTION]];
     //    [_sensors addObject:[self getCelContent:@"Rotation (iOS)" desc:@"Orientation of the device" image:@"ic_action_rotation" key:SENSOR_ROTATION]];
@@ -351,7 +361,17 @@
         }
     }
     [_sensors addObject:[self getCelContent:@"Auto Study Update" desc:formattedDateString image:@"" key:@"STUDY_CELL_AUTO_STUDY_UPDATE"]];
-
+    
+    [awareStudy refreshAllSetting];
+    NSString * studyInfo = @"No Study: Let's join a study!";
+    if([awareStudy getMqttServer] != nil){
+        studyInfo = [NSString stringWithFormat:@"%@ (%@)", awareStudy.getMqttServer, awareStudy.getStudyId];
+    }
+    [_sensors addObject:[self getCelContent:@"Quit Study" desc:studyInfo image:@"" key:@"STUDY_CELL_QUIT_STUDY"]];
+//    [_sensors addObject:[self getCelContent:@"Privacy Policy" desc:@"" image:@"" key:@"STUDY_CELL_PRIVACY_POLICY"]];
+//    [_sensors addObject:[self getCelContent:@"About AWARE" desc:@"" image:@"" key:@"STUDY_CELL_ABOUT_AWARE"]];
+    [_sensors addObject:[self getCelContent:@"TEAM" desc:@"" image:@"" key:@"STUDY_CELL_TEAM"]];
+//    [_sensors addObject:[self getCelContent:@"Terms of Use" desc:@"" image:@"" key:@"STUDY_CELL_TERMS_OF_USE"]];
 }
 
 
@@ -416,6 +436,7 @@
 {
     NSLog(@"Back button is pressed!");
     [self.navigationController popToRootViewControllerAnimated:YES];
+    [self performSelector:@selector(initContentsOnTableView) withObject:0 afterDelay:3];
     return YES;
 }
 
@@ -510,6 +531,26 @@
         alert.alertViewStyle = UIAlertViewStylePlainTextInput;
         alert.tag = 11;
         [alert show];
+    }else if ([key isEqualToString:@"STUDY_CELL_QUIT_STUDY"]){
+        
+        if([awareStudy getMqttServer] != nil){
+            UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Quit the current study?"
+                                                             message:[NSString stringWithFormat:@"Now you are joining %@(%@)", [awareStudy getMqttServer], [awareStudy getStudyId]]
+                                                            delegate:self
+                                                   cancelButtonTitle:@"Cancel"
+                                                   otherButtonTitles:@"Quit",nil];
+            alert.tag = 12;
+            [alert show];
+        }
+    } else if([key isEqualToString:@"STUDY_CELL_PRIVACY_POLICY"]){
+//        webViewURL = [NSURL URLWithString:@""];
+        [self performSegueWithIdentifier:@"webView" sender:self];
+    } else if ([key isEqualToString:@"STUDY_CELL_ABOUT_AWARE"]){
+        webViewURL = [NSURL URLWithString:@"http://www.awareframework.com/what-is-aware/"];
+        [self performSegueWithIdentifier:@"webView" sender:self];
+    } else if ([key isEqualToString:@"STUDY_CELL_TEAM"]){
+        webViewURL = [NSURL URLWithString:@"http://www.awareframework.com/team/"];
+        [self performSegueWithIdentifier:@"webView" sender:self];
     }
 }
 
@@ -610,6 +651,18 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
         Labels * labelsSensor = [[Labels alloc] initWithSensorName:SENSOR_LABELS withAwareStudy:awareStudy];
         [labelsSensor saveLabel:label withKey:@"top" type:@"text" body:@"" triggerTime:[NSDate new] answeredTime:[NSDate new]];
         [labelsSensor syncAwareDB];
+    }else if (alertView.tag == 12){
+        if(buttonIndex == 1){
+            [sensorManager stopAndRemoveAllSensors];
+            [awareStudy clearAllSetting];
+            [self pushedStudyRefreshButton:nil];
+            UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"The study is quitted"
+                                                             message:nil
+                                                            delegate:self
+                                                   cancelButtonTitle:@"Close"
+                                                   otherButtonTitles:nil];
+            [alert show];
+        }
     }
 }
 
