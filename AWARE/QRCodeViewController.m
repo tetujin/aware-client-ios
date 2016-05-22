@@ -156,11 +156,17 @@
                     qrcodeStr = qrcode;
                     _button.enabled = YES;
                     _button.titleLabel.font = [UIFont boldSystemFontOfSize:20];
-                    [_button setTitle:@"Tap to join a study!" forState:UIControlStateNormal];
+                    [_button setTitle:@"Find a QR code!" forState:UIControlStateNormal];
+                    
+                    [self performSelector:@selector(setTapToJoinTextToButton:) withObject:nil afterDelay:2];
                 }
             }
         }
     });
+}
+
+- (void) setTapToJoinTextToButton:(id) sender{
+    [_button setTitle:@"Tap to join a study!" forState:UIControlStateNormal];
 }
 
 - (void) moveToTopPage {
@@ -233,6 +239,7 @@
                 // Install CRT file for SSL: If the error code is -1202, this device needs .crt for SSL(secure) connection.
                 dispatch_async(dispatch_get_main_queue(),^{
                     [self installSSLCertificationFile];
+//                    [self joinStudy];
                 });
             }
         }

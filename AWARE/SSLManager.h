@@ -15,4 +15,5 @@
 - (bool) installCRTWithAwareHostURL:(NSString *) url;
 - (bool) installCRTWithTextOfQRCode:(NSString *) text;
 
+
 @end

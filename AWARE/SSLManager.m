@@ -17,7 +17,7 @@
     NSArray *elements = [text componentsSeparatedByString:@"/"];
     if (elements.count > 2) {
         if ([[elements objectAtIndex:0] isEqualToString:@"https:"] || [[elements objectAtIndex:0] isEqualToString:@"http:"]) {
-            [self installCRTWithAwareHostURL:[elements objectAtIndex:2]];
+            return [self installCRTWithAwareHostURL:[elements objectAtIndex:2]];
         }
     }
     return NO;
@@ -27,9 +27,40 @@
     if ([url isEqualToString:@"api.awareframework.com"]) {
         url = @"awareframework.com";
     }
-    NSString * awareCrtUrl = [NSString stringWithFormat:@"http://%@/public/server.crt", url];
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:awareCrtUrl]];
-    return NO;
+    NSURL * awareCrtUrl = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@/public/server.crt", url]];
+    [[UIApplication sharedApplication] openURL:awareCrtUrl];
+    
+//    NSError *error = nil;
+//    int responseCode = 0;
+//    NSString* cerStr = @"";
+//    
+//    @autoreleasepool {
+//        NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+//        [request setURL:awareCrtUrl];
+//        [request setHTTPMethod:@"POST"];
+//        [request setTimeoutInterval:60*3];
+//        NSHTTPURLResponse *response = nil;
+//        NSData *resData = [NSURLConnection sendSynchronousRequest:request
+//                                                returningResponse:&response error:&error];
+//        cerStr = [[NSString alloc] initWithData:resData encoding:NSUTF8StringEncoding];
+//        responseCode = (int)[response statusCode];
+//    }
+//    
+//    if(responseCode == 200){
+//        NSLog(@"SSL: %@", cerStr);
+//        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+//        NSString *directory = [paths objectAtIndex:0];
+//        NSString *filePath = [directory stringByAppendingPathComponent:@"server.crt"];
+//        BOOL successful = [cerStr writeToFile:filePath atomically:NO];
+//        if (successful) {
+//            return YES;
+//        }else{
+//            return NO;
+//        }
+//    }else{
+//        return NO;
+//    }
+    return YES;
 }
 
 @end
