@@ -369,8 +369,8 @@
     }
     [_sensors addObject:[self getCelContent:@"Quit Study" desc:studyInfo image:@"" key:@"STUDY_CELL_QUIT_STUDY"]];
 //    [_sensors addObject:[self getCelContent:@"Privacy Policy" desc:@"" image:@"" key:@"STUDY_CELL_PRIVACY_POLICY"]];
-//    [_sensors addObject:[self getCelContent:@"About AWARE" desc:@"" image:@"" key:@"STUDY_CELL_ABOUT_AWARE"]];
-    [_sensors addObject:[self getCelContent:@"TEAM" desc:@"" image:@"" key:@"STUDY_CELL_TEAM"]];
+    [_sensors addObject:[self getCelContent:@"About AWARE" desc:@"" image:@"" key:@"STUDY_CELL_ABOUT_AWARE"]];
+    [_sensors addObject:[self getCelContent:@"Team" desc:@"" image:@"" key:@"STUDY_CELL_TEAM"]];
 //    [_sensors addObject:[self getCelContent:@"Terms of Use" desc:@"" image:@"" key:@"STUDY_CELL_TERMS_OF_USE"]];
 }
 
@@ -546,7 +546,7 @@
 //        webViewURL = [NSURL URLWithString:@""];
         [self performSegueWithIdentifier:@"webView" sender:self];
     } else if ([key isEqualToString:@"STUDY_CELL_ABOUT_AWARE"]){
-        webViewURL = [NSURL URLWithString:@"http://www.awareframework.com/what-is-aware/"];
+        webViewURL = [NSURL URLWithString:@"http://www.awareframework.com/"];
         [self performSegueWithIdentifier:@"webView" sender:self];
     } else if ([key isEqualToString:@"STUDY_CELL_TEAM"]){
         webViewURL = [NSURL URLWithString:@"http://www.awareframework.com/team/"];
