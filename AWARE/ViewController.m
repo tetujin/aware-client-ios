@@ -73,6 +73,8 @@
     AWARESensorManager * sensorManager;
     
     NSURL * webViewURL;
+    
+    EAIntroView *intro;
 }
 
 - (void)viewDidLoad {
@@ -89,6 +91,15 @@
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     uploadInterval = [userDefaults doubleForKey:SETTING_SYNC_INT];
+    
+    
+    // EAIntroView
+    intro = [[EAIntroView alloc] initWithFrame:self.view.bounds andPages:[self getIntroPages]];
+    [intro setDelegate:self];
+    if (![userDefaults boolForKey:@"showed_introduction"]) {
+         [intro showInView:self.view animateDuration:0.0];
+    }
+    [userDefaults setBool:YES forKey:@"showed_introduction"];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
 
@@ -372,6 +383,7 @@
     [_sensors addObject:[self getCelContent:@"About AWARE" desc:@"" image:@"" key:@"STUDY_CELL_ABOUT_AWARE"]];
     [_sensors addObject:[self getCelContent:@"Team" desc:@"" image:@"" key:@"STUDY_CELL_TEAM"]];
 //    [_sensors addObject:[self getCelContent:@"Terms of Use" desc:@"" image:@"" key:@"STUDY_CELL_TERMS_OF_USE"]];
+    [_sensors addObject:[self getCelContent:@"Introduction" desc:@"" image:@"" key:@"STUDY_CELL_SHOW_INTRODUCTION"]];
 }
 
 
@@ -551,6 +563,10 @@
     } else if ([key isEqualToString:@"STUDY_CELL_TEAM"]){
         webViewURL = [NSURL URLWithString:@"http://www.awareframework.com/team/"];
         [self performSegueWithIdentifier:@"webView" sender:self];
+    } else if ([key isEqualToString:@"STUDY_CELL_SHOW_INTRODUCTION"]){
+         [intro showInView:self.view animateDuration:0.0];
+         NSIndexPath* indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+         [tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];
     }
 }
 
@@ -730,6 +746,81 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
         return cell;
     }
 }
+
+
+
+///////////////////////////////////////////////
+///////////////////////////////////////////////
+
+- (NSArray *) getIntroPages {
+    NSMutableArray * pages = [[NSMutableArray alloc] init];
+    
+    // basic
+    EAIntroPage *page1 = [EAIntroPage page];
+    page1.title = @"About AWARE";
+    page1.desc = @"AWARE Client iOS is a sensing framework dedicated to an instrument, infer, log and share mobile context information, for smartphone users and researchers. AWARE captures hardware-, software-, and human-based data.";
+    page1.titlePositionY = 350;
+    page1.descPositionY = 300;
+    page1.titleColor = [UIColor darkGrayColor];
+    page1.descColor = [UIColor darkGrayColor];
+    page1.bgColor = [UIColor whiteColor];
+    page1.titleIconView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_launcher_aware-web"]];
+    [page1.titleIconView setBounds:CGRectMake(0,0,200,200)];
+    
+    // custom
+    EAIntroPage *page2 = [EAIntroPage page];
+    page2.title = @"Individuals: Record your data";
+    page2.desc = @"By using the AWARE Dashboard, you can enable or disable sensors. Privacy is enforced by design, so AWARE does not log personal information, such as phone numbers or contacts information. Also, the data is saved locally on your mobile phone temporary. AWARE upload the data to the AWARE server automatically if the device has a Wi-Fi network and is charged battery.";
+    page2.titlePositionY = 350;
+    page2.descPositionY = 300;
+    page2.titleColor = [UIColor darkGrayColor];
+    page2.descColor = [UIColor darkGrayColor];
+    page2.bgColor = [UIColor whiteColor];
+    page2.titleIconView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"personal"]];
+    [page2.titleIconView setBounds:CGRectMake(0,0,200,200)];
+    
+    // page 3
+    EAIntroPage *page3 = [EAIntroPage page];
+    page3.title = @"Scientists: Run studies";
+    page3.desc = @"Running a mobile related study has never been easier. Install AWARE on the participants phone, select the data you want to collect and that is it. If you use the own AWARE server, you can set mobile questionary.";
+    page3.titlePositionY = 350;
+    page3.descPositionY = 300;
+    page3.titleColor = [UIColor darkGrayColor];
+    page3.descColor = [UIColor darkGrayColor];
+    page3.bgColor = [UIColor whiteColor];
+    page3.titleIconView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"scientist"]];
+    [page3.titleIconView setBounds:CGRectMake(0,0,200,200)];
+    
+    EAIntroPage *page4 = [EAIntroPage page];
+    page4.title = @"How to Use AWARE Client";
+    page4.desc = @"1.Set a study on AWARE Dashboard and make a QRcode for the study\n2.Read the QRcode by AWARE client's QRcode reader\n3.Install SSL certificiation file and push a 'Refresh button'\n3.AWARE client start sensing and uploading your contexts in the background\n4.You can quit the study by 'Quit Study' button";
+    page4.titlePositionY = 350;
+    page4.descPositionY = 300;
+    page4.titleColor = [UIColor darkGrayColor];
+    page4.descColor = [UIColor darkGrayColor];
+    page4.bgColor = [UIColor whiteColor];
+    page4.titleIconView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"aware_qrcode"]];
+    [page4.titleIconView setBounds:CGRectMake(0,0,200,200)];
+    
+    EAIntroPage *page5 = [EAIntroPage page];
+    page5.titleColor = [UIColor darkGrayColor];
+    page5.title = @"Welcome to AWARE Framework!!";
+    page5.titleFont = [UIFont fontWithName:@"Georgia-BoldItalic" size:30];
+    page5.titlePositionY = 500;
+    page5.descColor = [UIColor darkGrayColor];
+    page5.desc = @"You can get more detail information about AWARE Framework from the following URL.\nhttp://www.awareframework.com/";
+    page5.descPositionY = 400;
+    page5.bgColor = [UIColor whiteColor];
+    
+    [pages addObject:page1];
+    [pages addObject:page2];
+    [pages addObject:page3];
+    [pages addObject:page4];
+    [pages addObject:page5];
+    
+    return pages;
+}
+
 
 
 @end

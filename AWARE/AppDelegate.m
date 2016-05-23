@@ -12,6 +12,9 @@
 #import "AWAREUtils.h"
 #import "AWAREStudy.h"
 
+// EAIntroView (https://github.com/ealeksandrov/EAIntroView)
+#import "EAIntroView.h"
+
 // DeployGateSDK Libraries (https://deploygate.com/docs/ios_sdk)
 #import "DeployGateSDK/DeployGateSDK.h"
 
@@ -42,7 +45,8 @@
     
     awareStudy = [[AWAREStudy alloc] initWithReachability:YES];
     observer = [[Observer alloc] initWithSensorName:@"" withAwareStudy:awareStudy];
-
+    
+    
     [application unregisterForRemoteNotifications];
     
     if ([AWAREUtils getCurrentOSVersionAsFloat] >= 8.0) {
@@ -843,6 +847,12 @@ didDisconnectWithUser:(GIDGoogleUser *)user
 //    }
 //}
 
+
+
+
+/////////////////////////////////////////////
+/////////////////////////////////////////////
+//
 
 
 
