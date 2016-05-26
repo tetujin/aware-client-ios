@@ -192,7 +192,7 @@
     
     if (motionActivity.automotive){
         motionName = @"in_vehicle";
-        motionType = @1;
+        motionType = @0;
         [activities addObject:[self getActivityDicWithName:motionName confidence:motionConfidence]];
     }
     
