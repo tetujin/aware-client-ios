@@ -18,7 +18,7 @@
 @implementation Scheduler {
     // -- Notification Body --
     NSString * notificationTitle;
-    NSString * body;
+    NSString * notificationBody;
     
     // -- Daily update function  --
     // An update timer for daily configuration
@@ -48,7 +48,7 @@
     if (self) {
         /** Notification Body */
         notificationTitle = @"BalancedCampus Question";
-        body = @"Tap to answer.";
+        notificationBody = @"Tap to answer.";
         
         /** Initialize variables for daily update */
         dailyUpdate = [AWAREUtils getTargetNSDate:[NSDate new] hour:3 nextDay:YES];
@@ -540,6 +540,14 @@ didCompleteWithError:(NSError *)error {
         NSString * identifier = [schedule objectForKey:@"schedule_id"];
         NSArray * hours = [schedule objectForKey:@"hours"];
         NSArray * esmsDic = [schedule objectForKey:@"esms"];
+        NSString * title = [schedule objectForKey:@"notification_title"];
+        NSString * body = [schedule objectForKey:@"notification_body"];
+        if (title != nil) {
+            notificationTitle = title;
+        }
+        if(body != nil){
+            notificationBody = body;
+        }
         // check esm_ios
         if (esmsDic != nil) {
             esmsDic = [self checkEsmIOS:esmsDic];
@@ -559,7 +567,7 @@ didCompleteWithError:(NSError *)error {
                                      intervalType:SCHEDULE_INTERVAL_DAY
                                               esm:esmsStr
                                             title:notificationTitle
-                                             body:body
+                                             body:notificationBody
                                        identifier:@"---"];
             schedule.schedule = fireDate;
             
