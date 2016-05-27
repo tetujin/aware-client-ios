@@ -276,6 +276,29 @@
 }
 
 
+/////////////////////////////////////////////
+/////////////////////////////////////////////
+/**
+ * Sync options
+ */
+- (void)allowsCellularAccess{
+    [uploader allowsCellularAccess];
+}
+
+- (void)forbidCellularAccess{
+    [uploader forbidCellularAccess];
+}
+
+
+- (void) allowsDateUploadWithoutBatteryCharging{
+    [uploader allowsDateUploadWithoutBatteryCharging];
+}
+
+- (void) forbidDatauploadWithoutBatteryCharging{
+    [uploader forbidDatauploadWithoutBatteryCharging];
+}
+
+
 //////////////////////////////////////////
 ////////////////////////////////////////
 

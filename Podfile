@@ -6,7 +6,6 @@
 
 target 'AWARE' do
 
-
 pod 'MQTTKit', :git => 'https://github.com/mobile-web-messaging/MQTTKit.git'
 pod 'SCNetworkReachability'
 pod 'Google/SignIn'
@@ -14,6 +13,8 @@ pod 'DeployGateSDK'
 pod 'ios-ntp'
 pod 'EZAudio'
 pod 'SVProgressHUD'
+#pod 'Google/CloudMessaging'
+pod 'EAIntroView', '~> 2.9.0'
 #pod 'RNGridMenu', '~> 0.1.2'
 
 
@@ -30,6 +31,12 @@ end
 target 'AWAREUITests' do
 
 end
+
+post_install do | installer |
+  require 'fileutils'
+    FileUtils.cp_r('Pods/Target Support Files/Pods-AWARE/Pods-AWARE-acknowledgements.plist', 'AWARE/Settings.bundle/Acknowledgements.plist', :remove_destination => true)
+end
+
 
 #post_install do | installer |
 #    require 'fileutils'

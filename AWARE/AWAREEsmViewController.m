@@ -254,38 +254,59 @@
     [textView setDelegate:self];
     
     
-    //for N/A option
-    UIButton * naCheckBox = [[UIButton alloc] initWithFrame:CGRectMake(mainContentRect.origin.x,
-                                                                       totalHight + textView.frame.size.height,
-                                                                       30, 30)];
-    [naCheckBox setImage:[UIImage imageNamed:@"unchecked_box"] forState:UIControlStateNormal];
-    naCheckBox.selected = NO;
-    naCheckBox.tag = tag;
-    [naCheckBox addTarget:self
-                   action:@selector(pushedNaBox:)
-         forControlEvents:UIControlEventTouchUpInside];
-    UILabel * nalabel = [[UILabel alloc] initWithFrame:CGRectMake(mainContentRect.origin.x+10+40,
-                                                                totalHight+ textView.frame.size.height,
-                                                                mainContentRect.size.width-90,
-                                                                30)];
-    nalabel.text = @"NA";
+    // @"esm_na"
+    BOOL naState = [self getNaStateFromDict:dic];
+    if (naState) {
+        //for N/A option
+        UIButton * naCheckBox = [[UIButton alloc] initWithFrame:CGRectMake(mainContentRect.origin.x,
+                                                                           totalHight + textView.frame.size.height,
+                                                                           30, 30)];
+        [naCheckBox setImage:[UIImage imageNamed:@"unchecked_box"] forState:UIControlStateNormal];
+        naCheckBox.selected = NO;
+        naCheckBox.tag = tag;
+        [naCheckBox addTarget:self
+                       action:@selector(pushedNaBox:)
+             forControlEvents:UIControlEventTouchUpInside];
+        UILabel * nalabel = [[UILabel alloc] initWithFrame:CGRectMake(mainContentRect.origin.x+10+40,
+                                                                      totalHight+ textView.frame.size.height,
+                                                                      mainContentRect.size.width-90,
+                                                                      30)];
+        nalabel.text = @"NA";
+        [self setContentSizeWithAdditionalHeight: mainContentRect.size.height + naCheckBox.frame.size.height ];
+        
+        [_mainScrollView addSubview:textView];
+        [_mainScrollView addSubview:naCheckBox];
+        [_mainScrollView addSubview:nalabel];
+        
+        //    [uiElements addObject:textView];
+        NSMutableDictionary * uiElement = [[NSMutableDictionary alloc] init];
+        [uiElement setObject:[NSNumber numberWithInt:tag] forKey:KEY_TAG];
+        [uiElement setObject:@1 forKey:KEY_TYPE];
+        NSArray * contents = [[NSArray alloc] initWithObjects:textView, naCheckBox, nil];
+        [uiElement setObject:contents forKey:KEY_ELEMENT];
+        [uiElement setObject:[[NSArray alloc] init] forKey:KEY_LABLES];
+        [uiElement setObject:dic forKey:KEY_OBJECT];
+        
+        [uiElements addObject:uiElement];
+    }else{
+        [self setContentSizeWithAdditionalHeight: mainContentRect.size.height];
+        
+        [_mainScrollView addSubview:textView];
+        
+        //    [uiElements addObject:textView];
+        NSMutableDictionary * uiElement = [[NSMutableDictionary alloc] init];
+        [uiElement setObject:[NSNumber numberWithInt:tag] forKey:KEY_TAG];
+        [uiElement setObject:@1 forKey:KEY_TYPE];
+        NSArray * contents = [[NSArray alloc] initWithObjects:textView, nil];
+        [uiElement setObject:contents forKey:KEY_ELEMENT];
+        [uiElement setObject:[[NSArray alloc] init] forKey:KEY_LABLES];
+        [uiElement setObject:dic forKey:KEY_OBJECT];
+        
+        [uiElements addObject:uiElement];
+    }
     
-    [self setContentSizeWithAdditionalHeight: mainContentRect.size.height + naCheckBox.frame.size.height ];
     
-    [_mainScrollView addSubview:textView];
-    [_mainScrollView addSubview:naCheckBox];
-    [_mainScrollView addSubview:nalabel];
     
-//    [uiElements addObject:textView];
-    NSMutableDictionary * uiElement = [[NSMutableDictionary alloc] init];
-    [uiElement setObject:[NSNumber numberWithInt:tag] forKey:KEY_TAG];
-    [uiElement setObject:@1 forKey:KEY_TYPE];
-    NSArray * contents = [[NSArray alloc] initWithObjects:textView, naCheckBox, nil];
-    [uiElement setObject:contents forKey:KEY_ELEMENT];
-    [uiElement setObject:[[NSArray alloc] init] forKey:KEY_LABLES];
-    [uiElement setObject:dic forKey:KEY_OBJECT];
-    
-    [uiElements addObject:uiElement];
 }
 
 
@@ -301,7 +322,6 @@
     NSMutableArray *elements = [[NSMutableArray alloc] init];
     NSMutableArray *labels = [[NSMutableArray alloc] init];
     
-//    for (NSString* buttonBoxItem in [dic objectForKey:KEY_ESM_RADIOS]) {
     NSArray * radios = [dic objectForKey:KEY_ESM_RADIOS];
     for (int i=0; i<radios.count ; i++) {
         NSString * labelText = @"";
@@ -544,42 +564,82 @@
                                                                   totalHight,
                                                                   mainContentRect.size.width-120,
                                                                   60)];
-    // Add labels
-    for (int i=0; i<[max intValue]+1; i++) {
-        int anOptionWidth = ratingView.frame.size.width / ([max intValue] + 1); // "1" is a space for N/A label
-        int addX = i * anOptionWidth;
-        int x = ratingView.frame.origin.x + addX + (anOptionWidth/4);
-        int y = totalHight;
-        int w = ratingView.frame.size.height/2; //30
-        int h = ratingView.frame.size.height/2; //30
-        UILabel *numbers = [[UILabel alloc] initWithFrame:CGRectMake(x,y,w,h)];
-        numbers.text = [NSString stringWithFormat:@"%d", i+1];
-//        [elements addObject:numbers];
-        if ( i == ([max intValue]) ) { // last label
-            numbers.text = @"NA";
-            numbers.frame = CGRectMake(x-(anOptionWidth/4), y, w, h);
+    // Get "NA" state. The key for the NA state is "esm_na", also value is 0(FALSE) or 1(TURE).
+    BOOL naState = [self getNaStateFromDict:dic];
+    
+    if(naState){ // NA is true
+        // Add labels
+        for (int i=0; i<[max intValue]+1; i++) {
+            int anOptionWidth = ratingView.frame.size.width / ([max intValue] + 1); // "1" is a space for N/A label
+            int addX = i * anOptionWidth;
+            int x = ratingView.frame.origin.x + addX + (anOptionWidth/4);
+            int y = totalHight;
+            int w = ratingView.frame.size.height/2; //30
+            int h = ratingView.frame.size.height/2; //30
+            UILabel *numbers = [[UILabel alloc] initWithFrame:CGRectMake(x,y,w,h)];
+            numbers.text = [NSString stringWithFormat:@"%d", i+1];
+            //        [elements addObject:numbers];
+            if ( i == ([max intValue]) ) { // last label
+                numbers.text = @"NA";
+                numbers.frame = CGRectMake(x-(anOptionWidth/4), y, w, h);
+            }
+            [_mainScrollView addSubview:numbers];
         }
-        [_mainScrollView addSubview:numbers];
+        
+        // Add options
+        for (int i=0; i<([max intValue]+1) ; i++) {
+            int anOptionWidth = ratingView.frame.size.width / ([max intValue]+1);
+            int addX = i * anOptionWidth;
+            int x = ratingView.frame.origin.x + addX;
+            int y = totalHight + ratingView.frame.size.height/2;
+            int w = ratingView.frame.size.height/2; //30
+            int h = ratingView.frame.size.height/2; //30
+            UIButton * option = [[UIButton alloc] initWithFrame:CGRectMake(x, y, w, h)];
+            option.tag = tag;
+            [option addTarget:self action:@selector(pushedLikertButton:) forControlEvents:UIControlEventTouchUpInside];
+            [option setImage:[UIImage imageNamed:@"unselected_circle"] forState:UIControlStateNormal];
+            option.selected = NO;
+            [_mainScrollView addSubview:option];
+            [elements addObject:option];
+        }
+        [self setContentSizeWithAdditionalHeight:ratingView.frame.size.height];
+    }else{ // NA is false
+        // Add labels
+        for (int i=0; i<[max intValue]; i++) {
+            int anOptionWidth = ratingView.frame.size.width / [max intValue]; // "1" is a space for N/A label
+            int addX = i * anOptionWidth;
+            int x = ratingView.frame.origin.x + addX + (anOptionWidth/4);
+            int y = totalHight;
+            int w = ratingView.frame.size.height/2; //30
+            int h = ratingView.frame.size.height/2; //30
+            UILabel *numbers = [[UILabel alloc] initWithFrame:CGRectMake(x,y,w,h)];
+            numbers.text = [NSString stringWithFormat:@"%d", i+1];
+            //        [elements addObject:numbers];
+//            if ( i == ([max intValue]) ) { // last label
+//                numbers.text = @"NA";
+//                numbers.frame = CGRectMake(x-(anOptionWidth/4), y, w, h);
+//            }
+            [_mainScrollView addSubview:numbers];
+        }
+        
+        // Add options
+        for (int i=0; i<[max intValue] ; i++) {
+            int anOptionWidth = ratingView.frame.size.width / [max intValue];
+            int addX = i * anOptionWidth;
+            int x = ratingView.frame.origin.x + addX;
+            int y = totalHight + ratingView.frame.size.height/2;
+            int w = ratingView.frame.size.height/2; //30
+            int h = ratingView.frame.size.height/2; //30
+            UIButton * option = [[UIButton alloc] initWithFrame:CGRectMake(x, y, w, h)];
+            option.tag = tag;
+            [option addTarget:self action:@selector(pushedLikertButton:) forControlEvents:UIControlEventTouchUpInside];
+            [option setImage:[UIImage imageNamed:@"unselected_circle"] forState:UIControlStateNormal];
+            option.selected = NO;
+            [_mainScrollView addSubview:option];
+            [elements addObject:option];
+        }
+        [self setContentSizeWithAdditionalHeight:ratingView.frame.size.height];
     }
-    
-    // Add options
-    for (int i=0; i<([max intValue]+1) ; i++) {
-        int anOptionWidth = ratingView.frame.size.width / ([max intValue]+1);
-        int addX = i * anOptionWidth;
-        int x = ratingView.frame.origin.x + addX;
-        int y = totalHight + ratingView.frame.size.height/2;
-        int w = ratingView.frame.size.height/2; //30
-        int h = ratingView.frame.size.height/2; //30
-        UIButton * option = [[UIButton alloc] initWithFrame:CGRectMake(x, y, w, h)];
-        option.tag = tag;
-        [option addTarget:self action:@selector(pushedLikertButton:) forControlEvents:UIControlEventTouchUpInside];
-        [option setImage:[UIImage imageNamed:@"unselected_circle"] forState:UIControlStateNormal];
-        option.selected = NO;
-        [_mainScrollView addSubview:option];
-        [elements addObject:option];
-    }
-    
-    [self setContentSizeWithAdditionalHeight:ratingView.frame.size.height];
     
     NSMutableDictionary * uiElement = [[NSMutableDictionary alloc] init];
     [uiElement setObject:[NSNumber numberWithInt:tag] forKey:KEY_TAG];
@@ -751,6 +811,10 @@
     minLabel.textAlignment = NSTextAlignmentCenter;
     maxLabel.textAlignment = NSTextAlignmentCenter;
     
+    
+    
+    // NA
+    BOOL naState = [self getNaStateFromDict:dic];
     UIButton * naCheckBox = [[UIButton alloc] initWithFrame:CGRectMake(mainContentRect.origin.x,
                                                                        totalHight+valueLabelH+mainContentH+spaceH,
                                                                        30, naH)];
@@ -766,12 +830,16 @@
                    action:@selector(pushedNaBox:)
          forControlEvents:UIControlEventTouchUpInside];
 
+    
+    
     [_mainScrollView addSubview:valueLabel];
     [_mainScrollView addSubview:slider];
     [_mainScrollView addSubview:maxLabel];
     [_mainScrollView addSubview:minLabel];
-    [_mainScrollView addSubview:naCheckBox];
-    [_mainScrollView addSubview:label];
+    if(naState){
+        [_mainScrollView addSubview:naCheckBox];
+        [_mainScrollView addSubview:label];
+    }
     
     [self setContentSizeWithAdditionalHeight:valueLabelH + mainContentH + spaceH + naH];
     
@@ -780,9 +848,9 @@
     NSMutableDictionary * uiElement = [[NSMutableDictionary alloc] init];
 //    [elements addObject:slider];
     [elements addObject:valueLabel]; // for detect
-    [elements addObject:naCheckBox];
+    if(naState)[elements addObject:naCheckBox];
     [labels addObject:maxLabel];
-    [labels addObject:label];
+    if(naState)[labels addObject:label];
     [uiElement setObject:[NSNumber numberWithInt:tag] forKey:KEY_TAG];
     [uiElement setObject:@6 forKey:KEY_TYPE];
     [uiElement setObject:elements forKey:KEY_ELEMENT];
@@ -826,6 +894,10 @@
      forControlEvents:UIControlEventValueChanged];
     
     int datePickerHight = datePicker.frame.size.height;
+    
+    
+    // NA
+    BOOL naState = [self getNaStateFromDict:dic];
     UIButton * naCheckBox = [[UIButton alloc] initWithFrame:CGRectMake(mainContentRect.origin.x,
                                                                        totalHight+datePickerHight+10,
                                                                        30, 30)];
@@ -844,8 +916,8 @@
     
     
     [_mainScrollView addSubview:datePicker];
-    [_mainScrollView addSubview:naCheckBox];
-    [_mainScrollView addSubview:label];
+    if(naState)[_mainScrollView addSubview:naCheckBox];
+    if(naState)[_mainScrollView addSubview:label];
     [self setContentSizeWithAdditionalHeight:datePickerHight + 10 + 30];
     
     
@@ -853,7 +925,8 @@
     NSMutableArray * labels = [[NSMutableArray alloc] init];
     NSNumber * datetime = [[NSNumber alloc] initWithInt:0];
     [elements addObject:datetime];
-    [elements addObject:naCheckBox];
+    if(naState)[elements addObject:naCheckBox];
+    
     NSMutableDictionary * uiElement = [[NSMutableDictionary alloc] init];
     [uiElement setObject:[NSNumber numberWithInt:tag] forKey:KEY_TAG];
     [uiElement setObject:@7 forKey:KEY_TYPE];
@@ -866,19 +939,18 @@
 
 
 - (void) setDateValue:(UIDatePicker * ) sender {
+    
     NSInteger tag = sender.tag;
     NSMutableDictionary * uiElement = [uiElements objectAtIndex:tag];
     NSArray * elements = [uiElement objectForKey:KEY_ELEMENT];
     
     NSMutableArray * array = [[NSMutableArray alloc] initWithArray:elements];
-//    double timeStamp = [[NSDate date] timeIntervalSince1970] * 1000;
-//    NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
     NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
     [array setObject:unixtime atIndexedSubscript:0];
     
     [uiElement setObject:array forKey:KEY_ELEMENT];
-    [uiElements insertObject:uiElement atIndex:tag];
-    
+    [uiElements replaceObjectAtIndex:tag withObject:uiElement];
+    //    [uiElements insertObject:uiElement atIndex:tag];
 }
 
 
@@ -1118,19 +1190,33 @@
         if ([type isEqualToNumber:@1]) {
             NSLog(@"Get free text data.");
             if (contents != nil) {
+                UITextView * textView = [contents objectAtIndex:0];
+                [dic setObject:textView.text forKey:KEY_ESM_USER_ANSWER];
+                NSLog(@"Value is = %@", textView.text);
+                if ([textView.text isEqualToString:@""]) {
+                    [dic setObject:DISMISSED forKey:KEY_ESM_STATUS];
+                }
                 if (contents.count > 1) {
-                    UITextView * textView = [contents objectAtIndex:0];
-                    [dic setObject:textView.text forKey:KEY_ESM_USER_ANSWER];
-                    NSLog(@"Value is = %@", textView.text);
                     UIButton * naButton = [contents objectAtIndex:1];
-                    if ([textView.text isEqualToString:@""] && !naButton.selected) {
-                        [dic setObject:DISMISSED forKey:KEY_ESM_STATUS];
-                    }
                     if (naButton.selected) {
                         [dic setObject:@"NA" forKey:KEY_ESM_USER_ANSWER];
                         [dic setObject:ANSWERED forKey:KEY_ESM_STATUS];
                     }
                 }
+
+//                if (contents.count > 1) {
+//                    UITextView * textView = [contents objectAtIndex:0];
+//                    [dic setObject:textView.text forKey:KEY_ESM_USER_ANSWER];
+//                    NSLog(@"Value is = %@", textView.text);
+//                    UIButton * naButton = [contents objectAtIndex:1];
+//                    if ([textView.text isEqualToString:@""] && !naButton.selected) {
+//                        [dic setObject:DISMISSED forKey:KEY_ESM_STATUS];
+//                    }
+//                    if (naButton.selected) {
+//                        [dic setObject:@"NA" forKey:KEY_ESM_USER_ANSWER];
+//                        [dic setObject:ANSWERED forKey:KEY_ESM_STATUS];
+//                    }
+//                }
             }
         } else if ([type isEqualToNumber:@2]) {
             NSLog(@"Get radio data.");
@@ -1248,40 +1334,54 @@
         } else if ([type isEqualToNumber:@6]) {
             NSLog(@"Get Scale data");
             if (contents != nil) {
+                UILabel * label = [contents objectAtIndex:0];
+                if ([label.text isEqualToString:@"---"]) {
+                    [dic setObject:@"" forKey:KEY_ESM_USER_ANSWER];
+                    [dic setObject:@1 forKey:KEY_ESM_STATUS];
+                }else{
+                    [dic setObject:label.text forKey:KEY_ESM_USER_ANSWER];
+                    [dic setObject:@2 forKey:KEY_ESM_STATUS];
+                }
                 if ( contents.count > 1) {
-                    UILabel * label = [contents objectAtIndex:0];
-                    if ([label.text isEqualToString:@"---"]) {
-                        [dic setObject:@"" forKey:KEY_ESM_USER_ANSWER];
-                        [dic setObject:@1 forKey:KEY_ESM_STATUS];
-                    }else{
-                        [dic setObject:label.text forKey:KEY_ESM_USER_ANSWER];
-                        [dic setObject:@2 forKey:KEY_ESM_STATUS];
-                    }
-                    
                     UIButton * naButton = [contents objectAtIndex:1];
                     if(naButton.selected){
                         [dic setObject:@"NA" forKey:KEY_ESM_USER_ANSWER];
                         [dic setObject:@2 forKey:KEY_ESM_STATUS];
                     }
                 }
+//                if ( contents.count > 1) {
+//                    UILabel * label = [contents objectAtIndex:0];
+//                    if ([label.text isEqualToString:@"---"]) {
+//                        [dic setObject:@"" forKey:KEY_ESM_USER_ANSWER];
+//                        [dic setObject:@1 forKey:KEY_ESM_STATUS];
+//                    }else{
+//                        [dic setObject:label.text forKey:KEY_ESM_USER_ANSWER];
+//                        [dic setObject:@2 forKey:KEY_ESM_STATUS];
+//                    }
+//                    
+//                    UIButton * naButton = [contents objectAtIndex:1];
+//                    if(naButton.selected){
+//                        [dic setObject:@"NA" forKey:KEY_ESM_USER_ANSWER];
+//                        [dic setObject:@2 forKey:KEY_ESM_STATUS];
+//                    }
+//                }
             }
         } else if ([type isEqual:@7]){
             NSLog(@"Get Date Picker");
             if (contents != nil) {
-                if ( contents.count > 1) {
-                    // DatePicker Value
-                    NSNumber *zero = @0;
-                    if ( [contents objectAtIndex:0] != zero ){
+                // DatePicker Value
+                NSNumber *zero = @0;
+                if ( [contents objectAtIndex:0] != zero ){
 //                        UIDatePicker * datePicker = [contents objectAtIndex:0];
 //                        double selectedDate = [datePicker.date timeIntervalSince1970];
-                        [dic setObject:[[contents objectAtIndex:0] stringValue] forKey:KEY_ESM_USER_ANSWER];
-                        [dic setObject:@2 forKey:KEY_ESM_STATUS];
-                        NSLog(@"selecte date => %@", [contents objectAtIndex:0]);
-                    }else{
-                        [dic setObject:@"0" forKey:KEY_ESM_USER_ANSWER];
-                        [dic setObject:@1 forKey:KEY_ESM_STATUS];
-                    }
-                    
+                    [dic setObject:[[contents objectAtIndex:0] stringValue] forKey:KEY_ESM_USER_ANSWER];
+                    [dic setObject:@2 forKey:KEY_ESM_STATUS];
+                    NSLog(@"selecte date => %@", [contents objectAtIndex:0]);
+                }else{
+                    [dic setObject:@"0" forKey:KEY_ESM_USER_ANSWER];
+                    [dic setObject:@1 forKey:KEY_ESM_STATUS];
+                }
+                if ( contents.count > 1) {
                     // Get N/A button value and set N/A condition
                     UIButton* naButton = [contents objectAtIndex:1];
                     if(naButton.selected){
@@ -1340,7 +1440,14 @@
         } else {
 
         }
+        
+        // Remove "esm_na" from the dictionary
+        [dic removeObjectForKey:@"esm_na"];
+        [dic removeObjectForKey:@"esm_reload"];
+        [dic removeObjectForKey:@"esm_style"];
+        
         [array addObject:dic];
+        
     }
 
     // Check stored ESM data
@@ -1541,6 +1648,18 @@
 - (void) setContentSizeWithAdditionalHeight:(int) additionalHeight {
     totalHight += additionalHeight;
     [_mainScrollView setContentSize:CGSizeMake(WIDTH_VIEW, totalHight)];
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (BOOL) getNaStateFromDict:(NSDictionary *)dict{
+    bool isExist = [dict.allKeys containsObject:@"esm_na"];
+    if (isExist) {
+        return [[dict objectForKey:@"esm_na"] boolValue];
+    }else{
+        return YES;
+    }
 }
 
 

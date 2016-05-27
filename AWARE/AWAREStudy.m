@@ -33,10 +33,6 @@
 }
 
 
-//- (instancetype)init {
-//    return [self initWithReachability:YES sensorManager:nil];
-//}
-
 - (instancetype) initWithReachability: (BOOL) reachabilityState{
     self = [super init];
     if (self) {
@@ -301,11 +297,6 @@ didCompleteWithError:(NSError *)error {
     }else{
         NSLog(@"This device ID is already regited to the AWARE server.");
     }
-    
-    // compare the new configuration with previus configuration in the local storage.
-    PushNotification * pushNotification = [[PushNotification alloc] initWithSensorName:nil withAwareStudy:self];
-    [pushNotification saveStoredPushNotificationDeviceToken];
-    [pushNotification syncAwareDB];
     
     // save the new configuration to the local storage
     [userDefaults setObject:mqttServer forKey:KEY_MQTT_SERVER];
@@ -658,9 +649,32 @@ didCompleteWithError:(NSError *)error {
     [userDefaults removeObjectForKey:KEY_WEBSERVICE_SERVER];
     [userDefaults removeObjectForKey:KEY_SENSORS];
     [userDefaults removeObjectForKey:KEY_PLUGINS];
+    [userDefaults removeObjectForKey:KEY_STUDY_QR_CODE];
+    [userDefaults removeObjectForKey:@"key_aware_study_configuration_json_text"];
+    [userDefaults synchronize];
+    mqttPassword = @"";
+    mqttUsername = @"";
+    studyId = @"";
+    mqttServer = @"";
+    webserviceServer = @"";
+    mqttPort = 1883;
+    mqttKeepAlive = 600;
+    mqttQos = 2;
     return YES;
 }
 
+
+- (void) refreshAllSetting{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    mqttServer = [userDefaults objectForKey:KEY_MQTT_SERVER];
+    mqttUsername = [userDefaults objectForKey:KEY_MQTT_USERNAME];
+    mqttPassword =  [userDefaults objectForKey:KEY_MQTT_PASS];
+    mqttPort =  [[userDefaults objectForKey:KEY_MQTT_PORT] intValue];
+    mqttKeepAlive = [[userDefaults objectForKey:KEY_MQTT_KEEP_ALIVE] intValue];
+    mqttQos = [[userDefaults objectForKey:KEY_MQTT_QOS] intValue];
+    studyId = [userDefaults objectForKey:KEY_STUDY_ID];
+    webserviceServer = [userDefaults objectForKey:KEY_WEBSERVICE_SERVER];
+}
 
 /**
  * Get a Wi-Fi network reachable as a boolean

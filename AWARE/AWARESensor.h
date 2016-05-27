@@ -59,6 +59,12 @@
 - (BOOL) syncAwareDBInForeground;
 - (BOOL) syncAwareDBWithData:(NSDictionary *) dictionary;
 
+// sync options
+- (void) allowsCellularAccess;
+- (void) forbidCellularAccess;
+- (void) allowsDateUploadWithoutBatteryCharging;
+- (void) forbidDatauploadWithoutBatteryCharging;
+
 // show progress of uploading
 - (NSString *) getSyncProgressAsText;
 - (NSString *) getSyncProgressAsText:(NSString*) sensorName;

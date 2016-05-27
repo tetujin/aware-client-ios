@@ -9,8 +9,9 @@
 #import <UIKit/UIKit.h>
 #import <AVFoundation/AVFoundation.h>
 
-@interface QRCodeViewController : UIViewController <AVCaptureMetadataOutputObjectsDelegate>
+@interface QRCodeViewController : UIViewController <AVCaptureMetadataOutputObjectsDelegate, UIAlertViewDelegate>
 
 @property (strong, nonatomic) AVCaptureSession *session;
+@property (strong, nonatomic) UIButton *button;
 
 @end

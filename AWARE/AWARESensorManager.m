@@ -176,7 +176,7 @@
             if ([value isEqualToString:@"true"]) {
                 [awareSensor startSensor:uploadInterval withSettings:sensors];
             }
-            
+            [awareSensor trackDebugEvents];
             // Add the sensor to the sensor manager
             [self addNewSensor:awareSensor];
         }
@@ -220,6 +220,7 @@
                 if(pluginState){
                     [awareSensor startSensor:uploadInterval withSettings:pluginSettings];
                 }
+                [awareSensor trackDebugEvents];
                 [self addNewSensor:awareSensor];
             }
         }
@@ -257,6 +258,7 @@
 
     // Push Notification
     AWARESensor * pushNotification = [[PushNotification alloc] initWithSensorName:nil withAwareStudy:awareStudy];
+    [pushNotification startSensor:0 withSettings:nil];
     [self addNewSensor:pushNotification];
     
     /**

@@ -58,7 +58,29 @@
 	
 	<optgroup label="Instance Methods">
 		
+		<option value="//api/name/createTable">- createTable</option>
+		
+		<option value="//api/name/fft:updatedWithFFTData:bufferSize:">- fft:updatedWithFFTData:bufferSize:</option>
+		
+		<option value="//api/name/microphone:changedDevice:">- microphone:changedDevice:</option>
+		
+		<option value="//api/name/microphone:changedPlayingState:">- microphone:changedPlayingState:</option>
+		
+		<option value="//api/name/microphone:hasAudioReceived:withBufferSize:withNumberOfChannels:">- microphone:hasAudioReceived:withBufferSize:withNumberOfChannels:</option>
+		
+		<option value="//api/name/microphone:hasAudioStreamBasicDescription:">- microphone:hasAudioStreamBasicDescription:</option>
+		
+		<option value="//api/name/microphone:hasBufferList:withBufferSize:withNumberOfChannels:">- microphone:hasBufferList:withBufferSize:withNumberOfChannels:</option>
+		
+		<option value="//api/name/recorderDidClose:">- recorderDidClose:</option>
+		
+		<option value="//api/name/recorderUpdatedCurrentTime:">- recorderUpdatedCurrentTime:</option>
+		
+		<option value="//api/name/startRecording:">- startRecording:</option>
+		
 		<option value="//api/name/startSensor:withSettings:">- startSensor:withSettings:</option>
+		
+		<option value="//api/name/stopRecording:">- stopRecording:</option>
 		
 		<option value="//api/name/stopSensor">- stopSensor</option>
 		
@@ -86,7 +108,7 @@
 	<td><a href="../Classes/AWARESensor.html">AWARESensor</a> : NSObject</td>
 </tr><tr>
 	<th>Conforms to</th>
-	<td>AWARESensorDelegate</td>
+	<td>AWARESensorDelegate<br /><a href="../Protocols/EZAudioFFTDelegate.html">EZAudioFFTDelegate</a><br /><a href="../Protocols/EZMicrophoneDelegate.html">EZMicrophoneDelegate</a><br /><a href="../Protocols/EZRecorderDelegate.html">EZRecorderDelegate</a></td>
 </tr><tr>
 	<th>Declared in</th>
 	<td>AmbientNoise.h<br />AmbientNoise.m</td>
@@ -103,10 +125,56 @@
 						
 
 						
-						
+						<h2 class="task-title">Other Methods</h2>
 
 						<div class="task-list">
 							<div class="section-method">
+	<a name="//api/name/createTable" title="createTable"></a>
+	<h3 class="method-title"><code><a href="#//api/name/createTable">&ndash;&nbsp;createTable</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Silence threshold (default = 50) in dB</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)createTable</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Silence threshold (default = 50) in dB</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">AmbientNoise.m</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
 	<a name="//api/name/startSensor:withSettings:" title="startSensor:withSettings:"></a>
 	<h3 class="method-title"><code><a href="#//api/name/startSensor:withSettings:">&ndash;&nbsp;startSensor:withSettings:</a></code>
 </h3>
@@ -198,6 +266,625 @@
 			
 		</div>
 	</div>
+</div><div class="section-method">
+	<a name="//api/name/startRecording:" title="startRecording:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/startRecording:">&ndash;&nbsp;startRecording:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Start recording ambient noise</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)startRecording:(id)<em>sender</em></code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Start recording ambient noise</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">AmbientNoise.m</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/stopRecording:" title="stopRecording:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/stopRecording:">&ndash;&nbsp;stopRecording:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Stop recording ambient noise</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)stopRecording:(id)<em>sender</em></code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Stop recording ambient noise</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">AmbientNoise.m</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/microphone:changedPlayingState:" title="microphone:changedPlayingState:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/microphone:changedPlayingState:">&ndash;&nbsp;microphone:changedPlayingState:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Called anytime the <a href="../Classes/EZMicrophone.html">EZMicrophone</a> starts or stops.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)microphone:(EZMicrophone *)<em>microphone</em> changedPlayingState:(BOOL)<em>isPlaying</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>isPlaying</code></th>
+						<td><p>A BOOL indicating whether the <a href="../Classes/EZMicrophone.html">EZMicrophone</a> instance is playing or not.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>output</code></th>
+						<td><p>The instance of the <a href="../Classes/EZMicrophone.html">EZMicrophone</a> that triggered the event.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Called anytime the <a href="../Classes/EZMicrophone.html">EZMicrophone</a> starts or stops.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">AmbientNoise.m</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/microphone:changedDevice:" title="microphone:changedDevice:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/microphone:changedDevice:">&ndash;&nbsp;microphone:changedDevice:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Called anytime the input device changes on an <a href="../Classes/EZMicrophone.html"><code>EZMicrophone</code></a> instance.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)microphone:(EZMicrophone *)<em>microphone</em> changedDevice:(EZAudioDevice *)<em>device</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>microphone</code></th>
+						<td><p>The instance of the <a href="../Classes/EZMicrophone.html">EZMicrophone</a> that triggered the event.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>device</code></th>
+						<td><p>The instance of the new <a href="../Classes/EZAudioDevice.html">EZAudioDevice</a> the microphone is using to pull input.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Called anytime the input device changes on an <a href="../Classes/EZMicrophone.html"><code>EZMicrophone</code></a> instance.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">AmbientNoise.m</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/microphone:hasAudioStreamBasicDescription:" title="microphone:hasAudioStreamBasicDescription:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/microphone:hasAudioStreamBasicDescription:">&ndash;&nbsp;microphone:hasAudioStreamBasicDescription:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Returns back the audio stream basic description as soon as it has been initialized. This is guaranteed to occur before the stream callbacks, <a href="#//api/name/microphone:hasBufferList:withBufferSize:withNumberOfChannels:"><code>microphone:hasBufferList:withBufferSize:withNumberOfChannels:</code></a> or <a href="#//api/name/microphone:hasAudioReceived:withBufferSize:withNumberOfChannels:"><code>microphone:hasAudioReceived:withBufferSize:withNumberOfChannels:</code></a></p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)microphone:(EZMicrophone *)<em>microphone</em> hasAudioStreamBasicDescription:(AudioStreamBasicDescription)<em>audioStreamBasicDescription</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>microphone</code></th>
+						<td><p>The instance of the <a href="../Classes/EZMicrophone.html">EZMicrophone</a> that triggered the event.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>audioStreamBasicDescription</code></th>
+						<td><p>The AudioStreamBasicDescription that was created for the microphone instance.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Returns back the audio stream basic description as soon as it has been initialized. This is guaranteed to occur before the stream callbacks, <a href="#//api/name/microphone:hasBufferList:withBufferSize:withNumberOfChannels:"><code>microphone:hasBufferList:withBufferSize:withNumberOfChannels:</code></a> or <a href="#//api/name/microphone:hasAudioReceived:withBufferSize:withNumberOfChannels:"><code>microphone:hasAudioReceived:withBufferSize:withNumberOfChannels:</code></a></p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">AmbientNoise.m</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+
+						<a title="Audio Data Callbacks" name="task_Audio Data Callbacks"></a>
+						<h2 class="task-title">Audio Data Callbacks</h2>
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/microphone:hasAudioReceived:withBufferSize:withNumberOfChannels:" title="microphone:hasAudioReceived:withBufferSize:withNumberOfChannels:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/microphone:hasAudioReceived:withBufferSize:withNumberOfChannels:">&ndash;&nbsp;microphone:hasAudioReceived:withBufferSize:withNumberOfChannels:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>This method provides an array of float arrays of the audio received, each float array representing a channel of audio data This occurs on the background thread so any drawing code must explicity perform its functions on the main thread.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)microphone:(EZMicrophone *)<em>microphone</em> hasAudioReceived:(float **)<em>buffer</em> withBufferSize:(UInt32)<em>bufferSize</em> withNumberOfChannels:(UInt32)<em>numberOfChannels</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>microphone</code></th>
+						<td><p>The instance of the <a href="../Classes/EZMicrophone.html">EZMicrophone</a> that triggered the event.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>buffer</code></th>
+						<td><p>The audio data as an array of float arrays. In a stereo signal buffer[0] represents the left channel while buffer[1] would represent the right channel.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>bufferSize</code></th>
+						<td><p>The size of each of the buffers (the length of each float array).</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>numberOfChannels</code></th>
+						<td><p>The number of channels for the incoming audio.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>This method provides an array of float arrays of the audio received, each float array representing a channel of audio data This occurs on the background thread so any drawing code must explicity perform its functions on the main thread.</p><div class="warning"><p><strong>Warning:</strong> This function executes on a background thread to avoid blocking any audio operations. If operations should be performed on any other thread (like the main thread) it should be performed within a dispatch block like so: dispatch_async(dispatch_get_main_queue(), ^{ &hellip;Your Code&hellip; })</p></div>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">AmbientNoise.m</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/microphone:hasBufferList:withBufferSize:withNumberOfChannels:" title="microphone:hasBufferList:withBufferSize:withNumberOfChannels:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/microphone:hasBufferList:withBufferSize:withNumberOfChannels:">&ndash;&nbsp;microphone:hasBufferList:withBufferSize:withNumberOfChannels:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Returns back the buffer list containing the audio received. This occurs on the background thread so any drawing code must explicity perform its functions on the main thread.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)microphone:(EZMicrophone *)<em>microphone</em> hasBufferList:(AudioBufferList *)<em>bufferList</em> withBufferSize:(UInt32)<em>bufferSize</em> withNumberOfChannels:(UInt32)<em>numberOfChannels</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>microphone</code></th>
+						<td><p>The instance of the <a href="../Classes/EZMicrophone.html">EZMicrophone</a> that triggered the event.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>bufferList</code></th>
+						<td><p>The AudioBufferList holding the audio data.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>bufferSize</code></th>
+						<td><p>The size of each of the buffers of the AudioBufferList.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>numberOfChannels</code></th>
+						<td><p>The number of channels for the incoming audio.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Returns back the buffer list containing the audio received. This occurs on the background thread so any drawing code must explicity perform its functions on the main thread.</p><div class="warning"><p><strong>Warning:</strong> This function executes on a background thread to avoid blocking any audio operations. If operations should be performed on any other thread (like the main thread) it should be performed within a dispatch block like so: dispatch_async(dispatch_get_main_queue(), ^{ &hellip;Your Code&hellip; })</p></div>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">AmbientNoise.m</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/recorderDidClose:" title="recorderDidClose:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/recorderDidClose:">&ndash;&nbsp;recorderDidClose:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Triggers when the <a href="../Classes/EZRecorder.html">EZRecorder</a> is explicitly closed with the <code>closeAudioFile</code> method.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)recorderDidClose:(EZRecorder *)<em>recorder</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>recorder</code></th>
+						<td><p>The <a href="../Classes/EZRecorder.html">EZRecorder</a> instance that triggered the action</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Triggers when the <a href="../Classes/EZRecorder.html">EZRecorder</a> is explicitly closed with the <code>closeAudioFile</code> method.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">AmbientNoise.m</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/recorderUpdatedCurrentTime:" title="recorderUpdatedCurrentTime:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/recorderUpdatedCurrentTime:">&ndash;&nbsp;recorderUpdatedCurrentTime:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Triggers after the <a href="../Classes/EZRecorder.html">EZRecorder</a> has successfully written audio data from the <code>appendDataFromBufferList:withBufferSize:</code> method.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)recorderUpdatedCurrentTime:(EZRecorder *)<em>recorder</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>recorder</code></th>
+						<td><p>The <a href="../Classes/EZRecorder.html">EZRecorder</a> instance that triggered the action</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Triggers after the <a href="../Classes/EZRecorder.html">EZRecorder</a> has successfully written audio data from the <code>appendDataFromBufferList:withBufferSize:</code> method.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">AmbientNoise.m</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/fft:updatedWithFFTData:bufferSize:" title="fft:updatedWithFFTData:bufferSize:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/fft:updatedWithFFTData:bufferSize:">&ndash;&nbsp;fft:updatedWithFFTData:bufferSize:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Triggered when the <a href="../Classes/EZAudioFFT.html">EZAudioFFT</a> computes an FFT from a buffer of input data. Provides an array of float data representing the computed FFT.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)fft:(EZAudioFFT *)<em>fft</em> updatedWithFFTData:(float *)<em>fftData</em> bufferSize:(vDSP_Length)<em>bufferSize</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>fft</code></th>
+						<td><p>The <a href="../Classes/EZAudioFFT.html">EZAudioFFT</a> instance that triggered the event.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>fftData</code></th>
+						<td><p>A float pointer representing the float array of FFT data.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>bufferSize</code></th>
+						<td><p>A vDSP_Length (unsigned long) representing the length of the float array.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Triggered when the <a href="../Classes/EZAudioFFT.html">EZAudioFFT</a> computes an FFT from a buffer of input data. Provides an array of float data representing the computed FFT.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">EZAudioFFT.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
 </div>
 						</div>
 						
@@ -213,7 +900,7 @@
 				<footer>
 					<div class="footer-copyright">
 						
-						<p class="copyright">Copyright &copy; 2016 AWARE. All rights reserved. Updated: 2016-04-16</p>
+						<p class="copyright">Copyright &copy; 2016 AWARE. All rights reserved. Updated: 2016-05-03</p>
 						
 						
 						<p class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2.1 (build 1334)</a>.</p>

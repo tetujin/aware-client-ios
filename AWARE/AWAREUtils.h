@@ -52,4 +52,5 @@
 // Format checker
 + (BOOL)validateEmailWithString:(NSString *)str;
 
++ (BOOL) checkURLFormat:(NSString *)urlStr;
 @end

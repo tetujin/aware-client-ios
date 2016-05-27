@@ -452,5 +452,20 @@ This method provides a system uuid.
     return deviceName;
 }
 
+
++ (BOOL)checkURLFormat:(NSString *)urlStr{
+    if (urlStr == nil) return NO;
+    
+    NSError *error = nil;
+    NSString *URLPattern = @"(http://|https://){1}[\\w\\.\\-/:]+";
+    NSRegularExpression *regularExpressionForPickOut = [NSRegularExpression regularExpressionWithPattern:URLPattern options:0 error:&error];
+    NSArray *matchesInString = [regularExpressionForPickOut matchesInString:urlStr options:0 range:NSMakeRange(0, urlStr.length)];
+    if (matchesInString.count > 0) {
+        return YES;
+    }else{
+        return NO;
+    }
+}
+
 @end
 
