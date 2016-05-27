@@ -119,8 +119,8 @@
                         [self setBufferSize:100];
                     }else if (activities.count > 50) {
                         [self setBufferSize:50];
-                    }else if(activities.count > 10){
-                        [self setBufferSize:10];
+                    }else if(activities.count > 20){
+                        [self setBufferSize:20];
                     }else{
                         [self setBufferSize:0];
                     }
@@ -134,8 +134,8 @@
                 dispatch_async(dispatch_get_main_queue(), ^{
                     if ([self isDebug]) {
                         NSInteger count = activities.count;
-                        NSString * message = [NSString stringWithFormat:@"Activity Recognition Sensor is called by a timer. (%ld activites)" ,count];
-                        [AWAREUtils sendLocalNotificationForMessage:message soundFlag:YES];
+                        NSString * message = [NSString stringWithFormat:@"Activity Recognition Sensor is called by a timer (%ld activites)" ,count];
+                        [AWAREUtils sendLocalNotificationForMessage:message soundFlag:NO];
                         
                     }
                 });

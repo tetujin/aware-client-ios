@@ -18,6 +18,9 @@
     LocalFileStorageHelper * awareLocalStorage;
     AWAREStudy * awareStudy;
     
+    NSString * baseSyncDataQueryIdentifier;
+    NSString * baseCreateTableQueryIdentifier;
+    
     NSString * syncDataQueryIdentifier;
     NSString * createTableQueryIdentifier;
     
@@ -40,8 +43,12 @@
         awareStudy = study;
         awareLocalStorage = localStorage;
         isUploading = NO;
-        syncDataQueryIdentifier = [NSString stringWithFormat:@"sync_data_query_identifier_%@", sensorName];
-        createTableQueryIdentifier = [NSString stringWithFormat:@"create_table_query_identifier_%@",  sensorName];
+        baseSyncDataQueryIdentifier = [NSString stringWithFormat:@"sync_data_query_identifier_%@", sensorName];
+        baseCreateTableQueryIdentifier = [NSString stringWithFormat:@"create_table_query_identifier_%@",  sensorName];
+        
+        syncDataQueryIdentifier = baseSyncDataQueryIdentifier;
+        createTableQueryIdentifier = baseCreateTableQueryIdentifier;
+        
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         isDebug = [userDefaults boolForKey:SETTING_DEBUG_STATE];
         isSyncWithOnlyBatteryCharging  = [userDefaults boolForKey:SETTING_SYNC_BATTERY_CHARGING_ONLY];
@@ -162,7 +169,7 @@
     // Set session configuration
     NSURLSessionConfiguration *sessionConfig = nil;
     double unxtime = [[NSDate new] timeIntervalSince1970];
-    syncDataQueryIdentifier = [NSString stringWithFormat:@"%@%f", syncDataQueryIdentifier, unxtime];
+    syncDataQueryIdentifier = [NSString stringWithFormat:@"%@%f", baseSyncDataQueryIdentifier, unxtime];
     sessionConfig = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:syncDataQueryIdentifier];
     sessionConfig.timeoutIntervalForRequest = 60 * 3;
     sessionConfig.HTTPMaximumConnectionsPerHost = 60 * 3;
@@ -621,7 +628,7 @@ didReceiveResponse:(NSURLResponse *)response
     
     // Generate an unique identifier for background HTTP/POST on iOS
     double unxtime = [[NSDate new] timeIntervalSince1970];
-    createTableQueryIdentifier = [NSString stringWithFormat:@"%@%f", createTableQueryIdentifier, unxtime];
+    createTableQueryIdentifier = [NSString stringWithFormat:@"%@%f", baseCreateTableQueryIdentifier, unxtime];
     sessionConfig = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:createTableQueryIdentifier];
     sessionConfig.timeoutIntervalForRequest = 180.0;
     sessionConfig.HTTPMaximumConnectionsPerHost = 60;
