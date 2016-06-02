@@ -315,10 +315,10 @@ didCompleteWithError:(NSError *)error {
     // run in the main thread
     dispatch_async(dispatch_get_main_queue(), ^{
         AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
-        AWARESensorManager * manager = delegate.sharedSensorManager;
-        [manager stopAndRemoveAllSensors];
-        [manager startAllSensorsWithStudy:self];
-        [manager createAllTables];
+        AWARECoreManager * core = delegate.sharedAWARECoreManager;
+        [core.sharedSensorManager stopAndRemoveAllSensors];
+        [core.sharedSensorManager startAllSensorsWithStudy:self];
+        [core.sharedSensorManager createAllTables];
     });
     
     readingState = YES;

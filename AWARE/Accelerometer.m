@@ -14,7 +14,7 @@
 }
 
 - (instancetype)initWithSensorName:(NSString *)sensorName withAwareStudy:(AWAREStudy *)study{
-    self = [super initWithSensorName:sensorName withAwareStudy:study];
+    self = [super initWithSensorName:@"accelerometer" withAwareStudy:study];
     if (self) {
         manager = [[CMMotionManager alloc] init];
     }
@@ -53,10 +53,25 @@
         manager.accelerometerUpdateInterval = 0.1f; //default value
     }
     
+
+    // The observer object is needed when unregistering
+//    NSObject * observer =
+//    [[NSNotificationCenter defaultCenter] addObserverForName:@"Accelerometer.ACTION_AWARE_ACCELEROMETER" object:nil queue:nil usingBlock:^(NSNotification *notif) {
+//        
+//        if ([[notif name] isEqualToString:@"Accelerometer.ACTION_AWARE_ACCELEROMETER"]) {
+//            NSDictionary *userInfo = notif.userInfo;
+//            CMAccelerometerData *dataObject = [userInfo objectForKey:@"Accelerometer.EXTRA_DATA"];
+//            // Your response to the notification should be placed here
+//            NSLog(@"acc x %f", dataObject.acceleration.x);
+//        }
+//    }];
+    
     // Set and start a motion sensor
     [manager startAccelerometerUpdatesToQueue:[NSOperationQueue currentQueue]
                                   withHandler:^(CMAccelerometerData *accelerometerData, NSError *error) {
-                                      if( error ) {
+                                      if( error )
+                                      
+                                      {
                                           NSLog(@"%@:%ld", [error domain], [error code] );
                                       } else {
                                               NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
@@ -73,10 +88,28 @@
                                                                 accelerometerData.acceleration.y,
                                                                 accelerometerData.acceleration.z]];
                                             dispatch_async(dispatch_get_main_queue(), ^{
+                                                NSDictionary *userInfo = [NSDictionary dictionaryWithObject:accelerometerData
+                                                                                                     forKey:@"Accelerometer.EXTRA_DATA"];
+                                                
+                                                [[NSNotificationCenter defaultCenter] postNotificationName:@"Accelerometer.ACTION_AWARE_ACCELEROMETER"
+                                                                                                    object:nil
+                                                                                                  userInfo:userInfo];
                                               [self saveData:dic];
                                             });
-                                          
-                                          
+                                        }
+                                  }];
+    return YES;
+}
+
+-(BOOL) stopSensor{
+    [manager stopAccelerometerUpdates];
+    return YES;
+}
+
+// You can also unregister notification types/names using
+//[[NSNotificationCenter defaultCenter] removeObserver:self name:@"Accelerometer.ACTION_AWARE_ACCELEROMETER" object:nil];
+
+
 //                                          AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
 //                                          NSManagedObject * acc = [NSEntityDescription insertNewObjectForEntityForName:@"Accelerometer" inManagedObjectContext:delegate.managedObjectContext];
 //                                          [acc setValue:[self getDeviceId] forKey:@"device_id"];
@@ -87,24 +120,13 @@
 //                                          [acc setValue:@0 forKey:@"accuracy"];
 //                                          [acc setValue:@"" forKey:@"label"];
 //                                          [self setLatestValue:[NSString stringWithFormat:@"%f, %f, %f",accelerometerData.acceleration.x,accelerometerData.acceleration.y,accelerometerData.acceleration.z]];
-//                                          
-//                                          
+//
+//
 //                                          NSError * error = nil;
 //                                          [delegate.managedObjectContext save:&error];
 //                                          if (error) {
 //                                              NSLog(@"%@", error.description);
 //                                          }
-
-                                          
-                                        }
-                                  }];
-    return YES;
-}
-
--(BOOL) stopSensor{
-    [manager stopAccelerometerUpdates];
-    return YES;
-}
 
 
 @end

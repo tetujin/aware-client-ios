@@ -107,13 +107,18 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
 
+    /// Init sensor manager for the list view
+    AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+    AWARECoreManager * core = delegate.sharedAWARECoreManager;
+    sensorManager = core.sharedSensorManager;
+    dailyUpdateTimer = core.dailyUpdateTimer;
+    
     // A sensor list for table view
     _sensors = [[NSMutableArray alloc] init];
     
     // AWAREStudy manages a study configurate
-     awareStudy = [[AWAREStudy alloc] initWithReachability:YES];
-    
-    
+    awareStudy = core.sharedAwareStudy;
+    //[[AWAREStudy alloc] initWithReachability:YES];
     
     /**
      * Init a Debug Sensor for collecting a debug message.
@@ -122,10 +127,7 @@
      */
     debugSensor = [[Debug alloc] initWithAwareStudy:awareStudy];
     
-    /// Init sensor manager for the list view
-    AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
-    sensorManager = delegate.sharedSensorManager;
-    dailyUpdateTimer = delegate.dailyUpdateTimer;
+    
     
     [self initContentsOnTableView];
     
@@ -440,8 +442,6 @@
 - (void) refreshButtonEnableYes {
     _refreshButton.enabled = YES;
 }
-
-
 
 
 -(BOOL)navigationBar:(UINavigationBar *)navigationBar shouldPopItem:(UINavigationItem *)item

@@ -9,16 +9,39 @@
 //
 
 #import "AWAREHealthKit.h"
+#import "AWAREUtils.h"
 #import <HealthKit/HealthKit.h>
 
 @implementation AWAREHealthKit{
     NSTimer * timer;
     HKHealthStore *healthStore;
+    
+    NSString* KEY_DEVICE_ID;
+    NSString* KEY_TIMESTAMP;
+    NSString* KEY_DATA_TYPE;
+    NSString* KEY_VALUE;
+    NSString* KEY_UNIT;
+    NSString* KEY_START;
+    NSString* KEY_END;
+    NSString* KEY_DEVICE;
+    NSString* KEY_LABLE;
+    
+//    NSString * KEY_TIMESTAMP_OF_LAST_UPDATE;
 }
 
 - (instancetype)initWithSensorName:(NSString *)sensorName withAwareStudy:(AWAREStudy *)study{
     self = [super initWithSensorName:sensorName withAwareStudy:study];
     if(self){
+        KEY_DEVICE_ID = @"device_id";
+        KEY_TIMESTAMP =@"timestamp";
+        KEY_DATA_TYPE= @"type";
+        KEY_VALUE = @"value";
+        KEY_UNIT = @"unit";
+        KEY_START = @"start";
+        KEY_END = @"end";
+        KEY_DEVICE = @"device";
+        KEY_LABLE = @"label";
+//        KEY_TIMESTAMP_OF_LAST_UPDATE = @"key_plugin_sensor_pedometer_last_update_timestamp";
         // Add your HealthKit code here
         healthStore = [[HKHealthStore alloc] init];
         if(NSClassFromString(@"HKHealthStore") && [HKHealthStore isHealthDataAvailable])
@@ -48,12 +71,31 @@
 }
 
 
-- (void)createTable {
-    
+
+- (void) createTable{
+    // Send a table create query
+    NSLog(@"[%@] create table!", [self getSensorName]);
+    NSMutableString *query = [[NSMutableString alloc] init];
+    [query appendString:@"_id integer primary key autoincrement,"];
+    [query appendFormat:@"%@ real default 0,", KEY_TIMESTAMP];
+    [query appendFormat:@"%@ text default '',", KEY_DEVICE_ID];
+    [query appendFormat:@"%@ text default '',", KEY_DATA_TYPE];
+    [query appendFormat:@"%@ real default 0,", KEY_VALUE];
+    [query appendFormat:@"%@ text default '',", KEY_UNIT];
+    [query appendFormat:@"%@ real default 0,", KEY_START];
+    [query appendFormat:@"%@ real default 0,", KEY_END];
+    [query appendFormat:@"%@ text default '',", KEY_DEVICE];
+    [query appendFormat:@"%@ text dedault '',", KEY_LABLE];
+    [query appendString:@"UNIQUE (timestamp,device_id)"];
+    [super createTable:query];
 }
 
+
 - (BOOL)startSensor:(double)upInterval withSettings:(NSArray *)settings{
-    timer = [NSTimer scheduledTimerWithTimeInterval:60
+    
+//    [self readAllDate];
+    
+    timer = [NSTimer scheduledTimerWithTimeInterval:60 * 15 //1hour
                                              target:self
                                            selector:@selector(readAllDate)
                                            userInfo:nil
@@ -79,8 +121,9 @@
 - (void) readAllDate {
     // Set your start and end date for your query of interest
     NSDate *startDate, *endDate;
-    startDate = [NSDate dateWithTimeIntervalSinceNow:-60*60*24];
+    startDate = [self getLastUpdate]; //[NSDate dateWithTimeIntervalSinceNow:-60*60*24];
     endDate = [NSDate new];
+    [self setLastUpdate:endDate];
     
     // Use the sample type for step count
     HKSampleType *sampleType = [HKSampleType quantityTypeForIdentifier:HKQuantityTypeIdentifierStepCount];
@@ -102,9 +145,41 @@
                                                                 {
                                                                     for(HKQuantitySample *samples in results)
                                                                     {
-                                                                        // your code here
-                                                                        NSLog(@"%@", samples);
                                                                         
+                                                                        HKSampleType * type = samples.sampleType;
+                                                                        // your code here
+//                                                                        NSLog(@"%@", samples);
+//                                                                        NSLog(@"%@",samples.device.model);
+//                                                                        NSLog(@"%@",samples.startDate);
+//                                                                        NSLog(@"%@",samples.endDate);
+//                                                                        NSLog(@"%@",samples);
+//                                                                        NSLog(@"%@",samples.quantity);
+                                                                        
+                                                                        NSMutableString * quantityStr = [[NSMutableString alloc] initWithString:[samples.quantity description]];
+                                                                        NSArray * array = [quantityStr componentsSeparatedByString:@" "];
+                                                                        NSNumber * value = @0;
+                                                                        NSString * unit = @"";
+                                                                        if (array.count > 1) {
+                                                                            if(array[0] != nil){
+                                                                                value = @([array[0] doubleValue]);
+                                                                            }
+                                                                            if(array[1] != nil){
+                                                                                unit = array[1];
+                                                                            }
+                                                                        }
+                                                                        
+                                                                        NSMutableDictionary * dict = [[NSMutableDictionary alloc] init];
+                                                                        [dict setObject:[AWAREUtils getUnixTimestamp:[NSDate new]] forKey:KEY_TIMESTAMP];
+                                                                        [dict setObject:[self getDeviceId] forKey:KEY_DEVICE_ID];
+                                                                        [dict setObject:[NSNumber numberWithInteger:(NSInteger)type] forKey:KEY_DATA_TYPE];
+                                                                        [dict setObject:value forKey:KEY_VALUE];
+                                                                        [dict setObject:unit forKey:KEY_UNIT];
+                                                                        [dict setObject:[AWAREUtils getUnixTimestamp:samples.startDate] forKey:KEY_START];
+                                                                        [dict setObject:[AWAREUtils getUnixTimestamp:samples.endDate] forKey:KEY_END];
+                                                                        [dict setObject:samples.device.model forKey:KEY_DEVICE];
+                                                                        [dict setObject:@"" forKey:KEY_LABLE];
+                                                                        
+                                                                        [self saveData:dict];
                                                                     }
                                                                 }
                                                                 
@@ -320,5 +395,19 @@
     return dataTypesSet;
 }
 
+- (NSDate *) getLastUpdate {
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSDate * lastUpdate =  [userDefaults objectForKey:@"plugin_health_kit_last_update_timestamp"];
+    if(lastUpdate == nil){
+        return [NSDate new];
+    }else{
+        return lastUpdate;
+    }
+}
+
+- (void) setLastUpdate :(NSDate *) date {
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setObject:date forKey:@"plugin_health_kit_last_update_timestamp"];
+}
 
 @end

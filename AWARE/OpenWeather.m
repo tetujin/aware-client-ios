@@ -106,7 +106,8 @@ int ONE_HOUR = 60*60;
     }
     
     AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
-    locationManager = delegate.homeLocationManager;
+    AWARECoreManager * core = delegate.sharedAWARECoreManager;
+    locationManager = core.sharedLocationManager;
     
     
 //    if (locationManager == nil){

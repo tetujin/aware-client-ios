@@ -55,6 +55,8 @@
 
 #import "Observer.h"
 
+#import "SampleSensor.h"
+
 @implementation AWARESensorManager{
     /** upload timer */
     NSTimer * uploadTimer;
@@ -251,6 +253,7 @@
 //    AWARESensor *bleHeartRate = [[BLEHeartRate alloc] initWithSensorName:SENSOR_BLE_HEARTRATE withAwareStudy:awareStudy];
 //    [bleHeartRate startSensor:uploadInterval withSettings:nil];
 //    [self addNewSensor:bleHeartRate];
+
     
     // Observer
     AWARESensor *observer = [[Observer alloc] initWithSensorName:@"" withAwareStudy:awareStudy];

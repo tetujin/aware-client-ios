@@ -18,7 +18,6 @@
 		16228A511C22E9FE0081C839 /* AWARESchedule.m in Sources */ = {isa = PBXBuildFile; fileRef = 16228A501C22E9FE0081C839 /* AWARESchedule.m */; };
 		1623CE6B1BFD1B2C00EFAD72 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1623CE6A1BFD1B2C00EFAD72 /* main.m */; };
 		1623CE6E1BFD1B2C00EFAD72 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1623CE6D1BFD1B2C00EFAD72 /* AppDelegate.m */; };
-		1623CE711BFD1B2C00EFAD72 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1623CE701BFD1B2C00EFAD72 /* ViewController.m */; };
 		1623CE741BFD1B2C00EFAD72 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1623CE721BFD1B2C00EFAD72 /* Main.storyboard */; };
 		1623CE771BFD1B2C00EFAD72 /* AWARE.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1623CE751BFD1B2C00EFAD72 /* AWARE.xcdatamodeld */; };
 		1623CE791BFD1B2C00EFAD72 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1623CE781BFD1B2C00EFAD72 /* Assets.xcassets */; };
@@ -86,6 +85,8 @@
 		169A7B461C0052F800A7C06D /* Gravity.m in Sources */ = {isa = PBXBuildFile; fileRef = 169A7B451C0052F800A7C06D /* Gravity.m */; };
 		169A7B491C00591A00A7C06D /* LinearAccelerometer.m in Sources */ = {isa = PBXBuildFile; fileRef = 169A7B481C00591A00A7C06D /* LinearAccelerometer.m */; };
 		169ACDC61C90C92C000072D6 /* BLEHeartRate.m in Sources */ = {isa = PBXBuildFile; fileRef = 169ACDC51C90C92C000072D6 /* BLEHeartRate.m */; };
+		169C85711D00670D00825761 /* AWAREDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 169C85701D00670D00825761 /* AWAREDelegate.m */; };
+		169C85731D007EDC00825761 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 169C85721D007EDC00825761 /* ViewController.m */; };
 		16A4810B1CB4ACA400F04B6E /* Observer.m in Sources */ = {isa = PBXBuildFile; fileRef = 16A4810A1CB4ACA400F04B6E /* Observer.m */; };
 		16C1FF7D1C617FB100C070AA /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16C1FF7C1C617FB100C070AA /* Accelerate.framework */; };
 		16C1FF7F1C617FC300C070AA /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16C1FF7E1C617FC300C070AA /* GLKit.framework */; };
@@ -96,6 +97,7 @@
 		16D810261C06242F00605DE2 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16D810251C06242F00605DE2 /* Security.framework */; };
 		16D91B5E1CA9447A00A5FD4F /* MicrosoftBandKit_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16D91B5D1CA9447A00A5FD4F /* MicrosoftBandKit_iOS.framework */; };
 		16D91B641CA9454D00A5FD4F /* BluetoothManager.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16D91B631CA9454D00A5FD4F /* BluetoothManager.framework */; };
+		16DA09431D00520B0095CC73 /* AWARECoreManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 16DA09421D00520B0095CC73 /* AWARECoreManager.m */; };
 		16DEA2371C54557B00B607C9 /* AWAREUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 16DEA2361C54557B00B607C9 /* AWAREUtils.m */; };
 		16DEA23A1C5535B300B607C9 /* AWAREEsmUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 16DEA2391C5535B300B607C9 /* AWAREEsmUtils.m */; };
 		16E155331C252B4D00316321 /* AWAREPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 16E155321C252B4D00316321 /* AWAREPlugin.m */; };
@@ -109,6 +111,8 @@
 		16EB1E5A1C4A930500966A07 /* LocalFileStorageHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 16EB1E591C4A930500966A07 /* LocalFileStorageHelper.m */; };
 		16EB1E5D1C4AC12500966A07 /* CalEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 16EB1E5C1C4AC12500966A07 /* CalEvent.m */; };
 		16F09B221C249C5F005C1EB8 /* GoogleCalPull.m in Sources */ = {isa = PBXBuildFile; fileRef = 16F09B211C249C5F005C1EB8 /* GoogleCalPull.m */; };
+		16F2C8CC1CF7EBBB00000534 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16F2C8CB1CF7EBBB00000534 /* HealthKit.framework */; };
+		16F2C8CF1CF8985B00000534 /* SensorTag.m in Sources */ = {isa = PBXBuildFile; fileRef = 16F2C8CE1CF8985B00000534 /* SensorTag.m */; };
 		16F3BC151C76D31B005ACEE3 /* LocalCoreDataStorageHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 16F3BC141C76D31B005ACEE3 /* LocalCoreDataStorageHelper.m */; };
 		16FCE2771BFE9326005FC71A /* AWARESensorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 16FCE2761BFE9326005FC71A /* AWARESensorManager.m */; };
 		16FD37561CF0B1F700EEB416 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 16FD37541CF0B1DE00EEB416 /* Settings.bundle */; };
@@ -169,7 +173,6 @@
 		1623CE6C1BFD1B2C00EFAD72 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		1623CE6D1BFD1B2C00EFAD72 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		1623CE6F1BFD1B2C00EFAD72 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		1623CE701BFD1B2C00EFAD72 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		1623CE731BFD1B2C00EFAD72 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		1623CE761BFD1B2C00EFAD72 /* AWARE.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = AWARE.xcdatamodel; sourceTree = "<group>"; };
 		1623CE781BFD1B2C00EFAD72 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -314,6 +317,9 @@
 		169A7B481C00591A00A7C06D /* LinearAccelerometer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LinearAccelerometer.m; sourceTree = "<group>"; };
 		169ACDC41C90C92C000072D6 /* BLEHeartRate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BLEHeartRate.h; sourceTree = "<group>"; };
 		169ACDC51C90C92C000072D6 /* BLEHeartRate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BLEHeartRate.m; sourceTree = "<group>"; };
+		169C856F1D00670D00825761 /* AWAREDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AWAREDelegate.h; sourceTree = "<group>"; };
+		169C85701D00670D00825761 /* AWAREDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AWAREDelegate.m; sourceTree = "<group>"; };
+		169C85721D007EDC00825761 /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		16A481091CB4ACA400F04B6E /* Observer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Observer.h; sourceTree = "<group>"; };
 		16A4810A1CB4ACA400F04B6E /* Observer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Observer.m; sourceTree = "<group>"; };
 		16C1FF7C1C617FB100C070AA /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
@@ -329,6 +335,8 @@
 		16D810251C06242F00605DE2 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		16D91B5D1CA9447A00A5FD4F /* MicrosoftBandKit_iOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MicrosoftBandKit_iOS.framework; path = ThirdPatyFrameworks/MicrosoftBandKit_iOS.framework; sourceTree = "<group>"; };
 		16D91B631CA9454D00A5FD4F /* BluetoothManager.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BluetoothManager.framework; path = PrivateFrameworks/BluetoothManager.framework; sourceTree = "<group>"; };
+		16DA09411D00520B0095CC73 /* AWARECoreManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AWARECoreManager.h; sourceTree = "<group>"; };
+		16DA09421D00520B0095CC73 /* AWARECoreManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AWARECoreManager.m; sourceTree = "<group>"; };
 		16DEA2351C54557B00B607C9 /* AWAREUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AWAREUtils.h; sourceTree = "<group>"; };
 		16DEA2361C54557B00B607C9 /* AWAREUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AWAREUtils.m; sourceTree = "<group>"; };
 		16DEA2381C5535B300B607C9 /* AWAREEsmUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AWAREEsmUtils.h; sourceTree = "<group>"; };
@@ -351,6 +359,9 @@
 		16EB1E5C1C4AC12500966A07 /* CalEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CalEvent.m; sourceTree = "<group>"; };
 		16F09B201C249C5F005C1EB8 /* GoogleCalPull.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GoogleCalPull.h; sourceTree = "<group>"; };
 		16F09B211C249C5F005C1EB8 /* GoogleCalPull.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GoogleCalPull.m; sourceTree = "<group>"; };
+		16F2C8CB1CF7EBBB00000534 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
+		16F2C8CD1CF8985B00000534 /* SensorTag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SensorTag.h; sourceTree = "<group>"; };
+		16F2C8CE1CF8985B00000534 /* SensorTag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SensorTag.m; sourceTree = "<group>"; };
 		16F3BC131C76D31B005ACEE3 /* LocalCoreDataStorageHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalCoreDataStorageHelper.h; sourceTree = "<group>"; };
 		16F3BC141C76D31B005ACEE3 /* LocalCoreDataStorageHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalCoreDataStorageHelper.m; sourceTree = "<group>"; };
 		16FCE2751BFE9326005FC71A /* AWARESensorManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AWARESensorManager.h; sourceTree = "<group>"; };
@@ -371,6 +382,7 @@
 				1658700A1C986D4F008B99D2 /* QuartzCore.framework in Frameworks */,
 				165DECF61C83AD7D002C88CA /* ExternalAccessory.framework in Frameworks */,
 				1623CEB11BFD40FB00EFAD72 /* AVFoundation.framework in Frameworks */,
+				16F2C8CC1CF7EBBB00000534 /* HealthKit.framework in Frameworks */,
 				168683031C07C43600CB4266 /* AudioToolbox.framework in Frameworks */,
 				16C1FF7D1C617FB100C070AA /* Accelerate.framework in Frameworks */,
 				16D810241C06242500605DE2 /* CFNetwork.framework in Frameworks */,
@@ -578,6 +590,7 @@
 		160794491C1926840021816F /* AWAREFramework */ = {
 			isa = PBXGroup;
 			children = (
+				16DA09451D00523D0095CC73 /* Core */,
 				16C5416C1CC1014C008FEF57 /* View */,
 				16E7AF861C3D563F005C9EDC /* Study */,
 				16E7AF851C3D54E0005C9EDC /* Utils */,
@@ -621,7 +634,7 @@
 				1623CE6C1BFD1B2C00EFAD72 /* AppDelegate.h */,
 				1623CE6D1BFD1B2C00EFAD72 /* AppDelegate.m */,
 				1623CE6F1BFD1B2C00EFAD72 /* ViewController.h */,
-				1623CE701BFD1B2C00EFAD72 /* ViewController.m */,
+				169C85721D007EDC00825761 /* ViewController.m */,
 				160794491C1926840021816F /* AWAREFramework */,
 				1623CE781BFD1B2C00EFAD72 /* Assets.xcassets */,
 				1623CE7D1BFD1B2C00EFAD72 /* Info.plist */,
@@ -916,11 +929,23 @@
 			name = PushNotification;
 			sourceTree = "<group>";
 		};
+		16DA09451D00523D0095CC73 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				169C856F1D00670D00825761 /* AWAREDelegate.h */,
+				169C85701D00670D00825761 /* AWAREDelegate.m */,
+				16DA09411D00520B0095CC73 /* AWARECoreManager.h */,
+				16DA09421D00520B0095CC73 /* AWARECoreManager.m */,
+			);
+			name = Core;
+			sourceTree = "<group>";
+		};
 		16E155341C252B5B00316321 /* Plugins */ = {
 			isa = PBXGroup;
 			children = (
 				16E155311C252B4D00316321 /* AWAREPlugin.h */,
 				16E155321C252B4D00316321 /* AWAREPlugin.m */,
+				16F2C8D01CF8986100000534 /* SensorTag */,
 				16C1FDAD1C617D4500C070AA /* HealthKit */,
 				1623FFE11C5DCFC500F3E3E4 /* Pedometer */,
 				16E47ECB1C4D8C05005B7932 /* FusedLocations */,
@@ -1049,9 +1074,19 @@
 			name = GoogleLogin;
 			sourceTree = "<group>";
 		};
+		16F2C8D01CF8986100000534 /* SensorTag */ = {
+			isa = PBXGroup;
+			children = (
+				16F2C8CD1CF8985B00000534 /* SensorTag.h */,
+				16F2C8CE1CF8985B00000534 /* SensorTag.m */,
+			);
+			name = SensorTag;
+			sourceTree = "<group>";
+		};
 		2A3CA9F5620967BACB187EB7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				16F2C8CB1CF7EBBB00000534 /* HealthKit.framework */,
 				160E1A001CD1D9C700D825BA /* libEZAudio.a */,
 				16D91B631CA9454D00A5FD4F /* BluetoothManager.framework */,
 				16D91B5D1CA9447A00A5FD4F /* MicrosoftBandKit_iOS.framework */,
@@ -1156,6 +1191,7 @@
 		1623CE5E1BFD1B2C00EFAD72 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 0730;
 				LastUpgradeCheck = 0710;
 				ORGANIZATIONNAME = "Yuuki NISHIYAMA";
 				TargetAttributes = {
@@ -1173,13 +1209,13 @@
 								enabled = 0;
 							};
 							com.apple.HealthKit = {
-								enabled = 0;
+								enabled = 1;
 							};
 							com.apple.InterAppAudio = {
 								enabled = 0;
 							};
 							com.apple.Maps.iOS = {
-								enabled = 1;
+								enabled = 0;
 							};
 							com.apple.Push = {
 								enabled = 1;
@@ -1334,7 +1370,6 @@
 				1623CEAF1BFD407900EFAD72 /* QRCodeViewController.m in Sources */,
 				160794511C1A4E380021816F /* AWAREMqtt.m in Sources */,
 				16E7AF901C3DB8E5005C9EDC /* GoogleLogin.m in Sources */,
-				1623CE711BFD1B2C00EFAD72 /* ViewController.m in Sources */,
 				16E7AF841C3D54D4005C9EDC /* SSLManager.m in Sources */,
 				16C81FF71CD6DD5E0013A87C /* PushNotification.m in Sources */,
 				16E7AF941C3DF7A0005C9EDC /* LocationModel.xcdatamodeld in Sources */,
@@ -1351,12 +1386,16 @@
 				1623CE6E1BFD1B2C00EFAD72 /* AppDelegate.m in Sources */,
 				1607944C1C19274C0021816F /* AWAREStudy.m in Sources */,
 				16FCE2771BFE9326005FC71A /* AWARESensorManager.m in Sources */,
+				169C85731D007EDC00825761 /* ViewController.m in Sources */,
 				169A7B2D1BFF219500A7C06D /* Barometer.m in Sources */,
+				16F2C8CF1CF8985B00000534 /* SensorTag.m in Sources */,
+				16DA09431D00520B0095CC73 /* AWARECoreManager.m in Sources */,
 				169A7B401BFFD55A00A7C06D /* Processor.m in Sources */,
 				1659150D1C7BAB0B00806744 /* Orientation.m in Sources */,
 				16F09B221C249C5F005C1EB8 /* GoogleCalPull.m in Sources */,
 				168683091C08050100CB4266 /* ActivityRecognition.m in Sources */,
 				169ACDC61C90C92C000072D6 /* BLEHeartRate.m in Sources */,
+				169C85711D00670D00825761 /* AWAREDelegate.m in Sources */,
 				1671A5D81C3B583C00C41F44 /* GoogleCalPush.m in Sources */,
 				169A7B2A1BFF1C2300A7C06D /* Battery.m in Sources */,
 				1623CE771BFD1B2C00EFAD72 /* AWARE.xcdatamodeld in Sources */,
@@ -1526,6 +1565,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = AWARE/AWARE.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -1550,6 +1590,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = jp.ac.keio.sfc.ht.tetujin.AWARE;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "AWARE/AWARE-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
@@ -1559,6 +1601,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = AWARE/AWARE.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
@@ -1583,6 +1626,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = jp.ac.keio.sfc.ht.tetujin.AWARE;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "AWARE/AWARE-Bridging-Header.h";
 			};
 			name = Release;
 		};

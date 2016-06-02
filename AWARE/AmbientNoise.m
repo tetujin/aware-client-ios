@@ -54,9 +54,9 @@ static vDSP_Length const FFTViewControllerFFTWindowSize = 4096;
         KEY_AMBIENT_NOISE_DEVICE_ID = @"device_id";
         KEY_AMBIENT_NOISE_FREQUENCY = @"double_frequency";
         KEY_AMBIENT_NOISE_DECIDELS = @"double_decibels";
-        KEY_AMBIENT_NOISE_RMS = @"double_RMS";
+        KEY_AMBIENT_NOISE_RMS = @"double_rms";
         KEY_AMBIENT_NOISE_SILENT = @"is_silent";
-        KEY_AMBIENT_NOISE_SILENT_THRESHOLD = @"silent_threshold";
+        KEY_AMBIENT_NOISE_SILENT_THRESHOLD = @"double_silent_threshold";
         KEY_AMBIENT_NOISE_RAW = @"raw";
         
         /**
