@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="10171" systemVersion="15E65" minimumToolsVersion="Automatic">
-    <entity name="PluginActivityRecognition" representedClassName="PluginActivityRecognition" syncable="YES">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="10174" systemVersion="15E65" minimumToolsVersion="Automatic">
+    <entity name="EntityAccelerometer" representedClassName="EntityAccelerometer" syncable="YES">
+        <attribute name="accuracy" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="double_values_0" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="double_values_1" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="double_values_2" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="label" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+    </entity>
+    <entity name="EntityActivityRecognition" syncable="YES">
         <attribute name="activities" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="activity_name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="activity_type" optional="YES" attributeType="String" syncable="YES"/>
@@ -8,7 +17,7 @@
         <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
     </entity>
-    <entity name="PluginAmbientNoise" representedClassName="PluginAmbientNoise" syncable="YES">
+    <entity name="EntityAmbientNoise" syncable="YES">
         <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="double_decibels" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
         <attribute name="double_frequency" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
@@ -18,7 +27,68 @@
         <attribute name="silent_threshold" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
         <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
     </entity>
-    <entity name="SensorAccelerometer" representedClassName="SensorAccelerometer" syncable="YES">
+    <entity name="EntityBarometer" representedClassName="EntityBarometer" syncable="YES">
+        <attribute name="accuracy" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="double_values_0" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="label" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+    </entity>
+    <entity name="EntityBattery" representedClassName="EntityBattery" syncable="YES">
+        <attribute name="battery_adaptor" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="battery_health" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="battery_level" optional="YES" attributeType="Integer 32" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="battery_scale" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="battery_status" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="battery_technology" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="battery_temperature" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="battery_voltage" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+    </entity>
+    <entity name="EntityBatteryCharge" representedClassName="EntityBatteryCharge" syncable="YES">
+        <attribute name="battery_end" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="battery_start" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="double_end_timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+    </entity>
+    <entity name="EntityBatteryDischarge" representedClassName="EntityBatteryDischarge" syncable="YES">
+        <attribute name="battery_end" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="battery_start" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="double_end_timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+    </entity>
+    <entity name="EntityBluetooth" representedClassName="EntityBluetooth" syncable="YES">
+        <attribute name="bt_address" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="bt_name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="bt_rssi" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="label" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+    </entity>
+    <entity name="EntityCall" representedClassName="EntityCall" syncable="YES">
+        <attribute name="call_duration" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="call_type" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="trace" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="EntityDebug" representedClassName="EntityDebug" syncable="YES">
+        <attribute name="app_version" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="battery" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="battery_state" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="device" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="event" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="label" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="network" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="os" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="type" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+    </entity>
+    <entity name="EntityGravity" representedClassName="EntityGravity" syncable="YES">
         <attribute name="accuracy" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="double_values_0" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
@@ -27,7 +97,25 @@
         <attribute name="label" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
     </entity>
-    <entity name="SensorLocations" representedClassName="SensorLocations" syncable="YES">
+    <entity name="EntityGyroscope" representedClassName="EntityGyroscope" syncable="YES">
+        <attribute name="accuracy" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="axis_x" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="axis_y" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="axis_z" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="label" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+    </entity>
+    <entity name="EntityLinearAccelerometer" representedClassName="EntityLinearAccelerometer" syncable="YES">
+        <attribute name="accuracy" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="double_values_0" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="double_values_1" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="double_values_2" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="label" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+    </entity>
+    <entity name="EntityLocation" representedClassName="EntityLocation" syncable="YES">
         <attribute name="accuracy" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="double_altitude" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
@@ -39,10 +127,38 @@
         <attribute name="provider" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
     </entity>
+    <entity name="EntityMagnetometer" representedClassName="EntityMagnetometer" syncable="YES">
+        <attribute name="accuracy" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="double_values_0" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="double_values_1" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="double_values_2" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="label" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+    </entity>
+    <entity name="EntityNetwork" representedClassName="EntityNetwork" syncable="YES">
+        <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="network_state" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="network_subtype" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="network_type" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+    </entity>
     <elements>
-        <element name="PluginActivityRecognition" positionX="180" positionY="117" width="128" height="135"/>
-        <element name="PluginAmbientNoise" positionX="234" positionY="0" width="128" height="165"/>
-        <element name="SensorLocations" positionX="117" positionY="81" width="128" height="195"/>
-        <element name="SensorAccelerometer" positionX="189" positionY="126" width="128" height="150"/>
+        <element name="EntityActivityRecognition" positionX="180" positionY="117" width="128" height="135"/>
+        <element name="EntityAmbientNoise" positionX="234" positionY="0" width="128" height="165"/>
+        <element name="EntityAccelerometer" positionX="189" positionY="126" width="128" height="150"/>
+        <element name="EntityLocation" positionX="117" positionY="81" width="128" height="30"/>
+        <element name="EntityBarometer" positionX="180" positionY="117" width="128" height="120"/>
+        <element name="EntityBattery" positionX="189" positionY="126" width="128" height="195"/>
+        <element name="EntityBatteryDischarge" positionX="198" positionY="153" width="128" height="30"/>
+        <element name="EntityBatteryCharge" positionX="207" positionY="162" width="128" height="30"/>
+        <element name="EntityBluetooth" positionX="216" positionY="180" width="128" height="30"/>
+        <element name="EntityCall" positionX="225" positionY="189" width="128" height="30"/>
+        <element name="EntityDebug" positionX="234" positionY="198" width="128" height="30"/>
+        <element name="EntityGravity" positionX="180" positionY="144" width="128" height="30"/>
+        <element name="EntityGyroscope" positionX="189" positionY="153" width="128" height="30"/>
+        <element name="EntityLinearAccelerometer" positionX="198" positionY="162" width="128" height="30"/>
+        <element name="EntityMagnetometer" positionX="207" positionY="171" width="128" height="30"/>
+        <element name="EntityNetwork" positionX="216" positionY="180" width="128" height="30"/>
     </elements>
 </model>

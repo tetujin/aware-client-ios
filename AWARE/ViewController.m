@@ -12,6 +12,7 @@
 #import "ViewController.h"
 #import "GoogleLoginViewController.h"
 #import "AWAREEsmViewController.h"
+#import "AWARECore.h"
 #import "WebViewController.h"
 
 // Util
@@ -109,7 +110,7 @@
 
     /// Init sensor manager for the list view
     AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
-    AWARECoreManager * core = delegate.sharedAWARECoreManager;
+    AWARECore * core = delegate.sharedAWARECore;
     sensorManager = core.sharedSensorManager;
     dailyUpdateTimer = core.dailyUpdateTimer;
     
@@ -137,7 +138,11 @@
     }
     
     /// Start an update timer for list view. This timer refreshed the list view every 0.1 sec.
-    listUpdateTimer = [NSTimer scheduledTimerWithTimeInterval:0.1f target:self.tableView selector:@selector(reloadData) userInfo:nil repeats:YES];
+    listUpdateTimer = [NSTimer scheduledTimerWithTimeInterval:0.1f
+                                                       target:self
+                                                     selector:@selector(updateVisibleCells)
+                                                     userInfo:nil
+                                                      repeats:YES];
     [[NSRunLoop mainRunLoop] addTimer:listUpdateTimer forMode:NSRunLoopCommonModes];
 
 }
@@ -464,7 +469,7 @@
  */
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"%ld is selected!", indexPath.row);
+//    NSLog(@"%ld is selected!", indexPath.row);
     NSDictionary *item = (NSDictionary *)[_sensors objectAtIndex:indexPath.row];
     NSString *key = [item objectForKey:KEY_CEL_SENSOR_NAME];
     // Debug Model ON/OFF
@@ -664,7 +669,7 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
             return;
         }
         NSString *label = [alertView textFieldAtIndex:0].text;
-        Labels * labelsSensor = [[Labels alloc] initWithSensorName:SENSOR_LABELS withAwareStudy:awareStudy];
+        Labels * labelsSensor = [[Labels alloc] initWithAwareStudy:awareStudy];
         [labelsSensor saveLabel:label withKey:@"top" type:@"text" body:@"" triggerTime:[NSDate new] answeredTime:[NSDate new]];
         [labelsSensor syncAwareDB];
     }else if (alertView.tag == 12){
@@ -707,15 +712,40 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
 }
 
 
+
+- (void)updateVisibleCells {
+    for (UITableViewCell *cell in [self.tableView visibleCells]){
+        [self updateCell:cell atIndexPath:[self.tableView indexPathForCell:cell]];
+//        NSLog(@"%@", cell);
+    }
+}
+
+
+//for cell updating
+- (void)updateCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
+    NSDictionary *item = (NSDictionary *)[_sensors objectAtIndex:indexPath.row];
+    NSString *sensorKey = [item objectForKey:KEY_CEL_SENSOR_NAME];
+    NSString* latestSensorData = nil;
+    @autoreleasepool {
+         latestSensorData = [sensorManager getLatestSensorData:sensorKey];
+        //update latest sensor data
+        if(![latestSensorData isEqualToString:@""]){
+            [cell.detailTextLabel setText:latestSensorData];
+        }
+    }
+    
+}
+
+
+
 - (UITableViewCell *)tableView:(UITableView *)tableView
          cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     @autoreleasepool {
-//        NSLog(@"%ld",indexPath.row);
         static NSString *MyIdentifier = @"MyReuseIdentifier";
-        
+//
         NSDictionary *item = (NSDictionary *)[_sensors objectAtIndex:indexPath.row];
-        
-        /// Make a cell by _sensors (sensor list on ViewController.)
+//
+//        /// Make a cell by _sensors (sensor list on ViewController.)
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:MyIdentifier];
         if (cell == nil) {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle  reuseIdentifier:MyIdentifier];
@@ -729,22 +759,25 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
         }
         NSString *stateStr = [item objectForKey:KEY_CEL_STATE];
         cell.imageView.image = theImage;
-        
-        //update latest sensor data
+    
         NSString *sensorKey = [item objectForKey:KEY_CEL_SENSOR_NAME];
         NSString* latestSensorData = [sensorManager getLatestSensorData:sensorKey];
+    
+    
+         latestSensorData = [sensorManager getLatestSensorData:sensorKey];
+         //update latest sensor data
         if(![latestSensorData isEqualToString:@""]){
             [cell.detailTextLabel setText:latestSensorData];
         }
-
         if ([stateStr isEqualToString:@"true"]) {
-            theImage = [theImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            UIImageView *aImageView = [[UIImageView alloc] initWithImage:theImage];
-            aImageView.tintColor = UIColor.redColor;
-            cell.imageView.image = theImage;
+             theImage = [theImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+             UIImageView *aImageView = [[UIImageView alloc] initWithImage:theImage];
+             aImageView.tintColor = UIColor.redColor;
+             cell.imageView.image = theImage;
         }
         return cell;
     }
+    
 }
 
 

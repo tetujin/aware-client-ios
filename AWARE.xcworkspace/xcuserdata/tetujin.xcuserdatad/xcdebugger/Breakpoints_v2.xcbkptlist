@@ -19,14 +19,14 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "AWARE/AWARECoreDataUploader.m"
-            timestampString = "483807500.384415"
+            filePath = "AWARE/AWAREFramework/Core/AWAREDelegate.m"
+            timestampString = "486898050.972535"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "410"
-            endingLineNumber = "410"
-            landmarkName = "-receivedResponseFromServer:withData:error:"
-            landmarkType = "5">
+            startingLineNumber = "504"
+            endingLineNumber = "504"
+            landmarkName = "exceptionHandler()"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
