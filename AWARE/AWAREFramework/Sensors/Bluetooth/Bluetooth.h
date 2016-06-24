@@ -23,6 +23,10 @@
 //@property (nonatomic, strong) CBPeripheral *peripheralDevice;
 @property (strong,nonatomic) NSMutableArray *peripherals;
 
+- (BOOL) startSensor;
+
+- (BOOL) startSensorWithScanInterval:(int)interval duration:(int)duration;
+
 //https://developer.bluetooth.org/gatt/services/Pages/ServicesHome.aspx
 
 //#define SENSORTAG_SERVICE_UUID @"AA80"

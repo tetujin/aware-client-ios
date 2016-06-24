@@ -14,6 +14,9 @@
 
 #include <stdio.h>
 
+#import "AppDelegate.h"
+#import "EntityBLEHeartRate.h"
+
 @implementation BLEHeartRate {
     NSString * KEY_HR_TIMESTAMP;
     NSString * KEY_HR_DEVICE_ID;
@@ -24,13 +27,15 @@
     NSString * KEY_HR_LABEL;
     
     NSArray *services;
+    
+    NSTimer * timer;
 }
 
 - (instancetype)initWithAwareStudy:(AWAREStudy *)study{
     self = [super initWithAwareStudy:study
                           sensorName:@"ble_heartrate"
-                        dbEntityName:nil
-                              dbType:AwareDBTypeTextFile];
+                        dbEntityName:NSStringFromClass([EntityBLEHeartRate class])
+                              dbType:AwareDBTypeCoreData];
     if (self) {
         KEY_HR_TIMESTAMP = @"timestamp";
         KEY_HR_DEVICE_ID = @"device_id";
@@ -46,9 +51,9 @@
         _deviceRssi = @0;
         
         services = @[
-                              [CBUUID UUIDWithString:POLARH7_HRM_HEART_RATE_SERVICE_UUID],
-                              [CBUUID UUIDWithString:POLARH7_HRM_DEVICE_INFO_SERVICE_UUID]
-                              ];
+                  [CBUUID UUIDWithString:POLARH7_HRM_HEART_RATE_SERVICE_UUID],
+                  [CBUUID UUIDWithString:POLARH7_HRM_DEVICE_INFO_SERVICE_UUID]
+                  ];
     }
     return self;
 }
@@ -69,23 +74,50 @@
 
 
 - (BOOL)startSensorWithSettings:(NSArray *)settings{
-    // Send a table create query
-//    [self createTable];
-    
-    [self setBufferSize:60];
-    
-    // Start a BLE central manager
-    _myCentralManager = [[CBCentralManager alloc] initWithDelegate:self queue:nil];
-    
+    [self startSensor];
+    return YES;
+}
+
+- (BOOL) startSensor{
+//    [self setBufferSize:1];
+    timer = [NSTimer scheduledTimerWithTimeInterval:60.0f * 5
+                                             target:self
+                                           selector:@selector(startDutyCycle)
+                                           userInfo:nil
+                                            repeats:YES];
+    [timer fire];
     return YES;
 }
 
 - (BOOL)stopSensor{
     // Stop a BLE central manager
     [_myCentralManager stopScan];
+    [timer invalidate];
+    timer = nil;
     return YES;
 }
 
+
+
+/////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////
+
+- (void) startDutyCycle {
+    NSLog(@"Start a duty cycle...");
+    [self startHeartRateSensor];
+    [self performSelector:@selector(stopHeartRateSensor) withObject:nil afterDelay:30.0f];
+}
+
+- (void) startHeartRateSensor{
+    // Start a BLE central manager
+    _myCentralManager = [[CBCentralManager alloc] initWithDelegate:self queue:nil];
+}
+
+- (void) stopHeartRateSensor{
+    // Start a BLE central manager
+    [_myCentralManager stopScan];
+    _myCentralManager = nil;
+}
 
 
 /////////////////////////////////////////////////////////////////
@@ -244,17 +276,30 @@
     NSLog(@"%hu", self.heartRate);
     
     NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
-    NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-    [dic setObject:unixtime forKey:KEY_HR_TIMESTAMP];
-    [dic setObject:[self getDeviceId] forKey:KEY_HR_DEVICE_ID];
-    [dic setObject:[NSNumber numberWithInt:_heartRate] forKey:KEY_HR_HEARTRATE]; //varchar
-    [dic setObject:_bodyLocation forKey:KEY_HR_LOCATION]; //1=chest, 2=wrist
-    [dic setObject:_manufacturer forKey:KEY_HR_MANUFACTURER];
-    [dic setObject:_deviceRssi forKey:KEY_HR_RSSI];
-    [dic setObject:@"BLE" forKey:KEY_HR_LABEL];
-    [self saveData:dic];
+    AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+    EntityBLEHeartRate * heartRateEntity = (EntityBLEHeartRate *)[NSEntityDescription insertNewObjectForEntityForName:[self getEntityName]
+                                                                                            inManagedObjectContext:delegate.managedObjectContext];
+    heartRateEntity.device_id = [self getDeviceId];
+    heartRateEntity.timestamp = unixtime;
+    heartRateEntity.heartrate = @(_heartRate);
+    heartRateEntity.location = _bodyLocation;
+    heartRateEntity.manufacturer = _manufacturer;
+    heartRateEntity.rssi = _deviceRssi;
+    heartRateEntity.label = @"BLE";
+    
+    [self saveDataToDB];
     
     [self setLatestValue:[NSString stringWithFormat:@"[%@] %d bps (RSSI:%f)",_manufacturer,_heartRate, _deviceRssi.doubleValue]];
+
+//    NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+//    [dic setObject:unixtime forKey:KEY_HR_TIMESTAMP];
+//    [dic setObject:[self getDeviceId] forKey:KEY_HR_DEVICE_ID];
+//    [dic setObject:[NSNumber numberWithInt:_heartRate] forKey:KEY_HR_HEARTRATE]; //varchar
+//    [dic setObject:_bodyLocation forKey:KEY_HR_LOCATION]; //1=chest, 2=wrist
+//    [dic setObject:_manufacturer forKey:KEY_HR_MANUFACTURER];
+//    [dic setObject:_deviceRssi forKey:KEY_HR_RSSI];
+//    [dic setObject:@"BLE" forKey:KEY_HR_LABEL];
+//    [self saveData:dic];
     
     return;
 }

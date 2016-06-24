@@ -13,4 +13,9 @@
 
 @interface Gyroscope : AWARESensor <AWARESensorDelegate>
 
+- (BOOL) startSensor;
+- (BOOL) startSensorWithInterval:(double)interval;
+- (BOOL) startSensorWithInterval:(double)interval bufferSize:(int)buffer;
+- (BOOL) startSensorWithInterval:(double)interval bufferSize:(int)buffer fetchLimit:(int)fetchLimit;
+
 @end

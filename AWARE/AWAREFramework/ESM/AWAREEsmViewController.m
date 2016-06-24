@@ -102,6 +102,8 @@
     KEY_OBJECT = @"KEY_OBJECT";
     
     esmNumber = 0;
+    
+    [_mainScrollView setBackgroundColor:[UIColor whiteColor]];
 }
 
 
@@ -260,6 +262,9 @@
     [self addCommonContents:dic];
     
     UITextView * textView = [[UITextView alloc] initWithFrame:CGRectMake(mainContentRect.origin.x, totalHight, mainContentRect.size.width, mainContentRect.size.height)];
+    textView.layer.borderWidth = 1.0f;    // 枠線の幅
+    textView.layer.cornerRadius = 5.0f;   // 角の丸み
+//    [textView.layer setBorderColor:(__bridge CGColorRef _Nullable)([UIColor lightGrayColor])];
     [freeTextViews addObject:textView];
     [textView setDelegate:self];
     
@@ -801,9 +806,13 @@
                                                                   totalHight+valueLabelH,
                                                                   60, mainContentH)];
     
+    minLabel.adjustsFontSizeToFitWidth = YES;
+    maxLabel.adjustsFontSizeToFitWidth = YES;
+    
     NSNumber *max = [dic objectForKey:KEY_ESM_SCALE_MAX];
     NSNumber *min = [dic objectForKey:KEY_ESM_SCALE_MIN];
     NSNumber *start = [dic objectForKey:KEY_ESM_SCALE_START];
+    
     slider.maximumValue = [max floatValue];
     slider.minimumValue = [min floatValue];
     slider.value = [start floatValue];
@@ -1092,8 +1101,8 @@
  */
 - (void) addLineElement {
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(lineRect.origin.x, totalHight, lineRect.size.width, lineRect.size.height)];
-    [view setBackgroundColor:[UIColor lightTextColor]];
-//    [view setBackgroundColor:[UIColor lightGrayColor]];
+//    [view setBackgroundColor:[UIColor lightTextColor]];
+    [view setBackgroundColor:[UIColor lightGrayColor]];
     [_mainScrollView addSubview:view];
     [self setContentSizeWithAdditionalHeight:lineRect.size.height];
 }
@@ -1149,7 +1158,8 @@
 - (void) addCancelButtonWithText:(NSString*) text {
     UIButton *cancelBtn = [[UIButton alloc] initWithFrame:CGRectMake(buttonRect.origin.x, totalHight, buttonRect.size.width, buttonRect.size.height)];
     [cancelBtn setTitle:text forState:UIControlStateNormal];
-    cancelBtn.layer.borderColor = [UIColor whiteColor].CGColor;
+    [cancelBtn setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+    cancelBtn.layer.borderColor = [UIColor lightGrayColor].CGColor;
     cancelBtn.layer.borderWidth = 2;
     [_mainScrollView addSubview:cancelBtn];
     [self setContentSizeWithAdditionalHeight:HIGHT_BUTTON];

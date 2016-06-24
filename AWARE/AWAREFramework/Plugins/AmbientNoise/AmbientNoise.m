@@ -9,6 +9,7 @@
 #import "AmbientNoise.h"
 #import "AudioAnalysis.h"
 #import "AppDelegate.h"
+#import "EntityAmbientNoise.h"
 
 static vDSP_Length const FFTViewControllerFFTWindowSize = 4096;
 
@@ -43,14 +44,16 @@ static vDSP_Length const FFTViewControllerFFTWindowSize = 4096;
     double rms;
     
     float lastdb;
+
+    BOOL saveRawData;
 }
 
 
 - (instancetype)initWithAwareStudy:(AWAREStudy *)study{
     self = [super initWithAwareStudy:study
                           sensorName:SENSOR_AMBIENT_NOISE
-                        dbEntityName:nil
-                              dbType:AwareDBTypeTextFile];
+                        dbEntityName:NSStringFromClass([EntityAmbientNoise class])
+                              dbType:AwareDBTypeCoreData];
     if (self) {
         KEY_AMBIENT_NOISE_TIMESTAMP = @"timestamp";
         KEY_AMBIENT_NOISE_DEVICE_ID = @"device_id";
@@ -90,6 +93,7 @@ static vDSP_Length const FFTViewControllerFFTWindowSize = 4096;
         db = 0;
         rms = 0;
         
+        saveRawData = NO;
 //        _resampleOutputBuffer.bufferLen = 0;
 //        _resampleOutputBuffer.bufferSize = MAX_RESAMPLE_BUF_SIZE;
 //        _resampleOutputBuffer.bufferPtr = (float*)malloc(_resampleOutputBuffer.bufferSize * sizeof(float));
@@ -142,18 +146,36 @@ static vDSP_Length const FFTViewControllerFFTWindowSize = 4096;
     if (silenceThreshold <= 0){
         silenceThreshold = 50;
     }
+
+    return [self startSensorWithFrequencyMin:frequencyMin sampleSize:sampleSize silenceThreshold:silenceThreshold saveRawData:NO];
+}
+
+- (BOOL) startSensor {
+    return [self startSensorWithFrequencyMin:frequencyMin sampleSize:sampleSize silenceThreshold:silenceThreshold saveRawData:NO];
+}
+
+- (BOOL) startSensorWithFrequencyMin:(double)min sampleSize:(double)size silenceThreshold:(double)threshold saveRawData:(BOOL)rawDataState{
     
     [self setupMicrophone];
     
+    if(saveRawData){
+        [self setFetchLimit:10];
+    }else{
+        [self setFetchLimit:100];
+    }
     currentSecond = 0;
+    frequencyMin = min;
+    sampleSize = size;
+    silenceThreshold = threshold;
     
-    timer = [NSTimer scheduledTimerWithTimeInterval: 60.0f * frequencyMin
+    saveRawData = rawDataState;
+    
+    timer = [NSTimer scheduledTimerWithTimeInterval:60.0f*frequencyMin
                                              target:self
                                            selector:@selector(startRecording:)
                                            userInfo:nil
                                             repeats:YES];
     [timer fire];
-    
     return YES;
 }
 
@@ -238,32 +260,35 @@ static vDSP_Length const FFTViewControllerFFTWindowSize = 4096;
  * Stop recording ambient noise
  */
 - (void) stopRecording:(id)sender{
-    // stop fetching audio
-    [self.microphone stopFetchingAudio];
-    // stop recording audio
-    [self.recorder closeAudioFile];
-    // Save audio data
-    [self saveAudioData];
-    
-    // init variables
-    self.recorder = nil;
-    maxFrequency = 0;
-    db = 0;
-    rms = 0;
-    lastdb = 0;
-    
-    // check a dutyCycle
-    if( sampleSize > currentSecond ){
-        currentSecond++;
-        [self startRecording:nil];
-    }else{
-        NSLog(@"Stop Recording");
-        currentSecond = 0;
-        _isRecording = NO;
-        if ([self isDebug]) {
-            [AWAREUtils sendLocalNotificationForMessage:@"[Ambient Noise] Stop Recording" soundFlag:NO];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        // stop fetching audio
+        [self.microphone stopFetchingAudio];
+        // stop recording audio
+        [self.recorder closeAudioFile];
+        // Save audio data
+        [self saveAudioData];
+        
+        // init variables
+        self.recorder = nil;
+        maxFrequency = 0;
+        db = 0;
+        rms = 0;
+        lastdb = 0;
+        
+        // check a dutyCycle
+        if( sampleSize > currentSecond ){
+            currentSecond++;
+            [self startRecording:nil];
+        }else{
+            NSLog(@"Stop Recording");
+            currentSecond = 0;
+            _isRecording = NO;
+            if ([self isDebug]) {
+                [AWAREUtils sendLocalNotificationForMessage:@"[Ambient Noise] Stop Recording" soundFlag:NO];
+            }
         }
-    }
+        
+    });
 }
 
 
@@ -272,43 +297,49 @@ static vDSP_Length const FFTViewControllerFFTWindowSize = 4096;
 
 - (void) saveAudioData {
     NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
-    NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-    [dic setObject:unixtime forKey:KEY_AMBIENT_NOISE_TIMESTAMP];
-    [dic setObject:[self getDeviceId] forKey:KEY_AMBIENT_NOISE_DEVICE_ID];
-    [dic setObject:[NSNumber numberWithFloat:maxFrequency] forKey:KEY_AMBIENT_NOISE_FREQUENCY];
-    [dic setObject:[NSNumber numberWithDouble:db] forKey:KEY_AMBIENT_NOISE_DECIDELS];
-    [dic setObject:[NSNumber numberWithDouble:rms] forKey:KEY_AMBIENT_NOISE_RMS];
-    [dic setObject:[NSNumber numberWithBool:[AudioAnalysis isSilent:rms threshold:silenceThreshold]] forKey:KEY_AMBIENT_NOISE_SILENT];
-    [dic setObject:[NSNumber numberWithInteger:silenceThreshold] forKey:KEY_AMBIENT_NOISE_SILENT_THRESHOLD];
-//    NSData * data = [NSData dataWithContentsOfURL:[self testFilePathURL]];
-//    NSString *base64Encoded = [data base64EncodedStringWithOptions:0];
-//    if(base64Encoded != nil){
-//        [dic setObject:base64Encoded forKey:KEY_AMBIENT_NOISE_RAW];
-//    }else{
-        [dic setObject:[[NSNull alloc] init] forKey:KEY_AMBIENT_NOISE_RAW];
-//    }
-    [self saveData:dic];
-    
-    
-//    AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
-//    PluginAmbientNoise * ambientNoise = [NSEntityDescription insertNewObjectForEntityForName:@"PluginAmbientNoise"
-//                                                inManagedObjectContext:delegate.managedObjectContext];
-//    ambientNoise.device_id = [self getDeviceId];
-//    ambientNoise.timestamp = unixtime;
-//    ambientNoise.double_frequency = [NSNumber numberWithFloat:maxFrequency];
-//    ambientNoise.double_decibels = [NSNumber numberWithDouble:db];
-//    ambientNoise.double_RMS = [NSNumber numberWithDouble:rms];
-//    ambientNoise.is_silent = [NSNumber numberWithBool:[AudioAnalysis isSilent:rms threshold:silenceThreshold]];
-//    ambientNoise.silent_threshold = [NSNumber numberWithInteger:silenceThreshold];
-//    NSData * data = [NSData dataWithContentsOfURL:[self testFilePathURL]];
-////    NSString *base64Encoded = [data base64EncodedStringWithOptions:0];
-//    ambientNoise.raw = [data base64EncodedStringWithOptions:0];
+
+    AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+    EntityAmbientNoise * ambientNoise = (EntityAmbientNoise *)[NSEntityDescription insertNewObjectForEntityForName:[self getEntityName]
+                                                inManagedObjectContext:delegate.managedObjectContext];
+    ambientNoise.device_id = [self getDeviceId];
+    ambientNoise.timestamp = unixtime;
+    ambientNoise.double_frequency = [NSNumber numberWithFloat:maxFrequency];
+    ambientNoise.double_decibels = [NSNumber numberWithDouble:db];
+    ambientNoise.double_RMS = [NSNumber numberWithDouble:rms];
+    ambientNoise.is_silent = [NSNumber numberWithBool:[AudioAnalysis isSilent:rms threshold:silenceThreshold]];
+    ambientNoise.silent_threshold = [NSNumber numberWithInteger:silenceThreshold];
+    NSData * data = [NSData dataWithContentsOfURL:[self testFilePathURL]];
+    if(saveRawData){
+        //    NSString *base64Encoded = [data base64EncodedStringWithOptions:0];
+        ambientNoise.raw = [data base64EncodedStringWithOptions:0];
+    }else{
+        ambientNoise.raw = @"";
+    }
     
     [self setLatestValue:[NSString stringWithFormat:@"dB:%f, RMS:%f, Frequency:%f", db, rms, maxFrequency]];
     
     if ([self isDebug] && sampleSize<=currentSecond) {
         [AWAREUtils sendLocalNotificationForMessage:[NSString stringWithFormat:@"dB:%f, RMS:%f, Frequency:%f", db, rms, maxFrequency] soundFlag:NO];
     }
+    
+    [self saveDataToDB];
+
+//    NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+//    [dic setObject:unixtime forKey:KEY_AMBIENT_NOISE_TIMESTAMP];
+//    [dic setObject:[self getDeviceId] forKey:KEY_AMBIENT_NOISE_DEVICE_ID];
+//    [dic setObject:[NSNumber numberWithFloat:maxFrequency] forKey:KEY_AMBIENT_NOISE_FREQUENCY];
+//    [dic setObject:[NSNumber numberWithDouble:db] forKey:KEY_AMBIENT_NOISE_DECIDELS];
+//    [dic setObject:[NSNumber numberWithDouble:rms] forKey:KEY_AMBIENT_NOISE_RMS];
+//    [dic setObject:[NSNumber numberWithBool:[AudioAnalysis isSilent:rms threshold:silenceThreshold]] forKey:KEY_AMBIENT_NOISE_SILENT];
+//    [dic setObject:[NSNumber numberWithInteger:silenceThreshold] forKey:KEY_AMBIENT_NOISE_SILENT_THRESHOLD];
+//    NSData * data = [NSData dataWithContentsOfURL:[self testFilePathURL]];
+//    NSString *base64Encoded = [data base64EncodedStringWithOptions:0];
+//    if(base64Encoded != nil){
+//        [dic setObject:base64Encoded forKey:KEY_AMBIENT_NOISE_RAW];
+//    }else{
+//        [dic setObject:[[NSNull alloc] init] forKey:KEY_AMBIENT_NOISE_RAW];
+//    }
+//    [self saveData:dic];
     
 //    if(sampleSize<=currentSecond){
 //        NSError * error = nil;

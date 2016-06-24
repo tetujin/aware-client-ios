@@ -15,6 +15,8 @@
 
 #import "Screen.h"
 #import "notify.h"
+#import "AppDelegate.h"
+#import "EntityScreen.h"
 
 @implementation Screen {
     int _notifyTokenForDidChangeLockStatus;
@@ -24,9 +26,10 @@
 - (instancetype)initWithAwareStudy:(AWAREStudy *)study{
     self = [super initWithAwareStudy:study
                           sensorName:SENSOR_SCREEN
-                        dbEntityName:nil
-                              dbType:AwareDBTypeTextFile];
+                        dbEntityName:NSStringFromClass([EntityScreen class])
+                              dbType:AwareDBTypeCoreData];
     if (self) {
+        
     }
     return self;
 }
@@ -43,6 +46,9 @@
     [super createTable:query];
 }
 
+- (BOOL) startSensor{
+    return [self startSensorWithSettings:nil];
+}
 
 - (BOOL)startSensorWithSettings:(NSArray *)settings{
     NSLog(@"[%@] Start Screen Sensor", [self getSensorName]);
@@ -75,20 +81,28 @@
         if(state == 0) {
             NSLog(@"unlock device");
             awareScreenState = 3;
+            [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_SCREEN_UNLOCKED
+                                                                object:nil
+                                                              userInfo:nil];
         } else {
             NSLog(@"lock device");
+            [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_SCREEN_LOCKED
+                                                                object:nil
+                                                              userInfo:nil];
             awareScreenState = 2;
         }
         
         NSLog(@"com.apple.springboard.lockstate = %llu", state);
 
-        NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
-        NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-        [dic setObject:unixtime forKey:@"timestamp"];
-        [dic setObject:[self getDeviceId] forKey:@"device_id"];
-        [dic setObject:[NSNumber numberWithInt:awareScreenState] forKey:@"screen_status"]; // int
+        [self saveScreenEvent:awareScreenState];
+        
+//        NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
+//        NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+//        [dic setObject:unixtime forKey:@"timestamp"];
+//        [dic setObject:[self getDeviceId] forKey:@"device_id"];
+//        [dic setObject:[NSNumber numberWithInt:awareScreenState] forKey:@"screen_status"]; // int
         [self setLatestValue:[NSString stringWithFormat:@"%@", [NSNumber numberWithInt:awareScreenState]]];
-        [self saveData:dic];
+//        [self saveData:dic];
     });
 }
 
@@ -103,21 +117,42 @@
         
         if(state == 0) {
             NSLog(@"screen off");
+            [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_SCREEN_OFF
+                                                                object:nil
+                                                              userInfo:nil];
             awareScreenState = 0;
         } else {
+            [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_SCREEN_ON
+                                                                object:nil
+                                                              userInfo:nil];
             NSLog(@"screen on");
             awareScreenState = 1;
         }
-        
-        NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
-        NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-        [dic setObject:unixtime forKey:@"timestamp"];
-        [dic setObject:[self getDeviceId] forKey:@"device_id"];
-        [dic setObject:[NSNumber numberWithInt:awareScreenState] forKey:@"screen_status"]; // int
+        [self saveScreenEvent:awareScreenState];
+//        NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
+//        NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+//        [dic setObject:unixtime forKey:@"timestamp"];
+//        [dic setObject:[self getDeviceId] forKey:@"device_id"];
+//        [dic setObject:[NSNumber numberWithInt:awareScreenState] forKey:@"screen_status"]; // int
         [self setLatestValue:[NSString stringWithFormat:@"%@", [NSNumber numberWithInt:awareScreenState]]];
-        [self saveData:dic];
+//        [self saveData:dic];
         
     });
+}
+
+
+- (void) saveScreenEvent:(int) state{
+    NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
+    AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+    EntityScreen* data = (EntityScreen *)[NSEntityDescription
+                                          insertNewObjectForEntityForName:[self getEntityName]
+                                          inManagedObjectContext:delegate.managedObjectContext];
+    
+    data.device_id = [self getDeviceId];
+    data.timestamp = unixtime;
+    data.screen_status = @(state);
+    
+    [self saveDataToDB];
 }
 
 

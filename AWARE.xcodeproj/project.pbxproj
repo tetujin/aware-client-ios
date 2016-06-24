@@ -180,6 +180,34 @@
 		169C88A01D01382C00825761 /* QRCodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 169C88271D01382C00825761 /* QRCodeViewController.m */; };
 		169C88A11D01382C00825761 /* WebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 169C88291D01382C00825761 /* WebViewController.m */; };
 		169C88AD1D0142C300825761 /* TCQMaker.m in Sources */ = {isa = PBXBuildFile; fileRef = 169C88AC1D0142C300825761 /* TCQMaker.m */; };
+		16B0776C1D192663009C070B /* EntityRotation+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B077691D192663009C070B /* EntityRotation+CoreDataProperties.m */; };
+		16B0776D1D192663009C070B /* EntityRotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B0776B1D192663009C070B /* EntityRotation.m */; };
+		16B077721D19288A009C070B /* EntityScreen+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B0776F1D19288A009C070B /* EntityScreen+CoreDataProperties.m */; };
+		16B077731D19288A009C070B /* EntityScreen.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B077711D19288A009C070B /* EntityScreen.m */; };
+		16B077781D192C30009C070B /* EntityTimezone+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B077751D192C30009C070B /* EntityTimezone+CoreDataProperties.m */; };
+		16B077791D192C30009C070B /* EntityTimezone.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B077771D192C30009C070B /* EntityTimezone.m */; };
+		16B0777E1D192D72009C070B /* EntityWifi+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B0777B1D192D72009C070B /* EntityWifi+CoreDataProperties.m */; };
+		16B0777F1D192D72009C070B /* EntityWifi.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B0777D1D192D72009C070B /* EntityWifi.m */; };
+		16B077841D1978FF009C070B /* EntityActivityRecognition+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B077811D1978FF009C070B /* EntityActivityRecognition+CoreDataProperties.m */; };
+		16B077851D1978FF009C070B /* EntityActivityRecognition.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B077831D1978FF009C070B /* EntityActivityRecognition.m */; };
+		16B0778A1D1990D9009C070B /* EntityAmbientNoise+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B077871D1990D9009C070B /* EntityAmbientNoise+CoreDataProperties.m */; };
+		16B0778B1D1990D9009C070B /* EntityAmbientNoise.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B077891D1990D9009C070B /* EntityAmbientNoise.m */; };
+		16B077901D1999B5009C070B /* EntityBLEHeartRate+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B0778D1D1999B5009C070B /* EntityBLEHeartRate+CoreDataProperties.m */; };
+		16B077911D1999B5009C070B /* EntityBLEHeartRate.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B0778F1D1999B5009C070B /* EntityBLEHeartRate.m */; };
+		16B077961D1A01A0009C070B /* EntityLocationVisit+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B077931D1A01A0009C070B /* EntityLocationVisit+CoreDataProperties.m */; };
+		16B077971D1A01A0009C070B /* EntityLocationVisit.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B077951D1A01A0009C070B /* EntityLocationVisit.m */; };
+		16B077A31D1A429E009C070B /* EntityDeviceUsage+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B077A01D1A429E009C070B /* EntityDeviceUsage+CoreDataProperties.m */; };
+		16B077A41D1A429E009C070B /* EntityDeviceUsage.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B077A21D1A429E009C070B /* EntityDeviceUsage.m */; };
+		16B077A91D1A4DF1009C070B /* EntityProcessor+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B077A61D1A4DF1009C070B /* EntityProcessor+CoreDataProperties.m */; };
+		16B077AA1D1A4DF1009C070B /* EntityProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B077A81D1A4DF1009C070B /* EntityProcessor.m */; };
+		16B077BB1D1A54BF009C070B /* EntityPushNotification+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B077B81D1A54BF009C070B /* EntityPushNotification+CoreDataProperties.m */; };
+		16B077BC1D1A54BF009C070B /* EntityPushNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B077BA1D1A54BF009C070B /* EntityPushNotification.m */; };
+		16B077C11D1A55FC009C070B /* EntityMemory+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B077BE1D1A55FC009C070B /* EntityMemory+CoreDataProperties.m */; };
+		16B077C21D1A55FC009C070B /* EntityMemory.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B077C01D1A55FC009C070B /* EntityMemory.m */; };
+		16B077C71D1A57DD009C070B /* EntityNTPTime+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B077C41D1A57DD009C070B /* EntityNTPTime+CoreDataProperties.m */; };
+		16B077C81D1A57DD009C070B /* EntityNTPTime.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B077C61D1A57DD009C070B /* EntityNTPTime.m */; };
+		16B077D31D1A5F51009C070B /* EntityOpenWeather+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B077D01D1A5F51009C070B /* EntityOpenWeather+CoreDataProperties.m */; };
+		16B077D41D1A5F51009C070B /* EntityOpenWeather.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B077D21D1A5F51009C070B /* EntityOpenWeather.m */; };
 		16C1FF7D1C617FB100C070AA /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16C1FF7C1C617FB100C070AA /* Accelerate.framework */; };
 		16C1FF7F1C617FC300C070AA /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16C1FF7E1C617FC300C070AA /* GLKit.framework */; };
 		16D810241C06242500605DE2 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16D810231C06242500605DE2 /* CFNetwork.framework */; };
@@ -532,6 +560,62 @@
 		169C88291D01382C00825761 /* WebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewController.m; sourceTree = "<group>"; };
 		169C88AB1D0142C300825761 /* TCQMaker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TCQMaker.h; sourceTree = "<group>"; };
 		169C88AC1D0142C300825761 /* TCQMaker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TCQMaker.m; sourceTree = "<group>"; };
+		16B077681D192663009C070B /* EntityRotation+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EntityRotation+CoreDataProperties.h"; sourceTree = "<group>"; };
+		16B077691D192663009C070B /* EntityRotation+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EntityRotation+CoreDataProperties.m"; sourceTree = "<group>"; };
+		16B0776A1D192663009C070B /* EntityRotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EntityRotation.h; sourceTree = "<group>"; };
+		16B0776B1D192663009C070B /* EntityRotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EntityRotation.m; sourceTree = "<group>"; };
+		16B0776E1D19288A009C070B /* EntityScreen+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EntityScreen+CoreDataProperties.h"; sourceTree = "<group>"; };
+		16B0776F1D19288A009C070B /* EntityScreen+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EntityScreen+CoreDataProperties.m"; sourceTree = "<group>"; };
+		16B077701D19288A009C070B /* EntityScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EntityScreen.h; sourceTree = "<group>"; };
+		16B077711D19288A009C070B /* EntityScreen.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EntityScreen.m; sourceTree = "<group>"; };
+		16B077741D192C30009C070B /* EntityTimezone+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EntityTimezone+CoreDataProperties.h"; sourceTree = "<group>"; };
+		16B077751D192C30009C070B /* EntityTimezone+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EntityTimezone+CoreDataProperties.m"; sourceTree = "<group>"; };
+		16B077761D192C30009C070B /* EntityTimezone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EntityTimezone.h; sourceTree = "<group>"; };
+		16B077771D192C30009C070B /* EntityTimezone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EntityTimezone.m; sourceTree = "<group>"; };
+		16B0777A1D192D72009C070B /* EntityWifi+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EntityWifi+CoreDataProperties.h"; sourceTree = "<group>"; };
+		16B0777B1D192D72009C070B /* EntityWifi+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EntityWifi+CoreDataProperties.m"; sourceTree = "<group>"; };
+		16B0777C1D192D72009C070B /* EntityWifi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EntityWifi.h; sourceTree = "<group>"; };
+		16B0777D1D192D72009C070B /* EntityWifi.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EntityWifi.m; sourceTree = "<group>"; };
+		16B077801D1978FF009C070B /* EntityActivityRecognition+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EntityActivityRecognition+CoreDataProperties.h"; sourceTree = "<group>"; };
+		16B077811D1978FF009C070B /* EntityActivityRecognition+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EntityActivityRecognition+CoreDataProperties.m"; sourceTree = "<group>"; };
+		16B077821D1978FF009C070B /* EntityActivityRecognition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EntityActivityRecognition.h; sourceTree = "<group>"; };
+		16B077831D1978FF009C070B /* EntityActivityRecognition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EntityActivityRecognition.m; sourceTree = "<group>"; };
+		16B077861D1990D9009C070B /* EntityAmbientNoise+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EntityAmbientNoise+CoreDataProperties.h"; sourceTree = "<group>"; };
+		16B077871D1990D9009C070B /* EntityAmbientNoise+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EntityAmbientNoise+CoreDataProperties.m"; sourceTree = "<group>"; };
+		16B077881D1990D9009C070B /* EntityAmbientNoise.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EntityAmbientNoise.h; sourceTree = "<group>"; };
+		16B077891D1990D9009C070B /* EntityAmbientNoise.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EntityAmbientNoise.m; sourceTree = "<group>"; };
+		16B0778C1D1999B5009C070B /* EntityBLEHeartRate+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EntityBLEHeartRate+CoreDataProperties.h"; sourceTree = "<group>"; };
+		16B0778D1D1999B5009C070B /* EntityBLEHeartRate+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EntityBLEHeartRate+CoreDataProperties.m"; sourceTree = "<group>"; };
+		16B0778E1D1999B5009C070B /* EntityBLEHeartRate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EntityBLEHeartRate.h; sourceTree = "<group>"; };
+		16B0778F1D1999B5009C070B /* EntityBLEHeartRate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EntityBLEHeartRate.m; sourceTree = "<group>"; };
+		16B077921D1A01A0009C070B /* EntityLocationVisit+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EntityLocationVisit+CoreDataProperties.h"; sourceTree = "<group>"; };
+		16B077931D1A01A0009C070B /* EntityLocationVisit+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EntityLocationVisit+CoreDataProperties.m"; sourceTree = "<group>"; };
+		16B077941D1A01A0009C070B /* EntityLocationVisit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EntityLocationVisit.h; sourceTree = "<group>"; };
+		16B077951D1A01A0009C070B /* EntityLocationVisit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EntityLocationVisit.m; sourceTree = "<group>"; };
+		16B0779F1D1A429E009C070B /* EntityDeviceUsage+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EntityDeviceUsage+CoreDataProperties.h"; sourceTree = "<group>"; };
+		16B077A01D1A429E009C070B /* EntityDeviceUsage+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EntityDeviceUsage+CoreDataProperties.m"; sourceTree = "<group>"; };
+		16B077A11D1A429E009C070B /* EntityDeviceUsage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EntityDeviceUsage.h; sourceTree = "<group>"; };
+		16B077A21D1A429E009C070B /* EntityDeviceUsage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EntityDeviceUsage.m; sourceTree = "<group>"; };
+		16B077A51D1A4DF1009C070B /* EntityProcessor+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EntityProcessor+CoreDataProperties.h"; sourceTree = "<group>"; };
+		16B077A61D1A4DF1009C070B /* EntityProcessor+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EntityProcessor+CoreDataProperties.m"; sourceTree = "<group>"; };
+		16B077A71D1A4DF1009C070B /* EntityProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EntityProcessor.h; sourceTree = "<group>"; };
+		16B077A81D1A4DF1009C070B /* EntityProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EntityProcessor.m; sourceTree = "<group>"; };
+		16B077B71D1A54BF009C070B /* EntityPushNotification+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EntityPushNotification+CoreDataProperties.h"; sourceTree = "<group>"; };
+		16B077B81D1A54BF009C070B /* EntityPushNotification+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EntityPushNotification+CoreDataProperties.m"; sourceTree = "<group>"; };
+		16B077B91D1A54BF009C070B /* EntityPushNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EntityPushNotification.h; sourceTree = "<group>"; };
+		16B077BA1D1A54BF009C070B /* EntityPushNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EntityPushNotification.m; sourceTree = "<group>"; };
+		16B077BD1D1A55FC009C070B /* EntityMemory+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EntityMemory+CoreDataProperties.h"; sourceTree = "<group>"; };
+		16B077BE1D1A55FC009C070B /* EntityMemory+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EntityMemory+CoreDataProperties.m"; sourceTree = "<group>"; };
+		16B077BF1D1A55FC009C070B /* EntityMemory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EntityMemory.h; sourceTree = "<group>"; };
+		16B077C01D1A55FC009C070B /* EntityMemory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EntityMemory.m; sourceTree = "<group>"; };
+		16B077C31D1A57DD009C070B /* EntityNTPTime+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EntityNTPTime+CoreDataProperties.h"; sourceTree = "<group>"; };
+		16B077C41D1A57DD009C070B /* EntityNTPTime+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EntityNTPTime+CoreDataProperties.m"; sourceTree = "<group>"; };
+		16B077C51D1A57DD009C070B /* EntityNTPTime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EntityNTPTime.h; sourceTree = "<group>"; };
+		16B077C61D1A57DD009C070B /* EntityNTPTime.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EntityNTPTime.m; sourceTree = "<group>"; };
+		16B077CF1D1A5F51009C070B /* EntityOpenWeather+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EntityOpenWeather+CoreDataProperties.h"; sourceTree = "<group>"; };
+		16B077D01D1A5F51009C070B /* EntityOpenWeather+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EntityOpenWeather+CoreDataProperties.m"; sourceTree = "<group>"; };
+		16B077D11D1A5F51009C070B /* EntityOpenWeather.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EntityOpenWeather.h; sourceTree = "<group>"; };
+		16B077D21D1A5F51009C070B /* EntityOpenWeather.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EntityOpenWeather.m; sourceTree = "<group>"; };
 		16C1FF7C1C617FB100C070AA /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		16C1FF7E1C617FC300C070AA /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		16C81FF41CD6B32D0013A87C /* AWARE_v2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = AWARE_v2.xcdatamodel; sourceTree = "<group>"; };
@@ -988,6 +1072,10 @@
 			children = (
 				169C87871D01382C00825761 /* ActivityRecognition.h */,
 				169C87881D01382C00825761 /* ActivityRecognition.m */,
+				16B077801D1978FF009C070B /* EntityActivityRecognition+CoreDataProperties.h */,
+				16B077811D1978FF009C070B /* EntityActivityRecognition+CoreDataProperties.m */,
+				16B077821D1978FF009C070B /* EntityActivityRecognition.h */,
+				16B077831D1978FF009C070B /* EntityActivityRecognition.m */,
 			);
 			path = ActivityRecognition;
 			sourceTree = "<group>";
@@ -999,6 +1087,10 @@
 				169C878B1D01382C00825761 /* AmbientNoise.m */,
 				169C878C1D01382C00825761 /* AudioAnalysis.h */,
 				169C878D1D01382C00825761 /* AudioAnalysis.m */,
+				16B077861D1990D9009C070B /* EntityAmbientNoise+CoreDataProperties.h */,
+				16B077871D1990D9009C070B /* EntityAmbientNoise+CoreDataProperties.m */,
+				16B077881D1990D9009C070B /* EntityAmbientNoise.h */,
+				16B077891D1990D9009C070B /* EntityAmbientNoise.m */,
 			);
 			path = AmbientNoise;
 			sourceTree = "<group>";
@@ -1008,6 +1100,10 @@
 			children = (
 				169C878F1D01382C00825761 /* BLEHeartRate.h */,
 				169C87901D01382C00825761 /* BLEHeartRate.m */,
+				16B0778C1D1999B5009C070B /* EntityBLEHeartRate+CoreDataProperties.h */,
+				16B0778D1D1999B5009C070B /* EntityBLEHeartRate+CoreDataProperties.m */,
+				16B0778E1D1999B5009C070B /* EntityBLEHeartRate.h */,
+				16B0778F1D1999B5009C070B /* EntityBLEHeartRate.m */,
 			);
 			path = BLEHeartRate;
 			sourceTree = "<group>";
@@ -1017,6 +1113,10 @@
 			children = (
 				169C87921D01382C00825761 /* DeviceUsage.h */,
 				169C87931D01382C00825761 /* DeviceUsage.m */,
+				16B0779F1D1A429E009C070B /* EntityDeviceUsage+CoreDataProperties.h */,
+				16B077A01D1A429E009C070B /* EntityDeviceUsage+CoreDataProperties.m */,
+				16B077A11D1A429E009C070B /* EntityDeviceUsage.h */,
+				16B077A21D1A429E009C070B /* EntityDeviceUsage.m */,
 			);
 			path = DeviceUsage;
 			sourceTree = "<group>";
@@ -1026,6 +1126,10 @@
 			children = (
 				169C87951D01382C00825761 /* FusedLocations.h */,
 				169C87961D01382C00825761 /* FusedLocations.m */,
+				16B077921D1A01A0009C070B /* EntityLocationVisit+CoreDataProperties.h */,
+				16B077931D1A01A0009C070B /* EntityLocationVisit+CoreDataProperties.m */,
+				16B077941D1A01A0009C070B /* EntityLocationVisit.h */,
+				16B077951D1A01A0009C070B /* EntityLocationVisit.m */,
 			);
 			path = FusedLocations;
 			sourceTree = "<group>";
@@ -1080,6 +1184,10 @@
 			children = (
 				169C87A71D01382C00825761 /* Memory.h */,
 				169C87A81D01382C00825761 /* Memory.m */,
+				16B077BD1D1A55FC009C070B /* EntityMemory+CoreDataProperties.h */,
+				16B077BE1D1A55FC009C070B /* EntityMemory+CoreDataProperties.m */,
+				16B077BF1D1A55FC009C070B /* EntityMemory.h */,
+				16B077C01D1A55FC009C070B /* EntityMemory.m */,
 			);
 			path = Memory;
 			sourceTree = "<group>";
@@ -1098,6 +1206,10 @@
 			children = (
 				169C87AD1D01382C00825761 /* NTPTime.h */,
 				169C87AE1D01382C00825761 /* NTPTime.m */,
+				16B077C31D1A57DD009C070B /* EntityNTPTime+CoreDataProperties.h */,
+				16B077C41D1A57DD009C070B /* EntityNTPTime+CoreDataProperties.m */,
+				16B077C51D1A57DD009C070B /* EntityNTPTime.h */,
+				16B077C61D1A57DD009C070B /* EntityNTPTime.m */,
 			);
 			path = NTPTime;
 			sourceTree = "<group>";
@@ -1116,6 +1228,10 @@
 			children = (
 				169C87B31D01382C00825761 /* OpenWeather.h */,
 				169C87B41D01382C00825761 /* OpenWeather.m */,
+				16B077CF1D1A5F51009C070B /* EntityOpenWeather+CoreDataProperties.h */,
+				16B077D01D1A5F51009C070B /* EntityOpenWeather+CoreDataProperties.m */,
+				16B077D11D1A5F51009C070B /* EntityOpenWeather.h */,
+				16B077D21D1A5F51009C070B /* EntityOpenWeather.m */,
 			);
 			path = OpenWeather;
 			sourceTree = "<group>";
@@ -1125,6 +1241,10 @@
 			children = (
 				169C87B61D01382C00825761 /* PushNotification.h */,
 				169C87B71D01382C00825761 /* PushNotification.m */,
+				16B077B71D1A54BF009C070B /* EntityPushNotification+CoreDataProperties.h */,
+				16B077B81D1A54BF009C070B /* EntityPushNotification+CoreDataProperties.m */,
+				16B077B91D1A54BF009C070B /* EntityPushNotification.h */,
+				16B077BA1D1A54BF009C070B /* EntityPushNotification.m */,
 			);
 			path = PushNotification;
 			sourceTree = "<group>";
@@ -1371,6 +1491,10 @@
 			children = (
 				169C87F61D01382C00825761 /* Processor.h */,
 				169C87F71D01382C00825761 /* Processor.m */,
+				16B077A51D1A4DF1009C070B /* EntityProcessor+CoreDataProperties.h */,
+				16B077A61D1A4DF1009C070B /* EntityProcessor+CoreDataProperties.m */,
+				16B077A71D1A4DF1009C070B /* EntityProcessor.h */,
+				16B077A81D1A4DF1009C070B /* EntityProcessor.m */,
 			);
 			path = Processor;
 			sourceTree = "<group>";
@@ -1423,6 +1547,10 @@
 			children = (
 				169C88101D01382C00825761 /* Rotation.h */,
 				169C88111D01382C00825761 /* Rotation.m */,
+				16B077681D192663009C070B /* EntityRotation+CoreDataProperties.h */,
+				16B077691D192663009C070B /* EntityRotation+CoreDataProperties.m */,
+				16B0776A1D192663009C070B /* EntityRotation.h */,
+				16B0776B1D192663009C070B /* EntityRotation.m */,
 			);
 			path = Rotation;
 			sourceTree = "<group>";
@@ -1441,6 +1569,10 @@
 			children = (
 				169C88161D01382C00825761 /* Screen.h */,
 				169C88171D01382C00825761 /* Screen.m */,
+				16B0776E1D19288A009C070B /* EntityScreen+CoreDataProperties.h */,
+				16B0776F1D19288A009C070B /* EntityScreen+CoreDataProperties.m */,
+				16B077701D19288A009C070B /* EntityScreen.h */,
+				16B077711D19288A009C070B /* EntityScreen.m */,
 			);
 			path = Screen;
 			sourceTree = "<group>";
@@ -1450,6 +1582,10 @@
 			children = (
 				169C88191D01382C00825761 /* Timezone.h */,
 				169C881A1D01382C00825761 /* Timezone.m */,
+				16B077741D192C30009C070B /* EntityTimezone+CoreDataProperties.h */,
+				16B077751D192C30009C070B /* EntityTimezone+CoreDataProperties.m */,
+				16B077761D192C30009C070B /* EntityTimezone.h */,
+				16B077771D192C30009C070B /* EntityTimezone.m */,
 			);
 			path = Timezone;
 			sourceTree = "<group>";
@@ -1459,6 +1595,10 @@
 			children = (
 				169C88211D01382C00825761 /* Wifi.h */,
 				169C88221D01382C00825761 /* Wifi.m */,
+				16B0777A1D192D72009C070B /* EntityWifi+CoreDataProperties.h */,
+				16B0777B1D192D72009C070B /* EntityWifi+CoreDataProperties.m */,
+				16B0777C1D192D72009C070B /* EntityWifi.h */,
+				16B0777D1D192D72009C070B /* EntityWifi.m */,
 				169C881C1D01382C00825761 /* MobileWiFi */,
 			);
 			path = Wifi;
@@ -1797,6 +1937,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				160F0E891D03D60500673343 /* EntityAccelerometer+CoreDataProperties.m in Sources */,
+				16B077AA1D1A4DF1009C070B /* EntityProcessor.m in Sources */,
+				16B077BC1D1A54BF009C070B /* EntityPushNotification.m in Sources */,
 				169C88751D01382C00825761 /* AudioAnalysis.m in Sources */,
 				169C88781D01382C00825761 /* FusedLocations.m in Sources */,
 				169C887C1D01382C00825761 /* AWAREHealthKit.m in Sources */,
@@ -1814,48 +1956,66 @@
 				169C888E1D01382C00825761 /* Calls.m in Sources */,
 				169C88321D01382C00825761 /* AWARESensorManager.m in Sources */,
 				169C889A1D01382C00825761 /* Rotation.m in Sources */,
+				16B077851D1978FF009C070B /* EntityActivityRecognition.m in Sources */,
+				16B077C71D1A57DD009C070B /* EntityNTPTime+CoreDataProperties.m in Sources */,
 				169C883A1D01382C00825761 /* AWAREEsmViewController.m in Sources */,
 				160F0EF21D04277000673343 /* EntityMagnetometer.m in Sources */,
 				160F0EC11D0404A400673343 /* EntityCall.m in Sources */,
 				169C88771D01382C00825761 /* DeviceUsage.m in Sources */,
 				169C88831D01382C00825761 /* PushNotification.m in Sources */,
+				16B077C11D1A55FC009C070B /* EntityMemory+CoreDataProperties.m in Sources */,
 				169C88981D01382C00825761 /* Processor.m in Sources */,
 				160F0EDE1D041DDE00673343 /* EntityLocation+CoreDataProperties.m in Sources */,
+				16B077A31D1A429E009C070B /* EntityDeviceUsage+CoreDataProperties.m in Sources */,
 				169C88951D01382C00825761 /* Network.m in Sources */,
+				16B077731D19288A009C070B /* EntityScreen.m in Sources */,
 				169C88921D01382C00825761 /* LinearAccelerometer.m in Sources */,
 				169C882E1D01382C00825761 /* AWAREKeys.m in Sources */,
+				16B077C81D1A57DD009C070B /* EntityNTPTime.m in Sources */,
 				169C882C1D01382C00825761 /* AWAREDataUploader.m in Sources */,
 				169C88A01D01382C00825761 /* QRCodeViewController.m in Sources */,
 				169C883F1D01382C00825761 /* MultiESMObject.m in Sources */,
 				160F0EF11D04277000673343 /* EntityMagnetometer+CoreDataProperties.m in Sources */,
+				16B077BB1D1A54BF009C070B /* EntityPushNotification+CoreDataProperties.m in Sources */,
+				16B0776C1D192663009C070B /* EntityRotation+CoreDataProperties.m in Sources */,
 				169C882A1D01382C00825761 /* AWARECore.m in Sources */,
+				16B0778A1D1990D9009C070B /* EntityAmbientNoise+CoreDataProperties.m in Sources */,
 				160F0EEC1D041FC000673343 /* EntityGyroscope.m in Sources */,
 				160F0E8F1D03D64E00673343 /* EntityBarometer+CoreDataProperties.m in Sources */,
 				169C887D1D01382C00825761 /* Labels.m in Sources */,
 				169C88711D01382C00825761 /* SingleESMObject.m in Sources */,
+				16B0777F1D192D72009C070B /* EntityWifi.m in Sources */,
 				169C88991D01382C00825761 /* Proximity.m in Sources */,
 				169C85731D007EDC00825761 /* ViewController.m in Sources */,
 				169C88961D01382C00825761 /* Orientation.m in Sources */,
 				169C887E1D01382C00825761 /* Memory.m in Sources */,
 				160F0F071D04756800673343 /* EntityBatteryDischarge+CoreDataProperties.m in Sources */,
+				16B0776D1D192663009C070B /* EntityRotation.m in Sources */,
+				16B077721D19288A009C070B /* EntityScreen+CoreDataProperties.m in Sources */,
 				169C88851D01382C00825761 /* Accelerometer.m in Sources */,
 				169C88881D01382C00825761 /* Battery.m in Sources */,
+				16B077961D1A01A0009C070B /* EntityLocationVisit+CoreDataProperties.m in Sources */,
 				169C887F1D01382C00825761 /* MSBand.m in Sources */,
 				169C889F1D01382C00825761 /* GoogleLoginViewController.m in Sources */,
 				169C889B1D01382C00825761 /* Scheduler.m in Sources */,
 				160F0EF81D042AB600673343 /* EntityNetwork.m in Sources */,
 				160F0F091D04756800673343 /* EntityBattery+CoreDataProperties.m in Sources */,
 				160F0F0A1D04756800673343 /* EntityBattery.m in Sources */,
+				16B077A41D1A429E009C070B /* EntityDeviceUsage.m in Sources */,
 				160F0EC61D040B7F00673343 /* EntityDebug+CoreDataProperties.m in Sources */,
 				169C889D1D01382C00825761 /* Timezone.m in Sources */,
 				160F0ED81D041B5D00673343 /* EntityLinearAccelerometer+CoreDataProperties.m in Sources */,
 				160F0F061D04756800673343 /* EntityBatteryCharge.m in Sources */,
 				169C88941D01382C00825761 /* Magnetometer.m in Sources */,
 				169C88841D01382C00825761 /* SensorTag.m in Sources */,
+				16B077841D1978FF009C070B /* EntityActivityRecognition+CoreDataProperties.m in Sources */,
+				16B077A91D1A4DF1009C070B /* EntityProcessor+CoreDataProperties.m in Sources */,
 				169C883D1D01382C00825761 /* ESMSchedule.m in Sources */,
+				16B077791D192C30009C070B /* EntityTimezone.m in Sources */,
 				169C88811D01382C00825761 /* Observer.m in Sources */,
 				169C88311D01382C00825761 /* AWARESensor.m in Sources */,
 				160F0EB41D03E2EC00673343 /* EntityBluetooth+CoreDataProperties.m in Sources */,
+				16B0777E1D192D72009C070B /* EntityWifi+CoreDataProperties.m in Sources */,
 				169C88891D01382C00825761 /* Bluetooth.m in Sources */,
 				169C88731D01382C00825761 /* ActivityRecognition.m in Sources */,
 				169C888F1D01382C00825761 /* Debug.m in Sources */,
@@ -1870,6 +2030,7 @@
 				169C88361D01382C00825761 /* LocalFileStorageHelper.m in Sources */,
 				169C88971D01382C00825761 /* Pedometer.m in Sources */,
 				169C88761D01382C00825761 /* BLEHeartRate.m in Sources */,
+				16B077971D1A01A0009C070B /* EntityLocationVisit.m in Sources */,
 				169C889C1D01382C00825761 /* Screen.m in Sources */,
 				1623CE771BFD1B2C00EFAD72 /* AWARE.xcdatamodeld in Sources */,
 				169C88741D01382C00825761 /* AmbientNoise.m in Sources */,
@@ -1878,29 +2039,36 @@
 				169C882D1D01382C00825761 /* AWAREDelegate.m in Sources */,
 				160F0EC01D0404A400673343 /* EntityCall+CoreDataProperties.m in Sources */,
 				16654EA21D027DC600280051 /* AWAREUploader.m in Sources */,
+				16B077D41D1A5F51009C070B /* EntityOpenWeather.m in Sources */,
 				169C88701D01382C00825761 /* PamSchema.m in Sources */,
 				169C882F1D01382C00825761 /* AWAREPlugin.m in Sources */,
 				169C88A11D01382C00825761 /* WebViewController.m in Sources */,
 				169C88391D01382C00825761 /* AWAREEsmUtils.m in Sources */,
 				169C88AD1D0142C300825761 /* TCQMaker.m in Sources */,
+				16B077781D192C30009C070B /* EntityTimezone+CoreDataProperties.m in Sources */,
 				169C888C1D01382C00825761 /* MDBluetoothManager.m in Sources */,
+				16B077C21D1A55FC009C070B /* EntityMemory.m in Sources */,
 				160F0E8A1D03D60500673343 /* EntityAccelerometer.m in Sources */,
 				1623CE6B1BFD1B2C00EFAD72 /* main.m in Sources */,
 				169C88871D01382C00825761 /* Barometer.m in Sources */,
 				169C888D1D01382C00825761 /* CalEvent.m in Sources */,
 				169C883C1D01382C00825761 /* ESMManager.m in Sources */,
 				169C88901D01382C00825761 /* Gravity.m in Sources */,
+				16B077901D1999B5009C070B /* EntityBLEHeartRate+CoreDataProperties.m in Sources */,
 				169C88791D01382C00825761 /* GoogleCalPull.m in Sources */,
 				169C88911D01382C00825761 /* Gyroscope.m in Sources */,
 				169C88371D01382C00825761 /* Reachability.m in Sources */,
 				169C88931D01382C00825761 /* Locations.m in Sources */,
+				16B0778B1D1990D9009C070B /* EntityAmbientNoise.m in Sources */,
 				160F0EB51D03E2EC00673343 /* EntityBluetooth.m in Sources */,
 				169C88861D01382C00825761 /* AmbientLight.m in Sources */,
 				160F0F081D04756800673343 /* EntityBatteryDischarge.m in Sources */,
 				169C882B1D01382C00825761 /* AWARECoreDataManager.m in Sources */,
 				169C883E1D01382C00825761 /* ESMStorageHelper.m in Sources */,
+				16B077911D1999B5009C070B /* EntityBLEHeartRate.m in Sources */,
 				169C887B1D01382C00825761 /* GoogleLogin.m in Sources */,
 				169C887A1D01382C00825761 /* GoogleCalPush.m in Sources */,
+				16B077D31D1A5F51009C070B /* EntityOpenWeather+CoreDataProperties.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

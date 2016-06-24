@@ -10,4 +10,6 @@
 
 @interface Orientation : AWARESensor <AWARESensorDelegate>
 
+- (BOOL) startSensor;
+
 @end

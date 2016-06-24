@@ -13,7 +13,10 @@
 
 
 @interface Accelerometer : AWARESensor <AWARESensorDelegate>
-@property(nonatomic, readwrite, strong)NSManagedObjectContext *context;
-- (void) setSensingInterval:(double)interval;
+
+- (BOOL) startSensor;
+- (BOOL) startSensorWithInterval:(double)interval;
+- (BOOL) startSensorWithInterval:(double)interval bufferSize:(int)buffer;
+- (BOOL) startSensorWithInterval:(double)interval bufferSize:(int)buffer fetchLimit:(int)fetchLimit;
 
 @end

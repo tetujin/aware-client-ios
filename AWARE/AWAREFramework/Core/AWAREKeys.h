@@ -35,6 +35,7 @@ extern NSString* const SETTING_DEBUG_STATE;
 extern NSString *const SETTING_SYNC_WIFI_ONLY;
 extern NSString* const SETTING_SYNC_INT;
 extern NSString* const SETTING_SYNC_BATTERY_CHARGING_ONLY;
+extern NSString* const SETTING_FREQUENCY_CLEAN_OLD_DATA;
 
 
 extern NSString* const TABLE_INSER;
@@ -166,6 +167,32 @@ extern NSString * const ACTION_AWARE_INTERNET_AVAILABLE;// broadcasted when the 
 extern NSString * const ACTION_AWARE_INTERNET_UNAVAILABLE;// broadcasted when the device is not connected to the internet.
 //extern NSString * const ACTION_AWARE_NETWORK_TRAFFIC;// broadcasted when new traffic information is available for both Wi-Fi and mobile data.
 
+
+extern NSString * const ACTION_AWARE_ROTATION;
+
+extern NSString * const ACTION_AWARE_SCREEN_ON;// = @"ACTION_AWARE_SCREEN_ON";
+extern NSString * const ACTION_AWARE_SCREEN_OFF;// = @"ACTION_AWARE_SCREEN_OFF";
+extern NSString * const ACTION_AWARE_SCREEN_LOCKED;// = @"ACTION_AWARE_SCREEN_LOCKED";
+extern NSString * const ACTION_AWARE_SCREEN_UNLOCKED;// = @"ACTION_AWARE_SCREEN_UNLOCKED";
+
+// Timezone
+extern NSString * const ACTION_AWARE_TIMEZONE;
+
+// Wifi
+extern NSString * const ACTION_AWARE_WIFI_NEW_DEVICE; //: new Wi-Fi device detected.
+extern NSString * const ACTION_AWARE_WIFI_SCAN_STARTED; //: scan session has started.
+extern NSString * const ACTION_AWARE_WIFI_SCAN_ENDED; //: scan session has ended.
+extern NSString * const ACTION_AWARE_WIFI_REQUEST_SCAN; //: request a Wi-Fi scan as soon as possible.
+
+// Activity Recognition
+extern NSString * const ACTION_AWARE_GOOGLE_ACTIVITY_RECOGNITION;
+
+// upload progress
+extern NSString * const KEY_UPLOAD_PROGRESS_STR;
+extern NSString * const KEY_UPLOAD_FIN;
+extern NSString * const KEY_UPLOAD_SENSOR_NAME;
+extern NSString * const KEY_UPLOAD_SUCCESS;
+extern NSString * const ACTION_AWARE_DATA_UPLOAD_PROGRESS;
 
 @interface AWAREKeys: NSObject
 

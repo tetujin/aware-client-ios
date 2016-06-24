@@ -72,7 +72,14 @@
     if (interval <= 0) {
         interval = defaultScanInterval;
     }
-    
+    return [self startSensorWithScanInterval:interval duration:scanDuration];
+}
+
+- (BOOL) startSensor{
+    return [self startSensorWithScanInterval:defaultScanInterval duration:scanDuration];
+}
+
+- (BOOL) startSensorWithScanInterval:(int)interval duration:(int)duration{
     scanTimer = [NSTimer scheduledTimerWithTimeInterval:interval
                                                  target:self
                                                selector:@selector(startToScanBluetooth:)
@@ -85,10 +92,10 @@
     
     // Set notification events for scanning classic bluetooth devices
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(bluetoothDeviceDiscoveredNotification:) name:@"BluetoothDeviceDiscoveredNotification" object:nil];
-
     
     return YES;
 }
+
 
 - (BOOL) stopSensor {
     // Stop a scan ble devices by CBCentralManager

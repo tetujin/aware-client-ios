@@ -12,7 +12,7 @@
 
 @implementation Barometer{
     CMAltimeter* altitude;
-    int bufferCount;
+    double defaultInterval;
 }
 
 
@@ -21,7 +21,7 @@
                         dbEntityName:NSStringFromClass([EntityBarometer class])
                               dbType:AwareDBTypeCoreData];
     if (self) {
-        bufferCount = 0;
+        defaultInterval = 0.2f;
     }
     return self;
 }
@@ -46,11 +46,29 @@
         frequency = frequency/100000;
     }else{
         // default value = 200000(microseconds) = 0.2(second)
-        frequency = 0.2;
+        frequency = defaultInterval;
     }
     
     // Set a buffer size for reducing file access
-    [self setBufferSize:10];
+//    [self setBufferSize:10];
+    return [self startSensorWithInterval:frequency bufferSize:10];
+}
+
+- (BOOL) startSensor{
+    return [self startSensorWithInterval:defaultInterval];
+}
+
+- (BOOL) startSensorWithInterval:(double)interval{
+    return [self startSensorWithInterval:interval bufferSize:[self getBufferSize]];
+}
+
+- (BOOL) startSensorWithInterval:(double)interval bufferSize:(int)buffer{
+    return [self startSensorWithInterval:interval bufferSize:buffer fetchLimit:[self getFetchLimit]];
+}
+
+- (BOOL) startSensorWithInterval:(double)interval bufferSize:(int)buffer fetchLimit:(int)fetchLimit{
+    [self setFetchLimit:fetchLimit];
+    [self setBufferSize:buffer];
     
     // Set and start a sensor
     NSLog(@"[%@] Start Barometer Sensor", [self getSensorName]);
@@ -59,58 +77,46 @@
     } else {
         altitude = [[CMAltimeter alloc] init];
         [altitude startRelativeAltitudeUpdatesToQueue:[NSOperationQueue mainQueue]
-                                           withHandler:^(CMAltitudeData *altitudeData, NSError *error) {
-                                               
-                                            dispatch_async(dispatch_get_main_queue(),^{
-                                               double pressureDouble = [altitudeData.pressure doubleValue];
-                                               
-                                               AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
-                                               EntityBarometer * pressureData = (EntityBarometer *)[NSEntityDescription
-                                                                                                   insertNewObjectForEntityForName:[self getEntityName]
-                                                                                                   inManagedObjectContext:delegate.managedObjectContext];
-                                               
-                                               pressureData.device_id = [self getDeviceId];
-                                               pressureData.timestamp = [AWAREUtils getUnixTimestamp:[NSDate new]];
-                                               pressureData.double_values_0 = [NSNumber numberWithDouble:(pressureDouble * 10.0f)];
-                                               pressureData.accuracy = @0;
-                                               pressureData.label = @"";
-                                               
-                                               [self setLatestValue:[NSString stringWithFormat:@"%f", (pressureDouble * 10.0f)]];
-                                               
-                                               NSDictionary *userInfo = [NSDictionary dictionaryWithObject:pressureData
-                                                                                                    forKey:EXTRA_DATA];
-                                               [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_BAROMETER
-                                                                                                   object:nil
-                                                                                                 userInfo:userInfo];
-                                               
-                                               if( bufferCount > [self getBufferSize]  ){
-                                                  NSError * error = nil;
-                                                   [delegate.managedObjectContext save:&error];
-                                                   if (error) {
-                                                       NSLog(@"%@", error.description);
-                                                   }
-                                                   NSLog(@"Save barometer data to SQLite");
-                                                   bufferCount = 0;
-                                               }else{
-                                                   bufferCount++;
-                                               }
-                                            });
-//
-//                                               NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
-//                                               NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-//                                               [dic setObject:unixtime forKey:@"timestamp"];
-//                                               [dic setObject:[self getDeviceId] forKey:@"device_id"];
-//                                               [dic setObject:[NSNumber numberWithDouble:pressure_f*10.0f] forKey:@"double_values_0"];
-//                                               [dic setObject:@0 forKey:@"accuracy"];
-//                                               [dic setObject:@"" forKey:@"label"];
-//                                               [self setLatestValue:[NSString stringWithFormat:@"%f", pressure_f*10.0f]];
-//                                               
-//                                               dispatch_async(dispatch_get_main_queue(), ^{
-//                                                   [self saveData:dic];
-//                                               });
-                                           }];
+                                          withHandler:^(CMAltitudeData *altitudeData, NSError *error) {
+                                              
+                                              dispatch_async(dispatch_get_main_queue(),^{
+                                                  double pressureDouble = [altitudeData.pressure doubleValue];
+                                                  
+                                                  AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+                                                  EntityBarometer * pressureData = (EntityBarometer *)[NSEntityDescription
+                                                                                                       insertNewObjectForEntityForName:[self getEntityName]
+                                                                                                       inManagedObjectContext:delegate.managedObjectContext];
+                                                  
+                                                  pressureData.device_id = [self getDeviceId];
+                                                  pressureData.timestamp = [AWAREUtils getUnixTimestamp:[NSDate new]];
+                                                  pressureData.double_values_0 = [NSNumber numberWithDouble:(pressureDouble * 10.0f)];
+                                                  pressureData.accuracy = @0;
+                                                  pressureData.label = @"";
+                                                  
+                                                  [self setLatestValue:[NSString stringWithFormat:@"%f", (pressureDouble * 10.0f)]];
+                                                  
+                                                  NSDictionary *userInfo = [NSDictionary dictionaryWithObject:pressureData
+                                                                                                       forKey:EXTRA_DATA];
+                                                  [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_BAROMETER
+                                                                                                      object:nil
+                                                                                                    userInfo:userInfo];
+                                                  [self saveDataToDB];
+                                              });
+                                              //
+                                              //                                               NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
+                                              //                                               NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+                                              //                                               [dic setObject:unixtime forKey:@"timestamp"];
+                                              //                                               [dic setObject:[self getDeviceId] forKey:@"device_id"];
+                                              //                                               [dic setObject:[NSNumber numberWithDouble:pressure_f*10.0f] forKey:@"double_values_0"];
+                                              //                                               [dic setObject:@0 forKey:@"accuracy"];
+                                              //                                               [dic setObject:@"" forKey:@"label"];
+                                              //                                               [self setLatestValue:[NSString stringWithFormat:@"%f", pressure_f*10.0f]];
+                                              //                                               
+                                              //                                               dispatch_async(dispatch_get_main_queue(), ^{
+                                              //                                                   [self saveData:dic];
+                                              //                                               });
+                                          }];
     }
-
     return YES;
 }
 

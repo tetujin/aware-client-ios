@@ -10,4 +10,7 @@
 
 @interface Timezone : AWARESensor <AWARESensorDelegate>
 
+- (BOOL) startSensor;
+- (BOOL) startSensorWithInterval:(double)interval;
+
 @end

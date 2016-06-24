@@ -41,7 +41,7 @@
 
 @implementation LinearAccelerometer {
     CMMotionManager* motionManager;
-    int bufferCount;
+    double defaultInterval;
 }
 
 
@@ -52,7 +52,7 @@
                               dbType:AwareDBTypeCoreData];
     if (self) {
         motionManager = [[CMMotionManager alloc] init];
-        bufferCount = 0;
+        defaultInterval = 0.1f;
     }
     return self;
 }
@@ -73,17 +73,36 @@
 
 
 - (BOOL)startSensorWithSettings:(NSArray *)settings{
-    // Get sensing interval(frequency) from settings
-    double interval = 0.1f; //default interval
+    double interval = defaultInterval;
     double frequency = [self getSensorSetting:settings withKey:@"frequency_linear_accelerometer"];
     if(frequency != -1){
         NSLog(@"Linear Accelerometer's frequency is %f !!", frequency);
         double iOSfrequency = [self convertMotionSensorFrequecyFromAndroid:frequency];
         interval = iOSfrequency;
     }
+    [self startSensorWithInterval:interval bufferSize:100 fetchLimit:1000];
+    return YES;
+}
+
+
+- (BOOL)startSensor{
+    return [self startSensorWithInterval:defaultInterval];
+}
+
+- (BOOL)startSensorWithInterval:(double)interval{
+    return [self startSensorWithInterval:interval bufferSize:[self getBufferSize]];
+}
+
+- (BOOL)startSensorWithInterval:(double)interval bufferSize:(int)buffer{
+    return [self startSensorWithInterval:interval bufferSize:buffer fetchLimit:[self getFetchLimit]];
+}
+
+- (BOOL)startSensorWithInterval:(double)interval bufferSize:(int)buffer fetchLimit:(int)fetchLimit{
     
     // Set a buffer size for reducing file access
-    [self setBufferSize:100];
+    [self setBufferSize:buffer];
+    
+    [self setFetchLimit:fetchLimit];
     
     // Start a motion sensor
     NSLog(@"[%@] Start Linear Acc Sensor", [self getSensorName]);
@@ -94,50 +113,39 @@
                                                // Save sensor data to the local database
                                                
                                                dispatch_async(dispatch_get_main_queue(),^{
-                                               AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
-                                               EntityLinearAccelerometer* data = (EntityLinearAccelerometer *)[NSEntityDescription
-                                                                                           insertNewObjectForEntityForName:[self getEntityName]
-                                                                                           inManagedObjectContext:delegate.managedObjectContext];
-                                               
-                                               data.device_id = [self getDeviceId];
-                                               data.timestamp = [AWAREUtils getUnixTimestamp:[NSDate new]];
-                                               data.double_values_0 = [NSNumber numberWithDouble:motion.userAcceleration.x];
-                                               data.double_values_1 = [NSNumber numberWithDouble:motion.userAcceleration.y];
-                                               data.double_values_2 = [NSNumber numberWithDouble:motion.userAcceleration.z];
-                                               data.accuracy = @0;
-                                               data.label =  @"";
-                                               
-                                               [self setLatestValue:[NSString stringWithFormat:@"%f, %f, %f",
-                                                                     motion.userAcceleration.z,
-                                                                     motion.userAcceleration.y,
-                                                                     motion.userAcceleration.z]];
-                                               
-                                               NSDictionary *userInfo = [NSDictionary dictionaryWithObject:data
-                                                                                                    forKey:EXTRA_DATA];
-                                               [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_LINEAR_ACCELEROMETER
-                                                                                                   object:nil
-                                                                                                 userInfo:userInfo];
-                                               
-                                               if(bufferCount > [self getBufferSize] ){
-                                                   NSError * e = nil;
-                                                   [delegate.managedObjectContext save:&e];
-                                                   if (e) {
-                                                       NSLog(@"%@", e.description);
-                                                   }
-                                                   NSLog(@"Save linear accelerometer data to SQLite");
-                                                   bufferCount = 0;
-                                               }else{
-                                                   bufferCount++;
-                                               }
-
-                                               
-                                               
-                                               [self setLatestValue:[NSString stringWithFormat:@"%f, %f, %f",motion.userAcceleration.x, motion.userAcceleration.y,motion.userAcceleration.z]];
+                                                   AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+                                                   EntityLinearAccelerometer* data = (EntityLinearAccelerometer *)[NSEntityDescription
+                                                                                                                   insertNewObjectForEntityForName:[self getEntityName]
+                                                                                                                   inManagedObjectContext:delegate.managedObjectContext];
+                                                   
+                                                   data.device_id = [self getDeviceId];
+                                                   data.timestamp = [AWAREUtils getUnixTimestamp:[NSDate new]];
+                                                   data.double_values_0 = [NSNumber numberWithDouble:motion.userAcceleration.x];
+                                                   data.double_values_1 = [NSNumber numberWithDouble:motion.userAcceleration.y];
+                                                   data.double_values_2 = [NSNumber numberWithDouble:motion.userAcceleration.z];
+                                                   data.accuracy = @0;
+                                                   data.label =  @"";
+                                                   
+                                                   [self setLatestValue:[NSString stringWithFormat:@"%f, %f, %f",
+                                                                         motion.userAcceleration.z,
+                                                                         motion.userAcceleration.y,
+                                                                         motion.userAcceleration.z]];
+                                                   
+                                                   NSDictionary *userInfo = [NSDictionary dictionaryWithObject:data
+                                                                                                        forKey:EXTRA_DATA];
+                                                   [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_LINEAR_ACCELEROMETER
+                                                                                                       object:nil
+                                                                                                     userInfo:userInfo];
+                                                   
+                                                   [self saveDataToDB];
+                                                   
+                                                   [self setLatestValue:[NSString stringWithFormat:@"%f, %f, %f",motion.userAcceleration.x, motion.userAcceleration.y,motion.userAcceleration.z]];
                                                });
                                            }];
     }
     return YES;
 }
+
 
 
 - (BOOL)stopSensor{

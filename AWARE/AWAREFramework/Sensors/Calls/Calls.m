@@ -38,6 +38,14 @@ NSString* const KEY_CALLS_TRACE = @"trace";
     [super syncAwareDB];
 }
 
+- (BOOL)syncAwareDBInForeground{
+    return [super syncAwareDBInForeground];
+}
+
+- (BOOL) isUploading{
+    return [super isUploading];
+}
+
 - (void) createTable{
     
     NSLog(@"[%@] Create Telephony Sensor Table", [self getSensorName]);
@@ -53,6 +61,9 @@ NSString* const KEY_CALLS_TRACE = @"trace";
     [super createTable:query];
 }
 
+-(BOOL)startSensor{
+    return [self startSensorWithSettings:nil];
+}
 
 -(BOOL)startSensorWithSettings:(NSArray *)settings{
     // Set and start a call sensor
@@ -90,7 +101,7 @@ NSString* const KEY_CALLS_TRACE = @"trace";
         
         
         NSLog(@"[%@] Call Duration is %d seconds @ [%@]", [super getSensorName], duration, callTypeStr);
-        NSNumber *durationValue = [NSNumber numberWithInt:duration];
+//        NSNumber *durationValue = [NSNumber numberWithInt:duration];
 //        NSMutableDictionary* dic = [[NSMutableDictionary alloc] init];
 //        [dic setObject:[AWAREUtils getUnixTimestamp:[NSDate new]] forKey:KEY_CALLS_TIMESTAMP];
 //        [dic setObject:[super getDeviceId] forKey:KEY_CALLS_DEVICEID];
@@ -98,58 +109,61 @@ NSString* const KEY_CALLS_TRACE = @"trace";
 //        [dic setObject:durationValue forKey:KEY_CALLS_CALL_DURATION];
 //        [dic setObject:callId forKey:KEY_CALLS_TRACE];
         
-        AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
-        EntityCall* callData = (EntityCall *)[NSEntityDescription
-                                        insertNewObjectForEntityForName:NSStringFromClass([EntityCall class])
-                                        inManagedObjectContext:delegate.managedObjectContext];
-        callData.device_id = [super getDeviceId];
-        callData.timestamp = [AWAREUtils getUnixTimestamp:[NSDate new]];
-        callData.call_type = callType;
-        callData.call_duration = @(duration);
-        callData.trace = callId;
-        
-        NSError * error = nil;
-        [delegate.managedObjectContext save:&error];
-        if (error) {
-            NSLog(@"%@", error.description);
-        }
-        [delegate.managedObjectContext reset];
-        
-        // Set latest sensor data
-        NSDateFormatter *timeFormat = [[NSDateFormatter alloc] init];
-        [timeFormat setDateFormat:@"YYYY-MM-dd HH:mm"];
-        NSString * dateStr = [timeFormat stringFromDate:[NSDate new]];
-        NSString * latestData = [NSString stringWithFormat:@"%@ [%@] %d seconds",dateStr, callTypeStr, duration];
-        [super setLatestValue: latestData];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+            EntityCall* callData = (EntityCall *)[NSEntityDescription
+                                                  insertNewObjectForEntityForName:NSStringFromClass([EntityCall class])
+                                                  inManagedObjectContext:delegate.managedObjectContext];
+            callData.device_id = [super getDeviceId];
+            callData.timestamp = [AWAREUtils getUnixTimestamp:[NSDate new]];
+            callData.call_type = callType;
+            callData.call_duration = @(duration);
+            callData.trace = callId;
+            [super saveDataToDB];
+            //        NSError * error = nil;
+            //        [delegate.managedObjectContext save:&error];
+            //        if (error) {
+            //            NSLog(@"%@", error.description);
+            //        }
+            
+            // Set latest sensor data
+            NSDateFormatter *timeFormat = [[NSDateFormatter alloc] init];
+            [timeFormat setDateFormat:@"YYYY-MM-dd HH:mm"];
+            NSString * dateStr = [timeFormat stringFromDate:[NSDate new]];
+            NSString * latestData = [NSString stringWithFormat:@"%@ [%@] %d seconds",dateStr, callTypeStr, duration];
+            [super setLatestValue: latestData];
+            
+            
+            // Broadcast a notification
+            // http://www.awareframework.com/communication/
+            // [NOTE] On the Andoind AWARE client, when the ACTION_AWARE_USER_NOT_IN_CALL and ACTION_AWARE_USER_IN_CALL are called?
+            NSDictionary *userInfo = [NSDictionary dictionaryWithObject:callData forKey:EXTRA_DATA];
+            if (call.callState == CTCallStateIncoming) {
+                [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_CALL_RINGING
+                                                                    object:nil
+                                                                  userInfo:userInfo];
+            } else if (call.callState == CTCallStateConnected){
+                [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_CALL_ACCEPTED
+                                                                    object:nil
+                                                                  userInfo:userInfo];
+                [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_USER_IN_CALL
+                                                                    object:nil
+                                                                  userInfo:userInfo];
+            } else if (call.callState == CTCallStateDialing){
+                [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_CALL_MADE
+                                                                    object:nil
+                                                                  userInfo:userInfo];
+            } else if (call.callState == CTCallStateDisconnected){
+                [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_CALL_MISSED
+                                                                    object:nil
+                                                                  userInfo:userInfo];
+                [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_USER_NOT_IN_CALL
+                                                                    object:nil
+                                                                  userInfo:userInfo];
+            }
+        });
         
 
-        // Broadcast a notification
-        // http://www.awareframework.com/communication/
-        // [NOTE] On the Andoind AWARE client, when the ACTION_AWARE_USER_NOT_IN_CALL and ACTION_AWARE_USER_IN_CALL are called?
-        NSDictionary *userInfo = [NSDictionary dictionaryWithObject:callData forKey:EXTRA_DATA];
-        if (call.callState == CTCallStateIncoming) {
-            [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_CALL_RINGING
-                                                                object:nil
-                                                              userInfo:userInfo];
-        } else if (call.callState == CTCallStateConnected){
-            [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_CALL_ACCEPTED
-                                                                object:nil
-                                                              userInfo:userInfo];
-            [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_USER_IN_CALL
-                                                                object:nil
-                                                              userInfo:userInfo];
-        } else if (call.callState == CTCallStateDialing){
-            [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_CALL_MADE
-                                                                object:nil
-                                                              userInfo:userInfo];
-        } else if (call.callState == CTCallStateDisconnected){
-            [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_CALL_MISSED
-                                                                object:nil
-                                                              userInfo:userInfo];
-            [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_USER_NOT_IN_CALL
-                                                                object:nil
-                                                              userInfo:userInfo];
-        }
         
         // Save a call event (, this sensor using TextFile based DB.)
         // [super saveData:dic];

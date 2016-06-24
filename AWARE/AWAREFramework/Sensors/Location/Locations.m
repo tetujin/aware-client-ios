@@ -13,6 +13,8 @@
 @implementation Locations{
     NSTimer *locationTimer;
     IBOutlet CLLocationManager *locationManager;
+    double defaultInterval;
+    double defaultAccuracy;
 }
 
 - (instancetype)initWithAwareStudy:(AWAREStudy *)study{
@@ -21,6 +23,8 @@
                         dbEntityName:NSStringFromClass([EntityLocation class])
                               dbType:AwareDBTypeCoreData];
     if (self) {
+        defaultInterval = 180; // 180sec(=3min)
+        defaultAccuracy = 250; // 250m
     }
     return self;
 }
@@ -51,7 +55,7 @@
 - (BOOL)startSensorWithSettings:(NSArray *)settings {
     
     // Get a sensing frequency from settings
-    double interval = 0;
+    double interval = defaultInterval;
     double frequency = [self getSensorSetting:settings withKey:@"frequency_gps"];
     if(frequency != -1){
         NSLog(@"Sensing requency is %f ", frequency);
@@ -60,32 +64,77 @@
     
     // Get a min gps accuracy from settings
     double minAccuracy = [self getSensorSetting:settings withKey:@"min_gps_accuracy"];
-    if (minAccuracy) {
+    if (minAccuracy > 0) {
         NSLog(@"Mini GSP accuracy is %f", minAccuracy);
     }else{
-        minAccuracy = 25;
+        minAccuracy = defaultAccuracy;
     }
     
+    [self startSensorWithInterval:0 accuracy:minAccuracy];
+    
+    return YES;
+}
+
+
+- (BOOL)startSensor{
+    return [self startSensorWithInterval:defaultInterval accuracy:defaultAccuracy];
+}
+
+- (BOOL)startSensorWithInterval:(double)interval{
+    return [self startSensorWithInterval:interval accuracy:defaultAccuracy];
+}
+
+- (BOOL)startSensorWithAccuracy:(double)accuracyMeter{
+    return [self startSensorWithInterval:defaultInterval accuracy:accuracyMeter];
+}
+
+- (BOOL)startSensorWithInterval:(double)interval accuracy:(double)accuracyMeter{
     // Set and start a location sensor with the senseing frequency and min GPS accuracy
     NSLog(@"[%@] Start Location Sensor!", [self getSensorName]);
     if (nil == locationManager){
         locationManager = [[CLLocationManager alloc] init];
         locationManager.delegate = self;
-        //    locationManager.desiredAccuracy = kCLLocationAccuracyKilometer;
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+        
+        //        extern const CLLocationAccuracy kCLLocationAccuracyBestForNavigation __OSX_AVAILABLE_STARTING(__MAC_10_7,__IPHONE_4_0);
+        //        extern const CLLocationAccuracy kCLLocationAccuracyBest;
+        //        extern const CLLocationAccuracy kCLLocationAccuracyNearestTenMeters;
+        //        extern const CLLocationAccuracy kCLLocationAccuracyHundredMeters;
+        //        extern const CLLocationAccuracy kCLLocationAccuracyKilometer;
+        //        extern const CLLocationAccuracy kCLLocationAccuracyThreeKilometers;
+        
+        if (accuracyMeter == 0) {
+            locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation;
+        } else if (accuracyMeter > 0 && accuracyMeter <= 10){
+            locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+        } else if (accuracyMeter > 10 && accuracyMeter <= 25 ){
+            locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
+        } else if (accuracyMeter > 25 && accuracyMeter <= 100 ){
+            locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters;
+        } else if (accuracyMeter > 100 && accuracyMeter <= 1000){
+            locationManager.desiredAccuracy = kCLLocationAccuracyKilometer;
+        } else if (accuracyMeter > 1000 && accuracyMeter <= 3000){
+            locationManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers;
+        } else {
+            locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters;
+        }
+        
         locationManager.pausesLocationUpdatesAutomatically = NO;
         CGFloat currentVersion = [[[UIDevice currentDevice] systemVersion] floatValue];
         NSLog(@"OS:%f", currentVersion);
         if (currentVersion >= 9.0) {
-             //This variable is an important method for background sensing after iOS9
+            //This variable is an important method for background sensing after iOS9
             locationManager.allowsBackgroundLocationUpdates = YES;
         }
-        locationManager.activityType = CLActivityTypeFitness;
         if ([locationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
             [locationManager requestAlwaysAuthorization];
         }
         // Set a movement threshold for new events.
-        locationManager.distanceFilter = minAccuracy; // meter
+        locationManager.distanceFilter = accuracyMeter; // meter
+        //        locationManager.activityType = CLActivityTypeFitness;
+        
+        // Start Monitoring
+        [locationManager startMonitoringSignificantLocationChanges];
+        // [locationManager startUpdatingLocation];
         // [locationManager startUpdatingHeading];
         // [_locationManager startMonitoringVisits]; // This method calls didVisit.
         
@@ -95,10 +144,12 @@
                                                            selector:@selector(getGpsData:)
                                                            userInfo:nil
                                                             repeats:YES];
+            [self getGpsData:nil];
         }else{
             [locationManager startUpdatingLocation];
-            [self setBufferSize:10];
         }
+//        NSLog(@"-----> %d", [self getBufferSize]);
+        
     }
     return YES;
 }
@@ -144,9 +195,7 @@
 ////    [sdManager addHeading: theHeading];
 //}
 
-
 - (void) saveLocation:(CLLocation *)location{
-    
     AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
     EntityLocation* data = (EntityLocation *)[NSEntityDescription
                                               insertNewObjectForEntityForName:[self getEntityName]
@@ -170,12 +219,7 @@
                                                         object:nil
                                                       userInfo:userInfo];
     
-    NSError * e = nil;
-    [delegate.managedObjectContext save:&e];
-    if (e) {
-        NSLog(@"%@", e.description);
-    }
-    [delegate.managedObjectContext reset];
+    [self saveDataToDB];
     
     [self setLatestValue:[NSString stringWithFormat:@"%f, %f, %f",
                           location.coordinate.latitude,

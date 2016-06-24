@@ -22,7 +22,7 @@ typedef enum: NSInteger {
 } AwareDBCondition;
 
 
-@interface AWARECoreDataManager : AWAREDataUploader <AWAREDataUploaderDelegate, NSURLSessionDataDelegate, NSURLSessionTaskDelegate>
+@interface AWARECoreDataManager : AWAREUploader <AWAREDataUploaderDelegate, NSURLSessionDataDelegate, NSURLSessionTaskDelegate>
 
 - (instancetype)initWithAwareStudy:(AWAREStudy *)study
                         sensorName:(NSString *)name

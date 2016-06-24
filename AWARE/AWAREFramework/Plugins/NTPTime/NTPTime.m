@@ -8,6 +8,8 @@
 
 #import "NTPTime.h"
 #import "ios-ntp.h"
+#import "AppDelegate.h"
+#import "EntityNTPTime.h"
 
 @implementation NTPTime  {
     NSTimer * sensingTimer;
@@ -16,8 +18,8 @@
 - (instancetype)initWithAwareStudy:(AWAREStudy *)study{
     self = [super initWithAwareStudy:study
                           sensorName:SENSOR_PLUGIN_NTPTIME
-                        dbEntityName:nil
-                              dbType:AwareDBTypeTextFile];
+                        dbEntityName:NSStringFromClass([EntityNTPTime class])
+                              dbType:AwareDBTypeCoreData];
     if (self) {
     }
     return self;
@@ -64,13 +66,24 @@
     double offset = nc.networkOffset * 1000;
     NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
     NSNumber * ntpUnixtime = [AWAREUtils getUnixTimestamp:nt];
-    NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-    [dic setObject:unixtime forKey:@"timestamp"];
-    [dic setObject:[self getDeviceId] forKey:@"device_id"];
-    [dic setObject:[NSNumber numberWithDouble:offset] forKey:@"drift"]; // real
-    [dic setObject:ntpUnixtime forKey:@"ntp_time"]; // real
+//    NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+//    [dic setObject:unixtime forKey:@"timestamp"];
+//    [dic setObject:[self getDeviceId] forKey:@"device_id"];
+//    [dic setObject:[NSNumber numberWithDouble:offset] forKey:@"drift"]; // real
+//    [dic setObject:ntpUnixtime forKey:@"ntp_time"]; // real
     [self setLatestValue:[NSString stringWithFormat:@"[%f] %@",offset, nt ]];
-    [self saveData:dic];
+//    [self saveData:dic];
+    
+    
+    AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+    EntityNTPTime * data = (EntityNTPTime *)[NSEntityDescription insertNewObjectForEntityForName:[self getEntityName]
+                                                                                            inManagedObjectContext:delegate.managedObjectContext];
+    data.device_id = [self getDeviceId];
+    data.timestamp = unixtime;
+    data.drift = @(offset);
+    data.ntp_time = ntpUnixtime;
+    
+    [self saveDataToDB];
 }
 
 

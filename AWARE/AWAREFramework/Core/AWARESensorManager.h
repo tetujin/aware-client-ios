@@ -13,7 +13,7 @@
 #import "AWARESensor.h"
 #import "AWAREStudy.h"
 
-@interface AWARESensorManager : NSObject
+@interface AWARESensorManager : NSObject <UIAlertViewDelegate>
 
 /** Initializer */
 - (instancetype)initWithAWAREStudy:(AWAREStudy *) study;

@@ -20,7 +20,7 @@
 
 @implementation Gravity {
     CMMotionManager* motionManager;
-    int bufferCount;
+    double defaultInterval;
 }
 
 - (instancetype)initWithAwareStudy:(AWAREStudy *)study{
@@ -30,7 +30,7 @@
                               dbType:AwareDBTypeCoreData];
     if (self) {
         motionManager = [[CMMotionManager alloc] init];
-        bufferCount = 0;
+        defaultInterval = 0.1f;
     }
     return self;
 }
@@ -48,19 +48,35 @@
     [super createTable:query];
 }
 
-
 - (BOOL)startSensorWithSettings:(NSArray *)settings{
     /// Get sensing frequency from settings
-    double interval = 0.1f;
+    double interval = defaultInterval;
     double frequency = [self getSensorSetting:settings withKey:@"frequency_gravity"];
     if(frequency != -1){
         NSLog(@"Gravity's frequency is %f !!", frequency);
         double iOSfrequency = [self convertMotionSensorFrequecyFromAndroid:frequency];
         interval = iOSfrequency;
     }
-    
+    return [self startSensorWithInterval:interval bufferSize:100 fetchLimit:1000];
+}
+
+- (BOOL) startSensor{
+    return [self startSensorWithInterval:defaultInterval];
+}
+
+- (BOOL) startSensorWithInterval:(double)interval{
+    return [self startSensorWithInterval:interval bufferSize:[self getBufferSize]];
+}
+
+- (BOOL) startSensorWithInterval:(double)interval bufferSize:(int)buffer{
+    return [self startSensorWithInterval:interval bufferSize:buffer fetchLimit:[self getFetchLimit]];
+}
+
+- (BOOL) startSensorWithInterval:(double)interval bufferSize:(int)buffer fetchLimit:(int)fetchLimit{
     // Set a buffer size for reducing file access
-    [self setBufferSize:100];
+    [self setBufferSize:buffer];
+    
+    [self setFetchLimit:fetchLimit];
     
     // Set and start motion sensor
     NSLog(@"[%@] Start Gravity Sensor", [self getSensorName]);
@@ -73,8 +89,8 @@
                                                dispatch_async(dispatch_get_main_queue(),^{
                                                    AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
                                                    EntityGravity* gravityData = (EntityGravity *)[NSEntityDescription
-                                                                                                        insertNewObjectForEntityForName:[self getEntityName]
-                                                                                                        inManagedObjectContext:delegate.managedObjectContext];
+                                                                                                  insertNewObjectForEntityForName:[self getEntityName]
+                                                                                                  inManagedObjectContext:delegate.managedObjectContext];
                                                    
                                                    gravityData.device_id = [self getDeviceId];
                                                    gravityData.timestamp = [AWAREUtils getUnixTimestamp:[NSDate new]];
@@ -90,21 +106,11 @@
                                                    [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_GRAVITY
                                                                                                        object:nil
                                                                                                      userInfo:userInfo];
-                                                   
-                                                   if( bufferCount > [self getBufferSize] ){
-                                                       NSError * e = nil;
-                                                       [delegate.managedObjectContext save:&e];
-                                                       if (e) {
-                                                           NSLog(@"%@", e.description);
-                                                       }
-                                                       NSLog(@"Save gravity data to SQLite");
-                                                       bufferCount = 0;
-                                                   }else{
-                                                       bufferCount++;
-                                                   }
+                                                   [self saveDataToDB];
                                                });
                                            }];
     }
+
     return YES;
 }
 

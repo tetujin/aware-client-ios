@@ -26,6 +26,7 @@
     // for CoreData
     int fetchLimit;
     int batchSize;
+    int bufferSize;
 }
 
 - (instancetype) initWithAwareStudy:(AWAREStudy *)study sensorName:(NSString *)name{
@@ -36,6 +37,7 @@
         
         fetchLimit = 100;
         batchSize = 0;
+        bufferSize = 0;
         
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         isDebug = [userDefaults boolForKey:SETTING_DEBUG_STATE];
@@ -79,13 +81,18 @@
 
 ///////////////////////////////////////////////////////////////////
 
+- (void) setBufferSize:(int)size{bufferSize=size;}
+
 - (void)setFetchLimit:(int)limit{ fetchLimit = limit; }
 
 - (void)setFetchBatchSize:(int)size{ batchSize = size; }
 
-- (int)getFetchLimit{ return fetchLimit; }
+- (int) getBufferSize{return bufferSize;}
+
+- (int) getFetchLimit{ return fetchLimit; }
 
 - (int) getFetchBatchSize{ return batchSize; }
+
 
 - (bool) saveDataToDB{
     NSLog(@"[NOTE] Please overwrite this method (-saveDataToDB)");
@@ -114,6 +121,7 @@
 }
 
 - (BOOL) syncAwareDBInForegroundWithSensorName:(NSString*) name{
+    
      NSLog(@"[NOTE] Please overwrite this method (-syncAwareDBInForegroundWithSensorName:)");
     return NO;
 }

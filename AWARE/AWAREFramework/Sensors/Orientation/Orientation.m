@@ -41,6 +41,11 @@
     [super createTable:query];
 }
 
+
+- (BOOL) startSensor{
+    return [self startSensorWithSettings:nil];
+}
+
 // Start sensor
 - (BOOL)startSensorWithSettings:(NSArray *)settings {
 //    [self setBufferSize:5];

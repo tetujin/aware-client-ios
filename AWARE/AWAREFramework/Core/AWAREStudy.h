@@ -10,6 +10,16 @@
 #import <UIKit/UIKit.h>
 #import <sys/utsname.h>
 
+//    int frequencyCleanOldData; // (0 = never, 1 = weekly, 2 = monthly, 3 = daily, 4 = always)
+
+typedef enum: NSInteger {
+    cleanOldDataTypeNever = 0,
+    cleanOldDataTypeWeekly = 1,
+    cleanOldDataTypeMonthly = 2,
+    cleanOldDataTypeDaily = 3,
+    cleanOldDataTypeAlways = 4
+} cleanOldDataType;
+
 @interface AWAREStudy : NSObject <NSURLSessionDataDelegate, NSURLSessionTaskDelegate>
 
 @property (strong, nonatomic) NSString* getSettingIdentifier;
@@ -44,6 +54,7 @@
 - (BOOL) isAvailable;
 - (bool) isWifiReachable;
 - (NSString *) getNetworkReachabilityAsText;
+- (cleanOldDataType) getCleanOldDataType;
 
 
 @end

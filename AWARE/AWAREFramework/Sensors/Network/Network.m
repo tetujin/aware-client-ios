@@ -47,6 +47,9 @@
     [super createTable:query];
 }
 
+- (BOOL)startSensor{
+    return [self startSensorWithSettings:nil];
+}
 
 - (BOOL)startSensorWithSettings:(NSArray *)settings {
     // Set and start a network reachability sensor
@@ -120,11 +123,12 @@
     data.network_state = [NSNumber numberWithInt:networkState];
     data.network_subtype = networkSubtype;
     
-    NSError * e = nil;
-    [delegate.managedObjectContext save:&e];
-    if (e) {
-        NSLog(@"%@", e.description);
-    }
+    [self saveDataToDB];
+//    NSError * e = nil;
+//    [delegate.managedObjectContext save:&e];
+//    if (e) {
+//        NSLog(@"%@", e.description);
+//    }
     
 //    NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
 //    NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];

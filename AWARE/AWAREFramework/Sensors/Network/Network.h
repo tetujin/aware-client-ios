@@ -11,4 +11,6 @@
 
 @interface Network : AWARESensor <AWARESensorDelegate>
 
+- (BOOL)startSensor;
+
 @end

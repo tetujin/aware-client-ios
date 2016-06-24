@@ -64,7 +64,12 @@ typedef enum: NSInteger {
 
 // store data
 - (void) setBufferSize:(int)size;
-- (int ) getBufferSize;
+- (void) setFetchLimit:(int)limit;
+- (void) setFetchBatchSize:(int)size;
+- (int) getFetchLimit;
+- (int) getFetchBatchSize;
+- (int) getBufferSize;
+
 - (bool) isDebug;
 - (bool) saveData:(NSDictionary *) data;
 - (bool) saveData:(NSDictionary *) data toLocalFile:(NSString*) fileName;

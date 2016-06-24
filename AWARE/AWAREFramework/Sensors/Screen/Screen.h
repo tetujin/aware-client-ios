@@ -10,4 +10,6 @@
 
 @interface Screen : AWARESensor <AWARESensorDelegate>
 
+- (BOOL) startSensor;
+
 @end

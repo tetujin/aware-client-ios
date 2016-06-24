@@ -7,18 +7,23 @@
 //
 
 #import "Wifi.h"
+#import "AppDelegate.h"
+#import "EntityWifi.h"
+#import "AWAREKeys.h"
 //#import "MobileWiFi/MobileWiFi.h"
 
 @implementation Wifi{
     NSTimer * sensingTimer;
+    double defaultInterval;
 }
 
 - (instancetype)initWithAwareStudy:(AWAREStudy *)study{
     self = [super initWithAwareStudy:study
                           sensorName:SENSOR_WIFI
-                        dbEntityName:nil
-                              dbType:AwareDBTypeTextFile];
+                        dbEntityName:NSStringFromClass([EntityWifi class])
+                              dbType:AwareDBTypeCoreData];
     if (self) {
+        defaultInterval = 60.0f; // 60sec. = 1min.
     }
     return self;
 }
@@ -43,18 +48,25 @@
 
 
 - (BOOL)startSensorWithSettings:(NSArray *)settings{
-
     // Get a sensing frequency
     double frequency = [self getSensorSetting:settings withKey:@"frequency_wifi"];
     if(frequency != -1){
         NSLog(@"Wi-Fi sensing requency is %f ", frequency);
     }else{
-        frequency = 60.0f;
+        frequency = defaultInterval;
     }
     
+    return [self startSensorWithInterval:frequency];
+}
+
+- (BOOL)startSensor {
+    return [self startSensorWithInterval:defaultInterval];
+}
+
+- (BOOL)startSensorWithInterval:(double) interval{
     // Set and start a data upload interval
     NSLog(@"[%@] Start Wifi Sensor", [self getSensorName]);
-    sensingTimer = [NSTimer scheduledTimerWithTimeInterval:frequency
+    sensingTimer = [NSTimer scheduledTimerWithTimeInterval:interval
                                                     target:self
                                                   selector:@selector(getWifiInfo)
                                                   userInfo:nil
@@ -79,6 +91,11 @@
 
 
 - (void) getWifiInfo {
+    
+    [self broadcastRequestScan];
+    
+    [self broadcastScanStarted];
+    
     // Get wifi information
     //http://www.heapoverflow.me/question-how-to-get-wifi-ssid-in-ios9-after-captivenetwork-is-depracted-and-calls-for-wif-31555640
     NSArray *ifs = (__bridge_transfer id)CNCopySupportedInterfaces();
@@ -115,22 +132,70 @@
         
         // Save sensor data to the local database.
         NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
-        NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-        [dic setObject:unixtime forKey:@"timestamp"];
-        [dic setObject:[self getDeviceId] forKey:@"device_id"];
-        [dic setObject:finalBSSID forKey:@"bssid"]; //text
-        [dic setObject:ssid forKey:@"ssid"]; //text
-        [dic setObject:@"" forKey:@"security"]; //text
-        [dic setObject:@0 forKey:@"frequency"];//int
-        [dic setObject:@0 forKey:@"rssi"]; //int
-        [dic setObject:@"" forKey:@"label"]; //text
+        AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+        EntityWifi* data = (EntityWifi *)[NSEntityDescription
+                                                  insertNewObjectForEntityForName:[self getEntityName]
+                                                  inManagedObjectContext:delegate.managedObjectContext];
+        
+        data.device_id = [self getDeviceId];
+        data.timestamp = unixtime;
+        data.bssid = finalBSSID;
+        data.ssid = ssid;
+        data.security = @"";
+        data.frequency = @0;
+        data.rssi = @0;
+        data.label = @"";
+        
+        [self saveDataToDB];
+        
+        [self broadcastDetectedNewDevice];
+        
+//        NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+//        [dic setObject:unixtime forKey:@"timestamp"];
+//        [dic setObject:[self getDeviceId] forKey:@"device_id"];
+//        [dic setObject:finalBSSID forKey:@"bssid"]; //text
+//        [dic setObject:ssid forKey:@"ssid"]; //text
+//        [dic setObject:@"" forKey:@"security"]; //text
+//        [dic setObject:@0 forKey:@"frequency"];//int
+//        [dic setObject:@0 forKey:@"rssi"]; //int
+//        [dic setObject:@"" forKey:@"label"]; //text
         [self setLatestValue:[NSString stringWithFormat:@"%@ (%@)",ssid, finalBSSID]];
-        [self saveData:dic toLocalFile:SENSOR_WIFI];
+//        [self saveData:dic toLocalFile:SENSOR_WIFI];
         
         if ([self isDebug]) {
             [AWAREUtils sendLocalNotificationForMessage:[NSString stringWithFormat:@"%@ (%@)",ssid, finalBSSID] soundFlag:NO];
         }
     }
+    
+    [self broadcastScanEnded];
+}
+
+
+///////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
+
+- (void) broadcastDetectedNewDevice{
+    [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_WIFI_NEW_DEVICE
+                                                        object:nil
+                                                      userInfo:nil];
+}
+
+- (void) broadcastScanStarted{
+    [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_WIFI_SCAN_STARTED
+                                                        object:nil
+                                                      userInfo:nil];
+}
+
+- (void) broadcastScanEnded{
+    [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_WIFI_SCAN_ENDED
+                                                        object:nil
+                                                      userInfo:nil];
+}
+
+- (void) broadcastRequestScan{
+    [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_WIFI_REQUEST_SCAN
+                                                        object:nil
+                                                      userInfo:nil];
 }
 
 //

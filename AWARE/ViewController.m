@@ -245,6 +245,29 @@
         batteryChargingOnly = @"NO";
     }
     
+    
+    cleanOldDataType cleanInterval = [userDefaults integerForKey:SETTING_FREQUENCY_CLEAN_OLD_DATA];
+    NSString * cleanIntervalStr = @"";
+    switch (cleanInterval) {
+        case cleanOldDataTypeNever:
+            cleanIntervalStr = @"Never";
+            break;
+        case cleanOldDataTypeWeekly:
+            cleanIntervalStr = @"Weekly";
+            break;
+        case cleanOldDataTypeMonthly:
+            cleanIntervalStr = @"Monthly";
+            break;
+        case cleanOldDataTypeDaily:
+            cleanIntervalStr = @"Daily";
+            break;
+        case cleanOldDataTypeAlways:
+            cleanIntervalStr = @"Always";
+            break;
+        default:
+            break;
+    }
+    
     // Get maximum data per a HTTP/POST request
     if (maximumFileSize > 0 ) {
         maximumFileSize = maximumFileSize/1000;
@@ -351,25 +374,27 @@
     /**
      * Setting
      */
-    // Title
+    // title for settings
     [_sensors addObject:[self getCelContent:@"Settings" desc:@"" image:@"" key:@"TITLE_CELL_VIEW"]];
-    // A Debug mode on/off
+    // debug state
     [_sensors addObject:[self getCelContent:@"Debug" desc:debugState image:@"" key:@"STUDY_CELL_DEBUG"]];
-    // A Sync interval
+    // sync interval
     [_sensors addObject:[self getCelContent:@"Sync Interval (min)" desc:syncInterval image:@"" key:@"STUDY_CELL_SYNC"]];
-    // A Sync network condition
+    // sync network condition
     [_sensors addObject:[self getCelContent:@"Auto sync with only Wi-Fi" desc:wifiOnly image:@"" key:@"STUDY_CELL_WIFI"]];
-    // A Sync battery condition
+    // sync battery condition
     [_sensors addObject:[self getCelContent:@"Auto sync with only battery charging" desc:batteryChargingOnly image:@"" key:@"STUDY_CELL_BATTERY"]];
-    // A maximum data size per one HTTP/POST
+    // frequency of clean old data
+    [_sensors addObject:[self getCelContent:@"Frequency of clean old data" desc:cleanIntervalStr image:@"" key:@"STUDY_CELL_CLEAN_OLD_DATA"]];
+    // maximum data size per one HTTP/POST
     [_sensors addObject:[self getCelContent:@"Maximum file size" desc:maximumFileSizeDesc image:@"" key:@"STUDY_CELL_MAX_FILE_SIZE"]];
-    // A current version of AWARE iOS
+    // current version of AWARE iOS
     NSString* version = [NSString stringWithFormat:@"%@",[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]];
     [_sensors addObject:[self getCelContent:@"Version" desc:version image:@"" key:@"STUDY_CELL_VIEW"]];
-        // A manual data upload button
+    // manual data upload button
     [_sensors addObject:[self getCelContent:@"Manual Data Upload" desc:@"Please push this row for uploading sensor data!" image:@"" key:@"STUDY_CELL_MANULA_UPLOAD"]];
     [_sensors addObject:[self getCelContent:@"General App Settings" desc:@"Move to the Settings app" image:@"" key:@"STUDY_CELL_SETTINGS_APP"]];
-    // Auto Study Update
+    // daily study update
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"HH:mm"];
     NSString *formattedDateString = @"--:--";
@@ -442,6 +467,7 @@
     _refreshButton.enabled = NO;
     [self performSelector:@selector(initContentsOnTableView) withObject:0 afterDelay:5];
     [self performSelector:@selector(refreshButtonEnableYes) withObject:0 afterDelay:10];
+    [self.tableView reloadData];
 }
 
 - (void) refreshButtonEnableYes {

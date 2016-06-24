@@ -189,7 +189,12 @@
         [dic setObject:eventText forKey:KEY_DEBUG_EVENT];
         [dic setObject:[NSNumber numberWithInteger:type] forKey:KEY_DEBUG_TYPE];
         [dic setObject:label forKey:KEY_DEBUG_LABEL];
-        [dic setObject:[awareStudy getNetworkReachabilityAsText] forKey:KEY_DEBUG_NETWORK];
+        NSString * network = [awareStudy getNetworkReachabilityAsText];
+        if(network != nil){
+            [dic setObject:network forKey:KEY_DEBUG_NETWORK];
+        }else{
+            [dic setObject:@"unknown" forKey:KEY_DEBUG_NETWORK];
+        }
         [dic setObject:appVersion forKey:KEY_DEBUG_APP_VERSION];
         [dic setObject:deviceName forKey:KEY_DEBUG_DEVICE];
         [dic setObject:osVersion forKey:KEY_DEBUG_OS];

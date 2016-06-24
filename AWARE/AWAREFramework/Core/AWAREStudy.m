@@ -27,6 +27,11 @@
     int mqttQos;
     bool readingState;
     
+    int frequencySyncDB;
+    // (0 = never, 1 = weekly, 2 = monthly, 3 = daily, 4 = always)
+    cleanOldDataType frequencyCleanOldData;
+    bool webserviceWifiOnly;
+    
     SCNetworkReachability * reachability;
     
     bool wifiReachable;
@@ -50,6 +55,10 @@
         mqttKeepAlive = 600;
         mqttQos = 2;
         readingState = YES;
+        frequencySyncDB = 30; //30 min
+        // (0 = never, 1 = weekly, 2 = monthly, 3 = daily, 4 = always)
+        frequencyCleanOldData = cleanOldDataTypeDaily;
+        webserviceWifiOnly = YES;
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         NSString* tempUserName = [userDefaults objectForKey:KEY_MQTT_USERNAME];
         if(tempUserName != nil){
@@ -284,6 +293,13 @@ didCompleteWithError:(NSError *)error {
             studyId = value;
         }else if([setting isEqualToString:@"webservice_server"]){
             webserviceServer = value;
+        }else if([setting isEqualToString:@"frequency_webservice"]){
+            frequencySyncDB = [value intValue];
+        }else if([setting isEqualToString:@"frequency_clean_old_data"]){
+            // (0 = never, 1 = weekly, 2 = monthly, 3 = daily, 4 = always)
+            frequencyCleanOldData = [value integerValue];
+        }else if([setting isEqualToString:@"webservice_wifi_only"]){
+            webserviceWifiOnly = [value boolValue];
         }
     }
     
@@ -310,6 +326,9 @@ didCompleteWithError:(NSError *)error {
     [userDefaults setObject:webserviceServer forKey:KEY_WEBSERVICE_SERVER];
     [userDefaults setObject:array forKey:KEY_SENSORS];
     [userDefaults setObject:plugins forKey:KEY_PLUGINS];
+    [userDefaults setDouble:frequencySyncDB*60 forKey:SETTING_SYNC_INT]; // save data as second
+    [userDefaults setBool:webserviceWifiOnly forKey:SETTING_SYNC_WIFI_ONLY];
+    [userDefaults setInteger:frequencyCleanOldData forKey:SETTING_FREQUENCY_CLEAN_OLD_DATA];
     [userDefaults synchronize];
 
     
@@ -690,7 +709,6 @@ didCompleteWithError:(NSError *)error {
  */
 - (NSString *) getNetworkReachabilityAsText{
     NSString * reachabilityText = @"";
-    
     switch (networkState){
         case SCNetworkStatusReachableViaWiFi:
             reachabilityText = @"wifi";
@@ -777,6 +795,11 @@ didCompleteWithError:(NSError *)error {
         }
     }
     return configStr;
+}
+
+- (cleanOldDataType) getCleanOldDataType{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    return [userDefaults integerForKey:SETTING_FREQUENCY_CLEAN_OLD_DATA];
 }
 
 @end

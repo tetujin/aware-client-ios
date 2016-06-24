@@ -26,4 +26,6 @@
 @property (nonatomic, strong) NSNumber *bodyLocation;
 @property (nonatomic, strong) NSNumber *deviceRssi;
 
+- (BOOL) startSensor;
+
 @end

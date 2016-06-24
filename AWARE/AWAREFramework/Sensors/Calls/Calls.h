@@ -27,5 +27,6 @@ extern NSString* const KEY_CALLS_TRACE;
 
 @property (strong, nonatomic) CTCallCenter *callCenter;
 
+-(BOOL)startSensor;
 
 @end

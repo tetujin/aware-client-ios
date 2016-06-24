@@ -9,6 +9,8 @@
 #import "PushNotification.h"
 #import "AWAREUtils.h"
 #import "AWAREKeys.h"
+#import "AppDelegate.h"
+#import "EntityPushNotification.h"
 
 @implementation PushNotification{
     NSString * KEY_PUSH_DEVICE_ID;
@@ -20,7 +22,7 @@
 - (instancetype)initWithAwareStudy:(AWAREStudy *)study{
     self = [super initWithAwareStudy:study
                           sensorName:@"push_notification_device_tokens"
-                        dbEntityName:nil
+                        dbEntityName:NSStringFromClass([EntityPushNotification class])
                               dbType:AwareDBTypeTextFile];
     if(self != nil){
         KEY_PUSH_DEVICE_ID = @"device_id";

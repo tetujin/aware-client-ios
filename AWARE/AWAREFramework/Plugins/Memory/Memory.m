@@ -7,6 +7,8 @@
 //
 
 #import "Memory.h"
+#import "AppDelegate.h"
+#import "EntityMemory.h"
 
 #import <mach/mach.h>
 #import <mach/mach_host.h>
@@ -23,8 +25,8 @@
 - (instancetype)initWiththAwareStudy:(AWAREStudy *)study{
     self = [super initWithAwareStudy:study
                           sensorName:@"memory"
-                        dbEntityName:nil
-                              dbType:AwareDBTypeTextFile];
+                        dbEntityName:NSStringFromClass([EntityMemory class])
+                              dbType:AwareDBTypeCoreData];
     if (self) {
         KEY_MEMORY_TIMESTAMP = @"timestamp";
         KEY_MEMORY_DEVICE_ID = @"device_id";
@@ -48,15 +50,22 @@
 }
 
 - (BOOL)startSensorWithSettings:(NSArray *)settings{
+    return [self startSensorWithInterval:60*5];
+}
+
+- (BOOL)startSensor{
+    return [self startSensorWithInterval:60*5];
+}
+
+- (BOOL) startSensorWithInterval:(double)interval{
     // start sensor
-    sensingTimer = [NSTimer scheduledTimerWithTimeInterval:60*5
+    sensingTimer = [NSTimer scheduledTimerWithTimeInterval:interval
                                                     target:self
                                                   selector:@selector(saveMemoryUsage)
                                                   userInfo:nil
                                                    repeats:YES];
     return YES;
 }
-
 
 - (BOOL)stopSensor{
     if (sensingTimer != nil) {
@@ -93,19 +102,30 @@
     double mem_total = mem_used + mem_free;
     NSLog(@"used: %f free: %f total: %f", mem_used, mem_free, mem_total);
     
-    NSMutableDictionary *query = [[NSMutableDictionary alloc] init];
-    [query setObject:[AWAREUtils getUnixTimestamp:[NSDate new]] forKey:KEY_MEMORY_TIMESTAMP];
-    [query setObject:[self getDeviceId] forKey:KEY_MEMORY_DEVICE_ID];
-    [query setObject:[NSNumber numberWithDouble:mem_used] forKey:KEY_MEMORY_USED];
-    [query setObject:[NSNumber numberWithDouble:mem_free] forKey:KEY_MEMORY_FREE];
-    [query setObject:[NSNumber numberWithDouble:mem_total] forKey:KEY_MEMORY_TOTAL];
+//    NSMutableDictionary *query = [[NSMutableDictionary alloc] init];
+//    [query setObject:[AWAREUtils getUnixTimestamp:[NSDate new]] forKey:KEY_MEMORY_TIMESTAMP];
+//    [query setObject:[self getDeviceId] forKey:KEY_MEMORY_DEVICE_ID];
+//    [query setObject:[NSNumber numberWithDouble:mem_used] forKey:KEY_MEMORY_USED];
+//    [query setObject:[NSNumber numberWithDouble:mem_free] forKey:KEY_MEMORY_FREE];
+//    [query setObject:[NSNumber numberWithDouble:mem_total] forKey:KEY_MEMORY_TOTAL];
+//    [self saveData:query];
     
+    dispatch_async(dispatch_get_main_queue(), ^{
+        AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+        EntityMemory * data = (EntityMemory *)[NSEntityDescription insertNewObjectForEntityForName:[self getEntityName]
+                                                                                               inManagedObjectContext:delegate.managedObjectContext];
+        data.device_id = [self getDeviceId];
+        data.timestamp = [AWAREUtils getUnixTimestamp:[NSDate new]];
+        data.mem_used = @(mem_used);
+        data.mem_free = @(mem_free);
+        data.mem_total = @(mem_total);
+        [self saveDataToDB];
+    });
+
     if ([self isDebug]) {
         [AWAREUtils sendLocalNotificationForMessage:[NSString stringWithFormat:@"used: %f free: %f total: %f", mem_used, mem_free, mem_total] soundFlag:NO];
     }
     
-    
-    [self saveData:query];
  
 }
 

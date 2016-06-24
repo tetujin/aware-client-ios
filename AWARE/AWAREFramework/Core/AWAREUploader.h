@@ -33,10 +33,12 @@
 
 
 // CoreData
-- (void)setFetchLimit:(int)limit;
-- (void)setFetchBatchSize:(int)size;
-- (int) getFetchLimit;
-- (int) getFetchBatchSize;
+- (void) setBufferSize:(int)size;
+- (void) setFetchLimit:(int)limit;
+- (void) setFetchBatchSize:(int)size;
+- (int)  getBufferSize;
+- (int)  getFetchLimit;
+- (int)  getFetchBatchSize;
 - (bool) saveDataToDB;//TODO
 
 - (void) syncAwareDBInBackground;

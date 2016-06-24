@@ -31,9 +31,10 @@ NSString* const KEY_STUDY_ID = @"study_id";
 NSString* const KEY_WEBSERVICE_SERVER = @"webservice_server";
 
 NSString* const SETTING_DEBUG_STATE = @"setting_debug_state";
-NSString *const SETTING_SYNC_WIFI_ONLY = @"setting_sync_wifi_only";
+NSString* const SETTING_SYNC_WIFI_ONLY = @"setting_sync_wifi_only";
 NSString* const SETTING_SYNC_INT = @"setting_sync_interval";
 NSString* const SETTING_SYNC_BATTERY_CHARGING_ONLY = @"setting_sync_battery_charging_only";
+NSString* const SETTING_FREQUENCY_CLEAN_OLD_DATA = @"setting_frequency_clean_old_data";
 
 
 NSString* const TABLE_INSERT = @"insert";
@@ -165,6 +166,33 @@ NSString * const ACTION_AWARE_INTERNET_AVAILABLE = @"ACTION_AWARE_INTERNET_AVAIL
 //extern NSString * const EXTRA_ACCESS;// an integer with one of the following constants: 1=Wi-Fi, 2= Bluetooth, 4= Mobile, 5= WIMAX
 NSString * const ACTION_AWARE_INTERNET_UNAVAILABLE = @"ACTION_AWARE_INTERNET_UNAVAILABLE";// broadcasted when the device is not connected to the internet.
 //NSString * const ACTION_AWARE_NETWORK_TRAFFIC = @"ACTION_AWARE_NETWORK_TRAFFIC";// broadcasted when new traffic information is available for both Wi-Fi and mobile data.
+
+NSString * const ACTION_AWARE_ROTATION = @"ACTION_AWARE_ROTATION";
+
+// Screen
+NSString * const ACTION_AWARE_SCREEN_ON = @"ACTION_AWARE_SCREEN_ON";
+NSString * const ACTION_AWARE_SCREEN_OFF = @"ACTION_AWARE_SCREEN_OFF";
+NSString * const ACTION_AWARE_SCREEN_LOCKED = @"ACTION_AWARE_SCREEN_LOCKED";
+NSString * const ACTION_AWARE_SCREEN_UNLOCKED = @"ACTION_AWARE_SCREEN_UNLOCKED";
+
+// Timezone
+NSString * const ACTION_AWARE_TIMEZONE = @"ACTION_AWARE_TIMEZONE";
+
+//Wifi
+NSString * const ACTION_AWARE_WIFI_NEW_DEVICE = @"ACTION_AWARE_WIFI_NEW_DEVICE"; //: new Wi-Fi device detected.
+NSString * const ACTION_AWARE_WIFI_SCAN_STARTED = @"ACTION_AWARE_WIFI_SCAN_STARTED"; //: scan session has started.
+NSString * const ACTION_AWARE_WIFI_SCAN_ENDED = @"ACTION_AWARE_WIFI_SCAN_ENDED"; //: scan session has ended.
+NSString * const ACTION_AWARE_WIFI_REQUEST_SCAN = @"ACTION_AWARE_WIFI_REQUEST_SCAN"; //: request a Wi-Fi scan as soon as possible.
+
+// Activity Recognition
+NSString * const ACTION_AWARE_GOOGLE_ACTIVITY_RECOGNITION = @"ACTION_AWARE_GOOGLE_ACTIVITY_RECOGNITION";
+
+// upload progress
+NSString * const KEY_UPLOAD_PROGRESS_STR = @"KEY_UPLOAD_PROGRESS_STR";
+NSString * const KEY_UPLOAD_FIN = @"KEY_UPLOAD_FIN";
+NSString * const KEY_UPLOAD_SENSOR_NAME = @"KEY_UPLOAD_SENSOR_NAME";
+NSString * const KEY_UPLOAD_SUCCESS = @"KEY_UPLOAD_SUCCESS";
+NSString * const ACTION_AWARE_DATA_UPLOAD_PROGRESS = @"ACTION_AWARE_DATA_UPLOAD_PROGRESS";
 
 @implementation AWAREKeys
 

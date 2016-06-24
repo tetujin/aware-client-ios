@@ -15,21 +15,29 @@
 
 
 #import "ActivityRecognition.h"
+#import "AppDelegate.h"
+#import "EntityActivityRecognition.h"
 
 @implementation ActivityRecognition {
     CMMotionActivityManager *motionActivityManager;
     NSString * KEY_TIMESTAMP_OF_LAST_UPDATE;
     NSTimer * timer;
+    double defaultInterval;
+    ActivityRecognitionMode sensingMode;
+    CMMotionActivityConfidence confidenceFilter;
 }
 
 - (instancetype)initWithAwareStudy:(AWAREStudy *)study{
     self = [super initWithAwareStudy:study
                           sensorName:SENSOR_PLUGIN_GOOGLE_ACTIVITY_RECOGNITION
-                        dbEntityName:nil
-                              dbType:AwareDBTypeTextFile];
+                        dbEntityName:NSStringFromClass([EntityActivityRecognition class])
+                              dbType:AwareDBTypeCoreData];
     if (self) {
         motionActivityManager = [[CMMotionActivityManager alloc] init];
         KEY_TIMESTAMP_OF_LAST_UPDATE = @"key_plugin_sensor_activity_recognition_last_update_timestamp";
+        defaultInterval = 60*3; // 3 min
+        sensingMode = ActivityRecognitionModeLive;
+        confidenceFilter = CMMotionActivityConfidenceLow;
     }
     return self;
 }
@@ -51,37 +59,56 @@
 - (BOOL)startSensorWithSettings:(NSArray *)settings{
     NSLog(@"Start Motion Activity Manager! ");
     
-//    [self setBufferSize:3];
-    
-    [self getMotionActivity:nil];
 
     double frequency = [self getSensorSetting:settings withKey:@"frequency_plugin_google_activity_recognition"];
-    if (frequency < 180) {
-        frequency = 180;
+    if (frequency < defaultInterval) {
+        frequency = defaultInterval;
     }
     
-    timer = [NSTimer scheduledTimerWithTimeInterval:frequency
-                                             target:self
-                                           selector:@selector(getMotionActivity:)
-                                           userInfo:nil
-                                            repeats:YES];
-    
-    
-    /** motion activity */
-//    if([CMMotionActivityManager isActivityAvailable]){
-//        motionActivityManager = [CMMotionActivityManager new];
-//        [motionActivityManager startActivityUpdatesToQueue:[NSOperationQueue new]
-//                                                withHandler:^(CMMotionActivity *activity) {
-//                                                    dispatch_async(dispatch_get_main_queue(), ^{
-//                                                        [self addMotionActivity:activity];
-//                                                    });
-//                                                }];
-//    }
-    
-   
-    return YES;
+    return [self startSensorWithConfidenceFilter:CMMotionActivityConfidenceLow mode:ActivityRecognitionModeHistory interval:frequency];
 }
 
+
+- (BOOL) startSensorWithLiveMode:(CMMotionActivityConfidence) filterLevel{
+    return [self startSensorWithConfidenceFilter:filterLevel mode:ActivityRecognitionModeLive interval:defaultInterval];
+}
+
+- (BOOL) startSensorWithHistoryMode:(CMMotionActivityConfidence)filterLevel interval:(double) interval{
+    return [self startSensorWithConfidenceFilter:filterLevel mode:ActivityRecognitionModeHistory interval:interval];
+}
+
+- (BOOL) startSensorWithConfidenceFilter:(CMMotionActivityConfidence) filterLevel
+                        mode:(ActivityRecognitionMode)mode
+                    interval:(double) interval{
+    
+    confidenceFilter = filterLevel;
+    sensingMode = mode;
+    
+    // history mode
+    if( mode == ActivityRecognitionModeHistory){
+        [self getMotionActivity:nil];
+        timer = [NSTimer scheduledTimerWithTimeInterval:interval
+                                                 target:self
+                                               selector:@selector(getMotionActivity:)
+                                               userInfo:nil
+                                                repeats:YES];
+    // live mode
+    }else if( mode == ActivityRecognitionModeLive ){
+        /** motion activity */
+        if([CMMotionActivityManager isActivityAvailable]){
+            motionActivityManager = [CMMotionActivityManager new];
+            [motionActivityManager startActivityUpdatesToQueue:[NSOperationQueue new]
+                                                   withHandler:^(CMMotionActivity *activity) {
+                                                       dispatch_async(dispatch_get_main_queue(), ^{
+                                                           [self addMotionActivity:activity];
+                                                       });
+                                                   }];
+        }else{
+            return NO;
+        }
+    }
+    return YES;
+}
 
 - (BOOL)stopSensor{
     // Stop and remove a motion sensor
@@ -153,6 +180,29 @@
 
 
 - (void) addMotionActivity: (CMMotionActivity *) motionActivity{
+    
+    NSLog(@"%ld", motionActivity.confidence);
+    
+    switch (confidenceFilter) {
+        case CMMotionActivityConfidenceHigh:
+            if(motionActivity.confidence == CMMotionActivityConfidenceMedium ||
+               motionActivity.confidence == CMMotionActivityConfidenceLow){
+                return;
+            }
+            break;
+        case CMMotionActivityConfidenceMedium:
+            if(motionActivity.confidence == CMMotionActivityConfidenceLow){
+                return;
+            }
+            break;
+        case CMMotionActivityConfidenceLow:
+            break;
+        default:
+            break;
+    }
+    
+    NSLog(@"stored");
+    
     NSNumber *motionConfidence = [NSNumber numberWithInt:0];
     if (motionActivity.confidence  == CMMotionActivityConfidenceHigh){
         motionConfidence = [NSNumber numberWithInt:100];
@@ -220,35 +270,40 @@
 
     
     NSLog(@"[%@] %@ %ld", motionActivity.startDate, motionName, motionActivity.confidence);
-    
-    NSNumber * unixtime = [AWAREUtils getUnixTimestamp:motionActivity.startDate];
-    NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-    [dic setObject:unixtime forKey:@"timestamp"];
-    [dic setObject:[self getDeviceId] forKey:@"device_id"];
-    [dic setObject:motionName forKey:@"activity_name"]; //varchar
-    [dic setObject:motionType forKey:@"activity_type"]; //text
-    [dic setObject:motionConfidence forKey:@"confidence"]; //int
-    [dic setObject:@"" forKey:@"activities"]; //text
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSNumber * unixtime = [AWAREUtils getUnixTimestamp:motionActivity.startDate];
+        
+        AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+        EntityActivityRecognition * data = (EntityActivityRecognition *)[NSEntityDescription insertNewObjectForEntityForName:[self getEntityName]
+                                                                             inManagedObjectContext:delegate.managedObjectContext];
+        data.device_id = [self getDeviceId];
+        data.timestamp = unixtime;
+        data.confidence = motionConfidence;
+        data.activities = activitiesStr;
+        data.activity_name = motionName;
+        data.activity_type = [motionType stringValue];
+        
+        NSDictionary * userInfo = [NSDictionary dictionaryWithObject:data
+                                                              forKey:EXTRA_DATA];
+        [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_GOOGLE_ACTIVITY_RECOGNITION
+                                                                object:nil
+                                                              userInfo:userInfo];
+        
+        [self saveDataToDB];
+    });
+
     [self setLatestValue:[NSString stringWithFormat:@"%@, %@, %@", motionName, motionType, motionConfidence]];
-    [self saveData:dic toLocalFile:SENSOR_PLUGIN_GOOGLE_ACTIVITY_RECOGNITION];
     
+    //    NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+    //    [dic setObject:unixtime forKey:@"timestamp"];
+    //    [dic setObject:[self getDeviceId] forKey:@"device_id"];
+    //    [dic setObject:motionName forKey:@"activity_name"]; //varchar
+    //    [dic setObject:motionType forKey:@"activity_type"]; //text
+    //    [dic setObject:motionConfidence forKey:@"confidence"]; //int
+    //    [dic setObject:@"" forKey:@"activities"]; //text
+    //    [self setLatestValue:[NSString stringWithFormat:@"%@, %@, %@", motionName, motionType, motionConfidence]];
+    //    [self saveData:dic toLocalFile:SENSOR_PLUGIN_GOOGLE_ACTIVITY_RECOGNITION];
     
-//    AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
-//    PluginActivityRecognition * activity = [NSEntityDescription insertNewObjectForEntityForName:@"ActivityRecognition" inManagedObjectContext:delegate.managedObjectContext];
-//    activity.device_id = [self getDeviceId];
-//    activity.timestamp = unixtime;
-//    activity.confidence = motionConfidence;
-//    activity.activities = activitiesStr;
-//    activity.activity_name = motionName;
-//    activity.activity_type = [motionType stringValue];
-//    
-//    NSError * error = nil;
-//    [delegate.managedObjectContext save:&error];
-//    if (error) {
-//        NSLog(@"%@", error.description);
-//    }
-    
-    [self setLatestValue:[NSString stringWithFormat:@"%@, %@, %@", motionName, motionType, motionConfidence]];
 }
 
 -(NSString*)timestamp2date:(NSDate*)date{

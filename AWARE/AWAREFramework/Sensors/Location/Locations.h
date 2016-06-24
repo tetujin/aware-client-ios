@@ -12,4 +12,10 @@
 
 @interface Locations : AWARESensor <AWARESensorDelegate, CLLocationManagerDelegate>
 
+- (BOOL) startSensor;
+- (BOOL) startSensorWithInterval:(double)interval;
+- (BOOL) startSensorWithAccuracy:(double)accuracyMeter;
+- (BOOL) startSensorWithInterval:(double)interval accuracy:(double)accuracyMeter;
+
+
 @end

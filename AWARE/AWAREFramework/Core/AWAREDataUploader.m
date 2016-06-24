@@ -48,6 +48,9 @@
 /////////////////////////////////
 /////////////////////////////////
 
+- (bool)isUploading{
+    return isUploading;
+}
 
 /**
  * Background data sync
@@ -376,6 +379,15 @@ didReceiveResponse:(NSURLResponse *)response
             return NO;
         }
     }
+    
+    NSMutableDictionary * userInfo = [[NSMutableDictionary alloc] init];
+    [userInfo setObject:@100 forKey:@"KEY_UPLOAD_PROGRESS_STR"];
+    [userInfo setObject:@YES forKey:@"KEY_UPLOAD_FIN"];
+    [userInfo setObject:@YES forKey:@"KEY_UPLOAD_SUCCESS"];
+    [userInfo setObject:sensorName forKey:@"KEY_UPLOAD_SENSOR_NAME"];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"ACTION_AWARE_DATA_UPLOAD_PROGRESS"
+                                                        object:nil
+                                                      userInfo:userInfo];
     return YES;
 }
 

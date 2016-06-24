@@ -200,8 +200,19 @@
     if (localStorage != nil) {
         [localStorage setBufferSize:size];
     }
+    if (baseDataUploader != nil){
+        [baseDataUploader setBufferSize:size];
+    }
 }
 
+
+- (void)setFetchLimit:(int)limit{ [baseDataUploader setFetchLimit:limit]; }
+
+- (void)setFetchBatchSize:(int)size{ [baseDataUploader setFetchBatchSize:size]; }
+
+- (int)getFetchLimit{ return [baseDataUploader getFetchLimit]; }
+
+- (int) getFetchBatchSize{ return [baseDataUploader getFetchBatchSize]; }
 
 //////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////

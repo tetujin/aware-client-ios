@@ -10,6 +10,20 @@
 #import "AWAREKeys.h"
 #import <CoreMotion/CoreMotion.h>
 
+typedef enum: NSInteger {
+    ActivityRecognitionModeLive = 0,
+    ActivityRecognitionModeHistory = 1
+} ActivityRecognitionMode;
+
+
+
 @interface ActivityRecognition : AWARESensor <AWARESensorDelegate>
+
+
+- (BOOL) startSensorWithLiveMode:(CMMotionActivityConfidence) filterLevel;
+- (BOOL) startSensorWithHistoryMode:(CMMotionActivityConfidence)filterLevel interval:(double) interval;
+- (BOOL) startSensorWithConfidenceFilter:(CMMotionActivityConfidence) filterLevel
+                                    mode:(ActivityRecognitionMode)mode
+                                interval:(double) interval;
 
 @end

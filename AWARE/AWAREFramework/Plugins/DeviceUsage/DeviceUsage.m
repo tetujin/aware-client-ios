@@ -8,6 +8,8 @@
 
 #import "DeviceUsage.h"
 #import "notify.h"
+#import "AppDelegate.h"
+#import "EntityDeviceUsage.h"
 
 @implementation DeviceUsage {
     double lastTime;
@@ -17,8 +19,8 @@
 - (instancetype)initWithAwareStudy:(AWAREStudy *)study{
     self = [super initWithAwareStudy:study
                           sensorName:SENSOR_PLUGIN_DEVICE_USAGE
-                        dbEntityName:nil
-                              dbType:AwareDBTypeTextFile];
+                        dbEntityName:NSStringFromClass([EntityDeviceUsage class])
+                              dbType:AwareDBTypeCoreData];
     if (self) {
     }
     return self;
@@ -60,10 +62,17 @@
 //    int notify_token;
     notify_register_dispatch("com.apple.iokit.hid.displayStatus", &_notifyTokenForDidChangeDisplayStatus,dispatch_get_main_queue(), ^(int token) {
         
+        //        NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+//        [dic setObject:unixtime forKey:@"timestamp"];
+//        [dic setObject:[self getDeviceId] forKey:@"device_id"];
+
+        AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+        EntityDeviceUsage * deviceUsage = (EntityDeviceUsage *)[NSEntityDescription insertNewObjectForEntityForName:[self getEntityName]
+                                                                                                inManagedObjectContext:delegate.managedObjectContext];
         NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
-        NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-        [dic setObject:unixtime forKey:@"timestamp"];
-        [dic setObject:[self getDeviceId] forKey:@"device_id"];
+        deviceUsage.timestamp = unixtime;
+        deviceUsage.device_id = [self getDeviceId];
+        
         
         int awareScreenState = 0;
         double currentTime = [[NSDate date] timeIntervalSince1970];
@@ -75,17 +84,22 @@
         if(state == 0) {
             NSLog(@"screen off");
             awareScreenState = 0;
-            [dic setObject:[NSNumber numberWithDouble:elapsedTime] forKey:@"elapsed_device_on"]; // real
-            [dic setObject:@0 forKey:@"elapsed_device_off"]; // real
+            deviceUsage.elapsed_device_on = @(elapsedTime);
+            deviceUsage.elapsed_device_off = @0;
+//            [dic setObject:[NSNumber numberWithDouble:elapsedTime] forKey:@"elapsed_device_on"]; // real
+//            [dic setObject:@0 forKey:@"elapsed_device_off"]; // real
         } else {
             NSLog(@"screen on");
             awareScreenState = 1;
-            [dic setObject:@0 forKey:@"elapsed_device_on"]; // real
-            [dic setObject:[NSNumber numberWithDouble:elapsedTime] forKey:@"elapsed_device_off"]; // real
+            deviceUsage.elapsed_device_on = @0;
+            deviceUsage.elapsed_device_off = @(elapsedTime);
+//            [dic setObject:@0 forKey:@"elapsed_device_on"]; // real
+//            [dic setObject:[NSNumber numberWithDouble:elapsedTime] forKey:@"elapsed_device_off"]; // real
         }
         
         [self setLatestValue:[NSString stringWithFormat:@"[%d] %f", awareScreenState, elapsedTime ]];
-        [self saveData:dic];
+        [self saveDataToDB];
+//        [self saveData:dic];
         
     });
 }

@@ -9,6 +9,7 @@
 #import "OpenWeather.h"
 #import "AWAREKeys.h"
 #import "AppDelegate.h"
+#import "EntityOpenWeather.h"
 
 @implementation OpenWeather{
     IBOutlet CLLocationManager *locationManager;
@@ -19,9 +20,11 @@
     double thisLat;
     double thisLon;
     NSString* identificationForOpenWeather;
+    NSString * userApiKey;
 }
 /** api */
-NSString* OPEN_WEATHER_API = @"http://api.openweathermap.org/data/2.5/weather?lat=%d&lon=%d&APPID=54e5dee2e6a2479e0cc963cf20f233cc";
+NSString* OPEN_WEATHER_API_URL = @"http://api.openweathermap.org/data/2.5/weather?lat=%d&lon=%d&APPID=%@";
+NSString* OPEN_WEATHER_API_DEFAULT_KEY = @"54e5dee2e6a2479e0cc963cf20f233cc";
 /** sys */
 NSString* KEY_SYS         = @"sys";
 NSString* ELE_COUNTORY    = @"country";
@@ -63,12 +66,13 @@ int ONE_HOUR = 60*60;
 - (instancetype) initWithAwareStudy:(AWAREStudy *)study{
     self = [super initWithAwareStudy:study
                           sensorName:SENSOR_PLUGIN_OPEN_WEATHER
-                        dbEntityName:nil
-                              dbType:AwareDBTypeTextFile];
+                        dbEntityName:NSStringFromClass([EntityOpenWeather class])
+                              dbType:AwareDBTypeCoreData];
     if (self) {
         locationManager = nil;
         identificationForOpenWeather = @"http_for_open_weather_";
         [self updateWeatherData:[NSDate new] Lat:0 Lon:0];
+        userApiKey = nil;
     }
     return self;
 }
@@ -91,7 +95,8 @@ int ONE_HOUR = 60*60;
     "wind_speed real default 0,"
     "wind_degrees real default 0,"
     "cloudiness real default 0,"
-    "weather_icon_id default 0,"
+    "weather_icon_id int default 0,"
+    "weather_description text default '',"
     "rain real default 0,"
     "snow real default 0,"
     "sunrise real default 0,"
@@ -106,6 +111,15 @@ int ONE_HOUR = 60*60;
     double frequencySec = 60.0f * frequencyMin;
     if (frequencyMin == -1) {
         frequencySec = 60.0f*15.0f;
+    }
+    
+//    NSString * apiKey = nil;
+    if (settings != nil) {
+        for (NSDictionary * setting in settings) {
+            if ([[setting objectForKey:@"setting"] isEqualToString:@"api_key_plugin_openweather"]) {
+                userApiKey = [setting objectForKey:@"value"];
+            }
+        }
     }
     
     AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
@@ -173,7 +187,13 @@ int ONE_HOUR = 60*60;
     sessionConfig.allowsCellularAccess = YES;
     sessionConfig.discretionary = YES;
     
-    NSString *url = [NSString stringWithFormat:OPEN_WEATHER_API, (int)lat, (int)lon];
+    NSString *url = @"";
+    if(userApiKey == nil){
+        url = [NSString stringWithFormat:OPEN_WEATHER_API_URL, (int)lat, (int)lon, OPEN_WEATHER_API_DEFAULT_KEY];
+    }else{
+        url = [NSString stringWithFormat:OPEN_WEATHER_API_URL, (int)lat, (int)lon, userApiKey];
+    }
+
     request = [[NSMutableURLRequest alloc] init];
     [request setURL:[NSURL URLWithString:url]];
     [request setHTTPMethod:@"POST"];
@@ -228,31 +248,55 @@ didReceiveResponse:(NSURLResponse *)response
             [self sendLocalNotificationForMessage:@"Get Weather Information" soundFlag:NO];
         }
         
-        NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-        NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
-        [dic setObject:unixtime forKey:@"timestamp"];
-        [dic setObject:[self getDeviceId] forKey:@"device_id"];
-        [dic setObject:[self getName] forKey:@"city"];
-        [dic setObject:[self getTemp] forKey:@"temperature"];
-        [dic setObject:[self getTempMax] forKey:@"temperature_max"];
-        [dic setObject:[self getTempMax] forKey:@"temperature_min"];
-        [dic setObject:@"" forKey:@"unit"];
-        [dic setObject:[self getHumidity] forKey:@"humidity"];
-        [dic setObject:[self getPressure] forKey:@"pressure"];
-        [dic setObject:[self getWindSpeed] forKey:@"wind_speed"];
-        [dic setObject:[self getWindDeg] forKey:@"wind_degrees"];
-        [dic setObject:[self getClouds] forKey:@"cloudiness"];
-        [dic setObject:[self getWeatherIcon] forKey:@"weather_icon_id"];
-        [dic setObject:[self getWeatherDescription] forKey:@"weather_description"];
-        [dic setObject:[self getRain] forKey:@"rain"];
-        [dic setObject:[self getSnow] forKey:@"snow"];
-        [dic setObject:[self getSunRise] forKey:@"sunrise"];
-        [dic setObject:[self getSunSet] forKey:@"sunset"];
-
+        
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self setLatestValue:[NSString stringWithFormat:@"%@: %@", [self getWeather], [self getWeatherDescription]]];
-            [self saveData:dic];
+            AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+            EntityOpenWeather * weatherData = (EntityOpenWeather *)[NSEntityDescription insertNewObjectForEntityForName:[self getEntityName]
+                                                                                                   inManagedObjectContext:delegate.managedObjectContext];
+            
+            weatherData.device_id = [self getDeviceId];
+            NSNumber * timestamp = [AWAREUtils getUnixTimestamp:[NSDate new]];
+            weatherData.timestamp = timestamp;
+            weatherData.city = [self getName];
+            weatherData.temperature = [self getTemp];
+            weatherData.temperature_max = [self getTempMax];
+            weatherData.temperature_min = [self getTempMin];
+            weatherData.unit = @"";
+            weatherData.humidity = [self getHumidity];
+            weatherData.pressure = [self getPressure];
+            weatherData.wind_speed = [self getWindSpeed];
+            weatherData.wind_degrees = [self getWindDeg];
+            weatherData.cloudiness = [self getClouds];
+            weatherData.weather_icon_id = [self getWeatherIcon];
+            weatherData.weather_description = [self getWeatherDescription];
+            weatherData.rain = [self getRain];
+            weatherData.snow = [self getSnow];
+            weatherData.sunrise = [self getSunRise];
+            weatherData.sunset = [self getSunSet];
+            
+            [self saveDataToDB];
         });
+
+//        NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+//        NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
+//        [dic setObject:unixtime forKey:@"timestamp"];
+//        [dic setObject:[self getDeviceId] forKey:@"device_id"];
+//        [dic setObject:[self getName] forKey:@"city"];
+//        [dic setObject:[self getTemp] forKey:@"temperature"];
+//        [dic setObject:[self getTempMax] forKey:@"temperature_max"];
+//        [dic setObject:[self getTempMax] forKey:@"temperature_min"];
+//        [dic setObject:@"" forKey:@"unit"];
+//        [dic setObject:[self getHumidity] forKey:@"humidity"];
+//        [dic setObject:[self getPressure] forKey:@"pressure"];
+//        [dic setObject:[self getWindSpeed] forKey:@"wind_speed"];
+//        [dic setObject:[self getWindDeg] forKey:@"wind_degrees"];
+//        [dic setObject:[self getClouds] forKey:@"cloudiness"];
+//        [dic setObject:[self getWeatherIcon] forKey:@"weather_icon_id"];
+//        [dic setObject:[self getWeatherDescription] forKey:@"weather_description"];
+//        [dic setObject:[self getRain] forKey:@"rain"];
+//        [dic setObject:[self getSnow] forKey:@"snow"];
+//        [dic setObject:[self getSunRise] forKey:@"sunrise"];
+//        [dic setObject:[self getSunSet] forKey:@"sunset"];
     }
 
     [session finishTasksAndInvalidate];
@@ -300,14 +344,17 @@ didReceiveResponse:(NSURLResponse *)response
 }
 
 
-- (NSString *) getWeatherIcon
+- (NSNumber *) getWeatherIcon
 {
-    NSString * value = [[[jsonWeatherData valueForKey:KEY_WEATHER] objectAtIndex:0] valueForKey:ELE_ICON];
-    if(value != nil){
-        return  value;
-    }else{
-        return @"0";
+    NSNumber * value  = @0;
+    @try {
+        if(value != nil){
+            value =  @([[[[jsonWeatherData valueForKey:KEY_WEATHER] objectAtIndex:0] valueForKey:ELE_ICON] integerValue]);
+        }
+    } @catch (NSException *exception) {
+        value = @0;
     }
+    return value;
 }
 
 - (NSString *) getWeatherDescription

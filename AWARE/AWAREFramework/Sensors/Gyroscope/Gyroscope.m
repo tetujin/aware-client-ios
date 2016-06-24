@@ -13,7 +13,7 @@
 
 @implementation Gyroscope{
     CMMotionManager* gyroManager;
-    int bufferCount;
+    double defaultInterval;
 }
 
 - (instancetype)initWithAwareStudy:(AWAREStudy *)study{
@@ -23,7 +23,7 @@
                               dbType:AwareDBTypeCoreData];
     if (self) {
         gyroManager = [[CMMotionManager alloc] init];
-        bufferCount = 0;
+        defaultInterval = 0.1f;
     }
     return self;
 }
@@ -49,19 +49,40 @@
     // Set and start a data uploader
     NSLog(@"[%@] Start Gyro Sensor", [self getSensorName]);
     
-    // Set a buffer size for reducing file access
-    [self setBufferSize:100];
-    
-    
     // Get a sensing frequency from settings
-    double frequency = [self getSensorSetting:settings withKey:@"frequency_gyroscope"];
-    if(frequency != -1){
-        NSLog(@"Gyroscope's frequency is %f !!", frequency);
-        double iOSfrequency = [self convertMotionSensorFrequecyFromAndroid:frequency];
-        gyroManager.gyroUpdateInterval = iOSfrequency;
-    }else{
-        gyroManager.gyroUpdateInterval = 0.1f;//default value
+    double interval = defaultInterval;
+    if(settings != nil){
+        double frequency = [self getSensorSetting:settings withKey:@"frequency_gyroscope"];
+        if(frequency != -1){
+            interval = [self convertMotionSensorFrequecyFromAndroid:frequency];
+        }
     }
+    [self startSensorWithInterval:interval bufferSize:100 fetchLimit:1000];
+    
+    return YES;
+}
+
+
+- (BOOL) startSensor{
+    return [self startSensorWithInterval:defaultInterval];
+}
+
+- (BOOL) startSensorWithInterval:(double)interval{
+    return [self startSensorWithInterval:interval bufferSize:[self getBufferSize]];
+}
+
+- (BOOL) startSensorWithInterval:(double)interval bufferSize:(int)buffer{
+    return [self startSensorWithInterval:interval bufferSize:buffer fetchLimit:[self getFetchLimit]];
+}
+
+
+- (BOOL) startSensorWithInterval:(double)interval bufferSize:(int)buffer fetchLimit:(int)fetchLimit{
+    
+    [self setBufferSize:buffer];
+    
+    [self setFetchLimit:fetchLimit];
+    
+    gyroManager.gyroUpdateInterval = interval;
     
     // Start a sensor
     [gyroManager startGyroUpdatesToQueue:[NSOperationQueue currentQueue]
@@ -94,19 +115,8 @@
                                                                                              object:nil
                                                                                            userInfo:userInfo];
                                          
-                                         if(bufferCount > [self getBufferSize] ){
-//                                             NSError * e = nil;
-//                                             [delegate.managedObjectContext save:&e];
-//                                             if (e) {
-//                                                 NSLog(@"%@", e.description);
-//                                             }
-                                             if(![self saveDataToDB]){
-                                                 NSLog(@"[%@] DB is not ready now", [self getEntityName]);
-                                             }
-                                             bufferCount = 0;
-                                         }else{
-                                             bufferCount++;
-                                         }
+                                         [self saveDataToDB];
+                                         
                                          
                                          //            NSNumber *unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
                                          //            NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
@@ -121,10 +131,10 @@
                                          //            dispatch_async(dispatch_get_main_queue(), ^{
                                          //                [self saveData:dic];
                                          //            });
-                                     
+                                         
                                      }
-                                });
-    }];
+                                 });
+                             }];
     return YES;
 }
 

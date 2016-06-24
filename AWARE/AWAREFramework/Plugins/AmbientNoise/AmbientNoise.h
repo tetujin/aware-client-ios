@@ -41,4 +41,7 @@
 //
 @property (nonatomic, assign) BOOL isRecording;
 
+- (BOOL) startSensor;
+- (BOOL) startSensorWithFrequencyMin:(double)min sampleSize:(double)size silenceThreshold:(double)threshold saveRawData:(BOOL)rawDataState;
+
 @end
