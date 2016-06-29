@@ -312,7 +312,17 @@
                                         expirationThreshold:@60
                                                     trigger:@"goal_of_today"];
     
-    return [[NSMutableArray alloc] initWithArray:@[sleepTime, wakeupTime, breakfast, foods, esm1,esm2,esm3,esm4,esm5,esm6,esm7, freeText]];
+    NSMutableDictionary *pam =
+    [SingleESMObject getEsmDictionaryAsPAMWithDeviceId:[self getDeviceId]
+                                             timestamp:[[AWAREUtils getUnixTimestamp:[NSDate new]] doubleValue]
+                                                 title:@"test"
+                                          instructions:@""
+                                                submit:@"Next"
+                                   expirationThreshold:@60
+                                               trigger:@"pam"];
+    
+    
+    return [[NSMutableArray alloc] initWithArray:@[pam, sleepTime, wakeupTime, breakfast, foods, esm1,esm2,esm3,esm4,esm5,esm6,esm7, freeText]];
 }
 
 - (NSMutableArray *) getESMDictionaries {
