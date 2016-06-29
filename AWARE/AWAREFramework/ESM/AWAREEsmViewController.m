@@ -999,8 +999,9 @@
         for (int columnNum=0; columnNum<column; columnNum++) {
             // 1. Get random number between 1 and 3
             int randomNum = arc4random() % 3 + 1;
-            NSString * emotion = [PamSchema getEmotionString:(NSInteger)pamNum];
-            NSString * imagePath = [NSString stringWithFormat:@"images/%d_%@/%d_%d.jpg",pamNum,emotion,pamNum, randomNum];
+//            NSString * emotion = [PamSchema getEmotionString:(NSInteger)pamNum];
+//            NSString * imagePath = [NSString stringWithFormat:@"images/%d_%@/%d_%d.jpg",pamNum,emotion,pamNum, randomNum];
+            NSString * imagePath = [NSString stringWithFormat:@"%d_%d.jpg",pamNum, randomNum];
             UIButton * button = [[UIButton alloc] initWithFrame:CGRectMake(cellWidth*columnNum, totalHight+cellHeight*rowNum, cellWidth, cellHeight)];
 //            button.imageView.image = [UIImage imageNamed:@"ic_launcher-web"];
             [button setImage:[UIImage imageNamed:imagePath] forState:UIControlStateNormal];
