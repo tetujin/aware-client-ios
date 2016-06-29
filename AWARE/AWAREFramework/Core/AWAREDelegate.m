@@ -14,7 +14,7 @@
 // Sensors
 #import "Debug.h"
 #import "PushNotification.h"
-#import "Scheduler.h"
+#import "BalacnedCampusESMScheduler.h"
 #import "ESM.h"
 #import "Labels.h"
 #import "GoogleCalPush.h"
@@ -284,7 +284,7 @@ handleEventsForBackgroundURLSession:(NSString *)identifier
     // Calendar and ESM plugin use this method
     AWAREStudy * awareStudy = _sharedAWARECore.sharedAwareStudy;
     if ([notification.category isEqualToString:SENSOR_PLUGIN_CAMPUS]) {
-        Scheduler * scheduler = [[Scheduler alloc] initWithAwareStudy:awareStudy];
+        BalacnedCampusESMScheduler * scheduler = [[BalacnedCampusESMScheduler alloc] initWithAwareStudy:awareStudy];
         [scheduler setESMWithUserInfo:notification.userInfo];
     } else if ([notification.category isEqualToString:SENSOR_PLUGIN_GOOGLE_CAL_PUSH]){
         GoogleCalPush * balancedCampusJournal = [[GoogleCalPush alloc] initWithAwareStudy:awareStudy];

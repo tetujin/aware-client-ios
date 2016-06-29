@@ -74,16 +74,18 @@
     [self setLatestValue:[NSString stringWithFormat:@"[%f] %@",offset, nt ]];
 //    [self saveData:dic];
     
+    dispatch_async(dispatch_get_main_queue(), ^{
+        AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+        EntityNTPTime * data = (EntityNTPTime *)[NSEntityDescription insertNewObjectForEntityForName:[self getEntityName]
+                                                                              inManagedObjectContext:delegate.managedObjectContext];
+        data.device_id = [self getDeviceId];
+        data.timestamp = unixtime;
+        data.drift = @(offset);
+        data.ntp_time = ntpUnixtime;
+        
+        [self saveDataToDB];
+    });
     
-    AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
-    EntityNTPTime * data = (EntityNTPTime *)[NSEntityDescription insertNewObjectForEntityForName:[self getEntityName]
-                                                                                            inManagedObjectContext:delegate.managedObjectContext];
-    data.device_id = [self getDeviceId];
-    data.timestamp = unixtime;
-    data.drift = @(offset);
-    data.ntp_time = ntpUnixtime;
-    
-    [self saveDataToDB];
 }
 
 

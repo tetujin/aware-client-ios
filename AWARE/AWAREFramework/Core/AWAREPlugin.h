@@ -12,7 +12,7 @@
 @protocol AWAREPluginDelegate <NSObject>
 //- (instancetype)initWithPluginName:(NSString *)pluginName deviceId:(NSString*) deviceId;
 - (instancetype) initWithPluginName:(NSString *)pluginName awareStudy:(AWAREStudy *) study;
-- (BOOL) startAllSensors:(double)upInterval withSettings:(NSArray *)settings;
+- (BOOL) startAllSensorsWithSettings:(NSArray *)settings;
 - (BOOL) stopAndRemoveAllSensors;
 @end
 
@@ -43,7 +43,8 @@
 /**
  * Start All sensors
  */
-- (BOOL)startAllSensors:(double)upInterval withSettings:(NSArray *)settings;
+//- (BOOL)startAllSensors:(double)upInterval withSettings:(NSArray *)settings;
+- (BOOL) startAllSensorsWithSettings:(NSArray *)settings;
 
 /**
  * Stop and remove all sensors
@@ -51,7 +52,8 @@
 - (BOOL)stopAndRemoveAllSensors;
 
 
-- (BOOL) startSensor:(double)upInterval withSettings:(NSArray *)settings;
+//- (BOOL) startSensor:(double)upInterval withSettings:(NSArray *)settings;
+- (BOOL) startSensorWithSettings:(NSArray *)settings;
 
 - (BOOL) stopSensor;
 

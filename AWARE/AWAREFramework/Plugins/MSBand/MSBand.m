@@ -7,6 +7,16 @@
 //
 
 #import "MSBand.h"
+#import "AppDelegate.h"
+#import "EntityMSBandHR.h"
+#import "EntityMSBandUV.h"
+#import "EntityMSBandGSR.h"
+#import "EntityMSBandCalorie.h"
+#import "EntityMSBandDistance.h"
+#import "EntityMSBandSkinTemp.h"
+#import "EntityMSBandPedometer.h"
+#import "EntityMSBandBatteryGauge.h"
+#import "EntityMSBandDeviceContact.h"
 
 @implementation MSBand {
     NSString* PLUGIN_MSBAND_SENSORS_CALORIES;
@@ -75,8 +85,8 @@
         // cal sensor
         calSensor = [[AWARESensor alloc] initWithAwareStudy:awareStudy
                                                  sensorName:PLUGIN_MSBAND_SENSORS_CALORIES
-                                               dbEntityName:nil
-                                                     dbType:AwareDBTypeTextFile];
+                                               dbEntityName:NSStringFromClass([EntityMSBandCalorie class])
+                                                     dbType:AwareDBTypeCoreData];
         [calSensor trackDebugEvents];
         [calSensor setBufferSize:10];
         [super addAnAwareSensor:calSensor];
@@ -84,8 +94,8 @@
         // distance sensor
         distanceSensor = [[AWARESensor alloc] initWithAwareStudy:awareStudy
                                                       sensorName:PLUGIN_MSBAND_SENSORS_DISTANCE
-                                                    dbEntityName:nil
-                                                          dbType:AwareDBTypeTextFile];
+                                                    dbEntityName:NSStringFromClass([EntityMSBandDistance class])
+                                                          dbType:AwareDBTypeCoreData];
         [distanceSensor setBufferSize:10];
         [distanceSensor trackDebugEvents];
         [super addAnAwareSensor:distanceSensor];
@@ -93,8 +103,8 @@
         // GSR sensor
         gsrSensor = [[AWARESensor alloc] initWithAwareStudy:awareStudy
                                                  sensorName:PLUGIN_MSBAND_SENSORS_GSR
-                                               dbEntityName:nil
-                                                     dbType:AwareDBTypeTextFile];
+                                               dbEntityName:NSStringFromClass([EntityMSBandGSR class])
+                                                     dbType:AwareDBTypeCoreData];
         [gsrSensor setBufferSize:30];
         [gsrSensor trackDebugEvents];
         [super addAnAwareSensor:gsrSensor];
@@ -102,8 +112,8 @@
         // HeartRate sensor
         hrSensor = [[AWARESensor alloc] initWithAwareStudy:awareStudy
                                                 sensorName:PLUGIN_MSBAND_SENSORS_HEARTRATE
-                                              dbEntityName:nil
-                                                    dbType:AwareDBTypeTextFile];
+                                              dbEntityName:NSStringFromClass([EntityMSBandHR class])
+                                                    dbType:AwareDBTypeCoreData];
         [super addAnAwareSensor:hrSensor];
         [hrSensor setBufferSize:5];
         [hrSensor trackDebugEvents];
@@ -111,8 +121,8 @@
         // UV sensor
         uvSensor = [[AWARESensor alloc] initWithAwareStudy:awareStudy
                                                 sensorName:PLUGIN_MSBAND_SENSORS_UV
-                                              dbEntityName:nil
-                                                    dbType:AwareDBTypeTextFile];
+                                              dbEntityName:NSStringFromClass([EntityMSBandUV class])
+                                                    dbType:AwareDBTypeCoreData];
         //        [uvSensor setBufferSize:3];
         [uvSensor trackDebugEvents];
         [super addAnAwareSensor:uvSensor];
@@ -120,8 +130,8 @@
         // Skin Temp sensor
         skinTempSensor = [[AWARESensor alloc] initWithAwareStudy:awareStudy
                                                       sensorName:PLUGIN_MSBAND_SENSORS_SKINTEMP
-                                                    dbEntityName:nil
-                                                          dbType:AwareDBTypeTextFile];
+                                                    dbEntityName:NSStringFromClass([EntityMSBandSkinTemp class])
+                                                          dbType:AwareDBTypeCoreData];
 //        [skinTempSensor setBufferSize:3];
         [skinTempSensor trackDebugEvents];
         [super addAnAwareSensor:skinTempSensor];
@@ -129,15 +139,15 @@
         // Pedometer
         pedometerSensor = [[AWARESensor alloc] initWithAwareStudy:awareStudy
                                                        sensorName:PLUGIN_MSBAND_SENSORS_PEDOMETER
-                                                     dbEntityName:nil
-                                                           dbType:AwareDBTypeTextFile];
+                                                     dbEntityName:NSStringFromClass([EntityMSBandPedometer class])
+                                                           dbType:AwareDBTypeCoreData];
         [super addAnAwareSensor:pedometerSensor];
         
         // Device Contact
         deviceContactSensor = [[AWARESensor alloc] initWithAwareStudy:awareStudy
                                                            sensorName:PLUGIN_MSBAND_SENSORS_DEVICECONTACT
-                                                         dbEntityName:nil
-                                                               dbType:AwareDBTypeTextFile];
+                                                         dbEntityName:NSStringFromClass([EntityMSBandDeviceContact class])
+                                                               dbType:AwareDBTypeCoreData];
         [deviceContactSensor setBufferSize:1];
         [deviceContactSensor trackDebugEvents];
         [super addAnAwareSensor:deviceContactSensor];
@@ -157,7 +167,7 @@
     [self createDeviceContactTable];
 }
 
-- (BOOL) startAllSensors:(double)upInterval withSettings:(NSArray *)settings {
+- (BOOL) startAllSensorsWithSettings:(NSArray *)settings {
     if (self.client == nil) {
         NSLog(@"Failed! No Bands attached.");
         return NO;
@@ -167,9 +177,15 @@
     
     // active_time_interval_in_minute
     intervalMin = [self getSensorSetting:settings withKey:@"active_time_interval_in_minute"];
+    if(intervalMin < 0){
+        intervalMin = 10;
+    }
     
     // active_time_in_minute
     activeMin = [self getSensorSetting:settings withKey:@"active_time_in_minute"];
+    if(activeMin  < 0){
+        activeMin = 2;
+    }
     
     timer = [NSTimer scheduledTimerWithTimeInterval:60.0f * intervalMin
                                              target:self
@@ -243,6 +259,14 @@
 }
 
 - (BOOL)syncAwareDBInForeground{
+    NSMutableDictionary * userInfo = [[NSMutableDictionary alloc] init];
+    [userInfo setObject:@100 forKey:@"KEY_UPLOAD_PROGRESS_STR"];
+    [userInfo setObject:@YES forKey:@"KEY_UPLOAD_FIN"];
+    [userInfo setObject:@YES forKey:@"KEY_UPLOAD_SUCCESS"];
+    [userInfo setObject:[self getSensorName] forKey:@"KEY_UPLOAD_SENSOR_NAME"];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"ACTION_AWARE_DATA_UPLOAD_PROGRESS"
+                                                        object:nil
+                                                      userInfo:userInfo];
     return [super syncAwareDBInForeground];
 }
 
@@ -288,17 +312,27 @@ didFailToConnectWithError:(NSError *)error{
 - (void) startCalorieSensor{
     NSLog(@"Start a Cal sensor!");
     void (^calHandler)(MSBSensorCaloriesData *, NSError *) = ^(MSBSensorCaloriesData *calData, NSError *error) {
-        NSString* data =[NSString stringWithFormat:@"%ld", calData.calories];
-        NSLog(@"Cal: %@",data);
-        NSNumber* unixtime = [self getUnixTime];
-        NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-        [dic setObject:unixtime forKey:@"timestamp"];
-        [dic setObject:[self getDeviceId] forKey:@"device_id"];
-        [dic setObject:[NSNumber numberWithInteger:calData.calories] forKey:@"calories"];
+//        NSString* cal =[NSString stringWithFormat:@"%ld", calData.calories];
+        NSLog(@"Cal: %ld",calData.calories);
         dispatch_async(dispatch_get_main_queue(), ^{
-            [calSensor setLatestValue:data];
-            [calSensor saveData:dic];
+            AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+            EntityMSBandCalorie * data = (EntityMSBandCalorie *)[NSEntityDescription insertNewObjectForEntityForName:[calSensor getEntityName]
+                                                                                              inManagedObjectContext:delegate.managedObjectContext];
+            data.device_id = [self getDeviceId];
+            data.timestamp = [self getUnixTime];
+            data.calories = @(calData.calories);
+            
+            [calSensor saveDataToDB];
         });
+//        NSNumber* unixtime = [self getUnixTime];
+//        NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+//        [dic setObject:unixtime forKey:@"timestamp"];
+//        [dic setObject:[self getDeviceId] forKey:@"device_id"];
+//        [dic setObject:[NSNumber numberWithInteger:calData.calories] forKey:@"calories"];
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            [calSensor setLatestValue:data];
+//            [calSensor saveData:dic];
+//        });
     };
     NSError *stateError;
     if (![self.client.sensorManager startCaloriesUpdatesToQueue:nil errorRef:&stateError withHandler:calHandler]) {
@@ -345,17 +379,28 @@ didFailToConnectWithError:(NSError *)error{
                 motionType = @"UNKNOWN";
                 break;
         }
-        NSNumber* unixtime = [self getUnixTime];//[NSNumber numberWithDouble:timeStamp];
-        NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-        [dic setObject:unixtime forKey:@"timestamp"];
-        [dic setObject:[self getDeviceId] forKey:@"device_id"];
-        [dic setObject:[NSNumber numberWithInteger:distanceData.totalDistance] forKey:@"distance"];
-        [dic setObject:motionType forKey:@"motiontype"];
-        
         dispatch_async(dispatch_get_main_queue(), ^{
-            [distanceSensor setLatestValue:data];
-            [distanceSensor saveData:dic];
+            AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+            EntityMSBandDistance * data = (EntityMSBandDistance *)[NSEntityDescription insertNewObjectForEntityForName:[distanceSensor getEntityName]
+                                                                                  inManagedObjectContext:delegate.managedObjectContext];
+            data.device_id = [self getDeviceId];
+            data.timestamp = [self getUnixTime];
+            data.distance = @(distanceData.totalDistance);
+            data.motiontype = motionType;
+            
+            [distanceSensor saveDataToDB];
         });
+//        NSNumber* unixtime = [self getUnixTime];//[NSNumber numberWithDouble:timeStamp];
+//        NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+//        [dic setObject:unixtime forKey:@"timestamp"];
+//        [dic setObject:[self getDeviceId] forKey:@"device_id"];
+//        [dic setObject:[NSNumber numberWithInteger:distanceData.totalDistance] forKey:@"distance"];
+//        [dic setObject:motionType forKey:@"motiontype"];
+//        
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            [distanceSensor setLatestValue:data];
+//            [distanceSensor saveData:dic];
+//        });
     };
     NSError *stateError;
     if (![self.client.sensorManager startDistanceUpdatesToQueue:nil errorRef:&stateError withHandler:distanceHandler]) {
@@ -383,17 +428,27 @@ didFailToConnectWithError:(NSError *)error{
     void (^gsrHandler)(MSBSensorGSRData *, NSError *error) = ^(MSBSensorGSRData *gsrData, NSError *error){
         NSString *data = [NSString stringWithFormat:@"%8u kOhm", (unsigned int)gsrData.resistance];
         NSLog(@"GSR: %@",data);
-        NSNumber *gerValue = [NSNumber numberWithUnsignedInteger:gsrData.resistance];
-        NSNumber* unixtime = [self getUnixTime];
-        NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-        [dic setObject:unixtime forKey:@"timestamp"];
-        [dic setObject:[self getDeviceId] forKey:@"device_id"];
-        [dic setObject:gerValue forKey:@"gsr"];
+        NSNumber *gsrValue = [NSNumber numberWithUnsignedInteger:gsrData.resistance];
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            [gsrSensor setLatestValue:data];
-            [gsrSensor saveData:dic];
+            AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+            EntityMSBandGSR * data = (EntityMSBandGSR *)[NSEntityDescription insertNewObjectForEntityForName:[gsrSensor getEntityName]
+                                                                                                inManagedObjectContext:delegate.managedObjectContext];
+            data.device_id = [self getDeviceId];
+            data.timestamp = [self getUnixTime];
+            data.gsr = gsrValue;
+            [gsrSensor saveDataToDB];
         });
+        
+//        NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+//        [dic setObject:unixtime forKey:@"timestamp"];
+//        [dic setObject:[self getDeviceId] forKey:@"device_id"];
+//        [dic setObject:gsrValue forKey:@"gsr"];
+//        
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            [gsrSensor setLatestValue:data];
+//            [gsrSensor saveData:dic];
+//        });
     };
     NSError *stateError;
     if (![self.client.sensorManager startGSRUpdatesToQueue:nil errorRef:&stateError withHandler:gsrHandler]) {
@@ -447,13 +502,7 @@ didFailToConnectWithError:(NSError *)error{
 
 - (void) startHeartRateSensor {
     void (^hrHandler)(MSBSensorHeartRateData *, NSError *) = ^(MSBSensorHeartRateData *heartRateData, NSError *error) {
-        NSString * data = [NSString stringWithFormat:@"Heart Rate: %3u %@",
-                           (unsigned int)heartRateData.heartRate,
-                           heartRateData.quality == MSBSensorHeartRateQualityAcquiring ? @"Acquiring" : @"Locked"];
-        NSLog(@"HR: %@", data);
-//        if ([self isDebug]) {
-//            [AWAREUtils sendLocalNotificationForMessage:[NSString stringWithFormat:@"HR: %@", data] soundFlag:NO];
-//        }
+        
         NSString* quality = @"";
         switch (heartRateData.quality) {
             case MSBSensorHeartRateQualityAcquiring:
@@ -466,18 +515,38 @@ didFailToConnectWithError:(NSError *)error{
                 quality = @"UNKNOWN";
                 break;
         }
-        NSNumber* unixtime = [self getUnixTime];
-        NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-        [dic setObject:unixtime forKey:@"timestamp"];
-        [dic setObject:[self getDeviceId] forKey:@"device_id"];
-        [dic setObject:[NSNumber numberWithDouble:heartRateData.heartRate] forKey:@"heartrate"];
-        [dic setObject:quality forKey:@"heartrate_quality"];
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            [hrSensor setLatestValue:data];
-            [hrSensor saveData:dic toLocalFile:PLUGIN_MSBAND_SENSORS_HEARTRATE];
-            [super setLatestValue:data]; //TODO
+            AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+            EntityMSBandHR * data = (EntityMSBandHR *)[NSEntityDescription insertNewObjectForEntityForName:[hrSensor getEntityName]
+                                                                                                inManagedObjectContext:delegate.managedObjectContext];
+            data.device_id = [self getDeviceId];
+            data.timestamp = [self getUnixTime];
+            data.heartrate = @(heartRateData.heartRate);
+            data.heartrate_quality = quality;
+            
+            [hrSensor saveDataToDB];
+            
+            // set latese sensor value
+            NSString * latestValue = [NSString stringWithFormat:@"Heart Rate: %3u %@",
+                               (unsigned int)heartRateData.heartRate,
+                               heartRateData.quality == MSBSensorHeartRateQualityAcquiring ? @"Acquiring" : @"Locked"];
+            NSLog(@"HR: %@", latestValue);
+            [super setLatestValue:latestValue];
         });
+        
+        
+//        NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+//        [dic setObject:unixtime forKey:@"timestamp"];
+//        [dic setObject:[self getDeviceId] forKey:@"device_id"];
+//        [dic setObject:[NSNumber numberWithDouble:heartRateData.heartRate] forKey:@"heartrate"];
+//        [dic setObject:quality forKey:@"heartrate_quality"];
+//        
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            [hrSensor setLatestValue:data];
+//            [hrSensor saveData:dic toLocalFile:PLUGIN_MSBAND_SENSORS_HEARTRATE];
+//            [super setLatestValue:data]; //TODO
+//        });
     };
     
     NSError *stateError;
@@ -532,16 +601,27 @@ didFailToConnectWithError:(NSError *)error{
                 break;
         }
         
-        
-        NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
-        NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-        [dic setObject:unixtime forKey:@"timestamp"];
-        [dic setObject:[self getDeviceId] forKey:@"device_id"];
-        [dic setObject:uvLevelStr forKey:@"uv"];
-        
         dispatch_async(dispatch_get_main_queue(), ^{
-            [uvSensor saveData:dic];
+            AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+            EntityMSBandUV * data = (EntityMSBandUV *)[NSEntityDescription insertNewObjectForEntityForName:[uvSensor getEntityName]
+                                                                                    inManagedObjectContext:delegate.managedObjectContext];
+            data.device_id = [self getDeviceId];
+            data.timestamp = [self getUnixTime];
+            data.uv = uvLevelStr;
+            
+            [uvSensor saveDataToDB];
         });
+        
+        
+//        NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
+//        NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+//        [dic setObject:unixtime forKey:@"timestamp"];
+//        [dic setObject:[self getDeviceId] forKey:@"device_id"];
+//        [dic setObject:uvLevelStr forKey:@"uv"];
+//        
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            [uvSensor saveData:dic];
+//        });
     };
     NSError *stateError;
     if (![self.client.sensorManager startUVUpdatesToQueue:nil errorRef:&stateError withHandler:uvHandler]) {
@@ -581,16 +661,28 @@ didFailToConnectWithError:(NSError *)error{
         if ([self isDebug]) {
             [AWAREUtils sendLocalNotificationForMessage:[NSString stringWithFormat:@"Skin: %@", data] soundFlag:NO];
         }
-        NSNumber* unixtime = [self getUnixTime]; //[NSNumber numberWithDouble:timeStamp];
-        NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-        [dic setObject:unixtime forKey:@"timestamp"];
-        [dic setObject:[self getDeviceId] forKey:@"device_id"];
-        [dic setObject:[NSNumber numberWithDouble:skinData.temperature] forKey:@"skintemp"];
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            [skinTempSensor setLatestValue:data];
-            [skinTempSensor saveData:dic];
+            AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+            EntityMSBandSkinTemp * data = (EntityMSBandSkinTemp *)[NSEntityDescription insertNewObjectForEntityForName:[skinTempSensor getEntityName]
+                                                                                    inManagedObjectContext:delegate.managedObjectContext];
+            data.device_id = [self getDeviceId];
+            data.timestamp = [self getUnixTime];
+            data.skintemp = @(skinData.temperature);
+            
+            [skinTempSensor saveDataToDB];
         });
+        
+//        NSNumber* unixtime = [self getUnixTime]; //[NSNumber numberWithDouble:timeStamp];
+//        NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+//        [dic setObject:unixtime forKey:@"timestamp"];
+//        [dic setObject:[self getDeviceId] forKey:@"device_id"];
+//        [dic setObject:[NSNumber numberWithDouble:skinData.temperature] forKey:@"skintemp"];
+//        
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            [skinTempSensor setLatestValue:data];
+//            [skinTempSensor saveData:dic];
+//        });
 
     };
     NSError *stateError;
@@ -616,15 +708,27 @@ didFailToConnectWithError:(NSError *)error{
     NSLog(@"Start a pedometer Sensor!");
     NSError * error = nil;
     void (^pedometerHandler)(MSBSensorPedometerData *, NSError *) = ^(MSBSensorPedometerData *pedometerData, NSError *error){
-        NSNumber* unixtime = [self getUnixTime];
-        NSMutableDictionary * dic = [[NSMutableDictionary alloc] init];
-        [dic setObject:unixtime forKey:@"timestamp"];
-        [dic setObject:[self getDeviceId] forKey:@"device_id"];
-        [dic setObject:[NSNumber numberWithInt:pedometerData.totalSteps] forKey:@"pedometer"];
         
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            [pedometerSensor saveData:dic];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+            EntityMSBandPedometer * data = (EntityMSBandPedometer *)[NSEntityDescription insertNewObjectForEntityForName:[pedometerSensor getEntityName]
+                                                                                    inManagedObjectContext:delegate.managedObjectContext];
+            data.device_id = [self getDeviceId];
+            data.timestamp = [self getUnixTime];
+            data.pedometer = @(pedometerData.totalSteps);
+            
+            [pedometerSensor saveDataToDB];
         });
+        
+//        NSNumber* unixtime = [self getUnixTime];
+//        NSMutableDictionary * dic = [[NSMutableDictionary alloc] init];
+//        [dic setObject:unixtime forKey:@"timestamp"];
+//        [dic setObject:[self getDeviceId] forKey:@"device_id"];
+//        [dic setObject:[NSNumber numberWithInt:pedometerData.totalSteps] forKey:@"pedometer"];
+//        
+//        dispatch_sync(dispatch_get_main_queue(), ^{
+//            [pedometerSensor saveData:dic];
+//        });
     };
     
     if(![self.client.sensorManager startPedometerUpdatesToQueue:nil errorRef:&error withHandler:pedometerHandler]){
@@ -661,15 +765,29 @@ didFailToConnectWithError:(NSError *)error{
             default:
                 break;
         }
-        NSNumber* unixtime = [self getUnixTime]; //[NSNumber numberWithDouble:timeStamp];
-        NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-        [dic setObject:unixtime forKey:@"timestamp"];
-        [dic setObject:[self getDeviceId] forKey:@"device_id"];
-        [dic setObject:wornState forKey:@"devicecontact"];
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            [deviceContactSensor saveData:dic];
+            AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+            EntityMSBandDeviceContact * data = (EntityMSBandDeviceContact *)[NSEntityDescription insertNewObjectForEntityForName:[deviceContactSensor getEntityName]
+                                                                                    inManagedObjectContext:delegate.managedObjectContext];
+            data.device_id = [self getDeviceId];
+            data.timestamp = [self getUnixTime];
+            data.devicecontact = wornState;
+            
+            [deviceContactSensor saveDataToDB];
+    
         });
+        
+        
+//        NSNumber* unixtime = [self getUnixTime]; //[NSNumber numberWithDouble:timeStamp];
+//        NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+//        [dic setObject:unixtime forKey:@"timestamp"];
+//        [dic setObject:[self getDeviceId] forKey:@"device_id"];
+//        [dic setObject:wornState forKey:@"devicecontact"];
+//        
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            [deviceContactSensor saveData:dic];
+//        });
     };
     
     NSError * error = nil;
@@ -709,55 +827,55 @@ didFailToConnectWithError:(NSError *)error{
  * ========================================
  */
 
-- (AWARESensor *) getAccSensor {
-    AWARESensor *accSensor = [[AWARESensor alloc] initWithAwareStudy:awareStudy
-                                                          sensorName:PLUGIN_MSBAND_SENSORS_ACC
-                                                        dbEntityName:nil
-                                                              dbType:AwareDBTypeTextFile];
-    
-    NSString *query = [[NSString alloc] init];
-    query = @"_id integer primary key autoincrement,"
-    "timestamp real default 0,"
-    "device_id text default '',"
-    "double_values_0 real default 0,"
-    "double_values_1 real default 0,"
-    "double_values_2 real default 0,"
-    "accuracy integer default 0,"
-    "label text default '',"
-    "UNIQUE (timestamp,device_id)";
-    [accSensor createTable:query withTableName:PLUGIN_MSBAND_SENSORS_ACC];
-    
-    NSLog(@"Start an Accelerometer Sensor!");
-    void (^accelerometerHandler)(MSBSensorAccelerometerData *, NSError *) = ^(MSBSensorAccelerometerData *accelerometerData, NSError *error){
-        NSString* data = [NSString stringWithFormat:@"X = %5.2f Y = %5.2f Z = %5.2f",
-                          accelerometerData.x,
-                          accelerometerData.y,
-                          accelerometerData.z];
-        NSNumber* unixtime = [self getUnixTime];
-        
-        NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-        [dic setObject:unixtime forKey:@"timestamp"];
-        [dic setObject:[self getDeviceId] forKey:@"device_id"];
-        [dic setObject:[NSNumber numberWithDouble:accelerometerData.x] forKey:@"double_values_0"];
-        [dic setObject:[NSNumber numberWithDouble:accelerometerData.y] forKey:@"double_values_1"];
-        [dic setObject:[NSNumber numberWithDouble:accelerometerData.z] forKey:@"double_values_2"];
-        [dic setObject:@0 forKey:@"accuracy"];
-        [dic setObject:@"" forKey:@"label"];
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [accSensor setLatestValue:data];
-            [accSensor saveData:dic];
-        });
-    };
-    NSError *stateError;
-    //    //Start accelerometer sensor on a MSBand.
-    if (![self.client.sensorManager startAccelerometerUpdatesToQueue:nil errorRef:&stateError withHandler:accelerometerHandler]) {
-        NSLog(@"Accelerometer is faild: %@", stateError.description);
-    }
-    [accSensor setBufferSize:100];
-    [accSensor trackDebugEvents];
-    return accSensor;
-}
+//- (AWARESensor *) getAccSensor {
+//    AWARESensor *accSensor = [[AWARESensor alloc] initWithAwareStudy:awareStudy
+//                                                          sensorName:PLUGIN_MSBAND_SENSORS_ACC
+//                                                        dbEntityName:nil
+//                                                              dbType:AwareDBTypeTextFile];
+//    
+//    NSString *query = [[NSString alloc] init];
+//    query = @"_id integer primary key autoincrement,"
+//    "timestamp real default 0,"
+//    "device_id text default '',"
+//    "double_values_0 real default 0,"
+//    "double_values_1 real default 0,"
+//    "double_values_2 real default 0,"
+//    "accuracy integer default 0,"
+//    "label text default '',"
+//    "UNIQUE (timestamp,device_id)";
+//    [accSensor createTable:query withTableName:PLUGIN_MSBAND_SENSORS_ACC];
+//    
+//    NSLog(@"Start an Accelerometer Sensor!");
+//    void (^accelerometerHandler)(MSBSensorAccelerometerData *, NSError *) = ^(MSBSensorAccelerometerData *accelerometerData, NSError *error){
+//        NSString* data = [NSString stringWithFormat:@"X = %5.2f Y = %5.2f Z = %5.2f",
+//                          accelerometerData.x,
+//                          accelerometerData.y,
+//                          accelerometerData.z];
+//        NSNumber* unixtime = [self getUnixTime];
+//        
+//        NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+//        [dic setObject:unixtime forKey:@"timestamp"];
+//        [dic setObject:[self getDeviceId] forKey:@"device_id"];
+//        [dic setObject:[NSNumber numberWithDouble:accelerometerData.x] forKey:@"double_values_0"];
+//        [dic setObject:[NSNumber numberWithDouble:accelerometerData.y] forKey:@"double_values_1"];
+//        [dic setObject:[NSNumber numberWithDouble:accelerometerData.z] forKey:@"double_values_2"];
+//        [dic setObject:@0 forKey:@"accuracy"];
+//        [dic setObject:@"" forKey:@"label"];
+//        
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            [accSensor setLatestValue:data];
+//            [accSensor saveData:dic];
+//        });
+//    };
+//    NSError *stateError;
+//    //    //Start accelerometer sensor on a MSBand.
+//    if (![self.client.sensorManager startAccelerometerUpdatesToQueue:nil errorRef:&stateError withHandler:accelerometerHandler]) {
+//        NSLog(@"Accelerometer is faild: %@", stateError.description);
+//    }
+//    [accSensor setBufferSize:100];
+//    [accSensor trackDebugEvents];
+//    return accSensor;
+//}
 
 
 

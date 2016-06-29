@@ -8,6 +8,8 @@
 
 #import "Labels.h"
 #import "AWAREKeys.h"
+#import "AppDelegate.h"
+#import "EntityLabel.h"
 
 @implementation Labels {
     NSString * KEY_LABELS_TIMESTAMP;
@@ -22,8 +24,8 @@
 - (instancetype)initWithAwareStudy:(AWAREStudy *)study{
     self = [super initWithAwareStudy:study
                           sensorName:SENSOR_LABELS
-                        dbEntityName:nil
-                              dbType:AwareDBTypeTextFile];
+                        dbEntityName:NSStringFromClass([EntityLabel class])
+                              dbType:AwareDBTypeCoreData];
     if (self) {
         KEY_LABELS_TIMESTAMP = @"timestamp";
         KEY_LABELS_DEVICE_ID = @"device_id";
@@ -145,15 +147,30 @@
     if (triggerTime == nil) triggerTime = [NSDate new];
     if (answeredTime == nil) answeredTime = [NSDate new];
     
-    NSMutableDictionary *query = [[NSMutableDictionary alloc] init];
-    [query setObject:[AWAREUtils getUnixTimestamp:triggerTime] forKey:KEY_LABELS_TIMESTAMP];
-    [query setObject:[self getDeviceId] forKey:KEY_LABELS_DEVICE_ID];
-    [query setObject:label forKey:KEY_LABELS_LABEL];
-    [query setObject:key forKey:KEY_LABELS_KEY];
-    [query setObject:type forKey:KEY_LABELS_TYPE];
-    [query setObject:notificationBody forKey:KEY_LABELS_NOTIFICATION_BODY];
-    [query setObject:[AWAREUtils getUnixTimestamp:answeredTime] forKey:KEY_LABELS_ANSWERED_TIMESTAMP];
-    [self saveData:query];
+//    NSMutableDictionary *query = [[NSMutableDictionary alloc] init];
+//    [query setObject:[AWAREUtils getUnixTimestamp:triggerTime] forKey:KEY_LABELS_TIMESTAMP];
+//    [query setObject:[self getDeviceId] forKey:KEY_LABELS_DEVICE_ID];
+//    [query setObject:label forKey:KEY_LABELS_LABEL];
+//    [query setObject:key forKey:KEY_LABELS_KEY];
+//    [query setObject:type forKey:KEY_LABELS_TYPE];
+//    [query setObject:notificationBody forKey:KEY_LABELS_NOTIFICATION_BODY];
+//    [query setObject:[AWAREUtils getUnixTimestamp:answeredTime] forKey:KEY_LABELS_ANSWERED_TIMESTAMP];
+//    [self saveData:query];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+        EntityLabel * data = (EntityLabel *)[NSEntityDescription insertNewObjectForEntityForName:[self getEntityName]
+                                                                            inManagedObjectContext:delegate.managedObjectContext];
+        data.device_id = [self getDeviceId];
+        data.timestamp = [AWAREUtils getUnixTimestamp:triggerTime];
+        data.label = label;
+        data.type = type;
+        data.key = key;
+        data.notification_body = notificationBody;
+        data.answered_timestamp = [AWAREUtils getUnixTimestamp:answeredTime];
+        [self saveDataToDB];
+    });
+
 }
 
 

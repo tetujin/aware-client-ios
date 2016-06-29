@@ -324,6 +324,14 @@
     }];
 }
 
+- (bool)isUploading{
+    if([fusedLocationsSensor isUploading] || [visitLocationSensor isUploading]){
+        return YES;
+    }else{
+        return NO;
+    }
+}
+
 //- (void)locationManager:(CLLocationManager *)manager didUpdateHeading:(CLHeading *)newHeading {
 //    if (newHeading.headingAccuracy < 0)
 //        return;

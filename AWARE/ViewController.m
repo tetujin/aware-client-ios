@@ -29,7 +29,7 @@
 #import "Orientation.h"
 #import "Debug.h"
 #import "AWAREHealthKit.h"
-#import "Scheduler.h"
+#import "BalacnedCampusESMScheduler.h"
 #import "Memory.h"
 #import "Labels.h"
 #import "BLEHeartRate.h"

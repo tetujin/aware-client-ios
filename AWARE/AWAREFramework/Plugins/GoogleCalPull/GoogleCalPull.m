@@ -225,10 +225,13 @@
 }
 
 - (void) saveCalEvent:(CalEvent *)calEvent{
-//    CalEvent *calEvent = [[CalEvent alloc] initWithEKEvent:event eventType:eventType];
+////    CalEvent *calEvent = [[CalEvent alloc] initWithEKEvent:event eventType:eventType];
     NSMutableDictionary * dic = [calEvent getCalEventAsDictionaryWithDeviceId:[awareStudy getDeviceId]
                                                                     timestamp:[AWAREUtils getUnixTimestamp:[NSDate new]]];
     [self saveData:dic toLocalFile:googleCalPullSensorName];
+    
+    
+    
 }
 
 

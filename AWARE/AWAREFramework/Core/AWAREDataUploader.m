@@ -118,6 +118,17 @@
         [self saveDebugEventWithText:message type:DebugTypeInfo  label:@""];
         [self dataSyncIsFinishedCorrectoly];
         [awareLocalStorage restMark];
+        
+        
+        NSMutableDictionary * userInfo = [[NSMutableDictionary alloc] init];
+        [userInfo setObject:@100 forKey:@"KEY_UPLOAD_PROGRESS_STR"];
+        [userInfo setObject:@YES forKey:@"KEY_UPLOAD_FIN"];
+        [userInfo setObject:@YES forKey:@"KEY_UPLOAD_SUCCESS"];
+        [userInfo setObject:sensorName forKey:@"KEY_UPLOAD_SENSOR_NAME"];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"ACTION_AWARE_DATA_UPLOAD_PROGRESS"
+                                                            object:nil
+                                                          userInfo:userInfo];
+        
         return;
     }
     
@@ -311,6 +322,15 @@ didReceiveResponse:(NSURLResponse *)response
             // init http/post condition
             [self dataSyncIsFinishedCorrectoly];
             
+            NSMutableDictionary * userInfo = [[NSMutableDictionary alloc] init];
+            [userInfo setObject:@100 forKey:@"KEY_UPLOAD_PROGRESS_STR"];
+            [userInfo setObject:@YES forKey:@"KEY_UPLOAD_FIN"];
+            [userInfo setObject:@YES forKey:@"KEY_UPLOAD_SUCCESS"];
+            [userInfo setObject:sensorName forKey:@"KEY_UPLOAD_SENSOR_NAME"];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"ACTION_AWARE_DATA_UPLOAD_PROGRESS"
+                                                                object:nil
+                                                              userInfo:userInfo];
+            
         } else {
             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
             NSInteger length = [userDefaults integerForKey:KEY_MAX_DATA_SIZE];
@@ -330,6 +350,20 @@ didReceiveResponse:(NSURLResponse *)response
                                     type:DebugTypeInfo
                                    label:syncDataQueryIdentifier];
             [self postSensorDataWithSensorName:sensorName session:nil];
+            
+            double progress = [awareLocalStorage getMarker]/(double)denominator*100;
+            if(progress>100){
+                progress = 100;
+            }
+            
+            NSMutableDictionary * userInfo = [[NSMutableDictionary alloc] init];
+            [userInfo setObject:@(progress) forKey:@"KEY_UPLOAD_PROGRESS_STR"];
+            [userInfo setObject:@YES forKey:@"KEY_UPLOAD_FIN"];
+            [userInfo setObject:@YES forKey:@"KEY_UPLOAD_SUCCESS"];
+            [userInfo setObject:sensorName forKey:@"KEY_UPLOAD_SENSOR_NAME"];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"ACTION_AWARE_DATA_UPLOAD_PROGRESS"
+                                                                object:nil
+                                                              userInfo:userInfo];
         }
     }
 }
@@ -351,43 +385,46 @@ didReceiveResponse:(NSURLResponse *)response
 }
 
 - (BOOL) syncAwareDBInForegroundWithSensorName:(NSString*) name {
-    while(true){
-        if([self foregroundSyncRequestWithSensorName:name]){
-            NSLog(@"%d", [awareLocalStorage getMarker]);
-            if([awareLocalStorage getMarker] == 0){
-                bool isRemoved = [awareLocalStorage clearFile:sensorName];
-                if (isRemoved) {
-                    [self saveDebugEventWithText:[NSString stringWithFormat:@"[%@] Sucessed to remove stored data in the foreground", sensorName]
-                                            type:DebugTypeInfo
-                                           label:@""];
-                }else{
-                    [self saveDebugEventWithText:[NSString stringWithFormat:@"[%@] Failed to remove stored data in the foreground", sensorName]
-                                            type:DebugTypeError
-                                           label:@""];
-                }
-                break;
-            }else{
-                [self saveDebugEventWithText:[NSString stringWithFormat:@"[%@] Upload stored data in the foreground again", sensorName]
-                                        type:DebugTypeInfo
-                                       label:@""];
-            }
-        }else{
-            NSLog(@"Error");
-            [self saveDebugEventWithText:[NSString stringWithFormat:@"[%@] Failed to upload sensor data in the foreground", sensorName]
-                                    type:DebugTypeError
-                                   label:@""];
-            return NO;
-        }
-    }
     
-    NSMutableDictionary * userInfo = [[NSMutableDictionary alloc] init];
-    [userInfo setObject:@100 forKey:@"KEY_UPLOAD_PROGRESS_STR"];
-    [userInfo setObject:@YES forKey:@"KEY_UPLOAD_FIN"];
-    [userInfo setObject:@YES forKey:@"KEY_UPLOAD_SUCCESS"];
-    [userInfo setObject:sensorName forKey:@"KEY_UPLOAD_SENSOR_NAME"];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"ACTION_AWARE_DATA_UPLOAD_PROGRESS"
-                                                        object:nil
-                                                      userInfo:userInfo];
+    [self syncAwareDBInBackground];
+    
+//    while(true){
+//        if([self foregroundSyncRequestWithSensorName:name]){
+//            NSLog(@"%d", [awareLocalStorage getMarker]);
+//            if([awareLocalStorage getMarker] == 0){
+//                bool isRemoved = [awareLocalStorage clearFile:sensorName];
+//                if (isRemoved) {
+//                    [self saveDebugEventWithText:[NSString stringWithFormat:@"[%@] Sucessed to remove stored data in the foreground", sensorName]
+//                                            type:DebugTypeInfo
+//                                           label:@""];
+//                }else{
+//                    [self saveDebugEventWithText:[NSString stringWithFormat:@"[%@] Failed to remove stored data in the foreground", sensorName]
+//                                            type:DebugTypeError
+//                                           label:@""];
+//                }
+//                break;
+//            }else{
+//                [self saveDebugEventWithText:[NSString stringWithFormat:@"[%@] Upload stored data in the foreground again", sensorName]
+//                                        type:DebugTypeInfo
+//                                       label:@""];
+//            }
+//        }else{
+//            NSLog(@"Error");
+//            [self saveDebugEventWithText:[NSString stringWithFormat:@"[%@] Failed to upload sensor data in the foreground", sensorName]
+//                                    type:DebugTypeError
+//                                   label:@""];
+//            return NO;
+//        }
+//    }
+//    
+//    NSMutableDictionary * userInfo = [[NSMutableDictionary alloc] init];
+//    [userInfo setObject:@100 forKey:@"KEY_UPLOAD_PROGRESS_STR"];
+//    [userInfo setObject:@YES forKey:@"KEY_UPLOAD_FIN"];
+//    [userInfo setObject:@YES forKey:@"KEY_UPLOAD_SUCCESS"];
+//    [userInfo setObject:sensorName forKey:@"KEY_UPLOAD_SENSOR_NAME"];
+//    [[NSNotificationCenter defaultCenter] postNotificationName:@"ACTION_AWARE_DATA_UPLOAD_PROGRESS"
+//                                                        object:nil
+//                                                      userInfo:userInfo];
     return YES;
 }
 

@@ -23,7 +23,7 @@
     self = [super initWithAwareStudy:study
                           sensorName:@"push_notification_device_tokens"
                         dbEntityName:NSStringFromClass([EntityPushNotification class])
-                              dbType:AwareDBTypeTextFile];
+                              dbType:AwareDBTypeCoreData];
     if(self != nil){
         KEY_PUSH_DEVICE_ID = @"device_id";
         KEY_PUSH_TIMESTAMP = @"timestamp";
@@ -67,13 +67,22 @@
     if (token == nil) {
         return;
     }
-    NSMutableDictionary * dict = [[NSMutableDictionary alloc] init];
-    [dict setObject:[AWAREUtils getUnixTimestamp:[NSDate new]] forKey:KEY_PUSH_TIMESTAMP];
-    [dict setObject:[self getDeviceId] forKey:KEY_PUSH_DEVICE_ID];
-    [dict setObject:token forKey:KEY_PUSH_TOKEN];
+//    NSMutableDictionary * dict = [[NSMutableDictionary alloc] init];
+//    [dict setObject:[AWAREUtils getUnixTimestamp:[NSDate new]] forKey:KEY_PUSH_TIMESTAMP];
+//    [dict setObject:[self getDeviceId] forKey:KEY_PUSH_DEVICE_ID];
+//    [dict setObject:token forKey:KEY_PUSH_TOKEN];
+//    [self saveData:dict];
+    NSNumber *unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
     
-    [self saveData:dict];
+    AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+    EntityPushNotification * entity = (EntityPushNotification *)[NSEntityDescription insertNewObjectForEntityForName:[self getEntityName]
+                                                                  inManagedObjectContext:delegate.managedObjectContext];
+    entity.device_id = [self getDeviceId];
+    entity.timestamp = unixtime;
+    entity.token = token;
     
+    [self saveDataToDB];
+
     // Save the token to user default
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     [defaults setObject:token forKey:KEY_APNS_TOKEN];

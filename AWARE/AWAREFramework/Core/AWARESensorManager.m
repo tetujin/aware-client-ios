@@ -45,7 +45,7 @@
 #import "GoogleCalPull.h"
 #import "GoogleCalPush.h"
 #import "GoogleLogin.h"
-#import "Scheduler.h"
+#import "BalacnedCampusESMScheduler.h"
 #import "FusedLocations.h"
 #import "Pedometer.h"
 #import "BLEHeartRate.h"
@@ -72,6 +72,8 @@
     NSObject * observer;
     NSMutableDictionary * progresses;
     int manualUploadTime;
+    BOOL alertState;
+    NSDictionary * previousProgresses;
 }
 
 /**
@@ -84,9 +86,12 @@
         awareSensors = [[NSMutableArray alloc] init];
         awareStudy = study;
         lock = false;
+
         manualUploadProgress = 0;
         numberOfSensors = 0;
         manualUploadTime = 0;
+        alertState = NO;
+        previousProgresses = [[NSDictionary alloc] init];
     }
     return self;
 }
@@ -219,7 +224,7 @@
             }else if([pluginName isEqualToString:[NSString stringWithFormat:@"status_%@",SENSOR_PLUGIN_GOOGLE_LOGIN]]){
                 awareSensor = [[GoogleLogin alloc] initWithAwareStudy:awareStudy];
             }else if([pluginName isEqualToString:[NSString stringWithFormat:@"status_%@",SENSOR_PLUGIN_CAMPUS]]){
-                awareSensor = [[Scheduler alloc] initWithAwareStudy:awareStudy];
+                awareSensor = [[BalacnedCampusESMScheduler alloc] initWithAwareStudy:awareStudy];
             }else if([pluginName isEqualToString:[NSString stringWithFormat:@"status_%@",SENSOR_GOOGLE_FUSED_LOCATION]]){
                 awareSensor = [[FusedLocations alloc] initWithAwareStudy:awareStudy];
             }else if([pluginName isEqualToString:[NSString stringWithFormat:@"status_%@",SENSOR_AMBIENT_NOISE]]){
@@ -525,29 +530,32 @@
             }
             
         }
-        
-        manualUploadTime ++;
-        if(manualUploadTime > 60 ){
-            manualUploadTime = 0;
-            for (id key in [progresses keyEnumerator]) {
-                double progress = [[progresses objectForKey:key] doubleValue];
-                if(progress == 0){
-                    UIAlertView *alert = [ [UIAlertView alloc]
-                                          initWithTitle:@"Manual Upload"
-                                          message:@"Do you continue to upload sensor data? Perhaps, this manual upload process occurred an error. Please try manual upload again."
-                                          delegate:self
-                                          cancelButtonTitle:@"NO"
-                                          otherButtonTitles:@"YES",nil];
-                    [alert show];
-                    break;
-                }
+    }
+    
+    /** ========= Freeze ======== */
+    manualUploadTime ++;
+    NSLog(@"%d", manualUploadTime);
+    if(manualUploadTime > 60 ){
+        manualUploadTime = 0;
+        for (id key in [progresses keyEnumerator]) {
+            double progress = [[progresses objectForKey:key] doubleValue];
+            if(progress == 0 && alertState == NO ){
+                alertState = YES;
+                UIAlertView *alert = [ [UIAlertView alloc]
+                                      initWithTitle:@"Manual Upload"
+                                      message:@"Do you continue to upload sensor data? Perhaps, this manual upload process occurred an error. Please try manual upload again."
+                                      delegate:self
+                                      cancelButtonTitle:@"NO"
+                                      otherButtonTitles:@"YES",nil];
+                [alert show];
+                break;
             }
         }
-        
-
+        previousProgresses = progresses;
     }
     
     
+    /** =======  WiFi network ======= */
     if(![awareStudy isWifiReachable]){
         // stop NSTimer
         [manualUploadMonitor invalidate];
@@ -559,11 +567,11 @@
         AudioServicesPlayAlertSound(1324);
         
         if([AWAREUtils isBackground]){
-            [AWAREUtils sendLocalNotificationForMessage:@"[Manual Upload] Fail to upload sensor data. Please try upload again." soundFlag:YES];
+            [AWAREUtils sendLocalNotificationForMessage:@"[Manual Upload] WiFi connection is closed. Please try upload again with WiFi." soundFlag:YES];
         }else{
             UIAlertView *alert = [ [UIAlertView alloc]
                                   initWithTitle:@""
-                                  message:@"[Manual Upload] Fail to upload sensor data. Please try upload again."
+                                  message:@"[Manual Upload] WiFi connection is closed. Please try upload again with WiFi."
                                   delegate:nil
                                   cancelButtonTitle:@"OK"
                                   otherButtonTitles:nil];
@@ -571,6 +579,7 @@
         }
     }
     
+    /** =========  Battery Charging  ====== */
     if( [UIDevice currentDevice].batteryState == UIDeviceBatteryStateUnplugged ){
         [manualUploadMonitor invalidate];
         manualUploadMonitor = nil;
@@ -581,11 +590,11 @@
         AudioServicesPlayAlertSound(1324);
         
         if([AWAREUtils isBackground]){
-            [AWAREUtils sendLocalNotificationForMessage:@"[Manual Upload] Fail to upload sensor data. Please try upload again." soundFlag:YES];
+            [AWAREUtils sendLocalNotificationForMessage:@"[Manual Upload] The battery is not charged. Please try upload again with battery charging." soundFlag:YES];
         }else{
             UIAlertView *alert = [ [UIAlertView alloc]
                                   initWithTitle:@""
-                                  message:@"[Manual Upload] Fail to upload sensor data. Please try upload again."
+                                  message:@"[Manual Upload] The battery is not charged. Please try upload again with battery charging."
                                   delegate:nil
                                   cancelButtonTitle:@"OK"
                                   otherButtonTitles:nil];
@@ -606,6 +615,7 @@
         AudioServicesPlayAlertSound(1324);
         [SVProgressHUD performSelector:@selector(dismiss) withObject:nil afterDelay:3.0f];
     }
+    alertState = NO;
 }
 
 

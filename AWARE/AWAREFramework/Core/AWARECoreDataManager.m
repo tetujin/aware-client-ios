@@ -393,9 +393,9 @@
              }
              [fetchRequest setEntity:[NSEntityDescription entityForName:entityName inManagedObjectContext:_mainQueueManagedObjectContext]];
              [fetchRequest setIncludesSubentities:NO];
-            
+             [fetchRequest setResultType:NSDictionaryResultType];
              [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"timestamp >= %@", unixtimeOfUploadingData]];
-             
+            
              //Set sort option
              NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"timestamp" ascending:YES];
              NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
@@ -403,11 +403,11 @@
              
             //Get NSManagedObject from managedObjectContext by using fetch setting
             NSArray *results = [private executeFetchRequest:fetchRequest error:nil] ;
-
+            
+            dbCondition = AwareDBConditionNormal;
             
             if (results.count == 0 || results.count == NSNotFound) {
                 [self dataSyncIsFinishedCorrectoly];
-                dbCondition = AwareDBConditionNormal;
                 NSMutableDictionary * userInfo = [[NSMutableDictionary alloc] init];
                 [userInfo setObject:@100 forKey:@"KEY_UPLOAD_PROGRESS_STR"];
                 [userInfo setObject:@YES forKey:@"KEY_UPLOAD_FIN"];
@@ -416,24 +416,26 @@
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"ACTION_AWARE_DATA_UPLOAD_PROGRESS"
                                                                     object:nil
                                                                   userInfo:userInfo];
-
                 return;
             }
         
-            NSMutableArray *array = [[NSMutableArray alloc] init];
-            for (NSManagedObject *data in results) {
-                NSArray *keys = [[[data entity] attributesByName] allKeys];
-                NSDictionary *dict = [data dictionaryWithValuesForKeys:keys];
+            NSMutableArray *array = [[NSMutableArray alloc] initWithArray:results];
+            for (NSDictionary * dict in array) {
                 unixtimeOfUploadingData = [dict objectForKey:@"timestamp"];
-                //        NSLog(@"timestamp: %@", unixtimeOfUploadingData );
-                [array addObject:dict];
             }
+//            for (NSManagedObject *data in results) {
+//                NSArray *keys = [[[data entity] attributesByName] allKeys];
+//                NSDictionary *dict = [data dictionaryWithValuesForKeys:keys];
+//                unixtimeOfUploadingData = [dict objectForKey:@"timestamp"];
+//                //        NSLog(@"timestamp: %@", unixtimeOfUploadingData );
+//                [array addObject:dict];
+//            }
+            
             
             if (results != nil) {
                 NSError * error = nil;
                 NSData * jsonData = [NSJSONSerialization dataWithJSONObject:array options:0 error:&error];
                 if (error == nil && jsonData != nil) {
-                    dbCondition = AwareDBConditionNormal;
                     sensorData = jsonData; //[[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
                     dispatch_async(dispatch_get_main_queue(), ^{
                         if (sensorData == nil || sensorData.length == 0 || sensorData.length == 2) { // || [sensorData isEqualToString:@"[]"]) {

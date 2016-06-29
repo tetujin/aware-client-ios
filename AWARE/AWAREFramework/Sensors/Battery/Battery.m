@@ -140,6 +140,13 @@
     return YES;
 }
 
+- (bool)isUploading{
+    if([super isUploading] || [batteryChargeSensor isUploading] || [batteryDischargeSensor isUploading]){
+        return YES;
+    }else{
+        return NO;
+    }
+}
 
 
 //////////////////////////////

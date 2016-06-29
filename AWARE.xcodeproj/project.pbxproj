@@ -158,7 +158,6 @@
 		169C888A1D01382C00825761 /* BluetoothScanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 169C87CF1D01382C00825761 /* BluetoothScanner.m */; };
 		169C888B1D01382C00825761 /* MDBluetoothDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 169C87D11D01382C00825761 /* MDBluetoothDevice.m */; };
 		169C888C1D01382C00825761 /* MDBluetoothManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 169C87D31D01382C00825761 /* MDBluetoothManager.m */; };
-		169C888D1D01382C00825761 /* CalEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 169C87D71D01382C00825761 /* CalEvent.m */; };
 		169C888E1D01382C00825761 /* Calls.m in Sources */ = {isa = PBXBuildFile; fileRef = 169C87D91D01382C00825761 /* Calls.m */; };
 		169C888F1D01382C00825761 /* Debug.m in Sources */ = {isa = PBXBuildFile; fileRef = 169C87DC1D01382C00825761 /* Debug.m */; };
 		169C88901D01382C00825761 /* Gravity.m in Sources */ = {isa = PBXBuildFile; fileRef = 169C87DF1D01382C00825761 /* Gravity.m */; };
@@ -172,7 +171,6 @@
 		169C88981D01382C00825761 /* Processor.m in Sources */ = {isa = PBXBuildFile; fileRef = 169C87F71D01382C00825761 /* Processor.m */; };
 		169C88991D01382C00825761 /* Proximity.m in Sources */ = {isa = PBXBuildFile; fileRef = 169C880E1D01382C00825761 /* Proximity.m */; };
 		169C889A1D01382C00825761 /* Rotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 169C88111D01382C00825761 /* Rotation.m */; };
-		169C889B1D01382C00825761 /* Scheduler.m in Sources */ = {isa = PBXBuildFile; fileRef = 169C88141D01382C00825761 /* Scheduler.m */; };
 		169C889C1D01382C00825761 /* Screen.m in Sources */ = {isa = PBXBuildFile; fileRef = 169C88171D01382C00825761 /* Screen.m */; };
 		169C889D1D01382C00825761 /* Timezone.m in Sources */ = {isa = PBXBuildFile; fileRef = 169C881A1D01382C00825761 /* Timezone.m */; };
 		169C889E1D01382C00825761 /* Wifi.m in Sources */ = {isa = PBXBuildFile; fileRef = 169C88221D01382C00825761 /* Wifi.m */; };
@@ -180,6 +178,7 @@
 		169C88A01D01382C00825761 /* QRCodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 169C88271D01382C00825761 /* QRCodeViewController.m */; };
 		169C88A11D01382C00825761 /* WebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 169C88291D01382C00825761 /* WebViewController.m */; };
 		169C88AD1D0142C300825761 /* TCQMaker.m in Sources */ = {isa = PBXBuildFile; fileRef = 169C88AC1D0142C300825761 /* TCQMaker.m */; };
+		16A45CDF1D2392A1008A02B1 /* BalacnedCampusESMScheduler.m in Sources */ = {isa = PBXBuildFile; fileRef = 16A45CDE1D2392A1008A02B1 /* BalacnedCampusESMScheduler.m */; };
 		16B0776C1D192663009C070B /* EntityRotation+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B077691D192663009C070B /* EntityRotation+CoreDataProperties.m */; };
 		16B0776D1D192663009C070B /* EntityRotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B0776B1D192663009C070B /* EntityRotation.m */; };
 		16B077721D19288A009C070B /* EntityScreen+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B0776F1D19288A009C070B /* EntityScreen+CoreDataProperties.m */; };
@@ -208,6 +207,27 @@
 		16B077C81D1A57DD009C070B /* EntityNTPTime.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B077C61D1A57DD009C070B /* EntityNTPTime.m */; };
 		16B077D31D1A5F51009C070B /* EntityOpenWeather+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B077D01D1A5F51009C070B /* EntityOpenWeather+CoreDataProperties.m */; };
 		16B077D41D1A5F51009C070B /* EntityOpenWeather.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B077D21D1A5F51009C070B /* EntityOpenWeather.m */; };
+		16B0780A1D1D8CCE009C070B /* CalEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B078091D1D8CCE009C070B /* CalEvent.m */; };
+		16B0780F1D1F2487009C070B /* EntityLabel+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B0780C1D1F2487009C070B /* EntityLabel+CoreDataProperties.m */; };
+		16B078101D1F2487009C070B /* EntityLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B0780E1D1F2487009C070B /* EntityLabel.m */; };
+		16B078351D1F918B009C070B /* EntityMSBandGSR+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B078121D1F918B009C070B /* EntityMSBandGSR+CoreDataProperties.m */; };
+		16B078361D1F918B009C070B /* EntityMSBandGSR.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B078141D1F918B009C070B /* EntityMSBandGSR.m */; };
+		16B078371D1F918B009C070B /* EntityMSBandUV+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B078161D1F918B009C070B /* EntityMSBandUV+CoreDataProperties.m */; };
+		16B078381D1F918B009C070B /* EntityMSBandUV.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B078181D1F918B009C070B /* EntityMSBandUV.m */; };
+		16B078391D1F918B009C070B /* EntityMSBandBatteryGauge+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B0781A1D1F918B009C070B /* EntityMSBandBatteryGauge+CoreDataProperties.m */; };
+		16B0783A1D1F918B009C070B /* EntityMSBandBatteryGauge.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B0781C1D1F918B009C070B /* EntityMSBandBatteryGauge.m */; };
+		16B0783B1D1F918B009C070B /* EntityMSBandPedometer+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B0781E1D1F918B009C070B /* EntityMSBandPedometer+CoreDataProperties.m */; };
+		16B0783C1D1F918B009C070B /* EntityMSBandPedometer.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B078201D1F918B009C070B /* EntityMSBandPedometer.m */; };
+		16B0783D1D1F918B009C070B /* EntityMSBandDeviceContact+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B078221D1F918B009C070B /* EntityMSBandDeviceContact+CoreDataProperties.m */; };
+		16B0783E1D1F918B009C070B /* EntityMSBandDeviceContact.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B078241D1F918B009C070B /* EntityMSBandDeviceContact.m */; };
+		16B0783F1D1F918B009C070B /* EntityMSBandCalorie+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B078261D1F918B009C070B /* EntityMSBandCalorie+CoreDataProperties.m */; };
+		16B078401D1F918B009C070B /* EntityMSBandCalorie.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B078281D1F918B009C070B /* EntityMSBandCalorie.m */; };
+		16B078411D1F918B009C070B /* EntityMSBandSkinTemp+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B0782A1D1F918B009C070B /* EntityMSBandSkinTemp+CoreDataProperties.m */; };
+		16B078421D1F918B009C070B /* EntityMSBandSkinTemp.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B0782C1D1F918B009C070B /* EntityMSBandSkinTemp.m */; };
+		16B078431D1F918B009C070B /* EntityMSBandDistance+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B0782E1D1F918B009C070B /* EntityMSBandDistance+CoreDataProperties.m */; };
+		16B078441D1F918B009C070B /* EntityMSBandDistance.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B078301D1F918B009C070B /* EntityMSBandDistance.m */; };
+		16B078451D1F918B009C070B /* EntityMSBandHR+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B078321D1F918B009C070B /* EntityMSBandHR+CoreDataProperties.m */; };
+		16B078461D1F918B009C070B /* EntityMSBandHR.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B078341D1F918B009C070B /* EntityMSBandHR.m */; };
 		16C1FF7D1C617FB100C070AA /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16C1FF7C1C617FB100C070AA /* Accelerate.framework */; };
 		16C1FF7F1C617FC300C070AA /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16C1FF7E1C617FC300C070AA /* GLKit.framework */; };
 		16D810241C06242500605DE2 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16D810231C06242500605DE2 /* CFNetwork.framework */; };
@@ -494,8 +514,6 @@
 		169C87D21D01382C00825761 /* MDBluetoothManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MDBluetoothManager.h; sourceTree = "<group>"; };
 		169C87D31D01382C00825761 /* MDBluetoothManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MDBluetoothManager.m; sourceTree = "<group>"; };
 		169C87D41D01382C00825761 /* MDBluetoothObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MDBluetoothObserver.h; sourceTree = "<group>"; };
-		169C87D61D01382C00825761 /* CalEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CalEvent.h; sourceTree = "<group>"; };
-		169C87D71D01382C00825761 /* CalEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CalEvent.m; sourceTree = "<group>"; };
 		169C87D81D01382C00825761 /* Calls.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Calls.h; sourceTree = "<group>"; };
 		169C87D91D01382C00825761 /* Calls.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Calls.m; sourceTree = "<group>"; };
 		169C87DB1D01382C00825761 /* Debug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Debug.h; sourceTree = "<group>"; };
@@ -540,8 +558,6 @@
 		169C880E1D01382C00825761 /* Proximity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Proximity.m; sourceTree = "<group>"; };
 		169C88101D01382C00825761 /* Rotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rotation.h; sourceTree = "<group>"; };
 		169C88111D01382C00825761 /* Rotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Rotation.m; sourceTree = "<group>"; };
-		169C88131D01382C00825761 /* Scheduler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Scheduler.h; sourceTree = "<group>"; };
-		169C88141D01382C00825761 /* Scheduler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Scheduler.m; sourceTree = "<group>"; };
 		169C88161D01382C00825761 /* Screen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Screen.h; sourceTree = "<group>"; };
 		169C88171D01382C00825761 /* Screen.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Screen.m; sourceTree = "<group>"; };
 		169C88191D01382C00825761 /* Timezone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Timezone.h; sourceTree = "<group>"; };
@@ -560,6 +576,8 @@
 		169C88291D01382C00825761 /* WebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewController.m; sourceTree = "<group>"; };
 		169C88AB1D0142C300825761 /* TCQMaker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TCQMaker.h; sourceTree = "<group>"; };
 		169C88AC1D0142C300825761 /* TCQMaker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TCQMaker.m; sourceTree = "<group>"; };
+		16A45CDD1D2392A1008A02B1 /* BalacnedCampusESMScheduler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BalacnedCampusESMScheduler.h; sourceTree = "<group>"; };
+		16A45CDE1D2392A1008A02B1 /* BalacnedCampusESMScheduler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BalacnedCampusESMScheduler.m; sourceTree = "<group>"; };
 		16B077681D192663009C070B /* EntityRotation+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EntityRotation+CoreDataProperties.h"; sourceTree = "<group>"; };
 		16B077691D192663009C070B /* EntityRotation+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EntityRotation+CoreDataProperties.m"; sourceTree = "<group>"; };
 		16B0776A1D192663009C070B /* EntityRotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EntityRotation.h; sourceTree = "<group>"; };
@@ -616,6 +634,48 @@
 		16B077D01D1A5F51009C070B /* EntityOpenWeather+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EntityOpenWeather+CoreDataProperties.m"; sourceTree = "<group>"; };
 		16B077D11D1A5F51009C070B /* EntityOpenWeather.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EntityOpenWeather.h; sourceTree = "<group>"; };
 		16B077D21D1A5F51009C070B /* EntityOpenWeather.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EntityOpenWeather.m; sourceTree = "<group>"; };
+		16B078081D1D8CCE009C070B /* CalEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CalEvent.h; sourceTree = "<group>"; };
+		16B078091D1D8CCE009C070B /* CalEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CalEvent.m; sourceTree = "<group>"; };
+		16B0780B1D1F2487009C070B /* EntityLabel+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EntityLabel+CoreDataProperties.h"; sourceTree = "<group>"; };
+		16B0780C1D1F2487009C070B /* EntityLabel+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EntityLabel+CoreDataProperties.m"; sourceTree = "<group>"; };
+		16B0780D1D1F2487009C070B /* EntityLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EntityLabel.h; sourceTree = "<group>"; };
+		16B0780E1D1F2487009C070B /* EntityLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EntityLabel.m; sourceTree = "<group>"; };
+		16B078111D1F918B009C070B /* EntityMSBandGSR+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EntityMSBandGSR+CoreDataProperties.h"; sourceTree = "<group>"; };
+		16B078121D1F918B009C070B /* EntityMSBandGSR+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EntityMSBandGSR+CoreDataProperties.m"; sourceTree = "<group>"; };
+		16B078131D1F918B009C070B /* EntityMSBandGSR.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EntityMSBandGSR.h; sourceTree = "<group>"; };
+		16B078141D1F918B009C070B /* EntityMSBandGSR.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EntityMSBandGSR.m; sourceTree = "<group>"; };
+		16B078151D1F918B009C070B /* EntityMSBandUV+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EntityMSBandUV+CoreDataProperties.h"; sourceTree = "<group>"; };
+		16B078161D1F918B009C070B /* EntityMSBandUV+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EntityMSBandUV+CoreDataProperties.m"; sourceTree = "<group>"; };
+		16B078171D1F918B009C070B /* EntityMSBandUV.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EntityMSBandUV.h; sourceTree = "<group>"; };
+		16B078181D1F918B009C070B /* EntityMSBandUV.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EntityMSBandUV.m; sourceTree = "<group>"; };
+		16B078191D1F918B009C070B /* EntityMSBandBatteryGauge+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EntityMSBandBatteryGauge+CoreDataProperties.h"; sourceTree = "<group>"; };
+		16B0781A1D1F918B009C070B /* EntityMSBandBatteryGauge+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EntityMSBandBatteryGauge+CoreDataProperties.m"; sourceTree = "<group>"; };
+		16B0781B1D1F918B009C070B /* EntityMSBandBatteryGauge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EntityMSBandBatteryGauge.h; sourceTree = "<group>"; };
+		16B0781C1D1F918B009C070B /* EntityMSBandBatteryGauge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EntityMSBandBatteryGauge.m; sourceTree = "<group>"; };
+		16B0781D1D1F918B009C070B /* EntityMSBandPedometer+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EntityMSBandPedometer+CoreDataProperties.h"; sourceTree = "<group>"; };
+		16B0781E1D1F918B009C070B /* EntityMSBandPedometer+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EntityMSBandPedometer+CoreDataProperties.m"; sourceTree = "<group>"; };
+		16B0781F1D1F918B009C070B /* EntityMSBandPedometer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EntityMSBandPedometer.h; sourceTree = "<group>"; };
+		16B078201D1F918B009C070B /* EntityMSBandPedometer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EntityMSBandPedometer.m; sourceTree = "<group>"; };
+		16B078211D1F918B009C070B /* EntityMSBandDeviceContact+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EntityMSBandDeviceContact+CoreDataProperties.h"; sourceTree = "<group>"; };
+		16B078221D1F918B009C070B /* EntityMSBandDeviceContact+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EntityMSBandDeviceContact+CoreDataProperties.m"; sourceTree = "<group>"; };
+		16B078231D1F918B009C070B /* EntityMSBandDeviceContact.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EntityMSBandDeviceContact.h; sourceTree = "<group>"; };
+		16B078241D1F918B009C070B /* EntityMSBandDeviceContact.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EntityMSBandDeviceContact.m; sourceTree = "<group>"; };
+		16B078251D1F918B009C070B /* EntityMSBandCalorie+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EntityMSBandCalorie+CoreDataProperties.h"; sourceTree = "<group>"; };
+		16B078261D1F918B009C070B /* EntityMSBandCalorie+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EntityMSBandCalorie+CoreDataProperties.m"; sourceTree = "<group>"; };
+		16B078271D1F918B009C070B /* EntityMSBandCalorie.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EntityMSBandCalorie.h; sourceTree = "<group>"; };
+		16B078281D1F918B009C070B /* EntityMSBandCalorie.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EntityMSBandCalorie.m; sourceTree = "<group>"; };
+		16B078291D1F918B009C070B /* EntityMSBandSkinTemp+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EntityMSBandSkinTemp+CoreDataProperties.h"; sourceTree = "<group>"; };
+		16B0782A1D1F918B009C070B /* EntityMSBandSkinTemp+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EntityMSBandSkinTemp+CoreDataProperties.m"; sourceTree = "<group>"; };
+		16B0782B1D1F918B009C070B /* EntityMSBandSkinTemp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EntityMSBandSkinTemp.h; sourceTree = "<group>"; };
+		16B0782C1D1F918B009C070B /* EntityMSBandSkinTemp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EntityMSBandSkinTemp.m; sourceTree = "<group>"; };
+		16B0782D1D1F918B009C070B /* EntityMSBandDistance+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EntityMSBandDistance+CoreDataProperties.h"; sourceTree = "<group>"; };
+		16B0782E1D1F918B009C070B /* EntityMSBandDistance+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EntityMSBandDistance+CoreDataProperties.m"; sourceTree = "<group>"; };
+		16B0782F1D1F918B009C070B /* EntityMSBandDistance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EntityMSBandDistance.h; sourceTree = "<group>"; };
+		16B078301D1F918B009C070B /* EntityMSBandDistance.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EntityMSBandDistance.m; sourceTree = "<group>"; };
+		16B078311D1F918B009C070B /* EntityMSBandHR+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EntityMSBandHR+CoreDataProperties.h"; sourceTree = "<group>"; };
+		16B078321D1F918B009C070B /* EntityMSBandHR+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EntityMSBandHR+CoreDataProperties.m"; sourceTree = "<group>"; };
+		16B078331D1F918B009C070B /* EntityMSBandHR.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EntityMSBandHR.h; sourceTree = "<group>"; };
+		16B078341D1F918B009C070B /* EntityMSBandHR.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EntityMSBandHR.m; sourceTree = "<group>"; };
 		16C1FF7C1C617FB100C070AA /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		16C1FF7E1C617FC300C070AA /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		16C81FF41CD6B32D0013A87C /* AWARE_v2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = AWARE_v2.xcdatamodel; sourceTree = "<group>"; };
@@ -1048,6 +1108,7 @@
 			children = (
 				169C87861D01382C00825761 /* ActivityRecognition */,
 				169C87891D01382C00825761 /* AmbientNoise */,
+				16A45CDC1D2392A1008A02B1 /* BalacnedCampusScheduler */,
 				169C878E1D01382C00825761 /* BLEHeartRate */,
 				169C87911D01382C00825761 /* DeviceUsage */,
 				169C87941D01382C00825761 /* FusedLocations */,
@@ -1139,6 +1200,8 @@
 			children = (
 				169C87981D01382C00825761 /* GoogleCalPull.h */,
 				169C87991D01382C00825761 /* GoogleCalPull.m */,
+				16B078081D1D8CCE009C070B /* CalEvent.h */,
+				16B078091D1D8CCE009C070B /* CalEvent.m */,
 			);
 			path = GoogleCalPull;
 			sourceTree = "<group>";
@@ -1175,6 +1238,10 @@
 			children = (
 				169C87A41D01382C00825761 /* Labels.h */,
 				169C87A51D01382C00825761 /* Labels.m */,
+				16B0780B1D1F2487009C070B /* EntityLabel+CoreDataProperties.h */,
+				16B0780C1D1F2487009C070B /* EntityLabel+CoreDataProperties.m */,
+				16B0780D1D1F2487009C070B /* EntityLabel.h */,
+				16B0780E1D1F2487009C070B /* EntityLabel.m */,
 			);
 			path = Labels;
 			sourceTree = "<group>";
@@ -1197,6 +1264,7 @@
 			children = (
 				169C87AA1D01382C00825761 /* MSBand.h */,
 				169C87AB1D01382C00825761 /* MSBand.m */,
+				16B078471D1F9192009C070B /* Entities */,
 			);
 			path = MSBand;
 			sourceTree = "<group>";
@@ -1279,7 +1347,6 @@
 				169C87F51D01382C00825761 /* Processor */,
 				169C87F81D01382C00825761 /* Proximity */,
 				169C880F1D01382C00825761 /* Rotation */,
-				169C88121D01382C00825761 /* Scheduler */,
 				169C88151D01382C00825761 /* Screen */,
 				169C88181D01382C00825761 /* Timezone */,
 				169C881B1D01382C00825761 /* Wifi */,
@@ -1365,8 +1432,6 @@
 		169C87D51D01382C00825761 /* Calls */ = {
 			isa = PBXGroup;
 			children = (
-				169C87D61D01382C00825761 /* CalEvent.h */,
-				169C87D71D01382C00825761 /* CalEvent.m */,
 				169C87D81D01382C00825761 /* Calls.h */,
 				169C87D91D01382C00825761 /* Calls.m */,
 				160F0EBC1D0404A400673343 /* EntityCall+CoreDataProperties.h */,
@@ -1555,15 +1620,6 @@
 			path = Rotation;
 			sourceTree = "<group>";
 		};
-		169C88121D01382C00825761 /* Scheduler */ = {
-			isa = PBXGroup;
-			children = (
-				169C88131D01382C00825761 /* Scheduler.h */,
-				169C88141D01382C00825761 /* Scheduler.m */,
-			);
-			path = Scheduler;
-			sourceTree = "<group>";
-		};
 		169C88151D01382C00825761 /* Screen */ = {
 			isa = PBXGroup;
 			children = (
@@ -1626,6 +1682,58 @@
 				169C88291D01382C00825761 /* WebViewController.m */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		16A45CDC1D2392A1008A02B1 /* BalacnedCampusScheduler */ = {
+			isa = PBXGroup;
+			children = (
+				16A45CDD1D2392A1008A02B1 /* BalacnedCampusESMScheduler.h */,
+				16A45CDE1D2392A1008A02B1 /* BalacnedCampusESMScheduler.m */,
+			);
+			path = BalacnedCampusScheduler;
+			sourceTree = "<group>";
+		};
+		16B078471D1F9192009C070B /* Entities */ = {
+			isa = PBXGroup;
+			children = (
+				16B078111D1F918B009C070B /* EntityMSBandGSR+CoreDataProperties.h */,
+				16B078121D1F918B009C070B /* EntityMSBandGSR+CoreDataProperties.m */,
+				16B078131D1F918B009C070B /* EntityMSBandGSR.h */,
+				16B078141D1F918B009C070B /* EntityMSBandGSR.m */,
+				16B078151D1F918B009C070B /* EntityMSBandUV+CoreDataProperties.h */,
+				16B078161D1F918B009C070B /* EntityMSBandUV+CoreDataProperties.m */,
+				16B078171D1F918B009C070B /* EntityMSBandUV.h */,
+				16B078181D1F918B009C070B /* EntityMSBandUV.m */,
+				16B078191D1F918B009C070B /* EntityMSBandBatteryGauge+CoreDataProperties.h */,
+				16B0781A1D1F918B009C070B /* EntityMSBandBatteryGauge+CoreDataProperties.m */,
+				16B0781B1D1F918B009C070B /* EntityMSBandBatteryGauge.h */,
+				16B0781C1D1F918B009C070B /* EntityMSBandBatteryGauge.m */,
+				16B0781D1D1F918B009C070B /* EntityMSBandPedometer+CoreDataProperties.h */,
+				16B0781E1D1F918B009C070B /* EntityMSBandPedometer+CoreDataProperties.m */,
+				16B0781F1D1F918B009C070B /* EntityMSBandPedometer.h */,
+				16B078201D1F918B009C070B /* EntityMSBandPedometer.m */,
+				16B078211D1F918B009C070B /* EntityMSBandDeviceContact+CoreDataProperties.h */,
+				16B078221D1F918B009C070B /* EntityMSBandDeviceContact+CoreDataProperties.m */,
+				16B078231D1F918B009C070B /* EntityMSBandDeviceContact.h */,
+				16B078241D1F918B009C070B /* EntityMSBandDeviceContact.m */,
+				16B078251D1F918B009C070B /* EntityMSBandCalorie+CoreDataProperties.h */,
+				16B078261D1F918B009C070B /* EntityMSBandCalorie+CoreDataProperties.m */,
+				16B078271D1F918B009C070B /* EntityMSBandCalorie.h */,
+				16B078281D1F918B009C070B /* EntityMSBandCalorie.m */,
+				16B078291D1F918B009C070B /* EntityMSBandSkinTemp+CoreDataProperties.h */,
+				16B0782A1D1F918B009C070B /* EntityMSBandSkinTemp+CoreDataProperties.m */,
+				16B0782B1D1F918B009C070B /* EntityMSBandSkinTemp.h */,
+				16B0782C1D1F918B009C070B /* EntityMSBandSkinTemp.m */,
+				16B0782D1D1F918B009C070B /* EntityMSBandDistance+CoreDataProperties.h */,
+				16B0782E1D1F918B009C070B /* EntityMSBandDistance+CoreDataProperties.m */,
+				16B0782F1D1F918B009C070B /* EntityMSBandDistance.h */,
+				16B078301D1F918B009C070B /* EntityMSBandDistance.m */,
+				16B078311D1F918B009C070B /* EntityMSBandHR+CoreDataProperties.h */,
+				16B078321D1F918B009C070B /* EntityMSBandHR+CoreDataProperties.m */,
+				16B078331D1F918B009C070B /* EntityMSBandHR.h */,
+				16B078341D1F918B009C070B /* EntityMSBandHR.m */,
+			);
+			name = Entities;
 			sourceTree = "<group>";
 		};
 		2A3CA9F5620967BACB187EB7 /* Frameworks */ = {
@@ -1761,7 +1869,7 @@
 								enabled = 0;
 							};
 							com.apple.Push = {
-								enabled = 0;
+								enabled = 1;
 							};
 							com.apple.SafariKeychain = {
 								enabled = 0;
@@ -1938,31 +2046,42 @@
 			files = (
 				160F0E891D03D60500673343 /* EntityAccelerometer+CoreDataProperties.m in Sources */,
 				16B077AA1D1A4DF1009C070B /* EntityProcessor.m in Sources */,
+				16B0783D1D1F918B009C070B /* EntityMSBandDeviceContact+CoreDataProperties.m in Sources */,
+				16B0783F1D1F918B009C070B /* EntityMSBandCalorie+CoreDataProperties.m in Sources */,
 				16B077BC1D1A54BF009C070B /* EntityPushNotification.m in Sources */,
 				169C88751D01382C00825761 /* AudioAnalysis.m in Sources */,
 				169C88781D01382C00825761 /* FusedLocations.m in Sources */,
+				16B0783C1D1F918B009C070B /* EntityMSBandPedometer.m in Sources */,
 				169C887C1D01382C00825761 /* AWAREHealthKit.m in Sources */,
 				160F0E901D03D64E00673343 /* EntityBarometer.m in Sources */,
 				169C88331D01382C00825761 /* AWAREStudy.m in Sources */,
 				160F0EEB1D041FC000673343 /* EntityGyroscope+CoreDataProperties.m in Sources */,
+				16A45CDF1D2392A1008A02B1 /* BalacnedCampusESMScheduler.m in Sources */,
 				169C88801D01382C00825761 /* NTPTime.m in Sources */,
+				16B0780F1D1F2487009C070B /* EntityLabel+CoreDataProperties.m in Sources */,
 				160F0EC71D040B7F00673343 /* EntityDebug.m in Sources */,
 				169C88341D01382C00825761 /* AWAREUtils.m in Sources */,
 				169C88821D01382C00825761 /* OpenWeather.m in Sources */,
 				1623CE6E1BFD1B2C00EFAD72 /* AppDelegate.m in Sources */,
+				16B0783B1D1F918B009C070B /* EntityMSBandPedometer+CoreDataProperties.m in Sources */,
 				160F0EDF1D041DDE00673343 /* EntityLocation.m in Sources */,
 				169C88301D01382C00825761 /* AWARESchedule.m in Sources */,
 				160F0ED91D041B5D00673343 /* EntityLinearAccelerometer.m in Sources */,
+				16B0783A1D1F918B009C070B /* EntityMSBandBatteryGauge.m in Sources */,
 				169C888E1D01382C00825761 /* Calls.m in Sources */,
+				16B078411D1F918B009C070B /* EntityMSBandSkinTemp+CoreDataProperties.m in Sources */,
+				16B078401D1F918B009C070B /* EntityMSBandCalorie.m in Sources */,
 				169C88321D01382C00825761 /* AWARESensorManager.m in Sources */,
 				169C889A1D01382C00825761 /* Rotation.m in Sources */,
 				16B077851D1978FF009C070B /* EntityActivityRecognition.m in Sources */,
+				16B078371D1F918B009C070B /* EntityMSBandUV+CoreDataProperties.m in Sources */,
 				16B077C71D1A57DD009C070B /* EntityNTPTime+CoreDataProperties.m in Sources */,
 				169C883A1D01382C00825761 /* AWAREEsmViewController.m in Sources */,
 				160F0EF21D04277000673343 /* EntityMagnetometer.m in Sources */,
 				160F0EC11D0404A400673343 /* EntityCall.m in Sources */,
 				169C88771D01382C00825761 /* DeviceUsage.m in Sources */,
 				169C88831D01382C00825761 /* PushNotification.m in Sources */,
+				16B078361D1F918B009C070B /* EntityMSBandGSR.m in Sources */,
 				16B077C11D1A55FC009C070B /* EntityMemory+CoreDataProperties.m in Sources */,
 				169C88981D01382C00825761 /* Processor.m in Sources */,
 				160F0EDE1D041DDE00673343 /* EntityLocation+CoreDataProperties.m in Sources */,
@@ -1997,7 +2116,6 @@
 				16B077961D1A01A0009C070B /* EntityLocationVisit+CoreDataProperties.m in Sources */,
 				169C887F1D01382C00825761 /* MSBand.m in Sources */,
 				169C889F1D01382C00825761 /* GoogleLoginViewController.m in Sources */,
-				169C889B1D01382C00825761 /* Scheduler.m in Sources */,
 				160F0EF81D042AB600673343 /* EntityNetwork.m in Sources */,
 				160F0F091D04756800673343 /* EntityBattery+CoreDataProperties.m in Sources */,
 				160F0F0A1D04756800673343 /* EntityBattery.m in Sources */,
@@ -2010,6 +2128,7 @@
 				169C88841D01382C00825761 /* SensorTag.m in Sources */,
 				16B077841D1978FF009C070B /* EntityActivityRecognition+CoreDataProperties.m in Sources */,
 				16B077A91D1A4DF1009C070B /* EntityProcessor+CoreDataProperties.m in Sources */,
+				16B078431D1F918B009C070B /* EntityMSBandDistance+CoreDataProperties.m in Sources */,
 				169C883D1D01382C00825761 /* ESMSchedule.m in Sources */,
 				16B077791D192C30009C070B /* EntityTimezone.m in Sources */,
 				169C88811D01382C00825761 /* Observer.m in Sources */,
@@ -2020,8 +2139,10 @@
 				169C88731D01382C00825761 /* ActivityRecognition.m in Sources */,
 				169C888F1D01382C00825761 /* Debug.m in Sources */,
 				160F0ECC1D04132600673343 /* EntityGravity+CoreDataProperties.m in Sources */,
+				16B078101D1F2487009C070B /* EntityLabel.m in Sources */,
 				169C883B1D01382C00825761 /* ESM.m in Sources */,
 				169C889E1D01382C00825761 /* Wifi.m in Sources */,
+				16B078381D1F918B009C070B /* EntityMSBandUV.m in Sources */,
 				169C888B1D01382C00825761 /* MDBluetoothDevice.m in Sources */,
 				169C888A1D01382C00825761 /* BluetoothScanner.m in Sources */,
 				160F0F051D04756800673343 /* EntityBatteryCharge+CoreDataProperties.m in Sources */,
@@ -2032,6 +2153,7 @@
 				169C88761D01382C00825761 /* BLEHeartRate.m in Sources */,
 				16B077971D1A01A0009C070B /* EntityLocationVisit.m in Sources */,
 				169C889C1D01382C00825761 /* Screen.m in Sources */,
+				16B078451D1F918B009C070B /* EntityMSBandHR+CoreDataProperties.m in Sources */,
 				1623CE771BFD1B2C00EFAD72 /* AWARE.xcdatamodeld in Sources */,
 				169C88741D01382C00825761 /* AmbientNoise.m in Sources */,
 				160F0ECD1D04132600673343 /* EntityGravity.m in Sources */,
@@ -2039,6 +2161,7 @@
 				169C882D1D01382C00825761 /* AWAREDelegate.m in Sources */,
 				160F0EC01D0404A400673343 /* EntityCall+CoreDataProperties.m in Sources */,
 				16654EA21D027DC600280051 /* AWAREUploader.m in Sources */,
+				16B078461D1F918B009C070B /* EntityMSBandHR.m in Sources */,
 				16B077D41D1A5F51009C070B /* EntityOpenWeather.m in Sources */,
 				169C88701D01382C00825761 /* PamSchema.m in Sources */,
 				169C882F1D01382C00825761 /* AWAREPlugin.m in Sources */,
@@ -2046,19 +2169,23 @@
 				169C88391D01382C00825761 /* AWAREEsmUtils.m in Sources */,
 				169C88AD1D0142C300825761 /* TCQMaker.m in Sources */,
 				16B077781D192C30009C070B /* EntityTimezone+CoreDataProperties.m in Sources */,
+				16B0780A1D1D8CCE009C070B /* CalEvent.m in Sources */,
 				169C888C1D01382C00825761 /* MDBluetoothManager.m in Sources */,
 				16B077C21D1A55FC009C070B /* EntityMemory.m in Sources */,
 				160F0E8A1D03D60500673343 /* EntityAccelerometer.m in Sources */,
 				1623CE6B1BFD1B2C00EFAD72 /* main.m in Sources */,
 				169C88871D01382C00825761 /* Barometer.m in Sources */,
-				169C888D1D01382C00825761 /* CalEvent.m in Sources */,
+				16B078441D1F918B009C070B /* EntityMSBandDistance.m in Sources */,
 				169C883C1D01382C00825761 /* ESMManager.m in Sources */,
 				169C88901D01382C00825761 /* Gravity.m in Sources */,
+				16B078351D1F918B009C070B /* EntityMSBandGSR+CoreDataProperties.m in Sources */,
 				16B077901D1999B5009C070B /* EntityBLEHeartRate+CoreDataProperties.m in Sources */,
 				169C88791D01382C00825761 /* GoogleCalPull.m in Sources */,
 				169C88911D01382C00825761 /* Gyroscope.m in Sources */,
 				169C88371D01382C00825761 /* Reachability.m in Sources */,
 				169C88931D01382C00825761 /* Locations.m in Sources */,
+				16B078391D1F918B009C070B /* EntityMSBandBatteryGauge+CoreDataProperties.m in Sources */,
+				16B0783E1D1F918B009C070B /* EntityMSBandDeviceContact.m in Sources */,
 				16B0778B1D1990D9009C070B /* EntityAmbientNoise.m in Sources */,
 				160F0EB51D03E2EC00673343 /* EntityBluetooth.m in Sources */,
 				169C88861D01382C00825761 /* AmbientLight.m in Sources */,
@@ -2066,6 +2193,7 @@
 				169C882B1D01382C00825761 /* AWARECoreDataManager.m in Sources */,
 				169C883E1D01382C00825761 /* ESMStorageHelper.m in Sources */,
 				16B077911D1999B5009C070B /* EntityBLEHeartRate.m in Sources */,
+				16B078421D1F918B009C070B /* EntityMSBandSkinTemp.m in Sources */,
 				169C887B1D01382C00825761 /* GoogleLogin.m in Sources */,
 				169C887A1D01382C00825761 /* GoogleCalPush.m in Sources */,
 				16B077D31D1A5F51009C070B /* EntityOpenWeather+CoreDataProperties.m in Sources */,

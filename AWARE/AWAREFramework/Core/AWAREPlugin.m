@@ -59,16 +59,18 @@
 //    }
 //}
 
-- (BOOL) startSensor:(double)upInterval withSettings:(NSArray *)settings{
-    [self startAllSensors:upInterval withSettings:settings];
+- (BOOL) startSensorWithSettings:(NSArray *)settings{
+    [self startAllSensorsWithSettings:settings];
     return YES;
 }
 
 /**
  * Start All sensors
  */
-- (BOOL)startAllSensors:(double)upInterval
-           withSettings:(NSArray *)settings{
+- (BOOL)startAllSensorsWithSettings:(NSArray *)settings{
+    for (AWARESensor* sensor in awareSensors) {
+        [sensor startSensorWithSettings:settings];
+    }
     return YES;
 }
 
@@ -107,6 +109,15 @@
 - (BOOL) stopSensor{
     [self stopAndRemoveAllSensors];
     return YES;
+}
+
+- (bool)isUploading{
+    for (AWARESensor * sensor in awareSensors) {
+        if( [sensor isUploading] ){
+            return YES;
+        }
+    }
+    return NO;
 }
 
 @end

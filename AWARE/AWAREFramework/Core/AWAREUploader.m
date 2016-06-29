@@ -121,8 +121,6 @@
 }
 
 - (BOOL) syncAwareDBInForegroundWithSensorName:(NSString*) name{
-    
-     NSLog(@"[NOTE] Please overwrite this method (-syncAwareDBInForegroundWithSensorName:)");
     return NO;
 }
 

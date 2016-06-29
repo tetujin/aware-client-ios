@@ -108,12 +108,12 @@
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         debug = [userDefaults boolForKey:SETTING_DEBUG_STATE];
         
-//        if(study == nil){
-//            // If the study object is nil(null), the initializer gnerates a new AWAREStudy object.
-//            awareStudy = [[AWAREStudy alloc] initWithReachability:];
-//        }else{
-        awareStudy = study;
-//        }
+        if(study == nil){
+            // If the study object is nil(null), the initializer gnerates a new AWAREStudy object.
+            awareStudy = [[AWAREStudy alloc] initWithReachability:NO];
+        }else{
+            awareStudy = study;
+        }
         // Save sensorName instance to awareSensorName
         awareSensorName = sensorName;
         

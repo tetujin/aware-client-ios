@@ -6,7 +6,7 @@
 //  Copyright © 2015 Yuuki NISHIYAMA. All rights reserved.
 //
 
-#import "Scheduler.h"
+#import "BalacnedCampusESMScheduler.h"
 #import "AWARESchedule.h"
 #import "ESMStorageHelper.h"
 #import "SingleESMObject.h"
@@ -15,7 +15,7 @@
 #import "AWAREEsmUtils.h"
 #import "Debug.h"
 
-@implementation Scheduler {
+@implementation BalacnedCampusESMScheduler {
     // -- Notification Body --
     NSString * notificationTitle;
     NSString * notificationBody;
@@ -178,6 +178,8 @@
         [scheduleManager removeAllObjects];
     }
 }
+///////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////
 
 
 ////////////////////////////////////////////////////////////////
