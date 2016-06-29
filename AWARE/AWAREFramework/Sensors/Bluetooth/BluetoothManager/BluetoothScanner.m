@@ -76,12 +76,12 @@
 }
 
 
-void notificationCallback(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo)
-{
-    if ([(__bridge NSString*)name characterAtIndex:0] == 'B') { // notice only notification they are associated with the BluetoothManager.framework
-        NSLog(@"Callback detected: \n\t name: %@ \n\t object:%@", name, object);
-    }
-}
+//void notificationCallback(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo)
+//{
+//    if ([(__bridge NSString*)name characterAtIndex:0] == 'B') { // notice only notification they are associated with the BluetoothManager.framework
+//        NSLog(@"Callback detected: \n\t name: %@ \n\t object:%@", name, object);
+//    }
+//}
 
 
 
