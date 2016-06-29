@@ -47,7 +47,7 @@ PODS:
   - ios-ntp (1.1.1):
     - CocoaAsyncSocket (~> 7.4.1)
   - macros_blocks (0.0.1)
-  - MQTTKit (0.1.0-next)
+  - MQTTKit (0.1.0)
   - SCNetworkReachability (2.0.5):
     - SCNetworkReachability/Core (= 2.0.5)
   - SCNetworkReachability/Core (2.0.5):
@@ -61,18 +61,9 @@ DEPENDENCIES:
   - EZAudio
   - Google/SignIn
   - ios-ntp
-  - MQTTKit (from `https://github.com/mobile-web-messaging/MQTTKit.git`)
+  - MQTTKit
   - SCNetworkReachability
   - SVProgressHUD
-
-EXTERNAL SOURCES:
-  MQTTKit:
-    :git: https://github.com/mobile-web-messaging/MQTTKit.git
-
-CHECKOUT OPTIONS:
-  MQTTKit:
-    :commit: 8f0753b98a60c8e6030000d877e0ef02e22b198b
-    :git: https://github.com/mobile-web-messaging/MQTTKit.git
 
 SPEC CHECKSUMS:
   CocoaAsyncSocket: a18c75dca4b08723628a0bacca6e94803d90be91
@@ -92,7 +83,7 @@ SPEC CHECKSUMS:
   GoogleUtilities: 56c5ac05b7aa5dc417a1bb85221a9516e04d7032
   ios-ntp: 5f2f4fecf0432169b358eb3b564f12b94157108f
   macros_blocks: da2106a0975514e16f3669f2f50a02efaff642cf
-  MQTTKit: 513ffc31464db7adeffefac986e228fdf6cd87e5
+  MQTTKit: a4e6b8aa92db1aeae917d2b773fd72a7749937c4
   SCNetworkReachability: 14026e754d9abb264c157131539e8e2c2131cb62
   SVProgressHUD: b0830714205bea1317ea1a2ebc71e5633af334d4
   TPCircularBuffer: 4960a919e667280f7f38963d771f45871b64fe62

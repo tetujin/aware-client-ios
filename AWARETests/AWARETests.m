@@ -7,6 +7,7 @@
 //
 
 #import <XCTest/XCTest.h>
+#import "TCQMaker.h"
 
 @interface AWARETests : XCTestCase
 
@@ -27,6 +28,9 @@
 - (void)testExample {
     // This is an example of a functional test case.
     // Use XCTAssert and related functions to verify your tests produce the correct results.
+//    TCQMaker * tcqMaker = [[TCQMaker alloc] init];
+//    [tcqMaker addColumn:@"test" type:TCQTypeText default:@"''"];
+
 }
 
 - (void)testPerformanceExample {

@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="10171" systemVersion="15E65" minimumToolsVersion="Automatic">
-    <entity name="PluginActivityRecognition" representedClassName="PluginActivityRecognition" syncable="YES">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="10174" systemVersion="15E65" minimumToolsVersion="Automatic">
+    <entity name="EntityAccelerometer" representedClassName="EntityAccelerometer" syncable="YES">
+        <attribute name="accuracy" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="device_id1" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="double_values_0" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="double_values_1" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="double_values_2" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="label" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="timestamp1" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+    </entity>
+    <entity name="EntityActivityRecognition" representedClassName="EntityActivityRecognition" syncable="YES">
         <attribute name="activities" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="activity_name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="activity_type" optional="YES" attributeType="String" syncable="YES"/>
@@ -8,7 +19,7 @@
         <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
     </entity>
-    <entity name="PluginAmbientNoise" representedClassName="PluginAmbientNoise" syncable="YES">
+    <entity name="EntityAmbientNoise" representedClassName="EntityAmbientNoise" syncable="YES">
         <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="double_decibels" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
         <attribute name="double_frequency" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
@@ -18,7 +29,107 @@
         <attribute name="silent_threshold" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
         <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
     </entity>
-    <entity name="SensorAccelerometer" representedClassName="SensorAccelerometer" syncable="YES">
+    <entity name="EntityBarometer" representedClassName="EntityBarometer" syncable="YES">
+        <attribute name="accuracy" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="double_values_0" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="label" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+    </entity>
+    <entity name="EntityBattery" representedClassName="EntityBattery" syncable="YES">
+        <attribute name="battery_adaptor" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="battery_health" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="battery_level" optional="YES" attributeType="Integer 32" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="battery_scale" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="battery_status" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="battery_technology" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="battery_temperature" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="battery_voltage" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+    </entity>
+    <entity name="EntityBatteryCharge" representedClassName="EntityBatteryCharge" syncable="YES">
+        <attribute name="battery_end" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="battery_start" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="double_end_timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+    </entity>
+    <entity name="EntityBatteryDischarge" representedClassName="EntityBatteryDischarge" syncable="YES">
+        <attribute name="battery_end" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="battery_start" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="double_end_timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+    </entity>
+    <entity name="EntityBCCalendar" syncable="YES">
+        <attribute name="account_name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="all_day" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="availability" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="begin" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="calendar_color" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="calendar_description" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="calendar_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="calendar_name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="color" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="end" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="event_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="event_timezone" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="has_alarm" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="is_organizer" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="location" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="owner_account" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="rrule" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="seen" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="status" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="EntityBLEHeartRate" representedClassName="EntityBLEHeartRate" syncable="YES">
+        <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="heartrate" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="label" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="location" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="manufacturer" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="rssi" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+    </entity>
+    <entity name="EntityBluetooth" representedClassName="EntityBluetooth" syncable="YES">
+        <attribute name="bt_address" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="bt_name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="bt_rssi" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="label" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+    </entity>
+    <entity name="EntityCall" representedClassName="EntityCall" syncable="YES">
+        <attribute name="call_duration" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="call_type" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="trace" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="EntityDebug" representedClassName="EntityDebug" syncable="YES">
+        <attribute name="app_version" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="battery" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="battery_state" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="device" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="event" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="label" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="network" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="os" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="type" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+    </entity>
+    <entity name="EntityDeviceUsage" representedClassName="EntityDeviceUsage" syncable="YES">
+        <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="elapsed_device_off" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="elapsed_device_on" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+    </entity>
+    <entity name="EntityGravity" representedClassName="EntityGravity" syncable="YES">
         <attribute name="accuracy" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="double_values_0" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
@@ -27,7 +138,34 @@
         <attribute name="label" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
     </entity>
-    <entity name="SensorLocations" representedClassName="SensorLocations" syncable="YES">
+    <entity name="EntityGyroscope" representedClassName="EntityGyroscope" syncable="YES">
+        <attribute name="accuracy" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="axis_x" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="axis_y" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="axis_z" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="label" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+    </entity>
+    <entity name="EntityLabel" representedClassName="EntityLabel" syncable="YES">
+        <attribute name="answered_timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="key" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="label" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="notification_body" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="EntityLinearAccelerometer" representedClassName="EntityLinearAccelerometer" syncable="YES">
+        <attribute name="accuracy" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="double_values_0" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="double_values_1" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="double_values_2" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="label" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+    </entity>
+    <entity name="EntityLocation" representedClassName="EntityLocation" syncable="YES">
         <attribute name="accuracy" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="double_altitude" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
@@ -39,10 +177,199 @@
         <attribute name="provider" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
     </entity>
+    <entity name="EntityLocationVisit" representedClassName="EntityLocationVisit" syncable="YES">
+        <attribute name="accuracy" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="address" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="double_arrival" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="double_departure" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="double_latitude" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="double_longitude" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="label" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="provider" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+    </entity>
+    <entity name="EntityMagnetometer" representedClassName="EntityMagnetometer" syncable="YES">
+        <attribute name="accuracy" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="double_values_0" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="double_values_1" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="double_values_2" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="label" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+    </entity>
+    <entity name="EntityMemory" representedClassName="EntityMemory" syncable="YES">
+        <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="mem_free" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="mem_total" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="mem_used" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+    </entity>
+    <entity name="EntityMSBandBatteryGauge" representedClassName="EntityMSBandBatteryGauge" syncable="YES">
+        <attribute name="battery_gauge" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+    </entity>
+    <entity name="EntityMSBandCalorie" representedClassName="EntityMSBandCalorie" syncable="YES">
+        <attribute name="calories" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+    </entity>
+    <entity name="EntityMSBandDeviceContact" representedClassName="EntityMSBandDeviceContact" syncable="YES">
+        <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="devicecontact" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+    </entity>
+    <entity name="EntityMSBandDistance" representedClassName="EntityMSBandDistance" syncable="YES">
+        <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="distance" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="motiontype" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+    </entity>
+    <entity name="EntityMSBandGSR" representedClassName="EntityMSBandGSR" syncable="YES">
+        <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="gsr" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+    </entity>
+    <entity name="EntityMSBandHR" representedClassName="EntityMSBandHR" syncable="YES">
+        <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="heartrate" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="heartrate_quality" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+    </entity>
+    <entity name="EntityMSBandPedometer" representedClassName="EntityMSBandPedometer" syncable="YES">
+        <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="pedometer" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+    </entity>
+    <entity name="EntityMSBandSkinTemp" representedClassName="EntityMSBandSkinTemp" syncable="YES">
+        <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="skintemp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+    </entity>
+    <entity name="EntityMSBandUV" representedClassName="EntityMSBandUV" syncable="YES">
+        <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="uv" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="EntityNetwork" representedClassName="EntityNetwork" syncable="YES">
+        <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="network_state" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="network_subtype" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="network_type" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+    </entity>
+    <entity name="EntityNTPTime" representedClassName="EntityNTPTime" syncable="YES">
+        <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="drift" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="ntp_time" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+    </entity>
+    <entity name="EntityOpenWeather" representedClassName="EntityOpenWeather" syncable="YES">
+        <attribute name="city" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="cloudiness" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="humidity" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="pressure" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="rain" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="snow" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="sunrise" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="sunset" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="temperature" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="temperature_max" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="temperature_min" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="unit" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="weather_description" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="weather_icon_id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="wind_degrees" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="wind_speed" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+    </entity>
+    <entity name="EntityProcessor" representedClassName="EntityProcessor" syncable="YES">
+        <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="double_idle" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="double_last_idle" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="double_last_system" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="double_last_user" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="double_system_load" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="double_user_load" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+    </entity>
+    <entity name="EntityPushNotification" representedClassName="EntityPushNotification" syncable="YES">
+        <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="token" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="EntityRotation" representedClassName="EntityRotation" syncable="YES">
+        <attribute name="accuracy" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="double_values_0" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="double_values_1" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="double_values_2" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="double_values_3" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="label" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+    </entity>
+    <entity name="EntityScreen" representedClassName="EntityScreen" syncable="YES">
+        <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="screen_status" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+    </entity>
+    <entity name="EntityTimezone" representedClassName="EntityTimezone" syncable="YES">
+        <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="timezone" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="EntityWifi" representedClassName="EntityWifi" syncable="YES">
+        <attribute name="bssid" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="frequency" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="label" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="rssi" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="security" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="ssid" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+    </entity>
     <elements>
-        <element name="PluginActivityRecognition" positionX="180" positionY="117" width="128" height="135"/>
-        <element name="PluginAmbientNoise" positionX="234" positionY="0" width="128" height="165"/>
-        <element name="SensorLocations" positionX="117" positionY="81" width="128" height="195"/>
-        <element name="SensorAccelerometer" positionX="189" positionY="126" width="128" height="150"/>
+        <element name="EntityAccelerometer" positionX="189" positionY="126" width="128" height="30"/>
+        <element name="EntityActivityRecognition" positionX="180" positionY="117" width="128" height="135"/>
+        <element name="EntityAmbientNoise" positionX="234" positionY="0" width="128" height="165"/>
+        <element name="EntityBarometer" positionX="180" positionY="117" width="128" height="120"/>
+        <element name="EntityBattery" positionX="189" positionY="126" width="128" height="195"/>
+        <element name="EntityBatteryCharge" positionX="207" positionY="162" width="128" height="30"/>
+        <element name="EntityBatteryDischarge" positionX="198" positionY="153" width="128" height="30"/>
+        <element name="EntityBLEHeartRate" positionX="216" positionY="180" width="128" height="30"/>
+        <element name="EntityBluetooth" positionX="216" positionY="180" width="128" height="30"/>
+        <element name="EntityCall" positionX="225" positionY="189" width="128" height="30"/>
+        <element name="EntityDebug" positionX="234" positionY="198" width="128" height="30"/>
+        <element name="EntityDeviceUsage" positionX="234" positionY="198" width="128" height="30"/>
+        <element name="EntityGravity" positionX="180" positionY="144" width="128" height="30"/>
+        <element name="EntityGyroscope" positionX="189" positionY="153" width="128" height="30"/>
+        <element name="EntityLinearAccelerometer" positionX="198" positionY="162" width="128" height="30"/>
+        <element name="EntityLocation" positionX="117" positionY="81" width="128" height="30"/>
+        <element name="EntityLocationVisit" positionX="225" positionY="189" width="128" height="30"/>
+        <element name="EntityMagnetometer" positionX="207" positionY="171" width="128" height="30"/>
+        <element name="EntityMemory" positionX="207" positionY="171" width="128" height="30"/>
+        <element name="EntityNetwork" positionX="216" positionY="180" width="128" height="30"/>
+        <element name="EntityNTPTime" positionX="216" positionY="180" width="128" height="30"/>
+        <element name="EntityOpenWeather" positionX="189" positionY="153" width="128" height="30"/>
+        <element name="EntityProcessor" positionX="180" positionY="144" width="128" height="30"/>
+        <element name="EntityPushNotification" positionX="198" positionY="162" width="128" height="30"/>
+        <element name="EntityRotation" positionX="180" positionY="144" width="128" height="30"/>
+        <element name="EntityScreen" positionX="189" positionY="153" width="128" height="30"/>
+        <element name="EntityTimezone" positionX="198" positionY="162" width="128" height="30"/>
+        <element name="EntityWifi" positionX="207" positionY="171" width="128" height="30"/>
+        <element name="EntityLabel" positionX="225" positionY="189" width="128" height="30"/>
+        <element name="EntityBCCalendar" positionX="234" positionY="198" width="128" height="30"/>
+        <element name="EntityMSBandBatteryGauge" positionX="180" positionY="135" width="128" height="90"/>
+        <element name="EntityMSBandCalorie" positionX="189" positionY="144" width="128" height="90"/>
+        <element name="EntityMSBandDeviceContact" positionX="198" positionY="153" width="128" height="90"/>
+        <element name="EntityMSBandDistance" positionX="207" positionY="162" width="128" height="105"/>
+        <element name="EntityMSBandGSR" positionX="216" positionY="171" width="128" height="90"/>
+        <element name="EntityMSBandHR" positionX="225" positionY="180" width="128" height="105"/>
+        <element name="EntityMSBandPedometer" positionX="234" positionY="189" width="128" height="90"/>
+        <element name="EntityMSBandSkinTemp" positionX="180" positionY="135" width="128" height="90"/>
+        <element name="EntityMSBandUV" positionX="189" positionY="144" width="128" height="90"/>
     </elements>
 </model>

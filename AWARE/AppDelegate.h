@@ -7,28 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <CoreData/CoreData.h>
-#import <Google/SignIn.h>
-#import <CoreLocation/CoreLocation.h>
-#import "AWAREKeys.h"
-#import "AWARESensorManager.h"
+#import "AWAREDelegate.h"
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate, GIDSignInDelegate,  UIAlertViewDelegate, CLLocationManagerDelegate>{
-    NSString* check;
-}
-
-@property (strong, nonatomic) UIWindow *window;
-
-@property (strong, nonatomic) CLLocationManager *homeLocationManager;
-
-@property (strong, nonatomic) AWARESensorManager * sharedSensorManager;
-@property (strong, nonatomic) NSTimer* dailyUpdateTimer;
-
-
-// CoreDate
-//@property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
-//@property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
-//@property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
+@interface AppDelegate : AWAREDelegate <UIApplicationDelegate>
 
 
 @end

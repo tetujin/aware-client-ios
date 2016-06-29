@@ -5,20 +5,16 @@
 
 
 target 'AWARE' do
-
-pod 'MQTTKit', :git => 'https://github.com/mobile-web-messaging/MQTTKit.git'
+pod 'MQTTKit' 
 pod 'SCNetworkReachability'
 pod 'Google/SignIn'
 pod 'DeployGateSDK'
 pod 'ios-ntp'
 pod 'EZAudio'
 pod 'SVProgressHUD'
-#pod 'Google/CloudMessaging'
 pod 'EAIntroView', '~> 2.9.0'
 #pod 'RNGridMenu', '~> 0.1.2'
-
-
-
+#pod 'Google/CloudMessaging'
 #pod 'Google-API-Client'
 #pod 'Podfile'
 #pod 'ResearchKit'

@@ -12,6 +12,7 @@
 #import "ViewController.h"
 #import "GoogleLoginViewController.h"
 #import "AWAREEsmViewController.h"
+#import "AWARECore.h"
 #import "WebViewController.h"
 
 // Util
@@ -28,7 +29,7 @@
 #import "Orientation.h"
 #import "Debug.h"
 #import "AWAREHealthKit.h"
-#import "Scheduler.h"
+#import "BalacnedCampusESMScheduler.h"
 #import "Memory.h"
 #import "Labels.h"
 #import "BLEHeartRate.h"
@@ -107,13 +108,18 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
 
+    /// Init sensor manager for the list view
+    AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+    AWARECore * core = delegate.sharedAWARECore;
+    sensorManager = core.sharedSensorManager;
+    dailyUpdateTimer = core.dailyUpdateTimer;
+    
     // A sensor list for table view
     _sensors = [[NSMutableArray alloc] init];
     
     // AWAREStudy manages a study configurate
-     awareStudy = [[AWAREStudy alloc] initWithReachability:YES];
-    
-    
+    awareStudy = core.sharedAwareStudy;
+    //[[AWAREStudy alloc] initWithReachability:YES];
     
     /**
      * Init a Debug Sensor for collecting a debug message.
@@ -122,10 +128,7 @@
      */
     debugSensor = [[Debug alloc] initWithAwareStudy:awareStudy];
     
-    /// Init sensor manager for the list view
-    AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
-    sensorManager = delegate.sharedSensorManager;
-    dailyUpdateTimer = delegate.dailyUpdateTimer;
+    
     
     [self initContentsOnTableView];
     
@@ -135,7 +138,11 @@
     }
     
     /// Start an update timer for list view. This timer refreshed the list view every 0.1 sec.
-    listUpdateTimer = [NSTimer scheduledTimerWithTimeInterval:0.1f target:self.tableView selector:@selector(reloadData) userInfo:nil repeats:YES];
+    listUpdateTimer = [NSTimer scheduledTimerWithTimeInterval:0.1f
+                                                       target:self
+                                                     selector:@selector(updateVisibleCells)
+                                                     userInfo:nil
+                                                      repeats:YES];
     [[NSRunLoop mainRunLoop] addTimer:listUpdateTimer forMode:NSRunLoopCommonModes];
 
 }
@@ -236,6 +243,29 @@
         batteryChargingOnly = @"YES";
     }else{
         batteryChargingOnly = @"NO";
+    }
+    
+    
+    cleanOldDataType cleanInterval = [userDefaults integerForKey:SETTING_FREQUENCY_CLEAN_OLD_DATA];
+    NSString * cleanIntervalStr = @"";
+    switch (cleanInterval) {
+        case cleanOldDataTypeNever:
+            cleanIntervalStr = @"Never";
+            break;
+        case cleanOldDataTypeWeekly:
+            cleanIntervalStr = @"Weekly";
+            break;
+        case cleanOldDataTypeMonthly:
+            cleanIntervalStr = @"Monthly";
+            break;
+        case cleanOldDataTypeDaily:
+            cleanIntervalStr = @"Daily";
+            break;
+        case cleanOldDataTypeAlways:
+            cleanIntervalStr = @"Always";
+            break;
+        default:
+            break;
     }
     
     // Get maximum data per a HTTP/POST request
@@ -344,25 +374,27 @@
     /**
      * Setting
      */
-    // Title
+    // title for settings
     [_sensors addObject:[self getCelContent:@"Settings" desc:@"" image:@"" key:@"TITLE_CELL_VIEW"]];
-    // A Debug mode on/off
+    // debug state
     [_sensors addObject:[self getCelContent:@"Debug" desc:debugState image:@"" key:@"STUDY_CELL_DEBUG"]];
-    // A Sync interval
+    // sync interval
     [_sensors addObject:[self getCelContent:@"Sync Interval (min)" desc:syncInterval image:@"" key:@"STUDY_CELL_SYNC"]];
-    // A Sync network condition
+    // sync network condition
     [_sensors addObject:[self getCelContent:@"Auto sync with only Wi-Fi" desc:wifiOnly image:@"" key:@"STUDY_CELL_WIFI"]];
-    // A Sync battery condition
+    // sync battery condition
     [_sensors addObject:[self getCelContent:@"Auto sync with only battery charging" desc:batteryChargingOnly image:@"" key:@"STUDY_CELL_BATTERY"]];
-    // A maximum data size per one HTTP/POST
+    // frequency of clean old data
+    [_sensors addObject:[self getCelContent:@"Frequency of clean old data" desc:cleanIntervalStr image:@"" key:@"STUDY_CELL_CLEAN_OLD_DATA"]];
+    // maximum data size per one HTTP/POST
     [_sensors addObject:[self getCelContent:@"Maximum file size" desc:maximumFileSizeDesc image:@"" key:@"STUDY_CELL_MAX_FILE_SIZE"]];
-    // A current version of AWARE iOS
+    // current version of AWARE iOS
     NSString* version = [NSString stringWithFormat:@"%@",[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]];
     [_sensors addObject:[self getCelContent:@"Version" desc:version image:@"" key:@"STUDY_CELL_VIEW"]];
-        // A manual data upload button
+    // manual data upload button
     [_sensors addObject:[self getCelContent:@"Manual Data Upload" desc:@"Please push this row for uploading sensor data!" image:@"" key:@"STUDY_CELL_MANULA_UPLOAD"]];
     [_sensors addObject:[self getCelContent:@"General App Settings" desc:@"Move to the Settings app" image:@"" key:@"STUDY_CELL_SETTINGS_APP"]];
-    // Auto Study Update
+    // daily study update
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"HH:mm"];
     NSString *formattedDateString = @"--:--";
@@ -435,13 +467,12 @@
     _refreshButton.enabled = NO;
     [self performSelector:@selector(initContentsOnTableView) withObject:0 afterDelay:5];
     [self performSelector:@selector(refreshButtonEnableYes) withObject:0 afterDelay:10];
+    [self.tableView reloadData];
 }
 
 - (void) refreshButtonEnableYes {
     _refreshButton.enabled = YES;
 }
-
-
 
 
 -(BOOL)navigationBar:(UINavigationBar *)navigationBar shouldPopItem:(UINavigationItem *)item
@@ -464,7 +495,7 @@
  */
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"%ld is selected!", indexPath.row);
+//    NSLog(@"%ld is selected!", indexPath.row);
     NSDictionary *item = (NSDictionary *)[_sensors objectAtIndex:indexPath.row];
     NSString *key = [item objectForKey:KEY_CEL_SENSOR_NAME];
     // Debug Model ON/OFF
@@ -664,7 +695,7 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
             return;
         }
         NSString *label = [alertView textFieldAtIndex:0].text;
-        Labels * labelsSensor = [[Labels alloc] initWithSensorName:SENSOR_LABELS withAwareStudy:awareStudy];
+        Labels * labelsSensor = [[Labels alloc] initWithAwareStudy:awareStudy];
         [labelsSensor saveLabel:label withKey:@"top" type:@"text" body:@"" triggerTime:[NSDate new] answeredTime:[NSDate new]];
         [labelsSensor syncAwareDB];
     }else if (alertView.tag == 12){
@@ -707,15 +738,40 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
 }
 
 
+
+- (void)updateVisibleCells {
+    for (UITableViewCell *cell in [self.tableView visibleCells]){
+        [self updateCell:cell atIndexPath:[self.tableView indexPathForCell:cell]];
+//        NSLog(@"%@", cell);
+    }
+}
+
+
+//for cell updating
+- (void)updateCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
+    NSDictionary *item = (NSDictionary *)[_sensors objectAtIndex:indexPath.row];
+    NSString *sensorKey = [item objectForKey:KEY_CEL_SENSOR_NAME];
+    NSString* latestSensorData = nil;
+    @autoreleasepool {
+         latestSensorData = [sensorManager getLatestSensorData:sensorKey];
+        //update latest sensor data
+        if(![latestSensorData isEqualToString:@""]){
+            [cell.detailTextLabel setText:latestSensorData];
+        }
+    }
+    
+}
+
+
+
 - (UITableViewCell *)tableView:(UITableView *)tableView
          cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     @autoreleasepool {
-//        NSLog(@"%ld",indexPath.row);
         static NSString *MyIdentifier = @"MyReuseIdentifier";
-        
+//
         NSDictionary *item = (NSDictionary *)[_sensors objectAtIndex:indexPath.row];
-        
-        /// Make a cell by _sensors (sensor list on ViewController.)
+//
+//        /// Make a cell by _sensors (sensor list on ViewController.)
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:MyIdentifier];
         if (cell == nil) {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle  reuseIdentifier:MyIdentifier];
@@ -729,22 +785,25 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
         }
         NSString *stateStr = [item objectForKey:KEY_CEL_STATE];
         cell.imageView.image = theImage;
-        
-        //update latest sensor data
+    
         NSString *sensorKey = [item objectForKey:KEY_CEL_SENSOR_NAME];
         NSString* latestSensorData = [sensorManager getLatestSensorData:sensorKey];
+    
+    
+         latestSensorData = [sensorManager getLatestSensorData:sensorKey];
+         //update latest sensor data
         if(![latestSensorData isEqualToString:@""]){
             [cell.detailTextLabel setText:latestSensorData];
         }
-
         if ([stateStr isEqualToString:@"true"]) {
-            theImage = [theImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            UIImageView *aImageView = [[UIImageView alloc] initWithImage:theImage];
-            aImageView.tintColor = UIColor.redColor;
-            cell.imageView.image = theImage;
+             theImage = [theImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+             UIImageView *aImageView = [[UIImageView alloc] initWithImage:theImage];
+             aImageView.tintColor = UIColor.redColor;
+             cell.imageView.image = theImage;
         }
         return cell;
     }
+    
 }
 
 
