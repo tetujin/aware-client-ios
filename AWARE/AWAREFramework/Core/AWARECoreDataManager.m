@@ -33,6 +33,7 @@
     BOOL isUploading;
     BOOL isManualUpload;
     BOOL isSyncWithOnlyBatteryCharging;
+    BOOL isSyncWithWifiOnly;
     int errorPosts;
     
     NSNumber * unixtimeOfUploadingData;
@@ -80,6 +81,8 @@
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         isDebug = [userDefaults boolForKey:SETTING_DEBUG_STATE];
         isSyncWithOnlyBatteryCharging = [userDefaults boolForKey:SETTING_SYNC_BATTERY_CHARGING_ONLY];
+        isSyncWithWifiOnly = [userDefaults boolForKey:SETTING_SYNC_WIFI_ONLY];
+        
         
         dbCondition = AwareDBConditionNormal;
         
@@ -119,7 +122,7 @@
     }
     
     // chekc wifi state
-    if (![awareStudy isWifiReachable]) {
+      if ([awareStudy isWifiReachable] == NO && isSyncWithWifiOnly == YES) {
         NSString * message = [NSString stringWithFormat:@"[%@] Wifi is not availabe.", sensorName];
         NSLog(@"%@", message);
         return;
@@ -453,7 +456,11 @@
                         sessionConfig.timeoutIntervalForRequest = 60 * 3;
                         sessionConfig.HTTPMaximumConnectionsPerHost = 60 * 3;
                         sessionConfig.timeoutIntervalForResource = 60 * 3;
-                        sessionConfig.allowsCellularAccess = NO;
+                        if(isSyncWithWifiOnly){
+                            sessionConfig.allowsCellularAccess = NO;
+                        }else{
+                            sessionConfig.allowsCellularAccess = YES;
+                        }
                         
                         // set HTTP/POST body information
                         NSString* post = [NSString stringWithFormat:@"device_id=%@&data=", deviceId];

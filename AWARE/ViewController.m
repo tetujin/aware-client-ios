@@ -465,9 +465,9 @@
     [awareStudy refreshStudy];
     
     _refreshButton.enabled = NO;
+    [self.tableView reloadData];
     [self performSelector:@selector(initContentsOnTableView) withObject:0 afterDelay:5];
     [self performSelector:@selector(refreshButtonEnableYes) withObject:0 afterDelay:10];
-    [self.tableView reloadData];
 }
 
 - (void) refreshButtonEnableYes {
@@ -505,11 +505,15 @@
         [alert show];
     // Set Sync Interval
     } else if ([key isEqualToString:@"STUDY_CELL_SYNC"]) { //Sync
+        // Get the interval
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        double interval = [userDefaults doubleForKey:SETTING_SYNC_INT];
+        // Set the interval
         UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Sync Interval (min)" message:@"Please inpute a sync interval to the server." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Done",nil];
         alert.alertViewStyle = UIAlertViewStylePlainTextInput;
         [[alert textFieldAtIndex:0] setKeyboardType:UIKeyboardTypeNumberPad];
         [[alert textFieldAtIndex:0] becomeFirstResponder];
-        [alert textFieldAtIndex:0].text = [NSString stringWithFormat:@"%d", (int)uploadInterval/60];
+        [alert textFieldAtIndex:0].text = [NSString stringWithFormat:@"%d", (int)(interval/60)];
         alert.tag = 2;
         [alert show];
     // Set Wi-Fi and mobile network setting
@@ -598,6 +602,14 @@
          [intro showInView:self.view animateDuration:0.0];
          NSIndexPath* indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
          [tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];
+    } else if ([key isEqualToString:@"STUDY_CELL_CLEAN_OLD_DATA"]){
+        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"AWARE Setting"
+                                                         message:@"Please select when old data will be cleared."
+                                                        delegate:self
+                                               cancelButtonTitle:@"Cancel"
+                                               otherButtonTitles:@"Never",@"Weekly",@"Monthly",@"Daily",@"Always",nil];
+        alert.tag = 14;
+        [alert show];
     }
 }
 
@@ -614,30 +626,38 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
 //        NSLog(@"%ld", buttonIndex);
         if (buttonIndex == 1){ //yes
             [userDefaults setBool:YES forKey:SETTING_DEBUG_STATE];
-//            [self initContentsOnTableView];
             [self pushedStudyRefreshButton:alertView];
         } else if (buttonIndex == 2){ // no
             //reset clicked
             [userDefaults setBool:NO forKey:SETTING_DEBUG_STATE];
-//            [self initContentsOnTableView];
             [self pushedStudyRefreshButton:alertView];
         } else {
             NSLog(@"Cancel");
         }
+        [self.tableView reloadData];
+        [self initContentsOnTableView];
     }else if([title isEqualToString:@"Sync Interval (min)"]){
+        // cancel
         if ( buttonIndex == [alertView cancelButtonIndex]){
             NSLog(@"Cancel");
             return;
         }
+        // Set value
         NSString *interval = [alertView textFieldAtIndex:0].text;
         if ([interval isEqualToString:@""] || [interval isEqualToString:@"0"]) {
             return;
         }
+        // Set the sync interval to userDedaults
         double syncInterval = [interval doubleValue] * 60.0f;
         [userDefaults setObject:[NSNumber numberWithDouble:syncInterval] forKey:SETTING_SYNC_INT];
-//        [self pushedStudyRefreshButton:alertView];
-        [self initContentsOnTableView];
+        [userDefaults synchronize];
+        
+        // restart uploader
         [sensorManager startUploadTimerWithInterval:syncInterval];
+        
+        [self.tableView reloadData];
+        [self initContentsOnTableView];
+        
     }else if(alertView.tag == 3){
 //        NSLog(@"%ld", buttonIndex);
         if (buttonIndex == 1){ //yes
@@ -652,17 +672,21 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
         } else {
             NSLog(@"Cancel");
         }
+        [self.tableView reloadData];
+        [self initContentsOnTableView];
     }else if (alertView.tag == 9){ // Set Sync Setting
 //        NSLog(@"%ld", buttonIndex);
         if (buttonIndex == 1){ //yes
             [userDefaults setBool:YES forKey:SETTING_SYNC_BATTERY_CHARGING_ONLY];
-            [self initContentsOnTableView];
+            [self pushedStudyRefreshButton:alertView];
         } else if (buttonIndex == 2){ // no
             [userDefaults setBool:NO forKey:SETTING_SYNC_BATTERY_CHARGING_ONLY];
-            [self initContentsOnTableView];
+            [self pushedStudyRefreshButton:alertView];
         } else {
             NSLog(@"Cancel");
         }
+        [self.tableView reloadData];
+        [self initContentsOnTableView];
     }else if([title isEqualToString:@"Maximum Size of Post Data(KB)"]){
         if ( buttonIndex == [alertView cancelButtonIndex]){
             NSLog(@"Cancel");
@@ -675,7 +699,9 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
         NSInteger maximumValue = [maximumValueStr integerValue] * 1000;
         [userDefaults setObject:[NSNumber numberWithInteger:maximumValue] forKey:KEY_MAX_DATA_SIZE];
         [self pushedStudyRefreshButton:alertView];
-//        [self initContentsOnTableView];
+        
+        [self.tableView reloadData];
+        [self initContentsOnTableView];
     }else if(alertView.tag == 8){ //manual data upload
         if (buttonIndex == [alertView cancelButtonIndex]) {
             
@@ -710,6 +736,32 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
                                                    otherButtonTitles:nil];
             [alert show];
         }
+    }else if (alertView.tag == 14){
+        switch (buttonIndex) {
+            case 0:
+                NSLog(@"cancel");
+                break;
+            case 1:
+                [userDefaults setInteger:cleanOldDataTypeNever forKey:SETTING_FREQUENCY_CLEAN_OLD_DATA];
+                break;
+            case 2:
+                [userDefaults setInteger:cleanOldDataTypeWeekly forKey:SETTING_FREQUENCY_CLEAN_OLD_DATA];
+                break;
+            case 3:
+                [userDefaults setInteger:cleanOldDataTypeMonthly forKey:SETTING_FREQUENCY_CLEAN_OLD_DATA];
+                break;
+            case 4:
+                [userDefaults setInteger:cleanOldDataTypeDaily forKey:SETTING_FREQUENCY_CLEAN_OLD_DATA];
+                break;
+            case 5:
+                [userDefaults setInteger:cleanOldDataTypeAlways forKey:SETTING_FREQUENCY_CLEAN_OLD_DATA];
+                break;
+            default:
+                
+                break;
+        }
+        [self.tableView reloadData];
+        [self initContentsOnTableView];
     }
 }
 

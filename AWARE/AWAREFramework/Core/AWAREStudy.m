@@ -57,8 +57,8 @@
         readingState = YES;
         frequencySyncDB = 30; //30 min
         // (0 = never, 1 = weekly, 2 = monthly, 3 = daily, 4 = always)
-        frequencyCleanOldData = cleanOldDataTypeDaily;
-        webserviceWifiOnly = YES;
+        frequencyCleanOldData = cleanOldDataTypeAlways;
+        webserviceWifiOnly = NO;
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         NSString* tempUserName = [userDefaults objectForKey:KEY_MQTT_USERNAME];
         if(tempUserName != nil){
@@ -268,6 +268,11 @@ didCompleteWithError:(NSError *)error {
     NSLog( @"%@", studyConfiguration );
     
     //    if(responseCode == 200){
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    webserviceWifiOnly = [userDefaults boolForKey:SETTING_SYNC_WIFI_ONLY];
+    frequencySyncDB = [userDefaults doubleForKey:SETTING_SYNC_INT]/60;
+    frequencyCleanOldData = [userDefaults integerForKey:SETTING_FREQUENCY_CLEAN_OLD_DATA];
+    
     NSLog(@"GET Study Information");
     NSArray * array = [[mqttArray objectAtIndex:0] objectForKey:@"sensors"];
     NSArray * plugins = [[mqttArray objectAtIndex:0] objectForKey:KEY_PLUGINS];
@@ -303,7 +308,6 @@ didCompleteWithError:(NSError *)error {
         }
     }
     
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString * oldStudyId = [userDefaults objectForKey:KEY_STUDY_ID];
     if(![oldStudyId isEqualToString:studyId]){
         NSLog(@"Add new device ID to the AWARE server.");

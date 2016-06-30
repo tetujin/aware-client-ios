@@ -81,42 +81,41 @@
         NSLog(@"Location sensing requency is %f ", frequency);
         interval = frequency;
     }
-
-    // Get a sensing accuracy for a location sensor
-    NSInteger accuracySetting = 0;
-    int accuracy = [self getSensorSetting:settings withKey:@"accuracy_google_fused_location"];
-    if(accuracy == 100){
-        accuracySetting = kCLLocationAccuracyBest;
-        locationManager.distanceFilter = kCLDistanceFilterNone;
-    }else if (accuracy == 101) { // High accuracy
-        accuracySetting = kCLLocationAccuracyNearestTenMeters;
-        locationManager.distanceFilter = 10;
-    } else if (accuracy == 102) { //balanced
-        accuracySetting = kCLLocationAccuracyHundredMeters;
-        locationManager.distanceFilter = 100;
-    } else if (accuracy == 104) { //low power
-        accuracySetting = kCLLocationAccuracyKilometer;
-        locationManager.distanceFilter = 1000;
-    } else if (accuracy == 105) { //no power
-        accuracySetting = kCLLocationAccuracyThreeKilometers;
-        locationManager.distanceFilter = 3000;
-    } else {
-        accuracySetting = kCLLocationAccuracyHundredMeters;
-        locationManager.distanceFilter = 100;
-    }
-    // One of the following numbers: 100 (High accuracy); 102 (balanced); 104 (low power); 105 (no power, listens to others location requests)
-    // http://stackoverflow.com/questions/3411629/decoding-the-cllocationaccuracy-consts
-    //    GPS - kCLLocationAccuracyBestForNavigation;
-    //    GPS - kCLLocationAccuracyBest;
-    //    GPS - kCLLocationAccuracyNearestTenMeters;
-    //    WiFi (or GPS in rural area) - kCLLocationAccuracyHundredMeters;
-    //    Cell Tower - kCLLocationAccuracyKilometer;
-    //    Cell Tower - kCLLocationAccuracyThreeKilometers;
-    
     
     // Initialize a location sensor
     if (locationManager == nil){
+        // AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
         locationManager = [[CLLocationManager alloc] init];
+        // Get a sensing accuracy for a location sensor
+        NSInteger accuracySetting = 0;
+        int accuracy = [self getSensorSetting:settings withKey:@"accuracy_google_fused_location"];
+        if(accuracy == 100){
+            accuracySetting = kCLLocationAccuracyBest;
+            locationManager.distanceFilter = kCLDistanceFilterNone;
+        }else if (accuracy == 101) { // High accuracy
+            accuracySetting = kCLLocationAccuracyNearestTenMeters;
+            locationManager.distanceFilter = 10;
+        } else if (accuracy == 102) { //balanced
+            accuracySetting = kCLLocationAccuracyHundredMeters;
+            locationManager.distanceFilter = 100;
+        } else if (accuracy == 104) { //low power
+            accuracySetting = kCLLocationAccuracyKilometer;
+            locationManager.distanceFilter = 1000;
+        } else if (accuracy == 105) { //no power
+            accuracySetting = kCLLocationAccuracyThreeKilometers;
+            locationManager.distanceFilter = 3000;
+        } else {
+            accuracySetting = kCLLocationAccuracyHundredMeters;
+            locationManager.distanceFilter = 100;
+        }
+        // One of the following numbers: 100 (High accuracy); 102 (balanced); 104 (low power); 105 (no power, listens to others location requests)
+        // http://stackoverflow.com/questions/3411629/decoding-the-cllocationaccuracy-consts
+        //    GPS - kCLLocationAccuracyBestForNavigation;
+        //    GPS - kCLLocationAccuracyBest;
+        //    GPS - kCLLocationAccuracyNearestTenMeters;
+        //    WiFi (or GPS in rural area) - kCLLocationAccuracyHundredMeters;
+        //    Cell Tower - kCLLocationAccuracyKilometer;
+        //    Cell Tower - kCLLocationAccuracyThreeKilometers;
         locationManager.delegate = self;
         locationManager.desiredAccuracy = accuracySetting;
         locationManager.pausesLocationUpdatesAutomatically = NO;

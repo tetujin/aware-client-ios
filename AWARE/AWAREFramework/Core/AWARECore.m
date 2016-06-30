@@ -53,7 +53,7 @@
         [userDefaults setBool:NO forKey:KEY_APP_TERMINATED];                  // Default Value: NO
         [userDefaults setInteger:0 forKey:KEY_UPLOAD_MARK];                   // Defualt Value: 0
         [userDefaults setInteger:1000 * 100 forKey:KEY_MAX_DATA_SIZE];        // Defualt Value: 1000*100 (byte) (100 KB)
-        [userDefaults setInteger:cleanOldDataTypeDaily forKey:SETTING_FREQUENCY_CLEAN_OLD_DATA];
+        [userDefaults setInteger:cleanOldDataTypeAlways forKey:SETTING_FREQUENCY_CLEAN_OLD_DATA];
         [userDefaults setBool:YES forKey:@"aware_inited"];
     }
     double uploadInterval = [userDefaults doubleForKey:SETTING_SYNC_INT];
@@ -109,6 +109,7 @@
         _sharedLocationManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers;
         _sharedLocationManager.pausesLocationUpdatesAutomatically = NO;
         _sharedLocationManager.activityType = CLActivityTypeOther;
+
         if ([AWAREUtils getCurrentOSVersionAsFloat] >= 9.0) {
             /// After iOS 9.0, we have to set "YES" for background sensing.
             _sharedLocationManager.allowsBackgroundLocationUpdates = YES;
@@ -117,8 +118,9 @@
             [_sharedLocationManager requestAlwaysAuthorization];
         }
         // Set a movement threshold for new events.
-        _sharedLocationManager.distanceFilter = 200; // meters
+        // _sharedLocationManager.distanceFilter = 200; // meters
         [_sharedLocationManager startUpdatingLocation];
+        [_sharedLocationManager startMonitoringSignificantLocationChanges];
     }
 }
 
@@ -135,12 +137,15 @@
         [debugSensor saveDebugEventWithText:message type:DebugTypeInfo label:@""];
         [userDefaults setBool:NO forKey:KEY_APP_TERMINATED];
     }else{
-        //        [self sendLocalNotificationForMessage:@"" soundFlag:YES];
+        // [self sendLocalNotificationForMessage:@"" soundFlag:YES];
+        // NSLog(@"Base Location Sensor.");
+        if ([userDefaults boolForKey: SETTING_DEBUG_STATE]) {
+            for (CLLocation * location in locations) {
+                NSLog(@"%@",location.description);
+                
+            }
+        }
     }
 }
-
-
-
-
 
 @end

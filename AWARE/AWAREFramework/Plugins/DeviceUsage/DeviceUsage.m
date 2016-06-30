@@ -62,7 +62,7 @@
 //    int notify_token;
     notify_register_dispatch("com.apple.iokit.hid.displayStatus", &_notifyTokenForDidChangeDisplayStatus,dispatch_get_main_queue(), ^(int token) {
         
-        //        NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+//        NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
 //        [dic setObject:unixtime forKey:@"timestamp"];
 //        [dic setObject:[self getDeviceId] forKey:@"device_id"];
 
@@ -86,6 +86,13 @@
             awareScreenState = 0;
             deviceUsage.elapsed_device_on = @(elapsedTime);
             deviceUsage.elapsed_device_off = @0;
+            if ([self isDebug]) {
+                NSString * message = [NSString stringWithFormat:@"Elapsed Time of device ON: %@ [Event at %@]",
+                                      [self unixtime2str:elapsedTime],
+                                      [self nsdate2FormattedTime:[NSDate new]]
+                                      ];
+                [AWAREUtils sendLocalNotificationForMessage:message soundFlag:NO];
+            }
 //            [dic setObject:[NSNumber numberWithDouble:elapsedTime] forKey:@"elapsed_device_on"]; // real
 //            [dic setObject:@0 forKey:@"elapsed_device_off"]; // real
         } else {
@@ -93,6 +100,17 @@
             awareScreenState = 1;
             deviceUsage.elapsed_device_on = @0;
             deviceUsage.elapsed_device_off = @(elapsedTime);
+            if([self isDebug]){
+                NSString * message = @"";
+                [AWAREUtils sendLocalNotificationForMessage:message soundFlag:NO];
+            }
+            if ([self isDebug]) {
+                NSString * message = [NSString stringWithFormat:@"Elapsed Time of device OFF: %@ [Event at %@]",
+                                      [self unixtime2str:elapsedTime],
+                                      [self nsdate2FormattedTime:[NSDate new]]
+                                      ];
+                [AWAREUtils sendLocalNotificationForMessage:message soundFlag:NO];
+            }
 //            [dic setObject:@0 forKey:@"elapsed_device_on"]; // real
 //            [dic setObject:[NSNumber numberWithDouble:elapsedTime] forKey:@"elapsed_device_off"]; // real
         }
@@ -113,5 +131,24 @@
         NSLog(@"[screen] NO ==> %d", result);
     }
 }
+
+
+-(NSString*)unixtime2str:(double)elapsedTime{
+    NSString * strElapsedTime = @"";
+    if( elapsedTime < 60){
+        strElapsedTime = [NSString stringWithFormat:@"%d sec.", (int)elapsedTime];
+    }else{ // 1min
+        strElapsedTime = [NSString stringWithFormat:@"%d min.", (int)(elapsedTime/60)];
+    }
+    return strElapsedTime;
+}
+
+-(NSString*)nsdate2FormattedTime:(NSDate*)date{
+    NSDateFormatter *formatter=[[NSDateFormatter alloc]init];
+    // [formatter setDateFormat:@"yyyy/MM/dd HH:mm:ss"];
+    [formatter setDateFormat:@"HH:mm:ss"];
+    return [formatter stringFromDate:date];
+}
+
 
 @end
