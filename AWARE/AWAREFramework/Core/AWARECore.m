@@ -139,8 +139,11 @@
     }else{
         // [self sendLocalNotificationForMessage:@"" soundFlag:YES];
         // NSLog(@"Base Location Sensor.");
-        for (CLLocation * location in locations) {
-            NSLog(@"%@",location.description);
+        if ([userDefaults boolForKey: SETTING_DEBUG_STATE]) {
+            for (CLLocation * location in locations) {
+                NSLog(@"%@",location.description);
+                
+            }
         }
     }
 }

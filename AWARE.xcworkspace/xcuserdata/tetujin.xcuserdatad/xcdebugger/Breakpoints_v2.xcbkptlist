@@ -180,12 +180,12 @@
                   moduleName = "AWARE"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/tetujin/Dropbox/tokuda_Lab/codes/objective-c/AWARE/AWARE/AWAREFramework/Core/AWARECoreDataManager.m"
-                  timestampString = "489003927.495755"
+                  timestampString = "489007113.44004"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "481"
-                  endingLineNumber = "481"
-                  offsetFromSymbolStart = "1496">
+                  startingLineNumber = "486"
+                  endingLineNumber = "486"
+                  offsetFromSymbolStart = "1568">
                </Location>
                <Location
                   shouldBeEnabled = "Yes"
@@ -195,11 +195,11 @@
                   moduleName = "AWARE"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/tetujin/Dropbox/tokuda_Lab/codes/objective-c/AWARE/AWARE/AWAREFramework/Core/AWARECoreDataManager.m"
-                  timestampString = "489003927.495875"
+                  timestampString = "489007113.440131"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "482"
-                  endingLineNumber = "482"
+                  startingLineNumber = "487"
+                  endingLineNumber = "487"
                   offsetFromSymbolStart = "140">
                </Location>
             </Locations>
