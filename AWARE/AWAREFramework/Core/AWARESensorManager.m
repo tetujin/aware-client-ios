@@ -556,51 +556,51 @@
     
     
     /** =======  WiFi network ======= */
-    if(![awareStudy isWifiReachable]){
-        // stop NSTimer
-        [manualUploadMonitor invalidate];
-        manualUploadMonitor = nil;
-        
-        // remove observer from DefaultCenter
-        [[NSNotificationCenter defaultCenter] removeObserver:observer];
-        [SVProgressHUD performSelector:@selector(dismiss) withObject:nil afterDelay:3.0f];
-        AudioServicesPlayAlertSound(1324);
-        
-        if([AWAREUtils isBackground]){
-            [AWAREUtils sendLocalNotificationForMessage:@"[Manual Upload] WiFi connection is closed. Please try upload again with WiFi." soundFlag:YES];
-        }else{
-            UIAlertView *alert = [ [UIAlertView alloc]
-                                  initWithTitle:@""
-                                  message:@"[Manual Upload] WiFi connection is closed. Please try upload again with WiFi."
-                                  delegate:nil
-                                  cancelButtonTitle:@"OK"
-                                  otherButtonTitles:nil];
-            [alert show];
-        }
-    }
+//    if(![awareStudy isWifiReachable]){
+//        // stop NSTimer
+//        [manualUploadMonitor invalidate];
+//        manualUploadMonitor = nil;
+//        
+//        // remove observer from DefaultCenter
+//        [[NSNotificationCenter defaultCenter] removeObserver:observer];
+//        [SVProgressHUD performSelector:@selector(dismiss) withObject:nil afterDelay:3.0f];
+//        AudioServicesPlayAlertSound(1324);
+//        
+//        if([AWAREUtils isBackground]){
+//            [AWAREUtils sendLocalNotificationForMessage:@"[Manual Upload] WiFi connection is closed. Please try upload again with WiFi." soundFlag:YES];
+//        }else{
+//            UIAlertView *alert = [ [UIAlertView alloc]
+//                                  initWithTitle:@""
+//                                  message:@"[Manual Upload] WiFi connection is closed. Please try upload again with WiFi."
+//                                  delegate:nil
+//                                  cancelButtonTitle:@"OK"
+//                                  otherButtonTitles:nil];
+//            [alert show];
+//        }
+//    }
     
     /** =========  Battery Charging  ====== */
-    if( [UIDevice currentDevice].batteryState == UIDeviceBatteryStateUnplugged ){
-        [manualUploadMonitor invalidate];
-        manualUploadMonitor = nil;
-        
-        // remove observer from DefaultCenter
-        [[NSNotificationCenter defaultCenter] removeObserver:observer];
-        [SVProgressHUD performSelector:@selector(dismiss) withObject:nil afterDelay:3.0f];
-        AudioServicesPlayAlertSound(1324);
-        
-        if([AWAREUtils isBackground]){
-            [AWAREUtils sendLocalNotificationForMessage:@"[Manual Upload] The battery is not charged. Please try upload again with battery charging." soundFlag:YES];
-        }else{
-            UIAlertView *alert = [ [UIAlertView alloc]
-                                  initWithTitle:@""
-                                  message:@"[Manual Upload] The battery is not charged. Please try upload again with battery charging."
-                                  delegate:nil
-                                  cancelButtonTitle:@"OK"
-                                  otherButtonTitles:nil];
-            [alert show];
-        }
-    }
+//    if( [UIDevice currentDevice].batteryState == UIDeviceBatteryStateUnplugged ){
+//        [manualUploadMonitor invalidate];
+//        manualUploadMonitor = nil;
+//        
+//        // remove observer from DefaultCenter
+//        [[NSNotificationCenter defaultCenter] removeObserver:observer];
+//        [SVProgressHUD performSelector:@selector(dismiss) withObject:nil afterDelay:3.0f];
+//        AudioServicesPlayAlertSound(1324);
+//        
+//        if([AWAREUtils isBackground]){
+//            [AWAREUtils sendLocalNotificationForMessage:@"[Manual Upload] The battery is not charged. Please try upload again with battery charging." soundFlag:YES];
+//        }else{
+//            UIAlertView *alert = [ [UIAlertView alloc]
+//                                  initWithTitle:@""
+//                                  message:@"[Manual Upload] The battery is not charged. Please try upload again with battery charging."
+//                                  delegate:nil
+//                                  cancelButtonTitle:@"OK"
+//                                  otherButtonTitles:nil];
+//            [alert show];
+//        }
+//    }
     
 }
 

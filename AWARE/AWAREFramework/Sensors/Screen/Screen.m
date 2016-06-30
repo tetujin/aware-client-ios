@@ -80,12 +80,20 @@
         
         if(state == 0) {
             NSLog(@"unlock device");
+            if ([self isDebug]) {
+                [AWAREUtils sendLocalNotificationForMessage:[NSString stringWithFormat:@"(3) Unlock at %@",[self nsdate2FormattedTime:[NSDate new]]]
+                                                  soundFlag:NO];
+            }
             awareScreenState = 3;
             [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_SCREEN_UNLOCKED
                                                                 object:nil
                                                               userInfo:nil];
         } else {
             NSLog(@"lock device");
+            if ([self isDebug]) {
+                [AWAREUtils sendLocalNotificationForMessage:[NSString stringWithFormat:@"(2) Lock at %@",[self nsdate2FormattedTime:[NSDate new]]]
+                                                  soundFlag:NO];
+            }
             [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_SCREEN_LOCKED
                                                                 object:nil
                                                               userInfo:nil];
@@ -96,12 +104,14 @@
 
         [self saveScreenEvent:awareScreenState];
         
+        [self setLatestValue:[NSString stringWithFormat:@"%@", [NSNumber numberWithInt:awareScreenState]]];
+        
+        /** ============ Codes for TextFile DB ==============  */
 //        NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
 //        NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
 //        [dic setObject:unixtime forKey:@"timestamp"];
 //        [dic setObject:[self getDeviceId] forKey:@"device_id"];
 //        [dic setObject:[NSNumber numberWithInt:awareScreenState] forKey:@"screen_status"]; // int
-        [self setLatestValue:[NSString stringWithFormat:@"%@", [NSNumber numberWithInt:awareScreenState]]];
 //        [self saveData:dic];
     });
 }
@@ -117,25 +127,47 @@
         
         if(state == 0) {
             NSLog(@"screen off");
+            /** 
+             -------------------------------------------------------------------------------------------
+              If you need to check an action of screen status(off), please use the following code.
+              The following code sends notifications when the screen status is changed in the debug mode.
+             -------------------------------------------------------------------------------------------
+             */
+//            if ([self isDebug]) {
+//                [AWAREUtils sendLocalNotificationForMessage:[NSString stringWithFormat:@"(0) Screen Off at %@", [self nsdate2FormattedTime:[NSDate new]]] soundFlag:NO];
+//            }
             [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_SCREEN_OFF
                                                                 object:nil
                                                               userInfo:nil];
             awareScreenState = 0;
         } else {
+            NSLog(@"screen on");
+            /**
+             -------------------------------------------------------------------------------------------
+             If you need to check an action of screen status(on), please use the following code.
+             The following codes send notifications when the screen status is changed in the debug mode.
+             -------------------------------------------------------------------------------------------
+             */
+//            if ([self isDebug]) {
+//                [AWAREUtils sendLocalNotificationForMessage:[NSString stringWithFormat:@"(1) Screen On at %@", [self nsdate2FormattedTime:[NSDate new]]] soundFlag:NO];
+//            }
+            awareScreenState = 1;
             [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_SCREEN_ON
                                                                 object:nil
                                                               userInfo:nil];
-            NSLog(@"screen on");
-            awareScreenState = 1;
+            
         }
         [self saveScreenEvent:awareScreenState];
-//        NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
-//        NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-//        [dic setObject:unixtime forKey:@"timestamp"];
-//        [dic setObject:[self getDeviceId] forKey:@"device_id"];
-//        [dic setObject:[NSNumber numberWithInt:awareScreenState] forKey:@"screen_status"]; // int
+        
         [self setLatestValue:[NSString stringWithFormat:@"%@", [NSNumber numberWithInt:awareScreenState]]];
-//        [self saveData:dic];
+        
+        /**  ======= Codes for TextFile DB ======= */
+        //        NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
+        //        NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+        //        [dic setObject:unixtime forKey:@"timestamp"];
+        //        [dic setObject:[self getDeviceId] forKey:@"device_id"];
+        //        [dic setObject:[NSNumber numberWithInt:awareScreenState] forKey:@"screen_status"]; // int
+        //        [self saveData:dic];
         
     });
 }
@@ -177,5 +209,11 @@
     }
 }
 
+-(NSString*)nsdate2FormattedTime:(NSDate*)date{
+    NSDateFormatter *formatter=[[NSDateFormatter alloc]init];
+    // [formatter setDateFormat:@"yyyy/MM/dd HH:mm:ss"];
+    [formatter setDateFormat:@"HH:mm:ss"];
+    return [formatter stringFromDate:date];
+}
 
 @end

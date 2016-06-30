@@ -66,6 +66,7 @@
     }
     
     return [self startSensorWithConfidenceFilter:CMMotionActivityConfidenceLow mode:ActivityRecognitionModeHistory interval:frequency];
+//    return [self startSensorWithConfidenceFilter:CMMotionActivityConfidenceLow mode:ActivityRecognitionModeLive interval:frequency];
 }
 
 

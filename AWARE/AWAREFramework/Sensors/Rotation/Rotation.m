@@ -113,7 +113,8 @@
                                                                                                  userInfo:userInfo];
                                                
                                                [self saveDataToDB];
-                                               
+                                               [self setLatestValue:[NSString stringWithFormat:@"%f, %f, %f",motion.attitude.pitch, motion.attitude.roll,motion.attitude.yaw]];
+
 //                                               NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
 //                                               [dic setObject:unixtime forKey:@"timestamp"];
 //                                               [dic setObject:[self getDeviceId] forKey:@"device_id"];
@@ -123,8 +124,7 @@
 //                                               [dic setObject:@0 forKey:@"double_values_3"]; //double
 //                                               [dic setObject:@0 forKey:@"accuracy"];//int
 //                                               [dic setObject:@"" forKey:@"label"]; //text
-                                               [self setLatestValue:[NSString stringWithFormat:@"%f, %f, %f",motion.attitude.pitch, motion.attitude.roll,motion.attitude.yaw]];
-//                                               dispatch_async(dispatch_get_main_queue(), ^{
+//                                              dispatch_async(dispatch_get_main_queue(), ^{
 //                                                   [self saveData:dic toLocalFile:SENSOR_ROTATION];
 //                                               });
                                            }];
