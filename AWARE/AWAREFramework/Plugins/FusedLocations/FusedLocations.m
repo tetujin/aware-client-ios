@@ -204,7 +204,9 @@
 
 
 - (void) getGpsData: (NSTimer *) theTimer {
-    NSLog(@"Get a location");
+    NSLog(@"Get a location")
+    
+    ;
     CLLocation* location = [locationManager location];
     [self saveLocation:location];
 }

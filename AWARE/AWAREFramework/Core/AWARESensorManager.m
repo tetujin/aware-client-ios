@@ -465,6 +465,25 @@
         for ( AWARESensor * sensor in awareSensors ) {
             [sensor syncAwareDBInForeground];
         }
+        
+        
+//        for ( int i=0; i < awareSensors.count; i++) {
+//            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, i * 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+//                NSLog(@"%d", [NSThread isMainThread]);
+//                @try {
+//                    if (i < awareSensors.count ) {
+//                        AWARESensor* sensor = [awareSensors objectAtIndex:i];
+//                        [sensor  syncAwareDBInForeground];
+//                    }else{
+//                        NSLog(@"error");
+//                    }
+//                } @catch (NSException *e) {
+//                    NSLog(@"An exception was appeared: %@",e.name);
+//                    NSLog(@"The reason: %@",e.reason);
+//                }
+//            });
+//        }
+
     });
     return YES;
 }

@@ -391,9 +391,11 @@
              NSData* sensorData = nil;
              NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:entityName];
              [fetchRequest setFetchLimit:[self getFetchLimit]];
-             if ([self getFetchBatchSize] != 0) {
-                 [fetchRequest setFetchBatchSize:[self getFetchBatchSize]];
-             }
+            
+             //if ([self getFetchBatchSize] != 0) {
+             //    [fetchRequest setFetchBatchSize:[self getFetchBatchSize]];
+             //}
+            
              [fetchRequest setEntity:[NSEntityDescription entityForName:entityName inManagedObjectContext:_mainQueueManagedObjectContext]];
              [fetchRequest setIncludesSubentities:NO];
              [fetchRequest setResultType:NSDictionaryResultType];
@@ -422,6 +424,8 @@
                 return;
             }
         
+            NSLog(@"[%@] %ld records", [self getEntityName], results.count);
+            
             NSMutableArray *array = [[NSMutableArray alloc] initWithArray:results];
             for (NSDictionary * dict in array) {
                 unixtimeOfUploadingData = [dict objectForKey:@"timestamp"];

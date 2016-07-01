@@ -268,11 +268,16 @@
             break;
     }
     
-    // Get maximum data per a HTTP/POST request
+    // Get maximum data size per POST
     if (maximumFileSize > 0 ) {
         maximumFileSize = maximumFileSize/1000;
     }
-    NSString *maximumFileSizeDesc = [NSString stringWithFormat:@"%ld (KB)", maximumFileSize];
+    //NSString *maximumFileSizeDesc = [NSString stringWithFormat:@"%ld (KB)", maximumFileSize];
+    NSString *maximumFileSizeDesc = @"Not support now";
+    
+    
+    // Get maximum fetch size per post
+    NSString * fetchSizeStr = [NSString stringWithFormat:@"%ld records per post",[awareStudy getMaxFetchSize]];
     
     /**
      * Study and Device Information
@@ -386,8 +391,10 @@
     [_sensors addObject:[self getCelContent:@"Auto sync with only battery charging" desc:batteryChargingOnly image:@"" key:@"STUDY_CELL_BATTERY"]];
     // frequency of clean old data
     [_sensors addObject:[self getCelContent:@"Frequency of clean old data" desc:cleanIntervalStr image:@"" key:@"STUDY_CELL_CLEAN_OLD_DATA"]];
+    // [userDefaults setInteger:10000 forKey:KEY_MAX_FETCH_SIZE_NORMAL_SENSOR];
+    [_sensors addObject:[self getCelContent:@"Maximum fetch records per POST" desc:fetchSizeStr image:@"" key:@"STUDY_CELL_MAX_FETCH_SIZE_NORMAL_SENSOR"]];
     // maximum data size per one HTTP/POST
-    [_sensors addObject:[self getCelContent:@"Maximum file size" desc:maximumFileSizeDesc image:@"" key:@"STUDY_CELL_MAX_FILE_SIZE"]];
+    [_sensors addObject:[self getCelContent:@"Maximum file size per POST" desc:maximumFileSizeDesc image:@"" key:@"STUDY_CELL_MAX_FILE_SIZE"]];
     // current version of AWARE iOS
     NSString* version = [NSString stringWithFormat:@"%@",[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]];
     [_sensors addObject:[self getCelContent:@"Version" desc:version image:@"" key:@"STUDY_CELL_VIEW"]];
@@ -416,6 +423,8 @@
     [_sensors addObject:[self getCelContent:@"Team" desc:@"" image:@"" key:@"STUDY_CELL_TEAM"]];
 //    [_sensors addObject:[self getCelContent:@"Terms of Use" desc:@"" image:@"" key:@"STUDY_CELL_TERMS_OF_USE"]];
     [_sensors addObject:[self getCelContent:@"Introduction" desc:@"" image:@"" key:@"STUDY_CELL_SHOW_INTRODUCTION"]];
+    
+    [self.tableView reloadData];
 }
 
 
@@ -466,7 +475,8 @@
     
     _refreshButton.enabled = NO;
     [self.tableView reloadData];
-    [self performSelector:@selector(initContentsOnTableView) withObject:0 afterDelay:5];
+    [self performSelector:@selector(initContentsOnTableView) withObject:0 afterDelay:3];
+    // [self.tableView performSelector:@selector(reloadData) withObject:nil afterDelay:3.1];
     [self performSelector:@selector(refreshButtonEnableYes) withObject:0 afterDelay:10];
 }
 
@@ -609,6 +619,17 @@
                                                cancelButtonTitle:@"Cancel"
                                                otherButtonTitles:@"Never",@"Weekly",@"Monthly",@"Daily",@"Always",nil];
         alert.tag = 14;
+        [alert show];
+    } else if ([key isEqualToString:@"STUDY_CELL_MAX_FETCH_SIZE_NORMAL_SENSOR"]){
+        // @"Maximum fetch size for SQLite"
+        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Maximum Fetch Records Per POST" message:@"Please input the maximum fetch records per POST." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Done",nil];
+        alert.alertViewStyle = UIAlertViewStylePlainTextInput;
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        NSInteger fetchSize = [userDefaults integerForKey:KEY_MAX_FETCH_SIZE_NORMAL_SENSOR];
+        [[alert textFieldAtIndex:0] setKeyboardType:UIKeyboardTypeNumberPad];
+        [[alert textFieldAtIndex:0] becomeFirstResponder];
+        [alert textFieldAtIndex:0].text = [NSString stringWithFormat:@"%ld", fetchSize];
+        alert.tag = 15;
         [alert show];
     }
 }
@@ -760,6 +781,23 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
                 
                 break;
         }
+        [self.tableView reloadData];
+        [self initContentsOnTableView];
+    }else if (alertView.tag == 15){
+        if ( buttonIndex == [alertView cancelButtonIndex]){
+            NSLog(@"Cancel");
+            return;
+        }
+        NSString *maximumValueStr = [alertView textFieldAtIndex:0].text;
+        if ([maximumValueStr isEqualToString:@""] || [maximumValueStr isEqualToString:@"0"]) {
+            return;
+        }
+        NSInteger maximumValue = [maximumValueStr integerValue];
+        [userDefaults setObject:[NSNumber numberWithInteger:maximumValue] forKey:KEY_MAX_FETCH_SIZE_NORMAL_SENSOR];
+        [userDefaults synchronize];
+        
+        [self pushedStudyRefreshButton:alertView];
+        
         [self.tableView reloadData];
         [self initContentsOnTableView];
     }

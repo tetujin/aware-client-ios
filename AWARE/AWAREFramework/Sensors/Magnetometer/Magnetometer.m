@@ -13,6 +13,7 @@
 @implementation Magnetometer{
     CMMotionManager* manager;
     double defaultInterval;
+    int dbWriteInterval;
 }
 
 - (instancetype)initWithAwareStudy:(AWAREStudy *)study{
@@ -23,6 +24,7 @@
     if (self) {
         manager = [[CMMotionManager alloc] init];
         defaultInterval = 0.1f;
+        dbWriteInterval = 10;
     }
     return self;
 }
@@ -56,8 +58,8 @@
     }else{
         frequency = defaultInterval;
     }
-
-    return [self startSensorWithInterval:frequency bufferSize:100 fetchLimit:1000];
+    int buffer = dbWriteInterval/frequency;
+    return [self startSensorWithInterval:frequency bufferSize:buffer];
 }
 
 - (BOOL) startSensor{

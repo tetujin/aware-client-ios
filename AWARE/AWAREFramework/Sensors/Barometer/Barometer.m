@@ -13,6 +13,7 @@
 @implementation Barometer{
     CMAltimeter* altitude;
     double defaultInterval;
+    int dbWriteInterval;
 }
 
 
@@ -22,6 +23,7 @@
                               dbType:AwareDBTypeCoreData];
     if (self) {
         defaultInterval = 0.2f;
+        dbWriteInterval = 10;
     }
     return self;
 }
@@ -50,8 +52,8 @@
     }
     
     // Set a buffer size for reducing file access
-//    [self setBufferSize:10];
-    return [self startSensorWithInterval:frequency bufferSize:10];
+    int buffer = (int)(dbWriteInterval/frequency);
+    return [self startSensorWithInterval:frequency bufferSize:buffer];
 }
 
 - (BOOL) startSensor{

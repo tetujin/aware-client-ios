@@ -730,7 +730,15 @@ didCompleteWithError:(NSError *)error {
     return reachabilityText;
 }
 
-
+- (NSInteger)getMaxFetchSize{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSInteger fetchSize = [userDefaults integerForKey:KEY_MAX_FETCH_SIZE_NORMAL_SENSOR];
+    if (fetchSize < 0){
+        fetchSize = 10000;
+        [userDefaults setInteger:fetchSize forKey:KEY_MAX_FETCH_SIZE_NORMAL_SENSOR];
+    }
+    return fetchSize;
+}
 
 
 ///////////////////////////////////////

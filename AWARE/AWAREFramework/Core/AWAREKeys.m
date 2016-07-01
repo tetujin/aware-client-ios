@@ -13,6 +13,8 @@ NSString* const KEY_AWARE_STUDY = @"key_aware_study";
 NSString* const KEY_APP_TERMINATED = @"key_app_terminated";
 
 NSString* const KEY_MAX_DATA_SIZE = @"key_max_data_size_";
+NSString* const KEY_MAX_FETCH_SIZE_MOTION_SENSOR = @"KEY_MAX_FETCH_SIZE_MOTION_SENSOR";
+NSString* const KEY_MAX_FETCH_SIZE_NORMAL_SENSOR = @"KEY_MAX_FETCH_SIZE_NORMAL_SENSOR";
 NSString* const KEY_UPLOAD_MARK = @"key_data_mark_";
 
 NSString* const KEY_SENSORS = @"sensors";

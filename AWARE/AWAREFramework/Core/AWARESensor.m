@@ -114,6 +114,7 @@
         }else{
             awareStudy = study;
         }
+        
         // Save sensorName instance to awareSensorName
         awareSensorName = sensorName;
         
@@ -210,7 +211,7 @@
 
 - (void)setFetchBatchSize:(int)size{ [baseDataUploader setFetchBatchSize:size]; }
 
-- (int)getFetchLimit{ return [baseDataUploader getFetchLimit]; }
+- (int) getFetchLimit{ return [baseDataUploader getFetchLimit]; }
 
 - (int) getFetchBatchSize{ return [baseDataUploader getFetchBatchSize]; }
 
