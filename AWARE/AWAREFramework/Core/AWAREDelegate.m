@@ -101,7 +101,6 @@
                                              selector:@selector(changedBatteryState:)
                                                  name:UIDeviceBatteryStateDidChangeNotification object:nil];
     
-
     _sharedAWARECore = [[AWARECore alloc] init];
     [_sharedAWARECore activate];
     
@@ -173,7 +172,19 @@
     [UIApplication sharedApplication].idleTimerDisabled = NO;
 }
 
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+// https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIApplicationShortcutIcon_Class/#//apple_ref/c/tdef/UIApplicationShortcutIconType
+// https://developer.apple.com/library/ios/documentation/General/Reference/InfoPlistKeyReference/Articles/iPhoneOSKeys.html#//apple_ref/doc/uid/TP40009252-SW36
+// https://developer.apple.com/library/ios/documentation/UserExperience/Conceptual/Adopting3DTouchOniPhone/
 
+- (void)application:(UIApplication *)application
+performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem
+  completionHandler:(void (^)(BOOL))completionHandler{
+    if([shortcutItem.type isEqualToString:@"com.awareframework.aware-client-ios.shortcut.manualupload"]){
+        [_sharedAWARECore.sharedSensorManager syncAllSensorsWithDBInForeground];
+    }
+}
 
 
 
