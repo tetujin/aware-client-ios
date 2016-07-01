@@ -15,6 +15,7 @@
 @implementation Accelerometer{
     CMMotionManager *manager;
     double defaultInterval;
+    int dbWriteInterval; //second
 }
 
 - (instancetype)initWithAwareStudy:(AWAREStudy *)study{
@@ -25,6 +26,7 @@
     if (self) {
         manager = [[CMMotionManager alloc] init];
         defaultInterval = 0.1f;
+        dbWriteInterval = 10;
     }
     return self;
 }
@@ -55,7 +57,10 @@
             frequency = [self convertMotionSensorFrequecyFromAndroid:tempFrequency];
         }
     }
-    return [self startSensorWithInterval:frequency bufferSize:100 fetchLimit:1000];
+    
+    int buffer = dbWriteInterval/frequency;
+    
+    return [self startSensorWithInterval:frequency bufferSize:buffer];
 }
 
 

@@ -65,13 +65,16 @@
    UIApplicationState appState = [[UIApplication sharedApplication] applicationState];
     switch (appState) {
         case UIApplicationStateActive:
-            NSLog(@"Application is in the foreground!");
+            NSLog(@"Application is in the foreground!(active)");
             return YES;
         case UIApplicationStateInactive:
-            NSLog(@"Application is in the foreground!");
-            return YES;
+//            NSLog(@"Application is in the foreground!");
+//            return YES;
+//            [AWAREUtils sendLocalNotificationForMessage:@"Application is inactive." soundFlag:NO];
+            NSLog(@"Application is in the background!(inactive)");
+            return NO;
         case UIApplicationStateBackground:
-            NSLog(@"Application is in the background!");
+            NSLog(@"Application is in the background!(background)");
             return NO;
         default:
             return NO;

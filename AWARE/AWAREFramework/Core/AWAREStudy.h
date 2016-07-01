@@ -55,6 +55,6 @@ typedef enum: NSInteger {
 - (bool) isWifiReachable;
 - (NSString *) getNetworkReachabilityAsText;
 - (cleanOldDataType) getCleanOldDataType;
-
+- (NSInteger) getMaxFetchSize;
 
 @end

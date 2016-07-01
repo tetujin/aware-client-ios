@@ -14,6 +14,7 @@
 @implementation Gyroscope{
     CMMotionManager* gyroManager;
     double defaultInterval;
+    int dbWriteInterval;
 }
 
 - (instancetype)initWithAwareStudy:(AWAREStudy *)study{
@@ -24,6 +25,7 @@
     if (self) {
         gyroManager = [[CMMotionManager alloc] init];
         defaultInterval = 0.1f;
+        dbWriteInterval = 10;
     }
     return self;
 }
@@ -57,7 +59,10 @@
             interval = [self convertMotionSensorFrequecyFromAndroid:frequency];
         }
     }
-    [self startSensorWithInterval:interval bufferSize:100 fetchLimit:1000];
+    
+    int buffer = dbWriteInterval/interval;
+    
+    [self startSensorWithInterval:interval bufferSize:buffer];
     
     return YES;
 }

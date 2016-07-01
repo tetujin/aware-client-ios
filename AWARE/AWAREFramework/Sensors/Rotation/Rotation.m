@@ -21,6 +21,7 @@
 @implementation Rotation {
     CMMotionManager* motionManager;
     double defaultInterval;
+    int dbWriteInterval;
 }
 
 
@@ -32,6 +33,7 @@
     if (self) {
         motionManager = [[CMMotionManager alloc] init];
         defaultInterval = 0.1f;
+        dbWriteInterval = 10;
     }
     return self;
 }
@@ -61,8 +63,8 @@
         double iOSfrequency = [self convertMotionSensorFrequecyFromAndroid:frequency];
         interval = iOSfrequency;
     }
-    
-    return [self startSensorWithInterval:interval bufferSize:100 fetchLimit:1000];
+    int buffer = dbWriteInterval/interval;
+    return [self startSensorWithInterval:interval bufferSize:buffer];
 }
 
 - (BOOL)startSensor{

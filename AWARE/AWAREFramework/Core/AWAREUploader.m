@@ -35,7 +35,7 @@
         awareStudy = study;
         sensorName = name;
         
-        fetchLimit = 100;
+        fetchLimit = (int)[study getMaxFetchSize];
         batchSize = 0;
         bufferSize = 0;
         
