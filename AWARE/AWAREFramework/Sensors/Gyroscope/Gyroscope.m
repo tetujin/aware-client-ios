@@ -99,10 +99,10 @@
                                      if( error ) {
                                          NSLog(@"%@:%ld", [error domain], [error code] );
                                      } else {
-                                         AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+                                         //AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
                                          EntityGyroscope* data = (EntityGyroscope *)[NSEntityDescription
                                                                                      insertNewObjectForEntityForName:[self getEntityName]
-                                                                                     inManagedObjectContext:delegate.managedObjectContext];
+                                                                                     inManagedObjectContext:[self getSensorManagedObjectContext]];
                                          
                                          data.device_id = [self getDeviceId];
                                          data.timestamp = [AWAREUtils getUnixTimestamp:[NSDate new]];

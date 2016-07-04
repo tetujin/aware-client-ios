@@ -84,10 +84,11 @@
                                               dispatch_async(dispatch_get_main_queue(),^{
                                                   double pressureDouble = [altitudeData.pressure doubleValue];
                                                   
-                                                  AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+                                                  // AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
                                                   EntityBarometer * pressureData = (EntityBarometer *)[NSEntityDescription
                                                                                                        insertNewObjectForEntityForName:[self getEntityName]
-                                                                                                       inManagedObjectContext:delegate.managedObjectContext];
+                                                                                                       inManagedObjectContext:[self getSensorManagedObjectContext]];
+                                                                                                       //inManagedObjectContext:delegate.managedObjectContext];
                                                   
                                                   pressureData.device_id = [self getDeviceId];
                                                   pressureData.timestamp = [AWAREUtils getUnixTimestamp:[NSDate new]];

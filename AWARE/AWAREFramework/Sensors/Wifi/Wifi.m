@@ -132,10 +132,10 @@
         
         // Save sensor data to the local database.
         NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
-        AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+        // AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
         EntityWifi* data = (EntityWifi *)[NSEntityDescription
                                                   insertNewObjectForEntityForName:[self getEntityName]
-                                                  inManagedObjectContext:delegate.managedObjectContext];
+                                                  inManagedObjectContext:[self getSensorManagedObjectContext]];
         
         data.device_id = [self getDeviceId];
         data.timestamp = unixtime;

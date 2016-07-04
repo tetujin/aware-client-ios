@@ -85,10 +85,10 @@
     [NSTimeZone localTimeZone];
     
     NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
-    AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+    // AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
     EntityTimezone* data = (EntityTimezone *)[NSEntityDescription
                                           insertNewObjectForEntityForName:[self getEntityName]
-                                          inManagedObjectContext:delegate.managedObjectContext];
+                                          inManagedObjectContext:[self getSensorManagedObjectContext]];
     
     data.device_id = [self getDeviceId];
     data.timestamp = unixtime;

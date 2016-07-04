@@ -92,10 +92,10 @@
                                                // Save sensor data to the local database.
                                                
                                                dispatch_async(dispatch_get_main_queue(),^{
-                                                   AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+                                                   //AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
                                                    EntityGravity* gravityData = (EntityGravity *)[NSEntityDescription
                                                                                                   insertNewObjectForEntityForName:[self getEntityName]
-                                                                                                  inManagedObjectContext:delegate.managedObjectContext];
+                                                                                                  inManagedObjectContext:[self getSensorManagedObjectContext]];
                                                    
                                                    gravityData.device_id = [self getDeviceId];
                                                    gravityData.timestamp = [AWAREUtils getUnixTimestamp:[NSDate new]];

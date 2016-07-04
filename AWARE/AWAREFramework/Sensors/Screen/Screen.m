@@ -175,10 +175,10 @@
 
 - (void) saveScreenEvent:(int) state{
     NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
-    AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+    // AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
     EntityScreen* data = (EntityScreen *)[NSEntityDescription
                                           insertNewObjectForEntityForName:[self getEntityName]
-                                          inManagedObjectContext:delegate.managedObjectContext];
+                                          inManagedObjectContext:[self getSensorManagedObjectContext]];
     
     data.device_id = [self getDeviceId];
     data.timestamp = unixtime;

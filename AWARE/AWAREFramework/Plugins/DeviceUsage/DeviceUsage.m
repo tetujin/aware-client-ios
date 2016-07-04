@@ -66,9 +66,9 @@
 //        [dic setObject:unixtime forKey:@"timestamp"];
 //        [dic setObject:[self getDeviceId] forKey:@"device_id"];
 
-        AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+        // AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
         EntityDeviceUsage * deviceUsage = (EntityDeviceUsage *)[NSEntityDescription insertNewObjectForEntityForName:[self getEntityName]
-                                                                                                inManagedObjectContext:delegate.managedObjectContext];
+                                                                                                inManagedObjectContext:[self getSensorManagedObjectContext]];
         NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
         deviceUsage.timestamp = unixtime;
         deviceUsage.device_id = [self getDeviceId];
@@ -87,11 +87,11 @@
             deviceUsage.elapsed_device_on = @(elapsedTime);
             deviceUsage.elapsed_device_off = @0;
             if ([self isDebug]) {
-                NSString * message = [NSString stringWithFormat:@"Elapsed Time of device ON: %@ [Event at %@]",
-                                      [self unixtime2str:elapsedTime],
-                                      [self nsdate2FormattedTime:[NSDate new]]
-                                      ];
-                [AWAREUtils sendLocalNotificationForMessage:message soundFlag:NO];
+//                NSString * message = [NSString stringWithFormat:@"Elapsed Time of device ON: %@ [Event at %@]",
+//                                      [self unixtime2str:elapsedTime],
+//                                      [self nsdate2FormattedTime:[NSDate new]]
+//                                      ];
+//                [AWAREUtils sendLocalNotificationForMessage:message soundFlag:NO];
             }
 //            [dic setObject:[NSNumber numberWithDouble:elapsedTime] forKey:@"elapsed_device_on"]; // real
 //            [dic setObject:@0 forKey:@"elapsed_device_off"]; // real

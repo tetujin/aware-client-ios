@@ -110,21 +110,24 @@ NSString* const KEY_CALLS_TRACE = @"trace";
 //        [dic setObject:callId forKey:KEY_CALLS_TRACE];
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+            
+            if([NSThread isMainThread]){
+                NSLog(@"Main Thread.");
+            }else{
+                NSLog(@"Sub Tread.");
+            }
+            
+            // AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
             EntityCall* callData = (EntityCall *)[NSEntityDescription
                                                   insertNewObjectForEntityForName:NSStringFromClass([EntityCall class])
-                                                  inManagedObjectContext:delegate.managedObjectContext];
+                                                  inManagedObjectContext:[self getSensorManagedObjectContext]];
+                                                  // inManagedObjectContext:delegate.managedObjectContext];
             callData.device_id = [super getDeviceId];
             callData.timestamp = [AWAREUtils getUnixTimestamp:[NSDate new]];
             callData.call_type = callType;
             callData.call_duration = @(duration);
             callData.trace = callId;
             [super saveDataToDB];
-            //        NSError * error = nil;
-            //        [delegate.managedObjectContext save:&error];
-            //        if (error) {
-            //            NSLog(@"%@", error.description);
-            //        }
             
             // Set latest sensor data
             NSDateFormatter *timeFormat = [[NSDateFormatter alloc] init];

@@ -128,10 +128,10 @@
     if (address == nil ) address = @"";
     if (rssi == nil) rssi = @-1;
 
-    AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+    //AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
     EntityBluetooth* bluetoothData = (EntityBluetooth *)[NSEntityDescription
                                                         insertNewObjectForEntityForName:[self getEntityName]
-                                                                 inManagedObjectContext:delegate.managedObjectContext];
+                                                                 inManagedObjectContext:[self getSensorManagedObjectContext]];
     bluetoothData.device_id = [self getDeviceId];
     bluetoothData.timestamp = [AWAREUtils getUnixTimestamp:[NSDate new]];
     bluetoothData.bt_address = address;
@@ -143,12 +143,8 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_BLUETOOTH_NEW_DEVICE
                                                         object:nil
                                                       userInfo:userInfo];
-   NSError * error = nil;
-    [delegate.managedObjectContext save:&error];
-    if (error) {
-        NSLog(@"%@", error.description);
-    }
-    [delegate.managedObjectContext reset];
+    NSError * error = nil;
+    [self saveDataToDB];
     
     
 //    NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];

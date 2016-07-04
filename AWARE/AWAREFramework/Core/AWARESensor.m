@@ -532,4 +532,11 @@
     return [baseDataUploader getCreateTableUrl:sensorName];
 }
 
+- (NSManagedObjectContext *)getSensorManagedObjectContext{
+    // return baseDataUploader.mainQueueManagedObjectContext;
+    // return baseDataUploader.writeQueueManagedObjectContext;
+     AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+    return delegate.managedObjectContext;
+}
+
 @end

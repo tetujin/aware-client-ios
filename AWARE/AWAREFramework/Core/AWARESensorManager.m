@@ -416,6 +416,9 @@
         manualUploadMonitor = nil;
     }
     
+    [self stopAndRemoveAllSensors];
+    [self startAllSensors];
+    
     manualUploadMonitor = [NSTimer scheduledTimerWithTimeInterval:1
                                                            target:self
                                                          selector:@selector(checkAllSensorsUploadStatus:)
@@ -452,12 +455,19 @@
                                        [progresses setObject:progressStr forKey:progressName];
                                        // call main thread for UI update
                                        dispatch_sync(dispatch_get_main_queue(), ^{
-                                           NSMutableString * result = [[NSMutableString alloc] init];
-                                           for (id key in [progresses keyEnumerator]) {
-                                               double progress = [[progresses objectForKey:key] doubleValue];
-                                               [result appendFormat:@"%@ (%.2f %%)\n", key, progress];
+                                           @try {
+                                               NSMutableString * result = [[NSMutableString alloc] init];
+                                               for (id key in [progresses keyEnumerator]) {
+                                                   double progress = [[progresses objectForKey:key] doubleValue];
+                                                   [result appendFormat:@"%@ (%.2f %%)\n", key, progress];
+                                               }
+                                               [SVProgressHUD showWithStatus:result];
+                                           } @catch (NSException *exception) {
+                                               NSLog(@"%@", exception.debugDescription);
+                                           } @finally {
+                                               
                                            }
-                                           [SVProgressHUD showWithStatus:result];
+                                           
                                        });
                                    }
                                }];
@@ -504,17 +514,25 @@
         manualUploadMonitor = nil;
         // remove observer from DefaultCenter
         [[NSNotificationCenter defaultCenter] removeObserver:observer];
-        
+       
         // check progress of all sensors
         BOOL completion = YES;
-        for (id key in [progresses keyEnumerator]) {
-            double progress = [[progresses objectForKey:key] doubleValue];
-            NSLog(@"[%@] %f", key ,progress);
-            if(progress < 100){
-                completion = NO;
-                break;
+        
+        @try {
+            for (id key in [progresses keyEnumerator]) {
+                double progress = [[progresses objectForKey:key] doubleValue];
+                NSLog(@"[%@] %f", key ,progress);
+                if(progress < 100){
+                    completion = NO;
+                    break;
+                }
             }
+        } @catch (NSException *exception) {
+            NSLog(@"%@", exception.debugDescription);
+        } @finally {
+            
         }
+        
         
 //        [SVProgressHUD performSelector:@selector(dismiss) withObject:nil afterDelay:1.0f];
         [SVProgressHUD dismiss];
@@ -552,25 +570,31 @@
     }
     
     /** ========= Freeze ======== */
-    manualUploadTime ++;
-    NSLog(@"%d", manualUploadTime);
-    if(manualUploadTime > 60 ){
-        manualUploadTime = 0;
-        for (id key in [progresses keyEnumerator]) {
-            double progress = [[progresses objectForKey:key] doubleValue];
-            if(progress == 0 && alertState == NO ){
-                alertState = YES;
-                UIAlertView *alert = [ [UIAlertView alloc]
-                                      initWithTitle:@"Manual Upload"
-                                      message:@"Do you continue to upload sensor data? Perhaps, this manual upload process occurred an error. Please try manual upload again."
-                                      delegate:self
-                                      cancelButtonTitle:@"NO"
-                                      otherButtonTitles:@"YES",nil];
-                [alert show];
-                break;
+    @try {
+        manualUploadTime ++;
+        NSLog(@"%d", manualUploadTime);
+        if(manualUploadTime > 60 ){
+            manualUploadTime = 0;
+            for (id key in [progresses keyEnumerator]) {
+                double progress = [[progresses objectForKey:key] doubleValue];
+                if(progress == 0 && alertState == NO ){
+                    alertState = YES;
+                    UIAlertView *alert = [ [UIAlertView alloc]
+                                          initWithTitle:@"Manual Upload"
+                                          message:@"Do you continue to upload sensor data? Perhaps, this manual upload process occurred an error. Please try manual upload again."
+                                          delegate:self
+                                          cancelButtonTitle:@"NO"
+                                          otherButtonTitles:@"YES",nil];
+                    [alert show];
+                    break;
+                }
             }
+            previousProgresses = progresses;
         }
-        previousProgresses = progresses;
+    } @catch (NSException *exception) {
+        NSLog(@"%@", exception.debugDescription);
+    } @finally {
+        
     }
     
     

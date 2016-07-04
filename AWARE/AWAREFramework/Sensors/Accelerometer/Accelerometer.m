@@ -99,53 +99,58 @@
                                           NSLog(@"%@:%ld", [error domain], [error code] );
                                       } else {
                                          // SQLite
-                                          if([self getDBType] == AwareDBTypeCoreData){
-                                              AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
-                                              
-                                              EntityAccelerometer * acc = (EntityAccelerometer *)[NSEntityDescription
-                                                                                                  insertNewObjectForEntityForName:[self getEntityName]
-                                                                                                  inManagedObjectContext:delegate.managedObjectContext];
-                                              
-                                              acc.device_id = [self getDeviceId];
-                                              
-                                              acc.timestamp = [AWAREUtils getUnixTimestamp:[NSDate new]];
-                                              acc.double_values_0 = [NSNumber numberWithDouble:accelerometerData.acceleration.x];
-                                              acc.double_values_1 = [NSNumber numberWithDouble:accelerometerData.acceleration.y];
-                                              acc.double_values_2 = [NSNumber numberWithDouble:accelerometerData.acceleration.z];
-                                              acc.accuracy = @0;
-                                              acc.label = @"";
-                                              
-                                              [self setLatestValue:[NSString stringWithFormat:@"%f, %f, %f",
-                                                                    accelerometerData.acceleration.x,
-                                                                    accelerometerData.acceleration.y,
-                                                                    accelerometerData.acceleration.z]];
-                                              
-                                              NSDictionary *userInfo = [NSDictionary dictionaryWithObject:acc
-                                                                                                   forKey:EXTRA_DATA];
-                                              [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_ACCELEROMETER
-                                                                                                  object:nil
-                                                                                                userInfo:userInfo];
-                                              [self saveDataToDB];
-                                        // Text File
-                                          } else if ([self getDBType] == AwareDBTypeTextFile){
-                                                NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-                                                [dic setObject:[AWAREUtils getUnixTimestamp:[NSDate new]] forKey:@"timestamp"];
-                                                [dic setObject:[self getDeviceId] forKey:@"device_id"];
-                                                [dic setObject:[NSNumber numberWithDouble:accelerometerData.acceleration.x] forKey:@"double_values_0"];
-                                                [dic setObject:[NSNumber numberWithDouble:accelerometerData.acceleration.y] forKey:@"double_values_1"];
-                                                [dic setObject:[NSNumber numberWithDouble:accelerometerData.acceleration.z] forKey:@"double_values_2"];
-                                                [dic setObject:@0 forKey:@"accuracy"];
-                                                [dic setObject:@"" forKey:@"label"];
-                                                [self setLatestValue:[NSString stringWithFormat:
-                                                                      @"%f, %f, %f",
-                                                                      accelerometerData.acceleration.x,
-                                                                  accelerometerData.acceleration.y,
-                                                                  accelerometerData.acceleration.z]];
-                                                dispatch_async(dispatch_get_main_queue(), ^{
-                                                     [self saveData:dic];
-                                                });
+                                          // @autoreleasepool {
+                                              if([self getDBType] == AwareDBTypeCoreData){
+                                                
+                                                  EntityAccelerometer * acc = nil;
+                                                  @autoreleasepool {
+                                                      //AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+                                                      acc = (EntityAccelerometer *)[NSEntityDescription
+                                                                                insertNewObjectForEntityForName:[self getEntityName]
+                                                                                inManagedObjectContext:[self getSensorManagedObjectContext]];
+                                                                                //inManagedObjectContext:delegate.managedObjectContext];
+                                                      
+                                                      acc.device_id = [self getDeviceId];
+                                                      
+                                                      acc.timestamp = [AWAREUtils getUnixTimestamp:[NSDate new]];
+                                                      acc.double_values_0 = @(accelerometerData.acceleration.x);
+                                                      acc.double_values_1 = @(accelerometerData.acceleration.y);
+                                                      acc.double_values_2 = @(accelerometerData.acceleration.z);
+                                                      acc.accuracy = @0;
+                                                      acc.label = @"";
+                                                      
+                                                      [self setLatestValue:[NSString stringWithFormat:@"%f, %f, %f",
+                                                                            accelerometerData.acceleration.x,
+                                                                            accelerometerData.acceleration.y,
+                                                                            accelerometerData.acceleration.z]];
+                                                      
+                                                      NSDictionary *userInfo = [NSDictionary dictionaryWithObject:acc
+                                                                                                           forKey:EXTRA_DATA];
+                                                      [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_ACCELEROMETER
+                                                                                                          object:nil
+                                                                                       userInfo:userInfo];
+                                                      [self saveDataToDB];
+                                                  }
+                                            // Text File
+                                              } else if ([self getDBType] == AwareDBTypeTextFile){
+                                                    NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+                                                    [dic setObject:[AWAREUtils getUnixTimestamp:[NSDate new]] forKey:@"timestamp"];
+                                                    [dic setObject:[self getDeviceId] forKey:@"device_id"];
+                                                    [dic setObject:[NSNumber numberWithDouble:accelerometerData.acceleration.x] forKey:@"double_values_0"];
+                                                    [dic setObject:[NSNumber numberWithDouble:accelerometerData.acceleration.y] forKey:@"double_values_1"];
+                                                    [dic setObject:[NSNumber numberWithDouble:accelerometerData.acceleration.z] forKey:@"double_values_2"];
+                                                    [dic setObject:@0 forKey:@"accuracy"];
+                                                    [dic setObject:@"" forKey:@"label"];
+                                                    [self setLatestValue:[NSString stringWithFormat:
+                                                                          @"%f, %f, %f",
+                                                                          accelerometerData.acceleration.x,
+                                                                      accelerometerData.acceleration.y,
+                                                                      accelerometerData.acceleration.z]];
+                                                    dispatch_async(dispatch_get_main_queue(), ^{
+                                                         [self saveData:dic];
+                                                    });
 
-                                          }
+                                              }
                                           
                                           
                                       }
