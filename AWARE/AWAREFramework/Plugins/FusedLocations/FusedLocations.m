@@ -221,9 +221,9 @@
 
     NSNumber *unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
     
-    AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+    // AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
     EntityLocation * locationData = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([EntityLocation class])
-                                                                  inManagedObjectContext:delegate.managedObjectContext];
+                                                                  inManagedObjectContext:[fusedLocationsSensor getSensorManagedObjectContext]];
     locationData.device_id = [self getDeviceId];
     locationData.timestamp = unixtime;
     locationData.double_latitude = [NSNumber numberWithDouble:location.coordinate.latitude];
@@ -303,9 +303,9 @@
                   }
                   
                    dispatch_async(dispatch_get_main_queue(), ^{
-                      AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+                      // AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
                       EntityLocationVisit * visitData = (EntityLocationVisit *)[NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([EntityLocationVisit class])
-                                                                                                             inManagedObjectContext:delegate.managedObjectContext];
+                                                                                                             inManagedObjectContext:[visitLocationSensor getSensorManagedObjectContext]];
                       
                       visitData.device_id = [self getDeviceId];
                       visitData.timestamp = timestamp;

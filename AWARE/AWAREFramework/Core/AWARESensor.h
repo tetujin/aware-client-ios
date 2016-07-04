@@ -110,4 +110,6 @@ typedef enum: NSInteger {
 - (NSString *) getCreateTableUrl:(NSString *)sensorName;
 - (NSString *) getClearTableUrl:(NSString *)sensorName;
 
+- (NSManagedObjectContext *) getSensorManagedObjectContext;
+
 @end

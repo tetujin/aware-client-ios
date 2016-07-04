@@ -87,9 +87,12 @@
         dbCondition = AwareDBConditionNormal;
         
         AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
-        _mainQueueManagedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
-        [_mainQueueManagedObjectContext setPersistentStoreCoordinator:delegate.persistentStoreCoordinator];
+        self.mainQueueManagedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
+        [self.mainQueueManagedObjectContext setPersistentStoreCoordinator:delegate.persistentStoreCoordinator];
       
+        // self.writeQueueManagedObjectContext = [[NSManagedObjectContext alloc] init];
+        // [self.writeQueueManagedObjectContext setPersistentStoreCoordinator:delegate.persistentStoreCoordinator];
+        
         NSNumber * timestamp = [userDefaults objectForKey:timeMarkerIdentifier];
         if(timestamp == 0){
             NSLog(@"timestamp == 0");
@@ -236,16 +239,26 @@
     }
     dbCondition = AwareDBConditionInserting;
     @try {
-        // If the current thread is main thread, we should make a new thread for saving data
-        if([NSThread isMainThread]){
-            // Make addtional thread
-            [[[NSOperationQueue alloc] init] addOperationWithBlock:^{
-                // In the other thread, this method call -saveDataToDB again.
-                [self saveDataInBackground];
-            }];
-        }else{
-            [self saveDataInBackground];
+        NSError * error = nil;
+        AppDelegate * appDelegate = (AppDelegate*)[UIApplication sharedApplication].delegate;
+        [appDelegate.managedObjectContext save:&error];
+        if ( error != nil ){
+            NSLog(@"[%@] %@", [self getEntityName], error.debugDescription );
         }
+        dbCondition = AwareDBConditionNormal;
+        
+        // ==== backup source code for background save ====
+        // If the current thread is main thread, we should make a new thread for saving data
+//        if([NSThread isMainThread]){
+//            // Make addtional thread
+//            [[[NSOperationQueue alloc] init] addOperationWithBlock:^{
+//                // In the other thread, this method call -saveDataToDB again.
+//                [self saveDataInBackground];
+//            }];
+//        }else{
+//            [self saveDataInBackground];
+//        }
+        // =================
     }@catch(NSException *exception) {
         NSLog(@"%@", exception.reason);
         dbCondition = AwareDBConditionNormal;
@@ -259,12 +272,18 @@
  */
 - (void) saveDataInBackground{
     NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-    [private setParentContext:_mainQueueManagedObjectContext];
+    [private setParentContext:self.mainQueueManagedObjectContext];
+    // [private setParentContext:self.writeQueueManagedObjectContext];
     [private performBlock:^{
         NSError *error = nil;
         if (! [private save:&error]) {
             NSLog(@"Error saving context: %@\n%@",
                   [error localizedDescription], [error userInfo]);
+        }else{
+            dispatch_async(dispatch_get_main_queue(), ^{
+                // NSLog(@"[%@] Clear Cash", [self getEntityName]);
+                // [self.writeQueueManagedObjectContext reset];
+            });
         }
         if(isDebug){
             NSLog(@"Save [%@] to SQLite", [self getEntityName]);
@@ -289,15 +308,16 @@
         }
         NSFetchRequest* request = [[NSFetchRequest alloc] init];
         NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-        [private setParentContext:_mainQueueManagedObjectContext];
+        [private setParentContext:self.mainQueueManagedObjectContext];
         [private performBlock:^{
-            [request setEntity:[NSEntityDescription entityForName:entityName inManagedObjectContext:_mainQueueManagedObjectContext]];
+            [request setEntity:[NSEntityDescription entityForName:entityName inManagedObjectContext:self.mainQueueManagedObjectContext]];
             [request setIncludesSubentities:NO];
             [request setPredicate:[NSPredicate predicateWithFormat:@"timestamp >= %@", timestamp]];
 
             NSError* error = nil;
             // Get count of category
             NSInteger count = [private countForFetchRequest:request error:&error];
+            NSLog(@"[%@] %ld records", [self getEntityName], count);
             if (count == NSNotFound) {
                 [self dataSyncIsFinishedCorrectoly];
                 dbCondition = AwareDBConditionNormal;
@@ -386,7 +406,7 @@
     
     @try {
         NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-        [private setParentContext:_mainQueueManagedObjectContext];
+        [private setParentContext:self.mainQueueManagedObjectContext];
         [private performBlock:^{
              NSData* sensorData = nil;
              NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:entityName];
@@ -396,7 +416,7 @@
              //    [fetchRequest setFetchBatchSize:[self getFetchBatchSize]];
              //}
             
-             [fetchRequest setEntity:[NSEntityDescription entityForName:entityName inManagedObjectContext:_mainQueueManagedObjectContext]];
+             [fetchRequest setEntity:[NSEntityDescription entityForName:entityName inManagedObjectContext:self.mainQueueManagedObjectContext]];
              [fetchRequest setIncludesSubentities:NO];
              [fetchRequest setResultType:NSDictionaryResultType];
              [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"timestamp >= %@", unixtimeOfUploadingData]];
@@ -423,8 +443,6 @@
                                                                   userInfo:userInfo];
                 return;
             }
-        
-            NSLog(@"[%@] %ld records", [self getEntityName], results.count);
             
             NSMutableArray *array = [[NSMutableArray alloc] initWithArray:results];
             for (NSDictionary * dict in array) {
@@ -677,8 +695,8 @@ didBecomeStreamTask:(NSURLSessionStreamTask *)streamTask{
         /** =========== Remove old data ============== */
         NSFetchRequest* request = [[NSFetchRequest alloc] init];
         NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-        [private setParentContext:_mainQueueManagedObjectContext];
-        [request setEntity:[NSEntityDescription entityForName:entityName inManagedObjectContext:_mainQueueManagedObjectContext]];
+        [private setParentContext:self.mainQueueManagedObjectContext];
+        [request setEntity:[NSEntityDescription entityForName:entityName inManagedObjectContext:self.mainQueueManagedObjectContext]];
         [request setIncludesSubentities:NO];
         
         [private performBlock:^{

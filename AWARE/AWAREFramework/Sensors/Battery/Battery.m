@@ -191,10 +191,9 @@
     int state = [myDevice batteryState];
     int batLeft = [myDevice batteryLevel] * 100;
     
-    AppDelegate *delegate = (AppDelegate*)[UIApplication sharedApplication].delegate;
     EntityBattery* batteryData = (EntityBattery *)[NSEntityDescription
                                         insertNewObjectForEntityForName:[self getEntityName]
-                                                 inManagedObjectContext:delegate.managedObjectContext];
+                                                 inManagedObjectContext:[self getSensorManagedObjectContext]];
     
     batteryData.device_id = [self getDeviceId];
     batteryData.timestamp = [AWAREUtils getUnixTimestamp:[NSDate new]];
@@ -214,12 +213,7 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_BATTERY_CHANGED
                                                         object:nil
                                                       userInfo:userInfo];
-    
-    NSError * error = nil;
-    [delegate.managedObjectContext save:&error];
-    if (error) {
-        NSLog(@"%@", error.description);
-    }
+    [self saveDataToDB];
     
 //    NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
 //    NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
@@ -291,10 +285,10 @@
         [userDefaults setObject:currentBatteryLevel forKey:KEY_LAST_BATTERY_LEVEL];
         [userDefaults setObject:currentTime forKey:KEY_LAST_BATTERY_EVENT_TIMESTAMP];
     
-        AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+        // AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
         EntityBatteryDischarge* batteryDischargeData = (EntityBatteryDischarge *)[NSEntityDescription
                                                        insertNewObjectForEntityForName:NSStringFromClass([EntityBatteryDischarge class])
-                                                       inManagedObjectContext:delegate.managedObjectContext];
+                                                       inManagedObjectContext:[batteryDischargeSensor getSensorManagedObjectContext]];
         batteryDischargeData.device_id = [self getDeviceId];
         batteryDischargeData.timestamp = lastBatteryEventTimestamp;
         batteryDischargeData.battery_start = lastBatteryLevel;
@@ -306,13 +300,7 @@
         [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_BATTERY_DISCHARGING
                                                             object:nil
                                                           userInfo:userInfo];
-        
-        NSError * error = nil;
-        [delegate.managedObjectContext save:&error];
-        if (error) {
-            NSLog(@"%@", error.description);
-        }
-        [delegate.managedObjectContext reset];
+        [batteryDischargeSensor saveDataToDB];
         
         // charge event
     }else if(lastBatteryEvent == UIDeviceBatteryStateCharging &&
@@ -327,10 +315,10 @@
         [userDefaults setObject:currentBatteryLevel forKey:KEY_LAST_BATTERY_LEVEL];
         [userDefaults setObject:currentTime forKey:KEY_LAST_BATTERY_EVENT_TIMESTAMP];
         
-        AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+        // AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
         EntityBatteryCharge* batteryChargeData = (EntityBatteryCharge *)[NSEntityDescription
                                                                                      insertNewObjectForEntityForName:NSStringFromClass([EntityBatteryCharge class])
-                                                                                     inManagedObjectContext:delegate.managedObjectContext];
+                                                                                     inManagedObjectContext:[batteryChargeSensor getSensorManagedObjectContext]];
         batteryChargeData.device_id = [self getDeviceId];
         batteryChargeData.timestamp = lastBatteryEventTimestamp;
         batteryChargeData.battery_start = lastBatteryLevel;
@@ -342,15 +330,8 @@
         [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_BATTERY_CHARGING
                                                             object:nil
                                                           userInfo:userInfo];
-        
-        NSError * error = nil;
-        [delegate.managedObjectContext save:&error];
-        if (error) {
-            NSLog(@"%@", error.description);
-        }
-
+        [batteryChargeSensor saveDataToDB];
     }
-    
     
     switch (currentBatteryEvent) {
         case UIDeviceBatteryStateCharging:

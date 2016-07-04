@@ -158,9 +158,9 @@
 //    [self saveData:query];
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+        // AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
         EntityLabel * data = (EntityLabel *)[NSEntityDescription insertNewObjectForEntityForName:[self getEntityName]
-                                                                            inManagedObjectContext:delegate.managedObjectContext];
+                                                                            inManagedObjectContext:[self getSensorManagedObjectContext]];
         data.device_id = [self getDeviceId];
         data.timestamp = [AWAREUtils getUnixTimestamp:triggerTime];
         data.label = label;

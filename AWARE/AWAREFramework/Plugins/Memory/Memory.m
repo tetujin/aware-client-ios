@@ -111,9 +111,9 @@
 //    [self saveData:query];
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+        // AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
         EntityMemory * data = (EntityMemory *)[NSEntityDescription insertNewObjectForEntityForName:[self getEntityName]
-                                                                                               inManagedObjectContext:delegate.managedObjectContext];
+                                                                                               inManagedObjectContext:[self getSensorManagedObjectContext]];
         data.device_id = [self getDeviceId];
         data.timestamp = [AWAREUtils getUnixTimestamp:[NSDate new]];
         data.mem_used = @(mem_used);

@@ -51,76 +51,60 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "AWARE/AWAREFramework/Core/AWARESensor.m"
-            timestampString = "488609767.537725"
+            filePath = "AWARE/AWAREFramework/Core/AWARECoreDataManager.m"
+            timestampString = "489321490.056393"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "303"
-            endingLineNumber = "303"
-            landmarkName = "-saveDataWithArray:"
+            startingLineNumber = "467"
+            endingLineNumber = "467"
+            landmarkName = "-uploadSensorDataInBackground"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "AWARE/AWAREFramework/Core/AWARESensor.m"
-            timestampString = "488609770.131372"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "313"
-            endingLineNumber = "313"
-            landmarkName = "-saveData:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AWARE/AWAREFramework/Core/AWARECoreDataManager.m"
-            timestampString = "489004124.72707"
+            timestampString = "489321490.056393"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "305"
-            endingLineNumber = "305"
-            landmarkName = "-setRepetationCountAfterStartToSyncDB:"
+            startingLineNumber = "516"
+            endingLineNumber = "516"
+            landmarkName = "-uploadSensorDataInBackground"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AWARE/AWAREFramework/Core/AWARECoreDataManager.m"
-            timestampString = "489004124.72707"
+            timestampString = "489321490.056393"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "311"
-            endingLineNumber = "311"
-            landmarkName = "-setRepetationCountAfterStartToSyncDB:"
+            startingLineNumber = "520"
+            endingLineNumber = "520"
+            landmarkName = "-uploadSensorDataInBackground"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AWARE/AWAREFramework/Core/AWARECoreDataManager.m"
-            timestampString = "489004124.72707"
+            timestampString = "489321490.056393"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "450"
-            endingLineNumber = "450"
+            startingLineNumber = "502"
+            endingLineNumber = "502"
             landmarkName = "-uploadSensorDataInBackground"
             landmarkType = "5">
          </BreakpointContent>
@@ -131,13 +115,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "AWARE/AWAREFramework/Core/AWARECoreDataManager.m"
-            timestampString = "489004124.72707"
+            filePath = "AWARE/AWAREFramework/Core/AWARESensorManager.m"
+            timestampString = "489321700.787266"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "499"
-            endingLineNumber = "499"
-            landmarkName = "-uploadSensorDataInBackground"
+            startingLineNumber = "466"
+            endingLineNumber = "466"
+            landmarkName = "-syncAllSensorsWithDBInForeground"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -147,13 +131,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "AWARE/AWAREFramework/Core/AWARECoreDataManager.m"
-            timestampString = "489004124.72707"
+            filePath = "AWARE/AWAREFramework/Core/AWARESensorManager.m"
+            timestampString = "489321820.881494"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "503"
-            endingLineNumber = "503"
-            landmarkName = "-uploadSensorDataInBackground"
+            startingLineNumber = "595"
+            endingLineNumber = "595"
+            landmarkName = "-checkAllSensorsUploadStatus:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -163,46 +147,14 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "AWARE/AWAREFramework/Core/AWARECoreDataManager.m"
-            timestampString = "489004124.72707"
+            filePath = "AWARE/AWAREFramework/Core/AWARESensorManager.m"
+            timestampString = "489321825.367637"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "485"
-            endingLineNumber = "485"
-            landmarkName = "-uploadSensorDataInBackground"
+            startingLineNumber = "531"
+            endingLineNumber = "531"
+            landmarkName = "-checkAllSensorsUploadStatus:"
             landmarkType = "5">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "__52-[AWARECoreDataManager uploadSensorDataInBackground]_block_invoke_2"
-                  moduleName = "AWARE"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/tetujin/Dropbox/tokuda_Lab/codes/objective-c/AWARE/AWARE/AWAREFramework/Core/AWARECoreDataManager.m"
-                  timestampString = "489007113.44004"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "486"
-                  endingLineNumber = "486"
-                  offsetFromSymbolStart = "1568">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "__52-[AWARECoreDataManager uploadSensorDataInBackground]_block_invoke_3"
-                  moduleName = "AWARE"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/tetujin/Dropbox/tokuda_Lab/codes/objective-c/AWARE/AWARE/AWAREFramework/Core/AWARECoreDataManager.m"
-                  timestampString = "489007113.440131"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "487"
-                  endingLineNumber = "487"
-                  offsetFromSymbolStart = "140">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

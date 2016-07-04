@@ -276,7 +276,7 @@
         
         AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
         EntityActivityRecognition * data = (EntityActivityRecognition *)[NSEntityDescription insertNewObjectForEntityForName:[self getEntityName]
-                                                                             inManagedObjectContext:delegate.managedObjectContext];
+                                                                                                      inManagedObjectContext:delegate.managedObjectContext];
         data.device_id = [self getDeviceId];
         data.timestamp = unixtime;
         data.confidence = motionConfidence;

@@ -298,9 +298,9 @@ static vDSP_Length const FFTViewControllerFFTWindowSize = 4096;
 - (void) saveAudioData {
     NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
 
-    AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+    // AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
     EntityAmbientNoise * ambientNoise = (EntityAmbientNoise *)[NSEntityDescription insertNewObjectForEntityForName:[self getEntityName]
-                                                inManagedObjectContext:delegate.managedObjectContext];
+                                                inManagedObjectContext:[self getSensorManagedObjectContext]];
     ambientNoise.device_id = [self getDeviceId];
     ambientNoise.timestamp = unixtime;
     ambientNoise.double_frequency = [NSNumber numberWithFloat:maxFrequency];

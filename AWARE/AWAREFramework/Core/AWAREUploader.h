@@ -75,6 +75,7 @@
 
 @interface AWAREUploader : NSData <AWAREDataUploaderDelegate>
 
-
+@property NSManagedObjectContext *mainQueueManagedObjectContext;
+@property NSManagedObjectContext *writeQueueManagedObjectContext;
 
 @end

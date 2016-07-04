@@ -276,9 +276,9 @@
     NSLog(@"%hu", self.heartRate);
     
     NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
-    AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+    // AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
     EntityBLEHeartRate * heartRateEntity = (EntityBLEHeartRate *)[NSEntityDescription insertNewObjectForEntityForName:[self getEntityName]
-                                                                                            inManagedObjectContext:delegate.managedObjectContext];
+                                                                                            inManagedObjectContext:[self getSensorManagedObjectContext]];
     heartRateEntity.device_id = [self getDeviceId];
     heartRateEntity.timestamp = unixtime;
     heartRateEntity.heartrate = @(_heartRate);
