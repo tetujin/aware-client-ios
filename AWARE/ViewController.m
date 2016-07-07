@@ -187,6 +187,10 @@
 
 - (void)didReceiveMemoryWarning {
     [debugSensor saveDebugEventWithText:@"didReceiveMemoryWarning" type:DebugTypeWarn label:@""];
+    
+    AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+    [delegate.managedObjectContext reset];
+    
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }

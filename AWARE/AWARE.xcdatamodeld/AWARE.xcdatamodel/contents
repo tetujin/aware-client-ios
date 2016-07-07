@@ -3,13 +3,11 @@
     <entity name="EntityAccelerometer" representedClassName="EntityAccelerometer" syncable="YES">
         <attribute name="accuracy" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="device_id1" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="double_values_0" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
         <attribute name="double_values_1" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
         <attribute name="double_values_2" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
         <attribute name="label" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="timestamp1" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
     </entity>
     <entity name="EntityActivityRecognition" representedClassName="EntityActivityRecognition" syncable="YES">
         <attribute name="activities" optional="YES" attributeType="String" syncable="YES"/>
@@ -243,6 +241,11 @@
         <attribute name="pedometer" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
     </entity>
+    <entity name="EntityMSBandRRInterval" representedClassName="EntityMSBandRRInterval" syncable="YES">
+        <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="rrinterval" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+    </entity>
     <entity name="EntityMSBandSkinTemp" representedClassName="EntityMSBandSkinTemp" syncable="YES">
         <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="skintemp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
@@ -332,13 +335,14 @@
         <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
     </entity>
     <elements>
-        <element name="EntityAccelerometer" positionX="189" positionY="126" width="128" height="30"/>
+        <element name="EntityAccelerometer" positionX="189" positionY="126" width="128" height="150"/>
         <element name="EntityActivityRecognition" positionX="180" positionY="117" width="128" height="135"/>
         <element name="EntityAmbientNoise" positionX="234" positionY="0" width="128" height="165"/>
         <element name="EntityBarometer" positionX="180" positionY="117" width="128" height="120"/>
         <element name="EntityBattery" positionX="189" positionY="126" width="128" height="195"/>
         <element name="EntityBatteryCharge" positionX="207" positionY="162" width="128" height="30"/>
         <element name="EntityBatteryDischarge" positionX="198" positionY="153" width="128" height="30"/>
+        <element name="EntityBCCalendar" positionX="234" positionY="198" width="128" height="30"/>
         <element name="EntityBLEHeartRate" positionX="216" positionY="180" width="128" height="30"/>
         <element name="EntityBluetooth" positionX="216" positionY="180" width="128" height="30"/>
         <element name="EntityCall" positionX="225" positionY="189" width="128" height="30"/>
@@ -346,22 +350,12 @@
         <element name="EntityDeviceUsage" positionX="234" positionY="198" width="128" height="30"/>
         <element name="EntityGravity" positionX="180" positionY="144" width="128" height="30"/>
         <element name="EntityGyroscope" positionX="189" positionY="153" width="128" height="30"/>
+        <element name="EntityLabel" positionX="225" positionY="189" width="128" height="30"/>
         <element name="EntityLinearAccelerometer" positionX="198" positionY="162" width="128" height="30"/>
         <element name="EntityLocation" positionX="117" positionY="81" width="128" height="30"/>
         <element name="EntityLocationVisit" positionX="225" positionY="189" width="128" height="30"/>
         <element name="EntityMagnetometer" positionX="207" positionY="171" width="128" height="30"/>
         <element name="EntityMemory" positionX="207" positionY="171" width="128" height="30"/>
-        <element name="EntityNetwork" positionX="216" positionY="180" width="128" height="30"/>
-        <element name="EntityNTPTime" positionX="216" positionY="180" width="128" height="30"/>
-        <element name="EntityOpenWeather" positionX="189" positionY="153" width="128" height="30"/>
-        <element name="EntityProcessor" positionX="180" positionY="144" width="128" height="30"/>
-        <element name="EntityPushNotification" positionX="198" positionY="162" width="128" height="30"/>
-        <element name="EntityRotation" positionX="180" positionY="144" width="128" height="30"/>
-        <element name="EntityScreen" positionX="189" positionY="153" width="128" height="30"/>
-        <element name="EntityTimezone" positionX="198" positionY="162" width="128" height="30"/>
-        <element name="EntityWifi" positionX="207" positionY="171" width="128" height="30"/>
-        <element name="EntityLabel" positionX="225" positionY="189" width="128" height="30"/>
-        <element name="EntityBCCalendar" positionX="234" positionY="198" width="128" height="30"/>
         <element name="EntityMSBandBatteryGauge" positionX="180" positionY="135" width="128" height="90"/>
         <element name="EntityMSBandCalorie" positionX="189" positionY="144" width="128" height="90"/>
         <element name="EntityMSBandDeviceContact" positionX="198" positionY="153" width="128" height="90"/>
@@ -371,5 +365,15 @@
         <element name="EntityMSBandPedometer" positionX="234" positionY="189" width="128" height="90"/>
         <element name="EntityMSBandSkinTemp" positionX="180" positionY="135" width="128" height="90"/>
         <element name="EntityMSBandUV" positionX="189" positionY="144" width="128" height="90"/>
+        <element name="EntityNetwork" positionX="216" positionY="180" width="128" height="30"/>
+        <element name="EntityNTPTime" positionX="216" positionY="180" width="128" height="30"/>
+        <element name="EntityOpenWeather" positionX="189" positionY="153" width="128" height="30"/>
+        <element name="EntityProcessor" positionX="180" positionY="144" width="128" height="30"/>
+        <element name="EntityPushNotification" positionX="198" positionY="162" width="128" height="30"/>
+        <element name="EntityRotation" positionX="180" positionY="144" width="128" height="30"/>
+        <element name="EntityScreen" positionX="189" positionY="153" width="128" height="30"/>
+        <element name="EntityTimezone" positionX="198" positionY="162" width="128" height="30"/>
+        <element name="EntityWifi" positionX="207" positionY="171" width="128" height="30"/>
+        <element name="EntityMSBandRRInterval" positionX="180" positionY="135" width="128" height="90"/>
     </elements>
 </model>

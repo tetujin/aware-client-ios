@@ -17,4 +17,7 @@
 - (BOOL) startSensorWithInterval:(double)interval bufferSize:(int)buffer;
 - (BOOL) startSensorWithInterval:(double)interval bufferSize:(int)buffer fetchLimit:(int)fetchLimit;
 
+- (BOOL) setInterval:(double)interval;
+- (double) getInterval;
+
 @end

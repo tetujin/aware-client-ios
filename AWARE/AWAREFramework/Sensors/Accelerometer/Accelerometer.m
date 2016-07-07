@@ -14,7 +14,7 @@
 
 @implementation Accelerometer{
     CMMotionManager *manager;
-    double defaultInterval;
+    double sensingInterval;
     int dbWriteInterval; //second
 }
 
@@ -25,8 +25,8 @@
                               dbType:AwareDBTypeCoreData];
     if (self) {
         manager = [[CMMotionManager alloc] init];
-        defaultInterval = 0.1f;
-        dbWriteInterval = 10;
+        sensingInterval = 0.1f;
+        dbWriteInterval = 30;
     }
     return self;
 }
@@ -48,7 +48,8 @@
  *
  */
 - (BOOL) startSensorWithSettings:(NSArray *)settings{
-    double frequency = defaultInterval;//default value
+    
+    double frequency = sensingInterval;//default value
     if(settings != nil){
         // Get a sensing frequency from settings
         double tempFrequency = [self getSensorSetting:settings withKey:@"frequency_accelerometer"];
@@ -65,7 +66,7 @@
 
 
 - (BOOL) startSensor{
-    return [self startSensorWithInterval:defaultInterval];
+    return [self startSensorWithInterval:sensingInterval];
 }
 
 - (BOOL) startSensorWithInterval:(double)interval{
@@ -80,6 +81,9 @@
  * Start sensor with interval and buffer, fetchLimit
  */
 - (BOOL) startSensorWithInterval:(double)interval bufferSize:(int)buffer fetchLimit:(int)fetchLimit{
+    
+    [super startSensor];
+    
     // Set and start a data uploader
     NSLog(@"[%@] Start Sensor!", [self getSensorName]);
     
@@ -161,32 +165,28 @@
 }
 
 
--(BOOL) stopSensor{
+-(BOOL) stopSensor {
+    [super stopSensor];
     [manager stopAccelerometerUpdates];
     return YES;
 }
 
 
-
-////////////////////////////////////////////////////
+///////////////////////////////////////////////////
 ///////////////////////////////////////////////////
 
-- (void)syncAwareDB{
-    [super syncAwareDB];
+- (BOOL) setInterval:(double)interval{
+    sensingInterval = interval;
+    return YES;
 }
 
+- (double) getInterval{
+    return sensingInterval;
+}
 
-///////////////////////////////////////////////////
-///////////////////////////////////////////////////
-
-//- (void)setSensingInterval:(double)interval{
-//    if(interval > 0){
-//        sensingInterval = interval;
-//    }else{
-//        NSLog(@"[NOTE] '%f' is wrong value for this sensor.", interval);
-//    }
-//}
-
+- (BOOL)syncAwareDBInForeground{
+    return [super syncAwareDBInForeground];
+}
 
 // The observer object is needed when unregistering
 //    NSObject * observer =

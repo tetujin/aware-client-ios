@@ -20,7 +20,7 @@
 
 @implementation Gravity {
     CMMotionManager* motionManager;
-    double defaultInterval;
+    double sensingInterval;
     int dbWriteInterval;
 }
 
@@ -31,8 +31,8 @@
                               dbType:AwareDBTypeCoreData];
     if (self) {
         motionManager = [[CMMotionManager alloc] init];
-        defaultInterval = 0.1f;
-        dbWriteInterval = 10;
+        sensingInterval = 0.1f;
+        dbWriteInterval = 30;
     }
     return self;
 }
@@ -52,7 +52,7 @@
 
 - (BOOL)startSensorWithSettings:(NSArray *)settings{
     /// Get sensing frequency from settings
-    double interval = defaultInterval;
+    double interval = sensingInterval;
     double frequency = [self getSensorSetting:settings withKey:@"frequency_gravity"];
     if(frequency != -1){
         NSLog(@"Gravity's frequency is %f !!", frequency);
@@ -66,7 +66,7 @@
 }
 
 - (BOOL) startSensor{
-    return [self startSensorWithInterval:defaultInterval];
+    return [self startSensorWithInterval:sensingInterval];
 }
 
 - (BOOL) startSensorWithInterval:(double)interval{
@@ -124,6 +124,7 @@
     motionManager = nil;
     return YES;
 }
+
 
 /////////////// for TextFile based DB
 //                                               NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];

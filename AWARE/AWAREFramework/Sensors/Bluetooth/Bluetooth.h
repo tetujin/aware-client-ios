@@ -23,6 +23,9 @@
 //@property (nonatomic, strong) CBPeripheral *peripheralDevice;
 @property (strong,nonatomic) NSMutableArray *peripherals;
 
+@property (nonatomic) int scanInterval;
+@property (nonatomic) int scanDuration;
+
 - (BOOL) startSensor;
 
 - (BOOL) startSensorWithScanInterval:(int)interval duration:(int)duration;

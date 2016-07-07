@@ -236,6 +236,8 @@
 		16E155391C27C2AC00316321 /* EventKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16E155371C27C2AC00316321 /* EventKit.framework */; };
 		16E1553A1C27C2AC00316321 /* EventKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16E155381C27C2AC00316321 /* EventKitUI.framework */; };
 		16E7AF961C3DF8A9005C9EDC /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16E7AF951C3DF8A9005C9EDC /* CoreData.framework */; };
+		16EC4F171D2E7D8200524424 /* EntityMSBandRRInterval+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 16EC4F141D2E7D8200524424 /* EntityMSBandRRInterval+CoreDataProperties.m */; };
+		16EC4F181D2E7D8200524424 /* EntityMSBandRRInterval.m in Sources */ = {isa = PBXBuildFile; fileRef = 16EC4F161D2E7D8200524424 /* EntityMSBandRRInterval.m */; };
 		16FD37561CF0B1F700EEB416 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 16FD37541CF0B1DE00EEB416 /* Settings.bundle */; };
 		FC2AF85D761397B784DECBD3 /* libPods-AWARE.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9ED04F29ED60F3FCC960F6CD /* libPods-AWARE.a */; };
 /* End PBXBuildFile section */
@@ -297,7 +299,7 @@
 		160F0EC81D04132600673343 /* EntityGravity+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EntityGravity+CoreDataProperties.h"; sourceTree = "<group>"; };
 		160F0EC91D04132600673343 /* EntityGravity+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EntityGravity+CoreDataProperties.m"; sourceTree = "<group>"; };
 		160F0ECA1D04132600673343 /* EntityGravity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EntityGravity.h; sourceTree = "<group>"; };
-		160F0ECB1D04132600673343 /* EntityGravity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EntityGravity.m; sourceTree = "<group>"; };
+		160F0ECB1D04132600673343 /* EntityGravity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EntityGravity.m; path = ../Gravity/EntityGravity.m; sourceTree = "<group>"; };
 		160F0ED41D041B5D00673343 /* EntityLinearAccelerometer+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EntityLinearAccelerometer+CoreDataProperties.h"; sourceTree = "<group>"; };
 		160F0ED51D041B5D00673343 /* EntityLinearAccelerometer+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EntityLinearAccelerometer+CoreDataProperties.m"; sourceTree = "<group>"; };
 		160F0ED61D041B5D00673343 /* EntityLinearAccelerometer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EntityLinearAccelerometer.h; sourceTree = "<group>"; };
@@ -685,6 +687,10 @@
 		16E155371C27C2AC00316321 /* EventKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKit.framework; path = System/Library/Frameworks/EventKit.framework; sourceTree = SDKROOT; };
 		16E155381C27C2AC00316321 /* EventKitUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKitUI.framework; path = System/Library/Frameworks/EventKitUI.framework; sourceTree = SDKROOT; };
 		16E7AF951C3DF8A9005C9EDC /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		16EC4F131D2E7D8200524424 /* EntityMSBandRRInterval+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EntityMSBandRRInterval+CoreDataProperties.h"; sourceTree = "<group>"; };
+		16EC4F141D2E7D8200524424 /* EntityMSBandRRInterval+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EntityMSBandRRInterval+CoreDataProperties.m"; sourceTree = "<group>"; };
+		16EC4F151D2E7D8200524424 /* EntityMSBandRRInterval.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EntityMSBandRRInterval.h; sourceTree = "<group>"; };
+		16EC4F161D2E7D8200524424 /* EntityMSBandRRInterval.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EntityMSBandRRInterval.m; sourceTree = "<group>"; };
 		16FD37541CF0B1DE00EEB416 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		9B5BAD09F1FBEE0838867ACF /* Pods-AWARE.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AWARE.release.xcconfig"; path = "Pods/Target Support Files/Pods-AWARE/Pods-AWARE.release.xcconfig"; sourceTree = "<group>"; };
 		9ED04F29ED60F3FCC960F6CD /* libPods-AWARE.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AWARE.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1362,6 +1368,7 @@
 				169C87BE1D01382C00825761 /* Accelerometer.m */,
 				160F0E851D03D60500673343 /* EntityAccelerometer+CoreDataProperties.h */,
 				160F0E861D03D60500673343 /* EntityAccelerometer+CoreDataProperties.m */,
+				160F0ECB1D04132600673343 /* EntityGravity.m */,
 				160F0E871D03D60500673343 /* EntityAccelerometer.h */,
 				160F0E881D03D60500673343 /* EntityAccelerometer.m */,
 			);
@@ -1464,7 +1471,6 @@
 				160F0EC81D04132600673343 /* EntityGravity+CoreDataProperties.h */,
 				160F0EC91D04132600673343 /* EntityGravity+CoreDataProperties.m */,
 				160F0ECA1D04132600673343 /* EntityGravity.h */,
-				160F0ECB1D04132600673343 /* EntityGravity.m */,
 			);
 			path = Gravity;
 			sourceTree = "<group>";
@@ -1733,6 +1739,10 @@
 				16B078321D1F918B009C070B /* EntityMSBandHR+CoreDataProperties.m */,
 				16B078331D1F918B009C070B /* EntityMSBandHR.h */,
 				16B078341D1F918B009C070B /* EntityMSBandHR.m */,
+				16EC4F131D2E7D8200524424 /* EntityMSBandRRInterval+CoreDataProperties.h */,
+				16EC4F141D2E7D8200524424 /* EntityMSBandRRInterval+CoreDataProperties.m */,
+				16EC4F151D2E7D8200524424 /* EntityMSBandRRInterval.h */,
+				16EC4F161D2E7D8200524424 /* EntityMSBandRRInterval.m */,
 			);
 			name = Entities;
 			sourceTree = "<group>";
@@ -2047,6 +2057,7 @@
 			files = (
 				160F0E891D03D60500673343 /* EntityAccelerometer+CoreDataProperties.m in Sources */,
 				16B077AA1D1A4DF1009C070B /* EntityProcessor.m in Sources */,
+				16EC4F171D2E7D8200524424 /* EntityMSBandRRInterval+CoreDataProperties.m in Sources */,
 				16B0783D1D1F918B009C070B /* EntityMSBandDeviceContact+CoreDataProperties.m in Sources */,
 				16B0783F1D1F918B009C070B /* EntityMSBandCalorie+CoreDataProperties.m in Sources */,
 				16B077BC1D1A54BF009C070B /* EntityPushNotification.m in Sources */,
@@ -2131,6 +2142,7 @@
 				16B077A91D1A4DF1009C070B /* EntityProcessor+CoreDataProperties.m in Sources */,
 				16B078431D1F918B009C070B /* EntityMSBandDistance+CoreDataProperties.m in Sources */,
 				169C883D1D01382C00825761 /* ESMSchedule.m in Sources */,
+				16EC4F181D2E7D8200524424 /* EntityMSBandRRInterval.m in Sources */,
 				16B077791D192C30009C070B /* EntityTimezone.m in Sources */,
 				169C88811D01382C00825761 /* Observer.m in Sources */,
 				169C88311D01382C00825761 /* AWARESensor.m in Sources */,
@@ -2378,7 +2390,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = AWARE/AWARE.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (

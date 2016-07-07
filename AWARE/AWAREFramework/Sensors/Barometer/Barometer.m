@@ -12,7 +12,7 @@
 
 @implementation Barometer{
     CMAltimeter* altitude;
-    double defaultInterval;
+    double sensingInterval;
     int dbWriteInterval;
 }
 
@@ -22,8 +22,8 @@
                         dbEntityName:NSStringFromClass([EntityBarometer class])
                               dbType:AwareDBTypeCoreData];
     if (self) {
-        defaultInterval = 0.2f;
-        dbWriteInterval = 10;
+        sensingInterval = 0.2f;
+        dbWriteInterval = 30;
     }
     return self;
 }
@@ -48,7 +48,7 @@
         frequency = frequency/100000;
     }else{
         // default value = 200000(microseconds) = 0.2(second)
-        frequency = defaultInterval;
+        frequency = sensingInterval;
     }
     
     // Set a buffer size for reducing file access
@@ -57,7 +57,7 @@
 }
 
 - (BOOL) startSensor{
-    return [self startSensorWithInterval:defaultInterval];
+    return [self startSensorWithInterval:sensingInterval];
 }
 
 - (BOOL) startSensorWithInterval:(double)interval{
@@ -69,6 +69,9 @@
 }
 
 - (BOOL) startSensorWithInterval:(double)interval bufferSize:(int)buffer fetchLimit:(int)fetchLimit{
+    
+    [super startSensor];
+    
     [self setFetchLimit:fetchLimit];
     [self setBufferSize:buffer];
     
@@ -128,7 +131,18 @@
     [altitude stopRelativeAltitudeUpdates];
     altitude = nil;
     
+    [super stopSensor];
+    
     return YES;
+}
+
+- (BOOL) setInterval:(double)interval{
+    sensingInterval = interval;
+    return YES;
+}
+
+- (double) getInterval{
+    return sensingInterval;
 }
 
 
