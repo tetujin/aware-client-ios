@@ -72,20 +72,25 @@
 -(BOOL)startSensorWithSettings:(NSArray *)settings{
     [helper removeEsmTexts];
     
-    ESMSchedule * schedule = [[ESMSchedule alloc] initWithIdentifier:@"sample_esm_for_sport"
-                                                       scheduledESMs:[self getSampleESMsForSports]
-                                                           fireDates:[self getSampleFireHours]
-                                                               title:@"体育会ラグビー部 コンディションチェック"
-                                                                body:@"現在のコンディションを入力してください！"
-                                                            interval:NSCalendarUnitDay
-                                                            category:[self getSensorName]
-                                                                icon:1
-                                                             timeout:60];
-    // Add the schedule to ESMManager
-    [esmManager addESMSchedules:schedule];
+//    [[[NSOperationQueue alloc] init] addOperationWithBlock:^{
+//        ESMSchedule * schedule = [[ESMSchedule alloc] initWithIdentifier:@"sample_esm_for_sport"
+//                                                           scheduledESMs:[self getSampleESMsForSports]
+//                                                               fireDates:[self getSampleFireHours]
+//                                                                   title:@"体育会ラグビー部 コンディションチェック"
+//                                                                    body:@"現在のコンディションを入力してください！"
+//                                                                interval:NSCalendarUnitDay
+//                                                                category:[self getSensorName]
+//                                                                    icon:1
+//                                                                 timeout:60];
+//        // Add the schedule to ESMManager
+//        [esmManager addESMSchedules:schedule];
+//        
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            // Start the schedules using -startAllESMSchedules on ESMManager
+//            [esmManager startAllESMSchedules];            
+//        });
+//    }];
     
-    // Start the schedules using -startAllESMSchedules on ESMManager
-    [esmManager startAllESMSchedules];
     
     
     // Remove all esms from the local-temp storage

@@ -419,8 +419,8 @@
     [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeBlack];
     [SVProgressHUD showWithStatus:@"Start manual upload"];
     
-    [self stopAndRemoveAllSensors];
-    [self startAllSensors];
+//    [self stopAndRemoveAllSensors];
+//    [self startAllSensors];
     
     manualUploadMonitor = [NSTimer scheduledTimerWithTimeInterval:1
                                                            target:self

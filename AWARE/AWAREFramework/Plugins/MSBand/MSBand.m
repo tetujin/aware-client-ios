@@ -286,46 +286,52 @@
     if ([self isDebug]) {
         [AWAREUtils sendLocalNotificationForMessage:msg soundFlag:NO];
     }
-    NSArray * allSensors = [super getSensors];
-    for (int i=0; i<allSensors.count; i++) {
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 3.0 * i * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-            NSLog(@"Stop %@ sensor", [[allSensors objectAtIndex:i] getSensorName]);
-            switch (i) {
-                case 0:
-                    [self.client.sensorManager stopUVUpdatesErrorRef:nil];
-                    break;
-                case 1:
-                    [self.client.sensorManager stopSkinTempUpdatesErrorRef:nil];
-                    break;
-                case 2:
-                    [self.client.sensorManager stopHeartRateUpdatesErrorRef:nil];
-                    break;
-                case 3:
-                    [self.client.sensorManager stopGSRUpdatesErrorRef:nil];
-                    break;
-                case 4:
-                    [self.client.sensorManager stopBandContactUpdatesErrorRef:nil];
-                    break;
-                case 5:
-                    [self.client.sensorManager stopCaloriesUpdatesErrorRef:nil];
-                    break;
-                case 6:
-                    [self.client.sensorManager stopDistanceUpdatesErrorRef:nil];
-                    break;
-                case 7:
-                    [self.client.sensorManager stopRRIntervalUpdatesErrorRef:nil];
-                    break;
-                default:
-                    break;
-            }
-            
-            // -- not implemented yet--
-            //        [self.client.sensorManager stopAccelerometerUpdatesErrorRef:nil];
-            //        [self.client.sensorManager stopAltimeterUpdatesErrorRef:nil];
-            //        [self.client.sensorManager stopAmbientLightUpdatesErrorRef:nil];
-            //        [self.client.sensorManager stopGyroscopeUpdatesErrorRef:nil];
-            //        [self.client.sensorManager stopPedometerUpdatesErrorRef:nil];
-        });
+    @try {
+        NSArray * allSensors = [super getSensors];
+        for (int i=0; i<allSensors.count; i++) {
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 3.0 * i * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+                NSLog(@"Stop %@ sensor", [[allSensors objectAtIndex:i] getSensorName]);
+                switch (i) {
+                    case 0:
+                        [self.client.sensorManager stopUVUpdatesErrorRef:nil];
+                        break;
+                    case 1:
+                        [self.client.sensorManager stopSkinTempUpdatesErrorRef:nil];
+                        break;
+                    case 2:
+                        [self.client.sensorManager stopHeartRateUpdatesErrorRef:nil];
+                        break;
+                    case 3:
+                        [self.client.sensorManager stopGSRUpdatesErrorRef:nil];
+                        break;
+                    case 4:
+                        [self.client.sensorManager stopBandContactUpdatesErrorRef:nil];
+                        break;
+                    case 5:
+                        [self.client.sensorManager stopCaloriesUpdatesErrorRef:nil];
+                        break;
+                    case 6:
+                        [self.client.sensorManager stopDistanceUpdatesErrorRef:nil];
+                        break;
+                    case 7:
+                        [self.client.sensorManager stopRRIntervalUpdatesErrorRef:nil];
+                        break;
+                    default:
+                        break;
+                }
+                
+                // -- not implemented yet--
+                //        [self.client.sensorManager stopAccelerometerUpdatesErrorRef:nil];
+                //        [self.client.sensorManager stopAltimeterUpdatesErrorRef:nil];
+                //        [self.client.sensorManager stopAmbientLightUpdatesErrorRef:nil];
+                //        [self.client.sensorManager stopGyroscopeUpdatesErrorRef:nil];
+                //        [self.client.sensorManager stopPedometerUpdatesErrorRef:nil];
+            });
+        }
+    } @catch (NSException *exception) {
+        NSLog(@"%@", exception.description);
+    } @finally {
+    
     }
 }
 

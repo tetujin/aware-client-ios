@@ -136,7 +136,7 @@
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     bool appTerminated = [userDefaults boolForKey:KEY_APP_TERMINATED];
     if (appTerminated) {
-        NSString * message = @"AWARE iOS is rebooted!";
+        NSString * message = @"AWARE client iOS is rebooted";
         [AWAREUtils sendLocalNotificationForMessage:message soundFlag:YES];
         Debug * debugSensor = [[Debug alloc] initWithAwareStudy:nil];
         [debugSensor saveDebugEventWithText:message type:DebugTypeInfo label:@""];
@@ -144,12 +144,12 @@
     }else{
         // [self sendLocalNotificationForMessage:@"" soundFlag:YES];
         // NSLog(@"Base Location Sensor.");
-        if ([userDefaults boolForKey: SETTING_DEBUG_STATE]) {
-            for (CLLocation * location in locations) {
-                NSLog(@"%@",location.description);
-                
-            }
-        }
+//        if ([userDefaults boolForKey: SETTING_DEBUG_STATE]) {
+//            for (CLLocation * location in locations) {
+//                NSLog(@"%@",location.description);
+//                
+//            }
+//        }
     }
 }
 

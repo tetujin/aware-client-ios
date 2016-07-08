@@ -22,9 +22,9 @@
         <attribute name="double_decibels" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
         <attribute name="double_frequency" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
         <attribute name="double_RMS" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="double_silent_threshold" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
         <attribute name="is_silent" optional="YES" attributeType="Integer 16" syncable="YES"/>
         <attribute name="raw" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="silent_threshold" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
         <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
     </entity>
     <entity name="EntityBarometer" representedClassName="EntityBarometer" syncable="YES">
@@ -363,6 +363,7 @@
         <element name="EntityMSBandGSR" positionX="216" positionY="171" width="128" height="90"/>
         <element name="EntityMSBandHR" positionX="225" positionY="180" width="128" height="105"/>
         <element name="EntityMSBandPedometer" positionX="234" positionY="189" width="128" height="90"/>
+        <element name="EntityMSBandRRInterval" positionX="180" positionY="135" width="128" height="90"/>
         <element name="EntityMSBandSkinTemp" positionX="180" positionY="135" width="128" height="90"/>
         <element name="EntityMSBandUV" positionX="189" positionY="144" width="128" height="90"/>
         <element name="EntityNetwork" positionX="216" positionY="180" width="128" height="30"/>
@@ -374,6 +375,5 @@
         <element name="EntityScreen" positionX="189" positionY="153" width="128" height="30"/>
         <element name="EntityTimezone" positionX="198" positionY="162" width="128" height="30"/>
         <element name="EntityWifi" positionX="207" positionY="171" width="128" height="30"/>
-        <element name="EntityMSBandRRInterval" positionX="180" positionY="135" width="128" height="90"/>
     </elements>
 </model>

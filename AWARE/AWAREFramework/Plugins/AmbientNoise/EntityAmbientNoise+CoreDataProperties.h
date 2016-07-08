@@ -2,7 +2,7 @@
 //  EntityAmbientNoise+CoreDataProperties.h
 //  AWARE
 //
-//  Created by Yuuki Nishiyama on 6/22/16.
+//  Created by Yuuki Nishiyama on 7/8/16.
 //  Copyright © 2016 Yuuki NISHIYAMA. All rights reserved.
 //
 //  Choose "Create NSManagedObject Subclass…" from the Core Data editor menu
@@ -21,7 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) NSNumber *double_RMS;
 @property (nullable, nonatomic, retain) NSNumber *is_silent;
 @property (nullable, nonatomic, retain) NSString *raw;
-@property (nullable, nonatomic, retain) NSNumber *silent_threshold;
+@property (nullable, nonatomic, retain) NSNumber *double_silent_threshold;
 @property (nullable, nonatomic, retain) NSNumber *timestamp;
 
 @end

@@ -400,7 +400,7 @@
         NSLog(@"Entity Name is 'nil'. Please check the initialozation of this class.");
     }
     
-    NSLog(@"[%@] %d", [self getEntityName], [NSThread isMainThread]);
+    // NSLog(@"[%@] %d", [self getEntityName], [NSThread isMainThread]);
     
     // set a repetation count
     currentRepetitionCounts++;
@@ -663,9 +663,9 @@ didBecomeStreamTask:(NSURLSessionStreamTask *)streamTask{
     int responseCode = (int)[httpResponse statusCode];
     NSString* newStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     NSLog(@"[%@] %d  Response =====> %@",sensorName, responseCode, newStr);
-    if([sensorName isEqualToString:SENSOR_ACCELEROMETER]){
-        NSLog(@"%@", sensorName);
-    }
+//    if([sensorName isEqualToString:SENSOR_ACCELEROMETER]){
+//        NSLog(@"%@", sensorName);
+//    }
     data = nil;
     response = nil;
     error = nil;

@@ -34,7 +34,7 @@
         // Make a visit location sensor
         visitLocationSensor = [[AWARESensor alloc] initWithAwareStudy:awareStudy
                                                            sensorName:@"locations_visit"
-                                                         dbEntityName:NSStringFromClass([EntityLocation class])
+                                                         dbEntityName:NSStringFromClass([EntityLocationVisit class])
                                                                dbType:AwareDBTypeCoreData];
     }
     return self;
@@ -130,7 +130,7 @@
         // Set a movement threshold for new events.
         [locationManager startMonitoringVisits]; // This method calls didVisit.
         [locationManager startMonitoringSignificantLocationChanges];
-        [fusedLocationsSensor setBufferSize:3];
+        // [fusedLocationsSensor setBufferSize:3];
         // [locationManager startUpdatingHeading];
         
         if(interval > 0){
@@ -139,8 +139,10 @@
                                                            selector:@selector(getGpsData:)
                                                            userInfo:nil
                                                             repeats:YES];
+            
         }else{
             [locationManager startUpdatingLocation];
+            [fusedLocationsSensor setBufferSize:3];
         }
     }
     
