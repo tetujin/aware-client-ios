@@ -1,8 +1,8 @@
 //
-//  EntityAmbientNoise.h
+//  EntityMSBandRRInterval.h
 //  AWARE
 //
-//  Created by Yuuki Nishiyama on 7/8/16.
+//  Created by Yuuki Nishiyama on 7/7/16.
 //  Copyright © 2016 Yuuki NISHIYAMA. All rights reserved.
 //
 
@@ -11,7 +11,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface EntityAmbientNoise : NSManagedObject
+@interface EntityMSBandRRInterval : NSManagedObject
 
 // Insert code here to declare functionality of your managed object subclass
 
@@ -19,4 +19,4 @@ NS_ASSUME_NONNULL_BEGIN
 
 NS_ASSUME_NONNULL_END
 
-#import "EntityAmbientNoise+CoreDataProperties.h"
+#import "EntityMSBandRRInterval+CoreDataProperties.h"

@@ -246,6 +246,7 @@
             NSLog(@"[%@] %@", [self getEntityName], error.debugDescription );
         }
         dbCondition = AwareDBConditionNormal;
+        NSLog(@"[%@] Save data to DB", [self getEntityName]);
         
         // ==== backup source code for background save ====
         // If the current thread is main thread, we should make a new thread for saving data
@@ -399,7 +400,7 @@
         NSLog(@"Entity Name is 'nil'. Please check the initialozation of this class.");
     }
     
-    NSLog(@"[%@] %d", [self getEntityName], [NSThread isMainThread]);
+    // NSLog(@"[%@] %d", [self getEntityName], [NSThread isMainThread]);
     
     // set a repetation count
     currentRepetitionCounts++;
@@ -433,15 +434,12 @@
             
             if (results.count == 0 || results.count == NSNotFound) {
                 [self dataSyncIsFinishedCorrectoly];
-                NSMutableDictionary * userInfo = [[NSMutableDictionary alloc] init];
-                [userInfo setObject:@100 forKey:@"KEY_UPLOAD_PROGRESS_STR"];
-                [userInfo setObject:@YES forKey:@"KEY_UPLOAD_FIN"];
-                [userInfo setObject:@YES forKey:@"KEY_UPLOAD_SUCCESS"];
-                [userInfo setObject:sensorName forKey:@"KEY_UPLOAD_SENSOR_NAME"];
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"ACTION_AWARE_DATA_UPLOAD_PROGRESS"
-                                                                    object:nil
-                                                                  userInfo:userInfo];
+                [self broadcastDBSyncEventWithProgress:@100 isFinish:@YES isSuccess:@YES sensorName:sensorName];
                 return;
+            }else{
+                if([sensorName isEqualToString:SENSOR_ACCELEROMETER]){
+                    NSLog(@"records: %ld", results.count);
+                }
             }
             
             NSMutableArray *array = [[NSMutableArray alloc] initWithArray:results];
@@ -466,9 +464,16 @@
                         if (sensorData == nil || sensorData.length == 0 || sensorData.length == 2) { // || [sensorData isEqualToString:@"[]"]) {
                             NSString * message = [NSString stringWithFormat:@"[%@] Data is Null or Length is Zero", sensorName];
                             [self dataSyncIsFinishedCorrectoly];
+                            [self broadcastDBSyncEventWithProgress:@(100) isFinish:YES isSuccess:YES sensorName:sensorName];
                             NSLog(@"%@", message);
                             return;
+                        }else{
+//                            if([sensorName isEqualToString:SENSOR_ACCELEROMETER]){
+//                                NSLog(@"info: %@", [[NSString alloc] initWithData:sensorData encoding:NSUTF8StringEncoding]);
+//                            }
                         }
+                        
+                        
                         
                         // Set session configuration
                         NSURLSessionConfiguration *sessionConfig = nil;
@@ -505,12 +510,12 @@
                                                                          delegateQueue:nil];
                         NSURLSessionDataTask* dataTask = [session dataTaskWithRequest:request];
                         
-                        [session getTasksWithCompletionHandler:^(NSArray* dataTasks, NSArray* uploadTasks, NSArray* downloadTasks){
-                            NSLog(@"Currently suspended tasks");
-                            for (NSURLSessionDownloadTask* task in dataTasks) {
-                                NSLog(@"Task: %@",[task description]);
-                            }
-                        }];
+//                        [session getTasksWithCompletionHandler:^(NSArray* dataTasks, NSArray* uploadTasks, NSArray* downloadTasks){
+//                            NSLog(@"Currently suspended tasks");
+//                            for (NSURLSessionDownloadTask* task in dataTasks) {
+//                                NSLog(@"Task: %@",[task description]);
+//                            }
+//                        }];
                         
                         httpStartTimestamp = [[NSDate new] timeIntervalSince1970];
                         postedTextLength = [[NSNumber numberWithInteger:postData.length] doubleValue];
@@ -658,7 +663,9 @@ didBecomeStreamTask:(NSURLSessionStreamTask *)streamTask{
     int responseCode = (int)[httpResponse statusCode];
     NSString* newStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     NSLog(@"[%@] %d  Response =====> %@",sensorName, responseCode, newStr);
-    
+//    if([sensorName isEqualToString:SENSOR_ACCELEROMETER]){
+//        NSLog(@"%@", sensorName);
+//    }
     data = nil;
     response = nil;
     error = nil;
@@ -679,18 +686,11 @@ didBecomeStreamTask:(NSURLSessionStreamTask *)streamTask{
     
         // broad cast current progress of data upload!
         NSNumber *finish = @NO;
-        NSMutableDictionary * userInfo = [[NSMutableDictionary alloc] init];
         if (currentRepetitionCounts > repetitionTime) {
             progress = 100;
             finish = @YES;
         }
-        [userInfo setObject:@(progress) forKey:@"KEY_UPLOAD_PROGRESS_STR"];
-        [userInfo setObject:finish forKey:@"KEY_UPLOAD_FIN"];
-        [userInfo setObject:@YES forKey:@"KEY_UPLOAD_SUCCESS"];
-        [userInfo setObject:sensorName forKey:@"KEY_UPLOAD_SENSOR_NAME"];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"ACTION_AWARE_DATA_UPLOAD_PROGRESS"
-                                                            object:nil
-                                                          userInfo:userInfo];
+        [self broadcastDBSyncEventWithProgress:@(progress) isFinish:finish isSuccess:@YES sensorName:sensorName];
         
         /** =========== Remove old data ============== */
         NSFetchRequest* request = [[NSFetchRequest alloc] init];
@@ -788,8 +788,10 @@ didCompleteWithError:(nullable NSError *)error;
             }
             if (errorPosts < 3) { //TODO
                 [self uploadSensorDataInBackground];
+                [self broadcastDBSyncEventWithProgress:@(-1) isFinish:@NO isSuccess:@NO sensorName:sensorName];
             } else {
                 [self dataSyncIsFinishedCorrectoly];
+                [self broadcastDBSyncEventWithProgress:@(-1) isFinish:@YES isSuccess:@NO sensorName:sensorName];
             }
         } else {
             

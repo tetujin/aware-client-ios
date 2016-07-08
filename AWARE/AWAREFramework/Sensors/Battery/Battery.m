@@ -28,6 +28,9 @@
     AWARESensor * batteryChargeSensor;
     // A battery discharge sensor
     AWARESensor * batteryDischargeSensor;
+    
+    NSTimer * timer;
+    NSInteger previousBatteryLevel;
 }
 
 - (instancetype)initWithAwareStudy:(AWAREStudy *)study{
@@ -61,6 +64,8 @@
                                                                   dbType:AwareDBTypeCoreData];
         [batteryChargeSensor trackDebugEvents];
         [batteryDischargeSensor trackDebugEvents];
+        previousBatteryLevel = [UIDevice currentDevice].batteryLevel*100;
+        [self batteryLevelChanged:nil];
     }
     return self;
 }
@@ -129,6 +134,11 @@
                                              selector:@selector(batteryStateChanged:)
                                                  name:UIDeviceBatteryStateDidChangeNotification object:nil];
     
+    timer = [NSTimer scheduledTimerWithTimeInterval:60.0f
+                                             target:self
+                                           selector:@selector(batteryLevelChanged:)
+                                           userInfo:nil
+                                            repeats:YES];
     return YES;
 }
 
@@ -137,6 +147,10 @@
     [NSNotificationCenter.defaultCenter removeObserver:self name:UIDeviceBatteryLevelDidChangeNotification object:nil];
     [NSNotificationCenter.defaultCenter removeObserver:self name:UIDeviceBatteryStateDidChangeNotification object:nil];
 //    [UIDevice currentDevice].batteryMonitoringEnabled = NO;
+    if(timer != nil){
+        [timer invalidate];
+        timer = nil;
+    }
     return YES;
 }
 
@@ -185,6 +199,11 @@
 
 
 - (void)batteryLevelChanged:(NSNotification *)notification {
+    
+    if (previousBatteryLevel == [UIDevice currentDevice].batteryLevel*100) {
+        return;
+    }
+    
     //    NSLog(@"battery status: %d",state); // 0 unknown, 1 unplegged, 2 charging, 3 full
     UIDevice *myDevice = [UIDevice currentDevice];
     [myDevice setBatteryMonitoringEnabled:YES];

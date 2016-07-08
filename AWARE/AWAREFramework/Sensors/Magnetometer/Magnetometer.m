@@ -24,7 +24,7 @@
     if (self) {
         manager = [[CMMotionManager alloc] init];
         defaultInterval = 0.1f;
-        dbWriteInterval = 10;
+        dbWriteInterval = 30;
     }
     return self;
 }

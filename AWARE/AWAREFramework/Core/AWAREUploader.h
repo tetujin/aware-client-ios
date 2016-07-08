@@ -70,6 +70,10 @@
 - (NSString *) getCreateTableUrl:(NSString *)sensorName;
 - (NSString *) getClearTableUrl:(NSString *)sensorName;
 
+- (void) broadcastDBSyncEventWithProgress:(NSNumber *)progress
+                                 isFinish:(BOOL)finish
+                                isSuccess:(BOOL)success
+                               sensorName:(NSString *)name;
 
 @end
 

@@ -18,7 +18,8 @@
 // By default this will record a file to the application's documents directory
 // (within the application's sandbox)
 //
-#define kAudioFilePath @"rawAudioData.m4a"
+#define kAudioFilePath @"rawAudio.m4a"
+#define kRawAudioDirectory @"rawAudioData"
 
 @interface AmbientNoise : AWARESensor <AWARESensorDelegate, EZMicrophoneDelegate, EZRecorderDelegate, EZAudioFFTDelegate>
 //

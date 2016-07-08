@@ -24,6 +24,7 @@ typedef enum: NSInteger {
 @protocol AWARESensorDelegate <NSObject>
 
 - (BOOL) startSensorWithSettings:(NSArray *)settings;
+- (BOOL) startSensor;
 - (BOOL) stopSensor;
 - (void) syncAwareDB;
 - (void) createTable;
@@ -111,5 +112,7 @@ typedef enum: NSInteger {
 - (NSString *) getClearTableUrl:(NSString *)sensorName;
 
 - (NSManagedObjectContext *) getSensorManagedObjectContext;
+
+- (BOOL) getStatus;
 
 @end

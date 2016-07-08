@@ -2,7 +2,7 @@
 //  EntityAmbientNoise+CoreDataProperties.m
 //  AWARE
 //
-//  Created by Yuuki Nishiyama on 6/22/16.
+//  Created by Yuuki Nishiyama on 7/8/16.
 //  Copyright © 2016 Yuuki NISHIYAMA. All rights reserved.
 //
 //  Choose "Create NSManagedObject Subclass…" from the Core Data editor menu
@@ -19,7 +19,7 @@
 @dynamic double_RMS;
 @dynamic is_silent;
 @dynamic raw;
-@dynamic silent_threshold;
+@dynamic double_silent_threshold;
 @dynamic timestamp;
 
 @end

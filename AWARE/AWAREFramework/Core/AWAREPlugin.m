@@ -120,4 +120,8 @@
     return NO;
 }
 
+- (NSArray *)getSensors{
+    return awareSensors;
+}
+
 @end

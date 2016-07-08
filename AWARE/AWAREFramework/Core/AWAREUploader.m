@@ -231,4 +231,25 @@
 }
 
 
+/**
+ * /////////////////////////////////////////////////////////
+ *  Broadcast CoreData(insert/fetch/delete) and data upload events
+ * /////////////////////////////////////////////////////////
+ */
+- (void) broadcastDBSyncEventWithProgress:(NSNumber *)progress
+                                 isFinish:(BOOL)finish
+                                isSuccess:(BOOL)success
+                               sensorName:(NSString *)name{
+    NSMutableDictionary * userInfo = [[NSMutableDictionary alloc] init];
+    [userInfo setObject:progress forKey:@"KEY_UPLOAD_PROGRESS_STR"];
+    [userInfo setObject:@(finish) forKey:@"KEY_UPLOAD_FIN"];
+    [userInfo setObject:@(success) forKey:@"KEY_UPLOAD_SUCCESS"];
+    [userInfo setObject:name forKey:@"KEY_UPLOAD_SENSOR_NAME"];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"ACTION_AWARE_DATA_UPLOAD_PROGRESS"
+                                                        object:nil
+                                                      userInfo:userInfo];
+    
+}
+
+
 @end

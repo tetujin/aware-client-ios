@@ -160,6 +160,7 @@
         [self saveScreenEvent:awareScreenState];
         
         [self setLatestValue:[NSString stringWithFormat:@"%@", [NSNumber numberWithInt:awareScreenState]]];
+
         
         /**  ======= Codes for TextFile DB ======= */
         //        NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];

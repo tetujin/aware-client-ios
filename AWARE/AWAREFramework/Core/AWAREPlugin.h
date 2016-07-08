@@ -57,4 +57,6 @@
 
 - (BOOL) stopSensor;
 
+- (NSArray * ) getSensors;
+
 @end

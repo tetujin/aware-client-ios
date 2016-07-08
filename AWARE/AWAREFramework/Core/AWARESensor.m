@@ -73,6 +73,7 @@
     ////////////// CoroData //////////////////////////////
 //    AWARECoreDataManager * coreDataManager;
 
+    BOOL sensorStatus;
 }
 
 @end
@@ -103,6 +104,8 @@
                              dbType:(AwareDBType)dbType
                          bufferSize:(int)buffer{
     if (self = [super init]) {
+        
+        sensorStatus = NO;
         
         // Get debug state
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -164,14 +167,19 @@
  *
  */
 -(BOOL)startSensorWithSettings:(NSArray *)settings{
-    return NO;
+    return [self startSensor];
 }
 
+- (BOOL) startSensor {
+    sensorStatus = YES;
+    return NO;
+}
 
 /**
  * DEFAULT:
  */
 - (BOOL)stopSensor{
+    sensorStatus = NO;
     return NO;
 }
 

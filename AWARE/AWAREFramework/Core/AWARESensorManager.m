@@ -416,8 +416,11 @@
         manualUploadMonitor = nil;
     }
     
-    [self stopAndRemoveAllSensors];
-    [self startAllSensors];
+    [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeBlack];
+    [SVProgressHUD showWithStatus:@"Start manual upload"];
+    
+//    [self stopAndRemoveAllSensors];
+//    [self startAllSensors];
     
     manualUploadMonitor = [NSTimer scheduledTimerWithTimeInterval:1
                                                            target:self
@@ -435,10 +438,7 @@
             [progresses setObject:@0 forKey:[sensor getSensorName]];
         }
         
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeBlack];
-            [SVProgressHUD showWithStatus:@"start manual upload"];
-        });
+        
     
 
         observer = [[NSNotificationCenter defaultCenter]
@@ -455,6 +455,7 @@
                                        [progresses setObject:progressStr forKey:progressName];
                                        // call main thread for UI update
                                        dispatch_sync(dispatch_get_main_queue(), ^{
+                                           // update progress
                                            @try {
                                                NSMutableString * result = [[NSMutableString alloc] init];
                                                for (id key in [progresses keyEnumerator]) {
@@ -468,6 +469,21 @@
                                                
                                            }
                                            
+                                           // stop
+                                           if(isFinish == YES && isSuccess == NO){
+                                               AudioServicesPlayAlertSound(1324);
+                                               if([AWAREUtils isBackground]){
+                                                   [AWAREUtils sendLocalNotificationForMessage:@"[Manual Upload] Fail to upload sensor data. Please try upload again." soundFlag:YES];
+                                               }else{
+                                                   UIAlertView *alert = [ [UIAlertView alloc]
+                                                                         initWithTitle:@""
+                                                                         message:@"[Manual Upload] Fail to upload sensor data. Please try upload again."
+                                                                         delegate:nil
+                                                                         cancelButtonTitle:@"OK"
+                                                                         otherButtonTitles:nil];
+                                                   [alert show];
+                                               }
+                                           }
                                        });
                                    }
                                }];
@@ -569,10 +585,10 @@
         }
     }
     
-    /** ========= Freeze ======== */
+    /** ========= Freeze Check ======== */
     @try {
         manualUploadTime ++;
-        NSLog(@"%d", manualUploadTime);
+        // NSLog(@"%d", manualUploadTime);
         if(manualUploadTime > 60 ){
             manualUploadTime = 0;
             for (id key in [progresses keyEnumerator]) {

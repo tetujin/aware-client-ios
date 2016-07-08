@@ -15,8 +15,8 @@
 @implementation Bluetooth {
     MDBluetoothManager * mdBluetoothManager;
     NSTimer * scanTimer;
-    int scanDuration;
-    int defaultScanInterval;
+    // int scanDuration;
+    // int scanInterval;
     NSDate * sessionTime;
     
     NSString * KEY_BLUETOOTH_TIMESTAMP;
@@ -34,8 +34,8 @@
                               dbType:AwareDBTypeCoreData];
     if (self) {
         mdBluetoothManager = [MDBluetoothManager sharedInstance];
-        scanDuration = 30; // 30 second
-        defaultScanInterval = 60*5; // 5 min
+        _scanDuration = 30; // 30 second
+        _scanInterval = 60*5; // 5 min
         sessionTime = [NSDate new];
         
         KEY_BLUETOOTH_TIMESTAMP = @"timestamp";
@@ -70,16 +70,19 @@
 
     double interval = [self getSensorSetting:settings withKey:@"frequency_bluetooth"];
     if (interval <= 0) {
-        interval = defaultScanInterval;
+        interval = _scanInterval;
     }
-    return [self startSensorWithScanInterval:interval duration:scanDuration];
+    return [self startSensorWithScanInterval:interval duration:_scanDuration];
 }
 
 - (BOOL) startSensor{
-    return [self startSensorWithScanInterval:defaultScanInterval duration:scanDuration];
+    return [self startSensorWithScanInterval:_scanInterval duration:_scanDuration];
 }
 
 - (BOOL) startSensorWithScanInterval:(int)interval duration:(int)duration{
+    
+    [super startSensor];
+    
     scanTimer = [NSTimer scheduledTimerWithTimeInterval:interval
                                                  target:self
                                                selector:@selector(startToScanBluetooth:)
@@ -109,6 +112,8 @@
     [mdBluetoothManager endScan];
     // remove notification observer from notification center
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"BluetoothDeviceDiscoveredNotification" object:nil];
+    
+    [super stopSensor];
     
     return YES;
 }
@@ -143,7 +148,7 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_BLUETOOTH_NEW_DEVICE
                                                         object:nil
                                                       userInfo:userInfo];
-    NSError * error = nil;
+    // NSError * error = nil;
     [self saveDataToDB];
     
     
@@ -191,7 +196,7 @@
     
     // start scanning classic bluetooth devices.
     if (![mdBluetoothManager isScanning]) {
-        NSString *scanStartMessage = [NSString stringWithFormat:@"Start scanning Bluetooth devices during %d second!", scanDuration];
+        NSString *scanStartMessage = [NSString stringWithFormat:@"Start scanning Bluetooth devices during %d second!", _scanDuration];
         NSLog(@"...Start scanning Bluetooth devices.");
         if ([self isDebug]){
            [AWAREUtils sendLocalNotificationForMessage:scanStartMessage soundFlag:NO];
@@ -199,14 +204,14 @@
         // start to scan Bluetooth devices
         [mdBluetoothManager startScan];
         // stop to scan Bluetooth devies after "scanDuration" second.
-        [self performSelector:@selector(stopToScanBluetooth) withObject:0 afterDelay:scanDuration];
-        NSLog(@"...After %d second, the Blueooth scan will be end.", scanDuration);
+        [self performSelector:@selector(stopToScanBluetooth) withObject:0 afterDelay:_scanDuration];
+        NSLog(@"...After %d second, the Blueooth scan will be end.", _scanDuration);
     }
     
     
     // start scanning ble devices.
     _myCentralManager = [[CBCentralManager alloc] initWithDelegate:self queue:nil];
-    [_myCentralManager performSelector:@selector(stopScan) withObject:nil afterDelay:scanDuration];
+    [_myCentralManager performSelector:@selector(stopScan) withObject:nil afterDelay:_scanDuration];
 }
 
 
