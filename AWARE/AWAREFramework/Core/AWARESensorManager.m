@@ -678,45 +678,45 @@
 }
 
 
-- (bool) syncOldSensorsDataInTextFileWithDBInForeground {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),^{
-        @autoreleasepool{
-            // Show progress bar
-            bool sucessOfUpload = true;
-            dispatch_sync(dispatch_get_main_queue(), ^{
-                [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeBlack];
-            });
-            // Sync local stored data with aware server.
-            for ( int i=0; i<awareSensors.count; i++) {
-                
-                AWARESensor* sensor = [awareSensors objectAtIndex:i];
-                NSString *message = [NSString stringWithFormat:@"Uploading %@ data %@",
-                                     [sensor getSensorName],
-                                     [sensor getSyncProgressAsText]];
-                [SVProgressHUD setStatus:message];
-                
-                [sensor sensorLock];
-                if (![sensor syncAwareDBInForeground]) {
-                    sucessOfUpload = NO;
-                }
-                [sensor sensorUnLock];
-            }
-            // Update UI in the main thread.
-            dispatch_sync(dispatch_get_main_queue(), ^{
-                if (sucessOfUpload) {
-                    [SVProgressHUD showSuccessWithStatus:@"Success to upload your data to the server!"];
-                    AudioServicesPlayAlertSound(1000);
-                }else{
-                    [SVProgressHUD showErrorWithStatus:@"Fail to upload your data to the server."];
-                    AudioServicesPlayAlertSound(1324);
-                }
-                [SVProgressHUD performSelector:@selector(dismiss) withObject:nil afterDelay:3.0f];
-                
-            });
-        }
-    });
-    return YES;
-}
+//- (bool) syncOldSensorsDataInTextFileWithDBInForeground {
+//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),^{
+//        @autoreleasepool{
+//            // Show progress bar
+//            bool sucessOfUpload = true;
+//            dispatch_sync(dispatch_get_main_queue(), ^{
+//                [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeBlack];
+//            });
+//            // Sync local stored data with aware server.
+//            for ( int i=0; i<awareSensors.count; i++) {
+//                
+//                AWARESensor* sensor = [awareSensors objectAtIndex:i];
+//                NSString *message = [NSString stringWithFormat:@"Uploading %@ data %@",
+//                                     [sensor getSensorName],
+//                                     [sensor getSyncProgressAsText]];
+//                [SVProgressHUD setStatus:message];
+//                
+//                [sensor lockDB];
+//                if (![sensor syncAwareDBInForeground]) {
+//                    sucessOfUpload = NO;
+//                }
+//                [sensor unlockDB];
+//            }
+//            // Update UI in the main thread.
+//            dispatch_sync(dispatch_get_main_queue(), ^{
+//                if (sucessOfUpload) {
+//                    [SVProgressHUD showSuccessWithStatus:@"Success to upload your data to the server!"];
+//                    AudioServicesPlayAlertSound(1000);
+//                }else{
+//                    [SVProgressHUD showErrorWithStatus:@"Fail to upload your data to the server."];
+//                    AudioServicesPlayAlertSound(1324);
+//                }
+//                [SVProgressHUD performSelector:@selector(dismiss) withObject:nil afterDelay:3.0f];
+//                
+//            });
+//        }
+//    });
+//    return YES;
+//}
 
 
 /**

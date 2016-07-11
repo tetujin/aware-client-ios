@@ -368,16 +368,21 @@
     return [baseDataUploader syncAwareDBInForeground];
 }
 
-- (void) sensorLock{
-    [localStorage dbLock];
-    [baseDataUploader lockBackgroundUpload];
+- (void) lockDB{
+    [baseDataUploader lockDB];
+    // [localStorage dbLock];
+    // [baseDataUploader lockBackgroundUpload];
 }
 
-- (void) sensorUnLock{
-    [localStorage dbUnlock];
-    [baseDataUploader unlockBackgroundUpload];
+- (void) unlockDB{
+    [baseDataUploader unlockDB];
+    // [localStorage dbUnlock];
+    // [baseDataUploader unlockBackgroundUpload];
 }
 
+- (BOOL) isDBLock {
+    return [baseDataUploader isDBLock];
+}
 
 /////////////////////////////////////////////
 /////////////////////////////////////////////

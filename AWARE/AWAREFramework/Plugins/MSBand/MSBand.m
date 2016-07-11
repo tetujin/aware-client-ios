@@ -64,6 +64,9 @@
     int reconnCountRRInterval;
     
     NSTimer * timer;
+    
+    NSString * PLUGIN_MSBAND_KEY_ACTIVE_TIME_INTERVAL_IN_MINUTE;// = @"active_time_interval_in_minute";
+    NSString * PLUGIN_MSBAND_KEY_ACTIVE_IN_MINUTE;// = @"active_time_in_minute"];
 }
 
 - (instancetype)initWithPluginName:(NSString *)pluginName awareStudy:(AWAREStudy *)study{
@@ -85,6 +88,9 @@
         PLUGIN_MSBAND_SENSORS_ALTIMETER = @"plugin_msband_sensors_altimeter";
         PLUGIN_MSBAND_SENSORS_BAROMETER = @"plugin_msband_sensors_barometer";
         PLUGIN_MSBAND_SENSORS_RRINTERVAL = @"plugin_msband_sensors_rrinterval";
+        
+        PLUGIN_MSBAND_KEY_ACTIVE_TIME_INTERVAL_IN_MINUTE = @"active_time_interval_in_minute";
+        PLUGIN_MSBAND_KEY_ACTIVE_IN_MINUTE = @"active_time_in_minute";
         
         intervalMin = 10;
         activeMin = 1;
@@ -227,7 +233,7 @@
         activeMin = 2;
     }
     
-    timer = [NSTimer scheduledTimerWithTimeInterval:60.0f * intervalMin
+    timer = [NSTimer scheduledTimerWithTimeInterval:intervalMin*60.0f
                                              target:self
                                            selector:@selector(startDutyCycle)
                                            userInfo:nil
@@ -237,23 +243,33 @@
     return YES;
 }
 
+
+- (BOOL)stopSensor{
+    return [self stopAllSensors];
+}
+
 - (BOOL) stopAllSensors{
     [timer invalidate];
     timer = nil;
     [super stopAndRemoveAllSensors];
-    [self stopMSBSensors];
+    // [self stopMSBSensors];
     return YES;
 }
 
-- (BOOL)stopSensor{
-    return [self stopAllSensors];
+///////////////////////////////////////////
+///////////////////////////////////////////
+
+- (void) startDutyCycle {
+    NSLog(@"Start a duty cycle...");
+    [self startMSBSensorsWithActiveTimeInSeconds:activeMin*60.0f];
+    // [self performSelector:@selector(stopMSBSensors) withObject:nil afterDelay:activeMin*60.0f];
 }
 
 
 /////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////
 
-- (void)startMSBSensors{
+- (void)startMSBSensorsWithActiveTimeInSeconds:(int)activeTime{
     NSString * msg = @"Start all sensors on the MS Band.";
     NSLog(@"%@", msg);
     if ([self isDebug]) {
@@ -270,70 +286,20 @@
     reconnCountDeviceContact = 0;
     reconnCountRRInterval = 0;
     
-    [self performSelector:@selector(startUVSensor) withObject:nil afterDelay:3];
-    [self performSelector:@selector(startSkinTempSensor) withObject:nil afterDelay:6];
-    [self performSelector:@selector(startHeartRateSensor) withObject:nil afterDelay:9];
-    [self performSelector:@selector(startGSRSensor) withObject:nil afterDelay:12];
-    [self performSelector:@selector(startDevicecontactSensor) withObject:nil afterDelay:15];
-    [self performSelector:@selector(startCalorieSensor) withObject:nil afterDelay:18];
-    [self performSelector:@selector(startDistanceSensor) withObject:nil afterDelay:21];
-    [self performSelector:@selector(startRRIntervalSensor) withObject:nil afterDelay:24];
+    int baseDelaySecond = 3;
+    
+    NSDictionary * settings = [NSDictionary dictionaryWithObject:@(activeTime) forKey:PLUGIN_MSBAND_KEY_ACTIVE_IN_MINUTE];
+    
+    [self performSelector:@selector(startUVSensor:) withObject:settings afterDelay:baseDelaySecond * 1];
+    [self performSelector:@selector(startSkinTempSensor:) withObject:settings afterDelay:baseDelaySecond * 2];
+    [self performSelector:@selector(startHeartRateSensor:) withObject:settings afterDelay:baseDelaySecond * 3];
+    [self performSelector:@selector(startGSRSensor:) withObject:settings afterDelay:baseDelaySecond * 4];
+    [self performSelector:@selector(startDevicecontactSensor:) withObject:settings afterDelay:baseDelaySecond * 5];
+    [self performSelector:@selector(startCalorieSensor:) withObject:settings afterDelay:baseDelaySecond * 6];
+    [self performSelector:@selector(startDistanceSensor:) withObject:settings afterDelay:baseDelaySecond * 7];
+    [self performSelector:@selector(startRRIntervalSensor:) withObject:settings afterDelay:baseDelaySecond * 8];
 }
 
-- (void) stopMSBSensors {
-    NSString * msg = @"Stop all sensors on the MS Band.";
-    NSLog(@"%@", msg);
-    if ([self isDebug]) {
-        [AWAREUtils sendLocalNotificationForMessage:msg soundFlag:NO];
-    }
-    @try {
-        NSArray * allSensors = [super getSensors];
-        for (int i=0; i<allSensors.count; i++) {
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 3.0 * i * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-                NSLog(@"Stop %@ sensor", [[allSensors objectAtIndex:i] getSensorName]);
-                switch (i) {
-                    case 0:
-                        [self.client.sensorManager stopUVUpdatesErrorRef:nil];
-                        break;
-                    case 1:
-                        [self.client.sensorManager stopSkinTempUpdatesErrorRef:nil];
-                        break;
-                    case 2:
-                        [self.client.sensorManager stopHeartRateUpdatesErrorRef:nil];
-                        break;
-                    case 3:
-                        [self.client.sensorManager stopGSRUpdatesErrorRef:nil];
-                        break;
-                    case 4:
-                        [self.client.sensorManager stopBandContactUpdatesErrorRef:nil];
-                        break;
-                    case 5:
-                        [self.client.sensorManager stopCaloriesUpdatesErrorRef:nil];
-                        break;
-                    case 6:
-                        [self.client.sensorManager stopDistanceUpdatesErrorRef:nil];
-                        break;
-                    case 7:
-                        [self.client.sensorManager stopRRIntervalUpdatesErrorRef:nil];
-                        break;
-                    default:
-                        break;
-                }
-                
-                // -- not implemented yet--
-                //        [self.client.sensorManager stopAccelerometerUpdatesErrorRef:nil];
-                //        [self.client.sensorManager stopAltimeterUpdatesErrorRef:nil];
-                //        [self.client.sensorManager stopAmbientLightUpdatesErrorRef:nil];
-                //        [self.client.sensorManager stopGyroscopeUpdatesErrorRef:nil];
-                //        [self.client.sensorManager stopPedometerUpdatesErrorRef:nil];
-            });
-        }
-    } @catch (NSException *exception) {
-        NSLog(@"%@", exception.description);
-    } @finally {
-    
-    }
-}
 
 
 
@@ -357,14 +323,6 @@
 }
 
 
-///////////////////////////////////////////
-///////////////////////////////////////////
-
-- (void) startDutyCycle {
-    NSLog(@"Start a duty cycle...");
-    [self startMSBSensors];
-    [self performSelector:@selector(stopMSBSensors) withObject:nil afterDelay:activeMin*60.0f];
-}
 
 
 ///////////////////////////////////////////////////////////////////////
@@ -395,11 +353,19 @@ didFailToConnectWithError:(NSError *)error{
 //////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////
 
-- (void) startCalorieSensor{
-    NSLog(@"Start a Cal sensor!");
+- (void) startCalorieSensor:(NSDictionary *)setting{
+    
+    double activeTimeInSec = 2*60;
+    if(setting != nil){
+        activeTimeInSec = [[setting objectForKey:PLUGIN_MSBAND_KEY_ACTIVE_IN_MINUTE] doubleValue];
+    }
+    
+    NSLog(@"Start Calorie Sensor");
     void (^calHandler)(MSBSensorCaloriesData *, NSError *) = ^(MSBSensorCaloriesData *calData, NSError *error) {
 //        NSString* cal =[NSString stringWithFormat:@"%ld", calData.calories];
-        NSLog(@"Cal: %ld",calData.calories);
+        if ([self isDebug]) {
+            NSLog(@"Cal: %ld",calData.calories);
+        }
         dispatch_async(dispatch_get_main_queue(), ^{
             AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
             EntityMSBandCalorie * data = (EntityMSBandCalorie *)[NSEntityDescription insertNewObjectForEntityForName:[calSensor getEntityName]
@@ -422,17 +388,16 @@ didFailToConnectWithError:(NSError *)error{
     };
     NSError *stateError;
     if (![self.client.sensorManager startCaloriesUpdatesToQueue:nil errorRef:&stateError withHandler:calHandler]) {
-        
-        if(reconnCountCal < reconnectionLimit){
-            NSLog(@"[ERROR] Retry to connect Cal sensor (%d) : %@", reconnCountCal, stateError.description);
-            [self performSelector:@selector(startCalorieSensor) withObject:nil afterDelay:1];
-            reconnCountCal++;
-        }else{
-            NSLog(@"[ERROR] Cal sensor connection is failed: %@", stateError.description);
-            reconnCountCal = 0;
-        }
+//        if(reconnCountCal < reconnectionLimit){
+//            NSLog(@"[ERROR] Retry to connect Cal sensor (%d) : %@", reconnCountCal, stateError.description);
+//            [self performSelector:@selector(startCalorieSensor:) withObject:setting afterDelay:1];
+//            reconnCountCal++;
+//        }else{
+//            NSLog(@"[ERROR] Cal sensor connection is failed: %@", stateError.description);
+//            reconnCountCal = 0;
+//        }
     }else{
-        
+        [self performSelector:@selector(stopCalorieSensor) withObject:nil afterDelay:activeTimeInSec];
     }
 }
 
@@ -445,15 +410,28 @@ didFailToConnectWithError:(NSError *)error{
     [calSensor createTable:query withTableName:PLUGIN_MSBAND_SENSORS_CALORIES];
 }
 
+- (void) stopCalorieSensor {
+    NSLog(@"Stop Calorie Sensor");
+    [self.client.sensorManager stopCaloriesUpdatesErrorRef:nil];
+}
+
 //////////////////////////////////////////////////
 /////////////////////////////////////////////////
 
 
-- (void) startDistanceSensor{
-    NSLog(@"Start a Distance Sensor!");
+- (void) startDistanceSensor:(NSDictionary *) setting {
+    NSLog(@"Start Distance Sensor!");
+    
+    double activeTimeInSec = 2*60;
+    if(setting != nil){
+        activeTimeInSec = [[setting objectForKey:PLUGIN_MSBAND_KEY_ACTIVE_IN_MINUTE] doubleValue];
+    }
+    
     void (^distanceHandler)(MSBSensorDistanceData *, NSError *) = ^(MSBSensorDistanceData *distanceData, NSError *error) {
         NSString* data =[NSString stringWithFormat:@"%ld", distanceData.totalDistance];
-        NSLog(@"Distance: %@", data);
+        if ([self isDebug]) {
+            NSLog(@"Distance: %@", data);
+        }
         NSString* motionType = @"";
         switch (distanceData.motionType) {
             case MSBSensorMotionTypeUnknown:
@@ -500,16 +478,19 @@ didFailToConnectWithError:(NSError *)error{
     };
     NSError *stateError;
     if (![self.client.sensorManager startDistanceUpdatesToQueue:nil errorRef:&stateError withHandler:distanceHandler]) {
-        if(reconnCountDistance < reconnectionLimit ){
-            NSLog(@"[ERROR] Retry to connect Distance sensor (%d) : %@", reconnCountDistance, stateError.description);
-            [self performSelector:@selector(startDistanceSensor) withObject:nil afterDelay:1];
-            reconnCountDistance++;
-        }else{
-            NSLog(@"[ERROR] Distance sensor connection is failed: %@", stateError.description);
-            reconnCountDistance = 0;
-        }
+//        if(reconnCountDistance < reconnectionLimit ){
+//            NSLog(@"[ERROR] Retry to connect Distance sensor (%d) : %@", reconnCountDistance, stateError.description);
+//            [self performSelector:@selector(startDistanceSensor:) withObject:setting afterDelay:1];
+//            reconnCountDistance++;
+//        }else{
+//            NSLog(@"[ERROR] Distance sensor connection is failed: %@", stateError.description);
+//            reconnCountDistance = 0;
+//        }
+    }else{
+        [self performSelector:@selector(stopDistanceSensor) withObject:nil afterDelay:activeTimeInSec];
     }
 }
+
 
 - (void) createDistanceTable{
     NSString *query = @"_id integer primary key autoincrement,"
@@ -521,18 +502,29 @@ didFailToConnectWithError:(NSError *)error{
     [distanceSensor createTable:query withTableName:PLUGIN_MSBAND_SENSORS_DISTANCE];
 }
 
+- (void) stopDistanceSensor{
+    NSLog(@"Stop Distance Sensor");
+    [self.client.sensorManager stopDistanceUpdatesErrorRef:nil];
+}
 
 
 ///////////////////////////////////////////////////////
 //////////////////////////////////////////////////////
 
-- (void) startGSRSensor { //x
-    NSLog(@"Start a GSR Sensor!");
+- (void) startGSRSensor:(NSDictionary *) setting { //x
+    
+    NSLog(@"Start GSR Sensor");
+    
+    double activeTimeInSec = 2*60;
+    if(setting != nil){
+        activeTimeInSec = [[setting objectForKey:PLUGIN_MSBAND_KEY_ACTIVE_IN_MINUTE] doubleValue];
+    }
+    
     void (^gsrHandler)(MSBSensorGSRData *, NSError *error) = ^(MSBSensorGSRData *gsrData, NSError *error){
         NSString *data = [NSString stringWithFormat:@"%8u kOhm", (unsigned int)gsrData.resistance];
-        //if ([self isDebug]) {
-        NSLog(@"GSR: %@", data);
-        //}
+        if ([self isDebug]) {
+            NSLog(@"GSR: %@", data);
+        }
         NSNumber *gsrValue = [NSNumber numberWithUnsignedInteger:gsrData.resistance];
         
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -543,29 +535,31 @@ didFailToConnectWithError:(NSError *)error{
             data.timestamp = [self getUnixTime];
             data.gsr = gsrValue;
             [gsrSensor saveDataToDB];
+            
+            //        NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+            //        [dic setObject:unixtime forKey:@"timestamp"];
+            //        [dic setObject:[self getDeviceId] forKey:@"device_id"];
+            //        [dic setObject:gsrValue forKey:@"gsr"];
+            //
+            //        dispatch_async(dispatch_get_main_queue(), ^{
+            //            [gsrSensor setLatestValue:data];
+            //            [gsrSensor saveData:dic];
+            //        });
         });
-        
-//        NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-//        [dic setObject:unixtime forKey:@"timestamp"];
-//        [dic setObject:[self getDeviceId] forKey:@"device_id"];
-//        [dic setObject:gsrValue forKey:@"gsr"];
-//        
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            [gsrSensor setLatestValue:data];
-//            [gsrSensor saveData:dic];
-//        });
     };
     NSError *stateError;
     if (![self.client.sensorManager startGSRUpdatesToQueue:nil errorRef:&stateError withHandler:gsrHandler]) {
         //NSLog(@"GSR sensor is failed: %@", stateError.description);
-        if(reconnCountGSR < reconnectionLimit){
-            NSLog(@"[ERROR] Retry to connect GSR sensor (%d) : %@", reconnCountGSR, stateError.description);
-            [self performSelector:@selector(startGSRSensor) withObject:nil afterDelay:1];
-            reconnCountGSR++;
-        }else{
-            NSLog(@"[ERROR] GSR sensor connection is failed: %@", stateError.description);
-            reconnCountGSR = 0;
-        }
+//        if(reconnCountGSR < reconnectionLimit){
+//            NSLog(@"[ERROR] Retry to connect GSR sensor (%d) : %@", reconnCountGSR, stateError.description);
+//            [self performSelector:@selector(startGSRSensor:) withObject:setting afterDelay:1];
+//            reconnCountGSR++;
+//        }else{
+//            NSLog(@"[ERROR] GSR sensor connection is failed: %@", stateError.description);
+//            reconnCountGSR = 0;
+//        }
+    }else{
+        [self performSelector:@selector(stopGSRSensor) withObject:nil afterDelay:activeTimeInSec];
     }
 }
 
@@ -576,6 +570,11 @@ didFailToConnectWithError:(NSError *)error{
                         "gsr integer default 0,"
                         "UNIQUE (timestamp,device_id)";
     [gsrSensor createTable:query withTableName:PLUGIN_MSBAND_SENSORS_GSR];
+}
+
+- (void) stopGSRSensor{
+    NSLog(@"Stop GSR Sensor");
+    [self.client.sensorManager stopGSRUpdatesErrorRef:nil];
 }
 
 
@@ -613,7 +612,15 @@ didFailToConnectWithError:(NSError *)error{
     }
 }
 
-- (void) startHeartRateSensor {
+- (void) startHeartRateSensor:(NSDictionary *) setting {
+    
+    NSLog(@"Start Heart Rate Sensor");
+    
+    double activeTimeInSec = 2*60;
+    if(setting != nil){
+        activeTimeInSec = [[setting objectForKey:PLUGIN_MSBAND_KEY_ACTIVE_IN_MINUTE] doubleValue];
+    }
+    
     void (^hrHandler)(MSBSensorHeartRateData *, NSError *) = ^(MSBSensorHeartRateData *heartRateData, NSError *error) {
         
         NSString* quality = @"";
@@ -644,7 +651,9 @@ didFailToConnectWithError:(NSError *)error{
             NSString * latestValue = [NSString stringWithFormat:@"Heart Rate: %3u %@",
                                (unsigned int)heartRateData.heartRate,
                                heartRateData.quality == MSBSensorHeartRateQualityAcquiring ? @"Acquiring" : @"Locked"];
-            NSLog(@"HR: %@", latestValue);
+            if ([self isDebug]) {
+                NSLog(@"HR: %@", latestValue);
+            }
             [super setLatestValue:latestValue];
         });
         
@@ -665,14 +674,16 @@ didFailToConnectWithError:(NSError *)error{
     NSError *stateError;
     if (![self.client.sensorManager startHeartRateUpdatesToQueue:nil errorRef:&stateError withHandler:hrHandler]) {
         // NSLog(@"HR sensor is failed: %@", stateError.description);
-        if(reconnCountHR < reconnectionLimit){
-            NSLog(@"[ERROR] Retry to connect HR sensor (%d) : %@", reconnCountHR, stateError.description);
-            [self performSelector:@selector(startHeartRateSensor) withObject:nil afterDelay:1];
-            reconnCountHR++;
-        }else{
-            NSLog(@"[ERROR] HR sensor connection is failed: %@", stateError.description);
-            reconnCountHR = 0;
-        }
+//        if(reconnCountHR < reconnectionLimit){
+//            NSLog(@"[ERROR] Retry to connect HR sensor (%d) : %@", reconnCountHR, stateError.description);
+//            [self performSelector:@selector(startHeartRateSensor:) withObject:setting afterDelay:1];
+//            reconnCountHR++;
+//        }else{
+//            NSLog(@"[ERROR] HR sensor connection is failed: %@", stateError.description);
+//            reconnCountHR = 0;
+//        }
+    }else{
+        [self performSelector:@selector(stopHeartRateSensor) withObject:nil afterDelay:activeTimeInSec];
     }
 }
 
@@ -687,18 +698,29 @@ didFailToConnectWithError:(NSError *)error{
     [hrSensor createTable:query withTableName:PLUGIN_MSBAND_SENSORS_HEARTRATE];
 }
 
-
+- (void) stopHeartRateSensor {
+    NSLog(@"Stop Heart Rate Sensor");
+    [self.client.sensorManager stopHeartRateUpdatesErrorRef:nil];
+}
 
 
 //////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////
 
 
-- (void) startUVSensor {
-    NSLog(@"Start a UV sensor!");
+- (void) startUVSensor:(NSDictionary *) setting {
+    
+    NSLog(@"Start UV sensor");
+    double activeTimeInSec = 2*60;
+    if(setting != nil){
+        activeTimeInSec = [[setting objectForKey:PLUGIN_MSBAND_KEY_ACTIVE_IN_MINUTE] doubleValue];
+    }
+    
     void (^uvHandler)(MSBSensorUVData *, NSError *) = ^(MSBSensorUVData *uvData,  NSError *error){
         NSString *data = [NSString stringWithFormat:@" interval (s): %ld", uvData.uvIndexLevel];
-        NSLog(@"UV: %@",data);
+        if ([self isDebug]) {
+            NSLog(@"UV: %@",data);
+        }
         if ([self isDebug]) {
             [AWAREUtils sendLocalNotificationForMessage:[NSString stringWithFormat:@"UV: %@", data] soundFlag:NO];
         }
@@ -747,14 +769,16 @@ didFailToConnectWithError:(NSError *)error{
     NSError *stateError;
     if (![self.client.sensorManager startUVUpdatesToQueue:nil errorRef:&stateError withHandler:uvHandler]) {
         // NSLog(@"UV sensor is failed: %@", stateError.description);
-        if(reconnCountUV < reconnectionLimit){
-            NSLog(@"[ERROR] Retry to connect UV sensor (%d) : %@", reconnCountUV, stateError.description);
-            [self performSelector:@selector(startUVSensor) withObject:nil afterDelay:1];
-            reconnCountUV++;
-        }else{
-            NSLog(@"[ERROR] UV sensor connection is failed: %@", stateError.description);
-            reconnCountUV = 0;
-        }
+//        if(reconnCountUV < reconnectionLimit){
+//            NSLog(@"[ERROR] Retry to connect UV sensor (%d) : %@", reconnCountUV, stateError.description);
+//            [self performSelector:@selector(startUVSensor:) withObject:setting afterDelay:1];
+//            reconnCountUV++;
+//        }else{
+//            NSLog(@"[ERROR] UV sensor connection is failed: %@", stateError.description);
+//            reconnCountUV = 0;
+//        }
+    }else{
+        [self performSelector:@selector(stopUVSensor) withObject:nil afterDelay:activeTimeInSec];
     }
 }
 
@@ -765,6 +789,11 @@ didFailToConnectWithError:(NSError *)error{
                         "uv text default '',"
                         "UNIQUE (timestamp,device_id)";
     [uvSensor createTable:query withTableName:PLUGIN_MSBAND_SENSORS_UV];
+}
+
+- (void) stopUVSensor {
+    NSLog(@"Stop UV Sensor");
+    [self.client.sensorManager stopUVUpdatesErrorRef:nil];
 }
 
 
@@ -782,11 +811,19 @@ didFailToConnectWithError:(NSError *)error{
 ////////////////////////////////////////////////
 
 
-- (void) startSkinTempSensor {
-    NSLog(@"Start a Skin Teamperature Sensor!");
+- (void) startSkinTempSensor:(NSDictionary *) setting {
+    NSLog(@"Start Skin Teamperature Sensor");
+    
+    double activeTimeInSec = 2*60;
+    if(setting != nil){
+        activeTimeInSec = [[setting objectForKey:PLUGIN_MSBAND_KEY_ACTIVE_IN_MINUTE] doubleValue];
+    }
+    
     void (^skinHandler)(MSBSensorSkinTemperatureData *, NSError *) = ^(MSBSensorSkinTemperatureData *skinData,  NSError *error){
         NSString *data = [NSString stringWithFormat:@" interval (s): %.2f", skinData.temperature];
-        NSLog(@"Skin: %@",data);
+        if ([self isDebug]) {
+            NSLog(@"Skin: %@",data);
+        }
         if ([self isDebug]) {
             [AWAREUtils sendLocalNotificationForMessage:[NSString stringWithFormat:@"Skin: %@", data] soundFlag:NO];
         }
@@ -817,14 +854,16 @@ didFailToConnectWithError:(NSError *)error{
     NSError *stateError;
     if (![self.client.sensorManager startSkinTempUpdatesToQueue:nil errorRef:&stateError withHandler:skinHandler]) {
         // NSLog(@"Skin sensor is failed: %@", stateError.description);
-        if(reconnCountSkinTemp < reconnectionLimit){
-            NSLog(@"[ERROR] Retry to connect Skin Temp sensor (%d) : %@", reconnCountSkinTemp, stateError.description);
-            [self performSelector:@selector(startSkinTempSensor) withObject:nil afterDelay:1];
-            reconnCountSkinTemp++;
-        }else{
-            NSLog(@"[ERROR] Skin Temp sensor connection is failed: %@", stateError.description);
-            reconnCountSkinTemp = 0;
-        }
+//        if(reconnCountSkinTemp < reconnectionLimit){
+//            NSLog(@"[ERROR] Retry to connect Skin Temp sensor (%d) : %@", reconnCountSkinTemp, stateError.description);
+//            [self performSelector:@selector(startSkinTempSensor:) withObject:setting afterDelay:1];
+//            reconnCountSkinTemp++;
+//        }else{
+//            NSLog(@"[ERROR] Skin Temp sensor connection is failed: %@", stateError.description);
+//            reconnCountSkinTemp = 0;
+//        }
+    }else{
+        [self performSelector:@selector(stopSkinTempSensor) withObject:nil afterDelay:activeTimeInSec];
     }
 }
 
@@ -837,12 +876,22 @@ didFailToConnectWithError:(NSError *)error{
     [skinTempSensor createTable:query withTableName:PLUGIN_MSBAND_SENSORS_SKINTEMP];
 }
 
+- (void) stopSkinTempSensor{
+    NSLog(@"Stop Skin Temp Sensor");
+    [self.client.sensorManager stopSkinTempUpdatesErrorRef:nil];
+}
 
 /////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////
 
-- (void) startPedometerSensor {
-    NSLog(@"Start a pedometer Sensor!");
+- (void) startPedometerSensor:(NSDictionary *) setting {
+    NSLog(@"Start Pedometer Sensor");
+    
+    double activeTimeInSec = 2*60;
+    if(setting != nil){
+        activeTimeInSec = [[setting objectForKey:PLUGIN_MSBAND_KEY_ACTIVE_IN_MINUTE] doubleValue];
+    }
+    
     NSError * error = nil;
     void (^pedometerHandler)(MSBSensorPedometerData *, NSError *) = ^(MSBSensorPedometerData *pedometerData, NSError *error){
         
@@ -870,14 +919,16 @@ didFailToConnectWithError:(NSError *)error{
     
     if(![self.client.sensorManager startPedometerUpdatesToQueue:nil errorRef:&error withHandler:pedometerHandler]){
         // NSLog(@"Pedometer is failed: %@", error.description);
-        if(reconnCountPedometer < reconnectionLimit){
-            NSLog(@"[ERROR] Retry to connect Pedometer sensor (%d) : %@", reconnCountPedometer, error.description);
-            [self performSelector:@selector(startPedometerSensor) withObject:nil afterDelay:1];
-            reconnCountPedometer++;
-        }else{
-            NSLog(@"[ERROR] Pedometer sensor connection is failed: %@", error.description);
-            reconnCountPedometer  = 0;
-        }
+//        if(reconnCountPedometer < reconnectionLimit){
+//            NSLog(@"[ERROR] Retry to connect Pedometer sensor (%d) : %@", reconnCountPedometer, error.description);
+//            [self performSelector:@selector(startPedometerSensor:) withObject:setting afterDelay:1];
+//            reconnCountPedometer++;
+//        }else{
+//            NSLog(@"[ERROR] Pedometer sensor connection is failed: %@", error.description);
+//            reconnCountPedometer  = 0;
+//        }
+    }else{
+        [self performSelector:@selector(stopPedometerSensor) withObject:nil afterDelay:activeTimeInSec];
     }
 }
 
@@ -891,10 +942,21 @@ didFailToConnectWithError:(NSError *)error{
     [pedometerSensor createTable:query withTableName:PLUGIN_MSBAND_SENSORS_PEDOMETER];
 }
 
+- (void) stopPedometerSensor {
+    NSLog(@"Stop Pedometer Sensor");
+    [self.client.sensorManager stopPedometerUpdatesErrorRef:nil];
+}
+
 ///////////////////////////////////////////////
 ///////////////////////////////////////////////
 
-- (void) startDevicecontactSensor {
+- (void) startDevicecontactSensor:(NSDictionary *) setting{
+    
+    NSLog(@"Start Device Contact Sensor");
+    double activeTimeInSec = 2*60;
+    if(setting != nil){
+        activeTimeInSec = [[setting objectForKey:PLUGIN_MSBAND_KEY_ACTIVE_IN_MINUTE] doubleValue];
+    }
     
     void (^bandHandler)(MSBSensorBandContactData *, NSError*) = ^(MSBSensorBandContactData *contactData, NSError *error) {
         NSString * wornState = @"UNKNOWN";
@@ -938,14 +1000,16 @@ didFailToConnectWithError:(NSError *)error{
     NSError * error = nil;
     if(![self.client.sensorManager startBandContactUpdatesToQueue:nil errorRef:&error withHandler:bandHandler]){
         // NSLog(@"ERROR: device contact sensor is failed: %@",error.description);
-        if(reconnCountDeviceContact < reconnectionLimit){
-            NSLog(@"[ERROR] Retry to connect device contact sensor (%d) : %@", reconnCountDeviceContact, error.description);
-            [self performSelector:@selector(startDevicecontactSensor) withObject:nil afterDelay:1];
-            reconnCountDeviceContact++;
-        }else{
-            NSLog(@"[ERROR] Device Contact sensor connection is failed: %@", error.description);
-            reconnCountDeviceContact = 0;
-        }
+//        if(reconnCountDeviceContact < reconnectionLimit){
+//            NSLog(@"[ERROR] Retry to connect device contact sensor (%d) : %@", reconnCountDeviceContact, error.description);
+//            [self performSelector:@selector(startDevicecontactSensor:) withObject:setting afterDelay:1];
+//            reconnCountDeviceContact++;
+//        }else{
+//            NSLog(@"[ERROR] Device Contact sensor connection is failed: %@", error.description);
+//            reconnCountDeviceContact = 0;
+//        }
+    }else{
+        [self performSelector:@selector(stopDeviceContactSensor) withObject:nil afterDelay:activeTimeInSec];
     }
 }
 
@@ -958,18 +1022,28 @@ didFailToConnectWithError:(NSError *)error{
     [deviceContactSensor createTable:query];
 }
 
+- (void) stopDeviceContactSensor{
+    NSLog(@"Stop Device Contact Sensor");
+    [self.client.sensorManager stopBandContactUpdatesErrorRef:nil];
+}
 
 
 ///////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////
-- (void) startRRIntervalSensor{
-    // __weak typeof(self) weakSelf = self;
+- (void) startRRIntervalSensor:(NSDictionary *) setting {
+    NSLog(@"Start RRInterval Sensor");
+    
+    double activeTimeInSec = 2*60;
+    if(setting != nil){
+        activeTimeInSec = [[setting objectForKey:PLUGIN_MSBAND_KEY_ACTIVE_IN_MINUTE] doubleValue];
+    }
+    
     void (^handler)(MSBSensorRRIntervalData *, NSError *) = ^(MSBSensorRRIntervalData *rrIntervalData, NSError *error)
     {
         // [weakSelf output:[NSString stringWithFormat:@" interval (s): %.2f", rrIntervalData.interval]];
-    
-        NSLog(@"RRInterval: %.2f", rrIntervalData.interval);
-        
+        if ([self isDebug]) {
+            NSLog(@"RRInterval: %.2f", rrIntervalData.interval);
+        }
         dispatch_async(dispatch_get_main_queue(), ^{
             AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
             EntityMSBandRRInterval * data = (EntityMSBandRRInterval *)[NSEntityDescription insertNewObjectForEntityForName:[rrIntervalSensor getEntityName]
@@ -987,15 +1061,17 @@ didFailToConnectWithError:(NSError *)error{
     NSError * stateError = nil;
     if (![self.client.sensorManager startRRIntervalUpdatesToQueue:nil errorRef:&stateError withHandler:handler]){
         // NSLog(@"ERROR: RRInterval sensor's connection is failed: %@", stateError.description);
-        if(reconnCountRRInterval < reconnectionLimit){
-            NSLog(@"[ERROR] Retry to connect RRInterval sensor (%d) : %@", reconnCountRRInterval, stateError.description);
-            [self performSelector:@selector(startRRIntervalSensor) withObject:nil afterDelay:1];
-            reconnCountRRInterval++;
-        }else{
-            NSLog(@"[ERROR] RRInterval sensor connection is failed: %@", stateError.description);
-            reconnCountRRInterval = 0;
-        }
+//        if(reconnCountRRInterval < reconnectionLimit){
+//            NSLog(@"[ERROR] Retry to connect RRInterval sensor (%d) : %@", reconnCountRRInterval, stateError.description);
+//            [self performSelector:@selector(startRRIntervalSensor:) withObject:setting afterDelay:1];
+//            reconnCountRRInterval++;
+//        }else{
+//            NSLog(@"[ERROR] RRInterval sensor connection is failed: %@", stateError.description);
+//            reconnCountRRInterval = 0;
+//        }
         return;
+    }else{
+        [self performSelector:@selector(stopRRIntervalSensor) withObject:nil afterDelay:activeTimeInSec];
     }
 }
 
@@ -1008,6 +1084,10 @@ didFailToConnectWithError:(NSError *)error{
     [rrIntervalSensor createTable:query];
 }
 
+- (void) stopRRIntervalSensor{
+    NSLog(@"Stop RRInterval Sensor");
+    [self.client.sensorManager stopRRIntervalUpdatesErrorRef:nil];
+}
 
 ////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
@@ -1238,6 +1318,60 @@ didFailToConnectWithError:(NSError *)error{
 //
 //
 
+// - (void) stopMSBSensors {
+//    NSString * msg = @"Stop all sensors on the MS Band.";
+//    NSLog(@"%@", msg);
+//    if ([self isDebug]) {
+//        [AWAREUtils sendLocalNotificationForMessage:msg soundFlag:NO];
+//    }
+//    @try {
+//        NSArray * allSensors = [super getSensors];
+//        for (int i=0; i<allSensors.count; i++) {
+//            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 3.0 * i * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+//                NSLog(@"Stop %@ sensor", [[allSensors objectAtIndex:i] getSensorName]);
+//                switch (i) {
+//                    case 0:
+//                        [self.client.sensorManager stopUVUpdatesErrorRef:nil];
+//                        break;
+//                    case 1:
+//                        [self.client.sensorManager stopSkinTempUpdatesErrorRef:nil];
+//                        break;
+//                    case 2:
+//                        [self.client.sensorManager stopHeartRateUpdatesErrorRef:nil];
+//                        break;
+//                    case 3:
+//                        [self.client.sensorManager stopGSRUpdatesErrorRef:nil];
+//                        break;
+//                    case 4:
+//                        [self.client.sensorManager stopBandContactUpdatesErrorRef:nil];
+//                        break;
+//                    case 5:
+//                        [self.client.sensorManager stopCaloriesUpdatesErrorRef:nil];
+//                        break;
+//                    case 6:
+//                        [self.client.sensorManager stopDistanceUpdatesErrorRef:nil];
+//                        break;
+//                    case 7:
+//                        [self.client.sensorManager stopRRIntervalUpdatesErrorRef:nil];
+//                        break;
+//                    default:
+//                        break;
+//                }
+//
+//                // -- not implemented yet--
+//                //        [self.client.sensorManager stopAccelerometerUpdatesErrorRef:nil];
+//                //        [self.client.sensorManager stopAltimeterUpdatesErrorRef:nil];
+//                //        [self.client.sensorManager stopAmbientLightUpdatesErrorRef:nil];
+//                //        [self.client.sensorManager stopGyroscopeUpdatesErrorRef:nil];
+//                //        [self.client.sensorManager stopPedometerUpdatesErrorRef:nil];
+//            });
+//        }
+//    } @catch (NSException *exception) {
+//        NSLog(@"%@", exception.description);
+//    } @finally {
+//
+//    }
+// }
 
 
 @end

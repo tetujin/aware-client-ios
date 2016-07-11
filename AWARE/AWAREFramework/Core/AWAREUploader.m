@@ -43,7 +43,7 @@
         isDebug = [userDefaults boolForKey:SETTING_DEBUG_STATE];
         isSyncWithOnlyBatteryCharging  = [userDefaults boolForKey:SETTING_SYNC_BATTERY_CHARGING_ONLY];
         isWifiOnly = [userDefaults boolForKey:SETTING_SYNC_WIFI_ONLY];
-        
+        isLock = NO;
     }
     return self;
 }
@@ -58,9 +58,32 @@
 - (void) setUploadingState:(bool)state{ isUploading = state; }
 
 /////////////
-- (void) lockBackgroundUpload{ isLock = YES; }
+//- (void) lockBackgroundUpload{ isLock = YES; }
+//
+//- (void) unlockBackgroundUpload{ isLock = NO; }
 
-- (void) unlockBackgroundUpload{ isLock = NO; }
+- (void) lockDB {
+    isLock = YES;
+    if([self isDebug])
+        NSLog(@"[%@] Lock DB", sensorName );
+}
+
+- (void) unlockDB {
+    isLock = NO;
+    if([self isDebug])
+        NSLog(@"[%@] Unlock DB", sensorName );
+}
+
+- (BOOL) isDBLock {
+    if(isLock){
+        if([self isDebug])
+            NSLog(@"[%@] DB is locking now", sensorName);
+    }else{
+        if([self isDebug])
+            NSLog(@"[%@] DB is available now", sensorName);
+    }
+    return isLock;
+}
 
 /////////
 - (void) allowsCellularAccess{ isWifiOnly = NO; }

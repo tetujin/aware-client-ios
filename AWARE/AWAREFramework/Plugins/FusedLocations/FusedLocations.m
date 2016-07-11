@@ -130,6 +130,8 @@
         // Set a movement threshold for new events.
         [locationManager startMonitoringVisits]; // This method calls didVisit.
         [locationManager startMonitoringSignificantLocationChanges];
+        [locationManager startUpdatingLocation];
+        
         // [fusedLocationsSensor setBufferSize:3];
         // [locationManager startUpdatingHeading];
         
@@ -141,9 +143,9 @@
                                                             repeats:YES];
             
         }else{
-            [locationManager startUpdatingLocation];
-            [fusedLocationsSensor setBufferSize:3];
+            
         }
+
     }
     
     return YES;
@@ -206,9 +208,9 @@
 
 
 - (void) getGpsData: (NSTimer *) theTimer {
-    NSLog(@"Get a location")
-    
-    ;
+    if([self isDebug]){
+        NSLog(@"Get a location");
+    }
     CLLocation* location = [locationManager location];
     [self saveLocation:location];
 }
@@ -264,12 +266,12 @@
                       address = [[placemark.addressDictionary valueForKey:@"FormattedAddressLines"] componentsJoinedByString:@", "];
                       [self setLatestValue:address];
                       NSString* visitMsg = [NSString stringWithFormat:@"I am currently at %@", address];
-                      NSLog( @"%@", visitMsg );
                       // Set name
                       if (placemark.name != nil) {
                           //[visitDic setObject:placemark.name forKey:@"name"];
                           name = placemark.name;
                           if ([self isDebug]) {
+                              NSLog( @"%@", visitMsg );
                               [AWAREUtils sendLocalNotificationForMessage:visitMsg soundFlag:YES];
                           }
                       }

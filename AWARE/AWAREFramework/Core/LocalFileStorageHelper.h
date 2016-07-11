@@ -53,7 +53,7 @@
 
 // set buffer and db lock
 - (void) setBufferSize:(int) size;
-- (void)dbLock;
-- (void)dbUnlock;
+//- (void)dbLock;
+//- (void)dbUnlock;
 
 @end

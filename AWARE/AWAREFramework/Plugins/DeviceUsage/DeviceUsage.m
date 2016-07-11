@@ -82,11 +82,11 @@
         uint64_t state = UINT64_MAX;
         notify_get_state(token, &state);
         if(state == 0) {
-            NSLog(@"screen off");
             awareScreenState = 0;
             deviceUsage.elapsed_device_on = @(elapsedTime);
             deviceUsage.elapsed_device_off = @0;
             if ([self isDebug]) {
+                NSLog(@"screen off");
 //                NSString * message = [NSString stringWithFormat:@"Elapsed Time of device ON: %@ [Event at %@]",
 //                                      [self unixtime2str:elapsedTime],
 //                                      [self nsdate2FormattedTime:[NSDate new]]
@@ -96,7 +96,6 @@
 //            [dic setObject:[NSNumber numberWithDouble:elapsedTime] forKey:@"elapsed_device_on"]; // real
 //            [dic setObject:@0 forKey:@"elapsed_device_off"]; // real
         } else {
-            NSLog(@"screen on");
             awareScreenState = 1;
             deviceUsage.elapsed_device_on = @0;
             deviceUsage.elapsed_device_off = @(elapsedTime);
@@ -105,6 +104,7 @@
                 [AWAREUtils sendLocalNotificationForMessage:message soundFlag:NO];
             }
             if ([self isDebug]) {
+                NSLog(@"screen on");
                 NSString * message = [NSString stringWithFormat:@"Elapsed Time of device OFF: %@ [Event at %@]",
                                       [self unixtime2str:elapsedTime],
                                       [self nsdate2FormattedTime:[NSDate new]]

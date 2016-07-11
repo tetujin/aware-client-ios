@@ -16,9 +16,12 @@
 
 - (bool) isUploading;
 - (void) setUploadingState:(bool)state;
-- (void) lockBackgroundUpload;
-- (void) unlockBackgroundUpload;
+//- (void) lockBackgroundUpload;
+//- (void) unlockBackgroundUpload;
 
+- (void) lockDB;
+- (void) unlockDB;
+- (BOOL) isDBLock;
 
 
 - (void) allowsCellularAccess;

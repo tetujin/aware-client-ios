@@ -34,8 +34,9 @@
 
 
 - (void)createTable{
-    NSLog(@"[%@] Send a create table query", [self getSensorName]);
-    
+    if([self isDebug]){
+        NSLog(@"[%@] Send a create table query", [self getSensorName]);
+    }
     NSMutableString *query = [[NSMutableString alloc] init];
     [query appendString:@"_id integer primary key autoincrement,"];
     [query appendString:[NSString stringWithFormat:@"%@ real default 0,", KEY_PUSH_TIMESTAMP]];

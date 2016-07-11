@@ -300,7 +300,7 @@
 		160F0EC81D04132600673343 /* EntityGravity+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EntityGravity+CoreDataProperties.h"; sourceTree = "<group>"; };
 		160F0EC91D04132600673343 /* EntityGravity+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EntityGravity+CoreDataProperties.m"; sourceTree = "<group>"; };
 		160F0ECA1D04132600673343 /* EntityGravity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EntityGravity.h; sourceTree = "<group>"; };
-		160F0ECB1D04132600673343 /* EntityGravity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EntityGravity.m; path = ../Gravity/EntityGravity.m; sourceTree = "<group>"; };
+		160F0ECB1D04132600673343 /* EntityGravity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EntityGravity.m; sourceTree = "<group>"; };
 		160F0ED41D041B5D00673343 /* EntityLinearAccelerometer+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EntityLinearAccelerometer+CoreDataProperties.h"; sourceTree = "<group>"; };
 		160F0ED51D041B5D00673343 /* EntityLinearAccelerometer+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EntityLinearAccelerometer+CoreDataProperties.m"; sourceTree = "<group>"; };
 		160F0ED61D041B5D00673343 /* EntityLinearAccelerometer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EntityLinearAccelerometer.h; sourceTree = "<group>"; };
@@ -1372,7 +1372,6 @@
 				169C87BE1D01382C00825761 /* Accelerometer.m */,
 				160F0E851D03D60500673343 /* EntityAccelerometer+CoreDataProperties.h */,
 				160F0E861D03D60500673343 /* EntityAccelerometer+CoreDataProperties.m */,
-				160F0ECB1D04132600673343 /* EntityGravity.m */,
 				160F0E871D03D60500673343 /* EntityAccelerometer.h */,
 				160F0E881D03D60500673343 /* EntityAccelerometer.m */,
 			);
@@ -1475,6 +1474,7 @@
 				160F0EC81D04132600673343 /* EntityGravity+CoreDataProperties.h */,
 				160F0EC91D04132600673343 /* EntityGravity+CoreDataProperties.m */,
 				160F0ECA1D04132600673343 /* EntityGravity.h */,
+				160F0ECB1D04132600673343 /* EntityGravity.m */,
 			);
 			path = Gravity;
 			sourceTree = "<group>";

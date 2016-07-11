@@ -104,6 +104,7 @@ NSString* const KEY_CALLS_TRACE = @"trace";
         
         
         NSLog(@"[%@] Call Duration is %d seconds @ [%@]", [super getSensorName], duration, callTypeStr);
+        
 //        NSNumber *durationValue = [NSNumber numberWithInt:duration];
 //        NSMutableDictionary* dic = [[NSMutableDictionary alloc] init];
 //        [dic setObject:[AWAREUtils getUnixTimestamp:[NSDate new]] forKey:KEY_CALLS_TIMESTAMP];
@@ -113,12 +114,6 @@ NSString* const KEY_CALLS_TRACE = @"trace";
 //        [dic setObject:callId forKey:KEY_CALLS_TRACE];
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            
-            if([NSThread isMainThread]){
-                NSLog(@"Main Thread.");
-            }else{
-                NSLog(@"Sub Tread.");
-            }
             
             // AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
             EntityCall* callData = (EntityCall *)[NSEntityDescription

@@ -182,7 +182,7 @@
 
 - (void) addMotionActivity: (CMMotionActivity *) motionActivity{
     
-    NSLog(@"%ld", motionActivity.confidence);
+    // NSLog(@"%ld", motionActivity.confidence);
     
     switch (confidenceFilter) {
         case CMMotionActivityConfidenceHigh:
@@ -202,7 +202,7 @@
             break;
     }
     
-    NSLog(@"stored");
+    // NSLog(@"stored");
     
     NSNumber *motionConfidence = [NSNumber numberWithInt:0];
     if (motionActivity.confidence  == CMMotionActivityConfidenceHigh){
@@ -269,8 +269,10 @@
         }
     }
 
+    if ([self isDebug]) {
+        NSLog(@"[%@] %@ %ld", motionActivity.startDate, motionName, motionActivity.confidence);
+    }
     
-    NSLog(@"[%@] %@ %ld", motionActivity.startDate, motionName, motionActivity.confidence);
     dispatch_async(dispatch_get_main_queue(), ^{
         NSNumber * unixtime = [AWAREUtils getUnixTimestamp:motionActivity.startDate];
         

@@ -94,9 +94,9 @@ typedef enum: NSInteger {
 - (NSString *) getSyncProgressAsText:(NSString*) sensorName;
 
 // lock
-- (void) sensorLock;
-- (void) sensorUnLock;
-
+- (void) lockDB;
+- (void) unlockDB;
+- (BOOL) isDBLock;
 
 
 // Utils

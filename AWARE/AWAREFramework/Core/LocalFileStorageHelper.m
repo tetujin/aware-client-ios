@@ -489,13 +489,6 @@
 }
 
 
-
-- (void) dbLock { isLock = YES; }
-
-
-- (void) dbUnlock { isLock = NO; }
-
-
 - (void)setBufferSize:(int)size{
     if (size >= 0 ) {
         bufferSize = size;
