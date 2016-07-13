@@ -94,60 +94,49 @@
                                      } else {
                                          
                                          dispatch_async(dispatch_get_main_queue(),^{
-                                             // AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
-                                             EntityMagnetometer* data = (EntityMagnetometer *)[NSEntityDescription
-                                                                                               insertNewObjectForEntityForName:[self getEntityName]
-                                                                                               inManagedObjectContext:[self getSensorManagedObjectContext]];
                                              
-                                             data.device_id = [self getDeviceId];
-                                             data.timestamp = [AWAREUtils getUnixTimestamp:[NSDate new]];
-                                             data.double_values_0 = [NSNumber numberWithDouble:magnetometerData.magneticField.x];
-                                             data.double_values_1 = [NSNumber numberWithDouble:magnetometerData.magneticField.y];
-                                             data.double_values_2 = [NSNumber numberWithDouble:magnetometerData.magneticField.z];
-                                             data.accuracy = @0;
-                                             data.label =  @"";
-                                             
-                                             NSDictionary *userInfo = [NSDictionary dictionaryWithObject:data
+                                             NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
+                                             NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+                                             [dict setObject:unixtime forKey:@"timestamp"];
+                                             [dict setObject:[self getDeviceId] forKey:@"device_id"];
+                                             [dict setObject:[NSNumber numberWithDouble:magnetometerData.magneticField.x] forKey:@"double_values_0"];
+                                             [dict setObject:[NSNumber numberWithDouble:magnetometerData.magneticField.y] forKey:@"double_values_1"];
+                                             [dict setObject:[NSNumber numberWithDouble:magnetometerData.magneticField.z] forKey:@"double_values_2"];
+                                             [dict setObject:@0 forKey:@"accuracy"];
+                                             [dict setObject:@"" forKey:@"label"];
+                                             [self setLatestValue:[NSString stringWithFormat:@"%f, %f, %f",magnetometerData.magneticField.x, magnetometerData.magneticField.y, magnetometerData.magneticField.z]];
+
+                                             NSDictionary *userInfo = [NSDictionary dictionaryWithObject:dict
                                                                                                   forKey:EXTRA_DATA];
                                              [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_MAGNETOMETER
                                                                                                  object:nil
                                                                                                userInfo:userInfo];
+
                                              
-//                                             if(bufferCount > [self getBufferSize] ){
-//                                                 NSError * e = nil;
-//                                                 [delegate.managedObjectContext save:&e];
-//                                                 if (e) {
-//                                                     NSLog(@"%@", e.description);
-//                                                 }
-//                                                 NSLog(@"Save magnetometer data to SQLite");
-//                                                 bufferCount = 0;
-//                                             }else{
-//                                                 bufferCount++;
-//                                             }
-                                             [self saveDataToDB];
+                                             [self saveData:dict];
                                              
-                                             [self setLatestValue:[NSString stringWithFormat:@"%f, %f, %f",
-                                                                   magnetometerData.magneticField.x,
-                                                                   magnetometerData.magneticField.y,
-                                                                   magnetometerData.magneticField.z]];
                                          });
-                                         //            NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
-                                         //            NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-                                         //            [dic setObject:unixtime forKey:@"timestamp"];
-                                         //            [dic setObject:[self getDeviceId] forKey:@"device_id"];
-                                         //            [dic setObject:[NSNumber numberWithDouble:magnetometerData.magneticField.x] forKey:@"double_values_0"];
-                                         //            [dic setObject:[NSNumber numberWithDouble:magnetometerData.magneticField.y] forKey:@"double_values_1"];
-                                         //            [dic setObject:[NSNumber numberWithDouble:magnetometerData.magneticField.z] forKey:@"double_values_2"];
-                                         //            [dic setObject:@0 forKey:@"accuracy"];
-                                         //            [dic setObject:@"" forKey:@"label"];
-                                         //            [self setLatestValue:[NSString stringWithFormat:@"%f, %f, %f",magnetometerData.magneticField.x, magnetometerData.magneticField.y, magnetometerData.magneticField.z]];
-                                         //            dispatch_async(dispatch_get_main_queue(), ^{
-                                         //                [self saveData:dic];
-                                         //            });
                                      }
                                  }];
 
     return YES;
+}
+
+
+- (void)insertNewEntityWithData:(NSDictionary *)data managedObjectContext:(NSManagedObjectContext *)childContext entityName:(NSString *)entity{
+
+    EntityMagnetometer* entityMag = (EntityMagnetometer *)[NSEntityDescription
+                                                      insertNewObjectForEntityForName:entity
+                                                      inManagedObjectContext:childContext];
+    
+    entityMag.device_id = [data objectForKey:@"device_id"];
+    entityMag.timestamp = [data objectForKey:@"timestamp"];
+    entityMag.double_values_0 = [data objectForKey:@"double_values_0"];
+    entityMag.double_values_1 = [data objectForKey:@"double_values_1"];
+    entityMag.double_values_2 = [data objectForKey:@"double_values_2"];
+    entityMag.accuracy = [data objectForKey:@"accuracy"];
+    entityMag.label =  [data objectForKey:@"label"];
+    
 }
 
 - (BOOL)stopSensor{

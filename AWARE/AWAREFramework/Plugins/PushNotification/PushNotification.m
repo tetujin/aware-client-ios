@@ -34,8 +34,9 @@
 
 
 - (void)createTable{
-    NSLog(@"[%@] Send a create table query", [self getSensorName]);
-    
+    if([self isDebug]){
+        NSLog(@"[%@] Send a create table query", [self getSensorName]);
+    }
     NSMutableString *query = [[NSMutableString alloc] init];
     [query appendString:@"_id integer primary key autoincrement,"];
     [query appendString:[NSString stringWithFormat:@"%@ real default 0,", KEY_PUSH_TIMESTAMP]];
@@ -66,22 +67,14 @@
 - (void) savePushNotificationDeviceToken:(NSString*) token {
     if (token == nil) {
         return;
+    
     }
-//    NSMutableDictionary * dict = [[NSMutableDictionary alloc] init];
-//    [dict setObject:[AWAREUtils getUnixTimestamp:[NSDate new]] forKey:KEY_PUSH_TIMESTAMP];
-//    [dict setObject:[self getDeviceId] forKey:KEY_PUSH_DEVICE_ID];
-//    [dict setObject:token forKey:KEY_PUSH_TOKEN];
-//    [self saveData:dict];
-    NSNumber *unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
+    NSMutableDictionary * dict = [[NSMutableDictionary alloc] init];
+    [dict setObject:[AWAREUtils getUnixTimestamp:[NSDate new]] forKey:KEY_PUSH_TIMESTAMP];
+    [dict setObject:[self getDeviceId] forKey:KEY_PUSH_DEVICE_ID];
+    [dict setObject:token forKey:KEY_PUSH_TOKEN];
+    [self saveData:dict];
     
-    AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
-    EntityPushNotification * entity = (EntityPushNotification *)[NSEntityDescription insertNewObjectForEntityForName:[self getEntityName]
-                                                                  inManagedObjectContext:delegate.managedObjectContext];
-    entity.device_id = [self getDeviceId];
-    entity.timestamp = unixtime;
-    entity.token = token;
-    
-    [self saveDataToDB];
 
     // Save the token to user default
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
@@ -101,6 +94,18 @@
         return YES;
     }
     return NO;
+}
+
+- (void)insertNewEntityWithData:(NSDictionary *)data
+           managedObjectContext:(NSManagedObjectContext *)childContext
+                     entityName:(NSString *)entity{
+    
+    EntityPushNotification * entityPush = (EntityPushNotification *)[NSEntityDescription insertNewObjectForEntityForName:entity
+                                                                                              inManagedObjectContext:childContext];
+    entityPush.device_id = [data objectForKey:KEY_PUSH_DEVICE_ID];
+    entityPush.timestamp = [data objectForKey:KEY_PUSH_TIMESTAMP];
+    entityPush.token = [data objectForKey:KEY_PUSH_TOKEN];
+    
 }
 
 @end

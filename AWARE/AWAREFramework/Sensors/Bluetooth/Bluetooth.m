@@ -133,41 +133,45 @@
     if (address == nil ) address = @"";
     if (rssi == nil) rssi = @-1;
 
-    //AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
-    EntityBluetooth* bluetoothData = (EntityBluetooth *)[NSEntityDescription
-                                                        insertNewObjectForEntityForName:[self getEntityName]
-                                                                 inManagedObjectContext:[self getSensorManagedObjectContext]];
-    bluetoothData.device_id = [self getDeviceId];
-    bluetoothData.timestamp = [AWAREUtils getUnixTimestamp:[NSDate new]];
-    bluetoothData.bt_address = address;
-    bluetoothData.bt_name = name;
-    bluetoothData.bt_rssi = rssi;
     
-    NSDictionary *userInfo = [NSDictionary dictionaryWithObject:bluetoothData
+    NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    [dict setObject:unixtime forKey:@"timestamp"];
+    [dict setObject:[self getDeviceId] forKey:@"device_id"];
+    [dict setObject:address forKey:@"bt_address"]; //varchar
+    [dict setObject:name forKey:@"bt_name"]; //text
+    [dict setObject:rssi  forKey:@"bt_rssi"]; //int
+    [dict setObject:[[AWAREUtils getUnixTimestamp:sessionTime] stringValue] forKey:@"label"]; //text
+    [self setLatestValue:[NSString stringWithFormat:@"%@(%@), %@", name, address,rssi]];
+     [self saveData:dict];
+    
+    // Boradcast events
+    NSDictionary *userInfo = [NSDictionary dictionaryWithObject:dict
                                                          forKey:EXTRA_DATA];
     [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_BLUETOOTH_NEW_DEVICE
                                                         object:nil
                                                       userInfo:userInfo];
-    // NSError * error = nil;
-    [self saveDataToDB];
-    
-    
-//    NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
-//    NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-//    [dic setObject:unixtime forKey:@"timestamp"];
-//    [dic setObject:[self getDeviceId] forKey:@"device_id"];
-//    [dic setObject:address forKey:@"bt_address"]; //varchar
-//    [dic setObject:name forKey:@"bt_name"]; //text
-//    [dic setObject:rssi  forKey:@"bt_rssi"]; //int
-//    [dic setObject:[[AWAREUtils getUnixTimestamp:sessionTime] stringValue] forKey:@"label"]; //text
-//    [self setLatestValue:[NSString stringWithFormat:@"%@(%@), %@", name, address,rssi]];
-//    [self saveData:dic toLocalFile:SENSOR_BLUETOOTH];
+   
     
     if ([self isDebug]) {
         [AWAREUtils sendLocalNotificationForMessage:[NSString stringWithFormat:@"Find a new Blueooth device! %@ (%@)", name, address] soundFlag:NO];
     }
 }
 
+- (void)insertNewEntityWithData:(NSDictionary *)data
+           managedObjectContext:(NSManagedObjectContext *)childContext
+                     entityName:(NSString *)entity{
+    EntityBluetooth* bluetoothData = (EntityBluetooth *)[NSEntityDescription
+                                                         insertNewObjectForEntityForName:entity
+                                                         inManagedObjectContext:childContext];
+    bluetoothData.device_id = [data objectForKey:@"device_id"];
+    bluetoothData.timestamp = [data objectForKey:@"timestamp"];
+    bluetoothData.bt_address = [data objectForKey:@"bt_address"];
+    bluetoothData.bt_name = [data objectForKey:@"bt_name"];
+    bluetoothData.bt_rssi = [data objectForKey:@"bt_rssi"];
+    bluetoothData.label = [data objectForKey:@"label"];
+    
+}
 
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -197,7 +201,7 @@
     // start scanning classic bluetooth devices.
     if (![mdBluetoothManager isScanning]) {
         NSString *scanStartMessage = [NSString stringWithFormat:@"Start scanning Bluetooth devices during %d second!", _scanDuration];
-        NSLog(@"...Start scanning Bluetooth devices.");
+        if([self isDebug]) NSLog(@"...Start scanning Bluetooth devices.");
         if ([self isDebug]){
            [AWAREUtils sendLocalNotificationForMessage:scanStartMessage soundFlag:NO];
         }
@@ -205,7 +209,7 @@
         [mdBluetoothManager startScan];
         // stop to scan Bluetooth devies after "scanDuration" second.
         [self performSelector:@selector(stopToScanBluetooth) withObject:0 afterDelay:_scanDuration];
-        NSLog(@"...After %d second, the Blueooth scan will be end.", _scanDuration);
+        if([self isDebug]) NSLog(@"...After %d second, the Blueooth scan will be end.", _scanDuration);
     }
     
     
@@ -230,16 +234,16 @@
 - (void)receivedBluetoothNotification:(MDBluetoothNotification)bluetoothNotification{
     switch (bluetoothNotification) {
         case MDBluetoothPowerChangedNotification:
-            NSLog(@"changed");
+            if([self isDebug]) NSLog(@"changed");
             break;
         case MDBluetoothDeviceUpdatedNotification:
-            NSLog(@"update");
+            if([self isDebug]) NSLog(@"update");
             break;
         case MDBluetoothDeviceRemovedNotification:
-            NSLog(@"remove");
+            if([self isDebug]) NSLog(@"remove");
             break;
         case MDBluetoothDeviceDiscoveredNotification:
-            NSLog(@"discoverd");
+            if([self isDebug]) NSLog(@"discoverd");
             break;
         default:
             break;
@@ -247,8 +251,9 @@
 }
 
 - (void)bluetoothDeviceDiscoveredNotification:(NSNotification *)notification{
-    NSLog(@"%@", notification.description);
-    
+    if([self isDebug]){
+        NSLog(@"%@", notification.description);
+    }
     // save a bluetooth device information
     BluetoothDevice * bluetoothDevice = notification.object;
     NSString* address = bluetoothDevice.address;
@@ -310,9 +315,11 @@
   didDiscoverPeripheral:(CBPeripheral *)peripheral
       advertisementData:(NSDictionary *)advertisementData
                    RSSI:(NSNumber *)RSSI {
-    NSLog(@"Discovered %@", peripheral.name);
-    NSLog(@"UUID %@", peripheral.identifier);
-    NSLog(@"%@", peripheral);
+    if([self isDebug]){
+        NSLog(@"Discovered %@", peripheral.name);
+        NSLog(@"UUID %@", peripheral.identifier);
+        NSLog(@"%@", peripheral);
+    }
     NSString *name = peripheral.name;
     NSString *uuid = peripheral.identifier.UUIDString;
     
@@ -327,7 +334,9 @@
 - (void) centralManager:(CBCentralManager *) central
    didConnectPeripheral:(CBPeripheral *)peripheral
 {
-    NSLog(@"Peripheral connected");
+    if([self isDebug]){
+        NSLog(@"Peripheral connected");
+    }
     peripheral.delegate = self;
     [peripheral readRSSI];
     [peripheral discoverServices:nil];
@@ -384,7 +393,9 @@
     NSString *name = [NSString stringWithFormat:@"%@ (%@)", peripheral.name, serialNumber];
     NSString *uuid = peripheral.identifier.UUIDString;
     NSNumber *rssi = peripheral.RSSI;
-    NSLog(@"%@", name);
+    if([self isDebug]){
+        NSLog(@"%@", name);
+    }
     [self saveBluetoothDeviceWithAddress:uuid name:name rssi:rssi];
     
 }

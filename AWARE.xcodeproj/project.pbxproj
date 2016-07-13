@@ -55,6 +55,7 @@
 		165A8B711C03B90500898C6C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 165A8B6E1C03B90500898C6C /* GoogleService-Info.plist */; };
 		165DECF61C83AD7D002C88CA /* ExternalAccessory.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 165DECF51C83AD7D002C88CA /* ExternalAccessory.framework */; };
 		16654EA21D027DC600280051 /* AWAREUploader.m in Sources */ = {isa = PBXBuildFile; fileRef = 16654EA11D027DC600280051 /* AWAREUploader.m */; };
+		1683ABCE1D347A5F001543D9 /* AWAREDebugMessageLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 1683ABCD1D347A5F001543D9 /* AWAREDebugMessageLogger.m */; };
 		168683031C07C43600CB4266 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 168683021C07C43600CB4266 /* AudioToolbox.framework */; };
 		169A7B321BFF282800A7C06D /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 169A7B311BFF282800A7C06D /* CoreLocation.framework */; };
 		169A7B3D1BFFC9F900A7C06D /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 169A7B3C1BFFC9F900A7C06D /* SystemConfiguration.framework */; };
@@ -226,6 +227,18 @@
 		16B078441D1F918B009C070B /* EntityMSBandDistance.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B078301D1F918B009C070B /* EntityMSBandDistance.m */; };
 		16B078451D1F918B009C070B /* EntityMSBandHR+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B078321D1F918B009C070B /* EntityMSBandHR+CoreDataProperties.m */; };
 		16B078461D1F918B009C070B /* EntityMSBandHR.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B078341D1F918B009C070B /* EntityMSBandHR.m */; };
+		16BDCC951D35B80E00B13BD4 /* BatteryCharge.m in Sources */ = {isa = PBXBuildFile; fileRef = 16BDCC941D35B80E00B13BD4 /* BatteryCharge.m */; };
+		16BDCC981D35C11100B13BD4 /* BatteryDischarge.m in Sources */ = {isa = PBXBuildFile; fileRef = 16BDCC971D35C11100B13BD4 /* BatteryDischarge.m */; };
+		16BDCC9B1D35C81800B13BD4 /* VisitLocations.m in Sources */ = {isa = PBXBuildFile; fileRef = 16BDCC9A1D35C81800B13BD4 /* VisitLocations.m */; };
+		16BDCC9E1D35FD3800B13BD4 /* MSBandUV.m in Sources */ = {isa = PBXBuildFile; fileRef = 16BDCC9D1D35FD3800B13BD4 /* MSBandUV.m */; };
+		16BDCCA11D3609CE00B13BD4 /* MSBandGSR.m in Sources */ = {isa = PBXBuildFile; fileRef = 16BDCCA01D3609CE00B13BD4 /* MSBandGSR.m */; };
+		16BDCCA41D36159500B13BD4 /* MSBandCalorie.m in Sources */ = {isa = PBXBuildFile; fileRef = 16BDCCA31D36159500B13BD4 /* MSBandCalorie.m */; };
+		16BDCCA71D3626F500B13BD4 /* MSBandSkinTemp.m in Sources */ = {isa = PBXBuildFile; fileRef = 16BDCCA61D3626F500B13BD4 /* MSBandSkinTemp.m */; };
+		16BDCCAA1D362AA500B13BD4 /* MSBandDistance.m in Sources */ = {isa = PBXBuildFile; fileRef = 16BDCCA91D362AA500B13BD4 /* MSBandDistance.m */; };
+		16BDCCAD1D364B3400B13BD4 /* MSBandHR.m in Sources */ = {isa = PBXBuildFile; fileRef = 16BDCCAC1D364B3400B13BD4 /* MSBandHR.m */; };
+		16BDCCB01D36661800B13BD4 /* MSBandPedometer.m in Sources */ = {isa = PBXBuildFile; fileRef = 16BDCCAF1D36661800B13BD4 /* MSBandPedometer.m */; };
+		16BDCCB31D366C1D00B13BD4 /* MSBandDeviceContact.m in Sources */ = {isa = PBXBuildFile; fileRef = 16BDCCB21D366C1D00B13BD4 /* MSBandDeviceContact.m */; };
+		16BDCCB61D366E3800B13BD4 /* MSBandRRInterval.m in Sources */ = {isa = PBXBuildFile; fileRef = 16BDCCB51D366E3800B13BD4 /* MSBandRRInterval.m */; };
 		16C1FF7D1C617FB100C070AA /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16C1FF7C1C617FB100C070AA /* Accelerate.framework */; };
 		16C1FF7F1C617FC300C070AA /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16C1FF7E1C617FC300C070AA /* GLKit.framework */; };
 		16D810241C06242500605DE2 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16D810231C06242500605DE2 /* CFNetwork.framework */; };
@@ -300,7 +313,7 @@
 		160F0EC81D04132600673343 /* EntityGravity+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EntityGravity+CoreDataProperties.h"; sourceTree = "<group>"; };
 		160F0EC91D04132600673343 /* EntityGravity+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EntityGravity+CoreDataProperties.m"; sourceTree = "<group>"; };
 		160F0ECA1D04132600673343 /* EntityGravity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EntityGravity.h; sourceTree = "<group>"; };
-		160F0ECB1D04132600673343 /* EntityGravity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EntityGravity.m; path = ../Gravity/EntityGravity.m; sourceTree = "<group>"; };
+		160F0ECB1D04132600673343 /* EntityGravity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EntityGravity.m; sourceTree = "<group>"; };
 		160F0ED41D041B5D00673343 /* EntityLinearAccelerometer+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EntityLinearAccelerometer+CoreDataProperties.h"; sourceTree = "<group>"; };
 		160F0ED51D041B5D00673343 /* EntityLinearAccelerometer+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EntityLinearAccelerometer+CoreDataProperties.m"; sourceTree = "<group>"; };
 		160F0ED61D041B5D00673343 /* EntityLinearAccelerometer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EntityLinearAccelerometer.h; sourceTree = "<group>"; };
@@ -361,6 +374,8 @@
 		165DECF71C83AD7D002C88CA /* AWARE.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = AWARE.entitlements; sourceTree = "<group>"; };
 		16654EA01D027DC600280051 /* AWAREUploader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AWAREUploader.h; sourceTree = "<group>"; };
 		16654EA11D027DC600280051 /* AWAREUploader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AWAREUploader.m; sourceTree = "<group>"; };
+		1683ABCC1D347A5F001543D9 /* AWAREDebugMessageLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AWAREDebugMessageLogger.h; sourceTree = "<group>"; };
+		1683ABCD1D347A5F001543D9 /* AWAREDebugMessageLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AWAREDebugMessageLogger.m; sourceTree = "<group>"; };
 		168683021C07C43600CB4266 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		169A7B311BFF282800A7C06D /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		169A7B3C1BFFC9F900A7C06D /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
@@ -675,6 +690,30 @@
 		16B078321D1F918B009C070B /* EntityMSBandHR+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EntityMSBandHR+CoreDataProperties.m"; sourceTree = "<group>"; };
 		16B078331D1F918B009C070B /* EntityMSBandHR.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EntityMSBandHR.h; sourceTree = "<group>"; };
 		16B078341D1F918B009C070B /* EntityMSBandHR.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EntityMSBandHR.m; sourceTree = "<group>"; };
+		16BDCC931D35B80E00B13BD4 /* BatteryCharge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BatteryCharge.h; sourceTree = "<group>"; };
+		16BDCC941D35B80E00B13BD4 /* BatteryCharge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BatteryCharge.m; sourceTree = "<group>"; };
+		16BDCC961D35C11100B13BD4 /* BatteryDischarge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BatteryDischarge.h; sourceTree = "<group>"; };
+		16BDCC971D35C11100B13BD4 /* BatteryDischarge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BatteryDischarge.m; sourceTree = "<group>"; };
+		16BDCC991D35C81800B13BD4 /* VisitLocations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VisitLocations.h; sourceTree = "<group>"; };
+		16BDCC9A1D35C81800B13BD4 /* VisitLocations.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VisitLocations.m; sourceTree = "<group>"; };
+		16BDCC9C1D35FD3800B13BD4 /* MSBandUV.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSBandUV.h; sourceTree = "<group>"; };
+		16BDCC9D1D35FD3800B13BD4 /* MSBandUV.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSBandUV.m; sourceTree = "<group>"; };
+		16BDCC9F1D3609CE00B13BD4 /* MSBandGSR.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSBandGSR.h; sourceTree = "<group>"; };
+		16BDCCA01D3609CE00B13BD4 /* MSBandGSR.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSBandGSR.m; sourceTree = "<group>"; };
+		16BDCCA21D36159500B13BD4 /* MSBandCalorie.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSBandCalorie.h; sourceTree = "<group>"; };
+		16BDCCA31D36159500B13BD4 /* MSBandCalorie.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSBandCalorie.m; sourceTree = "<group>"; };
+		16BDCCA51D3626F500B13BD4 /* MSBandSkinTemp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSBandSkinTemp.h; sourceTree = "<group>"; };
+		16BDCCA61D3626F500B13BD4 /* MSBandSkinTemp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSBandSkinTemp.m; sourceTree = "<group>"; };
+		16BDCCA81D362AA500B13BD4 /* MSBandDistance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSBandDistance.h; sourceTree = "<group>"; };
+		16BDCCA91D362AA500B13BD4 /* MSBandDistance.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSBandDistance.m; sourceTree = "<group>"; };
+		16BDCCAB1D364B3400B13BD4 /* MSBandHR.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSBandHR.h; sourceTree = "<group>"; };
+		16BDCCAC1D364B3400B13BD4 /* MSBandHR.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSBandHR.m; sourceTree = "<group>"; };
+		16BDCCAE1D36661800B13BD4 /* MSBandPedometer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSBandPedometer.h; sourceTree = "<group>"; };
+		16BDCCAF1D36661800B13BD4 /* MSBandPedometer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSBandPedometer.m; sourceTree = "<group>"; };
+		16BDCCB11D366C1D00B13BD4 /* MSBandDeviceContact.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSBandDeviceContact.h; sourceTree = "<group>"; };
+		16BDCCB21D366C1D00B13BD4 /* MSBandDeviceContact.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSBandDeviceContact.m; sourceTree = "<group>"; };
+		16BDCCB41D366E3800B13BD4 /* MSBandRRInterval.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSBandRRInterval.h; sourceTree = "<group>"; };
+		16BDCCB51D366E3800B13BD4 /* MSBandRRInterval.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSBandRRInterval.m; sourceTree = "<group>"; };
 		16C1FF7C1C617FB100C070AA /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		16C1FF7E1C617FC300C070AA /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		16C81FF41CD6B32D0013A87C /* AWARE_v2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = AWARE_v2.xcdatamodel; sourceTree = "<group>"; };
@@ -839,7 +878,6 @@
 			isa = PBXGroup;
 			children = (
 				169C870E1D01382C00825761 /* Core */,
-				169C872D1D01382C00825761 /* ESM */,
 				169C87821D01382C00825761 /* MQTT */,
 				169C87851D01382C00825761 /* Plugins */,
 				169C87BB1D01382C00825761 /* Sensors */,
@@ -883,6 +921,9 @@
 				169C872C1D01382C00825761 /* SSLManager.m */,
 				169C88AB1D0142C300825761 /* TCQMaker.h */,
 				169C88AC1D0142C300825761 /* TCQMaker.m */,
+				1683ABCC1D347A5F001543D9 /* AWAREDebugMessageLogger.h */,
+				1683ABCD1D347A5F001543D9 /* AWAREDebugMessageLogger.m */,
+				169C872D1D01382C00825761 /* ESM */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -908,7 +949,8 @@
 				169C87801D01382C00825761 /* SingleESMObject.h */,
 				169C87811D01382C00825761 /* SingleESMObject.m */,
 			);
-			path = ESM;
+			name = ESM;
+			path = ../ESM;
 			sourceTree = "<group>";
 		};
 		169C873C1D01382C00825761 /* PAM */ = {
@@ -1275,6 +1317,24 @@
 			children = (
 				169C87AA1D01382C00825761 /* MSBand.h */,
 				169C87AB1D01382C00825761 /* MSBand.m */,
+				16BDCC9C1D35FD3800B13BD4 /* MSBandUV.h */,
+				16BDCC9D1D35FD3800B13BD4 /* MSBandUV.m */,
+				16BDCC9F1D3609CE00B13BD4 /* MSBandGSR.h */,
+				16BDCCA01D3609CE00B13BD4 /* MSBandGSR.m */,
+				16BDCCA21D36159500B13BD4 /* MSBandCalorie.h */,
+				16BDCCA31D36159500B13BD4 /* MSBandCalorie.m */,
+				16BDCCA51D3626F500B13BD4 /* MSBandSkinTemp.h */,
+				16BDCCA61D3626F500B13BD4 /* MSBandSkinTemp.m */,
+				16BDCCA81D362AA500B13BD4 /* MSBandDistance.h */,
+				16BDCCA91D362AA500B13BD4 /* MSBandDistance.m */,
+				16BDCCAB1D364B3400B13BD4 /* MSBandHR.h */,
+				16BDCCAC1D364B3400B13BD4 /* MSBandHR.m */,
+				16BDCCAE1D36661800B13BD4 /* MSBandPedometer.h */,
+				16BDCCAF1D36661800B13BD4 /* MSBandPedometer.m */,
+				16BDCCB11D366C1D00B13BD4 /* MSBandDeviceContact.h */,
+				16BDCCB21D366C1D00B13BD4 /* MSBandDeviceContact.m */,
+				16BDCCB41D366E3800B13BD4 /* MSBandRRInterval.h */,
+				16BDCCB51D366E3800B13BD4 /* MSBandRRInterval.m */,
 				16B078471D1F9192009C070B /* Entities */,
 			);
 			path = MSBand;
@@ -1372,7 +1432,6 @@
 				169C87BE1D01382C00825761 /* Accelerometer.m */,
 				160F0E851D03D60500673343 /* EntityAccelerometer+CoreDataProperties.h */,
 				160F0E861D03D60500673343 /* EntityAccelerometer+CoreDataProperties.m */,
-				160F0ECB1D04132600673343 /* EntityGravity.m */,
 				160F0E871D03D60500673343 /* EntityAccelerometer.h */,
 				160F0E881D03D60500673343 /* EntityAccelerometer.m */,
 			);
@@ -1406,6 +1465,10 @@
 			children = (
 				169C87C61D01382C00825761 /* Battery.h */,
 				169C87C71D01382C00825761 /* Battery.m */,
+				16BDCC931D35B80E00B13BD4 /* BatteryCharge.h */,
+				16BDCC941D35B80E00B13BD4 /* BatteryCharge.m */,
+				16BDCC961D35C11100B13BD4 /* BatteryDischarge.h */,
+				16BDCC971D35C11100B13BD4 /* BatteryDischarge.m */,
 				160F0EA31D03D74F00673343 /* Entities */,
 			);
 			path = Battery;
@@ -1475,6 +1538,7 @@
 				160F0EC81D04132600673343 /* EntityGravity+CoreDataProperties.h */,
 				160F0EC91D04132600673343 /* EntityGravity+CoreDataProperties.m */,
 				160F0ECA1D04132600673343 /* EntityGravity.h */,
+				160F0ECB1D04132600673343 /* EntityGravity.m */,
 			);
 			path = Gravity;
 			sourceTree = "<group>";
@@ -1510,6 +1574,8 @@
 			children = (
 				169C87E71D01382C00825761 /* Locations.h */,
 				169C87E81D01382C00825761 /* Locations.m */,
+				16BDCC991D35C81800B13BD4 /* VisitLocations.h */,
+				16BDCC9A1D35C81800B13BD4 /* VisitLocations.m */,
 				160F0EDA1D041DDE00673343 /* EntityLocation+CoreDataProperties.h */,
 				160F0EDB1D041DDE00673343 /* EntityLocation+CoreDataProperties.m */,
 				160F0EDC1D041DDE00673343 /* EntityLocation.h */,
@@ -2095,17 +2161,20 @@
 				16B0783A1D1F918B009C070B /* EntityMSBandBatteryGauge.m in Sources */,
 				169C888E1D01382C00825761 /* Calls.m in Sources */,
 				16B078411D1F918B009C070B /* EntityMSBandSkinTemp+CoreDataProperties.m in Sources */,
+				16BDCCA71D3626F500B13BD4 /* MSBandSkinTemp.m in Sources */,
 				16B078401D1F918B009C070B /* EntityMSBandCalorie.m in Sources */,
 				169C88321D01382C00825761 /* AWARESensorManager.m in Sources */,
 				169C889A1D01382C00825761 /* Rotation.m in Sources */,
 				16B077851D1978FF009C070B /* EntityActivityRecognition.m in Sources */,
 				16B078371D1F918B009C070B /* EntityMSBandUV+CoreDataProperties.m in Sources */,
 				16B077C71D1A57DD009C070B /* EntityNTPTime+CoreDataProperties.m in Sources */,
+				16BDCCAD1D364B3400B13BD4 /* MSBandHR.m in Sources */,
 				169C883A1D01382C00825761 /* AWAREEsmViewController.m in Sources */,
 				160F0EF21D04277000673343 /* EntityMagnetometer.m in Sources */,
 				160F0EC11D0404A400673343 /* EntityCall.m in Sources */,
 				169C88771D01382C00825761 /* DeviceUsage.m in Sources */,
 				169C88831D01382C00825761 /* PushNotification.m in Sources */,
+				16BDCC9B1D35C81800B13BD4 /* VisitLocations.m in Sources */,
 				16B078361D1F918B009C070B /* EntityMSBandGSR.m in Sources */,
 				16B077C11D1A55FC009C070B /* EntityMemory+CoreDataProperties.m in Sources */,
 				169C88981D01382C00825761 /* Processor.m in Sources */,
@@ -2132,6 +2201,7 @@
 				169C88991D01382C00825761 /* Proximity.m in Sources */,
 				169C85731D007EDC00825761 /* ViewController.m in Sources */,
 				169C88961D01382C00825761 /* Orientation.m in Sources */,
+				16BDCC9E1D35FD3800B13BD4 /* MSBandUV.m in Sources */,
 				169C887E1D01382C00825761 /* Memory.m in Sources */,
 				160F0F071D04756800673343 /* EntityBatteryDischarge+CoreDataProperties.m in Sources */,
 				16B0776D1D192663009C070B /* EntityRotation.m in Sources */,
@@ -2146,13 +2216,17 @@
 				160F0EF81D042AB600673343 /* EntityNetwork.m in Sources */,
 				160F0F091D04756800673343 /* EntityBattery+CoreDataProperties.m in Sources */,
 				160F0F0A1D04756800673343 /* EntityBattery.m in Sources */,
+				16BDCCA41D36159500B13BD4 /* MSBandCalorie.m in Sources */,
 				16B077A41D1A429E009C070B /* EntityDeviceUsage.m in Sources */,
+				16BDCC951D35B80E00B13BD4 /* BatteryCharge.m in Sources */,
 				160F0EC61D040B7F00673343 /* EntityDebug+CoreDataProperties.m in Sources */,
 				169C889D1D01382C00825761 /* Timezone.m in Sources */,
 				160F0ED81D041B5D00673343 /* EntityLinearAccelerometer+CoreDataProperties.m in Sources */,
 				160F0F061D04756800673343 /* EntityBatteryCharge.m in Sources */,
+				16BDCCB31D366C1D00B13BD4 /* MSBandDeviceContact.m in Sources */,
 				169C88941D01382C00825761 /* Magnetometer.m in Sources */,
 				169C88841D01382C00825761 /* SensorTag.m in Sources */,
+				16BDCC981D35C11100B13BD4 /* BatteryDischarge.m in Sources */,
 				16B077841D1978FF009C070B /* EntityActivityRecognition+CoreDataProperties.m in Sources */,
 				16B077A91D1A4DF1009C070B /* EntityProcessor+CoreDataProperties.m in Sources */,
 				16B078431D1F918B009C070B /* EntityMSBandDistance+CoreDataProperties.m in Sources */,
@@ -2169,11 +2243,14 @@
 				160F0ECC1D04132600673343 /* EntityGravity+CoreDataProperties.m in Sources */,
 				16B078101D1F2487009C070B /* EntityLabel.m in Sources */,
 				169C883B1D01382C00825761 /* ESM.m in Sources */,
+				1683ABCE1D347A5F001543D9 /* AWAREDebugMessageLogger.m in Sources */,
+				16BDCCB61D366E3800B13BD4 /* MSBandRRInterval.m in Sources */,
 				169C889E1D01382C00825761 /* Wifi.m in Sources */,
 				16B078381D1F918B009C070B /* EntityMSBandUV.m in Sources */,
 				169C888B1D01382C00825761 /* MDBluetoothDevice.m in Sources */,
 				169C888A1D01382C00825761 /* BluetoothScanner.m in Sources */,
 				160F0F051D04756800673343 /* EntityBatteryCharge+CoreDataProperties.m in Sources */,
+				16BDCCA11D3609CE00B13BD4 /* MSBandGSR.m in Sources */,
 				169C88381D01382C00825761 /* SSLManager.m in Sources */,
 				160F0EF71D042AB600673343 /* EntityNetwork+CoreDataProperties.m in Sources */,
 				169C88361D01382C00825761 /* LocalFileStorageHelper.m in Sources */,
@@ -2214,6 +2291,7 @@
 				169C88931D01382C00825761 /* Locations.m in Sources */,
 				16B078391D1F918B009C070B /* EntityMSBandBatteryGauge+CoreDataProperties.m in Sources */,
 				16B0783E1D1F918B009C070B /* EntityMSBandDeviceContact.m in Sources */,
+				16BDCCB01D36661800B13BD4 /* MSBandPedometer.m in Sources */,
 				160F0EB51D03E2EC00673343 /* EntityBluetooth.m in Sources */,
 				169C88861D01382C00825761 /* AmbientLight.m in Sources */,
 				160F0F081D04756800673343 /* EntityBatteryDischarge.m in Sources */,
@@ -2222,6 +2300,7 @@
 				16B077911D1999B5009C070B /* EntityBLEHeartRate.m in Sources */,
 				16B078421D1F918B009C070B /* EntityMSBandSkinTemp.m in Sources */,
 				169C887B1D01382C00825761 /* GoogleLogin.m in Sources */,
+				16BDCCAA1D362AA500B13BD4 /* MSBandDistance.m in Sources */,
 				169C887A1D01382C00825761 /* GoogleCalPush.m in Sources */,
 				16B077D31D1A5F51009C070B /* EntityOpenWeather+CoreDataProperties.m in Sources */,
 			);

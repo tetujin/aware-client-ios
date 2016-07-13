@@ -26,9 +26,6 @@
 // add a new sensor
 - (void) addNewSensor:(AWARESensor *) sensor;
 - (BOOL) isExist :(NSString *) key;
-//- (bool) addNewSensorWithSensorName:(NSString *)sensorName
-//                     uploadInterval:(double) uploadTime;
-
 
 // sensor manager (start and stop)
 - (BOOL) startAllSensors;

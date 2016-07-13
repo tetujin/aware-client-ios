@@ -25,7 +25,7 @@
     int bufferSize;
     
     // A Debug sensor
-    Debug * debugSensor;
+    AWAREDebugMessageLogger * dmLogger;
     
     // A state of file lock
     bool isLock;
@@ -466,19 +466,20 @@
 
 /// Utils
 
+- (void) trackDebugEventsWithDMLogger:(AWAREDebugMessageLogger *) logger {
+    dmLogger = logger;
+}
+
 - (bool)saveDebugEventWithText:(NSString *)eventText
                           type:(NSInteger)type
                          label:(NSString *)label{
-    if (debugSensor != nil) {
-        [debugSensor saveDebugEventWithText:eventText type:type label:label];
+    if (dmLogger != nil) {
+        [dmLogger saveDebugEventWithText:eventText type:type label:label];
         return  YES;
     }
     return NO;
 }
 
-- (void) trackDebugEventsWithDebugSensor:(Debug*)debug{
-    debugSensor = debug;
-}
 
 
 - (NSString *) getSensorName {
@@ -487,13 +488,6 @@
     }
     return sensorName;
 }
-
-
-
-- (void) dbLock { isLock = YES; }
-
-
-- (void) dbUnlock { isLock = NO; }
 
 
 - (void)setBufferSize:(int)size{

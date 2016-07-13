@@ -102,35 +102,20 @@ NSString* const KEY_CALLS_TRACE = @"trace";
             start = [NSDate new];
         }
         
-        
         NSLog(@"[%@] Call Duration is %d seconds @ [%@]", [super getSensorName], duration, callTypeStr);
-//        NSNumber *durationValue = [NSNumber numberWithInt:duration];
-//        NSMutableDictionary* dic = [[NSMutableDictionary alloc] init];
-//        [dic setObject:[AWAREUtils getUnixTimestamp:[NSDate new]] forKey:KEY_CALLS_TIMESTAMP];
-//        [dic setObject:[super getDeviceId] forKey:KEY_CALLS_DEVICEID];
-//        [dic setObject:callType forKey:KEY_CALLS_CALL_TYPE];
-//        [dic setObject:durationValue forKey:KEY_CALLS_CALL_DURATION];
-//        [dic setObject:callId forKey:KEY_CALLS_TRACE];
         
         dispatch_async(dispatch_get_main_queue(), ^{
             
-            if([NSThread isMainThread]){
-                NSLog(@"Main Thread.");
-            }else{
-                NSLog(@"Sub Tread.");
-            }
+            NSNumber *durationValue = [NSNumber numberWithInt:duration];
+            NSMutableDictionary* dict = [[NSMutableDictionary alloc] init];
+            [dict setObject:[AWAREUtils getUnixTimestamp:[NSDate new]] forKey:KEY_CALLS_TIMESTAMP];
+            [dict setObject:[super getDeviceId] forKey:KEY_CALLS_DEVICEID];
+            [dict setObject:callType forKey:KEY_CALLS_CALL_TYPE];
+            [dict setObject:durationValue forKey:KEY_CALLS_CALL_DURATION];
+            [dict setObject:callId forKey:KEY_CALLS_TRACE];
             
-            // AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
-            EntityCall* callData = (EntityCall *)[NSEntityDescription
-                                                  insertNewObjectForEntityForName:NSStringFromClass([EntityCall class])
-                                                  inManagedObjectContext:[self getSensorManagedObjectContext]];
-                                                  // inManagedObjectContext:delegate.managedObjectContext];
-            callData.device_id = [super getDeviceId];
-            callData.timestamp = [AWAREUtils getUnixTimestamp:[NSDate new]];
-            callData.call_type = callType;
-            callData.call_duration = @(duration);
-            callData.trace = callId;
-            [super saveDataToDB];
+            [super saveData:dict];
+            
             
             // Set latest sensor data
             NSDateFormatter *timeFormat = [[NSDateFormatter alloc] init];
@@ -143,7 +128,7 @@ NSString* const KEY_CALLS_TRACE = @"trace";
             // Broadcast a notification
             // http://www.awareframework.com/communication/
             // [NOTE] On the Andoind AWARE client, when the ACTION_AWARE_USER_NOT_IN_CALL and ACTION_AWARE_USER_IN_CALL are called?
-            NSDictionary *userInfo = [NSDictionary dictionaryWithObject:callData forKey:EXTRA_DATA];
+            NSDictionary *userInfo = [NSDictionary dictionaryWithObject:dict forKey:EXTRA_DATA];
             if (call.callState == CTCallStateIncoming) {
                 [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_CALL_RINGING
                                                                     object:nil
@@ -168,14 +153,25 @@ NSString* const KEY_CALLS_TRACE = @"trace";
                                                                   userInfo:userInfo];
             }
         });
-        
-
-        
-        // Save a call event (, this sensor using TextFile based DB.)
-        // [super saveData:dic];
     };
-    
     return YES;
+}
+
+
+- (void)insertNewEntityWithData:(NSDictionary *)data
+           managedObjectContext:(NSManagedObjectContext *)childContext
+                     entityName:(NSString *)entity{
+    
+    
+    EntityCall* callData = (EntityCall *)[NSEntityDescription
+                                          insertNewObjectForEntityForName:entity
+                                          inManagedObjectContext:childContext];
+    callData.device_id = [data objectForKey:KEY_CALLS_DEVICEID];
+    callData.timestamp = [data objectForKey:KEY_CALLS_TIMESTAMP];
+    callData.call_type = [data objectForKey:KEY_CALLS_CALL_TYPE];
+    callData.call_duration = [data objectForKey:KEY_CALLS_CALL_DURATION];
+    callData.trace = [data objectForKey:KEY_CALLS_TRACE];
+
 }
 
 -(BOOL) stopSensor{

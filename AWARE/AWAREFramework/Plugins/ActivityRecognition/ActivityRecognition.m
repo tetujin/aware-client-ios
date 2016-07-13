@@ -182,7 +182,7 @@
 
 - (void) addMotionActivity: (CMMotionActivity *) motionActivity{
     
-    NSLog(@"%ld", motionActivity.confidence);
+    // NSLog(@"%ld", motionActivity.confidence);
     
     switch (confidenceFilter) {
         case CMMotionActivityConfidenceHigh:
@@ -202,7 +202,7 @@
             break;
     }
     
-    NSLog(@"stored");
+    // NSLog(@"stored");
     
     NSNumber *motionConfidence = [NSNumber numberWithInt:0];
     if (motionActivity.confidence  == CMMotionActivityConfidenceHigh){
@@ -269,41 +269,43 @@
         }
     }
 
+    if ([self isDebug]) {
+        NSLog(@"[%@] %@ %ld", motionActivity.startDate, motionName, motionActivity.confidence);
+    }
     
-    NSLog(@"[%@] %@ %ld", motionActivity.startDate, motionName, motionActivity.confidence);
     dispatch_async(dispatch_get_main_queue(), ^{
         NSNumber * unixtime = [AWAREUtils getUnixTimestamp:motionActivity.startDate];
+
+        NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+        [dict setObject:unixtime forKey:@"timestamp"];
+        [dict setObject:[self getDeviceId] forKey:@"device_id"];
+        [dict setObject:motionName forKey:@"activity_name"]; //varchar
+        [dict setObject:[motionType stringValue] forKey:@"activity_type"]; //text
+        [dict setObject:motionConfidence forKey:@"confidence"]; //int
+        [dict setObject:activitiesStr forKey:@"activities"]; //text
+        [self setLatestValue:[NSString stringWithFormat:@"%@, %@, %@", motionName, motionType, motionConfidence]];
+        [self saveData:dict];
         
-        AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
-        EntityActivityRecognition * data = (EntityActivityRecognition *)[NSEntityDescription insertNewObjectForEntityForName:[self getEntityName]
-                                                                                                      inManagedObjectContext:delegate.managedObjectContext];
-        data.device_id = [self getDeviceId];
-        data.timestamp = unixtime;
-        data.confidence = motionConfidence;
-        data.activities = activitiesStr;
-        data.activity_name = motionName;
-        data.activity_type = [motionType stringValue];
-        
-        NSDictionary * userInfo = [NSDictionary dictionaryWithObject:data
+        NSDictionary * userInfo = [NSDictionary dictionaryWithObject:dict
                                                               forKey:EXTRA_DATA];
         [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_GOOGLE_ACTIVITY_RECOGNITION
                                                                 object:nil
                                                               userInfo:userInfo];
-        
-        [self saveDataToDB];
     });
+}
 
-    [self setLatestValue:[NSString stringWithFormat:@"%@, %@, %@", motionName, motionType, motionConfidence]];
+- (void)insertNewEntityWithData:(NSDictionary *)data
+           managedObjectContext:(NSManagedObjectContext *)childContext
+                     entityName:(NSString *)entity{
     
-    //    NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-    //    [dic setObject:unixtime forKey:@"timestamp"];
-    //    [dic setObject:[self getDeviceId] forKey:@"device_id"];
-    //    [dic setObject:motionName forKey:@"activity_name"]; //varchar
-    //    [dic setObject:motionType forKey:@"activity_type"]; //text
-    //    [dic setObject:motionConfidence forKey:@"confidence"]; //int
-    //    [dic setObject:@"" forKey:@"activities"]; //text
-    //    [self setLatestValue:[NSString stringWithFormat:@"%@, %@, %@", motionName, motionType, motionConfidence]];
-    //    [self saveData:dic toLocalFile:SENSOR_PLUGIN_GOOGLE_ACTIVITY_RECOGNITION];
+    EntityActivityRecognition * entityActivity = (EntityActivityRecognition *)[NSEntityDescription insertNewObjectForEntityForName:entity
+                                                                                                  inManagedObjectContext:childContext];
+    entityActivity.device_id = [data objectForKey:@"device_id"];
+    entityActivity.timestamp = [data objectForKey:@"timestamp"];
+    entityActivity.confidence = [data objectForKey:@"confidence"];
+    entityActivity.activities =    [data objectForKey:@"activities"];
+    entityActivity.activity_name = [data objectForKey:@"activity_name"];
+    entityActivity.activity_type = [data objectForKey:@"activity_type"];
     
 }
 

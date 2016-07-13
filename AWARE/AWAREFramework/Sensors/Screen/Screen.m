@@ -113,6 +113,7 @@
 //        [dic setObject:[self getDeviceId] forKey:@"device_id"];
 //        [dic setObject:[NSNumber numberWithInt:awareScreenState] forKey:@"screen_status"]; // int
 //        [self saveData:dic];
+        
     });
 }
 
@@ -160,32 +161,33 @@
         [self saveScreenEvent:awareScreenState];
         
         [self setLatestValue:[NSString stringWithFormat:@"%@", [NSNumber numberWithInt:awareScreenState]]];
-
-        
-        /**  ======= Codes for TextFile DB ======= */
-        //        NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
-        //        NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-        //        [dic setObject:unixtime forKey:@"timestamp"];
-        //        [dic setObject:[self getDeviceId] forKey:@"device_id"];
-        //        [dic setObject:[NSNumber numberWithInt:awareScreenState] forKey:@"screen_status"]; // int
-        //        [self saveData:dic];
-        
     });
 }
 
 
 - (void) saveScreenEvent:(int) state{
+    /**  ======= Codes for TextFile DB ======= */
     NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
-    // AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
-    EntityScreen* data = (EntityScreen *)[NSEntityDescription
-                                          insertNewObjectForEntityForName:[self getEntityName]
-                                          inManagedObjectContext:[self getSensorManagedObjectContext]];
+    NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+    [dic setObject:unixtime forKey:@"timestamp"];
+    [dic setObject:[self getDeviceId] forKey:@"device_id"];
+    [dic setObject:[NSNumber numberWithInt:state] forKey:@"screen_status"]; // int
+    [self saveData:dic];
+}
+
+
+- (void)insertNewEntityWithData:(NSDictionary *)data
+           managedObjectContext:(NSManagedObjectContext *)childContext
+                     entityName:(NSString *)entity{
     
-    data.device_id = [self getDeviceId];
-    data.timestamp = unixtime;
-    data.screen_status = @(state);
+    EntityScreen* entityScreen = (EntityScreen *)[NSEntityDescription
+                                          insertNewObjectForEntityForName:entity
+                                          inManagedObjectContext:childContext];
     
-    [self saveDataToDB];
+    entityScreen.device_id = [data objectForKey:@"device_id"];
+    entityScreen.timestamp = [data objectForKey:@"timestamp"];
+    entityScreen.screen_status = [data objectForKey:@"screen_status"];
+    
 }
 
 

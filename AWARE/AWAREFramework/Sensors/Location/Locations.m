@@ -64,9 +64,9 @@
     
     // Get a min gps accuracy from settings
     double minAccuracy = [self getSensorSetting:settings withKey:@"min_gps_accuracy"];
-    if (minAccuracy > 0) {
+    if ( minAccuracy > 0 ) {
         NSLog(@"Mini GSP accuracy is %f", minAccuracy);
-    }else{
+    } else {
         minAccuracy = defaultAccuracy;
     }
     
@@ -91,16 +91,17 @@
 - (BOOL)startSensorWithInterval:(double)interval accuracy:(double)accuracyMeter{
     // Set and start a location sensor with the senseing frequency and min GPS accuracy
     NSLog(@"[%@] Start Location Sensor!", [self getSensorName]);
+    
     if (nil == locationManager){
         locationManager = [[CLLocationManager alloc] init];
         locationManager.delegate = self;
         
-        //        extern const CLLocationAccuracy kCLLocationAccuracyBestForNavigation __OSX_AVAILABLE_STARTING(__MAC_10_7,__IPHONE_4_0);
-        //        extern const CLLocationAccuracy kCLLocationAccuracyBest;
-        //        extern const CLLocationAccuracy kCLLocationAccuracyNearestTenMeters;
-        //        extern const CLLocationAccuracy kCLLocationAccuracyHundredMeters;
-        //        extern const CLLocationAccuracy kCLLocationAccuracyKilometer;
-        //        extern const CLLocationAccuracy kCLLocationAccuracyThreeKilometers;
+        // extern const CLLocationAccuracy kCLLocationAccuracyBestForNavigation
+        // extern const CLLocationAccuracy kCLLocationAccuracyBest;
+        // extern const CLLocationAccuracy kCLLocationAccuracyNearestTenMeters;
+        // extern const CLLocationAccuracy kCLLocationAccuracyHundredMeters;
+        // extern const CLLocationAccuracy kCLLocationAccuracyKilometer;
+        // extern const CLLocationAccuracy kCLLocationAccuracyThreeKilometers;
         
         if (accuracyMeter == 0) {
             locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation;
@@ -130,13 +131,15 @@
         }
         // Set a movement threshold for new events.
         locationManager.distanceFilter = accuracyMeter; // meter
-        //        locationManager.activityType = CLActivityTypeFitness;
+        // locationManager.activityType = CLActivityTypeFitness;
         
         // Start Monitoring
         [locationManager startMonitoringSignificantLocationChanges];
         // [locationManager startUpdatingLocation];
         // [locationManager startUpdatingHeading];
-        // [_locationManager startMonitoringVisits]; // This method calls didVisit.
+        // [_locationManager startMonitoringVisits];
+        
+        [self getGpsData:nil];
         
         if(interval > 0){
             locationTimer = [NSTimer scheduledTimerWithTimeInterval:interval
@@ -148,7 +151,6 @@
         }else{
             [locationManager startUpdatingLocation];
         }
-//        NSLog(@"-----> %d", [self getBufferSize]);
         
     }
     return YES;
@@ -185,6 +187,64 @@
     }
 }
 
+- (void) saveLocation:(CLLocation *)location{
+
+    int accuracy = (location.verticalAccuracy + location.horizontalAccuracy) / 2;
+    
+    NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    [dict setObject:unixtime forKey:@"timestamp"];
+    [dict setObject:[self getDeviceId] forKey:@"device_id"];
+    [dict setObject:[NSNumber numberWithDouble:location.coordinate.latitude] forKey:@"double_latitude"];
+    [dict setObject:[NSNumber numberWithDouble:location.coordinate.longitude] forKey:@"double_longitude"];
+    [dict setObject:[NSNumber numberWithDouble:location.course] forKey:@"double_bearing"];
+    [dict setObject:[NSNumber numberWithDouble:location.speed] forKey:@"double_speed"];
+    [dict setObject:[NSNumber numberWithDouble:location.altitude] forKey:@"double_altitude"];
+    [dict setObject:@"gps" forKey:@"provider"];
+    [dict setObject:[NSNumber numberWithInt:accuracy] forKey:@"accuracy"];
+    [dict setObject:@"" forKey:@"label"];
+    [self setLatestValue:[NSString stringWithFormat:@"%f, %f, %f", location.coordinate.latitude, location.coordinate.longitude, location.speed]];
+    //[self saveData:dict toLocalFile:@"locations"];
+    [self saveData:dict];
+    
+    [self setLatestValue:[NSString stringWithFormat:@"%f, %f, %f",
+                          location.coordinate.latitude,
+                          location.coordinate.longitude,
+                          location.speed]];
+    
+    NSDictionary *userInfo = [NSDictionary dictionaryWithObject:dict
+                                                         forKey:EXTRA_DATA];
+    [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_LOCATIONS
+                                                        object:nil
+                                                      userInfo:userInfo];
+}
+
+
+- (void)insertNewEntityWithData:(NSDictionary *)data
+           managedObjectContext:(NSManagedObjectContext *)childContext
+                     entityName:(NSString *)entity{
+    
+    EntityLocation* entityLocation = (EntityLocation *)[NSEntityDescription
+                                              insertNewObjectForEntityForName:entity
+                                              inManagedObjectContext:childContext];
+    
+    entityLocation.device_id = [data objectForKey:@"device_id"];
+    entityLocation.timestamp = [data objectForKey:@"timestamp"];
+    entityLocation.double_latitude = [data objectForKey:@"double_latitude"];
+    entityLocation.double_longitude = [data objectForKey:@"double_longitude"];
+    entityLocation.double_bearing = [data objectForKey:@"double_bearing"];
+    entityLocation.double_speed = [data objectForKey:@"double_speed"];
+    entityLocation.double_altitude = [data objectForKey:@"double_altitude"];
+    entityLocation.provider = [data objectForKey:@"provider"];
+    entityLocation.accuracy = [data objectForKey:@"accuracy"];
+    entityLocation.label = [data objectForKey:@"label"];
+    
+    
+    
+}
+
+
+
 
 //- (void)locationManager:(CLLocationManager *)manager didUpdateHeading:(CLHeading *)newHeading {
 //    if (newHeading.headingAccuracy < 0)
@@ -194,54 +254,6 @@
 ////    [sdManager addSensorDataMagx:newHeading.x magy:newHeading.y magz:newHeading.z];
 ////    [sdManager addHeading: theHeading];
 //}
-
-- (void) saveLocation:(CLLocation *)location{
-    // AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
-    EntityLocation* data = (EntityLocation *)[NSEntityDescription
-                                              insertNewObjectForEntityForName:[self getEntityName]
-                                              inManagedObjectContext:[self getSensorManagedObjectContext]];
-    
-    data.device_id = [self getDeviceId];
-    data.timestamp = [AWAREUtils getUnixTimestamp:[NSDate new]];
-    data.double_latitude = [NSNumber numberWithDouble:location.coordinate.latitude];
-    data.double_longitude = [NSNumber numberWithDouble:location.coordinate.longitude];
-    data.double_bearing = [NSNumber numberWithDouble:location.course];
-    data.double_speed = [NSNumber numberWithDouble:location.speed];
-    data.double_altitude = [NSNumber numberWithDouble:location.altitude];
-    data.provider = @"gps";
-    int accuracy = (location.verticalAccuracy + location.horizontalAccuracy) / 2;
-    data.accuracy = [NSNumber numberWithInt:accuracy];
-    data.label = @"";
-    
-    NSDictionary *userInfo = [NSDictionary dictionaryWithObject:data
-                                                         forKey:EXTRA_DATA];
-    [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_LOCATIONS
-                                                        object:nil
-                                                      userInfo:userInfo];
-    
-    [self saveDataToDB];
-    
-    [self setLatestValue:[NSString stringWithFormat:@"%f, %f, %f",
-                          location.coordinate.latitude,
-                          location.coordinate.longitude,
-                          location.speed]];
-    
-//    NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
-//    NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-//    [dic setObject:unixtime forKey:@"timestamp"];
-//    [dic setObject:[self getDeviceId] forKey:@"device_id"];
-//    [dic setObject:[NSNumber numberWithDouble:location.coordinate.latitude] forKey:@"double_latitude"];
-//    [dic setObject:[NSNumber numberWithDouble:location.coordinate.longitude] forKey:@"double_longitude"];
-//    [dic setObject:[NSNumber numberWithDouble:location.course] forKey:@"double_bearing"];
-//    [dic setObject:[NSNumber numberWithDouble:location.speed] forKey:@"double_speed"];
-//    [dic setObject:[NSNumber numberWithDouble:location.altitude] forKey:@"double_altitude"];
-//    [dic setObject:@"gps" forKey:@"provider"];
-//    [dic setObject:[NSNumber numberWithInt:location.verticalAccuracy] forKey:@"accuracy"];
-//    [dic setObject:@"" forKey:@"label"];
-//    [self setLatestValue:[NSString stringWithFormat:@"%f, %f, %f", location.coordinate.latitude, location.coordinate.longitude, location.speed]];
-//    [self saveData:dic toLocalFile:@"locations"];
-}
-
 
 
 

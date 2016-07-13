@@ -17,5 +17,6 @@
 - (BOOL) startSensorWithAccuracy:(double)accuracyMeter;
 - (BOOL) startSensorWithInterval:(double)interval accuracy:(double)accuracyMeter;
 
+- (void) saveLocation:(CLLocation *)location;
 
 @end

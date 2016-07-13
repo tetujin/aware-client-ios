@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Debug.h"
+#import "AWAREDebugMessageLogger.h"
 
 @interface LocalFileStorageHelper : NSObject
 
@@ -45,7 +45,7 @@
 - (void) setLostedTextLength:(int)lostedTextLength;
 
 // set debug tracker
-- (void) trackDebugEventsWithDebugSensor:(Debug*)debug;
+- (void) trackDebugEventsWithDMLogger:(AWAREDebugMessageLogger *) logger;
 
 // get sensor storage name and path
 - (NSString *) getSensorName;
@@ -53,7 +53,7 @@
 
 // set buffer and db lock
 - (void) setBufferSize:(int) size;
-- (void)dbLock;
-- (void)dbUnlock;
+//- (void)dbLock;
+//- (void)dbUnlock;
 
 @end

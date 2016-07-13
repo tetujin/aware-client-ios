@@ -45,7 +45,7 @@
     double frequency = [self getSensorSetting:settings withKey:@"frequency_barometer"];
     if(frequency != -1){
         // NOTE: The frequency value is a microsecond
-        frequency = frequency/100000;
+        frequency = frequency/1000000;
     }else{
         // default value = 200000(microseconds) = 0.2(second)
         frequency = sensingInterval;
@@ -85,45 +85,51 @@
                                           withHandler:^(CMAltitudeData *altitudeData, NSError *error) {
                                               
                                               dispatch_async(dispatch_get_main_queue(),^{
-                                                  double pressureDouble = [altitudeData.pressure doubleValue];
+
+                                                double pressureDouble = [altitudeData.pressure doubleValue];
+
+                                                 NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
+                                                 NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+                                                 [dict setObject:unixtime forKey:@"timestamp"];
+                                                 [dict setObject:[self getDeviceId] forKey:@"device_id"];
+                                                 [dict setObject:[NSNumber numberWithDouble:pressureDouble*10.0f] forKey:@"double_values_0"];
+                                                 [dict setObject:@0 forKey:@"accuracy"];
+                                                 [dict setObject:@"" forKey:@"label"];
+                                                 [self setLatestValue:[NSString stringWithFormat:@"%f", pressureDouble*10.0f]];
+  
+                                                  if([self getDBType] == AwareDBTypeCoreData) {
+                                                      [self saveData:dict];
+                                                  }else if([self getDBType] == AwareDBTypeTextFile){
+                                                      dispatch_async(dispatch_get_main_queue(), ^{
+                                                          [self saveData:dict];
+                                                      });
+                                                  }
                                                   
-                                                  // AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
-                                                  EntityBarometer * pressureData = (EntityBarometer *)[NSEntityDescription
-                                                                                                       insertNewObjectForEntityForName:[self getEntityName]
-                                                                                                       inManagedObjectContext:[self getSensorManagedObjectContext]];
-                                                                                                       //inManagedObjectContext:delegate.managedObjectContext];
-                                                  
-                                                  pressureData.device_id = [self getDeviceId];
-                                                  pressureData.timestamp = [AWAREUtils getUnixTimestamp:[NSDate new]];
-                                                  pressureData.double_values_0 = [NSNumber numberWithDouble:(pressureDouble * 10.0f)];
-                                                  pressureData.accuracy = @0;
-                                                  pressureData.label = @"";
                                                   
                                                   [self setLatestValue:[NSString stringWithFormat:@"%f", (pressureDouble * 10.0f)]];
                                                   
-                                                  NSDictionary *userInfo = [NSDictionary dictionaryWithObject:pressureData
+                                                  NSDictionary *userInfo = [NSDictionary dictionaryWithObject:dict
                                                                                                        forKey:EXTRA_DATA];
                                                   [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_BAROMETER
                                                                                                       object:nil
                                                                                                     userInfo:userInfo];
-                                                  [self saveDataToDB];
                                               });
-                                              //
-                                              //                                               NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
-                                              //                                               NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-                                              //                                               [dic setObject:unixtime forKey:@"timestamp"];
-                                              //                                               [dic setObject:[self getDeviceId] forKey:@"device_id"];
-                                              //                                               [dic setObject:[NSNumber numberWithDouble:pressure_f*10.0f] forKey:@"double_values_0"];
-                                              //                                               [dic setObject:@0 forKey:@"accuracy"];
-                                              //                                               [dic setObject:@"" forKey:@"label"];
-                                              //                                               [self setLatestValue:[NSString stringWithFormat:@"%f", pressure_f*10.0f]];
-                                              //                                               
-                                              //                                               dispatch_async(dispatch_get_main_queue(), ^{
-                                              //                                                   [self saveData:dic];
-                                              //                                               });
                                           }];
     }
     return YES;
+}
+
+- (void)insertNewEntityWithData:(NSDictionary *)data managedObjectContext:(NSManagedObjectContext *)childContext entityName:(NSString *)entity{
+    EntityBarometer * pressureData = (EntityBarometer *)[NSEntityDescription
+                                                         insertNewObjectForEntityForName:entity
+                                                         inManagedObjectContext:childContext];
+    
+    pressureData.device_id = [data objectForKey:@"device_id"];
+    pressureData.timestamp = [data objectForKey:@"timestamp"];
+    pressureData.double_values_0 = [data objectForKey:@"double_values_0"];
+    pressureData.accuracy = @0;
+    pressureData.label = @"";
+
 }
 
 - (BOOL)stopSensor{

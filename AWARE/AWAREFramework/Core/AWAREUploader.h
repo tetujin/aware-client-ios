@@ -16,9 +16,12 @@
 
 - (bool) isUploading;
 - (void) setUploadingState:(bool)state;
-- (void) lockBackgroundUpload;
-- (void) unlockBackgroundUpload;
+//- (void) lockBackgroundUpload;
+//- (void) unlockBackgroundUpload;
 
+- (void) lockDB;
+- (void) unlockDB;
+- (BOOL) isDBLock;
 
 
 - (void) allowsCellularAccess;
@@ -60,8 +63,8 @@
 - (NSString *) getSyncProgressAsText:(NSString *)sensorName;
 
 
-- (void) trackDebugEventsWithDebugSensor:(Debug*)debug;
-- (bool)saveDebugEventWithText:(NSString *)eventText type:(NSInteger)type label:(NSString *)label;
+- (BOOL) trackDebugEvents;
+- (bool) saveDebugEventWithText:(NSString *)eventText type:(NSInteger)type label:(NSString *)label;
 
 
 - (NSString *) getWebserviceUrl;

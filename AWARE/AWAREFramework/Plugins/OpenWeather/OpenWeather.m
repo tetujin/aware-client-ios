@@ -143,7 +143,14 @@ int ONE_HOUR = 60*60;
     return YES;
 }
 
+- (BOOL)syncAwareDBInForeground{
+    return [super syncAwareDBInForeground];
+}
 
+- (BOOL) isUploading{
+    // NSLog(@"%d %@", [super isUploading], [self getEntityName]);
+    return [super isUploading];
+}
 
 /////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////
@@ -200,7 +207,9 @@ int ONE_HOUR = 60*60;
     [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
     
     // set HTTP/POST body information
-    NSLog(@"--- [%@] This is background task ----", [self getSensorName] );
+    if([self isDebug]){
+        NSLog(@"--- [%@] This is background task ----", [self getSensorName] );
+    }
     session = [NSURLSession sessionWithConfiguration:sessionConfig delegate:self delegateQueue:nil];
     NSURLSessionDataTask* dataTask = [session dataTaskWithRequest:request];
     [dataTask resume];
@@ -220,7 +229,9 @@ didReceiveResponse:(NSURLResponse *)response
     NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
     int responseCode = (int)[httpResponse statusCode];
     if (responseCode == 200) {
-        NSLog(@"[%@] Got Weather Information from API!", [self getSensorName]);
+        if([self isDebug]){
+            NSLog(@"[%@] Got Weather Information from API!", [self getSensorName]);
+        }
     }
 
     completionHandler(NSURLSessionResponseAllow);
@@ -237,8 +248,8 @@ didReceiveResponse:(NSURLResponse *)response
                                                             error:&e];
         
         if ( jsonWeatherData == nil) {
-            NSLog( @"%@", e.debugDescription );
             if ([self isDebug]) {
+                NSLog( @"%@", e.debugDescription );
                 [self sendLocalNotificationForMessage:e.debugDescription soundFlag:NO];
             }
             return;
@@ -255,8 +266,7 @@ didReceiveResponse:(NSURLResponse *)response
                                                                                                    inManagedObjectContext:delegate.managedObjectContext];
             
             weatherData.device_id = [self getDeviceId];
-            NSNumber * timestamp = [AWAREUtils getUnixTimestamp:[NSDate new]];
-            weatherData.timestamp = timestamp;
+            weatherData.timestamp = [AWAREUtils getUnixTimestamp:[NSDate new]];
             weatherData.city = [self getName];
             weatherData.temperature = [self getTemp];
             weatherData.temperature_max = [self getTempMax];
@@ -315,7 +325,9 @@ didReceiveResponse:(NSURLResponse *)response
 
 - (void)URLSession:(NSURLSession *)session didBecomeInvalidWithError:(NSError *)error{
     if (error != nil) {
-        NSLog(@"[%@] the session did become invaild with error: %@", [self getSensorName], error.debugDescription);
+        if([self isDebug]){
+            NSLog(@"[%@] the session did become invaild with error: %@", [self getSensorName], error.debugDescription);
+        }
     }
     [session invalidateAndCancel];
     [session finishTasksAndInvalidate];

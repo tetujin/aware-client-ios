@@ -12,7 +12,9 @@
 #import "AWAREUtils.h"
 #import "AWAREStudy.h"
 #import "AWAREKeys.h"
+#import "AWARECoreDataManager.h"
 #import "TCQMaker.h"
+
 
 typedef enum: NSInteger {
     AwareDBTypeCoreData = 0,
@@ -35,15 +37,15 @@ typedef enum: NSInteger {
 - (NSString *) getEntityName;
 - (NSInteger) getDBType;
 
-
 @end
 
-@interface AWARESensor : NSObject <AWARESensorDelegate, UIAlertViewDelegate>
+
+@interface AWARESensor : AWARECoreDataManager <AWARESensorDelegate, UIAlertViewDelegate>
 
 - (instancetype) initWithAwareStudy:(AWAREStudy *) study;
-- (instancetype) initWithAwareStudy:(AWAREStudy *) study sensorName:(NSString *)sensorName dbEntityName:(NSString *) entityName;
-- (instancetype) initWithAwareStudy:(AWAREStudy *) study sensorName:(NSString *)sensorName dbEntityName:(NSString *) entityName dbType:(AwareDBType)dbType;
-- (instancetype) initWithAwareStudy:(AWAREStudy *) study sensorName:(NSString *)sensorName dbEntityName:(NSString *) entityName dbType:(AwareDBType)dbType bufferSize:(int)buffer;
+- (instancetype) initWithAwareStudy:(AWAREStudy *) study sensorName:(NSString *)name dbEntityName:(NSString *)entity;
+- (instancetype) initWithAwareStudy:(AWAREStudy *) study sensorName:(NSString *)name dbEntityName:(NSString *)entity dbType:(AwareDBType)dbType;
+- (instancetype) initWithAwareStudy:(AWAREStudy *) study sensorName:(NSString *)name dbEntityName:(NSString *)entity dbType:(AwareDBType)dbType bufferSize:(int)buffer;
 
 // save debug events
 - (void) trackDebugEvents;
@@ -94,10 +96,9 @@ typedef enum: NSInteger {
 - (NSString *) getSyncProgressAsText:(NSString*) sensorName;
 
 // lock
-- (void) sensorLock;
-- (void) sensorUnLock;
-
-
+- (void) lockDB;
+- (void) unlockDB;
+- (BOOL) isDBLock;
 
 // Utils
 - (double) convertMotionSensorFrequecyFromAndroid:(double)frequency;
