@@ -130,37 +130,23 @@
             //        NSLog(@"error");
         }
         
+        [self setLatestValue:[NSString stringWithFormat:@"%@ (%@)",ssid, finalBSSID]];
+        
         // Save sensor data to the local database.
         NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
-        // AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
-        EntityWifi* data = (EntityWifi *)[NSEntityDescription
-                                                  insertNewObjectForEntityForName:[self getEntityName]
-                                                  inManagedObjectContext:[self getSensorManagedObjectContext]];
-        
-        data.device_id = [self getDeviceId];
-        data.timestamp = unixtime;
-        data.bssid = finalBSSID;
-        data.ssid = ssid;
-        data.security = @"";
-        data.frequency = @0;
-        data.rssi = @0;
-        data.label = @"";
-        
-        [self saveDataToDB];
+        NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+        [dict setObject:unixtime forKey:@"timestamp"];
+        [dict setObject:[self getDeviceId] forKey:@"device_id"];
+        [dict setObject:finalBSSID forKey:@"bssid"]; //text
+        [dict setObject:ssid forKey:@"ssid"]; //text
+        [dict setObject:@"" forKey:@"security"]; //text
+        [dict setObject:@0 forKey:@"frequency"];//int
+        [dict setObject:@0 forKey:@"rssi"]; //int
+        [dict setObject:@"" forKey:@"label"]; //text
+
+        [self saveData:dict];
         
         [self broadcastDetectedNewDevice];
-        
-//        NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-//        [dic setObject:unixtime forKey:@"timestamp"];
-//        [dic setObject:[self getDeviceId] forKey:@"device_id"];
-//        [dic setObject:finalBSSID forKey:@"bssid"]; //text
-//        [dic setObject:ssid forKey:@"ssid"]; //text
-//        [dic setObject:@"" forKey:@"security"]; //text
-//        [dic setObject:@0 forKey:@"frequency"];//int
-//        [dic setObject:@0 forKey:@"rssi"]; //int
-//        [dic setObject:@"" forKey:@"label"]; //text
-        [self setLatestValue:[NSString stringWithFormat:@"%@ (%@)",ssid, finalBSSID]];
-//        [self saveData:dic toLocalFile:SENSOR_WIFI];
         
         if ([self isDebug]) {
             [AWAREUtils sendLocalNotificationForMessage:[NSString stringWithFormat:@"%@ (%@)",ssid, finalBSSID] soundFlag:NO];
@@ -168,6 +154,27 @@
     }
     
     [self broadcastScanEnded];
+}
+
+
+-(void)insertNewEntityWithData:(NSDictionary *)data
+          managedObjectContext:(NSManagedObjectContext *)childContext
+                    entityName:(NSString *)entity{
+    
+    EntityWifi* entityWifi = (EntityWifi *)[NSEntityDescription
+                                      insertNewObjectForEntityForName:entity
+                                      inManagedObjectContext:childContext];
+    entityWifi.device_id = [data objectForKey:@"device_id"];
+    entityWifi.timestamp = [data objectForKey:@"timestamp"];
+    entityWifi.bssid = [data objectForKey:@"bssid"];//finalBSSID;
+    entityWifi.ssid = [data objectForKey:@"ssid"];//ssid;
+    entityWifi.security = [data objectForKey:@"security"];// @"";
+    entityWifi.frequency = [data objectForKey:@"frequency"];//@0;
+    entityWifi.rssi = [data objectForKey:@"rssi"]; //@0;
+    entityWifi.label = [data objectForKey:@"label"];//@"";
+    
+    
+    
 }
 
 

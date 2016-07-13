@@ -110,7 +110,6 @@
                                       } else {
                                           
                                          // SQLite
-                                          
                                           NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
                                           [dict setObject:[AWAREUtils getUnixTimestamp:[NSDate new]] forKey:@"timestamp"];
                                           [dict setObject:[self getDeviceId] forKey:@"device_id"];
@@ -133,61 +132,7 @@
                                                                                             userInfo:userInfo];
                                           ////// SQLite DB ////////
                                           if([self getDBType] == AwareDBTypeCoreData) {
-                                              
-                                              // add current sensor data to the buffer array
-                                              [bufferArray addObject:dict];
-                                              
-                                              if (currentBufferSize > [self getBufferSize]) {
-                                                  currentBufferSize = 0;
-                                                  
-                                                  // make parent and child context from background data save
-                                                  AppDelegate * delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
-                                                  NSManagedObjectContext* parentContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
-                                                  [parentContext setPersistentStoreCoordinator:delegate.persistentStoreCoordinator];
-                                                  
-                                                  NSManagedObjectContext* childContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-                                                  [childContext setParentContext:parentContext];
-                                                  
-                                                  // Copy the buffer and remove the buffer objects
-                                                  NSArray * array = [bufferArray copy];
-                                                  [bufferArray removeAllObjects];
-                                                  
-                                                  [childContext performBlock:^{
-                                                      if(![self isDBLock]){
-                                                          [self lockDB];
-                                                          // Convert a NSDictionary to a SQLite Entity
-                                                          for (NSDictionary * bufferedData in array) {
-                                                              // insert new data
-                                                              [self insertNewEntityWithData:bufferedData managedObjectContext:childContext entityName:[self getEntityName]];
-                                                          }
-                                                          NSError *error = nil;
-                                                          if (![childContext save:&error]) {
-                                                              // An error is occued
-                                                              NSLog(@"Error saving context: %@\n%@", [error localizedDescription], [error userInfo]);
-                                                              [bufferArray addObjectsFromArray:array];
-                                                          }else{
-                                                              // sucess to marge diff to the main context manager
-                                                              [parentContext performBlock:^{
-                                                                  if(![parentContext save:nil]){
-                                                                      // An error is occued
-                                                                      NSLog(@"Error saving context");
-                                                                      [bufferArray addObjectsFromArray:array];
-                                                                  }
-                                                                  [self unlockDB];
-                                                              }];
-                                                          }
-                                                          
-                                                      }else{
-                                                          NSLog(@"[%@] The DB is lock by the other thread", [self getEntityName]);
-                                                          [bufferArray addObjectsFromArray:array];
-                                                      }
-                                                  }];
-                                                  
-                                              }else{
-                                                  currentBufferSize++;
-                                              }
-                                              
-                                            
+                                              [self saveData:dict];
                                          //////////// Text File based DB ///////////////////////////////////
                                           } else if ([self getDBType] == AwareDBTypeTextFile){
                                                 dispatch_async(dispatch_get_main_queue(), ^{
@@ -200,17 +145,20 @@
     return YES;
 }
 
-- (void) insertNewEntityWithData:(NSDictionary *)data managedObjectContext:(NSManagedObjectContext *)context entityName:(NSString *) entityName {
-    EntityAccelerometer * entity = (EntityAccelerometer *)[NSEntityDescription
-                                                           insertNewObjectForEntityForName:NSStringFromClass([EntityAccelerometer class])
-                                                           inManagedObjectContext:context];
-    entity.device_id = [self getDeviceId];
-    entity.timestamp = [data objectForKey:@"timestamp"];
-    entity.double_values_0 = [data objectForKey:@"double_values_0"];
-    entity.double_values_1 = [data objectForKey:@"double_values_1"];
-    entity.double_values_2 = [data objectForKey:@"double_values_2"];
-    entity.accuracy = [data objectForKey:@"accuracy"];
-    entity.label = [data objectForKey:@"label"];
+- (void)insertNewEntityWithData:(NSDictionary *)data managedObjectContext:(NSManagedObjectContext *)childContext entityName:(NSString *)entity{
+    EntityAccelerometer * entityAcc = (EntityAccelerometer *)[NSEntityDescription
+                                                           insertNewObjectForEntityForName:entity
+                                                           inManagedObjectContext:childContext];
+    entityAcc.device_id = [self getDeviceId];
+    entityAcc.timestamp = [data objectForKey:@"timestamp"];
+    entityAcc.double_values_0 = [data objectForKey:@"double_values_0"];
+    entityAcc.double_values_1 = [data objectForKey:@"double_values_1"];
+    entityAcc.double_values_2 = [data objectForKey:@"double_values_2"];
+    entityAcc.accuracy = [data objectForKey:@"accuracy"];
+    entityAcc.label = [data objectForKey:@"label"];
+    
+    // NSLog(@"%@",entityAcc.debugDescription);
+    
 }
 
 
@@ -236,6 +184,63 @@
 - (BOOL)syncAwareDBInForeground{
     return [super syncAwareDBInForeground];
 }
+
+
+
+// add current sensor data to the buffer array
+//                                              [bufferArray addObject:dict];
+//
+//                                              if (currentBufferSize > [self getBufferSize]) {
+//                                                  currentBufferSize = 0;
+//
+//                                                  // make parent and child context from background data save
+//                                                  AppDelegate * delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+//                                                  NSManagedObjectContext* parentContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
+//                                                  [parentContext setPersistentStoreCoordinator:delegate.persistentStoreCoordinator];
+//
+//                                                  NSManagedObjectContext* childContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+//                                                  [childContext setParentContext:parentContext];
+//
+//                                                  // Copy the buffer and remove the buffer objects
+//                                                  NSArray * array = [bufferArray copy];
+//                                                  [bufferArray removeAllObjects];
+//
+//                                                  [childContext performBlock:^{
+//                                                      if(![self isDBLock]){
+//                                                          [self lockDB];
+//                                                          // Convert a NSDictionary to a SQLite Entity
+//                                                          for (NSDictionary * bufferedData in array) {
+//                                                              // insert new data
+//                                                              [self insertNewEntityWithData:bufferedData managedObjectContext:childContext entityName:[self getEntityName]];
+//                                                          }
+//                                                          NSError *error = nil;
+//                                                          if (![childContext save:&error]) {
+//                                                              // An error is occued
+//                                                              NSLog(@"Error saving context: %@\n%@", [error localizedDescription], [error userInfo]);
+//                                                              [bufferArray addObjectsFromArray:array];
+//                                                          }else{
+//                                                              // sucess to marge diff to the main context manager
+//                                                              [parentContext performBlock:^{
+//                                                                  if(![parentContext save:nil]){
+//                                                                      // An error is occued
+//                                                                      NSLog(@"Error saving context");
+//                                                                      [bufferArray addObjectsFromArray:array];
+//                                                                  }
+//                                                                  [self unlockDB];
+//                                                              }];
+//                                                          }
+//
+//                                                      }else{
+//                                                          NSLog(@"[%@] The DB is lock by the other thread", [self getEntityName]);
+//                                                          [bufferArray addObjectsFromArray:array];
+//                                                      }
+//                                                  }];
+//
+//                                              }else{
+//                                                  currentBufferSize++;
+//                                              }
+
+
 
 // The observer object is needed when unregistering
 //    NSObject * observer =

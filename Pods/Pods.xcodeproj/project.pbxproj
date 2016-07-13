@@ -82,19 +82,6 @@
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
-		<key>031A35ECEB15AB0962A73ED75777FC2B</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>wrapper.framework</string>
-			<key>name</key>
-			<string>FirebaseAnalytics.framework</string>
-			<key>path</key>
-			<string>Frameworks/FirebaseAnalytics.framework</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
 		<key>03B6D9557C1926CF6EC512AD8DD53A3C</key>
 		<dict>
 			<key>isa</key>
@@ -1055,6 +1042,19 @@
 			<string>1A33A273B61859667C564638DDC80D5D</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
+		</dict>
+		<key>207DF5108574F2759F62281CF6E7D697</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>91519D0231D439C76B2DAE95213B4E3C</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>name</key>
+			<string>Frameworks</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
 		</dict>
 		<key>21289AADE67B875C7804326CC0943613</key>
 		<dict>
@@ -4183,6 +4183,19 @@
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
+		<key>91519D0231D439C76B2DAE95213B4E3C</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>wrapper.framework</string>
+			<key>name</key>
+			<string>FirebaseAnalytics.framework</string>
+			<key>path</key>
+			<string>Frameworks/frameworks/FirebaseAnalytics.framework</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
 		<key>91F378756AAAF3D834C7CE68E710A6F6</key>
 		<dict>
 			<key>includeInIndex</key>
@@ -5704,19 +5717,6 @@
 			<key>sourceTree</key>
 			<string>BUILT_PRODUCTS_DIR</string>
 		</dict>
-		<key>CDA2F051C3B15AC048B0B4EC1EC8BC90</key>
-		<dict>
-			<key>children</key>
-			<array>
-				<string>031A35ECEB15AB0962A73ED75777FC2B</string>
-			</array>
-			<key>isa</key>
-			<string>PBXGroup</string>
-			<key>name</key>
-			<string>Frameworks</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
 		<key>CDAC1E772D553FAACF13CEF736AF510D</key>
 		<dict>
 			<key>children</key>
@@ -7199,7 +7199,7 @@
 		<dict>
 			<key>children</key>
 			<array>
-				<string>CDA2F051C3B15AC048B0B4EC1EC8BC90</string>
+				<string>207DF5108574F2759F62281CF6E7D697</string>
 			</array>
 			<key>isa</key>
 			<string>PBXGroup</string>

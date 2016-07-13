@@ -99,48 +99,49 @@
                                      if( error ) {
                                          NSLog(@"%@:%ld", [error domain], [error code] );
                                      } else {
-                                         //AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
-                                         EntityGyroscope* data = (EntityGyroscope *)[NSEntityDescription
-                                                                                     insertNewObjectForEntityForName:[self getEntityName]
-                                                                                     inManagedObjectContext:[self getSensorManagedObjectContext]];
-                                         
-                                         data.device_id = [self getDeviceId];
-                                         data.timestamp = [AWAREUtils getUnixTimestamp:[NSDate new]];
-                                         data.axis_x = [NSNumber numberWithDouble:gyroData.rotationRate.x];
-                                         data.axis_y = [NSNumber numberWithDouble:gyroData.rotationRate.y];
-                                         data.axis_z = [NSNumber numberWithDouble:gyroData.rotationRate.z];
-                                         data.accuracy = @0;
-                                         data.label =  @"";
-                                         
+                                         NSNumber *unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
+                                         NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+                                         [dict setObject:unixtime forKey:@"timestamp"];
+                                         [dict setObject:[self getDeviceId] forKey:@"device_id"];
+                                         [dict setObject:[NSNumber numberWithDouble:gyroData.rotationRate.x] forKey:@"axis_x"];
+                                         [dict setObject:[NSNumber numberWithDouble:gyroData.rotationRate.y] forKey:@"axis_y"];
+                                         [dict setObject:[NSNumber numberWithDouble:gyroData.rotationRate.z] forKey:@"axis_z"];
+                                         [dict setObject:@0 forKey:@"accuracy"];
+                                         [dict setObject:@"" forKey:@"label"];
                                          [self setLatestValue:[NSString stringWithFormat:@"%f, %f, %f",gyroData.rotationRate.x,gyroData.rotationRate.y,gyroData.rotationRate.z]];
                                          
-                                         NSDictionary *userInfo = [NSDictionary dictionaryWithObject:data
+                                         if([self getDBType] == AwareDBTypeCoreData){
+                                             [self saveData:dict];
+                                         }else if([self getDBType] == AwareDBTypeTextFile){
+                                             dispatch_async(dispatch_get_main_queue(), ^{
+                                                 [self saveData:dict];
+                                             });
+                                         }
+                                         
+                                         NSDictionary *userInfo = [NSDictionary dictionaryWithObject:dict
                                                                                               forKey:EXTRA_DATA];
                                          [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_GYROSCOPE
                                                                                              object:nil
                                                                                            userInfo:userInfo];
-                                         
-                                         [self saveDataToDB];
-                                         
-                                         
-                                         //            NSNumber *unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
-                                         //            NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-                                         //            [dic setObject:unixtime forKey:@"timestamp"];
-                                         //            [dic setObject:[self getDeviceId] forKey:@"device_id"];
-                                         //            [dic setObject:[NSNumber numberWithDouble:gyroData.rotationRate.x] forKey:@"axis_x"];
-                                         //            [dic setObject:[NSNumber numberWithDouble:gyroData.rotationRate.y] forKey:@"axis_y"];
-                                         //            [dic setObject:[NSNumber numberWithDouble:gyroData.rotationRate.z] forKey:@"axis_z"];
-                                         //            [dic setObject:@0 forKey:@"accuracy"];
-                                         //            [dic setObject:@"" forKey:@"label"];
-                                         //            [self setLatestValue:[NSString stringWithFormat:@"%f, %f, %f",gyroData.rotationRate.x,gyroData.rotationRate.y,gyroData.rotationRate.z]];
-                                         //            dispatch_async(dispatch_get_main_queue(), ^{
-                                         //                [self saveData:dic];
-                                         //            });
-                                         
-                                     }
+                                    }
                                  });
                              }];
     return YES;
+}
+
+
+- (void)insertNewEntityWithData:(NSDictionary *)data managedObjectContext:(NSManagedObjectContext *)childContext entityName:(NSString *)entity{
+    EntityGyroscope* entityGyro = (EntityGyroscope *)[NSEntityDescription
+                                                insertNewObjectForEntityForName:entity
+                                                inManagedObjectContext:childContext];
+    
+    entityGyro.device_id = [data objectForKey:@"device_id"];
+    entityGyro.timestamp = [data objectForKey:@"timestamp"];
+    entityGyro.axis_x = [data objectForKey:@"axis_x"];
+    entityGyro.axis_y = [data objectForKey:@"axis_y"];
+    entityGyro.axis_z = [data objectForKey:@"axis_z"];
+    entityGyro.accuracy = [data objectForKey:@"accuracy"];
+    entityGyro.label =  [data objectForKey:@"label"];
 }
 
 - (BOOL)stopSensor{

@@ -123,7 +123,7 @@
             [_sharedLocationManager requestAlwaysAuthorization];
         }
         // Set a movement threshold for new events.
-        // _sharedLocationManager.distanceFilter = 200; // meters
+        _sharedLocationManager.distanceFilter = 25; // meters
         [_sharedLocationManager startUpdatingLocation];
         [_sharedLocationManager startMonitoringSignificantLocationChanges];
     }

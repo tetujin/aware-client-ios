@@ -10,6 +10,7 @@
 #import "SCNetworkReachability.h"
 #import "AWAREKeys.h"
 #import "AWAREStudy.h"
+#import "AWAREUtils.h"
 
 @implementation AWAREDataUploader{
     NSString * sensorName;
@@ -428,6 +429,7 @@ didReceiveResponse:(NSURLResponse *)response
     return YES;
 }
 
+
 - (bool)foregroundSyncRequestWithSensorName:(NSString * )name{
     // init variables
     NSString *deviceId = [awareStudy getDeviceId];
@@ -493,9 +495,6 @@ didReceiveResponse:(NSURLResponse *)response
 
 ////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////
-
-
-
 /**
  * Sync with AWARE database
  */
@@ -560,12 +559,10 @@ didReceiveResponse:(NSURLResponse *)response
     }
     return @"";
 }
+
+
 /////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////
-
-
-
-
 /**
  * Get progress
  */
@@ -596,9 +593,6 @@ didReceiveResponse:(NSURLResponse *)response
 
 ////////////////////////////////////////////
 ////////////////////////////////////////////
-
-
-
 /**
  * Create Table Methods
  */

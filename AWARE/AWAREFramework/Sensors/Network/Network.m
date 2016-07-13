@@ -111,35 +111,31 @@
 //////////////////////////////////////////////////////////////
 
 - (void) getNetworkInfo{
-    
-    // AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
-    EntityNetwork* data = (EntityNetwork *)[NSEntityDescription
-                                        insertNewObjectForEntityForName:[self getEntityName]
-                                        inManagedObjectContext:[self getSensorManagedObjectContext]];
-    
-    data.device_id = [self getDeviceId];
-    data.timestamp = [AWAREUtils getUnixTimestamp:[NSDate new]];
-    data.network_type = networkType;
-    data.network_state = [NSNumber numberWithInt:networkState];
-    data.network_subtype = networkSubtype;
-    
-    [self saveDataToDB];
-//    NSError * e = nil;
-//    [delegate.managedObjectContext save:&e];
-//    if (e) {
-//        NSLog(@"%@", e.description);
-//    }
-    
-//    NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
-//    NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-//    [dic setObject:unixtime forKey:@"timestamp"];
-//    [dic setObject:[self getDeviceId] forKey:@"device_id"];
-//    [dic setObject:networkType forKey:@"network_type"];
-//    [dic setObject:networkSubtype forKey:@"network_subtype"];
-//    [dic setObject:[NSNumber numberWithInt:networkState] forKey:@"network_state"];
+
     [self setLatestValue:[NSString stringWithFormat:@"%@", networkSubtype]];
-//    [self saveData:dic toLocalFile:SENSOR_NETWORK];
+ 
+    NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    [dict setObject:unixtime forKey:@"timestamp"];
+    [dict setObject:[self getDeviceId] forKey:@"device_id"];
+    [dict setObject:networkType forKey:@"network_type"];
+    [dict setObject:networkSubtype forKey:@"network_subtype"];
+    [dict setObject:[NSNumber numberWithInt:networkState] forKey:@"network_state"];
+    
+    [self saveData:dict];
 }
 
+- (void)insertNewEntityWithData:(NSDictionary *)data managedObjectContext:(NSManagedObjectContext *)childContext entityName:(NSString *)entity{
+    EntityNetwork* entityNetwork = (EntityNetwork *)[NSEntityDescription
+                                            insertNewObjectForEntityForName:entity
+                                                     inManagedObjectContext:childContext];
+    
+    entityNetwork.device_id = [data objectForKey:@"device_id"];
+    entityNetwork.timestamp = [data objectForKey:@"timestamp"];
+    entityNetwork.network_type =    [data objectForKey:@"network_type"];
+    entityNetwork.network_state =   [data objectForKey:@"network_state"];
+    entityNetwork.network_subtype = [data objectForKey:@"network_subtype"];
+
+}
 
 @end

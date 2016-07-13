@@ -143,7 +143,14 @@ int ONE_HOUR = 60*60;
     return YES;
 }
 
+- (BOOL)syncAwareDBInForeground{
+    return [super syncAwareDBInForeground];
+}
 
+- (BOOL) isUploading{
+    // NSLog(@"%d %@", [super isUploading], [self getEntityName]);
+    return [super isUploading];
+}
 
 /////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////
@@ -259,8 +266,7 @@ didReceiveResponse:(NSURLResponse *)response
                                                                                                    inManagedObjectContext:delegate.managedObjectContext];
             
             weatherData.device_id = [self getDeviceId];
-            NSNumber * timestamp = [AWAREUtils getUnixTimestamp:[NSDate new]];
-            weatherData.timestamp = timestamp;
+            weatherData.timestamp = [AWAREUtils getUnixTimestamp:[NSDate new]];
             weatherData.city = [self getName];
             weatherData.temperature = [self getTemp];
             weatherData.temperature_max = [self getTempMax];

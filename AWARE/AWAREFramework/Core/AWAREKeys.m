@@ -84,6 +84,45 @@ NSString* const SENSOR_PLUGIN_CAMPUS = @"plugin_cmu_esm";
 NSString* const SENSOR_PLUGIN_PEDOMETER = @"plugin_pedometer";
 NSString* const SENSOR_AWARE_DEBUG = @"aware_debug";
 
+
+NSString* const SENSOR_PLUGIN_MSBAND_SENSORS_CALORIES      = @"plugin_msband_sensors_calories";
+NSString* const SENSOR_PLUGIN_MSBAND_SENSORS_DEVICECONTACT = @"plugin_msband_sensors_devicecontact";
+NSString* const SENSOR_PLUGIN_MSBAND_SENSORS_DISTANCE      = @"plugin_msband_sensors_distance";
+NSString* const SENSOR_PLUGIN_MSBAND_SENSORS_HEARTRATE     = @"plugin_msband_sensors_heartrate";
+NSString* const SENSOR_PLUGIN_MSBAND_SENSORS_PEDOMETER     = @"plugin_msband_sensors_pedometer";
+NSString* const SENSOR_PLUGIN_MSBAND_SENSORS_SKINTEMP      = @"plugin_msband_sensors_skintemp";
+NSString* const SENSOR_PLUGIN_MSBAND_SENSORS_UV            = @"plugin_msband_sensors_uv";
+NSString* const SENSOR_PLUGIN_MSBAND_SENSORS_BATTERYGAUGE  = @"plugin_msband_sensors_batterygauge";
+NSString* const SENSOR_PLUGIN_MSBAND_SENSORS_GSR           = @"plugin_msband_sensors_gsr";
+NSString* const SENSOR_PLUGIN_MSBAND_SENSORS_ACC           = @"plugin_msband_sensors_accelerometer";
+NSString* const SENSOR_PLUGIN_MSBAND_SENSORS_GYRO          = @"plugin_msband_sensors_gyroscope";
+NSString* const SENSOR_PLUGIN_MSBAND_SENSORS_ALTIMETER     = @"plugin_msband_sensors_altimeter";
+NSString* const SENSOR_PLUGIN_MSBAND_SENSORS_BAROMETER     = @"plugin_msband_sensors_barometer";
+NSString* const SENSOR_PLUGIN_MSBAND_SENSORS_RRINTERVAL    = @"plugin_msband_sensors_rrinterval";
+
+NSString* const SENSOR_PLUGIN_MSBAND_KEY_ACTIVE_TIME_INTERVAL_IN_MINUTE = @"active_time_interval_in_minute";
+NSString* const SENSOR_PLUGIN_MSBAND_KEY_ACTIVE_IN_MINUTE = @"active_time_in_minute";
+
+//_PLUGIN_MSBAND_SENSORS_ACC = @"plugin_msband_sensors_accelerometer";
+//_PLUGIN_MSBAND_SENSORS_GYRO = @"plugin_msband_sensors_gyroscope";
+//_PLUGIN_MSBAND_SENSORS_CALORIES = @"plugin_msband_sensors_calories";
+//_PLUGIN_MSBAND_SENSORS_DEVICECONTACT = @"plugin_msband_sensors_devicecontact";
+//_PLUGIN_MSBAND_SENSORS_DISTANCE = @"plugin_msband_sensors_distance";
+//_PLUGIN_MSBAND_SENSORS_HEARTRATE = @"plugin_msband_sensors_heartrate";
+//_PLUGIN_MSBAND_SENSORS_PEDOMETER = @"plugin_msband_sensors_pedometer";
+//_PLUGIN_MSBAND_SENSORS_SKINTEMP = @"plugin_msband_sensors_skintemp";
+//_PLUGIN_MSBAND_SENSORS_UV = @"plugin_msband_sensors_uv";
+//
+//_PLUGIN_MSBAND_SENSORS_BATTERYGAUGE = @"plugin_msband_sensors_batterygauge";
+//_PLUGIN_MSBAND_SENSORS_GSR = @"plugin_msband_sensors_gsr";
+//_PLUGIN_MSBAND_SENSORS_ALTIMETER = @"plugin_msband_sensors_altimeter";
+//_PLUGIN_MSBAND_SENSORS_BAROMETER = @"plugin_msband_sensors_barometer";
+//_PLUGIN_MSBAND_SENSORS_RRINTERVAL = @"plugin_msband_sensors_rrinterval";
+//
+//_PLUGIN_MSBAND_KEY_ACTIVE_TIME_INTERVAL_IN_MINUTE = @"active_time_interval_in_minute";
+//_PLUGIN_MSBAND_KEY_ACTIVE_IN_MINUTE = @"active_time_in_minute";
+
+
 NSString* const SENSOR_APPLICATION_HISTORY = @"applications_history";
 
 

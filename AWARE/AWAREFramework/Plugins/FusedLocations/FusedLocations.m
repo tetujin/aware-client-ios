@@ -6,7 +6,9 @@
 //  Copyright © 2016 Yuuki NISHIYAMA. All rights reserved.
 //
 #import "FusedLocations.h"
-#import "AppDelegate.h"
+#import "Locations.h"
+#import "VisitLocations.h"
+// #import "AppDelegate.h"
 #import "EntityLocation.h"
 #import "EntityLocationVisit.h"
 
@@ -14,8 +16,8 @@
     NSTimer *locationTimer;
     IBOutlet CLLocationManager *locationManager;
     
-    AWARESensor * fusedLocationsSensor;
-    AWARESensor * visitLocationSensor;
+    Locations * fusedLocationsSensor;
+    VisitLocations * visitLocationSensor;
     AWAREStudy * awareStudy;
 }
 
@@ -27,49 +29,21 @@
     awareStudy = study;
     if (self) {
         // Make a fused location sensor
-        fusedLocationsSensor = [[AWARESensor alloc] initWithAwareStudy:awareStudy
-                                                            sensorName:@"locations"
-                                                          dbEntityName:NSStringFromClass([EntityLocation class])
-                                                                dbType:AwareDBTypeCoreData];
+        fusedLocationsSensor = [[Locations alloc] initWithAwareStudy:awareStudy];
+        
         // Make a visit location sensor
-        visitLocationSensor = [[AWARESensor alloc] initWithAwareStudy:awareStudy
-                                                           sensorName:@"locations_visit"
-                                                         dbEntityName:NSStringFromClass([EntityLocationVisit class])
-                                                               dbType:AwareDBTypeCoreData];
+        visitLocationSensor = [[VisitLocations alloc] initWithAwareStudy:awareStudy];
     }
     return self;
 }
 
 - (void)createTable{
     // Send a table create query
-    [fusedLocationsSensor createTable:@"_id integer primary key autoincrement,"
-     "timestamp real default 0,"
-     "device_id text default '',"
-     "double_latitude real default 0,"
-     "double_longitude real default 0,"
-     "double_bearing real default 0,"
-     "double_speed real default 0,"
-     "double_altitude real default 0,"
-     "provider text default '',"
-     "accuracy integer default 0,"
-     "label text default '',"
-     "UNIQUE (timestamp,device_id)"];
-    //////////////////////////
+    [fusedLocationsSensor createTable];
     
+    //////////////////////////
     // Send a table create query
-    [visitLocationSensor createTable:@"_id integer primary key autoincrement,"
-     "timestamp real default 0,"
-     "device_id text default '',"
-     "double_latitude real default 0,"
-     "double_longitude real default 0,"
-     "double_arrival real default 0,"
-     "double_departure real default 0,"
-     "address text default '',"
-     "name text default '',"
-     "provider text default '',"
-     "accuracy integer default 0,"
-     "label text default '',"
-     "UNIQUE (timestamp,device_id)"];
+    [visitLocationSensor createTable];
 }
 
 - (BOOL)startSensorWithSettings:(NSArray *)settings {
@@ -141,8 +115,6 @@
                                                            selector:@selector(getGpsData:)
                                                            userInfo:nil
                                                             repeats:YES];
-            
-        }else{
             
         }
 
@@ -223,111 +195,45 @@
 
 - (void) saveLocation:(CLLocation *)location{
 
-    NSNumber *unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
+    // save location data by using location sensor
+    int accuracy = (location.verticalAccuracy + location.horizontalAccuracy) / 2;
     
-    // AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
-    EntityLocation * locationData = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([EntityLocation class])
-                                                                  inManagedObjectContext:[fusedLocationsSensor getSensorManagedObjectContext]];
-    locationData.device_id = [self getDeviceId];
-    locationData.timestamp = unixtime;
-    locationData.double_latitude = [NSNumber numberWithDouble:location.coordinate.latitude];
-    locationData.double_longitude = [NSNumber numberWithDouble:location.coordinate.longitude];
-    locationData.double_bearing = [NSNumber numberWithDouble:location.course];
-    locationData.double_speed = [NSNumber numberWithDouble:location.speed];
-    locationData.double_altitude = [NSNumber numberWithDouble:location.altitude];
-    locationData.provider = @"fused";
-    locationData.accuracy = [NSNumber numberWithInt:location.verticalAccuracy];
-    locationData.label = @"";
+    NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    [dict setObject:unixtime forKey:@"timestamp"];
+    [dict setObject:[self getDeviceId] forKey:@"device_id"];
+    [dict setObject:[NSNumber numberWithDouble:location.coordinate.latitude] forKey:@"double_latitude"];
+    [dict setObject:[NSNumber numberWithDouble:location.coordinate.longitude] forKey:@"double_longitude"];
+    [dict setObject:[NSNumber numberWithDouble:location.course] forKey:@"double_bearing"];
+    [dict setObject:[NSNumber numberWithDouble:location.speed] forKey:@"double_speed"];
+    [dict setObject:[NSNumber numberWithDouble:location.altitude] forKey:@"double_altitude"];
+    [dict setObject:@"fused" forKey:@"provider"];
+    [dict setObject:[NSNumber numberWithInt:accuracy] forKey:@"accuracy"];
+    [dict setObject:@"" forKey:@"label"];
+    [fusedLocationsSensor saveData:dict];
     
-    [self setLatestValue:[NSString stringWithFormat:@"%f, %f, %f", location.coordinate.latitude, location.coordinate.longitude, location.speed]];
+    [self setLatestValue:[NSString stringWithFormat:@"%f, %f, %f",
+                          location.coordinate.latitude,
+                          location.coordinate.longitude,
+                          location.speed]];
     
-    [fusedLocationsSensor saveDataToDB];
-
     if ([self isDebug]) {
-        [AWAREUtils sendLocalNotificationForMessage:[NSString stringWithFormat:@"Location: %f, %f, %f", location.coordinate.latitude, location.coordinate.longitude, location.speed] soundFlag:NO];
+        [AWAREUtils sendLocalNotificationForMessage:[NSString stringWithFormat:@"Location: %f, %f, %f",
+                                                     location.coordinate.latitude,
+                                                     location.coordinate.longitude,
+                                                     location.speed]
+                                          soundFlag:NO];
     }
-
 }
 
 
 - (void)locationManager:(CLLocationManager *)manager
                didVisit:(CLVisit *)visit {
 
-    CLGeocoder *ceo = [[CLGeocoder alloc]init];
-    CLLocation *loc = [[CLLocation alloc]initWithLatitude:visit.coordinate.latitude longitude:visit.coordinate.longitude]; //insert your coordinates
-    [ceo reverseGeocodeLocation:loc
-              completionHandler:^(NSArray *placemarks, NSError *error) {
-                  CLPlacemark * placemark = nil;
-                  // NSMutableDictionary * visitDic = [[NSMutableDictionary alloc] init];
-                  NSString * name = @"";
-                  NSString * address = @"";
-                  if (placemarks.count > 0) {
-                      placemark = [placemarks objectAtIndex:0];
-                      address = [[placemark.addressDictionary valueForKey:@"FormattedAddressLines"] componentsJoinedByString:@", "];
-                      [self setLatestValue:address];
-                      NSString* visitMsg = [NSString stringWithFormat:@"I am currently at %@", address];
-                      // Set name
-                      if (placemark.name != nil) {
-                          //[visitDic setObject:placemark.name forKey:@"name"];
-                          name = placemark.name;
-                          if ([self isDebug]) {
-                              NSLog( @"%@", visitMsg );
-                              [AWAREUtils sendLocalNotificationForMessage:visitMsg soundFlag:YES];
-                          }
-                      }
-                  }
-                  
-                  NSNumber * timestamp = [AWAREUtils getUnixTimestamp:[NSDate new]];
-                  NSNumber * depature = [AWAREUtils getUnixTimestamp:[visit departureDate]];
-                  NSNumber * arrival = [AWAREUtils getUnixTimestamp:[visit arrivalDate]];
-                  
-                  /*
-                   *  arrivalDate
-                   *
-                   *  Discussion:
-                   *    The date when the visit began.  This may be equal to [NSDate
-                   *    distantPast] if the true arrival date isn't available.
-                   */
-                  if([[visit departureDate] isEqualToDate:[NSDate distantPast]]){
-                      arrival = @-1;
-//                      [self sendLocalNotificationForMessage:[NSString stringWithFormat:@"departure date is %@",[NSDate distantPast]] soundFlag:NO];
-                  }
-                  
-                  /*
-                   *  departureDate
-                   *
-                   *  Discussion:
-                   *    The date when the visit ended.  This is equal to [NSDate
-                   *    distantFuture] if the device hasn't yet left.
-                   */
-                  
-                  if([[visit arrivalDate] isEqualToDate:[NSDate distantFuture]]){
-                      depature = @-1;
-//                      [self sendLocalNotificationForMessage:[NSString stringWithFormat:@"departure date is %@",[NSDate distantFuture]] soundFlag:NO];
-                  }
-                  
-                   dispatch_async(dispatch_get_main_queue(), ^{
-                      // AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
-                      EntityLocationVisit * visitData = (EntityLocationVisit *)[NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([EntityLocationVisit class])
-                                                                                                             inManagedObjectContext:[visitLocationSensor getSensorManagedObjectContext]];
-                      
-                      visitData.device_id = [self getDeviceId];
-                      visitData.timestamp = timestamp;
-                      visitData.double_latitude = [NSNumber numberWithDouble:visit.coordinate.latitude];
-                      visitData.double_longitude = [NSNumber numberWithDouble:visit.coordinate.longitude];
-                      visitData.provider = @"fused";
-                      visitData.accuracy = [NSNumber numberWithInt:visit.horizontalAccuracy];
-                      visitData.address = address;
-                      visitData.name = name;
-                      visitData.double_arrival = arrival;
-                      visitData.double_departure = depature;
-                      visitData.label = @"";
-                      
-                      [visitLocationSensor saveDataToDB];
-                   });
-                  return;
-    }];
+    [visitLocationSensor locationManager:manager didVisit:visit];
+    
 }
+
 
 - (bool)isUploading{
     if([fusedLocationsSensor isUploading] || [visitLocationSensor isUploading]){
@@ -345,23 +251,6 @@
 //    //    [sdManager addSensorDataMagx:newHeading.x magy:newHeading.y magz:newHeading.z];
 //    //    [sdManager addHeading: theHeading];
 //}
-
-
-
-//    NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-//    [dic setObject:unixtime forKey:@"timestamp"];
-//    [dic setObject:[self getDeviceId] forKey:@"device_id"];
-//    [dic setObject:[NSNumber numberWithDouble:location.coordinate.latitude] forKey:@"double_latitude"];
-//    [dic setObject:[NSNumber numberWithDouble:location.coordinate.longitude] forKey:@"double_longitude"];
-//    [dic setObject:[NSNumber numberWithDouble:location.course] forKey:@"double_bearing"];
-//    [dic setObject:[NSNumber numberWithDouble:location.speed] forKey:@"double_speed"];
-//    [dic setObject:[NSNumber numberWithDouble:location.altitude] forKey:@"double_altitude"];
-//    [dic setObject:@"fused" forKey:@"provider"];
-//    [dic setObject:[NSNumber numberWithInt:location.verticalAccuracy] forKey:@"accuracy"];
-//    [dic setObject:@"" forKey:@"label"];
-//    [self setLatestValue:[NSString stringWithFormat:@"%f, %f, %f", location.coordinate.latitude, location.coordinate.longitude, location.speed]];
-//    [fusedLocationsSensor saveData:dic];
-
 
 
 @end

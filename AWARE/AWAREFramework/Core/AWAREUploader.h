@@ -63,8 +63,8 @@
 - (NSString *) getSyncProgressAsText:(NSString *)sensorName;
 
 
-- (void) trackDebugEventsWithDebugSensor:(Debug*)debug;
-- (bool)saveDebugEventWithText:(NSString *)eventText type:(NSInteger)type label:(NSString *)label;
+- (BOOL) trackDebugEvents;
+- (bool) saveDebugEventWithText:(NSString *)eventText type:(NSInteger)type label:(NSString *)label;
 
 
 - (NSString *) getWebserviceUrl;

@@ -9,7 +9,6 @@
 #import <Foundation/Foundation.h>
 #import "AWAREStudy.h"
 #import "AWAREDataUploader.h"
-#import "AppDelegate.h"
 #import "AWAREUploader.h"
 
 typedef enum: NSInteger {
@@ -24,8 +23,16 @@ typedef enum: NSInteger {
 
 @interface AWARECoreDataManager : AWAREUploader <AWAREDataUploaderDelegate, NSURLSessionDataDelegate, NSURLSessionTaskDelegate>
 
+// - (instancetype) initWithAwareStudy:(AWAREStudy *) study sensorName:(NSString *)sensorName dbEntityName:(NSString *) entityName;
+
 - (instancetype)initWithAwareStudy:(AWAREStudy *)study
                         sensorName:(NSString *)name
                       dbEntityName:(NSString *)entity;
+
+- (bool) saveDataWithArray:(NSArray*)array;
+- (bool) saveData:(NSDictionary *)data;
+- (void) insertNewEntityWithData:(NSDictionary *)data
+           managedObjectContext:(NSManagedObjectContext *)childContext
+                     entityName:(NSString*) entity;
 
 @end

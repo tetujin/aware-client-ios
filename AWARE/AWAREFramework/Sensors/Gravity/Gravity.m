@@ -92,31 +92,52 @@
                                                // Save sensor data to the local database.
                                                
                                                dispatch_async(dispatch_get_main_queue(),^{
-                                                   //AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
-                                                   EntityGravity* gravityData = (EntityGravity *)[NSEntityDescription
-                                                                                                  insertNewObjectForEntityForName:[self getEntityName]
-                                                                                                  inManagedObjectContext:[self getSensorManagedObjectContext]];
                                                    
-                                                   gravityData.device_id = [self getDeviceId];
-                                                   gravityData.timestamp = [AWAREUtils getUnixTimestamp:[NSDate new]];
-                                                   gravityData.double_values_0 = [NSNumber numberWithDouble:motion.gravity.x];
-                                                   gravityData.double_values_1 = [NSNumber numberWithDouble:motion.gravity.y];
-                                                   gravityData.double_values_2 = [NSNumber numberWithDouble:motion.gravity.z];
-                                                   gravityData.label =  @"";
+                                                  NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
+                                                  NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+                                                  [dict setObject:unixtime forKey:@"timestamp"];
+                                                  [dict setObject:[self getDeviceId] forKey:@"device_id"];
+                                                  [dict setObject:[NSNumber numberWithDouble:motion.gravity.x] forKey:@"double_values_0"]; //double
+                                                  [dict setObject:[NSNumber numberWithDouble:motion.gravity.y]  forKey:@"double_values_1"]; //double
+                                                  [dict setObject:[NSNumber numberWithDouble:motion.gravity.z]  forKey:@"double_values_2"]; //double
+                                                  [dict setObject:@0 forKey:@"accuracy"];//int
+                                                  [dict setObject:@"" forKey:@"label"]; //text
+                                                  [self setLatestValue:[NSString stringWithFormat:@"%f, %f, %f",motion.attitude.pitch, motion.attitude.roll,motion.attitude.yaw]];
+                                                  
                                                    
-                                                   [self setLatestValue:[NSString stringWithFormat:@"%f, %f, %f",motion.attitude.pitch, motion.attitude.roll,motion.attitude.yaw]];
-                                                   
-                                                   NSDictionary *userInfo = [NSDictionary dictionaryWithObject:gravityData
+                                                   NSDictionary *userInfo = [NSDictionary dictionaryWithObject:dict
                                                                                                         forKey:EXTRA_DATA];
                                                    [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_GRAVITY
                                                                                                        object:nil
                                                                                                      userInfo:userInfo];
-                                                   [self saveDataToDB];
+                                                   
+                                                   if([self getDBType] == AwareDBTypeCoreData){
+                                                       [self saveData:dict];
+                                                   }else if([self getDBType] == AwareDBTypeTextFile){
+                                                       dispatch_async(dispatch_get_main_queue(), ^{
+                                                           [self saveData:dict];
+                                                       });
+                                                   }
+                                                
                                                });
                                            }];
     }
 
     return YES;
+}
+
+- (void)insertNewEntityWithData:(NSDictionary *)data managedObjectContext:(NSManagedObjectContext *)childContext entityName:(NSString *)entity{
+    EntityGravity* gravityData = (EntityGravity *)[NSEntityDescription
+                                                   insertNewObjectForEntityForName:entity
+                                                   inManagedObjectContext:childContext];
+    
+    gravityData.device_id = [data objectForKey:@"device_id"];
+    gravityData.timestamp = [data objectForKey:@"timestamp"];
+    gravityData.double_values_0 = [data objectForKey:@"double_values_0"];
+    gravityData.double_values_1 = [data objectForKey:@"double_values_1"];
+    gravityData.double_values_2 = [data objectForKey:@"double_values_2"];
+    gravityData.label =  [data objectForKey:@"label"];
+
 }
 
 - (BOOL)stopSensor{
@@ -127,18 +148,6 @@
 
 
 /////////////// for TextFile based DB
-//                                               NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
-//                                               NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-//                                               [dic setObject:unixtime forKey:@"timestamp"];
-//                                               [dic setObject:[self getDeviceId] forKey:@"device_id"];
-//                                               [dic setObject:[NSNumber numberWithDouble:motion.gravity.x] forKey:@"double_values_0"]; //double
-//                                               [dic setObject:[NSNumber numberWithDouble:motion.gravity.y]  forKey:@"double_values_1"]; //double
-//                                               [dic setObject:[NSNumber numberWithDouble:motion.gravity.z]  forKey:@"double_values_2"]; //double
-//                                               [dic setObject:@0 forKey:@"accuracy"];//int
-//                                               [dic setObject:@"" forKey:@"label"]; //text
-//                                               [self setLatestValue:[NSString stringWithFormat:@"%f, %f, %f",motion.attitude.pitch, motion.attitude.roll,motion.attitude.yaw]];
-//                                               dispatch_async(dispatch_get_main_queue(), ^{
-//                                                   [self saveData:dic];
-//                                               });
+//
 
 @end

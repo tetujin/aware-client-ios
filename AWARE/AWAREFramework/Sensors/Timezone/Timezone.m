@@ -85,31 +85,36 @@
     [NSTimeZone localTimeZone];
     
     NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
-    // AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
-    EntityTimezone* data = (EntityTimezone *)[NSEntityDescription
-                                          insertNewObjectForEntityForName:[self getEntityName]
-                                          inManagedObjectContext:[self getSensorManagedObjectContext]];
     
-    data.device_id = [self getDeviceId];
-    data.timestamp = unixtime;
-    data.timezone = [[NSTimeZone localTimeZone] description];
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    [dict setObject:unixtime forKey:@"timestamp"];
+    [dict setObject:[self getDeviceId] forKey:@"device_id"];
+    [dict setObject:[[NSTimeZone localTimeZone] description] forKey:@"timezone"];
+    [self setLatestValue:[NSString stringWithFormat:@"%@", [[NSTimeZone localTimeZone] description]]];
+    [self saveData:dict];
     
-    [self saveDataToDB];
-
-    NSDictionary *userInfo = [NSDictionary dictionaryWithObject:data
+    // Broadcast
+    NSDictionary *userInfo = [NSDictionary dictionaryWithObject:dict
                                                          forKey:EXTRA_DATA];
     [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_TIMEZONE
                                                         object:nil
                                                       userInfo:userInfo];
 
     
-//    NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
-//    NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-//    [dic setObject:unixtime forKey:@"timestamp"];
-//    [dic setObject:[self getDeviceId] forKey:@"device_id"];
-//    [dic setObject:[[NSTimeZone localTimeZone] description] forKey:@"timezone"];
-    [self setLatestValue:[NSString stringWithFormat:@"%@", [[NSTimeZone localTimeZone] description]]];
-//    [self saveData:dic];
+}
+
+- (void)insertNewEntityWithData:(NSDictionary *)data
+           managedObjectContext:(NSManagedObjectContext *)childContext
+                     entityName:(NSString *)entity{
+    EntityTimezone* entityTimezone = (EntityTimezone *)[NSEntityDescription
+                                              insertNewObjectForEntityForName:entity
+                                              inManagedObjectContext:childContext];
+    
+    entityTimezone.device_id = [data objectForKey:@"device_id"];
+    entityTimezone.timestamp = [data objectForKey:@"timestamp"];
+    entityTimezone.timezone = [[NSTimeZone localTimeZone] description];
+
 }
 
 @end
+

@@ -9,27 +9,14 @@
 //
 
 #import "Debug.h"
-#import "AWAREKeys.h"
 #import "EntityDebug.h"
+#import "AWAREKeys.h"
 #import "AppDelegate.h"
+#import "AWAREDebugMessageLogger.h"
 
 @implementation Debug {
-    NSString * KEY_DEBUG_TIMESTAMP;
-    NSString * KEY_DEBUG_DEVICE_ID;
-    NSString * KEY_DEBUG_EVENT;
-    NSString * KEY_DEBUG_TYPE;
-    NSString * KEY_DEBUG_NETWORK;
-    NSString * KEY_DEBUG_DEVICE;
-    NSString * KEY_DEBUG_OS;
-    NSString * KEY_DEBUG_APP_VERSION;
-    NSString * KEY_DEBUG_LABEL;
-    NSString * KEY_DEBUG_BATTERY;
-    NSString * KEY_DEBUG_BATTERY_STATE;
-    
-    NSString* KEY_APP_VERSION;
-    NSString* KEY_OS_VERSION;
-    NSString* KEY_APP_INSTALL;
     AWAREStudy * awareStudy;
+    AWAREDebugMessageLogger * dmLogger;
 }
 
 - (instancetype)initWithAwareStudy:(AWAREStudy *) study {
@@ -50,22 +37,7 @@
                               dbType:dbType];
     if (self) {
         awareStudy = study;
-        KEY_DEBUG_TIMESTAMP = @"timestamp";
-        KEY_DEBUG_DEVICE_ID = @"device_id";
-        KEY_DEBUG_EVENT = @"event";
-        KEY_DEBUG_TYPE = @"type";
-        KEY_DEBUG_LABEL= @"label";
-        KEY_DEBUG_NETWORK = @"network";
-        KEY_DEBUG_DEVICE = @"device";
-        KEY_DEBUG_OS = @"os";
-        KEY_DEBUG_APP_VERSION = @"app_version";
-        KEY_DEBUG_BATTERY = @"battery";
-        KEY_DEBUG_BATTERY_STATE = @"battery_state";
-        
-        
-        KEY_APP_VERSION = @"key_application_history_app_version";
-        KEY_OS_VERSION = @"key_application_history_os_version";
-        KEY_APP_INSTALL = @"key_application_history_app_install";
+        dmLogger = [[AWAREDebugMessageLogger alloc] initWithAwareStudy:awareStudy];
     }
     return self;
 }
@@ -77,17 +49,17 @@
     
     NSMutableString *query = [[NSMutableString alloc] init];
     [query appendString:@"_id integer primary key autoincrement,"];
-    [query appendString:[NSString stringWithFormat:@"%@ real default 0,", KEY_DEBUG_TIMESTAMP]];
-    [query appendString:[NSString stringWithFormat:@"%@ text default '',", KEY_DEBUG_DEVICE_ID]];
-    [query appendString:[NSString stringWithFormat:@"%@ text default '',", KEY_DEBUG_EVENT]];
-    [query appendString:[NSString stringWithFormat:@"%@ integer default 0,", KEY_DEBUG_TYPE]];
-    [query appendString:[NSString stringWithFormat:@"%@ text default '',", KEY_DEBUG_LABEL]];
-    [query appendString:[NSString stringWithFormat:@"%@ text default '',", KEY_DEBUG_NETWORK]];
-    [query appendString:[NSString stringWithFormat:@"%@ text default '',",KEY_DEBUG_APP_VERSION]];
-    [query appendString:[NSString stringWithFormat:@"%@ text default '',",KEY_DEBUG_DEVICE]];
-    [query appendString:[NSString stringWithFormat:@"%@ text default '',",KEY_DEBUG_OS]];
-    [query appendString:[NSString stringWithFormat:@"%@ integer default 0,", KEY_DEBUG_BATTERY]];
-    [query appendString:[NSString stringWithFormat:@"%@ integer default 0,", KEY_DEBUG_BATTERY_STATE]];
+    [query appendString:[NSString stringWithFormat:@"%@ real default 0,", dmLogger.KEY_DEBUG_TIMESTAMP]];
+    [query appendString:[NSString stringWithFormat:@"%@ text default '',", dmLogger.KEY_DEBUG_DEVICE_ID]];
+    [query appendString:[NSString stringWithFormat:@"%@ text default '',", dmLogger.KEY_DEBUG_EVENT]];
+    [query appendString:[NSString stringWithFormat:@"%@ integer default 0,", dmLogger.KEY_DEBUG_TYPE]];
+    [query appendString:[NSString stringWithFormat:@"%@ text default '',", dmLogger.KEY_DEBUG_LABEL]];
+    [query appendString:[NSString stringWithFormat:@"%@ text default '',", dmLogger.KEY_DEBUG_NETWORK]];
+    [query appendString:[NSString stringWithFormat:@"%@ text default '',", dmLogger.KEY_DEBUG_APP_VERSION]];
+    [query appendString:[NSString stringWithFormat:@"%@ text default '',", dmLogger.KEY_DEBUG_DEVICE]];
+    [query appendString:[NSString stringWithFormat:@"%@ text default '',", dmLogger.KEY_DEBUG_OS]];
+    [query appendString:[NSString stringWithFormat:@"%@ integer default 0,", dmLogger.KEY_DEBUG_BATTERY]];
+    [query appendString:[NSString stringWithFormat:@"%@ integer default 0,", dmLogger.KEY_DEBUG_BATTERY_STATE]];
     [query appendString:@"UNIQUE (timestamp,device_id)"];
     [super createTable:query];
 }
@@ -98,9 +70,6 @@
     // Start a data upload timer
     NSLog(@"[%@] Start Sensor!", [self getSensorName]);
     
-    // Set a buffer for reducing file access
-    [self setBufferSize:10];
-    
     // Software Update Event
     NSString* currentVersion = [NSString stringWithFormat:@"%@",[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]];
     // OS Update Event
@@ -109,7 +78,7 @@
     NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
     
     // App Install event
-    if (![defaults boolForKey:KEY_APP_INSTALL]) {
+    if (![defaults boolForKey:dmLogger.KEY_APP_INSTALL]) {
         if ([self isDebug]) {
             NSString* message = [NSString stringWithFormat:@"AWARE iOS is installed"];
             [AWAREUtils sendLocalNotificationForMessage:message soundFlag:YES];
@@ -119,10 +88,10 @@
     }else{
         // Application update event
         NSString* oldVersion = @"";
-        if ([defaults stringForKey:KEY_APP_VERSION]) {
-            oldVersion = [defaults stringForKey:KEY_APP_VERSION];
+        if ([defaults stringForKey:dmLogger.KEY_APP_VERSION]) {
+            oldVersion = [defaults stringForKey:dmLogger.KEY_APP_VERSION];
         }
-        [defaults setObject:currentVersion forKey:KEY_APP_VERSION];
+        [defaults setObject:currentVersion forKey:dmLogger.KEY_APP_VERSION];
         
         if (![currentVersion isEqualToString:oldVersion]) {
             if ([self isDebug]) {
@@ -135,10 +104,10 @@
         
         // OS update event
         NSString* storedOsVersion = @"";
-        if ([defaults stringForKey:KEY_OS_VERSION]) {
-            storedOsVersion = [defaults stringForKey:KEY_OS_VERSION];
+        if ([defaults stringForKey:dmLogger.KEY_OS_VERSION]) {
+            storedOsVersion = [defaults stringForKey:dmLogger.KEY_OS_VERSION];
         }
-        [defaults setObject:currentOsVersion forKey:KEY_OS_VERSION];
+        [defaults setObject:currentOsVersion forKey:dmLogger.KEY_OS_VERSION];
         
         if (![currentOsVersion isEqualToString:storedOsVersion]) {
             if ([self isDebug]) {
@@ -149,9 +118,13 @@
             [self saveDebugEventWithText:updateInformation type:DebugTypeInfo label:@""];
         }
     }
-    [defaults setBool:YES forKey:KEY_APP_INSTALL];
-    [defaults setObject:currentVersion forKey:KEY_APP_VERSION];
-    [defaults setObject:currentOsVersion forKey:KEY_OS_VERSION];
+    
+    [defaults setBool:YES forKey:dmLogger.KEY_APP_INSTALL];
+    [defaults setObject:currentVersion forKey:dmLogger.KEY_APP_VERSION];
+    [defaults setObject:currentOsVersion forKey:dmLogger.KEY_OS_VERSION];
+    
+    // Set a buffer for reducing file access
+    [self setBufferSize:10];
     
     return YES;
 }
@@ -168,76 +141,7 @@
 
 
 - (void) saveDebugEventWithText:(NSString *)eventText type:(NSInteger)type label:(NSString *) label {
-    if (eventText == nil) eventText = @"";
-    if (label == nil) eventText = @"";
-    
-    NSString * osVersion = [[UIDevice currentDevice] systemVersion];
-    NSString * deviceName = [AWAREUtils deviceName];
-    NSString * appVersion = [NSString stringWithFormat:@"%@",[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]];
-    NSNumber * battery = [NSNumber numberWithInt:[[UIDevice currentDevice] batteryLevel] * 100];
-    NSNumber * batterySate = [NSNumber numberWithInteger:[UIDevice currentDevice].batteryState];
-    NSString * deviceId = [self getDeviceId];
-    if (deviceId == nil || [deviceId isEqualToString:@""]) {
-        deviceId = [AWAREUtils getSystemUUID];
-    }
-    
-    if([self getDBType] == AwareDBTypeTextFile){
-        NSMutableDictionary* dic = [[NSMutableDictionary alloc] init];
-        [dic setObject:[AWAREUtils getUnixTimestamp:[NSDate new]] forKey:KEY_DEBUG_DEVICE_ID];
-        [dic setObject:deviceId forKey:KEY_DEBUG_DEVICE_ID];
-        [dic setObject:[AWAREUtils getUnixTimestamp:[NSDate new]] forKey:KEY_DEBUG_TIMESTAMP];
-        [dic setObject:eventText forKey:KEY_DEBUG_EVENT];
-        [dic setObject:[NSNumber numberWithInteger:type] forKey:KEY_DEBUG_TYPE];
-        [dic setObject:label forKey:KEY_DEBUG_LABEL];
-        NSString * network = [awareStudy getNetworkReachabilityAsText];
-        if(network != nil){
-            [dic setObject:network forKey:KEY_DEBUG_NETWORK];
-        }else{
-            [dic setObject:@"unknown" forKey:KEY_DEBUG_NETWORK];
-        }
-        [dic setObject:appVersion forKey:KEY_DEBUG_APP_VERSION];
-        [dic setObject:deviceName forKey:KEY_DEBUG_DEVICE];
-        [dic setObject:osVersion forKey:KEY_DEBUG_OS];
-        [dic setObject:battery forKey:KEY_DEBUG_BATTERY];
-        [dic setObject:batterySate forKey:KEY_DEBUG_BATTERY_STATE];
-        
-        // Set latest sensor data
-        NSDateFormatter *timeFormat = [[NSDateFormatter alloc] init];
-        [timeFormat setDateFormat:@"MM-dd HH:mm"];
-        NSString * dateStr = [timeFormat stringFromDate:[NSDate new]];
-        NSString * latestEvent = [NSString stringWithFormat:@"[%@] %@", dateStr, eventText];
-        [super setLatestValue: latestEvent];
-        // Save a call event (if this class is using TextFile based database)
-        [super saveData:dic];
-    }else if([self getDBType] == AwareDBTypeCoreData){
-        AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
-        EntityDebug* debugData = (EntityDebug *)[NSEntityDescription
-                                                             insertNewObjectForEntityForName:NSStringFromClass([EntityDebug class])
-                                                             inManagedObjectContext:delegate.managedObjectContext];
-        debugData.device_id = [self getDeviceId];
-        debugData.timestamp = [AWAREUtils getUnixTimestamp:[NSDate new]];
-        debugData.app_version = appVersion;
-        debugData.battery = battery;
-        debugData.battery_state = batterySate;
-        debugData.device = deviceName;
-        debugData.event = eventText;
-        debugData.label = label;
-        debugData.network = [awareStudy getNetworkReachabilityAsText];
-        debugData.os = osVersion;
-        debugData.type = @(type);
-    
-        NSDictionary *userInfo = [NSDictionary dictionaryWithObject:debugData
-                                                             forKey:EXTRA_DATA];
-        [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_DEBUG
-                                                            object:nil
-                                                          userInfo:userInfo];
-        
-        NSError * error = nil;
-        [delegate.managedObjectContext save:&error];
-        if (error) {
-            NSLog(@"%@", error.description);
-        }
-    }
+    [dmLogger saveDebugEventWithText:eventText type:type label:label];
 }
 
 - (void)syncAwareDB{

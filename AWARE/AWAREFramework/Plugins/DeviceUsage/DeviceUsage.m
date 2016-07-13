@@ -62,16 +62,11 @@
 //    int notify_token;
     notify_register_dispatch("com.apple.iokit.hid.displayStatus", &_notifyTokenForDidChangeDisplayStatus,dispatch_get_main_queue(), ^(int token) {
         
-//        NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-//        [dic setObject:unixtime forKey:@"timestamp"];
-//        [dic setObject:[self getDeviceId] forKey:@"device_id"];
-
-        // AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
-        EntityDeviceUsage * deviceUsage = (EntityDeviceUsage *)[NSEntityDescription insertNewObjectForEntityForName:[self getEntityName]
-                                                                                                inManagedObjectContext:[self getSensorManagedObjectContext]];
         NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
-        deviceUsage.timestamp = unixtime;
-        deviceUsage.device_id = [self getDeviceId];
+        
+        NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+        [dic setObject:unixtime forKey:@"timestamp"];
+        [dic setObject:[self getDeviceId] forKey:@"device_id"];
         
         
         int awareScreenState = 0;
@@ -81,10 +76,12 @@
         
         uint64_t state = UINT64_MAX;
         notify_get_state(token, &state);
+        
+        // screen off
         if(state == 0) {
             awareScreenState = 0;
-            deviceUsage.elapsed_device_on = @(elapsedTime);
-            deviceUsage.elapsed_device_off = @0;
+            [dic setObject:@(elapsedTime) forKey:@"elapsed_device_on"]; // real
+            [dic setObject:@0 forKey:@"elapsed_device_off"]; // real
             if ([self isDebug]) {
                 NSLog(@"screen off");
 //                NSString * message = [NSString stringWithFormat:@"Elapsed Time of device ON: %@ [Event at %@]",
@@ -93,34 +90,27 @@
 //                                      ];
 //                [AWAREUtils sendLocalNotificationForMessage:message soundFlag:NO];
             }
-//            [dic setObject:[NSNumber numberWithDouble:elapsedTime] forKey:@"elapsed_device_on"]; // real
-//            [dic setObject:@0 forKey:@"elapsed_device_off"]; // real
+        // screen on
         } else {
             awareScreenState = 1;
-            deviceUsage.elapsed_device_on = @0;
-            deviceUsage.elapsed_device_off = @(elapsedTime);
+            [dic setObject:@0 forKey:@"elapsed_device_on"]; // real
+            [dic setObject:[NSNumber numberWithDouble:elapsedTime] forKey:@"elapsed_device_off"]; // real
             if([self isDebug]){
-                NSString * message = @"";
-                [AWAREUtils sendLocalNotificationForMessage:message soundFlag:NO];
-            }
-            if ([self isDebug]) {
                 NSLog(@"screen on");
-                NSString * message = [NSString stringWithFormat:@"Elapsed Time of device OFF: %@ [Event at %@]",
-                                      [self unixtime2str:elapsedTime],
-                                      [self nsdate2FormattedTime:[NSDate new]]
-                                      ];
-                [AWAREUtils sendLocalNotificationForMessage:message soundFlag:NO];
+//                NSString * message = [NSString stringWithFormat:@"Elapsed Time of device OFF: %@ [Event at %@]",
+//                                      [self unixtime2str:elapsedTime],
+//                                      [self nsdate2FormattedTime:[NSDate new]]
+//                                      ];
+//                [AWAREUtils sendLocalNotificationForMessage:message soundFlag:NO];
             }
-//            [dic setObject:@0 forKey:@"elapsed_device_on"]; // real
-//            [dic setObject:[NSNumber numberWithDouble:elapsedTime] forKey:@"elapsed_device_off"]; // real
         }
         
         [self setLatestValue:[NSString stringWithFormat:@"[%d] %f", awareScreenState, elapsedTime ]];
-        [self saveDataToDB];
-//        [self saveData:dic];
+        [self saveData:dic];
         
     });
 }
+
 
 - (void) unregisterAppforDetectDisplayStatus {
     //    notify_suspend(_notifyTokenForDidChangeDisplayStatus);
@@ -132,6 +122,26 @@
     }
 }
 
+
+/////////////////////////////////////////////////////////////
+
+- (void)insertNewEntityWithData:(NSDictionary *)data
+           managedObjectContext:(NSManagedObjectContext *)childContext
+                     entityName:(NSString *)entity{
+    
+    EntityDeviceUsage * deviceUsage = (EntityDeviceUsage *)[NSEntityDescription insertNewObjectForEntityForName:entity
+                                                                                         inManagedObjectContext:childContext];
+    deviceUsage.timestamp = [data objectForKey:@"timestamp"];
+    deviceUsage.device_id = [data objectForKey:@"device_id"];
+    deviceUsage.elapsed_device_on = [data objectForKey:@"elapsed_device_on"];
+    deviceUsage.elapsed_device_off = [data objectForKey:@"elapsed_device_off"];
+    
+}
+
+
+
+
+/////////////////////////////////////////////////////////////
 
 -(NSString*)unixtime2str:(double)elapsedTime{
     NSString * strElapsedTime = @"";

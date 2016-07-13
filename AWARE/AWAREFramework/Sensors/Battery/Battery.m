@@ -10,11 +10,14 @@
 //
 
 #import "Battery.h"
+#import "BatteryCharge.h"
+#import "BatteryDischarge.h"
 #import "AppDelegate.h"
 
 #import "EntityBattery.h"
 #import "EntityBatteryCharge.h"
 #import "EntityBatteryDischarge.h"
+
 
 @implementation Battery {
     NSString* BATTERY_DISCHARGERES;
@@ -25,9 +28,9 @@
     NSString* KEY_LAST_BATTERY_LEVEL;
     
     // A battery charge sensor
-    AWARESensor * batteryChargeSensor;
+    BatteryCharge * batteryChargeSensor;
     // A battery discharge sensor
-    AWARESensor * batteryDischargeSensor;
+    BatteryDischarge * batteryDischargeSensor;
     
     NSTimer * timer;
     NSInteger previousBatteryLevel;
@@ -53,12 +56,12 @@
             [userDefaults setInteger:[UIDevice currentDevice].batteryLevel*100 forKey:KEY_LAST_BATTERY_LEVEL];
         }
         // Get default information from local storage
-        batteryChargeSensor = [[AWARESensor alloc] initWithAwareStudy:study
+        batteryChargeSensor = [[BatteryCharge alloc] initWithAwareStudy:study
                                                            sensorName:BATTERY_CHARGERES
                                                          dbEntityName:NSStringFromClass([EntityBatteryCharge class])
                                                                dbType:AwareDBTypeCoreData];
         
-        batteryDischargeSensor = [[AWARESensor alloc] initWithAwareStudy:study
+        batteryDischargeSensor = [[BatteryDischarge alloc] initWithAwareStudy:study
                                                               sensorName:BATTERY_DISCHARGERES
                                                             dbEntityName:NSStringFromClass([EntityBatteryDischarge class])
                                                                   dbType:AwareDBTypeCoreData];
@@ -74,8 +77,8 @@
 - (void) createTable{
     // Send a create table queries (battery_level, battery_charging, and battery_discharging)
     [self createBatteryTable];
-    [self createCargeTable];
-    [self createDichargeTable];
+    [batteryChargeSensor createTable];
+    [batteryDischargeSensor createTable];
 }
 
 - (void) createBatteryTable{
@@ -95,31 +98,6 @@
     [super createTable:query];
 }
 
-
-- (void) createDichargeTable {
-    NSString *query = [[NSString alloc] init];
-    query = @"_id integer primary key autoincrement,"
-    "timestamp real default 0,"
-    "device_id text default '',"
-    "battery_start integer default 0,"
-    "battery_end integer default 0,"
-    "double_end_timestamp real default 0,"
-    "UNIQUE (timestamp,device_id)";
-    [batteryDischargeSensor createTable:query];
-}
-
-
-- (void) createCargeTable {
-    NSString *query = [[NSString alloc] init];
-    query = @"_id integer primary key autoincrement,"
-    "timestamp real default 0,"
-    "device_id text default '',"
-    "battery_start integer default 0,"
-    "battery_end integer default 0,"
-    "double_end_timestamp real default 0,"
-    "UNIQUE (timestamp,device_id)";
-    [batteryChargeSensor createTable:query];
-}
 
 - (BOOL)startSensorWithSettings:(NSArray *)settings{
 
@@ -191,64 +169,65 @@
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
 
-//- (void)syncAwareDBWithAllBatterySensor:(id) sendar {
-//    [self syncAwareDB];
-//    [batteryChargeSensor syncAwareDB];
-//    [batteryDischargeSensor syncAwareDB];
-//}
-
-
 - (void)batteryLevelChanged:(NSNotification *)notification {
     
     if (previousBatteryLevel == [UIDevice currentDevice].batteryLevel*100) {
         return;
     }
-    
-    //    NSLog(@"battery status: %d",state); // 0 unknown, 1 unplegged, 2 charging, 3 full
+    // NSLog(@"battery status: %d",state); // 0 unknown, 1 unplegged, 2 charging, 3 full
     UIDevice *myDevice = [UIDevice currentDevice];
     [myDevice setBatteryMonitoringEnabled:YES];
     int state = [myDevice batteryState];
     int batLeft = [myDevice batteryLevel] * 100;
     
-    EntityBattery* batteryData = (EntityBattery *)[NSEntityDescription
-                                        insertNewObjectForEntityForName:[self getEntityName]
-                                                 inManagedObjectContext:[self getSensorManagedObjectContext]];
-    
-    batteryData.device_id = [self getDeviceId];
-    batteryData.timestamp = [AWAREUtils getUnixTimestamp:[NSDate new]];
-    batteryData.battery_status = [NSNumber numberWithInt:state];
-    batteryData.battery_level = [NSNumber numberWithInt:batLeft];
-    batteryData.battery_scale = @100;
-    batteryData.battery_voltage = @-1;
-    batteryData.battery_temperature = @-1;
-    batteryData.battery_adaptor = @-1;
-    batteryData.battery_health = @-1;
-    batteryData.battery_technology = @"";
- 
+    NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    [dict setObject:unixtime forKey:@"timestamp"];
+    [dict setObject:[self getDeviceId] forKey:@"device_id"];
+    [dict setObject:@(state) forKey:@"battery_status"];
+    [dict setObject:@(batLeft) forKey:@"battery_level"];
+    [dict setObject:@100 forKey:@"battery_scale"];
+    [dict setObject:@0 forKey:@"battery_voltage"];
+    [dict setObject:@0 forKey:@"battery_temperature"];
+    [dict setObject:@0 forKey:@"battery_adaptor"];
+    [dict setObject:@0 forKey:@"battery_health"];
+    [dict setObject:@"" forKey:@"battery_technology"];
+    [self saveData:dict];
     [self setLatestValue:[NSString stringWithFormat:@"%d", batLeft]];
     
-    NSDictionary *userInfo = [NSDictionary dictionaryWithObject:batteryData
+    // Broadcast
+    NSDictionary *userInfo = [NSDictionary dictionaryWithObject:dict
                                                          forKey:EXTRA_DATA];
     [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_BATTERY_CHANGED
                                                         object:nil
                                                       userInfo:userInfo];
-    [self saveDataToDB];
-    
-//    NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
-//    NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-//    [dic setObject:unixtime forKey:@"timestamp"];
-//    [dic setObject:[self getDeviceId] forKey:@"device_id"];
-//    [dic setObject:[NSNumber numberWithInt:state] forKey:@"battery_status"];
-//    [dic setObject:[NSNumber numberWithInt:batLeft] forKey:@"battery_level"];
-//    [dic setObject:@100 forKey:@"battery_scale"];
-//    [dic setObject:@0 forKey:@"battery_voltage"];
-//    [dic setObject:@0 forKey:@"battery_temperature"];
-//    [dic setObject:@0 forKey:@"battery_adaptor"];
-//    [dic setObject:@0 forKey:@"battery_health"];
-//    [dic setObject:@"" forKey:@"battery_technology"];
-//    [self setLatestValue:[NSString stringWithFormat:@"%d", batLeft]];
-//    [self saveData:dic toLocalFile:SENSOR_BATTERY];
 }
+
+
+- (void)insertNewEntityWithData:(NSDictionary *)data
+           managedObjectContext:(NSManagedObjectContext *)childContext
+                     entityName:(NSString *)entity{
+    
+    EntityBattery* batteryData = (EntityBattery *)[NSEntityDescription
+                                                   insertNewObjectForEntityForName:entity
+                                                   inManagedObjectContext:childContext];
+    
+    batteryData.device_id = [data objectForKey:@"device_id"];
+    batteryData.timestamp = [data objectForKey:@"timestamp"];
+    batteryData.battery_status = [data objectForKey:@"battery_status"];
+    batteryData.battery_level = [data objectForKey:@"battery_level"];
+    batteryData.battery_scale = [data objectForKey:@"battery_scale"];
+    batteryData.battery_voltage = [data objectForKey:@"battery_voltage"];
+    batteryData.battery_temperature = [data objectForKey:@"battery_temperature"];
+    batteryData.battery_adaptor = [data objectForKey:@"battery_adaptor"];
+    batteryData.battery_health = [data objectForKey:@"battery_health"];
+    batteryData.battery_technology = [data objectForKey:@"battery_technology"];
+}
+
+
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 
 
 - (void)batteryStateChanged:(NSNotification *)notification {
@@ -294,62 +273,29 @@
     // discharge event
     if (lastBatteryEvent == UIDeviceBatteryStateUnplugged &&
         currentBatteryEvent == UIDeviceBatteryStateCharging) {
-//        NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-//        [dic setObject:lastBatteryEventTimestamp forKey:@"timestamp"];
-//        [dic setObject:[self getDeviceId] forKey:@"device_id"];
-//        [dic setObject:lastBatteryLevel forKey:@"battery_start"];
-//        [dic setObject:currentBatteryLevel forKey:@"battery_end"];
-//        [dic setObject:currentTime forKey:@"double_end_timestamp"];
-//        [batteryDischargeSensor saveData:dic];
+        
+        // Save latest event on UserDefaults
         [userDefaults setObject:currentBatteryLevel forKey:KEY_LAST_BATTERY_LEVEL];
         [userDefaults setObject:currentTime forKey:KEY_LAST_BATTERY_EVENT_TIMESTAMP];
-    
-        // AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
-        EntityBatteryDischarge* batteryDischargeData = (EntityBatteryDischarge *)[NSEntityDescription
-                                                       insertNewObjectForEntityForName:NSStringFromClass([EntityBatteryDischarge class])
-                                                       inManagedObjectContext:[batteryDischargeSensor getSensorManagedObjectContext]];
-        batteryDischargeData.device_id = [self getDeviceId];
-        batteryDischargeData.timestamp = lastBatteryEventTimestamp;
-        batteryDischargeData.battery_start = lastBatteryLevel;
-        batteryDischargeData.battery_end = currentBatteryLevel;
-        batteryDischargeData.double_end_timestamp = currentTime;
         
-        NSDictionary *userInfo = [NSDictionary dictionaryWithObject:batteryDischargeData
-                                                             forKey:EXTRA_DATA];
-        [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_BATTERY_DISCHARGING
-                                                            object:nil
-                                                          userInfo:userInfo];
-        [batteryDischargeSensor saveDataToDB];
+        [batteryDischargeSensor saveBatteryDischargeEventWithStartTimestamp:lastBatteryEventTimestamp
+                                                               endTimestamp:currentTime
+                                                          startBatteryLevel:lastBatteryLevel
+                                                            endBatteryLevel:currentBatteryLevel];
         
-        // charge event
+    // charge event
     }else if(lastBatteryEvent == UIDeviceBatteryStateCharging &&
              currentBatteryEvent == UIDeviceBatteryStateUnplugged ){
-//        NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-//        [dic setObject:lastBatteryEventTimestamp forKey:@"timestamp"];
-//        [dic setObject:[self getDeviceId] forKey:@"device_id"];
-//        [dic setObject:lastBatteryLevel forKey:@"battery_start"];
-//        [dic setObject:currentBatteryLevel forKey:@"battery_end"];
-//        [dic setObject:currentTime forKey:@"double_end_timestamp"];
-//        [batteryChargeSensor saveData:dic];
+        
+        // Save battery events on UserDefaults
         [userDefaults setObject:currentBatteryLevel forKey:KEY_LAST_BATTERY_LEVEL];
         [userDefaults setObject:currentTime forKey:KEY_LAST_BATTERY_EVENT_TIMESTAMP];
         
-        // AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
-        EntityBatteryCharge* batteryChargeData = (EntityBatteryCharge *)[NSEntityDescription
-                                                                                     insertNewObjectForEntityForName:NSStringFromClass([EntityBatteryCharge class])
-                                                                                     inManagedObjectContext:[batteryChargeSensor getSensorManagedObjectContext]];
-        batteryChargeData.device_id = [self getDeviceId];
-        batteryChargeData.timestamp = lastBatteryEventTimestamp;
-        batteryChargeData.battery_start = lastBatteryLevel;
-        batteryChargeData.battery_end = currentBatteryLevel;
-        batteryChargeData.double_end_timestamp = currentTime;
         
-        NSDictionary *userInfo = [NSDictionary dictionaryWithObject:batteryChargeData
-                                                             forKey:EXTRA_DATA];
-        [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_BATTERY_CHARGING
-                                                            object:nil
-                                                          userInfo:userInfo];
-        [batteryChargeSensor saveDataToDB];
+        [batteryChargeSensor saveBatteryChargeEventWithStartTimestamp:lastBatteryEventTimestamp
+                                                         endTimestamp:currentTime
+                                                    startBatteryLevel:lastBatteryLevel
+                                                      endBatteryLevel:currentBatteryLevel];
     }
     
     switch (currentBatteryEvent) {
@@ -367,6 +313,5 @@
     }
     [userDefaults synchronize];
 }
-
 
 @end

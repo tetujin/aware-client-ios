@@ -355,7 +355,6 @@
         [awareSensors removeAllObjects];
     }
     [self unlock];
-//    awareSensors = [[NSMutableArray alloc] init];
 }
 
 /**
@@ -520,6 +519,7 @@
     BOOL finish = YES;
     for (AWARESensor * sensor in awareSensors) {
         if([sensor isUploading]){
+            // NSLog(@"%d", [sensor isUploading]);
             finish = NO;
         }
     }

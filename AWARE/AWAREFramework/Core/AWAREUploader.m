@@ -8,14 +8,16 @@
 
 #import "AWAREUploader.h"
 #import "AWAREStudy.h"
-#import "Debug.h"
+#import "AWAREDebugMessageLogger.h"
+#import "AWAREKeys.h"
 
 @implementation AWAREUploader{
     // study
     AWAREStudy * awareStudy;
     NSString *sensorName;
     // debug
-    Debug * debugSensor;
+    // Debug * debugSensor;
+    AWAREDebugMessageLogger * dmLogger;
     // settings
     BOOL isDebug;
     BOOL isSyncWithOnlyBatteryCharging;
@@ -235,22 +237,34 @@
  * Set Debug Sensor
  * //////////////////////////////////////////////////////
  */
-- (void) trackDebugEventsWithDebugSensor:(Debug *)debug {
-    debugSensor = debug;
+- (BOOL) trackDebugEvents {
+    if(awareStudy != nil){
+        dmLogger = [[AWAREDebugMessageLogger alloc] initWithAwareStudy:awareStudy];
+        return YES;
+    }else{
+        NSLog(@"AWAREStudy variable is nil");
+        return NO;
+    }
 }
 
 
 /* //////////////////////////////////////////////////////////////
- * A wrapper method for debug sensor
+ * A wrapper method for Debug Message Tracker
  * //////////////////////////////////////////////////////////////
  */
 
-- (bool)saveDebugEventWithText:(NSString *)eventText type:(NSInteger)type label:(NSString *)label{
-    if (debugSensor != nil) {
-        [debugSensor saveDebugEventWithText:eventText type:type label:label];
-        return  YES;
+- (BOOL)saveDebugEventWithText:(NSString *)eventText type:(NSInteger)type label:(NSString *)label{
+    if (dmLogger != nil) {
+        [dmLogger saveDebugEventWithText:eventText type:type label:label];
+    } else {
+        NSLog(@"AWAREDebugMessageLogger is nil");
+        if([self trackDebugEvents]){
+            [dmLogger saveDebugEventWithText:eventText type:type label:label];
+        }else{
+            return NO;
+        }
     }
-    return NO;
+    return YES;
 }
 
 

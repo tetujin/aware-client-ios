@@ -273,37 +273,42 @@
         self.heartRate = bpm;
     }
     
-    NSLog(@"%hu", self.heartRate);
-    
-    NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
-    // AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
-    EntityBLEHeartRate * heartRateEntity = (EntityBLEHeartRate *)[NSEntityDescription insertNewObjectForEntityForName:[self getEntityName]
-                                                                                            inManagedObjectContext:[self getSensorManagedObjectContext]];
-    heartRateEntity.device_id = [self getDeviceId];
-    heartRateEntity.timestamp = unixtime;
-    heartRateEntity.heartrate = @(_heartRate);
-    heartRateEntity.location = _bodyLocation;
-    heartRateEntity.manufacturer = _manufacturer;
-    heartRateEntity.rssi = _deviceRssi;
-    heartRateEntity.label = @"BLE";
-    
-    [self saveDataToDB];
+    if([self isDebug]){
+        NSLog(@"%hu", self.heartRate);
+    }
     
     [self setLatestValue:[NSString stringWithFormat:@"[%@] %d bps (RSSI:%f)",_manufacturer,_heartRate, _deviceRssi.doubleValue]];
 
-//    NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-//    [dic setObject:unixtime forKey:KEY_HR_TIMESTAMP];
-//    [dic setObject:[self getDeviceId] forKey:KEY_HR_DEVICE_ID];
-//    [dic setObject:[NSNumber numberWithInt:_heartRate] forKey:KEY_HR_HEARTRATE]; //varchar
-//    [dic setObject:_bodyLocation forKey:KEY_HR_LOCATION]; //1=chest, 2=wrist
-//    [dic setObject:_manufacturer forKey:KEY_HR_MANUFACTURER];
-//    [dic setObject:_deviceRssi forKey:KEY_HR_RSSI];
-//    [dic setObject:@"BLE" forKey:KEY_HR_LABEL];
-//    [self saveData:dic];
+    NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+    NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
+    [dic setObject:unixtime forKey:KEY_HR_TIMESTAMP];
+    [dic setObject:[self getDeviceId] forKey:KEY_HR_DEVICE_ID];
+    [dic setObject:[NSNumber numberWithInt:_heartRate] forKey:KEY_HR_HEARTRATE]; //varchar
+    [dic setObject:_bodyLocation forKey:KEY_HR_LOCATION]; //1=chest, 2=wrist
+    [dic setObject:_manufacturer forKey:KEY_HR_MANUFACTURER];
+    [dic setObject:_deviceRssi forKey:KEY_HR_RSSI];
+    [dic setObject:@"BLE" forKey:KEY_HR_LABEL];
+    
+    [self saveData:dic];
     
     return;
 }
 
+
+- (void)insertNewEntityWithData:(NSDictionary *)data
+           managedObjectContext:(NSManagedObjectContext *)childContext
+                     entityName:(NSString *)entity{
+    EntityBLEHeartRate * heartRateEntity = (EntityBLEHeartRate *)[NSEntityDescription insertNewObjectForEntityForName:entity
+                                                                                               inManagedObjectContext:childContext];
+    heartRateEntity.device_id = [data objectForKey:@"device_id"];
+    heartRateEntity.timestamp = [data objectForKey:@"timestamp"];
+    heartRateEntity.heartrate = [data objectForKey:@"heartrate"];
+    heartRateEntity.location = [data objectForKey:@"location"];
+    heartRateEntity.manufacturer = [data objectForKey:@"manufacturer"];
+    heartRateEntity.rssi = [data objectForKey:@"rssi"];
+    heartRateEntity.label = [data objectForKey:@"label"];
+
+}
 
 - (void) getManufacturerName:(CBCharacteristic *) characteristic {
     NSString *manufacturerName = [[NSString alloc] initWithData:characteristic.value encoding:NSUTF8StringEncoding];  // 1

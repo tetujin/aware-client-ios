@@ -33,10 +33,11 @@
 #import "AWARECoreDataManager.h"
 #import "AWAREDataUploader.h"
 #import "AWAREUploader.h"
+#import "AWAREDebugMessageLogger.h"
+#import "AppDelegate.h"
 
 #import "SCNetworkReachability.h"
 #import "LocalFileStorageHelper.h"
-#import "Debug.h"
 
 @interface AWARESensor () {
     /** aware sensor name */
@@ -46,7 +47,7 @@
     /** latest Sensor Value */
     NSString * latestSensorValue;
     /** buffer size */
-    int bufferSize;
+    // int bufferSize;
 
     /** debug state */
     bool debug;
@@ -54,7 +55,7 @@
     NSInteger networkState;
     
     /** debug sensor*/
-    Debug * debugSensor;
+    AWAREDebugMessageLogger * dmLogger;
     /** aware study*/
     AWAREStudy * awareStudy;
 
@@ -68,10 +69,10 @@
     /** aware local storage (text) */
     LocalFileStorageHelper * localStorage;
     /** sensor data uploader */
-//    AWAREDataUploader *uploader;
+    // AWAREDataUploader *uploader;
     
     ////////////// CoroData //////////////////////////////
-//    AWARECoreDataManager * coreDataManager;
+//     AWARECoreDataManager * coreDataManager;
 
     BOOL sensorStatus;
 }
@@ -86,24 +87,26 @@
 
 
 - (instancetype) initWithAwareStudy:(AWAREStudy *)study
-                         sensorName:(NSString *)sensorName
-                       dbEntityName:(NSString *)entityName {
-    return [self initWithAwareStudy:study sensorName:sensorName dbEntityName:entityName dbType:AwareDBTypeCoreData];
+                         sensorName:(NSString *)name
+                       dbEntityName:(NSString *)entity {
+    return [self initWithAwareStudy:study sensorName:name dbEntityName:entity dbType:AwareDBTypeCoreData];
 }
 
 - (instancetype) initWithAwareStudy:(AWAREStudy *)study
-                         sensorName:(NSString *)sensorName
-                       dbEntityName:(NSString *)entityName
+                         sensorName:(NSString *)name
+                       dbEntityName:(NSString *)entity
                              dbType:(AwareDBType)dbType{
-    return [self initWithAwareStudy:study sensorName:sensorName dbEntityName:entityName dbType:dbType bufferSize:0];
+    return [self initWithAwareStudy:study sensorName:name dbEntityName:entity dbType:dbType bufferSize:0];
 }
 
 - (instancetype) initWithAwareStudy:(AWAREStudy *)study
-                         sensorName:(NSString *)sensorName
-                       dbEntityName:(NSString *)entityName
+                         sensorName:(NSString *)name
+                       dbEntityName:(NSString *)entity
                              dbType:(AwareDBType)dbType
                          bufferSize:(int)buffer{
-    if (self = [super init]) {
+    self = [super initWithAwareStudy:study sensorName:name dbEntityName:entity];
+    //self = [super init];
+    if (self != nil) {
         
         sensorStatus = NO;
         
@@ -119,31 +122,32 @@
         }
         
         // Save sensorName instance to awareSensorName
-        awareSensorName = sensorName;
+        awareSensorName = name;
         
         // Set db entity name
-        dbEntityName = entityName;
+        dbEntityName = entity;
         
         // Initialize the latest sensor value with an empty object (@"").
         latestSensorValue = @"";
         
         // init buffer size
-        bufferSize = buffer;
+        // bufferSize = buffer;
+        [super setBufferSize:buffer];
         
         // AWARE DB setting
         awareDBType = dbType;
         
         switch (dbType) {
             case AwareDBTypeCoreData:
-                 baseDataUploader = [[AWARECoreDataManager alloc] initWithAwareStudy:awareStudy sensorName:sensorName dbEntityName:dbEntityName];
-                NSLog(@"[%@] Initialize an AWARESensor as '%@' with CoreData (EntityName=%@,BufferSize=%d)", sensorName, sensorName, dbEntityName, bufferSize);
+//                 baseDataUploader = [[AWARECoreDataManager alloc] initWithAwareStudy:awareStudy sensorName:name dbEntityName:entity];
+                NSLog(@"[%@] Initialize an AWARESensor (Type=CoreData,EntityName=%@,BufferSize=%d)", name, entity, buffer);
                 break;
             case AwareDBTypeTextFile:
                 // Make a local storage with sensor name
-                localStorage = [[LocalFileStorageHelper alloc] initWithStorageName:sensorName];
+                localStorage = [[LocalFileStorageHelper alloc] initWithStorageName:name];
                 // Make an uploader instance with the local storage and an aware study instance.
                  baseDataUploader = [[AWAREDataUploader alloc] initWithLocalStorage:localStorage withAwareStudy:awareStudy];
-                NSLog(@"[%@] Initialize an AWARESensor as '%@' with TextFile (DBName=%@,BufferSize=%d)", sensorName, sensorName, sensorName, bufferSize);
+                NSLog(@"[%@] Initialize an AWARESensor (Type=TextFile,DBName=%@,BufferSize=%d)", name, name, buffer);
                 break;
             default:
                 break;
@@ -205,23 +209,49 @@
  * @param int A buffer size
  */
 - (void) setBufferSize:(int) size{
-    bufferSize = size;
     if (localStorage != nil) {
         [localStorage setBufferSize:size];
     }
     if (baseDataUploader != nil){
         [baseDataUploader setBufferSize:size];
     }
+    [super setBufferSize:size];
 }
 
 
-- (void)setFetchLimit:(int)limit{ [baseDataUploader setFetchLimit:limit]; }
+- (void)setFetchLimit:(int)limit{
+    if(baseDataUploader!=nil)[baseDataUploader setFetchLimit:limit];
+    [super setFetchLimit:limit];
+}
 
-- (void)setFetchBatchSize:(int)size{ [baseDataUploader setFetchBatchSize:size]; }
+- (void)setFetchBatchSize:(int)size{
+    if(baseDataUploader!=nil)[baseDataUploader setFetchBatchSize:size];
+    [super setFetchBatchSize:size];
+}
 
-- (int) getFetchLimit{ return [baseDataUploader getFetchLimit]; }
 
-- (int) getFetchBatchSize{ return [baseDataUploader getFetchBatchSize]; }
+- (int) getBufferSize{
+    if(baseDataUploader != nil){
+        return [baseDataUploader getBufferSize];
+    }
+    return [super getBufferSize];
+}
+
+- (int) getFetchLimit{
+    if(baseDataUploader != nil){
+        return [baseDataUploader getFetchLimit];
+    }else{
+        return [super getFetchLimit];
+    }
+}
+
+- (int) getFetchBatchSize{
+    if(baseDataUploader != nil){
+        return [baseDataUploader getFetchBatchSize];
+    }else{
+        return [super getFetchBatchSize];
+    }
+}
 
 //////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////
@@ -255,10 +285,6 @@
     return dbEntityName;
 }
 
-- (int) getBufferSize{
-    return bufferSize;
-    
-}
 
 - (NSInteger) getDBType{
     return awareDBType;
@@ -288,7 +314,11 @@
  * @param   NSString    A query for creating a database table
  */
 - (void) createTable:(NSString *) query {
-    [baseDataUploader createTable:query];
+    if(baseDataUploader != nil){
+        [baseDataUploader createTable:query];
+    }else{
+        [super createTable:query];
+    }
 }
 
 /**
@@ -296,7 +326,11 @@
  * @param   NSString    A query for creating a database table
  */
 - (void) createTable:(NSString *)query withTableName:(NSString *)tableName{
-    [baseDataUploader createTable:query withTableName:tableName];
+    if(baseDataUploader != nil){
+        [baseDataUploader createTable:query withTableName:tableName];
+    }else{
+        [super createTable:query withTableName:tableName];
+    }
 }
 
 
@@ -309,9 +343,9 @@
     if(localStorage != nil){
         return [localStorage saveDataWithArray:array];
     }else{
-        NSLog(@"local storage variable is nil");
-        return NO;
+        return [super saveDataWithArray:array];
     }
+    return NO;
 }
 
 // save data
@@ -319,30 +353,41 @@
     if(localStorage != nil){
         return [localStorage saveData:data];
     }else{
-        NSLog(@"local storage variable is nil");
-        return NO;
+        return [super saveData:data];
     }
+    return NO;
 }
+
 
 // save data with local file
 - (bool) saveData:(NSDictionary *)data toLocalFile:(NSString *)fileName{
     if(localStorage != nil){
         return [localStorage saveData:data toLocalFile:fileName];
     }else{
-        return NO;
+        NSLog(@"[%@] Please use -saveData: method", awareSensorName);
+        return [super saveData:data];
     }
+    return NO;
 }
 
 
 
 - (BOOL) syncAwareDBWithData:(NSDictionary *) dictionary{
-    [baseDataUploader syncAwareDBWithData:dictionary];
-    return NO;
+    if(baseDataUploader != nil){
+        return [baseDataUploader syncAwareDBWithData:dictionary];
+    }else{
+        return [super syncAwareDBWithData:dictionary];
+    }
+    // return NO;
 }
 
 
-- (bool) saveDataToDB{
-    return [baseDataUploader saveDataToDB];
+- (bool) saveDataToDB {
+    if(baseDataUploader != nil){
+        return [baseDataUploader saveDataToDB];
+    }else{
+        return [super saveDataToDB];
+    }
 }
 
 //////////////////////////////////////////
@@ -355,7 +400,11 @@
  */
 
 - (void) syncAwareDB {
-    [baseDataUploader syncAwareDBInBackground];
+    if(baseDataUploader != nil){
+        [baseDataUploader syncAwareDBInBackground];
+    }else{
+        [super syncAwareDBInBackground];
+    }
 }
 
 
@@ -365,23 +414,37 @@
  * Fourground sync method
  */
 - (BOOL) syncAwareDBInForeground{
-    return [baseDataUploader syncAwareDBInForeground];
+    if(baseDataUploader != nil){
+        return [baseDataUploader syncAwareDBInForeground];
+    }else{
+        return [super syncAwareDBInForeground];
+    }
 }
 
 - (void) lockDB{
-    [baseDataUploader lockDB];
-    // [localStorage dbLock];
-    // [baseDataUploader lockBackgroundUpload];
+    
+    if(baseDataUploader != nil){
+        [baseDataUploader lockDB];
+    }else{
+        [super lockDB];
+    }
+    
 }
 
 - (void) unlockDB{
-    [baseDataUploader unlockDB];
-    // [localStorage dbUnlock];
-    // [baseDataUploader unlockBackgroundUpload];
+    if(baseDataUploader != nil){
+        [baseDataUploader unlockDB];
+    }else{
+        [super unlockDB];
+    }
 }
 
 - (BOOL) isDBLock {
-    return [baseDataUploader isDBLock];
+    if(baseDataUploader != nil){
+        return [baseDataUploader isDBLock];
+    }else{
+        return [super isDBLock];
+    }
 }
 
 /////////////////////////////////////////////
@@ -390,20 +453,36 @@
  * Sync options
  */
 - (void)allowsCellularAccess{
-    [baseDataUploader allowsCellularAccess];
+    if(baseDataUploader != nil){
+        [baseDataUploader allowsCellularAccess];
+    }else{
+        [super allowsCellularAccess];
+    }
 }
 
 - (void)forbidCellularAccess{
-    [baseDataUploader forbidCellularAccess];
+    if(baseDataUploader != nil){
+        [baseDataUploader forbidCellularAccess];
+    }else{
+        [super forbidCellularAccess];
+    }
 }
-
 
 - (void) allowsDateUploadWithoutBatteryCharging{
-    [baseDataUploader allowsDateUploadWithoutBatteryCharging];
+    if(baseDataUploader != nil){
+        [baseDataUploader allowsDateUploadWithoutBatteryCharging];
+    }else{
+        [super allowsDateUploadWithoutBatteryCharging];
+    }
 }
 
+
 - (void) forbidDatauploadWithoutBatteryCharging{
-    [baseDataUploader forbidDatauploadWithoutBatteryCharging];
+    if(baseDataUploader != nil){
+        [baseDataUploader forbidDatauploadWithoutBatteryCharging];
+    }else{
+        [super forbidDatauploadWithoutBatteryCharging];
+    }
 }
 
 
@@ -411,19 +490,37 @@
 ////////////////////////////////////////
 
 - (NSString *)getSyncProgressAsText{
-    return [baseDataUploader getSyncProgressAsText];
+    if(baseDataUploader != nil){
+        return [baseDataUploader getSyncProgressAsText];
+    }else{
+        return [super getSyncProgressAsText];
+    }
 }
 
 - (NSString *) getSyncProgressAsText:(NSString *)sensorName{
-    return [baseDataUploader getSyncProgressAsText:sensorName];
+    if(baseDataUploader != nil){
+        return [baseDataUploader getSyncProgressAsText:sensorName];
+    }else{
+        return [super getSyncProgressAsText:sensorName];
+    }
 }
 
 - (NSString *) getNetworkReachabilityAsText{
-    return [baseDataUploader getNetworkReachabilityAsText];
+    if(baseDataUploader != nil){
+        return [baseDataUploader getNetworkReachabilityAsText];
+    }else{
+        return [super getNetworkReachabilityAsText];
+    }
 }
 
 - (bool)isUploading{
-    return [baseDataUploader isUploading];
+    
+    if(baseDataUploader != nil){
+        return [baseDataUploader isUploading];
+    }else{
+        // NSLog(@"%d %@", [super isUploading], awareSensorName);
+        return [super isUploading];
+    }
 }
 
 
@@ -435,8 +532,8 @@
  */
 
 - (bool)saveDebugEventWithText:(NSString *)eventText type:(NSInteger)type label:(NSString *)label{
-    if (debugSensor != nil) {
-        [debugSensor saveDebugEventWithText:eventText type:type label:label];
+    if (dmLogger != nil) {
+        [dmLogger saveDebugEventWithText:eventText type:type label:label];
         return  YES;
     }
     return NO;
@@ -513,9 +610,15 @@
  * Start a debug event tracker
  */
 - (void) trackDebugEvents {
-    debugSensor = [[Debug alloc] initWithAwareStudy:awareStudy];
-    [localStorage trackDebugEventsWithDebugSensor:debugSensor];
-    [baseDataUploader trackDebugEventsWithDebugSensor:debugSensor];
+    if(awareStudy != nil){
+        dmLogger = [[AWAREDebugMessageLogger alloc] initWithAwareStudy:awareStudy];
+        [localStorage trackDebugEventsWithDMLogger:dmLogger];
+    }else{
+        NSLog(@"AWAREStudy variable is nil");
+    }
+//    debugSensor = [[Debug alloc] initWithAwareStudy:awareStudy];
+//    [localStorage trackDebugEventsWithDebugSensor:debugSensor];
+//    [baseDataUploader trackDebugEventsWithDebugSensor:debugSensor];
 }
 
 /**
@@ -526,28 +629,46 @@
 }
 
 - (NSString *) getWebserviceUrl{
-    return [baseDataUploader getWebserviceUrl];
+    if(baseDataUploader != nil){
+        return [baseDataUploader getWebserviceUrl];
+    }else{
+        return [super getWebserviceUrl];
+    }
 }
 
 - (NSString *) getInsertUrl:(NSString *)sensorName{
-    return [baseDataUploader getInsertUrl:sensorName];
+    if(baseDataUploader != nil){
+        return [baseDataUploader getInsertUrl:sensorName];
+    }else{
+        return [super getInsertUrl:sensorName];
+    }
 }
 
 - (NSString *) getLatestDataUrl:(NSString *)sensorName{
-    return [baseDataUploader getLatestDataUrl:sensorName];
+    if(baseDataUploader != nil){
+        return [baseDataUploader getLatestDataUrl:sensorName];
+    }else{
+        return [super getLatestDataUrl:sensorName];
+    }
 }
 
 - (NSString *) getCreateTableUrl:(NSString *)sensorName{
-    return [baseDataUploader getCreateTableUrl:sensorName];
+    if(baseDataUploader != nil){
+        return [baseDataUploader getCreateTableUrl:sensorName];
+    }else{
+        return [super getCreateTableUrl:sensorName];
+    }
 }
 
 - (NSString *) getClearTableUrl:(NSString *)sensorName{
-    return [baseDataUploader getCreateTableUrl:sensorName];
+    if(baseDataUploader != nil){
+        return [baseDataUploader getCreateTableUrl:sensorName];
+    }else{
+        return [super getClearTableUrl:sensorName];
+    }
 }
 
 - (NSManagedObjectContext *)getSensorManagedObjectContext{
-    // return baseDataUploader.mainQueueManagedObjectContext;
-    // return baseDataUploader.writeQueueManagedObjectContext;
      AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
     return delegate.managedObjectContext;
 }

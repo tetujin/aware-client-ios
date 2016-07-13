@@ -116,40 +116,46 @@
                                                // Save sensor data to the local database
                                                
                                                dispatch_async(dispatch_get_main_queue(),^{
-                                                   // AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
-                                                   EntityLinearAccelerometer* data = (EntityLinearAccelerometer *)[NSEntityDescription
-                                                                                                                   insertNewObjectForEntityForName:[self getEntityName]
-                                                                                                                   inManagedObjectContext:[self getSensorManagedObjectContext]];
                                                    
-                                                   data.device_id = [self getDeviceId];
-                                                   data.timestamp = [AWAREUtils getUnixTimestamp:[NSDate new]];
-                                                   data.double_values_0 = [NSNumber numberWithDouble:motion.userAcceleration.x];
-                                                   data.double_values_1 = [NSNumber numberWithDouble:motion.userAcceleration.y];
-                                                   data.double_values_2 = [NSNumber numberWithDouble:motion.userAcceleration.z];
-                                                   data.accuracy = @0;
-                                                   data.label =  @"";
+                                                   //////////////////////////////////////////////////
+                                                   NSNumber *unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
+                                                   NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+                                                   [dict setObject:unixtime forKey:@"timestamp"];
+                                                   [dict setObject:[self getDeviceId] forKey:@"device_id"];
+                                                   [dict setObject:[NSNumber numberWithDouble:motion.userAcceleration.x] forKey:@"double_values_0"]; //double
+                                                   [dict setObject:[NSNumber numberWithDouble:motion.userAcceleration.y]  forKey:@"double_values_1"]; //double
+                                                   [dict setObject:[NSNumber numberWithDouble:motion.userAcceleration.z]  forKey:@"double_values_2"]; //double
+                                                   [dict setObject:@0 forKey:@"accuracy"];//int
+                                                   [dict setObject:@"" forKey:@"label"]; //text
+                                                   [self setLatestValue:[NSString stringWithFormat:@"%f, %f, %f",motion.userAcceleration.x, motion.userAcceleration.y,motion.userAcceleration.z]];
                                                    
-                                                   [self setLatestValue:[NSString stringWithFormat:@"%f, %f, %f",
-                                                                         motion.userAcceleration.z,
-                                                                         motion.userAcceleration.y,
-                                                                         motion.userAcceleration.z]];
-                                                   
-                                                   NSDictionary *userInfo = [NSDictionary dictionaryWithObject:data
+                                                   NSDictionary *userInfo = [NSDictionary dictionaryWithObject:dict
                                                                                                         forKey:EXTRA_DATA];
                                                    [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_LINEAR_ACCELEROMETER
                                                                                                        object:nil
                                                                                                      userInfo:userInfo];
                                                    
-                                                   [self saveDataToDB];
                                                    
-                                                   [self setLatestValue:[NSString stringWithFormat:@"%f, %f, %f",motion.userAcceleration.x, motion.userAcceleration.y,motion.userAcceleration.z]];
+                                                   [self saveData:dict];
                                                });
                                            }];
     }
     return YES;
 }
 
-
+- (void)insertNewEntityWithData:(NSDictionary *)data managedObjectContext:(NSManagedObjectContext *)childContext entityName:(NSString *)entity{
+    EntityLinearAccelerometer* entityLinearAcc = (EntityLinearAccelerometer *)[NSEntityDescription
+                                                                    insertNewObjectForEntityForName:entity
+                                                                    inManagedObjectContext:childContext];
+    
+    entityLinearAcc.device_id = [data objectForKey:@"device_id"];
+    entityLinearAcc.timestamp = [data objectForKey:@"timestamp"];
+    entityLinearAcc.double_values_0 = [data objectForKey:@"double_values_0"];
+    entityLinearAcc.double_values_1 = [data objectForKey:@"double_values_1"];
+    entityLinearAcc.double_values_2 = [data objectForKey:@"double_values_2"];
+    entityLinearAcc.accuracy = [data objectForKey:@"accuracy"];
+    entityLinearAcc.label =  [data objectForKey:@"label"];
+}
 
 - (BOOL)stopSensor{
     [motionManager stopDeviceMotionUpdates];
@@ -157,20 +163,7 @@
     return YES;
 }
 
-//////////////////////////////////////////////////
-//NSNumber *unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
-//NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-//[dic setObject:unixtime forKey:@"timestamp"];
-//[dic setObject:[self getDeviceId] forKey:@"device_id"];
-//[dic setObject:[NSNumber numberWithDouble:motion.userAcceleration.x] forKey:@"double_values_0"]; //double
-//[dic setObject:[NSNumber numberWithDouble:motion.userAcceleration.y]  forKey:@"double_values_1"]; //double
-//[dic setObject:[NSNumber numberWithDouble:motion.userAcceleration.z]  forKey:@"double_values_2"]; //double
-//[dic setObject:@0 forKey:@"accuracy"];//int
-//[dic setObject:@"" forKey:@"label"]; //text
-//[self setLatestValue:[NSString stringWithFormat:@"%f, %f, %f",motion.userAcceleration.x, motion.userAcceleration.y,motion.userAcceleration.z]];
-//dispatch_async(dispatch_get_main_queue(), ^{
-//    [self saveData:dic toLocalFile:SENSOR_LINEAR_ACCELEROMETER];
-//});
+
 
 
 @end
