@@ -94,41 +94,34 @@
                                            withHandler:^(CMDeviceMotion *motion, NSError *error){
                                                // Save sensor data to the local database.
                                                NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
-                                               // AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
-                                               EntityRotation* data = (EntityRotation *)[NSEntityDescription
-                                                                                        insertNewObjectForEntityForName:[self getEntityName]
-                                                                                    inManagedObjectContext:[self getSensorManagedObjectContext]];
+                                           
+                                              NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+                                              [dict setObject:unixtime forKey:@"timestamp"];
+                                              [dict setObject:[self getDeviceId] forKey:@"device_id"];
+                                              [dict setObject:[NSNumber numberWithDouble:motion.attitude.pitch] forKey:@"double_values_0"]; //double
+                                              [dict setObject:[NSNumber numberWithDouble:motion.attitude.roll]  forKey:@"double_values_1"]; //double
+                                              [dict setObject:[NSNumber numberWithDouble:motion.attitude.yaw]  forKey:@"double_values_2"]; //double
+                                              [dict setObject:@0 forKey:@"double_values_3"]; //double
+                                              [dict setObject:@0 forKey:@"accuracy"];//int
+                                              [dict setObject:@"" forKey:@"label"]; //text
                                                
-                                               data.device_id = [self getDeviceId];
-                                               data.timestamp = unixtime;
-                                               data.double_values_0 = @(motion.attitude.pitch);
-                                               data.double_values_1 = @(motion.attitude.roll);
-                                               data.double_values_2 = @(motion.attitude.yaw);
-                                               data.double_values_3 = @0;
-                                               data.accuracy = @0;
-                                               data.label =  @"";
+                                               if([self getDBType] == AwareDBTypeCoreData){
+                                                   [self saveData:dict];
+                                               }else if([self getDBType] == AwareDBTypeTextFile){
+                                                   dispatch_async(dispatch_get_main_queue(), ^{
+                                                       [self saveData:dict toLocalFile:SENSOR_ROTATION];
+                                                   });
+                                               }
                                                
-                                               NSDictionary *userInfo = [NSDictionary dictionaryWithObject:data
+                                            
+                                               NSDictionary *userInfo = [NSDictionary dictionaryWithObject:dict
                                                                                                     forKey:EXTRA_DATA];
                                                [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_ROTATION
                                                                                                    object:nil
                                                                                                  userInfo:userInfo];
                                                
-                                               [self saveDataToDB];
                                                [self setLatestValue:[NSString stringWithFormat:@"%f, %f, %f",motion.attitude.pitch, motion.attitude.roll,motion.attitude.yaw]];
 
-//                                               NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-//                                               [dic setObject:unixtime forKey:@"timestamp"];
-//                                               [dic setObject:[self getDeviceId] forKey:@"device_id"];
-//                                               [dic setObject:[NSNumber numberWithDouble:motion.attitude.pitch] forKey:@"double_values_0"]; //double
-//                                               [dic setObject:[NSNumber numberWithDouble:motion.attitude.roll]  forKey:@"double_values_1"]; //double
-//                                               [dic setObject:[NSNumber numberWithDouble:motion.attitude.yaw]  forKey:@"double_values_2"]; //double
-//                                               [dic setObject:@0 forKey:@"double_values_3"]; //double
-//                                               [dic setObject:@0 forKey:@"accuracy"];//int
-//                                               [dic setObject:@"" forKey:@"label"]; //text
-//                                              dispatch_async(dispatch_get_main_queue(), ^{
-//                                                   [self saveData:dic toLocalFile:SENSOR_ROTATION];
-//                                               });
                                            }];
     }
     return YES;
@@ -139,6 +132,25 @@
     [motionManager stopDeviceMotionUpdates];
     motionManager = nil;
     return YES;
+}
+
+
+- (void)insertNewEntityWithData:(NSDictionary *)data
+           managedObjectContext:(NSManagedObjectContext *)childContext
+                     entityName:(NSString *)entity{
+    EntityRotation* entityRotation = (EntityRotation *)[NSEntityDescription
+                                              insertNewObjectForEntityForName:entity
+                                              inManagedObjectContext:childContext];
+    
+    entityRotation.device_id = [data objectForKey:@"device_id"];
+    entityRotation.timestamp = [data objectForKey:@"timestamp"];
+    entityRotation.double_values_0 = [data objectForKey:@"double_values_0"];
+    entityRotation.double_values_1 = [data objectForKey:@""];
+    entityRotation.double_values_2 = [data objectForKey:@""];
+    entityRotation.double_values_3 = [data objectForKey:@""];
+    entityRotation.accuracy = [data objectForKey:@""];
+    entityRotation.label = [data objectForKey:@""];
+    
 }
 
 

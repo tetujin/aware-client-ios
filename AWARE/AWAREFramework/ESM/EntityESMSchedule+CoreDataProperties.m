@@ -2,7 +2,7 @@
 //  EntityESMSchedule+CoreDataProperties.m
 //  AWARE
 //
-//  Created by Yuuki Nishiyama on 7/18/16.
+//  Created by Yuuki Nishiyama on 7/19/16.
 //  Copyright © 2016 Yuuki NISHIYAMA. All rights reserved.
 //
 //  Choose "Create NSManagedObject Subclass…" from the Core Data editor menu
@@ -21,6 +21,7 @@
 @dynamic randomize;
 @dynamic schedule_id;
 @dynamic start_date;
+@dynamic context;
 @dynamic esms;
 
 @end

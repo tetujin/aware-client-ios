@@ -204,6 +204,10 @@ didReceiveResponse:(NSURLResponse *)response
                 NSString * notificationTitle = [schedule objectForKey:@"notification_title"];
                 NSString * notificationBody = [schedule objectForKey:@"notification_body"];
                 NSString * scheduleId = [schedule objectForKey:@"schedule_id"];
+                NSString * eventContext = [self convertNSArraytoJsonStr:[schedule objectForKey:@"context"]];
+                if(eventContext == nil) {
+                    eventContext = @"[]";
+                }
                 
                 NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
                 [formatter setDateFormat:@"MM-dd-yyyy"];
@@ -225,6 +229,7 @@ didReceiveResponse:(NSURLResponse *)response
                     entityWebESM.noitification_body = notificationBody;
                     entityWebESM.randomize = randomize;
                     entityWebESM.schedule_id = scheduleId;
+                    entityWebESM.context = eventContext;
                     
                     for (NSDictionary * esmDict in esms) {
                         NSDictionary * esm = [esmDict objectForKey:@"esm"];
@@ -270,9 +275,7 @@ didReceiveResponse:(NSURLResponse *)response
             // save new ESMs
             NSError * e = nil;
             if(![context save:&e]){
-                
                 NSLog(@"Error: %@", e.debugDescription);
-            
             }
             
             // isLock = NO;

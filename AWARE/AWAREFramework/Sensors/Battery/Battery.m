@@ -174,7 +174,9 @@
     if (previousBatteryLevel == [UIDevice currentDevice].batteryLevel*100) {
         return;
     }
-    // NSLog(@"battery status: %d",state); // 0 unknown, 1 unplegged, 2 charging, 3 full
+    
+    // 0 unknown, 1 unplegged, 2 charging, 3 full
+    // NSLog(@"battery status: %d",state);
     UIDevice *myDevice = [UIDevice currentDevice];
     [myDevice setBatteryMonitoringEnabled:YES];
     int state = [myDevice batteryState];
@@ -192,7 +194,6 @@
     [dict setObject:@0 forKey:@"battery_adaptor"];
     [dict setObject:@0 forKey:@"battery_health"];
     [dict setObject:@"" forKey:@"battery_technology"];
-    [self saveData:dict];
     [self setLatestValue:[NSString stringWithFormat:@"%d", batLeft]];
     
     // Broadcast
@@ -201,6 +202,11 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_BATTERY_CHANGED
                                                         object:nil
                                                       userInfo:userInfo];
+    
+    NSLog(@"[Battery Sensor] %d", [NSThread isMainThread] );
+    
+    [self saveData:dict];
+    
 }
 
 

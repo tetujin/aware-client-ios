@@ -19,4 +19,6 @@
 
 - (void) saveLocation:(CLLocation *)location;
 
+- (void) saveAuthorizationStatus:(CLAuthorizationStatus)status;
+
 @end

@@ -93,7 +93,7 @@
                                          NSLog(@"%@:%ld", [error domain], [error code] );
                                      } else {
                                          
-                                         dispatch_async(dispatch_get_main_queue(),^{
+                                         // dispatch_async(dispatch_get_main_queue(),^{
                                              
                                              NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
                                              NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
@@ -112,10 +112,15 @@
                                                                                                  object:nil
                                                                                                userInfo:userInfo];
 
-                                             
+                                         if([self getDBType] == AwareDBTypeCoreData){
                                              [self saveData:dict];
-                                             
-                                         });
+                                         }else if ([self getDBType] == AwareDBTypeTextFile){
+                                             dispatch_async(dispatch_get_main_queue(), ^{
+                                                 [self saveData:dict];
+                                             });
+                                         }
+                                         
+                                         // });
                                      }
                                  }];
 

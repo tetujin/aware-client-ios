@@ -101,6 +101,9 @@
         if ([locationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
             [locationManager requestAlwaysAuthorization];
         }
+        
+        [fusedLocationsSensor saveAuthorizationStatus:[CLLocationManager authorizationStatus]];
+    
         // Set a movement threshold for new events.
         [locationManager startMonitoringVisits]; // This method calls didVisit.
         [locationManager startMonitoringSignificantLocationChanges];
@@ -235,7 +238,7 @@
 }
 
 
-- (bool)isUploading{
+- (bool)isUploading:(CLAuthorizationStatus ) state{
     if([fusedLocationsSensor isUploading] || [visitLocationSensor isUploading]){
         return YES;
     }else{
@@ -252,5 +255,10 @@
 //    //    [sdManager addHeading: theHeading];
 //}
 
+
+- (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status
+{
+    [fusedLocationsSensor saveAuthorizationStatus:status];
+}
 
 @end

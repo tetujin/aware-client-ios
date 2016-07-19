@@ -84,8 +84,6 @@
         [altitude startRelativeAltitudeUpdatesToQueue:[NSOperationQueue mainQueue]
                                           withHandler:^(CMAltitudeData *altitudeData, NSError *error) {
                                               
-                                              dispatch_async(dispatch_get_main_queue(),^{
-
                                                 double pressureDouble = [altitudeData.pressure doubleValue];
 
                                                  NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
@@ -113,7 +111,6 @@
                                                   [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_BAROMETER
                                                                                                       object:nil
                                                                                                     userInfo:userInfo];
-                                              });
                                           }];
     }
     return YES;

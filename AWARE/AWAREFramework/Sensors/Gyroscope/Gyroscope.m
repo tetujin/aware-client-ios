@@ -94,7 +94,7 @@
                              withHandler:^(CMGyroData * _Nullable gyroData,
                                            NSError * _Nullable error) {
                                  
-                                 dispatch_async(dispatch_get_main_queue(),^{
+                                 // dispatch_async(dispatch_get_main_queue(),^{
                                      
                                      if( error ) {
                                          NSLog(@"%@:%ld", [error domain], [error code] );
@@ -124,7 +124,7 @@
                                                                                              object:nil
                                                                                            userInfo:userInfo];
                                     }
-                                 });
+                                 // });
                              }];
     return YES;
 }

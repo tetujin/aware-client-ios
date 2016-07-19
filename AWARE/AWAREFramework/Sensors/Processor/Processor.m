@@ -58,39 +58,36 @@
     }
     NSLog(@"[%@] Sensing requency is %f ",[self getSensorName], frequency);
     
-    // Set a buffer size for reducing file access
-//     [self setBufferSize:1000];
-    
     NSLog(@"[%@] Start Processor Sensor", [self getSensorName]);
     sensingTimer = [NSTimer scheduledTimerWithTimeInterval:frequency
                                                     target:self
-                                                  selector:@selector(getSensorData)
+                                                  selector:@selector(saveCPUUsage:)
                                                   userInfo:nil
                                                    repeats:YES];
     return YES;
 }
 
-- (void) getSensorData{
+- (void) saveCPUUsage:(id)sender{
     // Get a CPU usage
-//    float cpuUsageFloat = [self getCpuUsage];
-//    NSNumber *appCpuUsage = [NSNumber numberWithFloat:cpuUsageFloat];
-//    NSNumber *idleCpuUsage = [NSNumber numberWithFloat:(100.0f-cpuUsageFloat)];
-//
-//    // Save sensor data to the local database.
-//    NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
-//    NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-//    [dic setObject:unixtime forKey:@"timestamp"];
-//    [dic setObject:[self getDeviceId] forKey:@"device_id"];
-//    [dic setObject:appCpuUsage forKey:@"double_last_user"]; //double
-//    [dic setObject:@0 forKey:@"double_last_system"]; //double
-//    [dic setObject:idleCpuUsage forKey:@"double_last_idle"]; //double
-//    [dic setObject:@0 forKey:@"double_user_load"];//double
-//    [dic setObject:@0 forKey:@"double_system_load"]; //double
-//    [dic setObject:@0 forKey:@"double_idle_load"]; //double
-//    [self setLatestValue:[NSString stringWithFormat:@"%@ %%",appCpuUsage]];
-//    [self saveData:dic toLocalFile:SENSOR_PROCESSOR];
-//    
-//    malloc(cpuUsageFloat);
+    float cpuUsageFloat = [self getCpuUsage];
+    NSNumber *appCpuUsage = [NSNumber numberWithFloat:cpuUsageFloat];
+    NSNumber *idleCpuUsage = [NSNumber numberWithFloat:(100.0f-cpuUsageFloat)];
+
+    // Save sensor data to the local database.
+    NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
+    NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+    [dic setObject:unixtime forKey:@"timestamp"];
+    [dic setObject:[self getDeviceId] forKey:@"device_id"];
+    [dic setObject:appCpuUsage forKey:@"double_last_user"]; //double
+    [dic setObject:@0 forKey:@"double_last_system"]; //double
+    [dic setObject:idleCpuUsage forKey:@"double_last_idle"]; //double
+    [dic setObject:@0 forKey:@"double_user_load"];//double
+    [dic setObject:@0 forKey:@"double_system_load"]; //double
+    [dic setObject:@0 forKey:@"double_idle_load"]; //double
+    [self setLatestValue:[NSString stringWithFormat:@"%@ %%",appCpuUsage]];
+    [self saveData:dic toLocalFile:SENSOR_PROCESSOR];
+    
+    malloc(cpuUsageFloat);
 }
 
 - (BOOL)stopSensor{

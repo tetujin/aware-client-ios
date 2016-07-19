@@ -126,9 +126,34 @@
             //This variable is an important method for background sensing after iOS9
             locationManager.allowsBackgroundLocationUpdates = YES;
         }
+        
         if ([locationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
             [locationManager requestAlwaysAuthorization];
         }
+        
+        /**
+         * Check an authorization of location sensor
+         * https://developer.apple.com/library/ios/documentation/CoreLocation/Reference/CLLocationManager_Class/#//apple_ref/c/tdef/CLAuthorizationStatus
+         */
+        [self saveAuthorizationStatus:[CLLocationManager authorizationStatus]];
+        
+//        if([CLLocationManager authorizationStatus] == kCLAuthorizationStatusNotDetermined ){
+//            [self saveDebugEventWithText:@":Location sensor's authorization is not determined" type:DebugTypeWarn label:@""];
+//        }else if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusRestricted ){
+//            [self saveDebugEventWithText:@"Location sensor's authorization is restrcted" type:DebugTypeWarn label:@""];
+//        }else if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied ){
+//            [self saveDebugEventWithText:@"Location sensor's authorization is denied" type:DebugTypeWarn label:@""];
+//        }else if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorized ){
+//            [self saveDebugEventWithText:@"Location sensor's authorization is authorized (always)" type:DebugTypeWarn label:@""];
+//        }else if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways){
+//            [self saveDebugEventWithText:@"Location sensor's authorization is authorized always" type:DebugTypeWarn label:@""];
+//        }else if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedWhenInUse){
+//            [self saveDebugEventWithText:@"Location sensor's authorization is authorized when in use" type:DebugTypeWarn label:@""];
+//        }else {
+//            [self saveDebugEventWithText:@"Location sensor's authorization is unknown" type:DebugTypeWarn label:@""];
+//        }
+        
+        
         // Set a movement threshold for new events.
         locationManager.distanceFilter = accuracyMeter; // meter
         // locationManager.activityType = CLActivityTypeFitness;
@@ -204,8 +229,12 @@
     [dict setObject:[NSNumber numberWithInt:accuracy] forKey:@"accuracy"];
     [dict setObject:@"" forKey:@"label"];
     [self setLatestValue:[NSString stringWithFormat:@"%f, %f, %f", location.coordinate.latitude, location.coordinate.longitude, location.speed]];
-    //[self saveData:dict toLocalFile:@"locations"];
-    [self saveData:dict];
+    
+    if([self getDBType] == AwareDBTypeCoreData){
+        [self saveData:dict];
+    }else if ([self getDBType] == AwareDBTypeTextFile){
+        [self saveData:dict toLocalFile:@"locations"];
+    }
     
     [self setLatestValue:[NSString stringWithFormat:@"%f, %f, %f",
                           location.coordinate.latitude,
@@ -239,8 +268,6 @@
     entityLocation.accuracy = [data objectForKey:@"accuracy"];
     entityLocation.label = [data objectForKey:@"label"];
     
-    
-    
 }
 
 
@@ -255,6 +282,94 @@
 ////    [sdManager addHeading: theHeading];
 //}
 
+
+
+- (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status
+{
+    [self saveAuthorizationStatus:status];
+}
+
+
+
+- (void) saveAuthorizationStatus:(CLAuthorizationStatus ) status {
+    if(status == kCLAuthorizationStatusNotDetermined ){
+        [self saveDebugEventWithText:@"Location sensor's authorization is not determined" type:DebugTypeWarn label:@""];
+        
+        //        NSString * title = @"Location Sensor Error";
+        //        NSString * message = @"Please allow to use location sensor on AWARE client iOS from 'Settings > AWARE > Location> Always'";
+        //        [self saveDebugEventWithText:@"Location sensor's authorization is restrcted" type:DebugTypeWarn label:@""];
+        //        if([AWAREUtils isBackground]){
+        //            [AWAREUtils sendLocalNotificationForMessage:message title:title soundFlag:YES
+        //                                               category:nil fireDate:[NSDate new] repeatInterval:0 userInfo:nil iconBadgeNumber:1];
+        //        }else{
+        //            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title
+        //                                                                message:message
+        //                                                               delegate:nil
+        //                                                      cancelButtonTitle:@"OK"
+        //                                                      otherButtonTitles:nil];
+        //            [alertView show];
+        //        }
+        ////////////////// kCLAuthorizationStatusRestricted ///////////////////////
+    }else if (status == kCLAuthorizationStatusRestricted ){
+        NSString * title = @"Location Sensor Error";
+        NSString * message = @"Please allow to use location sensor on AWARE client iOS from 'Settings > AWARE > Location> Always'";
+        [self saveDebugEventWithText:@"Location sensor's authorization is restrcted" type:DebugTypeWarn label:@""];
+        if([AWAREUtils isBackground]){
+            [AWAREUtils sendLocalNotificationForMessage:message title:title soundFlag:YES
+                                               category:nil fireDate:[NSDate new] repeatInterval:0 userInfo:nil iconBadgeNumber:1];
+        }else{
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title
+                                                                message:message
+                                                               delegate:nil
+                                                      cancelButtonTitle:@"OK"
+                                                      otherButtonTitles:nil];
+            [alertView show];
+        }
+        ///////////////// kCLAuthorizationStatusDenied //////////////////////////////
+    }else if (status == kCLAuthorizationStatusDenied ){
+        
+        NSString * title = @"Location Sensor Error";
+        NSString * message = @"Please turn on the location service from 'Settings > General > Privacy > Location Services'";
+        [self saveDebugEventWithText:@"Location sensor's authorization is denied" type:DebugTypeWarn label:@""];
+        if([AWAREUtils isBackground]){
+            [AWAREUtils sendLocalNotificationForMessage:message title:title soundFlag:YES
+                                               category:nil fireDate:[NSDate new] repeatInterval:0 userInfo:nil iconBadgeNumber:1];
+        }else{
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [alertView show];
+        }
+        //////////////////// kCLAuthorizationStatusAuthorized /////////////////////////
+    }else if (status == kCLAuthorizationStatusAuthorized || status == kCLAuthorizationStatusAuthorizedAlways){
+        [self saveDebugEventWithText:@"Location sensor's authorization is authorized always" type:DebugTypeWarn label:@""];
+        //        NSString * title = @"Location Sensor";
+        //        NSString * message = @"Location service setting is correct! Thank you for your cooperation";
+        //        if([AWAREUtils isBackground]){
+        //            [AWAREUtils sendLocalNotificationForMessage:message title:title soundFlag:YES
+        //                                               category:nil fireDate:[NSDate new] repeatInterval:0 userInfo:nil iconBadgeNumber:1];
+        //        }else{
+        //            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        //             [alertView show];
+        //        }
+        
+        /////////////////// kCLAuthorizationStatusAuthorizedWhenInUse ///////////////////
+    }else if (status == kCLAuthorizationStatusAuthorizedWhenInUse){
+        [self saveDebugEventWithText:@"Location sensor's authorization is authorized when in use" type:DebugTypeWarn label:@""];
+        NSString * title = @"Location Sensor Error";
+        NSString * message = @"Please allow to use location sensor 'Always' on AWARE client iOS from 'Settings > AWARE > Location> Always'";
+        [self saveDebugEventWithText:@"Location sensor's authorization is denied" type:DebugTypeWarn label:@""];
+        if([AWAREUtils isBackground]){
+            [AWAREUtils sendLocalNotificationForMessage:message title:title soundFlag:YES
+                                               category:nil fireDate:[NSDate new] repeatInterval:0 userInfo:nil iconBadgeNumber:1];
+        }else{
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [alertView show];
+        }
+        
+        //////////////////// Unknown ///////////////////////////////
+    }else {
+        [self saveDebugEventWithText:@"Location sensor's authorization is unknown" type:DebugTypeWarn label:@""];
+    }
+}
 
 
 @end

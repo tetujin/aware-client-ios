@@ -33,7 +33,7 @@
 
 - (instancetype)initWithAwareStudy:(AWAREStudy *)study{
     self = [super initWithAwareStudy:study
-                          sensorName:@"ble_heartrate"
+                          sensorName:@"plugin_bluetooth_le_heartrate"
                         dbEntityName:NSStringFromClass([EntityBLEHeartRate class])
                               dbType:AwareDBTypeCoreData];
     if (self) {

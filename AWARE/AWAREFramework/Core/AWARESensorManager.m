@@ -53,6 +53,7 @@
 #import "AWAREHealthKit.h"
 #import "AmbientNoise.h"
 #import "WebESM.h"
+#import "IBeacon.h"
 
 #import "Observer.h"
 
@@ -280,6 +281,9 @@
     [pushNotification startSensorWithSettings:nil];
     [self addNewSensor:pushNotification];
     
+//    IBeacon * iBeacon = [[IBeacon alloc] initWithAwareStudy:awareStudy];
+//    [iBeacon startSensorWithSettings:nil];
+//    [self addNewSensor:iBeacon];
     
     /**
      * Debug Sensor

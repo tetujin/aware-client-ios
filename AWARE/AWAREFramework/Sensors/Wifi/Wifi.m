@@ -10,7 +10,10 @@
 #import "AppDelegate.h"
 #import "EntityWifi.h"
 #import "AWAREKeys.h"
-//#import "MobileWiFi/MobileWiFi.h"
+#import <ifaddrs.h>
+#import <net/if.h>
+#import <SystemConfiguration/CaptiveNetwork.h>
+
 
 @implementation Wifi{
     NSTimer * sensingTimer;
@@ -151,6 +154,10 @@
         if ([self isDebug]) {
             [AWAREUtils sendLocalNotificationForMessage:[NSString stringWithFormat:@"%@ (%@)",ssid, finalBSSID] soundFlag:NO];
         }
+        
+        if(![self isWiFiEnabled]){
+            [self saveDebugEventWithText:@"Wifi module is powered off" type:DebugTypeWarn label:@""];
+        }
     }
     
     [self broadcastScanEnded];
@@ -172,9 +179,6 @@
     entityWifi.frequency = [data objectForKey:@"frequency"];//@0;
     entityWifi.rssi = [data objectForKey:@"rssi"]; //@0;
     entityWifi.label = [data objectForKey:@"label"];//@"";
-    
-    
-    
 }
 
 
@@ -206,58 +210,31 @@
                                                       userInfo:nil];
 }
 
-//
-//
-//
-//static WiFiManagerRef _manager;
-//static void scan_callback(WiFiDeviceClientRef device, CFArrayRef results, CFErrorRef error, void *token);
-//
-//- (void) scanWifi {
-//    _manager = WiFiManagerClientCreate(kCFAllocatorDefault, 0);
-//    
-//    CFArrayRef devices = WiFiManagerClientCopyDevices(_manager);
-//    if (!devices) {
-//        fprintf(stderr, "Couldn't get WiFi devices. Bailing.\n");
-////        exit(EXIT_FAILURE);
-//        return;
-//    }
-//    
-//    WiFiDeviceClientRef client = (WiFiDeviceClientRef)CFArrayGetValueAtIndex(devices, 0);
-//    
-//    WiFiManagerClientScheduleWithRunLoop(_manager, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode);
-//    WiFiDeviceClientScanAsync(client, (__bridge CFDictionaryRef)[NSDictionary dictionary], scan_callback, 0);
-//    
-//    CFRelease(devices);
-//    
-//    CFRunLoopRun();
-//}
-//
-//static void scan_callback(WiFiDeviceClientRef device, CFArrayRef results, CFErrorRef error, void *token)
-//{
-//    NSLog(@"Finished scanning! networks: %@", results);
-//    
-//    WiFiManagerClientUnscheduleFromRunLoop(_manager);
-//    CFRelease(_manager);
-//    
-//    CFRunLoopStop(CFRunLoopGetCurrent());
-//}
 
+- (BOOL) isWiFiEnabled {
+    
+    NSCountedSet * cset = [NSCountedSet new];
+    
+    struct ifaddrs *interfaces;
+    
+    if( ! getifaddrs(&interfaces) ) {
+        for( struct ifaddrs *interface = interfaces; interface; interface = interface->ifa_next) {
+            if ( (interface->ifa_flags & IFF_UP) == IFF_UP ) {
+                [cset addObject:[NSString stringWithUTF8String:interface->ifa_name]];
+            }
+        }
+    }
+    
+    return [cset countForObject:@"awdl0"] > 1 ? YES : NO;
+}
 
-//    NSArray * networkInterfaces = [NEHotspotHelper supportedNetworkInterfaces];
-//    NSLog(@"Networks %@",networkInterfaces);
-//    for(NEHotspotNetwork *hotspotNetwork in [NEHotspotHelper supportedNetworkInterfaces]) {
-//        NSString *ssid = hotspotNetwork.SSID;
-//        NSString *bssid = hotspotNetwork.BSSID;
-//        BOOL secure = hotspotNetwork.secure;
-//        BOOL autoJoined = hotspotNetwork.autoJoined;
-//        double signalStrength = hotspotNetwork.signalStrength;
-//    }
+- (NSDictionary *) wifiDetails {
+    return
+    (__bridge NSDictionary *)
+    CNCopyCurrentNetworkInfo(
+                             CFArrayGetValueAtIndex( CNCopySupportedInterfaces(), 0)
+                             );
+}
 
-//    CFArrayRef myArray = CNCopySupportedInterfaces();
-//    CFDictionaryRef captiveNetWork = CNCopyCurrentNetworkInfo(CFArrayGetValueAtIndex(myArray, 0));
-//    NSLog(@"Connected at : %@", captiveNetWork);
-//    NSDictionary *myDictionnary = (__bridge NSDictionary *)captiveNetWork;
-//    NSString *bssid = [myDictionnary objectForKey:@"BSSID"];
-//    NSLog(@"BSSID : %@", bssid);
 
 @end

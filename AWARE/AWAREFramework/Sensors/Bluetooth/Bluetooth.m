@@ -143,7 +143,7 @@
     [dict setObject:rssi  forKey:@"bt_rssi"]; //int
     [dict setObject:[[AWAREUtils getUnixTimestamp:sessionTime] stringValue] forKey:@"label"]; //text
     [self setLatestValue:[NSString stringWithFormat:@"%@(%@), %@", name, address,rssi]];
-     [self saveData:dict];
+    [self saveData:dict];
     
     // Boradcast events
     NSDictionary *userInfo = [NSDictionary dictionaryWithObject:dict
@@ -273,8 +273,10 @@
 //    NSLog(@"centralManagerDidUpdateState");
     if([central state] == CBCentralManagerStatePoweredOff){
         NSLog(@"CoreBluetooth BLE hardware is powered off");
+        [self saveDebugEventWithText:@"Bluetooth module is powered off" type:DebugTypeWarn label:@""];
     }else if([central state] == CBCentralManagerStatePoweredOn){
         NSLog(@"CoreBluetooth BLE hardware is powered on");
+        [self saveDebugEventWithText:@"Bluetooth module is powered on" type:DebugTypeWarn label:@""];
         NSArray *services = @[
                             [CBUUID UUIDWithString:BATTERY_SERVICE],
                             [CBUUID UUIDWithString:BODY_COMPOSITION_SERIVCE],
@@ -291,7 +293,7 @@
                             [CBUUID UUIDWithString:HUMAN_INTERFACE_DEVICE],
                             [CBUUID UUIDWithString:INDOOR_POSITIONING],
                             [CBUUID UUIDWithString:LOCATION_NAVIGATION ],
-                            [CBUUID UUIDWithString:PHONE_ALERT_STATUS],
+                            // [CBUUID UUIDWithString:PHONE_ALERT_STATUS],
                             [CBUUID UUIDWithString:REFERENCE_TIME],
                             [CBUUID UUIDWithString:SCAN_PARAMETERS],
                             [CBUUID UUIDWithString:TRANSPORT_DISCOVERY],
@@ -301,10 +303,13 @@
         [central scanForPeripheralsWithServices:services options:nil];
     }else if([central state] == CBCentralManagerStateUnauthorized){
         NSLog(@"CoreBluetooth BLE hardware is unauthorized");
+        [self saveDebugEventWithText:@"Bluetooth module is unauthorized" type:DebugTypeWarn label:@""];
     }else if([central state] == CBCentralManagerStateUnknown){
         NSLog(@"CoreBluetooth BLE hardware is unknown");
+        [self saveDebugEventWithText:@"Bluetooth module is unknown" type:DebugTypeWarn label:@""];
     }else if([central state] == CBCentralManagerStateUnsupported){
         NSLog(@"CoreBluetooth BLE hardware is unsupported on this platform");
+        [self saveDebugEventWithText:@"Bluetooth module is unsupported on this platform" type:DebugTypeWarn label:@""];
     }
 }
 

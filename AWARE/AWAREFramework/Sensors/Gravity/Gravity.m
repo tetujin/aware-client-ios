@@ -91,7 +91,7 @@
                                            withHandler:^(CMDeviceMotion *motion, NSError *error){
                                                // Save sensor data to the local database.
                                                
-                                               dispatch_async(dispatch_get_main_queue(),^{
+                                               // dispatch_async(dispatch_get_main_queue(),^{
                                                    
                                                   NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
                                                   NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
@@ -119,7 +119,7 @@
                                                        });
                                                    }
                                                 
-                                               });
+                                               // });
                                            }];
     }
 

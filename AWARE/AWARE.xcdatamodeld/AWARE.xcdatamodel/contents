@@ -177,6 +177,7 @@
         <attribute name="trigger" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <entity name="EntityESMSchedule" representedClassName="EntityESMSchedule" syncable="YES">
+        <attribute name="context" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="end_date" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="expiration_threshold" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="fire_hour" optional="YES" attributeType="Integer 16" minValueString="-1" maxValueString="23" defaultValueString="0" syncable="YES"/>
@@ -410,7 +411,8 @@
         <element name="EntityDeviceUsage" positionX="234" positionY="198" width="128" height="30"/>
         <element name="EntityESM" positionX="549" positionY="396" width="128" height="480"/>
         <element name="EntityESMAnswer" positionX="448" positionY="297" width="128" height="165"/>
-        <element name="EntityESMSchedule" positionX="97" positionY="582" width="146" height="180"/>
+        <element name="EntityESMHistory" positionX="297" positionY="144" width="128" height="135"/>
+        <element name="EntityESMSchedule" positionX="97" positionY="582" width="146" height="195"/>
         <element name="EntityGravity" positionX="180" positionY="144" width="128" height="30"/>
         <element name="EntityGyroscope" positionX="189" positionY="153" width="128" height="30"/>
         <element name="EntityLabel" positionX="225" positionY="189" width="128" height="30"/>
@@ -438,6 +440,5 @@
         <element name="EntityScreen" positionX="189" positionY="153" width="128" height="30"/>
         <element name="EntityTimezone" positionX="198" positionY="162" width="128" height="30"/>
         <element name="EntityWifi" positionX="207" positionY="171" width="128" height="30"/>
-        <element name="EntityESMHistory" positionX="297" positionY="144" width="128" height="135"/>
     </elements>
 </model>

@@ -171,7 +171,7 @@
     }
     
     NSArray * esms = [webESM getValidESMsWithDatetime:[NSDate new]];
-    if(esms != nil && esms.count != 0){
+    if(esms != nil && esms.count != 0 && ![ESM isAppearedThisSection]){
         [ESM setAppearedState:YES];
         [self performSegueWithIdentifier:@"webEsmView" sender:self];
     }
