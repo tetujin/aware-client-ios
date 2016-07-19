@@ -82,6 +82,7 @@ extern NSString* const SENSOR_PLUGIN_GOOGLE_CAL_PUSH;
 extern NSString* const SENSOR_PLUGIN_GOOGLE_LOGIN;
 extern NSString* const SENSOR_PLUGIN_CAMPUS;
 extern NSString* const SENSOR_PLUGIN_PEDOMETER;
+extern NSString* const SENSOR_PLUGIN_WEB_ESM;
 extern NSString* const SENSOR_AWARE_DEBUG;
 
 

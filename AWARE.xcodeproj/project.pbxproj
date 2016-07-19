@@ -37,6 +37,15 @@
 		160F0F081D04756800673343 /* EntityBatteryDischarge.m in Sources */ = {isa = PBXBuildFile; fileRef = 160F0F001D04756800673343 /* EntityBatteryDischarge.m */; };
 		160F0F091D04756800673343 /* EntityBattery+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 160F0F021D04756800673343 /* EntityBattery+CoreDataProperties.m */; };
 		160F0F0A1D04756800673343 /* EntityBattery.m in Sources */ = {isa = PBXBuildFile; fileRef = 160F0F041D04756800673343 /* EntityBattery.m */; };
+		1613E0BC1D3CA917000528F5 /* EntityESM+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 1613E0B51D3CA917000528F5 /* EntityESM+CoreDataProperties.m */; };
+		1613E0BD1D3CA917000528F5 /* EntityESM.m in Sources */ = {isa = PBXBuildFile; fileRef = 1613E0B71D3CA917000528F5 /* EntityESM.m */; };
+		1613E0BE1D3CA917000528F5 /* EntityESMSchedule+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 1613E0B91D3CA917000528F5 /* EntityESMSchedule+CoreDataProperties.m */; };
+		1613E0BF1D3CA917000528F5 /* EntityESMSchedule.m in Sources */ = {isa = PBXBuildFile; fileRef = 1613E0BB1D3CA917000528F5 /* EntityESMSchedule.m */; };
+		1613E0CA1D3D33B0000528F5 /* EntityESMHistory+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 1613E0C71D3D33B0000528F5 /* EntityESMHistory+CoreDataProperties.m */; };
+		1613E0CB1D3D33B0000528F5 /* EntityESMHistory.m in Sources */ = {isa = PBXBuildFile; fileRef = 1613E0C91D3D33B0000528F5 /* EntityESMHistory.m */; };
+		161F71FB1D3B261300309650 /* WebESMViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 161F71FA1D3B261300309650 /* WebESMViewController.m */; };
+		161F720C1D3B71D400309650 /* EntityESMAnswer+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 161F72091D3B71D400309650 /* EntityESMAnswer+CoreDataProperties.m */; };
+		161F720D1D3B71D400309650 /* EntityESMAnswer.m in Sources */ = {isa = PBXBuildFile; fileRef = 161F720B1D3B71D400309650 /* EntityESMAnswer.m */; };
 		1623CE6B1BFD1B2C00EFAD72 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1623CE6A1BFD1B2C00EFAD72 /* main.m */; };
 		1623CE6E1BFD1B2C00EFAD72 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1623CE6D1BFD1B2C00EFAD72 /* AppDelegate.m */; };
 		1623CE741BFD1B2C00EFAD72 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1623CE721BFD1B2C00EFAD72 /* Main.storyboard */; };
@@ -239,6 +248,8 @@
 		16BDCCB01D36661800B13BD4 /* MSBandPedometer.m in Sources */ = {isa = PBXBuildFile; fileRef = 16BDCCAF1D36661800B13BD4 /* MSBandPedometer.m */; };
 		16BDCCB31D366C1D00B13BD4 /* MSBandDeviceContact.m in Sources */ = {isa = PBXBuildFile; fileRef = 16BDCCB21D366C1D00B13BD4 /* MSBandDeviceContact.m */; };
 		16BDCCB61D366E3800B13BD4 /* MSBandRRInterval.m in Sources */ = {isa = PBXBuildFile; fileRef = 16BDCCB51D366E3800B13BD4 /* MSBandRRInterval.m */; };
+		16BDCCFE1D38637900B13BD4 /* Meal.m in Sources */ = {isa = PBXBuildFile; fileRef = 16BDCCFD1D38637900B13BD4 /* Meal.m */; };
+		16BDCD011D38646400B13BD4 /* MealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 16BDCD001D38646400B13BD4 /* MealViewController.m */; };
 		16C1FF7D1C617FB100C070AA /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16C1FF7C1C617FB100C070AA /* Accelerate.framework */; };
 		16C1FF7F1C617FC300C070AA /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16C1FF7E1C617FC300C070AA /* GLKit.framework */; };
 		16D810241C06242500605DE2 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16D810231C06242500605DE2 /* CFNetwork.framework */; };
@@ -346,6 +357,24 @@
 		160F0F021D04756800673343 /* EntityBattery+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EntityBattery+CoreDataProperties.m"; sourceTree = "<group>"; };
 		160F0F031D04756800673343 /* EntityBattery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EntityBattery.h; sourceTree = "<group>"; };
 		160F0F041D04756800673343 /* EntityBattery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EntityBattery.m; sourceTree = "<group>"; };
+		1613E0B41D3CA917000528F5 /* EntityESM+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EntityESM+CoreDataProperties.h"; sourceTree = "<group>"; };
+		1613E0B51D3CA917000528F5 /* EntityESM+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EntityESM+CoreDataProperties.m"; sourceTree = "<group>"; };
+		1613E0B61D3CA917000528F5 /* EntityESM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EntityESM.h; sourceTree = "<group>"; };
+		1613E0B71D3CA917000528F5 /* EntityESM.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EntityESM.m; sourceTree = "<group>"; };
+		1613E0B81D3CA917000528F5 /* EntityESMSchedule+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EntityESMSchedule+CoreDataProperties.h"; sourceTree = "<group>"; };
+		1613E0B91D3CA917000528F5 /* EntityESMSchedule+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EntityESMSchedule+CoreDataProperties.m"; sourceTree = "<group>"; };
+		1613E0BA1D3CA917000528F5 /* EntityESMSchedule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EntityESMSchedule.h; sourceTree = "<group>"; };
+		1613E0BB1D3CA917000528F5 /* EntityESMSchedule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EntityESMSchedule.m; sourceTree = "<group>"; };
+		1613E0C61D3D33B0000528F5 /* EntityESMHistory+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EntityESMHistory+CoreDataProperties.h"; sourceTree = "<group>"; };
+		1613E0C71D3D33B0000528F5 /* EntityESMHistory+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EntityESMHistory+CoreDataProperties.m"; sourceTree = "<group>"; };
+		1613E0C81D3D33B0000528F5 /* EntityESMHistory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EntityESMHistory.h; sourceTree = "<group>"; };
+		1613E0C91D3D33B0000528F5 /* EntityESMHistory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EntityESMHistory.m; sourceTree = "<group>"; };
+		161F71F91D3B261300309650 /* WebESMViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebESMViewController.h; sourceTree = "<group>"; };
+		161F71FA1D3B261300309650 /* WebESMViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebESMViewController.m; sourceTree = "<group>"; };
+		161F72081D3B71D400309650 /* EntityESMAnswer+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EntityESMAnswer+CoreDataProperties.h"; sourceTree = "<group>"; };
+		161F72091D3B71D400309650 /* EntityESMAnswer+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EntityESMAnswer+CoreDataProperties.m"; sourceTree = "<group>"; };
+		161F720A1D3B71D400309650 /* EntityESMAnswer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EntityESMAnswer.h; sourceTree = "<group>"; };
+		161F720B1D3B71D400309650 /* EntityESMAnswer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EntityESMAnswer.m; sourceTree = "<group>"; };
 		16228A3B1C22DAE20081C839 /* NotificationCenter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NotificationCenter.framework; path = System/Library/Frameworks/NotificationCenter.framework; sourceTree = SDKROOT; };
 		1623CE661BFD1B2C00EFAD72 /* AWARE.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AWARE.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1623CE6A1BFD1B2C00EFAD72 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -714,6 +743,10 @@
 		16BDCCB21D366C1D00B13BD4 /* MSBandDeviceContact.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSBandDeviceContact.m; sourceTree = "<group>"; };
 		16BDCCB41D366E3800B13BD4 /* MSBandRRInterval.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSBandRRInterval.h; sourceTree = "<group>"; };
 		16BDCCB51D366E3800B13BD4 /* MSBandRRInterval.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSBandRRInterval.m; sourceTree = "<group>"; };
+		16BDCCFC1D38637900B13BD4 /* Meal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Meal.h; path = Meal/Meal.h; sourceTree = "<group>"; };
+		16BDCCFD1D38637900B13BD4 /* Meal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Meal.m; path = Meal/Meal.m; sourceTree = "<group>"; };
+		16BDCCFF1D38646400B13BD4 /* MealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MealViewController.h; path = Meal/MealViewController.h; sourceTree = "<group>"; };
+		16BDCD001D38646400B13BD4 /* MealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MealViewController.m; path = Meal/MealViewController.m; sourceTree = "<group>"; };
 		16C1FF7C1C617FB100C070AA /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		16C1FF7E1C617FC300C070AA /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		16C81FF41CD6B32D0013A87C /* AWARE_v2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = AWARE_v2.xcdatamodel; sourceTree = "<group>"; };
@@ -878,6 +911,7 @@
 			isa = PBXGroup;
 			children = (
 				169C870E1D01382C00825761 /* Core */,
+				169C872D1D01382C00825761 /* ESM */,
 				169C87821D01382C00825761 /* MQTT */,
 				169C87851D01382C00825761 /* Plugins */,
 				169C87BB1D01382C00825761 /* Sensors */,
@@ -923,7 +957,6 @@
 				169C88AC1D0142C300825761 /* TCQMaker.m */,
 				1683ABCC1D347A5F001543D9 /* AWAREDebugMessageLogger.h */,
 				1683ABCD1D347A5F001543D9 /* AWAREDebugMessageLogger.m */,
-				169C872D1D01382C00825761 /* ESM */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -948,9 +981,26 @@
 				169C873C1D01382C00825761 /* PAM */,
 				169C87801D01382C00825761 /* SingleESMObject.h */,
 				169C87811D01382C00825761 /* SingleESMObject.m */,
+				161F72081D3B71D400309650 /* EntityESMAnswer+CoreDataProperties.h */,
+				161F72091D3B71D400309650 /* EntityESMAnswer+CoreDataProperties.m */,
+				161F720A1D3B71D400309650 /* EntityESMAnswer.h */,
+				161F720B1D3B71D400309650 /* EntityESMAnswer.m */,
+				1613E0B41D3CA917000528F5 /* EntityESM+CoreDataProperties.h */,
+				1613E0B51D3CA917000528F5 /* EntityESM+CoreDataProperties.m */,
+				1613E0B61D3CA917000528F5 /* EntityESM.h */,
+				1613E0B71D3CA917000528F5 /* EntityESM.m */,
+				1613E0B81D3CA917000528F5 /* EntityESMSchedule+CoreDataProperties.h */,
+				1613E0B91D3CA917000528F5 /* EntityESMSchedule+CoreDataProperties.m */,
+				1613E0BA1D3CA917000528F5 /* EntityESMSchedule.h */,
+				1613E0BB1D3CA917000528F5 /* EntityESMSchedule.m */,
+				1613E0C61D3D33B0000528F5 /* EntityESMHistory+CoreDataProperties.h */,
+				1613E0C71D3D33B0000528F5 /* EntityESMHistory+CoreDataProperties.m */,
+				1613E0C81D3D33B0000528F5 /* EntityESMHistory.h */,
+				1613E0C91D3D33B0000528F5 /* EntityESMHistory.m */,
+				161F71F91D3B261300309650 /* WebESMViewController.h */,
+				161F71FA1D3B261300309650 /* WebESMViewController.m */,
 			);
-			name = ESM;
-			path = ../ESM;
+			path = ESM;
 			sourceTree = "<group>";
 		};
 		169C873C1D01382C00825761 /* PAM */ = {
@@ -1177,6 +1227,7 @@
 				169C87B51D01382C00825761 /* PushNotification */,
 				169C87B81D01382C00825761 /* SensorTag */,
 				16EC4F1C1D2EAA4F00524424 /* WebESM */,
+				16BDCD021D38876B00B13BD4 /* Meal */,
 			);
 			path = Plugins;
 			sourceTree = "<group>";
@@ -1817,6 +1868,17 @@
 			name = Entities;
 			sourceTree = "<group>";
 		};
+		16BDCD021D38876B00B13BD4 /* Meal */ = {
+			isa = PBXGroup;
+			children = (
+				16BDCCFC1D38637900B13BD4 /* Meal.h */,
+				16BDCCFD1D38637900B13BD4 /* Meal.m */,
+				16BDCCFF1D38646400B13BD4 /* MealViewController.h */,
+				16BDCD001D38646400B13BD4 /* MealViewController.m */,
+			);
+			name = Meal;
+			sourceTree = "<group>";
+		};
 		16EC4F1C1D2EAA4F00524424 /* WebESM */ = {
 			isa = PBXGroup;
 			children = (
@@ -2139,10 +2201,13 @@
 				16EC4F171D2E7D8200524424 /* EntityMSBandRRInterval+CoreDataProperties.m in Sources */,
 				16B0783D1D1F918B009C070B /* EntityMSBandDeviceContact+CoreDataProperties.m in Sources */,
 				16B0783F1D1F918B009C070B /* EntityMSBandCalorie+CoreDataProperties.m in Sources */,
+				16BDCD011D38646400B13BD4 /* MealViewController.m in Sources */,
 				16B077BC1D1A54BF009C070B /* EntityPushNotification.m in Sources */,
 				169C88751D01382C00825761 /* AudioAnalysis.m in Sources */,
 				169C88781D01382C00825761 /* FusedLocations.m in Sources */,
+				1613E0BC1D3CA917000528F5 /* EntityESM+CoreDataProperties.m in Sources */,
 				16B0783C1D1F918B009C070B /* EntityMSBandPedometer.m in Sources */,
+				1613E0BF1D3CA917000528F5 /* EntityESMSchedule.m in Sources */,
 				169C887C1D01382C00825761 /* AWAREHealthKit.m in Sources */,
 				160F0E901D03D64E00673343 /* EntityBarometer.m in Sources */,
 				169C88331D01382C00825761 /* AWAREStudy.m in Sources */,
@@ -2168,6 +2233,7 @@
 				16B077851D1978FF009C070B /* EntityActivityRecognition.m in Sources */,
 				16B078371D1F918B009C070B /* EntityMSBandUV+CoreDataProperties.m in Sources */,
 				16B077C71D1A57DD009C070B /* EntityNTPTime+CoreDataProperties.m in Sources */,
+				1613E0CB1D3D33B0000528F5 /* EntityESMHistory.m in Sources */,
 				16BDCCAD1D364B3400B13BD4 /* MSBandHR.m in Sources */,
 				169C883A1D01382C00825761 /* AWAREEsmViewController.m in Sources */,
 				160F0EF21D04277000673343 /* EntityMagnetometer.m in Sources */,
@@ -2208,8 +2274,10 @@
 				16B077721D19288A009C070B /* EntityScreen+CoreDataProperties.m in Sources */,
 				169C88851D01382C00825761 /* Accelerometer.m in Sources */,
 				16EC4F211D2FA1F000524424 /* EntityAmbientNoise+CoreDataProperties.m in Sources */,
+				161F720D1D3B71D400309650 /* EntityESMAnswer.m in Sources */,
 				16EC4F221D2FA1F000524424 /* EntityAmbientNoise.m in Sources */,
 				169C88881D01382C00825761 /* Battery.m in Sources */,
+				161F71FB1D3B261300309650 /* WebESMViewController.m in Sources */,
 				16B077961D1A01A0009C070B /* EntityLocationVisit+CoreDataProperties.m in Sources */,
 				169C887F1D01382C00825761 /* MSBand.m in Sources */,
 				169C889F1D01382C00825761 /* GoogleLoginViewController.m in Sources */,
@@ -2249,7 +2317,9 @@
 				16B078381D1F918B009C070B /* EntityMSBandUV.m in Sources */,
 				169C888B1D01382C00825761 /* MDBluetoothDevice.m in Sources */,
 				169C888A1D01382C00825761 /* BluetoothScanner.m in Sources */,
+				1613E0CA1D3D33B0000528F5 /* EntityESMHistory+CoreDataProperties.m in Sources */,
 				160F0F051D04756800673343 /* EntityBatteryCharge+CoreDataProperties.m in Sources */,
+				1613E0BD1D3CA917000528F5 /* EntityESM.m in Sources */,
 				16BDCCA11D3609CE00B13BD4 /* MSBandGSR.m in Sources */,
 				169C88381D01382C00825761 /* SSLManager.m in Sources */,
 				160F0EF71D042AB600673343 /* EntityNetwork+CoreDataProperties.m in Sources */,
@@ -2279,11 +2349,14 @@
 				16B077C21D1A55FC009C070B /* EntityMemory.m in Sources */,
 				160F0E8A1D03D60500673343 /* EntityAccelerometer.m in Sources */,
 				1623CE6B1BFD1B2C00EFAD72 /* main.m in Sources */,
+				1613E0BE1D3CA917000528F5 /* EntityESMSchedule+CoreDataProperties.m in Sources */,
 				169C88871D01382C00825761 /* Barometer.m in Sources */,
 				16B078441D1F918B009C070B /* EntityMSBandDistance.m in Sources */,
 				169C883C1D01382C00825761 /* ESMManager.m in Sources */,
 				169C88901D01382C00825761 /* Gravity.m in Sources */,
 				16B078351D1F918B009C070B /* EntityMSBandGSR+CoreDataProperties.m in Sources */,
+				16BDCCFE1D38637900B13BD4 /* Meal.m in Sources */,
+				161F720C1D3B71D400309650 /* EntityESMAnswer+CoreDataProperties.m in Sources */,
 				16B077901D1999B5009C070B /* EntityBLEHeartRate+CoreDataProperties.m in Sources */,
 				169C88791D01382C00825761 /* GoogleCalPull.m in Sources */,
 				169C88911D01382C00825761 /* Gyroscope.m in Sources */,

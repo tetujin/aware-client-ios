@@ -22,6 +22,7 @@
 #import "ESMStorageHelper.h"
 #import "AppDelegate.h"
 #import "Observer.h"
+#import "WebESM.h"
 
 // Plugins
 #import "GoogleCalPush.h"
@@ -76,6 +77,8 @@
     NSURL * webViewURL;
     
     EAIntroView *intro;
+    
+    WebESM *webESM;
 }
 
 - (void)viewDidLoad {
@@ -97,10 +100,10 @@
     // EAIntroView
     intro = [[EAIntroView alloc] initWithFrame:self.view.bounds andPages:[self getIntroPages]];
     [intro setDelegate:self];
-    if (![userDefaults boolForKey:@"showed_introduction"]) {
-         [intro showInView:self.view animateDuration:0.0];
-    }
-    [userDefaults setBool:YES forKey:@"showed_introduction"];
+//    if (![userDefaults boolForKey:@"showed_introduction"]) {
+//         [intro showInView:self.view animateDuration:0.0];
+//    }
+//    [userDefaults setBool:YES forKey:@"showed_introduction"];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
 
@@ -145,6 +148,7 @@
                                                       repeats:YES];
     [[NSRunLoop mainRunLoop] addTimer:listUpdateTimer forMode:NSRunLoopCommonModes];
 
+    webESM = [[WebESM alloc] initWithAwareStudy:awareStudy];
 }
 
 
@@ -154,7 +158,9 @@
  * If an ESM is existed, AWARE iOS move to the ESM answer page.
  */
 - (void)appDidBecomeActive:(NSNotification *)notification {
+    
     NSLog(@"did become active notification");
+    
     ESMStorageHelper * helper = [[ESMStorageHelper alloc] init];
     NSArray * storedEsms = [helper getEsmTexts];
     if(storedEsms != nil){
@@ -162,8 +168,12 @@
             [ESM setAppearedState:YES];
             [self performSegueWithIdentifier:@"esmView" sender:self];
         }
-    }else{
-        NSLog(@"----------");
+    }
+    
+    NSArray * esms = [webESM getValidESMsWithDatetime:[NSDate new]];
+    if(esms != nil && esms.count != 0){
+        [ESM setAppearedState:YES];
+        [self performSegueWithIdentifier:@"webEsmView" sender:self];
     }
     
     if([AWAREUtils getCurrentOSVersionAsFloat] >= 9.0){
@@ -466,7 +476,8 @@
 
 
 - (IBAction)pushedEsmButtonOnNavigationBar:(id)sender {
-    [self performSegueWithIdentifier:@"esmView" sender:self];
+//    [self performSegueWithIdentifier:@"esmView" sender:self];
+    [self performSegueWithIdentifier:@"webEsmView" sender:self];
 }
 
 /**

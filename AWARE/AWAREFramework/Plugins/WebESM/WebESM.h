@@ -8,6 +8,11 @@
 
 #import "AWARESensor.h"
 
-@interface WebESM : AWARESensor
 
+@interface WebESM : AWARESensor <AWARESensorDelegate, NSURLSessionDataDelegate> //NSURLSessionTaskDelegate
+
+- (NSArray *) getValidESMsWithDatetime:(NSDate *) datetime;
+- (void) setNotificationSchedules;
+- (void) removeNotificationSchedules;
+- (void) refreshNotifications;
 @end

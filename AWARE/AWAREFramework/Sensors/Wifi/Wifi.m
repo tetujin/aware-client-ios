@@ -188,6 +188,7 @@
 }
 
 - (void) broadcastScanStarted{
+    
     [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_WIFI_SCAN_STARTED
                                                         object:nil
                                                       userInfo:nil];

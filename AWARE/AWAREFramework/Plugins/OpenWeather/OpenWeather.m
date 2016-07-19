@@ -223,9 +223,6 @@ int ONE_HOUR = 60*60;
 didReceiveResponse:(NSURLResponse *)response
  completionHandler:(void (^)(NSURLSessionResponseDisposition disposition))completionHandler {
     
-    [session finishTasksAndInvalidate];
-    [session invalidateAndCancel];
-    
     NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
     int responseCode = (int)[httpResponse statusCode];
     if (responseCode == 200) {
@@ -234,7 +231,14 @@ didReceiveResponse:(NSURLResponse *)response
         }
     }
 
-    completionHandler(NSURLSessionResponseAllow);
+    [super URLSession:session
+             dataTask:dataTask
+   didReceiveResponse:response
+    completionHandler:completionHandler];
+    
+//    [session finishTasksAndInvalidate];
+//    [session invalidateAndCancel];
+//    completionHandler(NSURLSessionResponseAllow);
 }
 
 
@@ -309,29 +313,30 @@ didReceiveResponse:(NSURLResponse *)response
 //        [dic setObject:[self getSunSet] forKey:@"sunset"];
     }
 
-    [session finishTasksAndInvalidate];
-    [session invalidateAndCancel];
-}
-
-
-- (void)URLSession:(NSURLSession *)session
-              task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error {
-    [session finishTasksAndInvalidate];
-    [session invalidateAndCancel];
+//    [session finishTasksAndInvalidate];
+//    [session invalidateAndCancel];
     
-    
+    [super URLSession:session dataTask:dataTask didReceiveData:data];
 }
 
-
-- (void)URLSession:(NSURLSession *)session didBecomeInvalidWithError:(NSError *)error{
-    if (error != nil) {
-        if([self isDebug]){
-            NSLog(@"[%@] the session did become invaild with error: %@", [self getSensorName], error.debugDescription);
-        }
-    }
-    [session invalidateAndCancel];
-    [session finishTasksAndInvalidate];
-}
+//
+//- (void)URLSession:(NSURLSession *)session
+//              task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error {
+//    [session finishTasksAndInvalidate];
+//    [session invalidateAndCancel];
+//    
+//    
+//}
+//
+//- (void)URLSession:(NSURLSession *)session didBecomeInvalidWithError:(NSError *)error{
+//    if (error != nil) {
+//        if([self isDebug]){
+//            NSLog(@"[%@] the session did become invaild with error: %@", [self getSensorName], error.debugDescription);
+//        }
+//    }
+//    [session invalidateAndCancel];
+//    [session finishTasksAndInvalidate];
+//}
 
 
 

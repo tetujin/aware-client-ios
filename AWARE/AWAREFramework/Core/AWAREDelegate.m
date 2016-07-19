@@ -573,7 +573,7 @@ didSignInForUser:(GIDGoogleUser *)user
     NSString *idToken = user.authentication.idToken; // Safe to send to the server
     NSString *name = user.profile.name;
     NSString *email = user.profile.email;
-
+    
     if (name != nil ) {
         NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
         [defaults setObject:userId  forKey:@"GOOGLE_ID"];
@@ -583,7 +583,7 @@ didSignInForUser:(GIDGoogleUser *)user
         [defaults setObject:@""     forKey:@"GOOGLE_PHONE"];
 
         GoogleLogin * googleLogin = [[GoogleLogin alloc] initWithAwareStudy:_sharedAWARECore.sharedAwareStudy];
-        [googleLogin saveName:name withEmail:email phoneNumber:@""];
+        [googleLogin saveWithUserID:userId name:name email:email];
     }
 }
 
