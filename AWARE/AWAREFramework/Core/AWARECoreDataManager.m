@@ -9,6 +9,7 @@
 #import "AWARECoreDataManager.h"
 #import "AWAREKeys.h"
 #import "AppDelegate.h"
+#import "EntityESMAnswer.h"
 
 @implementation AWARECoreDataManager {
     AWAREStudy * awareStudy;
@@ -584,9 +585,14 @@ didReceiveResponse:(NSURLResponse *)response
     if([[self getEntityName] isEqualToString:@"EntityOpenWeather"]){
         
         //NSLog(@"%@", [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding]);
-        NSLog(@"hello");
+        // NSLog(@"hello");
+        
+    }else if([[self getEntityName] isEqualToString:NSStringFromClass([EntityESMAnswer class])]){
+        
+        // NSLog(@"hey hey hey");
         
     }
+    
     
     double diff = [[NSDate new] timeIntervalSince1970] - httpStartTimestamp;
     if (postedTextLength > 0 && diff > 0) {
@@ -607,6 +613,8 @@ didReceiveResponse:(NSURLResponse *)response
         int responseCode = (int)[httpResponse statusCode];
         if (responseCode == 200) {
             NSLog(@"[%@] Sucess to create new table on AWARE server.", sensorName);
+        }else{
+            NSLog(@"[%@] Fail to create new table on AWARE server....", sensorName);
         }
     } else {
         

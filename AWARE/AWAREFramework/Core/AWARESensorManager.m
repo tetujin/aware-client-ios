@@ -52,6 +52,7 @@
 #import "Memory.h"
 #import "AWAREHealthKit.h"
 #import "AmbientNoise.h"
+#import "WebESM.h"
 
 #import "Observer.h"
 
@@ -229,6 +230,8 @@
                 awareSensor = [[FusedLocations alloc] initWithAwareStudy:awareStudy];
             }else if([pluginName isEqualToString:[NSString stringWithFormat:@"status_%@",SENSOR_AMBIENT_NOISE]]){
                 awareSensor = [[AmbientNoise alloc] initWithAwareStudy:awareStudy];
+            }else if([pluginName isEqualToString:[NSString stringWithFormat:@"status_%@",SENSOR_PLUGIN_WEB_ESM]]){
+                awareSensor = [[WebESM alloc] initWithAwareStudy:awareStudy];
             }
             
             if(awareSensor != nil){
@@ -268,7 +271,6 @@
     [bleHeartRate startSensorWithSettings:nil];
     [self addNewSensor:bleHeartRate];
 
-    
     // Observer
     AWARESensor *observerSensor = [[Observer alloc] initWithAwareStudy:awareStudy];
     [self addNewSensor:observerSensor];
@@ -277,6 +279,7 @@
     AWARESensor * pushNotification = [[PushNotification alloc] initWithAwareStudy:awareStudy];
     [pushNotification startSensorWithSettings:nil];
     [self addNewSensor:pushNotification];
+    
     
     /**
      * Debug Sensor
@@ -337,7 +340,6 @@
     }
     [awareSensors addObject:sensor];
 }
-
 
 /**
  * Remove all sensors from the manager after stop the sensors

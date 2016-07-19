@@ -70,6 +70,8 @@
     XCTAssertEqual(10, [accSensor getBufferSize]);
 }
 
+
+
 - (void) testInitCoreDataManager {
 
 }

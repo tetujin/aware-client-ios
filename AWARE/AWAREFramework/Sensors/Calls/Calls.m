@@ -73,6 +73,7 @@ NSString* const KEY_CALLS_TRACE = @"trace";
     _callCenter = [[CTCallCenter alloc] init];
     _callCenter.callEventHandler = ^(CTCall* call){
         NSString * callId = call.callID;
+        if (callId == nil) callId = @"";
         NSNumber * callType = @0;
         NSString * callTypeStr = @"Unknown";
         int duration = 0;
@@ -104,7 +105,7 @@ NSString* const KEY_CALLS_TRACE = @"trace";
         
         NSLog(@"[%@] Call Duration is %d seconds @ [%@]", [super getSensorName], duration, callTypeStr);
         
-        dispatch_async(dispatch_get_main_queue(), ^{
+        // dispatch_async(dispatch_get_main_queue(), ^{
             
             NSNumber *durationValue = [NSNumber numberWithInt:duration];
             NSMutableDictionary* dict = [[NSMutableDictionary alloc] init];
@@ -152,7 +153,7 @@ NSString* const KEY_CALLS_TRACE = @"trace";
                                                                     object:nil
                                                                   userInfo:userInfo];
             }
-        });
+        //});
     };
     return YES;
 }

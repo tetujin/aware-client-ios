@@ -127,6 +127,66 @@
         <attribute name="elapsed_device_on" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
         <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
     </entity>
+    <entity name="EntityESM" representedClassName="EntityESM" parentEntity="EntityESMSchedule" syncable="YES">
+        <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="double_esm_user_answer_timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="esm_checkboxes" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="esm_expiration_threshold" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="esm_instructions" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="esm_json" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="esm_likert_max" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="esm_likert_max_label" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="esm_likert_min_label" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="esm_likert_step" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="esm_na" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="esm_number" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="esm_quick_answers" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="esm_radios" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="esm_scale_max" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="esm_scale_max_label" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="esm_scale_min" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="esm_scale_min_label" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="esm_scale_start" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="esm_scale_step" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="esm_status" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="esm_submit" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="esm_title" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="esm_trigger" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="esm_type" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="esm_url" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="esm_user_answer" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <relationship name="esm_schedule" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="EntityESMSchedule" inverseName="esms" inverseEntity="EntityESMSchedule" syncable="YES"/>
+    </entity>
+    <entity name="EntityESMAnswer" representedClassName="EntityESMAnswer" syncable="YES">
+        <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="double_esm_user_answer_timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="esm_expiration_threshold" optional="YES" attributeType="Integer 32" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="esm_json" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="esm_status" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="esm_trigger" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="esm_user_answer" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+    </entity>
+    <entity name="EntityESMHistory" representedClassName="EntityESMHistory" syncable="YES">
+        <attribute name="expiration_threshold" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="fire_date" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="original_fire_date" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="randomize" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="schedule_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="trigger" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="EntityESMSchedule" representedClassName="EntityESMSchedule" syncable="YES">
+        <attribute name="end_date" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="expiration_threshold" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="fire_hour" optional="YES" attributeType="Integer 16" minValueString="-1" maxValueString="23" defaultValueString="0" syncable="YES"/>
+        <attribute name="noitification_body" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="notification_title" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="randomize" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="schedule_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="start_date" optional="YES" attributeType="Date" syncable="YES"/>
+        <relationship name="esms" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="EntityESM" inverseName="esm_schedule" inverseEntity="EntityESM" syncable="YES"/>
+    </entity>
     <entity name="EntityGravity" representedClassName="EntityGravity" syncable="YES">
         <attribute name="accuracy" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
@@ -335,7 +395,7 @@
         <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
     </entity>
     <elements>
-        <element name="EntityAccelerometer" positionX="189" positionY="126" width="128" height="150"/>
+        <element name="EntityAccelerometer" positionX="457" positionY="84" width="128" height="150"/>
         <element name="EntityActivityRecognition" positionX="180" positionY="117" width="128" height="135"/>
         <element name="EntityAmbientNoise" positionX="234" positionY="0" width="128" height="165"/>
         <element name="EntityBarometer" positionX="180" positionY="117" width="128" height="120"/>
@@ -348,6 +408,9 @@
         <element name="EntityCall" positionX="225" positionY="189" width="128" height="30"/>
         <element name="EntityDebug" positionX="234" positionY="198" width="128" height="30"/>
         <element name="EntityDeviceUsage" positionX="234" positionY="198" width="128" height="30"/>
+        <element name="EntityESM" positionX="549" positionY="396" width="128" height="480"/>
+        <element name="EntityESMAnswer" positionX="448" positionY="297" width="128" height="165"/>
+        <element name="EntityESMSchedule" positionX="97" positionY="582" width="146" height="180"/>
         <element name="EntityGravity" positionX="180" positionY="144" width="128" height="30"/>
         <element name="EntityGyroscope" positionX="189" positionY="153" width="128" height="30"/>
         <element name="EntityLabel" positionX="225" positionY="189" width="128" height="30"/>
@@ -375,5 +438,6 @@
         <element name="EntityScreen" positionX="189" positionY="153" width="128" height="30"/>
         <element name="EntityTimezone" positionX="198" positionY="162" width="128" height="30"/>
         <element name="EntityWifi" positionX="207" positionY="171" width="128" height="30"/>
+        <element name="EntityESMHistory" positionX="297" positionY="144" width="128" height="135"/>
     </elements>
 </model>

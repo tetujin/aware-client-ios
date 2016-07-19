@@ -82,6 +82,7 @@ NSString* const SENSOR_PLUGIN_NTPTIME = @"plugin_ntptime";
 NSString* const SENSOR_PLUGIN_SCHEDULER = @"scheduler";
 NSString* const SENSOR_PLUGIN_CAMPUS = @"plugin_cmu_esm";
 NSString* const SENSOR_PLUGIN_PEDOMETER = @"plugin_pedometer";
+NSString* const SENSOR_PLUGIN_WEB_ESM = @"plugin_web_esm";
 NSString* const SENSOR_AWARE_DEBUG = @"aware_debug";
 
 
