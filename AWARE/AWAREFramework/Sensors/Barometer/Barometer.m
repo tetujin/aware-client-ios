@@ -14,13 +14,15 @@
     CMAltimeter* altitude;
     double sensingInterval;
     int dbWriteInterval;
+    double timestamp;
 }
 
 
-- (instancetype)initWithAwareStudy:(AWAREStudy *)study{
-    self = [super initWithAwareStudy:study sensorName:SENSOR_BAROMETER
+- (instancetype)initWithAwareStudy:(AWAREStudy *)study dbType:(AwareDBType)dbType{
+    self = [super initWithAwareStudy:study
+                          sensorName:SENSOR_BAROMETER
                         dbEntityName:NSStringFromClass([EntityBarometer class])
-                              dbType:AwareDBTypeCoreData];
+                              dbType:dbType];
     if (self) {
         sensingInterval = 0.2f;
         dbWriteInterval = 30;
@@ -73,7 +75,10 @@
     [super startSensor];
     
     [self setFetchLimit:fetchLimit];
+    
     [self setBufferSize:buffer];
+    
+    timestamp = [[NSDate new] timeIntervalSince1970];
     
     // Set and start a sensor
     NSLog(@"[%@] Start Barometer Sensor", [self getSensorName]);
@@ -81,12 +86,17 @@
         NSLog(@"This device doesen't support CMAltimeter.");
     } else {
         altitude = [[CMAltimeter alloc] init];
+        
         [altitude startRelativeAltitudeUpdatesToQueue:[NSOperationQueue mainQueue]
                                           withHandler:^(CMAltitudeData *altitudeData, NSError *error) {
                                               
-                                              dispatch_async(dispatch_get_main_queue(),^{
-
-                                                double pressureDouble = [altitudeData.pressure doubleValue];
+                                              double currentTimestamp = [[NSDate new] timeIntervalSince1970];
+                                              
+                                              if( (currentTimestamp - timestamp) > interval ){
+                                                  
+                                                 timestamp = currentTimestamp;
+                                                  
+                                                 double pressureDouble = [altitudeData.pressure doubleValue];
 
                                                  NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
                                                  NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
@@ -113,7 +123,7 @@
                                                   [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_BAROMETER
                                                                                                       object:nil
                                                                                                     userInfo:userInfo];
-                                              });
+                                              }
                                           }];
     }
     return YES;
@@ -130,6 +140,11 @@
     pressureData.accuracy = @0;
     pressureData.label = @"";
 
+}
+
+
+-(void)saveDummyData{
+    [self setBufferSize:0];
 }
 
 - (BOOL)stopSensor{

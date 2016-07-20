@@ -25,7 +25,7 @@
 }
 
 
-- (instancetype) initWithAwareStudy:(AWAREStudy *)study{
+- (instancetype) initWithAwareStudy:(AWAREStudy *)study dbType:(AwareDBType)dbType{
     self  = [super initWithAwareStudy:study
                            sensorName:@"balancedcampuscalendar"
                          dbEntityName:nil
@@ -324,8 +324,6 @@
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     return [userDefaults objectForKey:PRIMARY_GOOGLE_ACCOUNT_NAME];
 }
-
-
 
 
 @end

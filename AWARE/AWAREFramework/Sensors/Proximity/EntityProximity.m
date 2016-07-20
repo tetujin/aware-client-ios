@@ -1,15 +1,14 @@
 //
-//  EntityESMSchedule.m
+//  EntityProximity.m
 //  AWARE
 //
-//  Created by Yuuki Nishiyama on 7/19/16.
+//  Created by Yuuki Nishiyama on 7/20/16.
 //  Copyright © 2016 Yuuki NISHIYAMA. All rights reserved.
 //
 
-#import "EntityESMSchedule.h"
-#import "EntityESM.h"
+#import "EntityProximity.h"
 
-@implementation EntityESMSchedule
+@implementation EntityProximity
 
 // Insert code here to add functionality to your managed object subclass
 

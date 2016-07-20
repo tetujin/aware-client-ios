@@ -535,32 +535,6 @@ didReceiveResponse:(NSURLResponse *)response
 }
 
 
-/**
- * Get latest sensor data method
- */
-- (NSString *)getLatestSensorData:(NSString *)deviceId withUrl:(NSString *)url{
-    NSString *post = [NSString stringWithFormat:@"device_id=%@", deviceId];
-    NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
-    NSString *postLength = [NSString stringWithFormat:@"%ld", [postData length]];
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
-    [request setURL:[NSURL URLWithString:url]];
-    [request setHTTPMethod:@"POST"];
-    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
-    [request setHTTPBody:postData];
-    NSError *error = nil;
-    NSHTTPURLResponse *response = nil;
-    NSData *resData = [NSURLConnection sendSynchronousRequest:request
-                                            returningResponse:&response error:&error];
-    NSString* newStr = [[NSString alloc] initWithData:resData encoding:NSUTF8StringEncoding];
-    int responseCode = (int)[response statusCode];
-    if(responseCode == 200){
-        NSLog(@"UPLOADED SENSOR DATA TO A SERVER");
-        return newStr;
-    }
-    return @"";
-}
-
-
 /////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////
 /**

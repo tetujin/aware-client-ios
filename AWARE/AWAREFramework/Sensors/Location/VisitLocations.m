@@ -14,12 +14,13 @@
 }
 
 
-- (instancetype)initWithAwareStudy:(AWAREStudy *)study{
+- (instancetype)initWithAwareStudy:(AWAREStudy *)study dbType:(AwareDBType)dbType{
     return [self initWithAwareStudy:study
                          sensorName:@"locations_visit"
                        dbEntityName:NSStringFromClass([EntityLocationVisit class])
-                             dbType:AwareDBTypeCoreData];
+                             dbType:dbType];
 }
+
 
 - (void)createTable{
     [super createTable:

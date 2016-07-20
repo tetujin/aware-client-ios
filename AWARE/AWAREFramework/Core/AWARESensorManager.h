@@ -30,6 +30,7 @@
 // sensor manager (start and stop)
 - (BOOL) startAllSensors;
 - (BOOL) startAllSensorsWithStudy:(AWAREStudy *) study;
+- (BOOL) startAllSensorsWithStudy:(AWAREStudy *) study dbType:(AwareDBType)dbType;
 - (BOOL) createAllTables;
 
 - (void) stopAndRemoveAllSensors;
@@ -48,7 +49,9 @@
 - (void) stopUploadTimer;
 
 // get latest sensor data with sensor name
-- (NSString*)getLatestSensorData:(NSString *)sensorName;
+- (NSString*) getLatestSensorData:(NSString *)sensorName;
+- (NSArray *) getAllSensors;
 
+- (void) testSensing;
 
 @end

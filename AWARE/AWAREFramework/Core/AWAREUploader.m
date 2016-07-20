@@ -21,7 +21,7 @@
     // settings
     BOOL isDebug;
     BOOL isSyncWithOnlyBatteryCharging;
-    BOOL isWifiOnly;
+    BOOL isSyncWithWifiOnly;
     BOOL isUploading;
     BOOL isLock;
     
@@ -44,7 +44,8 @@
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         isDebug = [userDefaults boolForKey:SETTING_DEBUG_STATE];
         isSyncWithOnlyBatteryCharging  = [userDefaults boolForKey:SETTING_SYNC_BATTERY_CHARGING_ONLY];
-        isWifiOnly = [userDefaults boolForKey:SETTING_SYNC_WIFI_ONLY];
+        isSyncWithWifiOnly = [userDefaults boolForKey:SETTING_SYNC_WIFI_ONLY];
+        
         isLock = NO;
     }
     return self;
@@ -88,9 +89,9 @@
 }
 
 /////////
-- (void) allowsCellularAccess{ isWifiOnly = NO; }
+- (void) allowsCellularAccess{ isSyncWithWifiOnly = NO; }
 
-- (void) forbidCellularAccess{ isWifiOnly = YES; }
+- (void) forbidCellularAccess{ isSyncWithWifiOnly = YES; }
 
 ////////
 - (void) allowsDateUploadWithoutBatteryCharging{ isSyncWithOnlyBatteryCharging = NO; }
@@ -100,7 +101,7 @@
 //////////////////////////////////////////////////
 - (bool) isDebug { return isDebug; }
 
-- (bool) isSyncWithOnlyWifi {return isWifiOnly;}
+- (bool) isSyncWithOnlyWifi {return isSyncWithWifiOnly;}
 
 - (bool) isSyncWithOnlyBatteryCharging { return isSyncWithOnlyBatteryCharging;}
 
@@ -180,6 +181,41 @@
     return NO;
 }
 
+
+/////////////////////////////////////////////////////////////////////////
+
+- (NSData *) getLatestData {
+    return [self getLatestSensorData:[self getDeviceId] withUrl:[self getLatestDataUrl:sensorName]];
+}
+
+/**
+ * Get latest sensor data method
+ */
+- (NSData *)getLatestSensorData:(NSString *)deviceId withUrl:(NSString *)url{
+    NSString *post = [NSString stringWithFormat:@"device_id=%@", deviceId];
+    NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
+    NSString *postLength = [NSString stringWithFormat:@"%ld", [postData length]];
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+    [request setURL:[NSURL URLWithString:url]];
+    [request setHTTPMethod:@"POST"];
+    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+    [request setHTTPBody:postData];
+    NSError *error = nil;
+    NSHTTPURLResponse *response = nil;
+    NSData *resData = [NSURLConnection sendSynchronousRequest:request
+                                            returningResponse:&response error:&error];
+
+    return resData;
+//    NSString* newStr = [[NSString alloc] initWithData:resData encoding:NSUTF8StringEncoding];
+//    int responseCode = (int)[response statusCode];
+//    if(responseCode == 200){
+//        // NSLog(@"[%@] Recieved new data",sensorName);
+//        return newStr;
+//    }
+//    return @"";
+}
+
+/////////////////////////////////////////////////////////////////////////////////
 
 /**
  * Return current network condition with a text
@@ -266,6 +302,8 @@
     }
     return YES;
 }
+
+
 
 
 /**

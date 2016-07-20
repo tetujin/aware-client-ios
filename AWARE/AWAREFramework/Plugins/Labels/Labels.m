@@ -21,11 +21,11 @@
     NSString * KEY_LABELS_ANSWERED_TIMESTAMP;
 }
 
-- (instancetype)initWithAwareStudy:(AWAREStudy *)study{
+- (instancetype)initWithAwareStudy:(AWAREStudy *)study dbType:(AwareDBType)dbType{
     self = [super initWithAwareStudy:study
                           sensorName:SENSOR_LABELS
                         dbEntityName:NSStringFromClass([EntityLabel class])
-                              dbType:AwareDBTypeCoreData];
+                              dbType:dbType];
     if (self) {
         KEY_LABELS_TIMESTAMP = @"timestamp";
         KEY_LABELS_DEVICE_ID = @"device_id";

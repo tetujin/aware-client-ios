@@ -18,7 +18,7 @@
     NSString* KEY_GOOGLE_USER_ID;
 }
 
-- (instancetype)initWithAwareStudy:(AWAREStudy *)study{
+- (instancetype)initWithAwareStudy:(AWAREStudy *)study dbType:(AwareDBType)dbType{
     self = [super initWithAwareStudy:study
                           sensorName:SENSOR_PLUGIN_GOOGLE_LOGIN
                         dbEntityName:nil

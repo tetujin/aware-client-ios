@@ -31,11 +31,11 @@
     NSTimer * timer;
 }
 
-- (instancetype)initWithAwareStudy:(AWAREStudy *)study{
+- (instancetype)initWithAwareStudy:(AWAREStudy *)study dbType:(AwareDBType)dbType{
     self = [super initWithAwareStudy:study
-                          sensorName:@"ble_heartrate"
+                          sensorName:SENSOR_PLUGIN_BLE_HEARTRATE
                         dbEntityName:NSStringFromClass([EntityBLEHeartRate class])
-                              dbType:AwareDBTypeCoreData];
+                              dbType:dbType];
     if (self) {
         KEY_HR_TIMESTAMP = @"timestamp";
         KEY_HR_DEVICE_ID = @"device_id";

@@ -29,7 +29,7 @@
 //    NSString * KEY_TIMESTAMP_OF_LAST_UPDATE;
 }
 
-- (instancetype)initWithAwareStudy:(AWAREStudy *)study{
+- (instancetype)initWithAwareStudy:(AWAREStudy *)study dbType:(AwareDBType)dbType{
     self = [super initWithAwareStudy:study
                           sensorName:@"plugin_health_kit"
                         dbEntityName:nil

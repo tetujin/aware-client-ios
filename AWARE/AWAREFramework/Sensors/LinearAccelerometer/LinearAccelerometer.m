@@ -46,11 +46,11 @@
 }
 
 
-- (instancetype)initWithAwareStudy:(AWAREStudy *)study{
+- (instancetype)initWithAwareStudy:(AWAREStudy *)study dbType:(AwareDBType)dbType{
     self = [super initWithAwareStudy:study
                           sensorName:SENSOR_LINEAR_ACCELEROMETER
                         dbEntityName:NSStringFromClass([EntityLinearAccelerometer class])
-                              dbType:AwareDBTypeCoreData];
+                              dbType:dbType];
     if (self) {
         motionManager = [[CMMotionManager alloc] init];
         defaultInterval = 0.1f;
@@ -115,7 +115,7 @@
                                            withHandler:^(CMDeviceMotion *motion, NSError *error){
                                                // Save sensor data to the local database
                                                
-                                               dispatch_async(dispatch_get_main_queue(),^{
+                                               // dispatch_async(dispatch_get_main_queue(),^{
                                                    
                                                    //////////////////////////////////////////////////
                                                    NSNumber *unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
@@ -135,9 +135,15 @@
                                                                                                        object:nil
                                                                                                      userInfo:userInfo];
                                                    
-                                                   
+                                               if([self getDBType] == AwareDBTypeCoreData){
                                                    [self saveData:dict];
-                                               });
+                                               }else if([self getDBType] == AwareDBTypeTextFile){
+                                                   dispatch_async(dispatch_get_main_queue(), ^{
+                                                       [self saveData:dict];
+                                                   });
+                                               }
+                                               
+                                               // });
                                            }];
     }
     return YES;

@@ -22,11 +22,11 @@
     // NSManagedObjectContext * tempManagedObjectContext;
 }
 
-- (instancetype)initWithAwareStudy:(AWAREStudy *)study{
+- (instancetype)initWithAwareStudy:(AWAREStudy *)study dbType:(AwareDBType)dbType{
     self = [super initWithAwareStudy:study
                           sensorName:@"accelerometer"
                         dbEntityName:NSStringFromClass([EntityAccelerometer class])
-                              dbType:AwareDBTypeCoreData];
+                              dbType:dbType];
     if (self) {
         manager = [[CMMotionManager alloc] init];
         sensingInterval = 0.1f;
@@ -167,6 +167,7 @@
     [manager stopAccelerometerUpdates];
     return YES;
 }
+
 
 
 ///////////////////////////////////////////////////

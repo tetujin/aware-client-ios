@@ -19,11 +19,11 @@
     NSString* networkSubtype;
 }
 
-- (instancetype)initWithAwareStudy:(AWAREStudy *)study{
+- (instancetype)initWithAwareStudy:(AWAREStudy *)study dbType:(AwareDBType)dbType{
     self = [super initWithAwareStudy:study
                           sensorName:SENSOR_NETWORK
                         dbEntityName:NSStringFromClass([EntityNetwork class])
-                              dbType:AwareDBTypeCoreData];
+                              dbType:dbType];
     if (self) {
         networkState= YES;
         networkType = @0;
@@ -104,6 +104,10 @@
     reachability = nil;
     
     return YES;
+}
+
+- (void)saveDummyData{
+    [self getNetworkInfo];
 }
 
 

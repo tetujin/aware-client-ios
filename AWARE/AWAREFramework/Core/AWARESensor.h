@@ -32,6 +32,7 @@ typedef enum: NSInteger {
 - (void) createTable;
 - (void) changedBatteryState;
 - (void) calledBackgroundFetch;
+- (void) saveDummyData;
 
 - (NSString *) getSensorName;
 - (NSString *) getEntityName;
@@ -42,7 +43,8 @@ typedef enum: NSInteger {
 
 @interface AWARESensor : AWARECoreDataManager <AWARESensorDelegate, UIAlertViewDelegate>
 
-- (instancetype) initWithAwareStudy:(AWAREStudy *) study;
+// - (instancetype) initWithAwareStudy:(AWAREStudy *) study;
+- (instancetype) initWithAwareStudy:(AWAREStudy *) study dbType:(AwareDBType)dbType;
 - (instancetype) initWithAwareStudy:(AWAREStudy *) study sensorName:(NSString *)name dbEntityName:(NSString *)entity;
 - (instancetype) initWithAwareStudy:(AWAREStudy *) study sensorName:(NSString *)name dbEntityName:(NSString *)entity dbType:(AwareDBType)dbType;
 - (instancetype) initWithAwareStudy:(AWAREStudy *) study sensorName:(NSString *)name dbEntityName:(NSString *)entity dbType:(AwareDBType)dbType bufferSize:(int)buffer;
@@ -79,6 +81,8 @@ typedef enum: NSInteger {
 - (bool) saveDataWithArray:(NSArray*) array;
 - (void) setLatestValue:(NSString *) valueStr;
 - (bool) saveDataToDB;
+
+- (void) saveDummyData;
 
 // sync data
 - (void) syncAwareDB;

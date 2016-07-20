@@ -16,11 +16,12 @@
     double defaultInterval;
 }
 
-- (instancetype)initWithAwareStudy:(AWAREStudy *)study{
+- (instancetype)initWithAwareStudy:(AWAREStudy *)study dbType:(AwareDBType)dbType{
     self = [super initWithAwareStudy:study
                           sensorName:SENSOR_TIMEZONE
                         dbEntityName:NSStringFromClass([EntityTimezone class])
-                              dbType:AwareDBTypeCoreData];
+                              dbType:dbType
+                          bufferSize:0];
     if (self) {
         defaultInterval = 60*60;// 3600 sec. = 1 hour
     }
@@ -54,6 +55,7 @@
 }
 
 - (BOOL) startSensorWithInterval:(double)interval{
+    
     // Set and start sensing timer
     NSLog(@"[%@] Start Device Usage Sensor", [self getSensorName]);
     [self getTimezone];
@@ -76,6 +78,13 @@
 }
 
 
+- (void)saveDummyData{
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    [dict setObject:[AWAREUtils getUnixTimestamp:[NSDate new]] forKey:@"timestamp"];
+    [dict setObject:[self getDeviceId] forKey:@"device_id"];
+    [dict setObject:[[NSTimeZone localTimeZone] description] forKey:@"timezone"];
+    [self saveData:dict];
+}
 
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////

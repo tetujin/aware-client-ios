@@ -17,11 +17,11 @@
     int dbWriteInterval;
 }
 
-- (instancetype)initWithAwareStudy:(AWAREStudy *)study{
+- (instancetype)initWithAwareStudy:(AWAREStudy *)study dbType:(AwareDBType)dbType{
     self = [super initWithAwareStudy:study
                           sensorName:SENSOR_GYROSCOPE
                         dbEntityName:NSStringFromClass([EntityGyroscope class])
-                              dbType:AwareDBTypeCoreData];
+                              dbType:dbType];
     if (self) {
         gyroManager = [[CMMotionManager alloc] init];
         defaultInterval = 0.1f;
@@ -37,9 +37,9 @@
     query = @"_id integer primary key autoincrement,"
     "timestamp real default 0,"
     "device_id text default '',"
-    "axis_x real default 0,"
-    "axis_y real default 0,"
-    "axis_z real default 0,"
+    "double_values_0 real default 0,"
+    "double_values_1 real default 0,"
+    "double_values_2 real default 0,"
     "accuracy integer default 0,"
     "label text default '',"
     "UNIQUE (timestamp,device_id)";
@@ -94,7 +94,7 @@
                              withHandler:^(CMGyroData * _Nullable gyroData,
                                            NSError * _Nullable error) {
                                  
-                                 dispatch_async(dispatch_get_main_queue(),^{
+                                 // dispatch_async(dispatch_get_main_queue(),^{
                                      
                                      if( error ) {
                                          NSLog(@"%@:%ld", [error domain], [error code] );
@@ -103,9 +103,9 @@
                                          NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
                                          [dict setObject:unixtime forKey:@"timestamp"];
                                          [dict setObject:[self getDeviceId] forKey:@"device_id"];
-                                         [dict setObject:[NSNumber numberWithDouble:gyroData.rotationRate.x] forKey:@"axis_x"];
-                                         [dict setObject:[NSNumber numberWithDouble:gyroData.rotationRate.y] forKey:@"axis_y"];
-                                         [dict setObject:[NSNumber numberWithDouble:gyroData.rotationRate.z] forKey:@"axis_z"];
+                                         [dict setObject:@(gyroData.rotationRate.x) forKey:@"double_values_0"];
+                                         [dict setObject:@(gyroData.rotationRate.y) forKey:@"double_values_1"];
+                                         [dict setObject:@(gyroData.rotationRate.z) forKey:@"double_values_2"];
                                          [dict setObject:@0 forKey:@"accuracy"];
                                          [dict setObject:@"" forKey:@"label"];
                                          [self setLatestValue:[NSString stringWithFormat:@"%f, %f, %f",gyroData.rotationRate.x,gyroData.rotationRate.y,gyroData.rotationRate.z]];
@@ -124,7 +124,7 @@
                                                                                              object:nil
                                                                                            userInfo:userInfo];
                                     }
-                                 });
+                                 // });
                              }];
     return YES;
 }
@@ -137,9 +137,9 @@
     
     entityGyro.device_id = [data objectForKey:@"device_id"];
     entityGyro.timestamp = [data objectForKey:@"timestamp"];
-    entityGyro.axis_x = [data objectForKey:@"axis_x"];
-    entityGyro.axis_y = [data objectForKey:@"axis_y"];
-    entityGyro.axis_z = [data objectForKey:@"axis_z"];
+    entityGyro.double_values_0 = [data objectForKey:@"double_values_0"];
+    entityGyro.double_values_1 = [data objectForKey:@"double_values_1"];
+    entityGyro.double_values_2 = [data objectForKey:@"double_values_2"];
     entityGyro.accuracy = [data objectForKey:@"accuracy"];
     entityGyro.label =  [data objectForKey:@"label"];
 }

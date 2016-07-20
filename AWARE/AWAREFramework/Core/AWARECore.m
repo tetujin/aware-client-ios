@@ -138,7 +138,7 @@
     if (appTerminated) {
         NSString * message = @"AWARE client iOS is rebooted";
         [AWAREUtils sendLocalNotificationForMessage:message soundFlag:YES];
-        Debug * debugSensor = [[Debug alloc] initWithAwareStudy:nil];
+        Debug * debugSensor = [[Debug alloc] initWithAwareStudy:_sharedAwareStudy dbType:AwareDBTypeCoreData];
         [debugSensor saveDebugEventWithText:message type:DebugTypeInfo label:@""];
         [userDefaults setBool:NO forKey:KEY_APP_TERMINATED];
     }else{

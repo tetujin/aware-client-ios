@@ -160,7 +160,7 @@
         [[UIApplication sharedApplication] scheduleLocalNotification:notification];
         
         
-        Debug * debugSensor = [[Debug alloc] initWithAwareStudy:_sharedAWARECore.sharedAwareStudy];
+        Debug * debugSensor = [[Debug alloc] initWithAwareStudy:_sharedAWARECore.sharedAwareStudy dbType:AwareDBTypeTextFile];
         [debugSensor saveDebugEventWithText:notification.alertBody type:DebugTypeWarn label:@"stop"];
         [debugSensor syncAwareDB];
     }
@@ -207,7 +207,7 @@ performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem
         [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm"];
         NSString *formattedDateString = [dateFormatter stringFromDate:[NSDate new]];
         
-        Debug * debug = [[Debug alloc] initWithAwareStudy:_sharedAWARECore.sharedAwareStudy];
+        Debug * debug = [[Debug alloc] initWithAwareStudy:_sharedAWARECore.sharedAwareStudy dbType:AwareDBTypeTextFile];
         [debug saveDebugEventWithText:@"This is a background fetch" type:DebugTypeInfo label:formattedDateString];
         bool result = [debug syncAwareDBInForeground];
         
@@ -266,12 +266,10 @@ handleEventsForBackgroundURLSession:(NSString *)identifier
     token = [token stringByReplacingOccurrencesOfString:@"<" withString:@""];
     token = [token stringByReplacingOccurrencesOfString:@">" withString:@""];
     token = [token stringByReplacingOccurrencesOfString:@" " withString:@""];
-    
-    PushNotification * pushNotification = [[PushNotification alloc] initWithAwareStudy:_sharedAWARECore.sharedAwareStudy];
+        
+    PushNotification * pushNotification = [[PushNotification alloc] initWithAwareStudy:_sharedAWARECore.sharedAwareStudy dbType:AwareDBTypeCoreData];
     [pushNotification savePushNotificationDeviceToken:token];
-    [pushNotification allowsCellularAccess];
-    [pushNotification allowsDateUploadWithoutBatteryCharging];
-    [pushNotification syncAwareDB];
+    // [pushNotification syncAwareDBInForeground];
     
     NSLog(@"deviceToken: %@", token);
 }
@@ -295,10 +293,10 @@ handleEventsForBackgroundURLSession:(NSString *)identifier
     // Calendar and ESM plugin use this method
     AWAREStudy * awareStudy = _sharedAWARECore.sharedAwareStudy;
     if ([notification.category isEqualToString:SENSOR_PLUGIN_CAMPUS]) {
-        BalacnedCampusESMScheduler * scheduler = [[BalacnedCampusESMScheduler alloc] initWithAwareStudy:awareStudy];
+        BalacnedCampusESMScheduler * scheduler = [[BalacnedCampusESMScheduler alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
         [scheduler setESMWithUserInfo:notification.userInfo];
     } else if ([notification.category isEqualToString:SENSOR_PLUGIN_GOOGLE_CAL_PUSH]){
-        GoogleCalPush * balancedCampusJournal = [[GoogleCalPush alloc] initWithAwareStudy:awareStudy];
+        GoogleCalPush * balancedCampusJournal = [[GoogleCalPush alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
         [balancedCampusJournal makePrepopulateEvetnsWith:[NSDate new]];
     }
 }
@@ -320,11 +318,11 @@ forLocalNotification:(UILocalNotification *)notification
     NSDictionary *userInfo = [(UILocalNotification*)notification userInfo];
     AWAREStudy * awareStudy = _sharedAWARECore.sharedAwareStudy;
     if ([identifier isEqualToString:@"calendar_update_action"]) {
-        GoogleCalPush * balancedCampusJournal = [[GoogleCalPush alloc] initWithAwareStudy:awareStudy];
+        GoogleCalPush * balancedCampusJournal = [[GoogleCalPush alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
         [balancedCampusJournal makePrepopulateEvetnsWith:[NSDate new]];
     } else if ([identifier isEqualToString:@"add_label_action"]) {
         NSString * inputText = [responseInfo objectForKey:UIUserNotificationActionResponseTypedTextKey];
-        Labels * labelSensor = [[Labels alloc] initWithAwareStudy:awareStudy];
+        Labels * labelSensor = [[Labels alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
         [labelSensor saveLabel:inputText
                        withKey:[userInfo objectForKey:@"key"]
                           type:identifier
@@ -332,7 +330,7 @@ forLocalNotification:(UILocalNotification *)notification
                    triggerTime:notification.fireDate
                   answeredTime:[NSDate new]];
     } else if ([identifier isEqualToString:@"add_bool_action_yes"]){
-        Labels * labelSensor = [[Labels alloc] initWithAwareStudy:awareStudy];
+        Labels * labelSensor = [[Labels alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
         [labelSensor saveLabel:@"1"
                        withKey:[userInfo objectForKey:@"key"]
                           type:identifier
@@ -340,7 +338,7 @@ forLocalNotification:(UILocalNotification *)notification
                    triggerTime:notification.fireDate
                   answeredTime:[NSDate new]];
     } else if ([identifier isEqualToString:@"add_bool_action_no"]){
-        Labels * labelSensor = [[Labels alloc] initWithAwareStudy:awareStudy];
+        Labels * labelSensor = [[Labels alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
         [labelSensor saveLabel:@"0"
                        withKey:[userInfo objectForKey:@"key"]
                           type:identifier
@@ -349,7 +347,7 @@ forLocalNotification:(UILocalNotification *)notification
                   answeredTime:[NSDate new]];
     } else if ([identifier isEqualToString:@"edit_label_action"]){
         NSString * inputText = [responseInfo objectForKey:UIUserNotificationActionResponseTypedTextKey];
-        ESM * esm = [[ESM alloc] initWithAwareStudy:awareStudy];
+        ESM * esm = [[ESM alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
         NSMutableDictionary *dic =  [AWAREEsmUtils getEsmFormatDictionary:(NSMutableDictionary *)notification.userInfo
                                                              withTimesmap:[AWAREUtils getUnixTimestamp:notification.fireDate]
                                                                   devieId:[awareStudy getDeviceId]];
@@ -360,7 +358,7 @@ forLocalNotification:(UILocalNotification *)notification
         [dic setObject:inputText forKey:KEY_ESM_USER_ANSWER];
         [esm saveData:dic];
     } else if ([identifier isEqualToString:@"esm_answer_yes_action"]){
-        ESM * esm = [[ESM alloc] initWithAwareStudy:awareStudy];
+        ESM * esm = [[ESM alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
         NSMutableDictionary *dic =  [AWAREEsmUtils getEsmFormatDictionary:(NSMutableDictionary *)notification.userInfo
                                                              withTimesmap:[AWAREUtils getUnixTimestamp:notification.fireDate]
                                                                   devieId:[awareStudy getDeviceId]];
@@ -371,7 +369,7 @@ forLocalNotification:(UILocalNotification *)notification
         [dic setObject:@"YES" forKey:KEY_ESM_USER_ANSWER];
         [esm saveData:dic];
     } else if ([identifier isEqualToString:@"esm_answer_no_action"]){
-        ESM * esm = [[ESM alloc] initWithAwareStudy:awareStudy];
+        ESM * esm = [[ESM alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
         NSMutableDictionary *dic =  [AWAREEsmUtils getEsmFormatDictionary:(NSMutableDictionary *)notification.userInfo
                                                              withTimesmap:[AWAREUtils getUnixTimestamp:notification.fireDate]
                                                                   devieId:[awareStudy getDeviceId]];
@@ -513,7 +511,7 @@ void exceptionHandler(NSException *exception) {
     //    NSLog(@"%@", exception.callStackSymbols);
     //    NSString * error = [NSString stringWithFormat:@"[%@] %@ , %@" , exception.name, exception.reason, exception.callStackSymbols];
     
-    Debug * debugSensor = [[Debug alloc] initWithAwareStudy:[[AWAREStudy alloc] initWithReachability:NO]];
+    Debug * debugSensor = [[Debug alloc] initWithAwareStudy:[[AWAREStudy alloc] initWithReachability:NO] dbType:AwareDBTypeTextFile];
     [debugSensor saveDebugEventWithText:exception.debugDescription type:DebugTypeCrash label:exception.name];
 }
 
@@ -522,7 +520,7 @@ void exceptionHandler(NSException *exception) {
 ////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////
 - (void) powerStateDidChange:(id) sender {
-    Debug * debugSensor = [[Debug alloc] initWithAwareStudy:_sharedAWARECore.sharedAwareStudy];
+    Debug * debugSensor = [[Debug alloc] initWithAwareStudy:_sharedAWARECore.sharedAwareStudy dbType:AwareDBTypeTextFile];
     if ([[NSProcessInfo processInfo] isLowPowerModeEnabled]) {
         // Low Power Mode is enabled. Start reducing activity to conserve energy.
         [debugSensor saveDebugEventWithText:@"[Low Power Mode] On" type:DebugTypeWarn label:@""];
@@ -541,7 +539,7 @@ void exceptionHandler(NSException *exception) {
 - (void) changedBatteryState:(id) sender {
     NSInteger batteryState = [UIDevice currentDevice].batteryState;
     if (batteryState == UIDeviceBatteryStateCharging || batteryState == UIDeviceBatteryStateFull) {
-        Debug * debugSensor = [[Debug alloc] initWithAwareStudy:_sharedAWARECore.sharedAwareStudy];
+        Debug * debugSensor = [[Debug alloc] initWithAwareStudy:_sharedAWARECore.sharedAwareStudy dbType:AwareDBTypeTextFile];
         [debugSensor saveDebugEventWithText:@"[Uploader] The battery is charging. AWARE iOS start to upload sensor data." type:DebugTypeInfo label:@""];
         [_sharedAWARECore.sharedSensorManager syncAllSensorsWithDBInBackground];
         [_sharedAWARECore.sharedSensorManager runBatteryStateChangeEvents];
@@ -582,7 +580,7 @@ didSignInForUser:(GIDGoogleUser *)user
         [defaults setObject:idToken forKey:@"GOOGLE_ID_TOKEN"];
         [defaults setObject:@""     forKey:@"GOOGLE_PHONE"];
 
-        GoogleLogin * googleLogin = [[GoogleLogin alloc] initWithAwareStudy:_sharedAWARECore.sharedAwareStudy];
+        GoogleLogin * googleLogin = [[GoogleLogin alloc] initWithAwareStudy:_sharedAWARECore.sharedAwareStudy dbType:AwareDBTypeCoreData];
         [googleLogin saveWithUserID:userId name:name email:email];
     }
 }

@@ -51,11 +51,11 @@ static vDSP_Length const FFTViewControllerFFTWindowSize = 4096;
 }
 
 
-- (instancetype)initWithAwareStudy:(AWAREStudy *)study{
+- (instancetype)initWithAwareStudy:(AWAREStudy *)study dbType:(AwareDBType)dbType{
     self = [super initWithAwareStudy:study
                           sensorName:SENSOR_AMBIENT_NOISE
                         dbEntityName:NSStringFromClass([EntityAmbientNoise class])
-                              dbType:AwareDBTypeCoreData];
+                              dbType:dbType];
     if (self) {
         KEY_AMBIENT_NOISE_TIMESTAMP = @"timestamp";
         KEY_AMBIENT_NOISE_DEVICE_ID = @"device_id";
@@ -330,12 +330,7 @@ static vDSP_Length const FFTViewControllerFFTWindowSize = 4096;
     if ([self isDebug] && sampleSize<=number) {
         [AWAREUtils sendLocalNotificationForMessage:[NSString stringWithFormat:@"dB:%f, RMS:%f, Frequency:%f", db, rms, maxFrequency] soundFlag:NO];
     }
-    @try {
-        [self saveDataToDB];
-    } @catch (NSException *exception) {
-        NSLog(@"%@", exception.debugDescription);
-    }
-
+    
     NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
     [dic setObject:unixtime forKey:KEY_AMBIENT_NOISE_TIMESTAMP];
     [dic setObject:[self getDeviceId] forKey:KEY_AMBIENT_NOISE_DEVICE_ID];
@@ -351,8 +346,11 @@ static vDSP_Length const FFTViewControllerFFTWindowSize = 4096;
         [dic setObject:@"" forKey:KEY_AMBIENT_NOISE_RAW];
     }
 
-    [self saveData:dic];
-    
+    @try {
+        [self saveData:dic];
+    } @catch (NSException *exception) {
+        NSLog(@"%@", exception.debugDescription);
+    }
 }
 
 
@@ -368,6 +366,21 @@ static vDSP_Length const FFTViewControllerFFTWindowSize = 4096;
     ambientNoise.is_silent = [data objectForKey:KEY_AMBIENT_NOISE_SILENT];
     ambientNoise.double_silent_threshold = [data objectForKey:KEY_AMBIENT_NOISE_SILENT_THRESHOLD];
     ambientNoise.raw = [data objectForKey:KEY_AMBIENT_NOISE_RAW];
+}
+
+- (void)saveDummyData{
+    
+    NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+    [dic setObject:[AWAREUtils getUnixTimestamp:[NSDate new]] forKey:KEY_AMBIENT_NOISE_TIMESTAMP];
+    [dic setObject:[self getDeviceId] forKey:KEY_AMBIENT_NOISE_DEVICE_ID];
+    [dic setObject:[NSNumber numberWithFloat:maxFrequency] forKey:KEY_AMBIENT_NOISE_FREQUENCY];
+    [dic setObject:[NSNumber numberWithDouble:db] forKey:KEY_AMBIENT_NOISE_DECIDELS];
+    [dic setObject:[NSNumber numberWithDouble:rms] forKey:KEY_AMBIENT_NOISE_RMS];
+    [dic setObject:[NSNumber numberWithBool:[AudioAnalysis isSilent:rms threshold:silenceThreshold]] forKey:KEY_AMBIENT_NOISE_SILENT];
+    [dic setObject:[NSNumber numberWithInteger:silenceThreshold] forKey:KEY_AMBIENT_NOISE_SILENT_THRESHOLD];
+    [dic setObject:@"" forKey:KEY_AMBIENT_NOISE_RAW];
+    
+    [self saveData:dic];
 }
 
 //////////////////////////////////////////////////////////////////////

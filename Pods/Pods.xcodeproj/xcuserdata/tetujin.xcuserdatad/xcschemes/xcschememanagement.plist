@@ -34,6 +34,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>Pods-AWARETests.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>SCNetworkReachability.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -98,6 +103,11 @@
 			<true/>
 		</dict>
 		<key>9B2B758E5A2FBC4951EB61B6FB6CE421</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>B1EA9EB50AFB32E24353EB0152115ACF</key>
 		<dict>
 			<key>primary</key>
 			<true/>

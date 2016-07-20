@@ -15,7 +15,7 @@
     NSString* KEY_DEVICE_ID;
 }
 
--(instancetype)initWithAwareStudy:(AWAREStudy *)study{
+-(instancetype)initWithAwareStudy:(AWAREStudy *)study dbType:(AwareDBType)dbType{
     self = [super initWithAwareStudy:study
                           sensorName:@"aware_observer"
                         dbEntityName:nil

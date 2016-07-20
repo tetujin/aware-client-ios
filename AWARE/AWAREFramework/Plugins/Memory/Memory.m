@@ -22,11 +22,11 @@
     NSString * KEY_MEMORY_TOTAL;
 }
 
-- (instancetype)initWiththAwareStudy:(AWAREStudy *)study{
+- (instancetype)initWithAwareStudy:(AWAREStudy *)study dbType:(AwareDBType)dbType{
     self = [super initWithAwareStudy:study
                           sensorName:@"memory"
                         dbEntityName:NSStringFromClass([EntityMemory class])
-                              dbType:AwareDBTypeCoreData];
+                              dbType:dbType];
     if (self) {
         KEY_MEMORY_TIMESTAMP = @"timestamp";
         KEY_MEMORY_DEVICE_ID = @"device_id";

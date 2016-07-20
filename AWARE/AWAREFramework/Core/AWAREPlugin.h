@@ -11,7 +11,12 @@
 
 @protocol AWAREPluginDelegate <NSObject>
 //- (instancetype)initWithPluginName:(NSString *)pluginName deviceId:(NSString*) deviceId;
-- (instancetype) initWithPluginName:(NSString *)pluginName awareStudy:(AWAREStudy *) study;
+//- (instancetype) initWithPluginName:(NSString *)pluginName awareStudy:(AWAREStudy *) study;
+// - (instancetype)initWithAwareStudy:(AWAREStudy *)study dbType:(AwareDBType)dbType;
+- (instancetype) initWithAwareStudy:(AWAREStudy *)study
+                         pluginName:(NSString *)pluginName
+                         entityName:(NSString*)entityName
+                             dbType:(AwareDBType) dbType;
 - (BOOL) startAllSensorsWithSettings:(NSArray *)settings;
 - (BOOL) stopAndRemoveAllSensors;
 @end
@@ -24,8 +29,12 @@
 /**
  * Init
  */
-- (instancetype) initWithPluginName:(NSString *)pluginName awareStudy:(AWAREStudy *) study;
-
+// - (instancetype) initWithPluginName:(NSString *)pluginName awareStudy:(AWAREStudy *) study;
+// - (instancetype)initWithAwareStudy:(AWAREStudy *)study dbType:(AwareDBType)dbType;
+- (instancetype) initWithAwareStudy:(AWAREStudy *)study
+                         pluginName:(NSString *)pluginName
+                         entityName:(NSString*)entityName
+                             dbType:(AwareDBType) dbType;
 
 - (NSString *) getDeviceId ;
 

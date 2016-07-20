@@ -13,7 +13,7 @@
 
 @interface Debug : AWARESensor <AWARESensorDelegate>
 
-- (instancetype) initWithAwareStudy:(AWAREStudy *) study;
+// - (instancetype) initWithAwareStudy:(AWAREStudy *) study;
 
 - (void) saveDebugEventWithText:(NSString *)eventText type:(NSInteger)type label:(NSString *) label;
 

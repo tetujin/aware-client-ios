@@ -9,6 +9,7 @@
 //
 
 #import "Processor.h"
+#import "EntityProcessor.h"
 #import <sys/sysctl.h>
 #import <sys/types.h>
 #import <sys/param.h>
@@ -21,11 +22,12 @@
     NSTimer * sensingTimer;
 }
 
-- (instancetype)initWithAwareStudy:(AWAREStudy *)study{
+- (instancetype)initWithAwareStudy:(AWAREStudy *)study dbType:(AwareDBType)dbType{
     self = [super initWithAwareStudy:study
                           sensorName:SENSOR_PROCESSOR
-                        dbEntityName:nil
-                              dbType:AwareDBTypeTextFile];
+                        dbEntityName:NSStringFromClass([EntityProcessor class])
+                              dbType:dbType
+                          bufferSize:0];
     if (self) {
     }
     return self;
@@ -58,39 +60,36 @@
     }
     NSLog(@"[%@] Sensing requency is %f ",[self getSensorName], frequency);
     
-    // Set a buffer size for reducing file access
-//     [self setBufferSize:1000];
-    
     NSLog(@"[%@] Start Processor Sensor", [self getSensorName]);
     sensingTimer = [NSTimer scheduledTimerWithTimeInterval:frequency
                                                     target:self
-                                                  selector:@selector(getSensorData)
+                                                  selector:@selector(saveCPUUsage:)
                                                   userInfo:nil
                                                    repeats:YES];
     return YES;
 }
 
-- (void) getSensorData{
+- (void) saveCPUUsage:(id)sender{
     // Get a CPU usage
-//    float cpuUsageFloat = [self getCpuUsage];
-//    NSNumber *appCpuUsage = [NSNumber numberWithFloat:cpuUsageFloat];
-//    NSNumber *idleCpuUsage = [NSNumber numberWithFloat:(100.0f-cpuUsageFloat)];
-//
-//    // Save sensor data to the local database.
-//    NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
-//    NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-//    [dic setObject:unixtime forKey:@"timestamp"];
-//    [dic setObject:[self getDeviceId] forKey:@"device_id"];
-//    [dic setObject:appCpuUsage forKey:@"double_last_user"]; //double
-//    [dic setObject:@0 forKey:@"double_last_system"]; //double
-//    [dic setObject:idleCpuUsage forKey:@"double_last_idle"]; //double
-//    [dic setObject:@0 forKey:@"double_user_load"];//double
-//    [dic setObject:@0 forKey:@"double_system_load"]; //double
-//    [dic setObject:@0 forKey:@"double_idle_load"]; //double
-//    [self setLatestValue:[NSString stringWithFormat:@"%@ %%",appCpuUsage]];
-//    [self saveData:dic toLocalFile:SENSOR_PROCESSOR];
-//    
-//    malloc(cpuUsageFloat);
+    float cpuUsageFloat = [self getCpuUsage];
+    NSNumber *appCpuUsage = [NSNumber numberWithFloat:cpuUsageFloat];
+    NSNumber *idleCpuUsage = [NSNumber numberWithFloat:(100.0f-cpuUsageFloat)];
+
+    // Save sensor data to the local database.
+    NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
+    NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+    [dic setObject:unixtime forKey:@"timestamp"];
+    [dic setObject:[self getDeviceId] forKey:@"device_id"];
+    [dic setObject:appCpuUsage forKey:@"double_last_user"]; //double
+    [dic setObject:@0 forKey:@"double_last_system"]; //double
+    [dic setObject:idleCpuUsage forKey:@"double_last_idle"]; //double
+    [dic setObject:@0 forKey:@"double_user_load"];//double
+    [dic setObject:@0 forKey:@"double_system_load"]; //double
+    [dic setObject:@0 forKey:@"double_idle_load"]; //double
+    [self setLatestValue:[NSString stringWithFormat:@"%@ %%",appCpuUsage]];
+    [self saveData:dic];
+    
+    malloc(cpuUsageFloat);
 }
 
 - (BOOL)stopSensor{
@@ -98,6 +97,23 @@
     return YES;
 }
 
+
+- (void)insertNewEntityWithData:(NSDictionary *)data
+           managedObjectContext:(NSManagedObjectContext *)childContext
+                     entityName:(NSString *)entity{
+    EntityProcessor* entityProcessor = (EntityProcessor *)[NSEntityDescription
+                                                     insertNewObjectForEntityForName:entity
+                                                     inManagedObjectContext:childContext];
+    
+    entityProcessor.device_id = [data objectForKey:@"device_id"];
+    entityProcessor.timestamp = [data objectForKey:@"timestamp"];
+    entityProcessor.double_last_user = [data objectForKey:@"double_last_user"];
+    entityProcessor.double_last_system = [data objectForKey:@"double_last_system"];
+    entityProcessor.double_last_idle = [data objectForKey:@"double_last_idle"];
+    entityProcessor.double_user_load = [data objectForKey:@"double_user_load"];
+    entityProcessor.double_system_load = [data objectForKey:@"double_system_load"];
+    entityProcessor.double_idle_load = [data objectForKey:@"double_idle_load"];
+}
 
 
 ////////////////////////////////////////////////////////////////////

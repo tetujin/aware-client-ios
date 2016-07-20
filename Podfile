@@ -21,6 +21,14 @@ pod 'EAIntroView', '~> 2.9.0'
 end
 
 target 'AWARETests' do
+pod 'MQTTKit' 
+pod 'SCNetworkReachability'
+pod 'Google/SignIn'
+pod 'DeployGateSDK'
+pod 'ios-ntp'
+pod 'EZAudio'
+pod 'SVProgressHUD'
+pod 'EAIntroView', '~> 2.9.0'
 
 end
 

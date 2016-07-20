@@ -17,11 +17,11 @@
 /**
  * Initialization of AWARE Plugin
  */
-- (instancetype) initWithPluginName:(NSString *)pluginName awareStudy:(AWAREStudy *) study {
+- (instancetype) initWithAwareStudy:(AWAREStudy *)study pluginName:(NSString *)pluginName entityName:(NSString*)entityName dbType:(AwareDBType) dbType{
     self = [super initWithAwareStudy:study
                           sensorName:pluginName
-                        dbEntityName:nil
-                              dbType:AwareDBTypeTextFile];
+                        dbEntityName:entityName
+                              dbType:dbType];
     if (self) {
         _pluginName = pluginName;
         _deviceId = [study getDeviceId];

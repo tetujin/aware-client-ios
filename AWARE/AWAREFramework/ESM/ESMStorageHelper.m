@@ -106,7 +106,7 @@
     AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
     AWAREStudy * study = delegate.sharedAWARECore.sharedAwareStudy;
 
-    Debug * debugSensor = [[Debug alloc] initWithAwareStudy:study];
+    Debug * debugSensor = [[Debug alloc] initWithAwareStudy:study dbType:AwareDBTypeTextFile];
     [debugSensor saveDebugEventWithText:@"[esms] Remove all ESMs from a temp-storage." type:DebugTypeInfo label:@""];
 }
 
@@ -128,7 +128,7 @@
         [defaults setObject:newEsms forKey:@"storedEsms"];
     }
     
-    Debug * debugSensor = [[Debug alloc] initWithAwareStudy:nil];
+    Debug * debugSensor = [[Debug alloc] initWithAwareStudy:nil dbType:AwareDBTypeTextFile];
     [debugSensor saveDebugEventWithText:@"[esms] Remove an ESM from a temp-storage." type:DebugTypeInfo label:@""];
 }
 
@@ -190,7 +190,7 @@
     AWAREStudy * study = delegate.sharedAWARECore.sharedAwareStudy;
     
     // Create
-    ESM *esm = [[ESM alloc] initWithAwareStudy:study]; //TODO
+    ESM *esm = [[ESM alloc] initWithAwareStudy:study dbType:AwareDBTypeTextFile]; //TODO
     NSNumber * answeredTime = [AWAREUtils getUnixTimestamp:[NSDate new]];
     NSString *deviceId = [esm getDeviceId];
     
@@ -218,7 +218,7 @@
     // Save the answers to the local storage.
     [esm saveDataWithArray:answers];
 
-    Debug * debugSensor = [[Debug alloc] initWithAwareStudy:nil];
+    Debug * debugSensor = [[Debug alloc] initWithAwareStudy:nil dbType:AwareDBTypeTextFile];
     [debugSensor saveDebugEventWithText:@"[esms] Save an ESM to main-storage as a timeout ESM" type:DebugTypeInfo label:@""];
     
     // Sync with AWARE database immediately

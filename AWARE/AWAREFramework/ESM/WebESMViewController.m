@@ -123,7 +123,7 @@
     
     esmNumber = 0;
     
-    webESM = [[WebESM alloc] initWithAwareStudy:study];
+    webESM = [[WebESM alloc] initWithAwareStudy:study dbType:AwareDBTypeCoreData];
     [webESM allowsCellularAccess];
     [webESM allowsDateUploadWithoutBatteryCharging];
     currentESMNumber = 0;
@@ -1492,7 +1492,7 @@
         NSLog(@"%@", error);
         
         [delegate.managedObjectContext reset];
-        webESM = [[WebESM alloc] initWithAwareStudy:study];
+        webESM = [[WebESM alloc] initWithAwareStudy:study dbType:AwareDBTypeCoreData];
         esms = [webESM getValidESMsWithDatetime:[NSDate new]];
         
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"AWARE can not save your answer" message:@"Please push submit button again." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];

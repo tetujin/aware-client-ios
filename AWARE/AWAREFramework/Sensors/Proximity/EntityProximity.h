@@ -1,19 +1,17 @@
 //
-//  EntityESMSchedule.h
+//  EntityProximity.h
 //  AWARE
 //
-//  Created by Yuuki Nishiyama on 7/19/16.
+//  Created by Yuuki Nishiyama on 7/20/16.
 //  Copyright © 2016 Yuuki NISHIYAMA. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class EntityESM;
-
 NS_ASSUME_NONNULL_BEGIN
 
-@interface EntityESMSchedule : NSManagedObject
+@interface EntityProximity : NSManagedObject
 
 // Insert code here to declare functionality of your managed object subclass
 
@@ -21,4 +19,4 @@ NS_ASSUME_NONNULL_BEGIN
 
 NS_ASSUME_NONNULL_END
 
-#import "EntityESMSchedule+CoreDataProperties.h"
+#import "EntityProximity+CoreDataProperties.h"
