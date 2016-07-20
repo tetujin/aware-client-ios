@@ -7,14 +7,16 @@
 //
 
 #import "proximity.h"
+#import "EntityProximity.h"
 
 @implementation Proximity
 
-- (instancetype)initWithAwareStudy:(AWAREStudy *)study{
+- (instancetype)initWithAwareStudy:(AWAREStudy *)study dbType:(AwareDBType)dbType{
     self = [super initWithAwareStudy:study
                           sensorName:SENSOR_PROXIMITY
-                        dbEntityName:nil
-                              dbType:AwareDBTypeTextFile];
+                        dbEntityName:NSStringFromClass([EntityProximity class])
+                              dbType:dbType
+                          bufferSize:0];
     if (self) {
     }
     return self;
@@ -76,8 +78,29 @@
     [self saveData:dic];
 }
 
+- (void)insertNewEntityWithData:(NSDictionary *)data managedObjectContext:(NSManagedObjectContext *)childContext entityName:(NSString *)entity{
+    
+    EntityProximity* entityProximity = (EntityProximity *)[NSEntityDescription
+                                                     insertNewObjectForEntityForName:entity
+                                                     inManagedObjectContext:childContext];
+    
+    entityProximity.device_id = [data objectForKey:@"device_id"];
+    entityProximity.timestamp = [data objectForKey:@"timestamp"];
+    entityProximity.double_proximity = [data objectForKey:@"double_proximity"];
+    entityProximity.accuracy = [data objectForKey:@"accuracy"];
+    entityProximity.label = [data objectForKey:@"label"];
+    
+}
 
-
-
+- (void)saveDummyData{
+    NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
+    NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+    [dic setObject:unixtime forKey:@"timestamp"];
+    [dic setObject:[self getDeviceId] forKey:@"device_id"];
+    [dic setObject:@1 forKey:@"double_proximity"];
+    [dic setObject:@0 forKey:@"accuracy"];
+    [dic setObject:@"dummy" forKey:@"label"];
+    [self saveData:dic];
+}
 
 @end

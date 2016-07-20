@@ -16,30 +16,30 @@
     NSTimer *locationTimer;
     IBOutlet CLLocationManager *locationManager;
     
-    Locations * fusedLocationsSensor;
+    Locations * locationSensor;
     VisitLocations * visitLocationSensor;
     AWAREStudy * awareStudy;
 }
 
-- (instancetype)initWithAwareStudy:(AWAREStudy *)study{
+- (instancetype)initWithAwareStudy:(AWAREStudy *)study dbType:(AwareDBType)dbType{
     self = [super initWithAwareStudy:study
-                          sensorName:@"google_fused_location"
-                        dbEntityName:nil
-                              dbType:AwareDBTypeTextFile];
+                          sensorName:SENSOR_GOOGLE_FUSED_LOCATION
+                        dbEntityName:NSStringFromClass([EntityLocation class])
+                              dbType:dbType];
     awareStudy = study;
     if (self) {
         // Make a fused location sensor
-        fusedLocationsSensor = [[Locations alloc] initWithAwareStudy:awareStudy];
+        // fusedLocationsSensor = [[Locations alloc] initWithAwareStudy:awareStudy];
         
         // Make a visit location sensor
-        visitLocationSensor = [[VisitLocations alloc] initWithAwareStudy:awareStudy];
+        visitLocationSensor = [[VisitLocations alloc] initWithAwareStudy:awareStudy dbType:dbType];
     }
     return self;
 }
 
 - (void)createTable{
     // Send a table create query
-    [fusedLocationsSensor createTable];
+    [locationSensor createTable];
     
     //////////////////////////
     // Send a table create query
@@ -102,7 +102,7 @@
             [locationManager requestAlwaysAuthorization];
         }
         
-        [fusedLocationsSensor saveAuthorizationStatus:[CLLocationManager authorizationStatus]];
+        [locationSensor saveAuthorizationStatus:[CLLocationManager authorizationStatus]];
     
         // Set a movement threshold for new events.
         [locationManager startMonitoringVisits]; // This method calls didVisit.
@@ -146,12 +146,12 @@
 
 
 - (void) syncAwareDB {
-    [fusedLocationsSensor syncAwareDB];
+    [super syncAwareDB];
     [visitLocationSensor syncAwareDB];
 }
 
 - (void) syncAwareDBWithLocationTable {
-    [fusedLocationsSensor syncAwareDB];
+    [super syncAwareDB];
 }
 
 - (void) syncAwareDBWithLocationVisitTable {
@@ -162,7 +162,7 @@
     if(![visitLocationSensor syncAwareDBInForeground]){
         return NO;
     }
-    if(![fusedLocationsSensor syncAwareDBInForeground]){
+    if(![super syncAwareDBInForeground]){
         return NO;
     }
     
@@ -213,7 +213,7 @@
     [dict setObject:@"fused" forKey:@"provider"];
     [dict setObject:[NSNumber numberWithInt:accuracy] forKey:@"accuracy"];
     [dict setObject:@"" forKey:@"label"];
-    [fusedLocationsSensor saveData:dict];
+    [locationSensor saveData:dict];
     
     [self setLatestValue:[NSString stringWithFormat:@"%f, %f, %f",
                           location.coordinate.latitude,
@@ -229,7 +229,6 @@
     }
 }
 
-
 - (void)locationManager:(CLLocationManager *)manager
                didVisit:(CLVisit *)visit {
 
@@ -239,7 +238,7 @@
 
 
 - (bool)isUploading:(CLAuthorizationStatus ) state{
-    if([fusedLocationsSensor isUploading] || [visitLocationSensor isUploading]){
+    if([self isUploading] || [visitLocationSensor isUploading]){
         return YES;
     }else{
         return NO;
@@ -258,7 +257,7 @@
 
 - (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status
 {
-    [fusedLocationsSensor saveAuthorizationStatus:status];
+    [locationSensor saveAuthorizationStatus:status];
 }
 
 @end

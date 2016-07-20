@@ -19,7 +19,7 @@
     AWAREDebugMessageLogger * dmLogger;
 }
 
-- (instancetype)initWithAwareStudy:(AWAREStudy *) study {
+- (instancetype)initWithAwareStudy:(AWAREStudy *)study dbType:(AwareDBType)dbType{
     
     return self = [self initWithAwareStudy:study
                   sensorName:@"aware_debug"

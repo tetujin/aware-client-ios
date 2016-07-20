@@ -20,7 +20,7 @@
     ESMManager * esmManager;
 }
 
-- (instancetype)initWithAwareStudy:(AWAREStudy *)study{
+- (instancetype)initWithAwareStudy:(AWAREStudy *)study dbType:(AwareDBType)dbType{
     self = [super initWithAwareStudy:study
                           sensorName:@"esms"
                         dbEntityName:nil
@@ -31,7 +31,6 @@
     }
     return self;
 }
-
 
 - (void) createTable {
     NSLog(@"[%@] Create Table", [self getSensorName]);

@@ -11,6 +11,7 @@
 #import "AWAREStudy.h"
 #import "Accelerometer.h"
 #import "EntityAccelerometer.h"
+#import "AppDelegate.h"
 
 @interface AWARETests : XCTestCase{
     AWAREStudy * study;
@@ -22,9 +23,14 @@
 
 - (void)setUp {
     [super setUp];
+
+    // [self removeAllFilesFromDocumentRoot];
+
     study = [[AWAREStudy alloc] initWithReachability:YES];
+    
     // Put setup code here. This method is called before the invocation of each test method in the class.
 }
+
 
 - (void)tearDown {
     // Put teardown code here. This method is called after the invocation of each test method in the class.
@@ -47,14 +53,77 @@
 //    }];
 //}
 
+
+- (void) testSensingQualityByAllSensor {
+    
+    // Set a test study URL
+    NSLog(@"--- start aware study ---");
+    [study setStudyInformationWithURL:@"https://aware.ht.sfc.keio.ac.jp/index.php/webservice/index/11/wVupTkDhRy9z"];
+    NSDate * testStartDate = [NSDate new];
+    
+    // Set Delegate
+    AppDelegate * delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    AWARESensorManager * sensorManager = delegate.sharedAWARECore.sharedSensorManager;
+    
+    NSLog(@"--- start all sensors ---");
+    [sensorManager startAllSensorsWithStudy:study];
+    
+    NSLog(@"--- upload sensor data ---");
+    [sensorManager syncAllSensorsWithDBInForeground];
+    
+    NSLog(@"--- check latest sensor data---");
+    [self checkStoredData:testStartDate];
+    
+    NSLog(@"--- stop all sensor ---");
+    [sensorManager stopAndRemoveAllSensors];
+    
+    NSLog(@"--- finish a test ---");
+}
+
+
+
+- (void) checkStoredData:(NSDate *) time {
+    AppDelegate * delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    AWARESensorManager * sensorManager = delegate.sharedAWARECore.sharedSensorManager;
+    for (AWARESensor * sensor in [sensorManager getAllSensors]) {
+        NSData * data = [sensor getLatestData];
+        // XCTAssertNotNil(data);
+        if(data != nil){
+            NSError *error = nil;
+            NSArray *jsonArray = [NSJSONSerialization JSONObjectWithData: data options: NSJSONReadingMutableContainers error: &error];
+            //XCTAssertNotNil(error);
+            if(error != nil){
+                NSLog(@"error: %@", error.debugDescription);
+            }
+            if(jsonArray != nil){
+                for (NSDictionary * dict in jsonArray) {
+                    NSNumber * timestamp = [dict objectForKey:@"timestamp"];
+                    XCTAssertNotNil(timestamp);
+                    if(timestamp != nil){
+                        NSNumber * startTime = [AWAREUtils getUnixTimestamp:time];
+                        NSLog(@"[%@] %@ <---> %@", [sensor getSensorName], timestamp, startTime);
+                        //XCTAssertLessThan(startTime, timestamp);
+                    }
+                }
+            }else{
+                NSLog(@"[%@] ERROR", [sensor getSensorName]);
+            }
+        }else{
+            NSLog(@"[%@] ERROR", [sensor getSensorName]);
+        }
+        // NSLog(@"[%@] %@", [sensor getSensorName], );
+    }
+}
+
+
 - (void) testSensorInitializations {
     
     // XCTAssertEqualObjects([calcViewController.displayField stringValue], @"8", @"Part 1 failed.");
-    AWARESensor * sensor = [[AWARESensor alloc] initWithAwareStudy:study];
+    AWARESensor * sensor = [[AWARESensor alloc] initWithAwareStudy:study dbType:AwareDBTypeCoreData];
     XCTAssertFalse([sensor startSensor]);
     
     //////////////////////////////////////////////////////////
-    AWARESensor * accSensor = [[Accelerometer alloc] initWithAwareStudy:study];
+    AWARESensor * accSensor = [[Accelerometer alloc] initWithAwareStudy:study dbType:AwareDBTypeCoreData];
     XCTAssertTrue([accSensor startSensor]);
     XCTAssertTrue([accSensor stopSensor]);
     XCTAssertEqual(0, [accSensor getBufferSize]);
@@ -76,6 +145,22 @@
 
 }
 
+
+
+- (void)removeAllFilesFromDocumentRoot{
+    NSFileManager   *fileManager    = [NSFileManager defaultManager];
+    NSArray         *ducumentDir    =  NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString        *docRoot        = [ducumentDir objectAtIndex:0];
+    NSError * error = nil;
+    for ( NSString *dirName  in [fileManager contentsOfDirectoryAtPath:docRoot error:&error] )
+        [self removeFilePath:[NSString stringWithFormat:@"%@/%@",docRoot, dirName]];
+}
+
+- (BOOL)removeFilePath:(NSString*)path {
+    NSLog(@"Remove => %@", path);
+    NSFileManager *fileManager = [[NSFileManager alloc] init];
+    return [fileManager removeItemAtPath:path error:NULL];
+}
 
 
 @end

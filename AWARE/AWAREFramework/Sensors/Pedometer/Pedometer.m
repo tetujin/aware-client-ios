@@ -33,7 +33,7 @@
     NSTimer * timer;
 }
 
-- (instancetype)initWithAwareStudy:(AWAREStudy *)study{
+- (instancetype)initWithAwareStudy:(AWAREStudy *)study dbType:(AwareDBType)dbType{
     self = [super initWithAwareStudy:study sensorName:SENSOR_PLUGIN_PEDOMETER
                         dbEntityName:nil
                               dbType:AwareDBTypeTextFile];

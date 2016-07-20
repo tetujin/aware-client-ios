@@ -1,5 +1,5 @@
 //
-//  EntityGyroscope.h
+//  EntityProximity.h
 //  AWARE
 //
 //  Created by Yuuki Nishiyama on 7/20/16.
@@ -11,7 +11,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface EntityGyroscope : NSManagedObject
+@interface EntityProximity : NSManagedObject
 
 // Insert code here to declare functionality of your managed object subclass
 
@@ -19,4 +19,4 @@ NS_ASSUME_NONNULL_BEGIN
 
 NS_ASSUME_NONNULL_END
 
-#import "EntityGyroscope+CoreDataProperties.h"
+#import "EntityProximity+CoreDataProperties.h"

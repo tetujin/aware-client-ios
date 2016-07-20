@@ -17,10 +17,11 @@
 }
 
 
-- (instancetype)initWithAwareStudy:(AWAREStudy *)study{
-    self = [super initWithAwareStudy:study sensorName:SENSOR_BAROMETER
+- (instancetype)initWithAwareStudy:(AWAREStudy *)study dbType:(AwareDBType)dbType{
+    self = [super initWithAwareStudy:study
+                          sensorName:SENSOR_BAROMETER
                         dbEntityName:NSStringFromClass([EntityBarometer class])
-                              dbType:AwareDBTypeCoreData];
+                              dbType:dbType];
     if (self) {
         sensingInterval = 0.2f;
         dbWriteInterval = 30;
@@ -127,6 +128,11 @@
     pressureData.accuracy = @0;
     pressureData.label = @"";
 
+}
+
+
+-(void)saveDummyData{
+    [self setBufferSize:0];
 }
 
 - (BOOL)stopSensor{

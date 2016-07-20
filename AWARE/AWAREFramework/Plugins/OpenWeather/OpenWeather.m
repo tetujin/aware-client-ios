@@ -63,11 +63,11 @@ NSString* ZERO            = @"0";
 int ONE_HOUR = 60*60;
 
 
-- (instancetype) initWithAwareStudy:(AWAREStudy *)study{
+- (instancetype) initWithAwareStudy:(AWAREStudy *)study dbType:(AwareDBType)dbType{
     self = [super initWithAwareStudy:study
                           sensorName:SENSOR_PLUGIN_OPEN_WEATHER
                         dbEntityName:NSStringFromClass([EntityOpenWeather class])
-                              dbType:AwareDBTypeCoreData];
+                              dbType:dbType];
     if (self) {
         locationManager = nil;
         identificationForOpenWeather = @"http_for_open_weather_";
@@ -265,58 +265,65 @@ didReceiveResponse:(NSURLResponse *)response
         
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
-            EntityOpenWeather * weatherData = (EntityOpenWeather *)[NSEntityDescription insertNewObjectForEntityForName:[self getEntityName]
-                                                                                                   inManagedObjectContext:delegate.managedObjectContext];
             
-            weatherData.device_id = [self getDeviceId];
-            weatherData.timestamp = [AWAREUtils getUnixTimestamp:[NSDate new]];
-            weatherData.city = [self getName];
-            weatherData.temperature = [self getTemp];
-            weatherData.temperature_max = [self getTempMax];
-            weatherData.temperature_min = [self getTempMin];
-            weatherData.unit = @"";
-            weatherData.humidity = [self getHumidity];
-            weatherData.pressure = [self getPressure];
-            weatherData.wind_speed = [self getWindSpeed];
-            weatherData.wind_degrees = [self getWindDeg];
-            weatherData.cloudiness = [self getClouds];
-            weatherData.weather_icon_id = [self getWeatherIcon];
-            weatherData.weather_description = [self getWeatherDescription];
-            weatherData.rain = [self getRain];
-            weatherData.snow = [self getSnow];
-            weatherData.sunrise = [self getSunRise];
-            weatherData.sunset = [self getSunSet];
+            NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+            NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
+            [dict setObject:unixtime forKey:@"timestamp"];
+            [dict setObject:[self getDeviceId] forKey:@"device_id"];
+            [dict setObject:[self getName] forKey:@"city"];
+            [dict setObject:[self getTemp] forKey:@"temperature"];
+            [dict setObject:[self getTempMax] forKey:@"temperature_max"];
+            [dict setObject:[self getTempMax] forKey:@"temperature_min"];
+            [dict setObject:@"" forKey:@"unit"];
+            [dict setObject:[self getHumidity] forKey:@"humidity"];
+            [dict setObject:[self getPressure] forKey:@"pressure"];
+            [dict setObject:[self getWindSpeed] forKey:@"wind_speed"];
+            [dict setObject:[self getWindDeg] forKey:@"wind_degrees"];
+            [dict setObject:[self getClouds] forKey:@"cloudiness"];
+            [dict setObject:[self getWeatherIcon] forKey:@"weather_icon_id"];
+            [dict setObject:[self getWeatherDescription] forKey:@"weather_description"];
+            [dict setObject:[self getRain] forKey:@"rain"];
+            [dict setObject:[self getSnow] forKey:@"snow"];
+            [dict setObject:[self getSunRise] forKey:@"sunrise"];
+            [dict setObject:[self getSunSet] forKey:@"sunset"];
             
-            [self saveDataToDB];
+            [self saveData:dict];
         });
-
-//        NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-//        NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
-//        [dic setObject:unixtime forKey:@"timestamp"];
-//        [dic setObject:[self getDeviceId] forKey:@"device_id"];
-//        [dic setObject:[self getName] forKey:@"city"];
-//        [dic setObject:[self getTemp] forKey:@"temperature"];
-//        [dic setObject:[self getTempMax] forKey:@"temperature_max"];
-//        [dic setObject:[self getTempMax] forKey:@"temperature_min"];
-//        [dic setObject:@"" forKey:@"unit"];
-//        [dic setObject:[self getHumidity] forKey:@"humidity"];
-//        [dic setObject:[self getPressure] forKey:@"pressure"];
-//        [dic setObject:[self getWindSpeed] forKey:@"wind_speed"];
-//        [dic setObject:[self getWindDeg] forKey:@"wind_degrees"];
-//        [dic setObject:[self getClouds] forKey:@"cloudiness"];
-//        [dic setObject:[self getWeatherIcon] forKey:@"weather_icon_id"];
-//        [dic setObject:[self getWeatherDescription] forKey:@"weather_description"];
-//        [dic setObject:[self getRain] forKey:@"rain"];
-//        [dic setObject:[self getSnow] forKey:@"snow"];
-//        [dic setObject:[self getSunRise] forKey:@"sunrise"];
-//        [dic setObject:[self getSunSet] forKey:@"sunset"];
     }
 
 //    [session finishTasksAndInvalidate];
 //    [session invalidateAndCancel];
     
     [super URLSession:session dataTask:dataTask didReceiveData:data];
+}
+
+
+- (void)insertNewEntityWithData:(NSDictionary *)data
+           managedObjectContext:(NSManagedObjectContext *)childContext
+                     entityName:(NSString *)entity{
+    
+    EntityOpenWeather * weatherData = (EntityOpenWeather *)[NSEntityDescription insertNewObjectForEntityForName:entity
+                                                                                         inManagedObjectContext:childContext];
+    
+    weatherData.device_id =         [data objectForKey:@"device_id"];
+    weatherData.timestamp =         [data objectForKey:@"timestamp"];
+    weatherData.city =              [data objectForKey:@"city"];
+    weatherData.temperature =       [data objectForKey:@"temperature"];
+    weatherData.temperature_max =   [data objectForKey:@"temperature_max"];
+    weatherData.temperature_min =   [data objectForKey:@"temperature_min"];
+    weatherData.unit =              [data objectForKey:@"unit"];
+    weatherData.humidity =          [data objectForKey:@"humidity"];
+    weatherData.pressure =          [data objectForKey:@"pressure"];
+    weatherData.wind_speed =        [data objectForKey:@"wind_speed"];
+    weatherData.wind_degrees =      [data objectForKey:@"wind_degrees"];
+    weatherData.cloudiness =        [data objectForKey:@"cloudiness"];
+    weatherData.weather_icon_id =   [data objectForKey:@"weather_icon_id"];
+    weatherData.weather_description=[data objectForKey:@"weather_description"];
+    weatherData.rain =              [data objectForKey:@"rain"];
+    weatherData.snow =              [data objectForKey:@"snow"];
+    weatherData.sunrise =           [data objectForKey:@"sunrise"];
+    weatherData.sunset =            [data objectForKey:@"sunset"];
+    
 }
 
 //

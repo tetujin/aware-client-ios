@@ -25,7 +25,7 @@
     bool isLock;
 }
 
--(instancetype)initWithAwareStudy:(AWAREStudy *)study{
+-(instancetype)initWithAwareStudy:(AWAREStudy *)study dbType:(AwareDBType)dbType{
     self = [super initWithAwareStudy:study
                           sensorName:SENSOR_PLUGIN_WEB_ESM
                         dbEntityName:NSStringFromClass([EntityESMAnswer class])

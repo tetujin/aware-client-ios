@@ -129,7 +129,7 @@
      * A developer can store debug messages to an aware database
      * by using the -saveDebugEventWithText:type:label: method on the debugSensor.
      */
-    debugSensor = [[Debug alloc] initWithAwareStudy:awareStudy];
+    debugSensor = [[Debug alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
     
     
     
@@ -148,7 +148,9 @@
                                                       repeats:YES];
     [[NSRunLoop mainRunLoop] addTimer:listUpdateTimer forMode:NSRunLoopCommonModes];
 
-    webESM = [[WebESM alloc] initWithAwareStudy:awareStudy];
+    webESM = [[WebESM alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeCoreData];
+    
+    // [sensorManager performSelector:@selector(testSensing) withObject:nil afterDelay:10];
 }
 
 
@@ -326,6 +328,8 @@
     [_sensors addObject:[self getCelContent:@"Gravity" desc:@"Gravity provides a three dimensional vector indicating the direction and magnitude of gravity (in m/s²)" image:@"ic_action_gravity" key:SENSOR_GRAVITY]];
     // linear  accelerometer
     [_sensors addObject:[self getCelContent:@"Linear Accelerometer" desc:@"The linear accelerometer measures the acceleration applied to the sensor built-in into the device, excluding the force of gravity, in m/s" image:@"ic_action_linear_acceleration" key:SENSOR_LINEAR_ACCELEROMETER]];
+    // rotation
+    [_sensors addObject:[self getCelContent:@"Rotation" desc:@"Orientation of the device in all axis" image:@"ic_action_rotation" key:SENSOR_ROTATION]];
     // locations (GPS)
     [_sensors addObject:[self getCelContent:@"Locations" desc:@"User's estimated location by GPS and network triangulation" image:@"ic_action_locations" key:SENSOR_LOCATIONS]];
     // magnetometer
@@ -757,7 +761,7 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
             return;
         }
         NSString *label = [alertView textFieldAtIndex:0].text;
-        Labels * labelsSensor = [[Labels alloc] initWithAwareStudy:awareStudy];
+        Labels * labelsSensor = [[Labels alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
         [labelsSensor saveLabel:label withKey:@"top" type:@"text" body:@"" triggerTime:[NSDate new] answeredTime:[NSDate new]];
         [labelsSensor syncAwareDB];
     }else if (alertView.tag == 12){

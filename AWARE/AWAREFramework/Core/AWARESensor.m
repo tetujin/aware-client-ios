@@ -81,10 +81,19 @@
 
 @implementation AWARESensor
 
-- (instancetype) initWithAwareStudy:(AWAREStudy *)study{
-    return [self initWithAwareStudy:study sensorName:@"---" dbEntityName:@"---"];
-}
+//- (instancetype) initWithAwareStudy:(AWAREStudy *)study{
+//    
+//    NSLog(@"Please overwrite this method");
+//    
+//    return [self initWithAwareStudy:study sensorName:@"---" dbEntityName:AwareDBTypeCoreData];
+//}
 
+- (instancetype) initWithAwareStudy:(AWAREStudy *)study dbType:(AwareDBType)dbType pluginName:(NSString *) pluginName {
+    
+    NSLog(@"Please overwrite this method");
+    
+    return [self initWithAwareStudy:study sensorName:pluginName dbEntityName:@"---" dbType:dbType];
+}
 
 - (instancetype) initWithAwareStudy:(AWAREStudy *)study
                          sensorName:(NSString *)name
@@ -388,6 +397,11 @@
     }else{
         return [super saveDataToDB];
     }
+}
+
+
+- (void) saveDummyData {
+    
 }
 
 //////////////////////////////////////////

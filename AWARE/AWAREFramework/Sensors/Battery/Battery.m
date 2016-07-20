@@ -36,11 +36,11 @@
     NSInteger previousBatteryLevel;
 }
 
-- (instancetype)initWithAwareStudy:(AWAREStudy *)study{
+- (instancetype)initWithAwareStudy:(AWAREStudy *)study dbType:(AwareDBType)dbType{
     self = [super initWithAwareStudy:study
                           sensorName:SENSOR_BATTERY
                         dbEntityName:NSStringFromClass([EntityBattery class])
-                              dbType:AwareDBTypeCoreData];
+                              dbType:dbType];
     if (self) {
         BATTERY_DISCHARGERES = @"battery_discharges";
         BATTERY_CHARGERES = @"battery_charges";
@@ -59,12 +59,12 @@
         batteryChargeSensor = [[BatteryCharge alloc] initWithAwareStudy:study
                                                            sensorName:BATTERY_CHARGERES
                                                          dbEntityName:NSStringFromClass([EntityBatteryCharge class])
-                                                               dbType:AwareDBTypeCoreData];
+                                                               dbType:dbType];
         
         batteryDischargeSensor = [[BatteryDischarge alloc] initWithAwareStudy:study
                                                               sensorName:BATTERY_DISCHARGERES
                                                             dbEntityName:NSStringFromClass([EntityBatteryDischarge class])
-                                                                  dbType:AwareDBTypeCoreData];
+                                                                  dbType:dbType];
         [batteryChargeSensor trackDebugEvents];
         [batteryDischargeSensor trackDebugEvents];
         previousBatteryLevel = [UIDevice currentDevice].batteryLevel*100;
@@ -231,6 +231,24 @@
 }
 
 
+
+
+- (void)saveDummyData{
+    NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    [dict setObject:unixtime forKey:@"timestamp"];
+    [dict setObject:[self getDeviceId] forKey:@"device_id"];
+    [dict setObject:@1 forKey:@"battery_status"];
+    [dict setObject:@1 forKey:@"battery_level"];
+    [dict setObject:@100 forKey:@"battery_scale"];
+    [dict setObject:@0 forKey:@"battery_voltage"];
+    [dict setObject:@0 forKey:@"battery_temperature"];
+    [dict setObject:@0 forKey:@"battery_adaptor"];
+    [dict setObject:@0 forKey:@"battery_health"];
+    [dict setObject:@"" forKey:@"battery_technology"];
+    
+    [self saveData:dict];
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////

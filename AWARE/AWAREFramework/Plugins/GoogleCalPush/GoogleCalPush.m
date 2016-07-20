@@ -27,7 +27,7 @@ NSString* const PLUGIN_GOOGLE_CAL_PUSH_CAL_NAME = @"BalancedCampusJournal";
 }
 
 // Initializer
-- (instancetype)initWithAwareStudy:(AWAREStudy *)study{
+- (instancetype)initWithAwareStudy:(AWAREStudy *)study dbType:(AwareDBType)dbType{
     self = [super initWithAwareStudy:study
                           sensorName:SENSOR_PLUGIN_GOOGLE_CAL_PUSH
                         dbEntityName:nil

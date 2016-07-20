@@ -16,7 +16,7 @@
 }
 
 /** Initializer */
-- (instancetype)initWithAwareStudy:(AWAREStudy *)study{
+- (instancetype)initWithAwareStudy:(AWAREStudy *)study dbType:(AwareDBType)dbType{
     self = [super initWithAwareStudy:study
                           sensorName:SENSOR_ORIENTATION
                         dbEntityName:nil

@@ -25,11 +25,11 @@
 }
 
 
-- (instancetype)initWithAwareStudy:(AWAREStudy *)study{
+- (instancetype)initWithAwareStudy:(AWAREStudy *)study dbType:(AwareDBType)dbType{
     self = [super initWithAwareStudy:study
                           sensorName:SENSOR_ROTATION
                         dbEntityName:NSStringFromClass([EntityRotation class])
-                              dbType:AwareDBTypeCoreData];
+                              dbType:dbType];
     if (self) {
         motionManager = [[CMMotionManager alloc] init];
         defaultInterval = 0.1f;
@@ -56,14 +56,14 @@
 
 - (BOOL)startSensorWithSettings:(NSArray *)settings{
     // Get a sensing frequency
-    int interval = defaultInterval;
+    double interval = defaultInterval;
     double frequency = [self getSensorSetting:settings withKey:@"frequency_rotation"];
     if(frequency != -1){
-        NSLog(@"Accelerometer's frequency is %f !!", frequency);
+        NSLog(@"Rotation's frequency is %f", frequency);
         double iOSfrequency = [self convertMotionSensorFrequecyFromAndroid:frequency];
         interval = iOSfrequency;
     }
-    int buffer = dbWriteInterval/interval;
+    int buffer = (double)dbWriteInterval/interval;
     return [self startSensorWithInterval:interval bufferSize:buffer];
 }
 
@@ -98,9 +98,9 @@
                                               NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
                                               [dict setObject:unixtime forKey:@"timestamp"];
                                               [dict setObject:[self getDeviceId] forKey:@"device_id"];
-                                              [dict setObject:[NSNumber numberWithDouble:motion.attitude.pitch] forKey:@"double_values_0"]; //double
-                                              [dict setObject:[NSNumber numberWithDouble:motion.attitude.roll]  forKey:@"double_values_1"]; //double
-                                              [dict setObject:[NSNumber numberWithDouble:motion.attitude.yaw]  forKey:@"double_values_2"]; //double
+                                              [dict setObject:@(motion.attitude.pitch) forKey:@"double_values_0"]; //double
+                                              [dict setObject:@(motion.attitude.roll)  forKey:@"double_values_1"]; //double
+                                              [dict setObject:@(motion.attitude.yaw)  forKey:@"double_values_2"]; //double
                                               [dict setObject:@0 forKey:@"double_values_3"]; //double
                                               [dict setObject:@0 forKey:@"accuracy"];//int
                                               [dict setObject:@"" forKey:@"label"]; //text
@@ -145,11 +145,11 @@
     entityRotation.device_id = [data objectForKey:@"device_id"];
     entityRotation.timestamp = [data objectForKey:@"timestamp"];
     entityRotation.double_values_0 = [data objectForKey:@"double_values_0"];
-    entityRotation.double_values_1 = [data objectForKey:@""];
-    entityRotation.double_values_2 = [data objectForKey:@""];
-    entityRotation.double_values_3 = [data objectForKey:@""];
-    entityRotation.accuracy = [data objectForKey:@""];
-    entityRotation.label = [data objectForKey:@""];
+    entityRotation.double_values_1 = [data objectForKey:@"double_values_1"];
+    entityRotation.double_values_2 = [data objectForKey:@"double_values_2"];
+    entityRotation.double_values_3 = [data objectForKey:@"double_values_3"];
+    entityRotation.accuracy = [data objectForKey:@"accuracy"];
+    entityRotation.label = [data objectForKey:@"label"];
     
 }
 

@@ -27,11 +27,11 @@
     NSString * KEY_BLUETOOTH_LABLE;
 }
 
-- (instancetype)initWithAwareStudy:(AWAREStudy *)study{
+- (instancetype)initWithAwareStudy:(AWAREStudy *)study dbType:(AwareDBType)dbType{
     self = [super initWithAwareStudy:study
                           sensorName:SENSOR_BLUETOOTH
                         dbEntityName:NSStringFromClass([EntityBluetooth class])
-                              dbType:AwareDBTypeCoreData];
+                              dbType:dbType];
     if (self) {
         mdBluetoothManager = [MDBluetoothManager sharedInstance];
         _scanDuration = 30; // 30 second
@@ -173,6 +173,18 @@
     
 }
 
+
+- (void)saveDummyData{
+    NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    [dict setObject:unixtime forKey:@"timestamp"];
+    [dict setObject:[self getDeviceId] forKey:@"device_id"];
+    [dict setObject:@"dummy" forKey:@"bt_address"]; //varchar
+    [dict setObject:@"dummy" forKey:@"bt_name"]; //text
+    [dict setObject:@0 forKey:@"bt_rssi"]; //int
+    [dict setObject:[[AWAREUtils getUnixTimestamp:[NSDate new]] stringValue] forKey:@"label"];
+    [self saveData:dict];
+}
 
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////

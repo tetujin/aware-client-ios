@@ -46,11 +46,11 @@
 }
 
 
-- (instancetype)initWithAwareStudy:(AWAREStudy *)study{
+- (instancetype)initWithAwareStudy:(AWAREStudy *)study dbType:(AwareDBType)dbType{
     self = [super initWithAwareStudy:study
                           sensorName:SENSOR_LINEAR_ACCELEROMETER
                         dbEntityName:NSStringFromClass([EntityLinearAccelerometer class])
-                              dbType:AwareDBTypeCoreData];
+                              dbType:dbType];
     if (self) {
         motionManager = [[CMMotionManager alloc] init];
         defaultInterval = 0.1f;

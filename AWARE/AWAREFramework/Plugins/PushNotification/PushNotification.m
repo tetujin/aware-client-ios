@@ -19,7 +19,7 @@
 }
 
 
-- (instancetype)initWithAwareStudy:(AWAREStudy *)study{
+- (instancetype)initWithAwareStudy:(AWAREStudy *)study dbType:(AwareDBType)dbType{
     self = [super initWithAwareStudy:study
                           sensorName:@"push_notification_device_tokens"
                         dbEntityName:NSStringFromClass([EntityPushNotification class])
@@ -28,6 +28,8 @@
         KEY_PUSH_DEVICE_ID = @"device_id";
         KEY_PUSH_TIMESTAMP = @"timestamp";
         KEY_PUSH_TOKEN = @"token";
+        [self allowsCellularAccess];
+        [self allowsDateUploadWithoutBatteryCharging];
     }
     return self;
 }
@@ -50,9 +52,7 @@
 
 - (BOOL)startSensorWithSettings:(NSArray *)settings{
     [self saveStoredPushNotificationDeviceToken];
-    [self allowsCellularAccess];
-    [self allowsDateUploadWithoutBatteryCharging];
-    [self syncAwareDB];
+    [self performSelector:@selector(syncAwareDBInBackground) withObject:nil afterDelay:3];
     return YES;
 }
 
@@ -105,7 +105,16 @@
     entityPush.device_id = [data objectForKey:KEY_PUSH_DEVICE_ID];
     entityPush.timestamp = [data objectForKey:KEY_PUSH_TIMESTAMP];
     entityPush.token = [data objectForKey:KEY_PUSH_TOKEN];
-    
+}
+
+- (void)saveDummyData{
+    [self saveStoredPushNotificationDeviceToken];
+}
+
+//////////////////////////////////////////////////
+
+- (BOOL)syncAwareDBInForeground{
+    return [super syncAwareDBInForeground];
 }
 
 @end

@@ -27,11 +27,11 @@
     CMMotionActivityConfidence confidenceFilter;
 }
 
-- (instancetype)initWithAwareStudy:(AWAREStudy *)study{
+- (instancetype)initWithAwareStudy:(AWAREStudy *)study dbType:(AwareDBType)dbType{
     self = [super initWithAwareStudy:study
                           sensorName:SENSOR_PLUGIN_GOOGLE_ACTIVITY_RECOGNITION
                         dbEntityName:NSStringFromClass([EntityActivityRecognition class])
-                              dbType:AwareDBTypeCoreData];
+                              dbType:dbType];
     if (self) {
         motionActivityManager = [[CMMotionActivityManager alloc] init];
         KEY_TIMESTAMP_OF_LAST_UPDATE = @"key_plugin_sensor_activity_recognition_last_update_timestamp";
@@ -307,6 +307,19 @@
     entityActivity.activity_name = [data objectForKey:@"activity_name"];
     entityActivity.activity_type = [data objectForKey:@"activity_type"];
     
+}
+
+
+- (void)saveDummyData{
+    NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    [dict setObject:unixtime forKey:@"timestamp"];
+    [dict setObject:[self getDeviceId] forKey:@"device_id"];
+    [dict setObject:@"dummy" forKey:@"activity_name"]; //varchar
+    [dict setObject:@"dummy" forKey:@"activity_type"]; //text
+    [dict setObject:@0 forKey:@"confidence"]; //int
+    [dict setObject:@"" forKey:@"activities"]; //text
+    [self saveData:dict];
 }
 
 -(NSString*)timestamp2date:(NSDate*)date{

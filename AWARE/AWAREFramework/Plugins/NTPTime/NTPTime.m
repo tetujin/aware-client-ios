@@ -15,11 +15,11 @@
     NSTimer * sensingTimer;
  }
 
-- (instancetype)initWithAwareStudy:(AWAREStudy *)study{
+- (instancetype)initWithAwareStudy:(AWAREStudy *)study dbType:(AwareDBType)dbType{
     self = [super initWithAwareStudy:study
                           sensorName:SENSOR_PLUGIN_NTPTIME
                         dbEntityName:NSStringFromClass([EntityNTPTime class])
-                              dbType:AwareDBTypeCoreData];
+                              dbType:dbType];
     if (self) {
     }
     return self;
@@ -45,6 +45,7 @@
                                                   selector:@selector(getNTPTime)
                                                   userInfo:nil
                                                    repeats:YES];
+    [self getNTPTime];
     
     return YES;
 }
@@ -66,26 +67,26 @@
     double offset = nc.networkOffset * 1000;
     NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
     NSNumber * ntpUnixtime = [AWAREUtils getUnixTimestamp:nt];
-//    NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-//    [dic setObject:unixtime forKey:@"timestamp"];
-//    [dic setObject:[self getDeviceId] forKey:@"device_id"];
-//    [dic setObject:[NSNumber numberWithDouble:offset] forKey:@"drift"]; // real
-//    [dic setObject:ntpUnixtime forKey:@"ntp_time"]; // real
+    NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+    [dic setObject:unixtime forKey:@"timestamp"];
+    [dic setObject:[self getDeviceId] forKey:@"device_id"];
+    [dic setObject:[NSNumber numberWithDouble:offset] forKey:@"drift"]; // real
+    [dic setObject:ntpUnixtime forKey:@"ntp_time"]; // real
+
     [self setLatestValue:[NSString stringWithFormat:@"[%f] %@",offset, nt ]];
-//    [self saveData:dic];
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
-        EntityNTPTime * data = (EntityNTPTime *)[NSEntityDescription insertNewObjectForEntityForName:[self getEntityName]
-                                                                              inManagedObjectContext:delegate.managedObjectContext];
-        data.device_id = [self getDeviceId];
-        data.timestamp = unixtime;
-        data.drift = @(offset);
-        data.ntp_time = ntpUnixtime;
-        
-        [self saveDataToDB];
+        [self saveData:dic];
     });
-    
+}
+
+- (void)insertNewEntityWithData:(NSDictionary *)data managedObjectContext:(NSManagedObjectContext *)childContext entityName:(NSString *)entity{
+    EntityNTPTime * entityNTP = (EntityNTPTime *)[NSEntityDescription insertNewObjectForEntityForName:entity
+                                                                          inManagedObjectContext:childContext];
+    entityNTP.device_id = [data objectForKey:@"device_id"];
+    entityNTP.timestamp = [data objectForKey:@"timestamp"];;
+    entityNTP.drift     = [data objectForKey:@"drift"];
+    entityNTP.ntp_time  = [data objectForKey:@"ntp_time"];
 }
 
 

@@ -50,8 +50,15 @@
     NSTimer * timer;
 }
 
-- (instancetype)initWithPluginName:(NSString *)pluginName awareStudy:(AWAREStudy *)study{
-    self = [super initWithPluginName:pluginName awareStudy:study];
+- (instancetype)initWithAwareStudy:(AWAREStudy *)study dbType:(AwareDBType)dbType{
+    self = [super initWithAwareStudy:study
+                          pluginName:SENSOR_PLUGIN_MSBAND
+                          entityName:@"---"
+                              dbType:dbType];
+    
+    // AwareDBType currentDBType = [self getDBType];
+
+    // self = [super initWithPluginName:SENSOR_PLUGIN_MSBAND awareStudy:study ];
     awareStudy = study;
     if (self) {
         
@@ -73,7 +80,7 @@
                                             awareStudy:awareStudy
                                                 sensorName:SENSOR_PLUGIN_MSBAND_SENSORS_GSR
                                             dbEntityName:NSStringFromClass([EntityMSBandGSR class])
-                                                  dbType:AwareDBTypeCoreData
+                                                  dbType:dbType
                                               bufferSize:30];
         [gsrSensor trackDebugEvents];
         [super addAnAwareSensor:(AWARESensor *)gsrSensor];
@@ -84,7 +91,7 @@
                                             awareStudy:awareStudy
                                             sensorName:SENSOR_PLUGIN_MSBAND_SENSORS_UV
                                           dbEntityName:NSStringFromClass([EntityMSBandUV class])
-                                                dbType:AwareDBTypeCoreData
+                                                dbType:dbType
                                             bufferSize:0];
         [uvSensor trackDebugEvents];
         [super addAnAwareSensor:(AWARESensor *)uvSensor];
@@ -95,7 +102,7 @@
                                                   awareStudy:awareStudy
                                                   sensorName:SENSOR_PLUGIN_MSBAND_SENSORS_CALORIES
                                                 dbEntityName:NSStringFromClass([EntityMSBandCalorie class])
-                                                      dbType:AwareDBTypeCoreData
+                                                      dbType:dbType
                                                   bufferSize:10];
         [calSensor trackDebugEvents];
         [super addAnAwareSensor:(AWARESensor *)calSensor];
@@ -106,7 +113,7 @@
                                                         awareStudy:awareStudy
                                                         sensorName:SENSOR_PLUGIN_MSBAND_SENSORS_SKINTEMP
                                                       dbEntityName:NSStringFromClass([EntityMSBandSkinTemp class])
-                                                            dbType:AwareDBTypeCoreData
+                                                            dbType:dbType
                                                         bufferSize:0];
         [skinTempSensor trackDebugEvents];
         [super addAnAwareSensor:(AWARESensor *)skinTempSensor];
@@ -118,7 +125,7 @@
                                                         awareStudy:awareStudy
                                                         sensorName:SENSOR_PLUGIN_MSBAND_SENSORS_DISTANCE
                                                       dbEntityName:NSStringFromClass([EntityMSBandDistance class])
-                                                            dbType:AwareDBTypeCoreData
+                                                            dbType:dbType
                                                         bufferSize:10];
         [distanceSensor trackDebugEvents];
         [super addAnAwareSensor:(AWARESensor *)distanceSensor];
@@ -129,7 +136,7 @@
                                             awareStudy:awareStudy
                                             sensorName:SENSOR_PLUGIN_MSBAND_SENSORS_HEARTRATE
                                           dbEntityName:NSStringFromClass([EntityMSBandHR class])
-                                                dbType:AwareDBTypeCoreData
+                                                dbType:dbType
                                             bufferSize:5];
         [hrSensor trackDebugEvents];
         [hrSensor requestHRUserConsent];
@@ -141,7 +148,7 @@
                                                           awareStudy:awareStudy
                                                           sensorName:SENSOR_PLUGIN_MSBAND_SENSORS_PEDOMETER
                                                         dbEntityName:NSStringFromClass([EntityMSBandPedometer class])
-                                                              dbType:AwareDBTypeCoreData
+                                                              dbType:dbType
                                                           bufferSize:10];
         [super addAnAwareSensor:(AWARESensor *)pedometerSensor];
         
@@ -151,8 +158,8 @@
                                                                   awareStudy:awareStudy
                                                                   sensorName:SENSOR_PLUGIN_MSBAND_SENSORS_DEVICECONTACT
                                                                 dbEntityName:NSStringFromClass([EntityMSBandDeviceContact class])
-                                                                      dbType:AwareDBTypeCoreData
-                                                                              bufferSize:0];
+                                                                      dbType:dbType
+                                                                  bufferSize:0];
         [deviceContactSensor trackDebugEvents];
         [super addAnAwareSensor:(AWARESensor *)deviceContactSensor];
         
@@ -162,7 +169,8 @@
                                                             awareStudy:awareStudy
                                                             sensorName:SENSOR_PLUGIN_MSBAND_SENSORS_RRINTERVAL
                                                           dbEntityName:NSStringFromClass([EntityMSBandRRInterval class])
-                                                                dbType:AwareDBTypeCoreData bufferSize:10];
+                                                                dbType:dbType
+                                                            bufferSize:10];
         [deviceContactSensor trackDebugEvents];
         [super addAnAwareSensor:(AWARESensor *)rrIntervalSensor];
     }
@@ -263,6 +271,10 @@
     [super setLatestValue:[hrSensor getLatestValue]];
 }
 
+
+- (NSString *)getLatestValue{
+    return [hrSensor getLatestValue];
+}
 
 
 

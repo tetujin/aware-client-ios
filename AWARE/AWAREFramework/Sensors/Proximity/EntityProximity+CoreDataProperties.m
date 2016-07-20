@@ -1,5 +1,5 @@
 //
-//  EntityGyroscope+CoreDataProperties.m
+//  EntityProximity+CoreDataProperties.m
 //  AWARE
 //
 //  Created by Yuuki Nishiyama on 7/20/16.
@@ -9,16 +9,14 @@
 //  to delete and recreate this implementation file for your updated model.
 //
 
-#import "EntityGyroscope+CoreDataProperties.h"
+#import "EntityProximity+CoreDataProperties.h"
 
-@implementation EntityGyroscope (CoreDataProperties)
+@implementation EntityProximity (CoreDataProperties)
 
-@dynamic accuracy;
-@dynamic double_values_0;
-@dynamic double_values_1;
-@dynamic double_values_2;
-@dynamic device_id;
-@dynamic label;
 @dynamic timestamp;
+@dynamic device_id;
+@dynamic double_proximity;
+@dynamic accuracy;
+@dynamic label;
 
 @end

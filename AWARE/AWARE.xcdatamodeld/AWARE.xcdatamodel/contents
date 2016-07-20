@@ -199,10 +199,10 @@
     </entity>
     <entity name="EntityGyroscope" representedClassName="EntityGyroscope" syncable="YES">
         <attribute name="accuracy" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
-        <attribute name="axis_x" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="axis_y" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="axis_z" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
         <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="double_values_0" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="double_values_1" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="double_values_2" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
         <attribute name="label" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
     </entity>
@@ -352,12 +352,19 @@
     </entity>
     <entity name="EntityProcessor" representedClassName="EntityProcessor" syncable="YES">
         <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="double_idle" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="double_idle_load" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
         <attribute name="double_last_idle" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
         <attribute name="double_last_system" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
         <attribute name="double_last_user" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
         <attribute name="double_system_load" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
         <attribute name="double_user_load" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+    </entity>
+    <entity name="EntityProximity" representedClassName="EntityProximity" syncable="YES">
+        <attribute name="accuracy" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="double_proximity" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="label" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
     </entity>
     <entity name="EntityPushNotification" representedClassName="EntityPushNotification" syncable="YES">
@@ -414,7 +421,7 @@
         <element name="EntityESMHistory" positionX="297" positionY="144" width="128" height="135"/>
         <element name="EntityESMSchedule" positionX="97" positionY="582" width="146" height="195"/>
         <element name="EntityGravity" positionX="180" positionY="144" width="128" height="30"/>
-        <element name="EntityGyroscope" positionX="189" positionY="153" width="128" height="30"/>
+        <element name="EntityGyroscope" positionX="189" positionY="153" width="128" height="150"/>
         <element name="EntityLabel" positionX="225" positionY="189" width="128" height="30"/>
         <element name="EntityLinearAccelerometer" positionX="198" positionY="162" width="128" height="30"/>
         <element name="EntityLocation" positionX="117" positionY="81" width="128" height="30"/>
@@ -434,11 +441,12 @@
         <element name="EntityNetwork" positionX="216" positionY="180" width="128" height="30"/>
         <element name="EntityNTPTime" positionX="216" positionY="180" width="128" height="30"/>
         <element name="EntityOpenWeather" positionX="189" positionY="153" width="128" height="30"/>
-        <element name="EntityProcessor" positionX="180" positionY="144" width="128" height="30"/>
+        <element name="EntityProcessor" positionX="180" positionY="144" width="128" height="165"/>
         <element name="EntityPushNotification" positionX="198" positionY="162" width="128" height="30"/>
         <element name="EntityRotation" positionX="180" positionY="144" width="128" height="30"/>
         <element name="EntityScreen" positionX="189" positionY="153" width="128" height="30"/>
         <element name="EntityTimezone" positionX="198" positionY="162" width="128" height="30"/>
         <element name="EntityWifi" positionX="207" positionY="171" width="128" height="30"/>
+        <element name="EntityProximity" positionX="306" positionY="153" width="128" height="120"/>
     </elements>
 </model>

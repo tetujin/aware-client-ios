@@ -33,8 +33,8 @@
     BOOL isDebug;
     BOOL isUploading;
     BOOL isManualUpload;
-    BOOL isSyncWithOnlyBatteryCharging;
-    BOOL isSyncWithWifiOnly;
+    // BOOL isSyncWithOnlyBatteryCharging;
+    // BOOL isSyncWithWifiOnly;
     int errorPosts;
     
     NSNumber * unixtimeOfUploadingData;
@@ -79,8 +79,8 @@
         // Get settings
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         isDebug = [userDefaults boolForKey:SETTING_DEBUG_STATE];
-        isSyncWithOnlyBatteryCharging = [userDefaults boolForKey:SETTING_SYNC_BATTERY_CHARGING_ONLY];
-        isSyncWithWifiOnly = [userDefaults boolForKey:SETTING_SYNC_WIFI_ONLY];
+//        isSyncWithOnlyBatteryCharging = [userDefaults boolForKey:SETTING_SYNC_BATTERY_CHARGING_ONLY];
+//        isSyncWithWifiOnly = [userDefaults boolForKey:SETTING_SYNC_WIFI_ONLY];
         
         AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
         self.mainQueueManagedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
@@ -116,22 +116,28 @@
 }
 
 - (void)syncAwareDBInBackground{
-    // chekc wifi state
+    
+//    if([sensorName isEqualToString:@"push_notification_device_tokens"]){
+//        NSLog(@"***");
+//    }
+    
+    // check wifi state
     if(isUploading){
         NSString * message= [NSString stringWithFormat:@"[%@] Now sendsor data is uploading.", sensorName];
         NSLog(@"%@", message);
         return;
     }
     
-    // chekc wifi state
-      if ([awareStudy isWifiReachable] == NO && isSyncWithWifiOnly == YES) {
+    // check wifi state
+    BOOL wifiReachable = [awareStudy isWifiReachable];
+    if (wifiReachable == NO && [self isSyncWithOnlyWifi] == YES) {
         NSString * message = [NSString stringWithFormat:@"[%@] Wifi is not availabe.", sensorName];
         NSLog(@"%@", message);
         return;
     }
     
     // check battery condition
-    if (isSyncWithOnlyBatteryCharging) {
+    if ([self isSyncWithOnlyBatteryCharging]) {
         NSInteger batteryState = [UIDevice currentDevice].batteryState;
         if ( batteryState == UIDeviceBatteryStateCharging || batteryState == UIDeviceBatteryStateFull) {
         }else{
@@ -234,7 +240,9 @@
 - (bool) saveData:(NSDictionary *)data{
     if(data!=nil && bufferArray != nil){
         [bufferArray addObject:data];
-        if(bufferCount > [self getBufferSize]){
+        //NSLog(@"[%@] buffer size: %d",sensorName,[self getBufferSize]);
+        int bufferLimit = [self getBufferSize];
+        if(bufferCount >= bufferLimit){
             bufferCount = 0;
             [self saveDataInBackground];
         }else{
@@ -274,6 +282,7 @@
                 // An error is occued
                 NSLog(@"Error saving context: %@\n%@", [error localizedDescription], [error userInfo]);
                 [bufferArray addObjectsFromArray:array];
+                [self unlockDB];
             }else{
                 // sucess to marge diff to the main context manager
                 [parentContext performBlock:^{
@@ -355,12 +364,22 @@
  * @discussion Please call this method in the background
  */
 - (BOOL) setRepetationCountAfterStartToSyncDB:(NSNumber *) timestamp {
+    
+//    if([sensorName isEqualToString:@"push_notification_device_tokens"]){
+//        NSLog(@"******");
+//    }
+    
     @try {
         if ([self isDBLock]) {
+            [self dataSyncIsFinishedCorrectoly];
             return NO;
         }else{
             [self lockDB];
         }
+        
+//        if([sensorName isEqualToString:@"push_notification_device_tokens"]){
+//            NSLog(@"*********");
+//        }
         
         NSFetchRequest* request = [[NSFetchRequest alloc] init];
         NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
@@ -429,7 +448,7 @@
     }
 
     // check battery condition
-    if (isSyncWithOnlyBatteryCharging) {
+    if ([self isSyncWithOnlyBatteryCharging]) {
         NSInteger batteryState = [UIDevice currentDevice].batteryState;
         if ( batteryState == UIDeviceBatteryStateCharging || batteryState == UIDeviceBatteryStateFull) {
         }else{
@@ -512,7 +531,7 @@
                         sessionConfig.timeoutIntervalForRequest = 60 * 3;
                         sessionConfig.HTTPMaximumConnectionsPerHost = 60 * 3;
                         sessionConfig.timeoutIntervalForResource = 60 * 3;
-                        if(isSyncWithWifiOnly){
+                        if([self isSyncWithOnlyWifi]){
                             sessionConfig.allowsCellularAccess = NO;
                         }else{
                             sessionConfig.allowsCellularAccess = YES;

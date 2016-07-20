@@ -23,11 +23,11 @@
     int _notifyTokenForDidChangeDisplayStatus;
 }
 
-- (instancetype)initWithAwareStudy:(AWAREStudy *)study{
+- (instancetype)initWithAwareStudy:(AWAREStudy *)study dbType:(AwareDBType)dbType{
     self = [super initWithAwareStudy:study
                           sensorName:SENSOR_SCREEN
                         dbEntityName:NSStringFromClass([EntityScreen class])
-                              dbType:AwareDBTypeCoreData];
+                              dbType:dbType];
     if (self) {
         
     }
@@ -64,6 +64,9 @@
     return YES;
 }
 
+- (void)saveDummyData {
+    [self saveScreenEvent:0];
+}
 
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
@@ -174,6 +177,7 @@
     [dic setObject:[NSNumber numberWithInt:state] forKey:@"screen_status"]; // int
     [self saveData:dic];
 }
+
 
 
 - (void)insertNewEntityWithData:(NSDictionary *)data

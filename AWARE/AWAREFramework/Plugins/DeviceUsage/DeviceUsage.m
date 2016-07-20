@@ -16,11 +16,11 @@
     int _notifyTokenForDidChangeDisplayStatus;
 }
 
-- (instancetype)initWithAwareStudy:(AWAREStudy *)study{
+- (instancetype)initWithAwareStudy:(AWAREStudy *)study dbType:(AwareDBType)dbType{
     self = [super initWithAwareStudy:study
                           sensorName:SENSOR_PLUGIN_DEVICE_USAGE
                         dbEntityName:NSStringFromClass([EntityDeviceUsage class])
-                              dbType:AwareDBTypeCoreData];
+                              dbType:dbType];
     if (self) {
     }
     return self;
@@ -51,6 +51,16 @@
 - (BOOL)stopSensor{
     [self unregisterAppforDetectDisplayStatus];
     return YES;
+}
+
+- (void)saveDummyData{
+    NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
+    NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+    [dic setObject:unixtime forKey:@"timestamp"];
+    [dic setObject:[self getDeviceId] forKey:@"device_id"];
+    [dic setObject:@0 forKey:@"elapsed_device_on"]; // real
+    [dic setObject:@0 forKey:@"elapsed_device_off"]; // real
+    [self saveData:dic];
 }
 
 

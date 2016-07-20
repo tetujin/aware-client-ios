@@ -25,8 +25,6 @@
 		160F0ED91D041B5D00673343 /* EntityLinearAccelerometer.m in Sources */ = {isa = PBXBuildFile; fileRef = 160F0ED71D041B5D00673343 /* EntityLinearAccelerometer.m */; };
 		160F0EDE1D041DDE00673343 /* EntityLocation+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 160F0EDB1D041DDE00673343 /* EntityLocation+CoreDataProperties.m */; };
 		160F0EDF1D041DDE00673343 /* EntityLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 160F0EDD1D041DDE00673343 /* EntityLocation.m */; };
-		160F0EEB1D041FC000673343 /* EntityGyroscope+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 160F0EE81D041FC000673343 /* EntityGyroscope+CoreDataProperties.m */; };
-		160F0EEC1D041FC000673343 /* EntityGyroscope.m in Sources */ = {isa = PBXBuildFile; fileRef = 160F0EEA1D041FC000673343 /* EntityGyroscope.m */; };
 		160F0EF11D04277000673343 /* EntityMagnetometer+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 160F0EEE1D04277000673343 /* EntityMagnetometer+CoreDataProperties.m */; };
 		160F0EF21D04277000673343 /* EntityMagnetometer.m in Sources */ = {isa = PBXBuildFile; fileRef = 160F0EF01D04277000673343 /* EntityMagnetometer.m */; };
 		160F0EF71D042AB600673343 /* EntityNetwork+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 160F0EF41D042AB600673343 /* EntityNetwork+CoreDataProperties.m */; };
@@ -67,6 +65,12 @@
 		16654EA21D027DC600280051 /* AWAREUploader.m in Sources */ = {isa = PBXBuildFile; fileRef = 16654EA11D027DC600280051 /* AWAREUploader.m */; };
 		1683ABCE1D347A5F001543D9 /* AWAREDebugMessageLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 1683ABCD1D347A5F001543D9 /* AWAREDebugMessageLogger.m */; };
 		168683031C07C43600CB4266 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 168683021C07C43600CB4266 /* AudioToolbox.framework */; };
+		168AEA921D3EE84100D02EA4 /* EntityGyroscope+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 168AEA8F1D3EE84100D02EA4 /* EntityGyroscope+CoreDataProperties.m */; };
+		168AEA931D3EE84100D02EA4 /* EntityGyroscope.m in Sources */ = {isa = PBXBuildFile; fileRef = 168AEA911D3EE84100D02EA4 /* EntityGyroscope.m */; };
+		168AEA981D3EFEC300D02EA4 /* EntityProcessor+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 168AEA951D3EFEC300D02EA4 /* EntityProcessor+CoreDataProperties.m */; };
+		168AEA991D3EFEC300D02EA4 /* EntityProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 168AEA971D3EFEC300D02EA4 /* EntityProcessor.m */; };
+		168AEA9E1D3EFFF000D02EA4 /* EntityProximity+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 168AEA9B1D3EFFF000D02EA4 /* EntityProximity+CoreDataProperties.m */; };
+		168AEA9F1D3EFFF000D02EA4 /* EntityProximity.m in Sources */ = {isa = PBXBuildFile; fileRef = 168AEA9D1D3EFFF000D02EA4 /* EntityProximity.m */; };
 		169A7B321BFF282800A7C06D /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 169A7B311BFF282800A7C06D /* CoreLocation.framework */; };
 		169A7B3D1BFFC9F900A7C06D /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 169A7B3C1BFFC9F900A7C06D /* SystemConfiguration.framework */; };
 		169C85731D007EDC00825761 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 169C85721D007EDC00825761 /* ViewController.m */; };
@@ -206,8 +210,6 @@
 		16B077971D1A01A0009C070B /* EntityLocationVisit.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B077951D1A01A0009C070B /* EntityLocationVisit.m */; };
 		16B077A31D1A429E009C070B /* EntityDeviceUsage+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B077A01D1A429E009C070B /* EntityDeviceUsage+CoreDataProperties.m */; };
 		16B077A41D1A429E009C070B /* EntityDeviceUsage.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B077A21D1A429E009C070B /* EntityDeviceUsage.m */; };
-		16B077A91D1A4DF1009C070B /* EntityProcessor+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B077A61D1A4DF1009C070B /* EntityProcessor+CoreDataProperties.m */; };
-		16B077AA1D1A4DF1009C070B /* EntityProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B077A81D1A4DF1009C070B /* EntityProcessor.m */; };
 		16B077BB1D1A54BF009C070B /* EntityPushNotification+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B077B81D1A54BF009C070B /* EntityPushNotification+CoreDataProperties.m */; };
 		16B077BC1D1A54BF009C070B /* EntityPushNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B077BA1D1A54BF009C070B /* EntityPushNotification.m */; };
 		16B077C11D1A55FC009C070B /* EntityMemory+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B077BE1D1A55FC009C070B /* EntityMemory+CoreDataProperties.m */; };
@@ -265,6 +267,7 @@
 		16EC4F211D2FA1F000524424 /* EntityAmbientNoise+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 16EC4F1E1D2FA1F000524424 /* EntityAmbientNoise+CoreDataProperties.m */; };
 		16EC4F221D2FA1F000524424 /* EntityAmbientNoise.m in Sources */ = {isa = PBXBuildFile; fileRef = 16EC4F201D2FA1F000524424 /* EntityAmbientNoise.m */; };
 		16FD37561CF0B1F700EEB416 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 16FD37541CF0B1DE00EEB416 /* Settings.bundle */; };
+		838F57A5098E1568A8309466 /* libPods-AWARETests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 822CF9BC899B8DB64922E564 /* libPods-AWARETests.a */; };
 		FC2AF85D761397B784DECBD3 /* libPods-AWARE.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9ED04F29ED60F3FCC960F6CD /* libPods-AWARE.a */; };
 /* End PBXBuildFile section */
 
@@ -334,10 +337,6 @@
 		160F0EDB1D041DDE00673343 /* EntityLocation+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EntityLocation+CoreDataProperties.m"; sourceTree = "<group>"; };
 		160F0EDC1D041DDE00673343 /* EntityLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EntityLocation.h; sourceTree = "<group>"; };
 		160F0EDD1D041DDE00673343 /* EntityLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EntityLocation.m; sourceTree = "<group>"; };
-		160F0EE71D041FC000673343 /* EntityGyroscope+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EntityGyroscope+CoreDataProperties.h"; sourceTree = "<group>"; };
-		160F0EE81D041FC000673343 /* EntityGyroscope+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EntityGyroscope+CoreDataProperties.m"; sourceTree = "<group>"; };
-		160F0EE91D041FC000673343 /* EntityGyroscope.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EntityGyroscope.h; sourceTree = "<group>"; };
-		160F0EEA1D041FC000673343 /* EntityGyroscope.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EntityGyroscope.m; sourceTree = "<group>"; };
 		160F0EED1D04277000673343 /* EntityMagnetometer+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EntityMagnetometer+CoreDataProperties.h"; sourceTree = "<group>"; };
 		160F0EEE1D04277000673343 /* EntityMagnetometer+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EntityMagnetometer+CoreDataProperties.m"; sourceTree = "<group>"; };
 		160F0EEF1D04277000673343 /* EntityMagnetometer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EntityMagnetometer.h; sourceTree = "<group>"; };
@@ -409,6 +408,18 @@
 		1683ABCC1D347A5F001543D9 /* AWAREDebugMessageLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AWAREDebugMessageLogger.h; sourceTree = "<group>"; };
 		1683ABCD1D347A5F001543D9 /* AWAREDebugMessageLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AWAREDebugMessageLogger.m; sourceTree = "<group>"; };
 		168683021C07C43600CB4266 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		168AEA8E1D3EE84100D02EA4 /* EntityGyroscope+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EntityGyroscope+CoreDataProperties.h"; sourceTree = "<group>"; };
+		168AEA8F1D3EE84100D02EA4 /* EntityGyroscope+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EntityGyroscope+CoreDataProperties.m"; sourceTree = "<group>"; };
+		168AEA901D3EE84100D02EA4 /* EntityGyroscope.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EntityGyroscope.h; sourceTree = "<group>"; };
+		168AEA911D3EE84100D02EA4 /* EntityGyroscope.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EntityGyroscope.m; sourceTree = "<group>"; };
+		168AEA941D3EFEC300D02EA4 /* EntityProcessor+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EntityProcessor+CoreDataProperties.h"; sourceTree = "<group>"; };
+		168AEA951D3EFEC300D02EA4 /* EntityProcessor+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EntityProcessor+CoreDataProperties.m"; sourceTree = "<group>"; };
+		168AEA961D3EFEC300D02EA4 /* EntityProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EntityProcessor.h; sourceTree = "<group>"; };
+		168AEA971D3EFEC300D02EA4 /* EntityProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EntityProcessor.m; sourceTree = "<group>"; };
+		168AEA9A1D3EFFF000D02EA4 /* EntityProximity+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EntityProximity+CoreDataProperties.h"; sourceTree = "<group>"; };
+		168AEA9B1D3EFFF000D02EA4 /* EntityProximity+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EntityProximity+CoreDataProperties.m"; sourceTree = "<group>"; };
+		168AEA9C1D3EFFF000D02EA4 /* EntityProximity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EntityProximity.h; sourceTree = "<group>"; };
+		168AEA9D1D3EFFF000D02EA4 /* EntityProximity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EntityProximity.m; sourceTree = "<group>"; };
 		169A7B311BFF282800A7C06D /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		169A7B3C1BFFC9F900A7C06D /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		169C85721D007EDC00825761 /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
@@ -660,10 +671,6 @@
 		16B077A01D1A429E009C070B /* EntityDeviceUsage+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EntityDeviceUsage+CoreDataProperties.m"; sourceTree = "<group>"; };
 		16B077A11D1A429E009C070B /* EntityDeviceUsage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EntityDeviceUsage.h; sourceTree = "<group>"; };
 		16B077A21D1A429E009C070B /* EntityDeviceUsage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EntityDeviceUsage.m; sourceTree = "<group>"; };
-		16B077A51D1A4DF1009C070B /* EntityProcessor+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EntityProcessor+CoreDataProperties.h"; sourceTree = "<group>"; };
-		16B077A61D1A4DF1009C070B /* EntityProcessor+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EntityProcessor+CoreDataProperties.m"; sourceTree = "<group>"; };
-		16B077A71D1A4DF1009C070B /* EntityProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EntityProcessor.h; sourceTree = "<group>"; };
-		16B077A81D1A4DF1009C070B /* EntityProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EntityProcessor.m; sourceTree = "<group>"; };
 		16B077B71D1A54BF009C070B /* EntityPushNotification+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EntityPushNotification+CoreDataProperties.h"; sourceTree = "<group>"; };
 		16B077B81D1A54BF009C070B /* EntityPushNotification+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EntityPushNotification+CoreDataProperties.m"; sourceTree = "<group>"; };
 		16B077B91D1A54BF009C070B /* EntityPushNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EntityPushNotification.h; sourceTree = "<group>"; };
@@ -770,6 +777,9 @@
 		16EC4F1F1D2FA1F000524424 /* EntityAmbientNoise.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EntityAmbientNoise.h; sourceTree = "<group>"; };
 		16EC4F201D2FA1F000524424 /* EntityAmbientNoise.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EntityAmbientNoise.m; sourceTree = "<group>"; };
 		16FD37541CF0B1DE00EEB416 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
+		2D9485D496C581405478FC4A /* Pods-AWARETests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AWARETests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AWARETests/Pods-AWARETests.debug.xcconfig"; sourceTree = "<group>"; };
+		7698B2A23049D1EDF9D0AD6F /* Pods-AWARETests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AWARETests.release.xcconfig"; path = "Pods/Target Support Files/Pods-AWARETests/Pods-AWARETests.release.xcconfig"; sourceTree = "<group>"; };
+		822CF9BC899B8DB64922E564 /* libPods-AWARETests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AWARETests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B5BAD09F1FBEE0838867ACF /* Pods-AWARE.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AWARE.release.xcconfig"; path = "Pods/Target Support Files/Pods-AWARE/Pods-AWARE.release.xcconfig"; sourceTree = "<group>"; };
 		9ED04F29ED60F3FCC960F6CD /* libPods-AWARE.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AWARE.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EE6BA2397CB9F7AB5C901B47 /* Pods-AWARE.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AWARE.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AWARE/Pods-AWARE.debug.xcconfig"; sourceTree = "<group>"; };
@@ -808,6 +818,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				838F57A5098E1568A8309466 /* libPods-AWARETests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1612,10 +1623,10 @@
 			children = (
 				169C87E11D01382C00825761 /* Gyroscope.h */,
 				169C87E21D01382C00825761 /* Gyroscope.m */,
-				160F0EE71D041FC000673343 /* EntityGyroscope+CoreDataProperties.h */,
-				160F0EE81D041FC000673343 /* EntityGyroscope+CoreDataProperties.m */,
-				160F0EE91D041FC000673343 /* EntityGyroscope.h */,
-				160F0EEA1D041FC000673343 /* EntityGyroscope.m */,
+				168AEA8E1D3EE84100D02EA4 /* EntityGyroscope+CoreDataProperties.h */,
+				168AEA8F1D3EE84100D02EA4 /* EntityGyroscope+CoreDataProperties.m */,
+				168AEA901D3EE84100D02EA4 /* EntityGyroscope.h */,
+				168AEA911D3EE84100D02EA4 /* EntityGyroscope.m */,
 			);
 			path = Gyroscope;
 			sourceTree = "<group>";
@@ -1697,10 +1708,10 @@
 			children = (
 				169C87F61D01382C00825761 /* Processor.h */,
 				169C87F71D01382C00825761 /* Processor.m */,
-				16B077A51D1A4DF1009C070B /* EntityProcessor+CoreDataProperties.h */,
-				16B077A61D1A4DF1009C070B /* EntityProcessor+CoreDataProperties.m */,
-				16B077A71D1A4DF1009C070B /* EntityProcessor.h */,
-				16B077A81D1A4DF1009C070B /* EntityProcessor.m */,
+				168AEA941D3EFEC300D02EA4 /* EntityProcessor+CoreDataProperties.h */,
+				168AEA951D3EFEC300D02EA4 /* EntityProcessor+CoreDataProperties.m */,
+				168AEA961D3EFEC300D02EA4 /* EntityProcessor.h */,
+				168AEA971D3EFEC300D02EA4 /* EntityProcessor.m */,
 			);
 			path = Processor;
 			sourceTree = "<group>";
@@ -1711,6 +1722,10 @@
 				169C87F91D01382C00825761 /* IOKit */,
 				169C880D1D01382C00825761 /* Proximity.h */,
 				169C880E1D01382C00825761 /* Proximity.m */,
+				168AEA9A1D3EFFF000D02EA4 /* EntityProximity+CoreDataProperties.h */,
+				168AEA9B1D3EFFF000D02EA4 /* EntityProximity+CoreDataProperties.m */,
+				168AEA9C1D3EFFF000D02EA4 /* EntityProximity.h */,
+				168AEA9D1D3EFFF000D02EA4 /* EntityProximity.m */,
 			);
 			path = Proximity;
 			sourceTree = "<group>";
@@ -1928,6 +1943,7 @@
 				1623CEB81BFE319100EFAD72 /* CoreMotion.framework */,
 				1623CEB01BFD40FB00EFAD72 /* AVFoundation.framework */,
 				16228A3B1C22DAE20081C839 /* NotificationCenter.framework */,
+				822CF9BC899B8DB64922E564 /* libPods-AWARETests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -1937,6 +1953,8 @@
 			children = (
 				EE6BA2397CB9F7AB5C901B47 /* Pods-AWARE.debug.xcconfig */,
 				9B5BAD09F1FBEE0838867ACF /* Pods-AWARE.release.xcconfig */,
+				2D9485D496C581405478FC4A /* Pods-AWARETests.debug.xcconfig */,
+				7698B2A23049D1EDF9D0AD6F /* Pods-AWARETests.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -1969,9 +1987,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1623CE991BFD1B2C00EFAD72 /* Build configuration list for PBXNativeTarget "AWARETests" */;
 			buildPhases = (
+				9BA6B7C278376472F80B8A76 /* Check Pods Manifest.lock */,
 				1623CE7E1BFD1B2C00EFAD72 /* Sources */,
 				1623CE7F1BFD1B2C00EFAD72 /* Frameworks */,
 				1623CE801BFD1B2C00EFAD72 /* Resources */,
+				0C722AF946B79ADDB678743D /* Embed Pods Frameworks */,
+				951329230349E8CAA50C88AF /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -2157,6 +2178,21 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		0C722AF946B79ADDB678743D /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-AWARETests/Pods-AWARETests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		35EEDFB59E9C7F753E79CF14 /* Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -2202,6 +2238,36 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
+		951329230349E8CAA50C88AF /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-AWARETests/Pods-AWARETests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		9BA6B7C278376472F80B8A76 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -2210,7 +2276,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				160F0E891D03D60500673343 /* EntityAccelerometer+CoreDataProperties.m in Sources */,
-				16B077AA1D1A4DF1009C070B /* EntityProcessor.m in Sources */,
 				16EC4F171D2E7D8200524424 /* EntityMSBandRRInterval+CoreDataProperties.m in Sources */,
 				16B0783D1D1F918B009C070B /* EntityMSBandDeviceContact+CoreDataProperties.m in Sources */,
 				16B0783F1D1F918B009C070B /* EntityMSBandCalorie+CoreDataProperties.m in Sources */,
@@ -2223,13 +2288,14 @@
 				169C887C1D01382C00825761 /* AWAREHealthKit.m in Sources */,
 				160F0E901D03D64E00673343 /* EntityBarometer.m in Sources */,
 				169C88331D01382C00825761 /* AWAREStudy.m in Sources */,
-				160F0EEB1D041FC000673343 /* EntityGyroscope+CoreDataProperties.m in Sources */,
 				16A45CDF1D2392A1008A02B1 /* BalacnedCampusESMScheduler.m in Sources */,
 				169C88801D01382C00825761 /* NTPTime.m in Sources */,
 				16B0780F1D1F2487009C070B /* EntityLabel+CoreDataProperties.m in Sources */,
 				160F0EC71D040B7F00673343 /* EntityDebug.m in Sources */,
 				169C88341D01382C00825761 /* AWAREUtils.m in Sources */,
 				169C88821D01382C00825761 /* OpenWeather.m in Sources */,
+				168AEA931D3EE84100D02EA4 /* EntityGyroscope.m in Sources */,
+				168AEA9E1D3EFFF000D02EA4 /* EntityProximity+CoreDataProperties.m in Sources */,
 				1623CE6E1BFD1B2C00EFAD72 /* AppDelegate.m in Sources */,
 				16B0783B1D1F918B009C070B /* EntityMSBandPedometer+CoreDataProperties.m in Sources */,
 				160F0EDF1D041DDE00673343 /* EntityLocation.m in Sources */,
@@ -2255,6 +2321,7 @@
 				16BDCC9B1D35C81800B13BD4 /* VisitLocations.m in Sources */,
 				16B078361D1F918B009C070B /* EntityMSBandGSR.m in Sources */,
 				16B077C11D1A55FC009C070B /* EntityMemory+CoreDataProperties.m in Sources */,
+				168AEA9F1D3EFFF000D02EA4 /* EntityProximity.m in Sources */,
 				169C88981D01382C00825761 /* Processor.m in Sources */,
 				160F0EDE1D041DDE00673343 /* EntityLocation+CoreDataProperties.m in Sources */,
 				16B077A31D1A429E009C070B /* EntityDeviceUsage+CoreDataProperties.m in Sources */,
@@ -2270,8 +2337,8 @@
 				160F0EF11D04277000673343 /* EntityMagnetometer+CoreDataProperties.m in Sources */,
 				16B077BB1D1A54BF009C070B /* EntityPushNotification+CoreDataProperties.m in Sources */,
 				16B0776C1D192663009C070B /* EntityRotation+CoreDataProperties.m in Sources */,
+				168AEA991D3EFEC300D02EA4 /* EntityProcessor.m in Sources */,
 				169C882A1D01382C00825761 /* AWARECore.m in Sources */,
-				160F0EEC1D041FC000673343 /* EntityGyroscope.m in Sources */,
 				160F0E8F1D03D64E00673343 /* EntityBarometer+CoreDataProperties.m in Sources */,
 				169C887D1D01382C00825761 /* Labels.m in Sources */,
 				169C88711D01382C00825761 /* SingleESMObject.m in Sources */,
@@ -2310,7 +2377,6 @@
 				16BDCC981D35C11100B13BD4 /* BatteryDischarge.m in Sources */,
 				16B077841D1978FF009C070B /* EntityActivityRecognition+CoreDataProperties.m in Sources */,
 				1613E0D41D3E28D3000528F5 /* EntityESMSchedule+CoreDataProperties.m in Sources */,
-				16B077A91D1A4DF1009C070B /* EntityProcessor+CoreDataProperties.m in Sources */,
 				16B078431D1F918B009C070B /* EntityMSBandDistance+CoreDataProperties.m in Sources */,
 				169C883D1D01382C00825761 /* ESMSchedule.m in Sources */,
 				16EC4F181D2E7D8200524424 /* EntityMSBandRRInterval.m in Sources */,
@@ -2377,6 +2443,7 @@
 				169C88931D01382C00825761 /* Locations.m in Sources */,
 				16B078391D1F918B009C070B /* EntityMSBandBatteryGauge+CoreDataProperties.m in Sources */,
 				16B0783E1D1F918B009C070B /* EntityMSBandDeviceContact.m in Sources */,
+				168AEA921D3EE84100D02EA4 /* EntityGyroscope+CoreDataProperties.m in Sources */,
 				16BDCCB01D36661800B13BD4 /* MSBandPedometer.m in Sources */,
 				160F0EB51D03E2EC00673343 /* EntityBluetooth.m in Sources */,
 				1613E0CE1D3E16B8000528F5 /* IBeacon.m in Sources */,
@@ -2390,6 +2457,7 @@
 				16BDCCAA1D362AA500B13BD4 /* MSBandDistance.m in Sources */,
 				169C887A1D01382C00825761 /* GoogleCalPush.m in Sources */,
 				16B077D31D1A5F51009C070B /* EntityOpenWeather+CoreDataProperties.m in Sources */,
+				168AEA981D3EFEC300D02EA4 /* EntityProcessor+CoreDataProperties.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2599,6 +2667,7 @@
 		};
 		1623CE9A1BFD1B2C00EFAD72 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2D9485D496C581405478FC4A /* Pods-AWARETests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				INFOPLIST_FILE = AWARETests/Info.plist;
@@ -2611,6 +2680,7 @@
 		};
 		1623CE9B1BFD1B2C00EFAD72 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7698B2A23049D1EDF9D0AD6F /* Pods-AWARETests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				INFOPLIST_FILE = AWARETests/Info.plist;

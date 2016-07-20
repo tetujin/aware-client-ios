@@ -24,11 +24,11 @@ NSString* const KEY_CALLS_TRACE = @"trace";
     NSDate * start;
 }
 
-- (instancetype)initWithAwareStudy:(AWAREStudy *)study{
+- (instancetype)initWithAwareStudy:(AWAREStudy *)study dbType:(AwareDBType)dbType{
     self = [super initWithAwareStudy:study
                           sensorName:@"calls"
                         dbEntityName:NSStringFromClass([EntityCall class])
-                              dbType:AwareDBTypeCoreData];
+                              dbType:dbType];
     if (self) {
     }
     return self;
@@ -173,6 +173,18 @@ NSString* const KEY_CALLS_TRACE = @"trace";
     callData.call_duration = [data objectForKey:KEY_CALLS_CALL_DURATION];
     callData.trace = [data objectForKey:KEY_CALLS_TRACE];
 
+}
+
+
+- (void)saveDummyData{
+    NSMutableDictionary* dict = [[NSMutableDictionary alloc] init];
+    [dict setObject:[AWAREUtils getUnixTimestamp:[NSDate new]] forKey:KEY_CALLS_TIMESTAMP];
+    [dict setObject:[super getDeviceId] forKey:KEY_CALLS_DEVICEID];
+    [dict setObject:@1 forKey:KEY_CALLS_CALL_TYPE];
+    [dict setObject:@23 forKey:KEY_CALLS_CALL_DURATION];
+    [dict setObject:@"test_trace" forKey:KEY_CALLS_TRACE];
+    
+    [super saveData:dict];
 }
 
 -(BOOL) stopSensor{

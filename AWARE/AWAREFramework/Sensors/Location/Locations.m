@@ -17,11 +17,11 @@
     double defaultAccuracy;
 }
 
-- (instancetype)initWithAwareStudy:(AWAREStudy *)study{
+- (instancetype)initWithAwareStudy:(AWAREStudy *)study dbType:(AwareDBType)dbType{
     self = [super initWithAwareStudy:study
                           sensorName:@"locations"
                         dbEntityName:NSStringFromClass([EntityLocation class])
-                              dbType:AwareDBTypeCoreData];
+                              dbType:dbType];
     if (self) {
         defaultInterval = 180; // 180sec(=3min)
         defaultAccuracy = 250; // 250m
@@ -271,6 +271,9 @@
 }
 
 
+- (void)saveDummyData{
+    [self getGpsData:nil];
+}
 
 
 //- (void)locationManager:(CLLocationManager *)manager didUpdateHeading:(CLHeading *)newHeading {

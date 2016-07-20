@@ -20,11 +20,11 @@
     double defaultInterval;
 }
 
-- (instancetype)initWithAwareStudy:(AWAREStudy *)study{
+- (instancetype)initWithAwareStudy:(AWAREStudy *)study dbType:(AwareDBType)dbType{
     self = [super initWithAwareStudy:study
                           sensorName:SENSOR_WIFI
                         dbEntityName:NSStringFromClass([EntityWifi class])
-                              dbType:AwareDBTypeCoreData];
+                              dbType:dbType];
     if (self) {
         defaultInterval = 60.0f; // 60sec. = 1min.
     }
@@ -181,6 +181,21 @@
     entityWifi.label = [data objectForKey:@"label"];//@"";
 }
 
+
+- (void)saveDummyData{
+    NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    [dict setObject:unixtime forKey:@"timestamp"];
+    [dict setObject:[self getDeviceId] forKey:@"device_id"];
+    [dict setObject:@"dummy" forKey:@"bssid"]; //text
+    [dict setObject:@"dummy" forKey:@"ssid"]; //text
+    [dict setObject:@"dummy" forKey:@"security"]; //text
+    [dict setObject:@0 forKey:@"frequency"];//int
+    [dict setObject:@0 forKey:@"rssi"]; //int
+    [dict setObject:@"dummy" forKey:@"label"]; //text
+    
+    [self saveData:dict];
+}
 
 ///////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////

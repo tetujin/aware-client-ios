@@ -9,6 +9,7 @@
 //
 
 #import "Processor.h"
+#import "EntityProcessor.h"
 #import <sys/sysctl.h>
 #import <sys/types.h>
 #import <sys/param.h>
@@ -21,11 +22,12 @@
     NSTimer * sensingTimer;
 }
 
-- (instancetype)initWithAwareStudy:(AWAREStudy *)study{
+- (instancetype)initWithAwareStudy:(AWAREStudy *)study dbType:(AwareDBType)dbType{
     self = [super initWithAwareStudy:study
                           sensorName:SENSOR_PROCESSOR
-                        dbEntityName:nil
-                              dbType:AwareDBTypeTextFile];
+                        dbEntityName:NSStringFromClass([EntityProcessor class])
+                              dbType:dbType
+                          bufferSize:0];
     if (self) {
     }
     return self;
@@ -85,7 +87,7 @@
     [dic setObject:@0 forKey:@"double_system_load"]; //double
     [dic setObject:@0 forKey:@"double_idle_load"]; //double
     [self setLatestValue:[NSString stringWithFormat:@"%@ %%",appCpuUsage]];
-    [self saveData:dic toLocalFile:SENSOR_PROCESSOR];
+    [self saveData:dic];
     
     malloc(cpuUsageFloat);
 }
@@ -95,6 +97,23 @@
     return YES;
 }
 
+
+- (void)insertNewEntityWithData:(NSDictionary *)data
+           managedObjectContext:(NSManagedObjectContext *)childContext
+                     entityName:(NSString *)entity{
+    EntityProcessor* entityProcessor = (EntityProcessor *)[NSEntityDescription
+                                                     insertNewObjectForEntityForName:entity
+                                                     inManagedObjectContext:childContext];
+    
+    entityProcessor.device_id = [data objectForKey:@"device_id"];
+    entityProcessor.timestamp = [data objectForKey:@"timestamp"];
+    entityProcessor.double_last_user = [data objectForKey:@"double_last_user"];
+    entityProcessor.double_last_system = [data objectForKey:@"double_last_system"];
+    entityProcessor.double_last_idle = [data objectForKey:@"double_last_idle"];
+    entityProcessor.double_user_load = [data objectForKey:@"double_user_load"];
+    entityProcessor.double_system_load = [data objectForKey:@"double_system_load"];
+    entityProcessor.double_idle_load = [data objectForKey:@"double_idle_load"];
+}
 
 
 ////////////////////////////////////////////////////////////////////

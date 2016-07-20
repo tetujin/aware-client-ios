@@ -12,11 +12,11 @@
 
 @implementation IBeacon
 
-- (instancetype)initWithAwareStudy:(AWAREStudy *)study{
+- (instancetype)initWithAwareStudy:(AWAREStudy *)study dbType:(AwareDBType)dbType{
     self = [super initWithAwareStudy:study
                           sensorName:@"ibeacon"
                         dbEntityName:nil
-                              dbType:AwareDBTypeCoreData
+                              dbType:dbType
                           bufferSize:0];
     if(self != nil){
         // Initialize location manager and set ourselves as the delegate

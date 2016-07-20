@@ -16,11 +16,11 @@
     int dbWriteInterval;
 }
 
-- (instancetype)initWithAwareStudy:(AWAREStudy *)study{
+- (instancetype)initWithAwareStudy:(AWAREStudy *)study dbType:(AwareDBType)dbType{
     self = [super initWithAwareStudy:study
                           sensorName:SENSOR_MAGNETOMETER
                         dbEntityName:NSStringFromClass([EntityMagnetometer class])
-                              dbType:AwareDBTypeCoreData];
+                              dbType:dbType];
     if (self) {
         manager = [[CMMotionManager alloc] init];
         defaultInterval = 0.1f;

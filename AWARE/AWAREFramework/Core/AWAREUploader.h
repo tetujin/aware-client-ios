@@ -58,6 +58,8 @@
 - (void) createTable:(NSString *)query withTableName:(NSString*) tableName;
 - (BOOL) clearTable;
 
+- (NSData *) getLatestData;
+
 - (NSString *) getNetworkReachabilityAsText;
 - (NSString *) getSyncProgressAsText;
 - (NSString *) getSyncProgressAsText:(NSString *)sensorName;

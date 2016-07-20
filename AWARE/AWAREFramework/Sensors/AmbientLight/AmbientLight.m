@@ -17,8 +17,8 @@
 
 @implementation AmbientLight
 
-- (instancetype)initWithAwareStudy:(AWAREStudy *)study{
-    self = [super initWithAwareStudy:study sensorName:@"light" dbEntityName:@"light" dbType:AwareDBTypeTextFile];
+- (instancetype)initWithAwareStudy:(AWAREStudy *)study dbType:(AwareDBType)dbType{
+    self = [super initWithAwareStudy:study sensorName:@"light" dbEntityName:@"light" dbType:dbType];
     if (self) {
         
     }
