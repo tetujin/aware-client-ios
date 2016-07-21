@@ -370,7 +370,7 @@ didCompleteWithError:(NSError *)error {
     NSString* release =  [NSString stringWithCString:systemInfo.release  encoding:NSUTF8StringEncoding]; // ok
     NSString* systemName = [NSString stringWithCString:systemInfo.sysname encoding:NSUTF8StringEncoding];// ok
     NSString* version = [NSString stringWithCString:systemInfo.version encoding:NSUTF8StringEncoding];
-    NSString *name = [[UIDevice currentDevice] name];//ok
+    NSString *name = [self getDeviceName]; //[[UIDevice currentDevice] name];//ok
     NSString *systemVersion = [[UIDevice currentDevice] systemVersion];//ok
     NSString *localizeModel = [[UIDevice currentDevice] localizedModel];//
     NSString *model = [[UIDevice currentDevice] model]; //ok
@@ -541,6 +541,21 @@ didCompleteWithError:(NSError *)error {
 // Getter
 ////////////////////////////////////////////////////////////////////////
 
+- (void) setDeviceName:(NSString *) deviceName {
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setObject:deviceName forKey:KEY_AWARE_DEVICE_NAME];
+    [userDefaults synchronize];
+}
+
+- (NSString *) getDeviceName {
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString *name = [[UIDevice currentDevice] name];
+    if ([userDefaults objectForKey:KEY_AWARE_DEVICE_NAME] != nil) {
+        name = [userDefaults objectForKey:KEY_AWARE_DEVICE_NAME];
+    }
+    return name;
+}
+
 /**
  * Get a device id from a local storage.
  * @return a device id of this device
@@ -611,6 +626,7 @@ didCompleteWithError:(NSError *)error {
  * @return an name of an aware server
  */
 - (NSString* ) getWebserviceServer{ return webserviceServer; }
+
 
 
 /**

@@ -71,7 +71,7 @@
 -(BOOL)startSensorWithSettings:(NSArray *)settings{
     [helper removeEsmTexts];
     
-    [[[NSOperationQueue alloc] init] addOperationWithBlock:^{
+//    [[[NSOperationQueue alloc] init] addOperationWithBlock:^{
 //        ESMSchedule * schedule = [[ESMSchedule alloc] initWithIdentifier:@"sample_esm_for_sport"
 //                                                           scheduledESMs:[self getSampleESMsForSports]
 //                                                               fireDates:[self getSampleFireHours]
@@ -88,7 +88,7 @@
 //            // Start the schedules using -startAllESMSchedules on ESMManager
 //            [esmManager startAllESMSchedules];            
 //        });
-    }];
+//    }];
     
     
     

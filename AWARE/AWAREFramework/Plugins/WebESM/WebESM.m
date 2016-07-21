@@ -36,6 +36,8 @@
         categoryWebESM = @"plugin_web_esm_category";
         receiveData = [[NSMutableData alloc] init];
         isLock = NO;
+        [self allowsDateUploadWithoutBatteryCharging];
+        [self allowsCellularAccess];
     }
     
     return self;

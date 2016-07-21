@@ -203,7 +203,7 @@
                                                         object:nil
                                                       userInfo:userInfo];
     
-    NSLog(@"[Battery Sensor] %d", [NSThread isMainThread] );
+    // NSLog(@"[Battery Sensor] %d", [NSThread isMainThread] );
     
     [self saveData:dict];
     

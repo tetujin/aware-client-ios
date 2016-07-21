@@ -230,6 +230,7 @@
     NSString *deviceId = [awareStudy getDeviceId];
     NSString *awareStudyId = [awareStudy getStudyId];
     NSString *mqttServerName = [awareStudy getMqttServer];
+    NSString *awareDeviceName = [awareStudy getDeviceName];
     if(deviceId == nil) deviceId = @"";
     if(awareStudyId == nil) awareStudyId = @"";
     if(mqttServerName == nil) mqttServerName = @"";
@@ -306,6 +307,9 @@
     [_sensors addObject:[self getCelContent:@"AWARE Study" desc:awareStudyId image:@"" key:@"STUDY_CELL_VIEW"]];
     // aware server information
     [_sensors addObject:[self getCelContent:@"AWARE Server" desc:mqttServerName image:@"" key:@"STUDY_CELL_VIEW"]];
+    
+    [_sensors addObject:[self getCelContent:@"Device Name" desc:awareDeviceName image:@"" key:KEY_AWARE_DEVICE_NAME]];
+    
 //     Google Account Information if a user registered him/her google account.
     [_sensors addObject:[self getCelContent:@"Google Account" desc:accountInfo image:@"" key:@"STUDY_CELL_VIEW"]];
     
@@ -650,6 +654,12 @@
         [alert textFieldAtIndex:0].text = [NSString stringWithFormat:@"%ld", fetchSize];
         alert.tag = 15;
         [alert show];
+    } else if ([key isEqualToString:KEY_AWARE_DEVICE_NAME]){
+        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Device Name Setting" message:@"Please edit your new device name!" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Done",nil];
+        alert.alertViewStyle = UIAlertViewStylePlainTextInput;
+        [alert textFieldAtIndex:0].text = awareStudy.getDeviceName;
+        alert.tag = 16;
+        [alert show];
     }
 }
 
@@ -817,6 +827,18 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
         
         [self pushedStudyRefreshButton:alertView];
         
+        [self.tableView reloadData];
+        [self initContentsOnTableView];
+    }else if(alertView.tag == 16){
+        if ( buttonIndex == [alertView cancelButtonIndex]){
+            NSLog(@"Cancel");
+            return;
+        }
+        NSString *newDeviceName = [alertView textFieldAtIndex:0].text;
+        if ([newDeviceName isEqualToString:@""]) {
+            return;
+        }
+        [awareStudy setDeviceName:newDeviceName];
         [self.tableView reloadData];
         [self initContentsOnTableView];
     }

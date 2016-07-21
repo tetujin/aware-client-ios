@@ -568,20 +568,13 @@ didSignInForUser:(GIDGoogleUser *)user
      withError:(NSError *)error {
     // Perform any operations on signed in user here.
     NSString *userId = user.userID;                  // For client-side use only!
-    NSString *idToken = user.authentication.idToken; // Safe to send to the server
+    // NSString *idToken = user.authentication.idToken; // Safe to send to the server
     NSString *name = user.profile.name;
     NSString *email = user.profile.email;
     
     if (name != nil ) {
-        NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-        [defaults setObject:userId  forKey:@"GOOGLE_ID"];
-        [defaults setObject:name    forKey:@"GOOGLE_NAME"];
-        [defaults setObject:email   forKey:@"GOOGLE_EMAIL"];
-        [defaults setObject:idToken forKey:@"GOOGLE_ID_TOKEN"];
-        [defaults setObject:@""     forKey:@"GOOGLE_PHONE"];
-
         GoogleLogin * googleLogin = [[GoogleLogin alloc] initWithAwareStudy:_sharedAWARECore.sharedAwareStudy dbType:AwareDBTypeCoreData];
-        [googleLogin saveWithUserID:userId name:name email:email];
+        [googleLogin setGoogleAccountWithUserId:userId name:name email:email];
     }
 }
 

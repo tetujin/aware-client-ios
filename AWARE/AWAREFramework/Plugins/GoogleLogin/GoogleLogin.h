@@ -14,8 +14,12 @@
 //        withEmail:(NSString *)email
 //      phoneNumber:(NSString*) phonenumber;
 
-- (void) saveWithUserID:(NSString *)userID
-                   name:(NSString* )name
-                  email:(NSString *)email;
+//- (void) saveWithUserID:(NSString *)userID
+//                   name:(NSString* )name
+//                  email:(NSString *)email;
+
+- (void) setGoogleAccountWithUserId:(NSString *)userId
+                               name:(NSString* )name
+                              email:(NSString *)email;
 
 @end
