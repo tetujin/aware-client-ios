@@ -44,6 +44,9 @@ typedef enum: NSInteger {
 - (NSString* ) getStudyId;
 - (NSString* ) getWebserviceServer;
 
+- (void) setDeviceName:(NSString *) deviceName;
+- (NSString *) getDeviceName;
+
 - (NSString *) getStudyConfigurationAsText;
 
 // Sensor and plugin infromation

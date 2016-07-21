@@ -836,7 +836,8 @@
     
     slider.maximumValue = esm.esm_scale_max.floatValue; // [max floatValue];
     slider.minimumValue = esm.esm_scale_min.floatValue; //[min floatValue];
-    slider.value = esm.esm_scale_start.floatValue; // [start floatValue];
+    float value = esm.esm_scale_start.floatValue;
+    slider.value = value; // [start floatValue];
     slider.tag = tag;
     [slider addTarget:self
                action:@selector(setNaBoxFolse:)
@@ -903,7 +904,7 @@
 
 
 - (IBAction)sliderChanged:(UISlider *)sender {
-    //    NSLog(@"slider value = %f", sender.value);
+    // NSLog(@"slider value = %f", sender.value);
     int intValue = sender.value;
     [sender setValue:intValue];
     UILabel * label = [_mainScrollView viewWithTag:sender.frame.origin.y-30];
