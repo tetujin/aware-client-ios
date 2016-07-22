@@ -74,7 +74,6 @@
 		169A7B321BFF282800A7C06D /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 169A7B311BFF282800A7C06D /* CoreLocation.framework */; };
 		169A7B3D1BFFC9F900A7C06D /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 169A7B3C1BFFC9F900A7C06D /* SystemConfiguration.framework */; };
 		169C85731D007EDC00825761 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 169C85721D007EDC00825761 /* ViewController.m */; };
-		169C85771D0127D700825761 /* BluetoothManager.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 169C85761D0127D700825761 /* BluetoothManager.framework */; };
 		169C882A1D01382C00825761 /* AWARECore.m in Sources */ = {isa = PBXBuildFile; fileRef = 169C87101D01382C00825761 /* AWARECore.m */; };
 		169C882B1D01382C00825761 /* AWARECoreDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 169C87121D01382C00825761 /* AWARECoreDataManager.m */; };
 		169C882C1D01382C00825761 /* AWAREDataUploader.m in Sources */ = {isa = PBXBuildFile; fileRef = 169C87141D01382C00825761 /* AWAREDataUploader.m */; };
@@ -170,9 +169,6 @@
 		169C88871D01382C00825761 /* Barometer.m in Sources */ = {isa = PBXBuildFile; fileRef = 169C87C41D01382C00825761 /* Barometer.m */; };
 		169C88881D01382C00825761 /* Battery.m in Sources */ = {isa = PBXBuildFile; fileRef = 169C87C71D01382C00825761 /* Battery.m */; };
 		169C88891D01382C00825761 /* Bluetooth.m in Sources */ = {isa = PBXBuildFile; fileRef = 169C87CA1D01382C00825761 /* Bluetooth.m */; };
-		169C888A1D01382C00825761 /* BluetoothScanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 169C87CF1D01382C00825761 /* BluetoothScanner.m */; };
-		169C888B1D01382C00825761 /* MDBluetoothDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 169C87D11D01382C00825761 /* MDBluetoothDevice.m */; };
-		169C888C1D01382C00825761 /* MDBluetoothManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 169C87D31D01382C00825761 /* MDBluetoothManager.m */; };
 		169C888E1D01382C00825761 /* Calls.m in Sources */ = {isa = PBXBuildFile; fileRef = 169C87D91D01382C00825761 /* Calls.m */; };
 		169C888F1D01382C00825761 /* Debug.m in Sources */ = {isa = PBXBuildFile; fileRef = 169C87DC1D01382C00825761 /* Debug.m */; };
 		169C88901D01382C00825761 /* Gravity.m in Sources */ = {isa = PBXBuildFile; fileRef = 169C87DF1D01382C00825761 /* Gravity.m */; };
@@ -808,7 +804,6 @@
 				164DD66A1C1FC1F900ADA92B /* MapKit.framework in Frameworks */,
 				16D810261C06242F00605DE2 /* Security.framework in Frameworks */,
 				169A7B3D1BFFC9F900A7C06D /* SystemConfiguration.framework in Frameworks */,
-				169C85771D0127D700825761 /* BluetoothManager.framework in Frameworks */,
 				16D91B5E1CA9447A00A5FD4F /* MicrosoftBandKit_iOS.framework in Frameworks */,
 				FC2AF85D761397B784DECBD3 /* libPods-AWARE.a in Frameworks */,
 			);
@@ -2395,8 +2390,6 @@
 				16BDCCB61D366E3800B13BD4 /* MSBandRRInterval.m in Sources */,
 				169C889E1D01382C00825761 /* Wifi.m in Sources */,
 				16B078381D1F918B009C070B /* EntityMSBandUV.m in Sources */,
-				169C888B1D01382C00825761 /* MDBluetoothDevice.m in Sources */,
-				169C888A1D01382C00825761 /* BluetoothScanner.m in Sources */,
 				1613E0CA1D3D33B0000528F5 /* EntityESMHistory+CoreDataProperties.m in Sources */,
 				160F0F051D04756800673343 /* EntityBatteryCharge+CoreDataProperties.m in Sources */,
 				1613E0BD1D3CA917000528F5 /* EntityESM.m in Sources */,
@@ -2425,7 +2418,6 @@
 				169C88AD1D0142C300825761 /* TCQMaker.m in Sources */,
 				16B077781D192C30009C070B /* EntityTimezone+CoreDataProperties.m in Sources */,
 				16B0780A1D1D8CCE009C070B /* CalEvent.m in Sources */,
-				169C888C1D01382C00825761 /* MDBluetoothManager.m in Sources */,
 				16B077C21D1A55FC009C070B /* EntityMemory.m in Sources */,
 				160F0E8A1D03D60500673343 /* EntityAccelerometer.m in Sources */,
 				1623CE6B1BFD1B2C00EFAD72 /* main.m in Sources */,

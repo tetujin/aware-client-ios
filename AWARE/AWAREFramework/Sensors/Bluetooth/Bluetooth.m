@@ -13,7 +13,7 @@
 #import "AppDelegate.h"
 
 @implementation Bluetooth {
-    MDBluetoothManager * mdBluetoothManager;
+    //MDBluetoothManager * mdBluetoothManager;
     NSTimer * scanTimer;
     // int scanDuration;
     // int scanInterval;
@@ -33,7 +33,7 @@
                         dbEntityName:NSStringFromClass([EntityBluetooth class])
                               dbType:dbType];
     if (self) {
-        mdBluetoothManager = [MDBluetoothManager sharedInstance];
+        // mdBluetoothManager = [MDBluetoothManager sharedInstance];
         _scanDuration = 30; // 30 second
         _scanInterval = 60*5; // 5 min
         sessionTime = [NSDate new];
@@ -94,7 +94,7 @@
     NSLog(@"[%@] Start BLE Sensor", [self getSensorName]);
     
     // Set notification events for scanning classic bluetooth devices
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(bluetoothDeviceDiscoveredNotification:) name:@"BluetoothDeviceDiscoveredNotification" object:nil];
+    // [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(bluetoothDeviceDiscoveredNotification:) name:@"BluetoothDeviceDiscoveredNotification" object:nil];
     
     return YES;
 }
@@ -109,9 +109,9 @@
     [scanTimer invalidate];
     scanTimer = nil;
     // Stop scanning classic bluetooth
-    [mdBluetoothManager endScan];
+    // [mdBluetoothManager endScan];
     // remove notification observer from notification center
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"BluetoothDeviceDiscoveredNotification" object:nil];
+    // [[NSNotificationCenter defaultCenter] removeObserver:self name:@"BluetoothDeviceDiscoveredNotification" object:nil];
     
     [super stopSensor];
     
@@ -203,26 +203,26 @@
                                                       userInfo:nil];
     
     // Set up for a classic bluetooth
-    if (![mdBluetoothManager bluetoothIsPowered]) {
-        [mdBluetoothManager turnBluetoothOn];
-    }
+//    if (![mdBluetoothManager bluetoothIsPowered]) {
+//        [mdBluetoothManager turnBluetoothOn];
+//    }
     
     _peripherals = [[NSMutableArray alloc] init];
     sessionTime = [NSDate new];
     
     // start scanning classic bluetooth devices.
-    if (![mdBluetoothManager isScanning]) {
-        NSString *scanStartMessage = [NSString stringWithFormat:@"Start scanning Bluetooth devices during %d second!", _scanDuration];
-        if([self isDebug]) NSLog(@"...Start scanning Bluetooth devices.");
-        if ([self isDebug]){
-           [AWAREUtils sendLocalNotificationForMessage:scanStartMessage soundFlag:NO];
-        }
-        // start to scan Bluetooth devices
-        [mdBluetoothManager startScan];
-        // stop to scan Bluetooth devies after "scanDuration" second.
-        [self performSelector:@selector(stopToScanBluetooth) withObject:0 afterDelay:_scanDuration];
-        if([self isDebug]) NSLog(@"...After %d second, the Blueooth scan will be end.", _scanDuration);
-    }
+//    if (![mdBluetoothManager isScanning]) {
+//        NSString *scanStartMessage = [NSString stringWithFormat:@"Start scanning Bluetooth devices during %d second!", _scanDuration];
+//        if([self isDebug]) NSLog(@"...Start scanning Bluetooth devices.");
+//        if ([self isDebug]){
+//           [AWAREUtils sendLocalNotificationForMessage:scanStartMessage soundFlag:NO];
+//        }
+//        // start to scan Bluetooth devices
+//        [mdBluetoothManager startScan];
+//        // stop to scan Bluetooth devies after "scanDuration" second.
+//        [self performSelector:@selector(stopToScanBluetooth) withObject:0 afterDelay:_scanDuration];
+//        if([self isDebug]) NSLog(@"...After %d second, the Blueooth scan will be end.", _scanDuration);
+//    }
     
     
     // start scanning ble devices.
@@ -236,45 +236,45 @@
         [AWAREUtils sendLocalNotificationForMessage:@"Stop scanning Bluetooth devices!" soundFlag:NO];
     }
     
-    [mdBluetoothManager endScan];
+    // [mdBluetoothManager endScan];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_BLUETOOTH_SCAN_ENDED
                                                         object:nil
                                                       userInfo:nil];
 }
 
-- (void)receivedBluetoothNotification:(MDBluetoothNotification)bluetoothNotification{
-    switch (bluetoothNotification) {
-        case MDBluetoothPowerChangedNotification:
-            if([self isDebug]) NSLog(@"changed");
-            break;
-        case MDBluetoothDeviceUpdatedNotification:
-            if([self isDebug]) NSLog(@"update");
-            break;
-        case MDBluetoothDeviceRemovedNotification:
-            if([self isDebug]) NSLog(@"remove");
-            break;
-        case MDBluetoothDeviceDiscoveredNotification:
-            if([self isDebug]) NSLog(@"discoverd");
-            break;
-        default:
-            break;
-    }
-}
+//- (void)receivedBluetoothNotification:(MDBluetoothNotification)bluetoothNotification{
+//    switch (bluetoothNotification) {
+//        case MDBluetoothPowerChangedNotification:
+//            if([self isDebug]) NSLog(@"changed");
+//            break;
+//        case MDBluetoothDeviceUpdatedNotification:
+//            if([self isDebug]) NSLog(@"update");
+//            break;
+//        case MDBluetoothDeviceRemovedNotification:
+//            if([self isDebug]) NSLog(@"remove");
+//            break;
+//        case MDBluetoothDeviceDiscoveredNotification:
+//            if([self isDebug]) NSLog(@"discoverd");
+//            break;
+//        default:
+//            break;
+//    }
+//}
 
-- (void)bluetoothDeviceDiscoveredNotification:(NSNotification *)notification{
-    if([self isDebug]){
-        NSLog(@"%@", notification.description);
-    }
-    // save a bluetooth device information
-    BluetoothDevice * bluetoothDevice = notification.object;
-    NSString* address = bluetoothDevice.address;
-    NSString* name = bluetoothDevice.name;
-    if (address == nil) address = @"";
-    if (name == nil) name = @"";
-    
-    [self saveBluetoothDeviceWithAddress:address name:name rssi:@-1];
-}
+//- (void)bluetoothDeviceDiscoveredNotification:(NSNotification *)notification{
+//    if([self isDebug]){
+//        NSLog(@"%@", notification.description);
+//    }
+//    // save a bluetooth device information
+//    BluetoothDevice * bluetoothDevice = notification.object;
+//    NSString* address = bluetoothDevice.address;
+//    NSString* name = bluetoothDevice.name;
+//    if (address == nil) address = @"";
+//    if (name == nil) name = @"";
+//    
+//    [self saveBluetoothDeviceWithAddress:address name:name rssi:@-1];
+//}
 
 ////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////
