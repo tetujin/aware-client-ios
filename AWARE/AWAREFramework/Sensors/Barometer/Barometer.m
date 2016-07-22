@@ -145,6 +145,14 @@
 
 -(void)saveDummyData{
     [self setBufferSize:0];
+    NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    [dict setObject:unixtime forKey:@"timestamp"];
+    [dict setObject:[self getDeviceId] forKey:@"device_id"];
+    [dict setObject:@1024 forKey:@"double_values_0"];
+    [dict setObject:@0 forKey:@"accuracy"];
+    [dict setObject:@"dummy" forKey:@"label"];
+    [self saveData:dict];
 }
 
 - (BOOL)stopSensor{

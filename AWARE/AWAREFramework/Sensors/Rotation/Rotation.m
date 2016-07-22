@@ -109,7 +109,7 @@
                                                    [self saveData:dict];
                                                }else if([self getDBType] == AwareDBTypeTextFile){
                                                    dispatch_async(dispatch_get_main_queue(), ^{
-                                                       [self saveData:dict toLocalFile:SENSOR_ROTATION];
+                                                       [self saveData:dict];
                                                    });
                                                }
                                                

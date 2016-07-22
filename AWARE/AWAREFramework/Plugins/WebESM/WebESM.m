@@ -640,4 +640,31 @@ didReceiveResponse:(NSURLResponse *)response
     return url;
 }
 
+//////////////////////////////////////////////////////////////
+
+- (void) saveDummyData {
+    
+    AppDelegate * delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    NSManagedObjectContext * context = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
+    context.persistentStoreCoordinator = delegate.persistentStoreCoordinator;
+    EntityESMAnswer * answer = (EntityESMAnswer *)
+    [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([EntityESMAnswer class])
+                                  inManagedObjectContext:context];
+    // add special data to dic from each uielements
+    answer.device_id = [self getDeviceId];
+    answer.timestamp = [AWAREUtils getUnixTimestamp:[NSDate new]];
+    answer.esm_json = @"[]";
+    answer.esm_trigger = @"dummy";
+    answer.esm_expiration_threshold = @0;
+    answer.double_esm_user_answer_timestamp = [AWAREUtils getUnixTimestamp:[NSDate new]];
+    answer.esm_user_answer = @"dummy";
+    answer.esm_status = @2;
+    
+    NSError * error = nil;
+    [context save:&error];
+    if(error != nil){
+        NSLog(@"%@", error.debugDescription);
+    }
+}
+
 @end

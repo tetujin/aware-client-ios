@@ -147,7 +147,7 @@
         <attribute name="esm_scale_min" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="esm_scale_min_label" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="esm_scale_start" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
-        <attribute name="esm_scale_step" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="esm_scale_step" optional="YES" attributeType="Double" defaultValueString="0" syncable="YES"/>
         <attribute name="esm_status" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="esm_submit" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="esm_title" optional="YES" attributeType="String" syncable="YES"/>
@@ -442,11 +442,11 @@
         <element name="EntityNTPTime" positionX="216" positionY="180" width="128" height="30"/>
         <element name="EntityOpenWeather" positionX="189" positionY="153" width="128" height="30"/>
         <element name="EntityProcessor" positionX="180" positionY="144" width="128" height="165"/>
+        <element name="EntityProximity" positionX="306" positionY="153" width="128" height="120"/>
         <element name="EntityPushNotification" positionX="198" positionY="162" width="128" height="30"/>
         <element name="EntityRotation" positionX="180" positionY="144" width="128" height="30"/>
         <element name="EntityScreen" positionX="189" positionY="153" width="128" height="30"/>
         <element name="EntityTimezone" positionX="198" positionY="162" width="128" height="30"/>
         <element name="EntityWifi" positionX="207" positionY="171" width="128" height="30"/>
-        <element name="EntityProximity" positionX="306" positionY="153" width="128" height="120"/>
     </elements>
 </model>

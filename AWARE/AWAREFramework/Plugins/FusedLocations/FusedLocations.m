@@ -260,4 +260,25 @@
     [locationSensor saveAuthorizationStatus:status];
 }
 
+
+///////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////
+
+- (void)saveDummyData{
+    NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    [dict setObject:unixtime forKey:@"timestamp"];
+    [dict setObject:[self getDeviceId] forKey:@"device_id"];
+    [dict setObject:@0 forKey:@"double_latitude"];
+    [dict setObject:@0 forKey:@"double_longitude"];
+    [dict setObject:@0 forKey:@"double_bearing"];
+    [dict setObject:@0 forKey:@"double_speed"];
+    [dict setObject:@0 forKey:@"double_altitude"];
+    [dict setObject:@"fused" forKey:@"provider"];
+    [dict setObject:@0 forKey:@"accuracy"];
+    [dict setObject:@"dummy" forKey:@"label"];
+    [locationSensor saveData:dict];
+}
+
+
 @end

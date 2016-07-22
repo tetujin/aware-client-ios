@@ -801,45 +801,70 @@
 //////////////////////////////////////////////////////
 
 
+- (void) testSensing{
+    [self testSensingWithCase:1];
+}
+
 /**
  *
  */
-- (void) testSensing {
-    
-    // 1. stop all sensors
+- (void) testSensingWithCase:(NSInteger)caseId{
+    /**
+     * 0 => text file (normal)
+     * 1 => core data (normal)
+     * 2 => text file -> core data
+     * 3 => core data -> text file
+     */
+
+    // remove all sensor data in all cases
     NSLog(@"==============Stop and remove all sensors ================");
     [self stopAndRemoveAllSensors];
-    
-    NSNumber * timestamp = [AWAREUtils getUnixTimestamp:[NSDate new]];
-    
     [self removeAllFilesFromDocumentRoot];
     
-    // 2. set new study
-    NSLog(@"============== Set a study for a test ====================");
-    // [awareStudy setStudyInformationWithURL:@"https://aware.ht.sfc.keio.ac.jp/index.php/webservice/index/11/wVupTkDhRy9z"];
+    // get a start timestamp
+    NSNumber * timestamp = [AWAREUtils getUnixTimestamp:[NSDate new]];
     
-    // 3. start sesning
-    NSLog(@"============== Start sensing =============================");
-    [self startAllSensorsWithStudy:awareStudy dbType:AwareDBTypeTextFile];
+    // NSLog(@"============== Set a study for a test ====================");
+    [awareStudy setStudyInformationWithURL:@"https://aware.ht.sfc.keio.ac.jp/index.php/webservice/index/11/wVupTkDhRy9z"];
     
-    [self performSelector:@selector(saveAllDummyDate) withObject:nil afterDelay:10];
-    
-    // 4. stop all sensor
-    NSLog(@"============== Stop all sensors ====================");
-    [self performSelector:@selector(stopAllSensors) withObject:nil afterDelay:40];
-    
-    NSLog(@"============= Show DBs =============================");
-    [self performSelector:@selector(checkLocalDBs) withObject:nil afterDelay:41];
-    
-    // 5. upload sensor data
-    NSLog(@"============== Upload all sensors ====================");
-    [self performSelector:@selector(syncAllSensorsWithDBInForeground) withObject:nil afterDelay:45];
-    
-    // 6. show latest sensor data
-    NSLog(@"============== Dowlonad all latest sensor data from an AWARE server ====================");
-    [self performSelector:@selector(showAllLatestSensorDataFromServer:) withObject:timestamp afterDelay:90];
-    
-    // return NO;
+    switch (caseId) {
+        case 0:
+            [self startAllSensorsWithStudy:awareStudy dbType:AwareDBTypeTextFile];
+            [self performSelector:@selector(saveAllDummyDate) withObject:nil afterDelay:10];
+            [self performSelector:@selector(stopAllSensors) withObject:nil afterDelay:40];
+            [self performSelector:@selector(checkLocalDBs) withObject:nil afterDelay:41];
+            [self performSelector:@selector(syncAllSensorsWithDBInForeground) withObject:nil afterDelay:45];
+            [self performSelector:@selector(showAllLatestSensorDataFromServer:) withObject:timestamp afterDelay:90];
+            break;
+        case 1:
+            [self startAllSensorsWithStudy:awareStudy dbType:AwareDBTypeCoreData];
+            [self performSelector:@selector(saveAllDummyDate) withObject:nil afterDelay:10];
+            [self performSelector:@selector(stopAllSensors) withObject:nil afterDelay:40];
+            [self performSelector:@selector(checkLocalDBs) withObject:nil afterDelay:41];
+            [self performSelector:@selector(syncAllSensorsWithDBInForeground) withObject:nil afterDelay:45];
+            [self performSelector:@selector(showAllLatestSensorDataFromServer:) withObject:timestamp afterDelay:90];
+            break;
+        case 2:
+            [self startAllSensorsWithStudy:awareStudy dbType:AwareDBTypeTextFile];
+            [self performSelector:@selector(saveAllDummyDate) withObject:nil afterDelay:10];
+            [self performSelector:@selector(stopAllSensors) withObject:nil afterDelay:40];
+            [self performSelector:@selector(checkLocalDBs) withObject:nil afterDelay:41];
+            [self performSelector:@selector(syncAllSensorsWithDBInForeground) withObject:nil afterDelay:45];
+            [self performSelector:@selector(showAllLatestSensorDataFromServer:) withObject:timestamp afterDelay:90];
+            
+            timestamp = [AWAREUtils getUnixTimestamp:[NSDate new]];
+            [self performSelector:@selector(stopAndRemoveAllSensors) withObject:nil afterDelay:120];
+            [self performSelector:@selector(startAllSensors) withObject:nil afterDelay:125];
+            [self performSelector:@selector(saveAllDummyDate) withObject:nil afterDelay:135];
+            [self performSelector:@selector(stopAllSensors) withObject:nil afterDelay:180];
+            [self performSelector:@selector(checkLocalDBs) withObject:nil afterDelay:181];
+            [self performSelector:@selector(syncAllSensorsWithDBInForeground) withObject:nil afterDelay:185];
+            [self performSelector:@selector(showAllLatestSensorDataFromServer:) withObject:timestamp afterDelay:210];
+            
+        default:
+            
+            break;
+    }
 }
 
 

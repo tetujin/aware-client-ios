@@ -601,6 +601,27 @@
     // Get "NA" state. The key for the NA state is "esm_na", also value is 0(FALSE) or 1(TURE).
     BOOL naState = [self getNaStateFromDict:esm];
     
+    
+    // Add  min/max/slider value
+    UILabel *minLabel = [[UILabel alloc] initWithFrame:CGRectMake(mainContentRect.origin.x,
+                                                                  totalHight + ratingView.frame.size.height/2,
+                                                                  60, ratingView.frame.size.height/2)];
+    UILabel *maxLabel = [[UILabel alloc] initWithFrame:CGRectMake(mainContentRect.origin.x+mainContentRect.size.width -60,
+                                                                  totalHight + ratingView.frame.size.height/2,
+                                                                  60, ratingView.frame.size.height/2)];
+    
+    minLabel.adjustsFontSizeToFitWidth = YES;
+    maxLabel.adjustsFontSizeToFitWidth = YES;
+    
+    minLabel.text = esm.esm_likert_min_label; // [dic objectForKey:KEY_ESM_SCALE_MIN_LABEL];
+    maxLabel.text = esm.esm_likert_max_label; // [dic objectForKey:KEY_ESM_SCALE_MAX_LABEL];
+    
+    minLabel.textAlignment = NSTextAlignmentCenter;
+    maxLabel.textAlignment = NSTextAlignmentCenter;
+    
+    [_mainScrollView addSubview:minLabel];
+    [_mainScrollView addSubview:maxLabel];
+    
     if(naState){ // NA is true
         // Add labels
         for (int i=0; i<[max intValue]+1; i++) {
@@ -674,6 +695,8 @@
         }
         [self setContentSizeWithAdditionalHeight:ratingView.frame.size.height];
     }
+
+    
     
     NSMutableDictionary * uiElement = [[NSMutableDictionary alloc] init];
     [uiElement setObject:[NSNumber numberWithInt:tag] forKey:KEY_TAG];
@@ -839,9 +862,8 @@
     float value = esm.esm_scale_start.floatValue;
     slider.value = value; // [start floatValue];
     slider.tag = tag;
-    [slider addTarget:self
-               action:@selector(setNaBoxFolse:)
-     forControlEvents:UIControlEventTouchUpInside];
+    [slider addTarget:self action:@selector(setNaBoxFolse:) forControlEvents:UIControlEventTouchUpInside];
+    
     
     valueLabel.text = @"---";
     valueLabel.tag = totalHight;
@@ -867,11 +889,8 @@
                                                                 mainContentRect.size.width-90, naH)];
     label.adjustsFontSizeToFitWidth = YES;
     label.text = @"NA";
-    [naCheckBox addTarget:self
-                   action:@selector(pushedNaBox:)
-         forControlEvents:UIControlEventTouchUpInside];
-    
-    
+    [naCheckBox addTarget:self action:@selector(pushedNaBox:) forControlEvents:UIControlEventTouchUpInside];
+
     
     [_mainScrollView addSubview:valueLabel];
     [_mainScrollView addSubview:slider];
@@ -905,10 +924,28 @@
 
 - (IBAction)sliderChanged:(UISlider *)sender {
     // NSLog(@"slider value = %f", sender.value);
-    int intValue = sender.value;
-    [sender setValue:intValue];
-    UILabel * label = [_mainScrollView viewWithTag:sender.frame.origin.y-30];
-    [label setText:[NSString stringWithFormat:@"%d", intValue]];
+    double value = sender.value;
+    NSInteger tag = sender.tag;
+    if(uiElements.count >= tag ){
+        EntityESM *esm = [[uiElements objectAtIndex:tag] objectForKey:KEY_OBJECT];
+        NSNumber * step = esm.esm_scale_step;
+        
+        if([step isEqual:@0.1]){
+            double tempValue = value*10;
+            int intValue = tempValue/10;
+            [sender setValue:intValue];
+            UILabel * label = [_mainScrollView viewWithTag:sender.frame.origin.y-30];
+            [label setText:[NSString stringWithFormat:@"%0.1f", value]];
+        }else{
+            [sender setValue:value];
+            UILabel * label = [_mainScrollView viewWithTag:sender.frame.origin.y-30];
+            [label setText:[NSString stringWithFormat:@"%d", (int)value]];
+        }
+        
+    }
+    
+    // NSArray * contents = [[uiElements objectAtIndex:tag] objectForKey:KEY_ELEMENT];
+    // NSArray * labels = [[uiElements objectAtIndex:tag] objectForKey:KEY_LABLES];
 }
 
 
