@@ -146,6 +146,26 @@
         // AWARE DB setting
         awareDBType = dbType;
         
+        /**
+         * NOTE: Switch to CoreData to TextFile DB if this device is using TextFile DB
+         */
+        BOOL textFileExistance = NO;
+        if(dbType == AwareDBTypeCoreData){
+            NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+            NSString *documentsDirectory = [paths objectAtIndex:0];
+            NSString * path = [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.dat",name]];
+            NSFileManager *manager = [NSFileManager defaultManager];
+            if (![manager fileExistsAtPath:path]) { // yes
+                textFileExistance = YES;
+            }else{
+                textFileExistance = NO;
+            }
+            // switch the db type to TextFile
+            if(textFileExistance){
+                awareDBType = AwareDBTypeTextFile;
+            }
+        }
+        
         switch (dbType) {
             case AwareDBTypeCoreData:
 //                 baseDataUploader = [[AWARECoreDataManager alloc] initWithAwareStudy:awareStudy sensorName:name dbEntityName:entity];

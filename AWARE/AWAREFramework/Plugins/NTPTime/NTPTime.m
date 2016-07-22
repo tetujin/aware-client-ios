@@ -75,9 +75,9 @@
 
     [self setLatestValue:[NSString stringWithFormat:@"[%f] %@",offset, nt ]];
     
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self saveData:dic];
-    });
+    //dispatch_async(dispatch_get_main_queue(), ^{
+    [self saveData:dic];
+    //});
 }
 
 - (void)insertNewEntityWithData:(NSDictionary *)data managedObjectContext:(NSManagedObjectContext *)childContext entityName:(NSString *)entity{
@@ -87,6 +87,11 @@
     entityNTP.timestamp = [data objectForKey:@"timestamp"];;
     entityNTP.drift     = [data objectForKey:@"drift"];
     entityNTP.ntp_time  = [data objectForKey:@"ntp_time"];
+}
+
+
+- (void)saveDummyData{
+    [self getNTPTime];
 }
 
 

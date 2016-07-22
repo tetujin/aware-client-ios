@@ -7,6 +7,7 @@
 //
 
 #import "SensorTag.h"
+#import "TCQMaker.h"
 
 @implementation SensorTag{
     
@@ -65,7 +66,8 @@
 }
 
 - (void)createTable{
-
+    TCQMaker * tcqMaker = [[TCQMaker alloc] init];
+    [tcqMaker addColumn:@"" type:TCQTypeReal default:@"'0'"];
 
 }
 

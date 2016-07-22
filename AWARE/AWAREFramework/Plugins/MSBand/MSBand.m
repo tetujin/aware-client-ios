@@ -276,6 +276,29 @@
     return [hrSensor getLatestValue];
 }
 
+- (NSData *)getLatestData{
+    
+    NSString * data = @"";
+    data = [[NSString alloc] initWithData:[uvSensor            getLatestData] encoding:NSUTF8StringEncoding];
+    NSLog(@"%@", data);
+    data = [[NSString alloc] initWithData:[skinTempSensor      getLatestData] encoding:NSUTF8StringEncoding];
+    NSLog(@"%@", data);
+    data = [[NSString alloc] initWithData:[hrSensor            getLatestData] encoding:NSUTF8StringEncoding];
+    NSLog(@"%@", data);
+    data = [[NSString alloc] initWithData:[gsrSensor           getLatestData] encoding:NSUTF8StringEncoding];
+    NSLog(@"%@", data);
+    data = [[NSString alloc] initWithData:[deviceContactSensor getLatestData] encoding:NSUTF8StringEncoding];
+    NSLog(@"%@", data);
+    data = [[NSString alloc] initWithData:[calSensor           getLatestData] encoding:NSUTF8StringEncoding];
+    NSLog(@"%@", data);
+    data = [[NSString alloc] initWithData:[distanceSensor      getLatestData] encoding:NSUTF8StringEncoding];
+    NSLog(@"%@", data);
+    data = [[NSString alloc] initWithData:[rrIntervalSensor    getLatestData] encoding:NSUTF8StringEncoding];
+    NSLog(@"%@", data);
+    data = [[NSString alloc] initWithData:[pedometerSensor     getLatestData] encoding:NSUTF8StringEncoding];
+    
+    return [hrSensor getLatestData];
+}
 
 
 //////////////////////////////////////
