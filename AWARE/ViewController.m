@@ -114,25 +114,13 @@
     /// Init sensor manager for the list view
     AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
     AWARECore * core = delegate.sharedAWARECore;
-    if(core == nil){
-        // [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeBlack];
-        // [SVProgressHUD showWithStatus:@"Migrating database... \nPlease don't cloase this app!"];
-        
-        delegate.sharedAWARECore = [[AWARECore alloc] init];
-        [delegate.sharedAWARECore activate];
-        core = delegate.sharedAWARECore;
-        
-        // [SVProgressHUD dismiss];
-    }
-    
-    sensorManager = core.sharedSensorManager;
-    dailyUpdateTimer = core.dailyUpdateTimer;
+    sensorManager =     core.sharedSensorManager;
+    dailyUpdateTimer =  core.dailyUpdateTimer;
+    awareStudy =        core.sharedAwareStudy;
     
     // A sensor list for table view
     _sensors = [[NSMutableArray alloc] init];
     
-    // AWAREStudy manages a study configurate
-    awareStudy = core.sharedAwareStudy;
     //[[AWAREStudy alloc] initWithReachability:YES];
     
     /**
