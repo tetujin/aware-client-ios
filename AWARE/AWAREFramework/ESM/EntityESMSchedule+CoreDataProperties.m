@@ -18,7 +18,8 @@
 @dynamic fire_hour;
 @dynamic noitification_body;
 @dynamic notification_title;
-@dynamic randomize;
+@dynamic randomize_schedule;
+@dynamic randomize_esm;
 @dynamic schedule_id;
 @dynamic start_date;
 @dynamic context;

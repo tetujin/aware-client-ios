@@ -20,7 +20,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) NSNumber *fire_hour;
 @property (nullable, nonatomic, retain) NSString *noitification_body;
 @property (nullable, nonatomic, retain) NSString *notification_title;
-@property (nullable, nonatomic, retain) NSNumber *randomize;
+@property (nullable, nonatomic, retain) NSNumber *randomize_schedule;
+@property (nullable, nonatomic, retain) NSNumber *randomize_esm;
 @property (nullable, nonatomic, retain) NSString *schedule_id;
 @property (nullable, nonatomic, retain) NSDate *start_date;
 @property (nullable, nonatomic, retain) NSString *context;

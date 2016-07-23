@@ -114,6 +114,17 @@
     /// Init sensor manager for the list view
     AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
     AWARECore * core = delegate.sharedAWARECore;
+    if(core == nil){
+        // [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeBlack];
+        // [SVProgressHUD showWithStatus:@"Migrating database... \nPlease don't cloase this app!"];
+        
+        delegate.sharedAWARECore = [[AWARECore alloc] init];
+        [delegate.sharedAWARECore activate];
+        core = delegate.sharedAWARECore;
+        
+        // [SVProgressHUD dismiss];
+    }
+    
     sensorManager = core.sharedSensorManager;
     dailyUpdateTimer = core.dailyUpdateTimer;
     
@@ -130,8 +141,6 @@
      * by using the -saveDebugEventWithText:type:label: method on the debugSensor.
      */
     debugSensor = [[Debug alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
-    
-    
     
     [self initContentsOnTableView];
     
@@ -234,6 +243,7 @@
     if(deviceId == nil) deviceId = @"";
     if(awareStudyId == nil) awareStudyId = @"";
     if(mqttServerName == nil) mqttServerName = @"";
+    if(awareDeviceName == nil) awareDeviceName = @"";
     
     // Get debug state (bool)
     NSString* debugState = @"OFF";
