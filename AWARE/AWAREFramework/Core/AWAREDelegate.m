@@ -111,8 +111,8 @@
         [_sharedAWARECore activate];
     }else{
         // init with only location server
-        migrationManager = [[AWARECoreDataMigrationManager alloc] init];
-        [migrationManager activate];
+        // migrationManager = [[AWARECoreDataMigrationManager alloc] init];
+        // [migrationManager activate];
         [AWAREUtils sendLocalNotificationForMessage:@"Please open AWARE client iOS for migrating database!" soundFlag:YES];
     }
     
