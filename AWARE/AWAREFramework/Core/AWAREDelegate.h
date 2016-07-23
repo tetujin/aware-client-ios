@@ -25,7 +25,7 @@
 
 - (void)saveContext;
 // for migration
-- (BOOL)isRequiredMigration;
-- (BOOL)doMigration;
+//- (BOOL)isRequiredMigration;
+//- (BOOL)doMigration;
 
 @end

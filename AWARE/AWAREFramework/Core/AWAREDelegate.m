@@ -105,16 +105,18 @@
                                              selector:@selector(changedBatteryState:)
                                                  name:UIDeviceBatteryStateDidChangeNotification object:nil];
     
+    _sharedAWARECore = [[AWARECore alloc] init];
+    [_sharedAWARECore activate];
     
-    if(![self isRequiredMigration]){
-        _sharedAWARECore = [[AWARECore alloc] init];
-        [_sharedAWARECore activate];
-    }else{
+    //if(![self isRequiredMigration]){
+//    _sharedAWARECore = [[AWARECore alloc] init];
+//    [_sharedAWARECore activate];
+    //}else{
         // init with only location server
         // migrationManager = [[AWARECoreDataMigrationManager alloc] init];
         // [migrationManager activate];
-        [AWAREUtils sendLocalNotificationForMessage:@"Please open AWARE client iOS for migrating database!" soundFlag:YES];
-    }
+        //[AWAREUtils sendLocalNotificationForMessage:@"Please open AWARE client iOS for migrating database!" soundFlag:YES];
+    //}
     
     return YES;
 }
@@ -642,10 +644,9 @@ didDisconnectWithUser:(GIDGoogleUser *)user
     
     
     /*********** options  ***********/
-    NSDictionary *options = [NSDictionary
-                             dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES],NSMigratePersistentStoresAutomaticallyOption,
-                             [NSNumber numberWithBool:YES],
-                             NSInferMappingModelAutomaticallyOption,
+    NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
+                             [NSNumber numberWithBool:YES], NSMigratePersistentStoresAutomaticallyOption,
+                             [NSNumber numberWithBool:YES], NSInferMappingModelAutomaticallyOption,
                              nil];
     
     if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:options error:&error]) {
@@ -695,45 +696,45 @@ didDisconnectWithUser:(GIDGoogleUser *)user
     }
 }
 
-- (BOOL)isRequiredMigration {
-    NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"AWARE.sqlite"];
-    NSError* error = nil;
-    
-    NSDictionary* sourceMetaData = [NSPersistentStoreCoordinator metadataForPersistentStoreOfType:NSSQLiteStoreType
-                                                                                              URL:storeURL
-                                                                                            error:&error];
-    if (sourceMetaData == nil) {
-        return NO;
-    } else if (error) {
-        NSLog(@"Checking migration was failed (%@, %@)", error, [error userInfo]);
-        abort();
-    }
-    
-    BOOL isCompatible = [self.managedObjectModel isConfiguration:nil
-                                     compatibleWithStoreMetadata:sourceMetaData];
-    
-    return !isCompatible;
-}
-
-- (BOOL) doMigration {
-    NSLog(@"--- doMigration ---");
-    NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"AWARE.sqlite"];
-    
-    NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
-                             [NSNumber numberWithBool:YES], NSMigratePersistentStoresAutomaticallyOption,
-                             [NSNumber numberWithBool:YES], NSInferMappingModelAutomaticallyOption,
-                             nil];
-    NSError *error = nil;
-    _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
-    if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:options error:&error])
-    {
-        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-        // abort();
-        return NO;
-    }
-    
-    return YES;//_persistentStoreCoordinator;
-}
-
+//- (BOOL)isRequiredMigration {
+//    NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"AWARE.sqlite"];
+//    NSError* error = nil;
+//    
+//    NSDictionary* sourceMetaData = [NSPersistentStoreCoordinator metadataForPersistentStoreOfType:NSSQLiteStoreType
+//                                                                                              URL:storeURL
+//                                                                                            error:&error];
+//    if (sourceMetaData == nil) {
+//        return NO;
+//    } else if (error) {
+//        NSLog(@"Checking migration was failed (%@, %@)", error, [error userInfo]);
+//        abort();
+//    }
+//    
+//    BOOL isCompatible = [self.managedObjectModel isConfiguration:nil
+//                                     compatibleWithStoreMetadata:sourceMetaData];
+//    
+//    return !isCompatible;
+//}
+//
+//- (BOOL) doMigration {
+//    NSLog(@"--- doMigration ---");
+//    NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"AWARE.sqlite"];
+//    
+//    NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
+//                             [NSNumber numberWithBool:YES], NSMigratePersistentStoresAutomaticallyOption,
+//                             [NSNumber numberWithBool:YES], NSInferMappingModelAutomaticallyOption,
+//                             nil];
+//    NSError *error = nil;
+//    _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
+//    if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:options error:&error])
+//    {
+//        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+//        // abort();
+//        return NO;
+//    }
+//    
+//    return YES;//_persistentStoreCoordinator;
+//}
+//
 
 @end
