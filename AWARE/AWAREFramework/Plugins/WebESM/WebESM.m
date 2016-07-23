@@ -198,7 +198,7 @@ didReceiveResponse:(NSURLResponse *)response
             for (NSDictionary * schedule in webESMArray) {
                 NSArray * hours = [schedule objectForKey:@"hours"];
                 NSArray * esms = [schedule objectForKey:@"esms"];
-                NSNumber * randomize = [schedule objectForKey:@"randomize"];
+                NSNumber * randomize_schedule = [schedule objectForKey:@"randomize_schedule"];
                 NSNumber * expiration = [schedule objectForKey:@"expiration"];
                 
                 NSString * startDateStr = [schedule objectForKey:@"start_date"];
@@ -229,7 +229,7 @@ didReceiveResponse:(NSURLResponse *)response
                     entityWebESM.end_date = endDate;
                     entityWebESM.notification_title = notificationTitle;
                     entityWebESM.noitification_body = notificationBody;
-                    entityWebESM.randomize = randomize;
+                    entityWebESM.randomize_schedule = randomize_schedule;
                     entityWebESM.schedule_id = scheduleId;
                     entityWebESM.context = eventContext;
                     
@@ -332,7 +332,9 @@ didReceiveResponse:(NSURLResponse *)response
         
         EntityESMSchedule * schedule = results[i];
     
-        NSNumber * randomize = schedule.randomize;
+        NSNumber * randomize = schedule.randomize_schedule;
+        if(randomize == nil) randomize = @0;
+        
         NSNumber * fireHour = schedule.fire_hour;
         NSNumber * expiration = schedule.expiration_threshold;
         NSDate * fireDate = [AWAREUtils getTargetNSDate:[NSDate new] hour:[fireHour intValue] nextDay:YES];
