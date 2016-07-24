@@ -269,6 +269,10 @@
         }
     }
 
+    if([self getDBType] == AwareDBTypeTextFile){
+        activitiesStr = @"";
+    }
+    
     if ([self isDebug]) {
         NSLog(@"[%@] %@ %ld", motionActivity.startDate, motionName, motionActivity.confidence);
     }

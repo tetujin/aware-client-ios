@@ -183,7 +183,8 @@
         <attribute name="fire_hour" optional="YES" attributeType="Integer 16" minValueString="-1" maxValueString="23" defaultValueString="0" syncable="YES"/>
         <attribute name="noitification_body" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="notification_title" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="randomize" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="randomize_esm" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="randomize_schedule" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="schedule_id" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="start_date" optional="YES" attributeType="Date" syncable="YES"/>
         <relationship name="esms" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="EntityESM" inverseName="esm_schedule" inverseEntity="EntityESM" syncable="YES"/>
@@ -419,7 +420,7 @@
         <element name="EntityESM" positionX="549" positionY="396" width="128" height="480"/>
         <element name="EntityESMAnswer" positionX="448" positionY="297" width="128" height="165"/>
         <element name="EntityESMHistory" positionX="297" positionY="144" width="128" height="135"/>
-        <element name="EntityESMSchedule" positionX="97" positionY="582" width="146" height="195"/>
+        <element name="EntityESMSchedule" positionX="97" positionY="582" width="146" height="210"/>
         <element name="EntityGravity" positionX="180" positionY="144" width="128" height="30"/>
         <element name="EntityGyroscope" positionX="189" positionY="153" width="128" height="150"/>
         <element name="EntityLabel" positionX="225" positionY="189" width="128" height="30"/>

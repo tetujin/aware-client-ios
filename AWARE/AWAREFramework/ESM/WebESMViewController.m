@@ -937,7 +937,7 @@
             UILabel * label = [_mainScrollView viewWithTag:sender.frame.origin.y-30];
             [label setText:[NSString stringWithFormat:@"%0.1f", value]];
         }else{
-            [sender setValue:value];
+            [sender setValue:(int)value];
             UILabel * label = [_mainScrollView viewWithTag:sender.frame.origin.y-30];
             [label setText:[NSString stringWithFormat:@"%d", (int)value]];
         }

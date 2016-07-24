@@ -114,14 +114,13 @@
     /// Init sensor manager for the list view
     AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
     AWARECore * core = delegate.sharedAWARECore;
-    sensorManager = core.sharedSensorManager;
-    dailyUpdateTimer = core.dailyUpdateTimer;
+    sensorManager =     core.sharedSensorManager;
+    dailyUpdateTimer =  core.dailyUpdateTimer;
+    awareStudy =        core.sharedAwareStudy;
     
     // A sensor list for table view
     _sensors = [[NSMutableArray alloc] init];
     
-    // AWAREStudy manages a study configurate
-    awareStudy = core.sharedAwareStudy;
     //[[AWAREStudy alloc] initWithReachability:YES];
     
     /**
@@ -130,8 +129,6 @@
      * by using the -saveDebugEventWithText:type:label: method on the debugSensor.
      */
     debugSensor = [[Debug alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
-    
-    
     
     [self initContentsOnTableView];
     
@@ -234,6 +231,7 @@
     if(deviceId == nil) deviceId = @"";
     if(awareStudyId == nil) awareStudyId = @"";
     if(mqttServerName == nil) mqttServerName = @"";
+    if(awareDeviceName == nil) awareDeviceName = @"";
     
     // Get debug state (bool)
     NSString* debugState = @"OFF";
