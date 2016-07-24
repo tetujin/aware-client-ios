@@ -29,7 +29,7 @@
     awareStudy = study;
     if (self) {
         // Make a fused location sensor
-        // fusedLocationsSensor = [[Locations alloc] initWithAwareStudy:awareStudy];
+        locationSensor = [[Locations alloc] initWithAwareStudy:awareStudy dbType:dbType];
         
         // Make a visit location sensor
         visitLocationSensor = [[VisitLocations alloc] initWithAwareStudy:awareStudy dbType:dbType];
@@ -145,24 +145,30 @@
 }
 
 
+//- (void) syncAwareDB {
+//    [super syncAwareDB];
+//    [visitLocationSensor syncAwareDB];
+//}
+//
+//- (void) syncAwareDBWithLocationTable {
+//    [super syncAwareDB];
+//}
+//
+//- (void) syncAwareDBWithLocationVisitTable {
+//    [visitLocationSensor syncAwareDB];
+//}
+
 - (void) syncAwareDB {
-    [super syncAwareDB];
     [visitLocationSensor syncAwareDB];
-}
-
-- (void) syncAwareDBWithLocationTable {
+    [locationSensor syncAwareDB];
     [super syncAwareDB];
-}
-
-- (void) syncAwareDBWithLocationVisitTable {
-    [visitLocationSensor syncAwareDB];
 }
 
 - (BOOL)syncAwareDBInForeground{
     if(![visitLocationSensor syncAwareDBInForeground]){
         return NO;
     }
-    if(![super syncAwareDBInForeground]){
+    if(![locationSensor syncAwareDBInForeground]){
         return NO;
     }
     
