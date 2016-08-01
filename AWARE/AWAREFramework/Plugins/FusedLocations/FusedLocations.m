@@ -8,7 +8,7 @@
 #import "FusedLocations.h"
 #import "Locations.h"
 #import "VisitLocations.h"
-// #import "AppDelegate.h"
+#import "AppDelegate.h"
 #import "EntityLocation.h"
 #import "EntityLocationVisit.h"
 
@@ -19,6 +19,8 @@
     Locations * locationSensor;
     VisitLocations * visitLocationSensor;
     AWAREStudy * awareStudy;
+    
+    CLLocation * previousLocation;
 }
 
 - (instancetype)initWithAwareStudy:(AWAREStudy *)study dbType:(AwareDBType)dbType{
@@ -120,6 +122,13 @@
                                                             repeats:YES];
             
         }
+        
+        AppDelegate * delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+        if(delegate.sharedAWARECore.sharedLocationManager != nil){
+            [delegate.sharedAWARECore.sharedLocationManager stopUpdatingLocation];
+            [delegate.sharedAWARECore.sharedLocationManager stopMonitoringSignificantLocationChanges];
+            delegate.sharedAWARECore.sharedLocationManager = locationManager;
+        }
 
     }
     
@@ -160,7 +169,7 @@
 
 - (void) syncAwareDB {
     [visitLocationSensor syncAwareDB];
-    [locationSensor syncAwareDB];
+    //[locationSensor syncAwareDB];
     [super syncAwareDB];
 }
 
@@ -168,11 +177,15 @@
     if(![visitLocationSensor syncAwareDBInForeground]){
         return NO;
     }
-    if(![locationSensor syncAwareDBInForeground]){
+    
+//    if(![locationSensor syncAwareDBInForeground]){
+//        return NO;
+//    }
+    
+    if(![super syncAwareDBInForeground]){
         return NO;
     }
     
-    [super syncAwareDBInForeground];
 
     
     return YES;
@@ -194,6 +207,15 @@
     }
     CLLocation* location = [locationManager location];
     [self saveLocation:location];
+    
+    if(location == nil && previousLocation != nil){
+        [self saveLocation:previousLocation];
+        // [AWAREUtils sendLocalNotificationForMessage:@"Location data is null!!" soundFlag:YES];
+    }
+    
+    if(location != nil){
+        previousLocation = location;
+    }
 }
 
 - (void) locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations{

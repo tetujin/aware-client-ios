@@ -364,11 +364,6 @@
  * @discussion Please call this method in the background
  */
 - (BOOL) setRepetationCountAfterStartToSyncDB:(NSNumber *) timestamp {
-    
-//    if([sensorName isEqualToString:@"push_notification_device_tokens"]){
-//        NSLog(@"******");
-//    }
-    
     @try {
         if ([self isDBLock]) {
             [self dataSyncIsFinishedCorrectoly];
@@ -376,10 +371,6 @@
         }else{
             [self lockDB];
         }
-        
-//        if([sensorName isEqualToString:@"push_notification_device_tokens"]){
-//            NSLog(@"*********");
-//        }
         
         NSFetchRequest* request = [[NSFetchRequest alloc] init];
         NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
@@ -437,10 +428,6 @@
     
     NSString *deviceId = [self getDeviceId];
     NSString *url = [self getInsertUrl:sensorName];
-
-//    if([[self getEntityName] isEqualToString:@"EntityOpenWeather"]){
-//        NSLog(@"hoge" );
-//    }
     
     // Get sensor data from CoreData
     if(unixtimeOfUploadingData == nil){
@@ -492,7 +479,7 @@
             //Get NSManagedObject from managedObjectContext by using fetch setting
             NSArray *results = [private executeFetchRequest:fetchRequest error:nil] ;
             
-
+            
             
             [self unlockDB];
             
@@ -559,6 +546,10 @@
                         postedTextLength = [[NSNumber numberWithInteger:mutablePostData.length] doubleValue];
                         
                         if([[self getEntityName] isEqualToString:@"EntityOpenWeather"]){
+                            
+                            NSLog(@"%@", [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding]);
+                            
+                        } else if ([[self getEntityName] isEqualToString:@"EntityESMAnswer"]){
                             
                             NSLog(@"%@", [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding]);
                             
@@ -932,11 +923,6 @@ didCompleteWithError:(nullable NSError *)error;
 //    return [awareStudy getNetworkReachabilityAsText];
 //}
 
-////////////////////////////////////////////////
-///////////////////////////////////////////////
-////////////////////////////////////////////
-////////////////////////////////////////////
-
 
 
 /**
@@ -1045,16 +1031,16 @@ didCompleteWithError:(nullable NSError *)error;
 //                //        NSLog(@"timestamp: %@", unixtimeOfUploadingData );
 //                [array addObject:dict];
 //            }
-
-
-
+//
+//
+//
 // set DB condition as normal after DB session
 //- (void) setDBConditionAsNormal{
 //    dbCondition = AwareDBConditionNormal;
 //}
-
-
-
+//
+//
+//
 //    if(dbCondition == AwareDBConditionCounting || dbCondition == AwareDBConditionFetching){
 //        NSLog(@"[%@] DB is working for 'counting' or 'fetching' the data.", [self getEntityName]);
 //        return NO;
@@ -1071,8 +1057,8 @@ didCompleteWithError:(nullable NSError *)error;
 //        }else{
 //            [self saveDataInBackground];
 //        }
-
-
+//
+//
 //        NSInteger categoryCount = [self getCategoryCountFromTimestamp:unixtimeOfUploadingData];
 //        if(isDebug){
 //

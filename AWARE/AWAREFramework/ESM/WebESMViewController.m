@@ -1554,7 +1554,8 @@
             esmNumber = 0;
             currentESMNumber = 0;
             // [esm performSelector:@selector(syncAwareDB) withObject:0 afterDelay:5];
-            [webESM syncAwareDBInForeground];
+            // [webESM syncAwareDB];
+            [webESM performSelector:@selector(syncAwareDB) withObject:nil afterDelay:3];
             
             [webESM refreshNotifications];
         }

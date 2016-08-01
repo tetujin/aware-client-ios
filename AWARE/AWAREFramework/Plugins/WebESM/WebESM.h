@@ -12,6 +12,15 @@
 @interface WebESM : AWARESensor <AWARESensorDelegate, NSURLSessionDataDelegate> //NSURLSessionTaskDelegate
 
 - (NSArray *) getValidESMsWithDatetime:(NSDate *) datetime;
+- (void) saveESMAnswerWithTimestamp:(NSNumber * )timestamp
+                           deviceId:(NSString *) deviceId
+                            esmJson:(NSString *) esmJson
+                         esmTrigger:(NSString *) esmTrigger
+             esmExpirationThreshold:(NSNumber *) esmExpirationThreshold
+             esmUserAnswerTimestamp:(NSNumber *) esmUserAnswerTimestamp
+                      esmUserAnswer:(NSString *) esmUserAnswer
+                          esmStatus:(NSNumber *) esmStatus;
+- (NSString *) convertNSArraytoJsonStr:(NSArray *)array;
 - (void) setNotificationSchedules;
 - (void) removeNotificationSchedules;
 - (void) refreshNotifications;

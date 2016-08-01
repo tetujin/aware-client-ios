@@ -728,6 +728,7 @@
 		16B078321D1F918B009C070B /* EntityMSBandHR+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EntityMSBandHR+CoreDataProperties.m"; sourceTree = "<group>"; };
 		16B078331D1F918B009C070B /* EntityMSBandHR.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EntityMSBandHR.h; sourceTree = "<group>"; };
 		16B078341D1F918B009C070B /* EntityMSBandHR.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EntityMSBandHR.m; sourceTree = "<group>"; };
+		16B709411D44C366007E5FFB /* AWARE_v3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = AWARE_v3.xcdatamodel; sourceTree = "<group>"; };
 		16BDCC931D35B80E00B13BD4 /* BatteryCharge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BatteryCharge.h; sourceTree = "<group>"; };
 		16BDCC941D35B80E00B13BD4 /* BatteryCharge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BatteryCharge.m; sourceTree = "<group>"; };
 		16BDCC961D35C11100B13BD4 /* BatteryDischarge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BatteryDischarge.h; sourceTree = "<group>"; };
@@ -2757,10 +2758,11 @@
 		1623CE751BFD1B2C00EFAD72 /* AWARE.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				16B709411D44C366007E5FFB /* AWARE_v3.xcdatamodel */,
 				16C81FF41CD6B32D0013A87C /* AWARE_v2.xcdatamodel */,
 				1623CE761BFD1B2C00EFAD72 /* AWARE.xcdatamodel */,
 			);
-			currentVersion = 1623CE761BFD1B2C00EFAD72 /* AWARE.xcdatamodel */;
+			currentVersion = 16B709411D44C366007E5FFB /* AWARE_v3.xcdatamodel */;
 			path = AWARE.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

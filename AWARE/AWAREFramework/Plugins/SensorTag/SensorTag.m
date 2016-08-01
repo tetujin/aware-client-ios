@@ -11,7 +11,7 @@
 
 @implementation SensorTag{
     
-    
+    // Acc
     NSString *KEY_TAG_ACCX;
     NSString *KEY_TAG_ACCY;
     NSString *KEY_TAG_ACCZ;
@@ -68,10 +68,14 @@
 - (void)createTable{
     TCQMaker * tcqMaker = [[TCQMaker alloc] init];
     [tcqMaker addColumn:@"" type:TCQTypeReal default:@"'0'"];
-
 }
 
 - (BOOL)startSensorWithSettings:(NSArray *)settings{
+    // active sensors
+    
+    // interval
+    
+    
     return YES;
 }
 
