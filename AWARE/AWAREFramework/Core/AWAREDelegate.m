@@ -17,6 +17,7 @@
 #import "PushNotification.h"
 #import "BalacnedCampusESMScheduler.h"
 #import "ESM.h"
+#import "WebESM.h"
 #import "Labels.h"
 #import "GoogleCalPush.h"
 #import "GoogleLogin.h"
@@ -47,6 +48,8 @@
     if ([AWAREUtils getCurrentOSVersionAsFloat] >= 8.0) {
         // Set remote notifications
         [application registerForRemoteNotifications];
+        // [application registerForRemoteNotificationTypes:(UIRemoteNotificationTypeNewsstandContentAvailability | UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound)];
+        
         // Set background fetch
         [application setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
         
@@ -60,6 +63,7 @@
             UIUserNotificationTypeAlert;
             UIUserNotificationSettings *mySettings = [UIUserNotificationSettings settingsForTypes:types categories:categories];
             [application registerUserNotificationSettings:mySettings];
+            
         }else{
             UIUserNotificationType types = UIUserNotificationTypeBadge|
             UIUserNotificationTypeSound|
@@ -69,6 +73,8 @@
             [application registerUserNotificationSettings:mySettings];
         }
     }
+    
+    
     
     [[UIApplication sharedApplication] cancelAllLocalNotifications];
     
@@ -247,12 +253,6 @@ performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem
 }
 
 
-// This method is called then iOS receieved data by BackgroundFetch
-- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
-    NSLog(@"pushInfo in Background: %@", [userInfo description]);
-    
-    completionHandler(UIBackgroundFetchResultNoData);
-}
 
 
 - (void)application:(UIApplication *)application
@@ -284,6 +284,7 @@ handleEventsForBackgroundURLSession:(NSString *)identifier
     PushNotification * pushNotification = [[PushNotification alloc] initWithAwareStudy:_sharedAWARECore.sharedAwareStudy dbType:AwareDBTypeCoreData];
     [pushNotification savePushNotificationDeviceToken:token];
     // [pushNotification syncAwareDBInForeground];
+    [pushNotification performSelector:@selector(syncAwareDBInForeground) withObject:nil afterDelay:5];
     
     NSLog(@"deviceToken: %@", token);
 }
@@ -291,6 +292,7 @@ handleEventsForBackgroundURLSession:(NSString *)identifier
 // Faile to get a DeviceToken
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
     NSLog(@"deviceToken error: %@", [error description]);
+    
 }
 
 
@@ -406,7 +408,50 @@ forLocalNotification:(UILocalNotification *)notification
 }
 
 
-- (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forRemoteNotification:(NSDictionary *)userInfo completionHandler:(void (^)())completionHandler {
+/////////////////////////////////////////////////////////////////////////////
+///// remote push notification
+
+// This method is called then iOS receieved data by BackgroundFetch
+- (void)application:(UIApplication *)application
+didReceiveRemoteNotification:(NSDictionary *)userInfo
+fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
+    NSLog(@"pushInfo in Background: %@", [userInfo description]);
+    
+    NSString *awareCategory = [userInfo objectForKey:@"category"];
+    if([awareCategory isEqualToString:@"refresh"]){
+        [_sharedAWARECore.sharedAwareStudy refreshStudy];
+    }else if([awareCategory isEqualToString:@"upload"]){
+        [_sharedAWARECore.sharedSensorManager syncAllSensorsWithDBInForeground];
+    }else if ([awareCategory isEqualToString:@"web_esm"]){
+        NSString * trigger = [userInfo objectForKey:@"trigger"];
+        NSString * title = [userInfo objectForKey:@"title"];
+        NSNumber * firedTimestamp = [AWAREUtils getUnixTimestamp:[NSDate new]];
+        NSNumber * scheduledTimestamp = [userInfo objectForKey:@"schedule"];
+        if(firedTimestamp == nil) firedTimestamp = @0;
+        WebESM * webESM = [[WebESM alloc] initWithAwareStudy:_sharedAWARECore.sharedAwareStudy dbType:AwareDBTypeCoreData];
+        [webESM saveESMAnswerWithTimestamp:scheduledTimestamp
+                                  deviceId:[_sharedAWARECore.sharedAwareStudy getDeviceId]
+                                   esmJson:[webESM convertNSArraytoJsonStr:@[userInfo]]
+                                esmTrigger:trigger
+                    esmExpirationThreshold:@0
+                    esmUserAnswerTimestamp:firedTimestamp
+                             esmUserAnswer:title
+                                 esmStatus:@0];
+    }
+    completionHandler(UIBackgroundFetchResultNoData);
+}
+
+
+/**
+ * Notification handler for remote push notification
+ */
+- (void)application:(UIApplication *)application
+handleActionWithIdentifier:(NSString *)identifier
+forRemoteNotification:(NSDictionary *)userInfo
+  completionHandler:(void (^)())completionHandler {
+    
+    // Get notification information from a userInfo variable
+    
     if ([identifier isEqualToString:NotificationActionOneIdent]) {
         //        NSLog(@"You chose action 1.");
     }
@@ -525,8 +570,9 @@ void exceptionHandler(NSException *exception) {
     //    NSLog(@"%@", exception.callStackSymbols);
     //    NSString * error = [NSString stringWithFormat:@"[%@] %@ , %@" , exception.name, exception.reason, exception.callStackSymbols];
     
-    Debug * debugSensor = [[Debug alloc] initWithAwareStudy:[[AWAREStudy alloc] initWithReachability:NO] dbType:AwareDBTypeTextFile];
+    Debug * debugSensor = [[Debug alloc] initWithAwareStudy:[[AWAREStudy alloc] initWithReachability:YES] dbType:AwareDBTypeTextFile];
     [debugSensor saveDebugEventWithText:exception.debugDescription type:DebugTypeCrash label:exception.name];
+    [debugSensor syncAwareDB];
 }
 
 
@@ -540,9 +586,15 @@ void exceptionHandler(NSException *exception) {
         [debugSensor saveDebugEventWithText:@"[Low Power Mode] On" type:DebugTypeWarn label:@""];
         [AWAREUtils sendLocalNotificationForMessage:@"Please don't use **Low Power Mode** during a study!" soundFlag:YES];
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"prefs:root=BATTERY_USAGE"]];
+        [debugSensor allowsCellularAccess];
+        [debugSensor allowsDateUploadWithoutBatteryCharging];
+        [debugSensor syncAwareDB];
     } else {
         // Low Power Mode is not enabled.
         [debugSensor saveDebugEventWithText:@"[Low Power Mode] Off" type:DebugTypeWarn label:@""];
+        [debugSensor allowsCellularAccess];
+        [debugSensor allowsDateUploadWithoutBatteryCharging];
+        [debugSensor syncAwareDB];
     };
 }
 
