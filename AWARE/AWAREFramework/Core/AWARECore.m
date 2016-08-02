@@ -107,26 +107,40 @@
  * And also, this sensing interval is the most low level.
  */
 - (void) initLocationSensor {
-    NSLog(@"start location sensing!");
-    if ( _sharedLocationManager == nil ) {
-        _sharedLocationManager  = [[CLLocationManager alloc] init];
-        _sharedLocationManager.delegate = self;
-        _sharedLocationManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers;
-        _sharedLocationManager.pausesLocationUpdatesAutomatically = NO;
-        _sharedLocationManager.activityType = CLActivityTypeOther;
+    // NSLog(@"start location sensing!");
+    // CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
+    // if ( _sharedLocationManager == nil) {
+    if ( _sharedLocationManager != nil) {
+        [_sharedLocationManager stopUpdatingHeading];
+        [_sharedLocationManager stopMonitoringVisits];
+        [_sharedLocationManager stopUpdatingLocation];
+        [_sharedLocationManager stopMonitoringSignificantLocationChanges];
+        // _sharedLocationManager = nil;
+    }
 
-        if ([AWAREUtils getCurrentOSVersionAsFloat] >= 9.0) {
-            /// After iOS 9.0, we have to set "YES" for background sensing.
-            _sharedLocationManager.allowsBackgroundLocationUpdates = YES;
-        }
-        if ([_sharedLocationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
-            [_sharedLocationManager requestAlwaysAuthorization];
-        }
+    _sharedLocationManager  = [[CLLocationManager alloc] init];
+    _sharedLocationManager.delegate = self;
+    _sharedLocationManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers;
+    _sharedLocationManager.pausesLocationUpdatesAutomatically = NO;
+    _sharedLocationManager.activityType = CLActivityTypeOther;
+
+    if ([AWAREUtils getCurrentOSVersionAsFloat] >= 9.0) {
+        /// After iOS 9.0, we have to set "YES" for background sensing.
+        _sharedLocationManager.allowsBackgroundLocationUpdates = YES;
+    }
+    
+    if ([_sharedLocationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
+        [_sharedLocationManager requestAlwaysAuthorization];
+    }
+     
+    CLAuthorizationStatus state = [CLLocationManager authorizationStatus];
+    if(state == kCLAuthorizationStatusAuthorizedAlways){
         // Set a movement threshold for new events.
         _sharedLocationManager.distanceFilter = 25; // meters
         [_sharedLocationManager startUpdatingLocation];
         [_sharedLocationManager startMonitoringSignificantLocationChanges];
     }
+    // }
 }
 
 /**
@@ -142,8 +156,8 @@
         [debugSensor saveDebugEventWithText:message type:DebugTypeInfo label:@""];
         [userDefaults setBool:NO forKey:KEY_APP_TERMINATED];
     }else{
-        // [self sendLocalNotificationForMessage:@"" soundFlag:YES];
-        // NSLog(@"Base Location Sensor.");
+        // [AWAREUtils sendLocalNotificationForMessage:@"" soundFlag:YES];
+        //NSLog(@"Base Location Sensor.");
 //        if ([userDefaults boolForKey: SETTING_DEBUG_STATE]) {
 //            for (CLLocation * location in locations) {
 //                NSLog(@"%@",location.description);
@@ -151,6 +165,36 @@
 //            }
 //        }
     }
+}
+
+
+- (void) checkLocationSensorWithViewController:(UIViewController *) viewController {
+    CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
+    if (status == kCLAuthorizationStatusAuthorizedWhenInUse || status == kCLAuthorizationStatusDenied || status == kCLAuthorizationStatusRestricted) {
+        NSString *title;
+        title = (status == kCLAuthorizationStatusDenied) ? @"Location services are off" : @"Background location is not enabled";
+        NSString *message = @"To track your daily activity, you have to turn on 'Always' in the Location Services Settings.";
+        // To track your daily activity, AWARE client iOS needs access to your location in the background.
+        // To use background location you must turn on 'Always' in the Location Services Settings
+        
+        UIAlertController* alert = [UIAlertController alertControllerWithTitle:title
+                                                                       message:message
+                                                                preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"Settings" style:UIAlertActionStyleDefault
+                                                              handler:^(UIAlertAction * action) {
+                                                                  // Send the user to the Settings for this app
+                                                                  NSURL *settingsURL = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
+                                                                  [[UIApplication sharedApplication] openURL:settingsURL];
+                                                              }];
+        [alert addAction:defaultAction];
+        [viewController presentViewController:alert animated:YES completion:nil];
+
+    }
+    // The user has not enabled any location services. Request background authorization.
+    else if (status == kCLAuthorizationStatusNotDetermined) {
+        [self initLocationSensor];
+    }
+    // status == kCLAuthorizationStatusAuthorizedAlways
 }
 
 @end

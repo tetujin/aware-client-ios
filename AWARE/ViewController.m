@@ -79,6 +79,8 @@
     EAIntroView *intro;
     
     WebESM *webESM;
+    
+    CLLocationManager * locationManager;
 }
 
 - (void)viewDidLoad {
@@ -117,6 +119,7 @@
     sensorManager =     core.sharedSensorManager;
     dailyUpdateTimer =  core.dailyUpdateTimer;
     awareStudy =        core.sharedAwareStudy;
+    locationManager =   core.sharedLocationManager;
     
     // A sensor list for table view
     _sensors = [[NSMutableArray alloc] init];
@@ -180,6 +183,10 @@
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"prefs:root=BATTERY_USAGE"]];
         }
     }
+    
+    AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+    AWARECore * core = delegate.sharedAWARECore;
+    [core checkLocationSensorWithViewController:self];
 }
 
 
