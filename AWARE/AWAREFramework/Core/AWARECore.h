@@ -25,8 +25,9 @@
 // Daily Update Timer
 @property (strong, nonatomic) NSTimer * dailyUpdateTimer;
 
-
 - (void) activate;
 - (void) deactivate;
+- (void) initLocationSensor;
+- (void) checkLocationSensorWithViewController:(UIViewController *) viewController;
 
 @end

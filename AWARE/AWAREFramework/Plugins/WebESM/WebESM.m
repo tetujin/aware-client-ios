@@ -157,7 +157,7 @@ didReceiveResponse:(NSURLResponse *)response
               task:(NSURLSessionTask *)task
     didCompleteWithError:(NSError *)error{
     
-    if(receiveData != nil){
+    if(receiveData.length != 0){
         NSError *e = nil;
         NSArray * webESMArray = [NSJSONSerialization JSONObjectWithData:receiveData
                                                                 options:NSJSONReadingAllowFragments
@@ -645,28 +645,52 @@ didReceiveResponse:(NSURLResponse *)response
 //////////////////////////////////////////////////////////////
 
 - (void) saveDummyData {
+    [self saveESMAnswerWithTimestamp:[AWAREUtils getUnixTimestamp:[NSDate new]]
+                            deviceId:[self getDeviceId]
+                             esmJson:@"[]"
+                          esmTrigger:@"dummy"
+              esmExpirationThreshold:@0
+              esmUserAnswerTimestamp:[AWAREUtils getUnixTimestamp:[NSDate new]]
+                       esmUserAnswer:@"dummy"
+                           esmStatus:@2];
+}
+
+
+- (void) saveESMAnswerWithTimestamp:(NSNumber * )timestamp
+                           deviceId:(NSString *) deviceId
+                            esmJson:(NSString *) esmJson
+                         esmTrigger:(NSString *) esmTrigger
+             esmExpirationThreshold:(NSNumber *) esmExpirationThreshold
+             esmUserAnswerTimestamp:(NSNumber *) esmUserAnswerTimestamp
+                      esmUserAnswer:(NSString *) esmUserAnswer
+                          esmStatus:(NSNumber *) esmStatus {
     
-    AppDelegate * delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    NSManagedObjectContext * context = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
-    context.persistentStoreCoordinator = delegate.persistentStoreCoordinator;
-    EntityESMAnswer * answer = (EntityESMAnswer *)
-    [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([EntityESMAnswer class])
-                                  inManagedObjectContext:context];
-    // add special data to dic from each uielements
-    answer.device_id = [self getDeviceId];
-    answer.timestamp = [AWAREUtils getUnixTimestamp:[NSDate new]];
-    answer.esm_json = @"[]";
-    answer.esm_trigger = @"dummy";
-    answer.esm_expiration_threshold = @0;
-    answer.double_esm_user_answer_timestamp = [AWAREUtils getUnixTimestamp:[NSDate new]];
-    answer.esm_user_answer = @"dummy";
-    answer.esm_status = @2;
-    
-    NSError * error = nil;
-    [context save:&error];
-    if(error != nil){
-        NSLog(@"%@", error.debugDescription);
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        AppDelegate * delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+        NSManagedObjectContext * context = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
+        context.persistentStoreCoordinator = delegate.persistentStoreCoordinator;
+        EntityESMAnswer * answer = (EntityESMAnswer *)
+        [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([EntityESMAnswer class])
+                                      inManagedObjectContext:context];
+        // add special data to dic from each uielements
+        answer.device_id = deviceId;
+        answer.timestamp = timestamp;
+        answer.esm_json = esmJson;
+        answer.esm_trigger = esmTrigger;
+        answer.esm_user_answer = esmUserAnswer;
+        answer.esm_expiration_threshold = esmExpirationThreshold;
+        answer.double_esm_user_answer_timestamp = esmUserAnswerTimestamp;
+        answer.esm_status = esmStatus;
+        
+        NSError * error = nil;
+        [context save:&error];
+        if(error != nil){
+            NSLog(@"%@", error.debugDescription);
+            if([self isDebug]){
+                [AWAREUtils sendLocalNotificationForMessage:[NSString stringWithFormat:@"ERROR: %@",  error.debugDescription] soundFlag:NO];
+            }
+        }
+    });
 }
 
 @end
