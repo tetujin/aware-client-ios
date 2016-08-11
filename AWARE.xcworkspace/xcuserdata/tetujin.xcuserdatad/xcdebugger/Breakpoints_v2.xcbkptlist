@@ -211,22 +211,6 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "AWARE/AWAREFramework/Core/AWAREDelegate.m"
-            timestampString = "491727256.101593"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "309"
-            endingLineNumber = "309"
-            landmarkName = "-application:didReceiveLocalNotification:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "AWARE/AWAREFramework/Plugins/BalacnedCampusScheduler/BalacnedCampusESMScheduler.m"
             timestampString = "491739332.774099"
             startingColumnNumber = "9223372036854775807"
@@ -276,27 +260,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AWARE/AWAREFramework/Plugins/WebESM/WebESM.m"
-            timestampString = "491739413.882259"
+            timestampString = "491825107.322804"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "280"
-            endingLineNumber = "280"
-            landmarkName = "-setWebESMsWithArray:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "AWARE/AWAREFramework/Plugins/WebESM/WebESM.m"
-            timestampString = "491740114.626019"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "688"
-            endingLineNumber = "688"
+            startingLineNumber = "690"
+            endingLineNumber = "690"
             landmarkName = "-saveESMAnswerWithTimestamp:deviceId:esmJson:esmTrigger:esmExpirationThreshold:esmUserAnswerTimestamp:esmUserAnswer:esmStatus:"
             landmarkType = "5">
          </BreakpointContent>

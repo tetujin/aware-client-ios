@@ -123,12 +123,12 @@
             
         }
         
-        AppDelegate * delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-        if(delegate.sharedAWARECore.sharedLocationManager != nil){
-            [delegate.sharedAWARECore.sharedLocationManager stopUpdatingLocation];
-            [delegate.sharedAWARECore.sharedLocationManager stopMonitoringSignificantLocationChanges];
-            delegate.sharedAWARECore.sharedLocationManager = locationManager;
-        }
+//        AppDelegate * delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+//        if(delegate.sharedAWARECore.sharedLocationManager != nil){
+//            [delegate.sharedAWARECore.sharedLocationManager stopUpdatingLocation];
+//            [delegate.sharedAWARECore.sharedLocationManager stopMonitoringSignificantLocationChanges];
+//            delegate.sharedAWARECore.sharedLocationManager = locationManager;
+//        }
 
     }
     

@@ -293,7 +293,7 @@
     if (dmLogger != nil) {
         [dmLogger saveDebugEventWithText:eventText type:type label:label];
     } else {
-        NSLog(@"AWAREDebugMessageLogger is nil");
+        // NSLog(@"AWAREDebugMessageLogger is nil");
         if([self trackDebugEvents]){
             [dmLogger saveDebugEventWithText:eventText type:type label:label];
         }else{

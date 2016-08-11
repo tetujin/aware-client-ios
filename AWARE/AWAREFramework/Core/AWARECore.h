@@ -25,9 +25,19 @@
 // Daily Update Timer
 @property (strong, nonatomic) NSTimer * dailyUpdateTimer;
 
+// Base compliance
+@property (strong, nonatomic) NSTimer * complianceTimer;
+
 - (void) activate;
 - (void) deactivate;
 - (void) initLocationSensor;
+
+- (void) checkCompliance;
+- (void) checkComplianceWithViewController:(UIViewController *)viewController;
+
 - (void) checkLocationSensorWithViewController:(UIViewController *) viewController;
+- (void) checkBackgroundAppRefreshWithViewController:(UIViewController *) viewController;
+- (void) checkStorageUsageWithViewController:(UIViewController *) viewController;
+- (void) checkWifiStateWithViewController:(UIViewController *) viewController;
 
 @end

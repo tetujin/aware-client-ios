@@ -72,11 +72,16 @@
     [defaults setBool:encryptionEmail   forKey:@"encryption_email_sha1"];
     [defaults setBool:encryptionUserId  forKey:@"encryption_user_id_sha1"];
     
-//    BOOL success = [self saveStoredGoogleAccount];
-//    if(!success){
-//        NSLog(@"[%@] Google account information is empty", [self getSensorName]);
-//    }
-    
+    BOOL success = [self saveStoredGoogleAccount];
+    if(!success){
+        NSLog(@"[%@] Google account information is empty", [self getSensorName]);
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Google account is required!"
+                                                        message:@"Please login to Google account from Google Login row."
+                                                       delegate:nil
+                                              cancelButtonTitle:nil
+                                              otherButtonTitles:@"OK", nil];
+        [alert show];
+    }
     return YES;
 }
 

@@ -113,11 +113,12 @@
 }
 
 - (BOOL) startAllSensors{
-    return [self startAllSensorsWithStudy:awareStudy dbType:AwareDBTypeCoreData];
+    return [self startAllSensorsWithStudy:awareStudy];
 }
 
 - (BOOL)startAllSensorsWithStudy:(AWAREStudy *) study{
-    return [self startAllSensorsWithStudy:study dbType:AwareDBTypeCoreData];
+    //return [self startAllSensorsWithStudy:study dbType:AwareDBTypeCoreData];
+    return [self startAllSensorsWithStudy:study dbType:AwareDBTypeTextFile];
 }
 
 - (BOOL)startAllSensorsWithStudy:(AWAREStudy *) study dbType:(AwareDBType)dbType{

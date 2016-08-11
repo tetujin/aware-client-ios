@@ -311,7 +311,7 @@
  * Set a next progress maker to local default storage
  */
 - (void) setNextMark {
-    NSLog(@"[%@] Line lenght is %llu", [self getSensorName], [self getFileSize]);
+    NSLog(@"[%@] Line length is %llu", [self getSensorName], [self getFileSize]);
     if(latestTextLength < [self getMaxDateLength]){
         [self setMarker:0];
         [self setLostedTextLength:0];

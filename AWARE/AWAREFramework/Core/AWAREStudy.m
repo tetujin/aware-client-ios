@@ -101,12 +101,17 @@
  * @return The result of download and set a study configuration
  */
 - (BOOL) setStudyInformationWithURL:(NSString*)url {
-    if (url != nil) {
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        [userDefaults setObject:url forKey:KEY_STUDY_QR_CODE];
+//    if (url != nil) {
+//        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+//        [userDefaults setObject:url forKey:KEY_STUDY_QR_CODE];
+//    }
+    if(url != nil){
+        [self setStudyURL:url];
+        NSString * deviceId = [AWAREUtils getSystemUUID];
+        return [self setStudyInformation:url withDeviceId:deviceId];
+    }else{
+        return NO;
     }
-    NSString * deviceId = [AWAREUtils getSystemUUID];
-    return [self setStudyInformation:url withDeviceId:deviceId];
 }
 
 /**
@@ -129,7 +134,11 @@
     NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
     NSString *postLength = [NSString stringWithFormat:@"%ld", [postData length]];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
-    [request setURL:[NSURL URLWithString:url]];
+    NSURL * urlObj = [NSURL URLWithString:url];
+    if(urlObj == nil){
+        return NO;
+    }
+    [request setURL:urlObj];
     [request setHTTPMethod:@"POST"];
     [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
     [request setHTTPBody:postData];
@@ -142,10 +151,13 @@
             [session invalidateAndCancel];
             // Success
             if (response && ! error) {
-                NSString *responseString = [[NSString alloc] initWithData: data  encoding: NSUTF8StringEncoding];
-                NSLog(@"Success: %@", responseString);
-                
-                [self setStudySettings:data];
+                if(data != nil){
+                    NSString *responseString = [[NSString alloc] initWithData: data  encoding: NSUTF8StringEncoding];
+                    NSLog(@"Success: %@", responseString);
+                    [self setStudySettings:data];
+                }else{
+                    NSLog(@"Error: Data is null");
+                }
                 
             // Error
             } else {
@@ -516,8 +528,9 @@ didCompleteWithError:(NSError *)error {
  * @return a refresh query is sent(YES) or not sent(NO) as a BOOL value
  */
 - (BOOL) refreshStudy {
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    NSString *url = [userDefaults objectForKey:KEY_STUDY_QR_CODE];
+//    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+//    NSString *url = [userDefaults objectForKey:KEY_STUDY_QR_CODE];
+    NSString * url = [self getStudyURL];
     if (url != nil) {
         [self setStudyInformationWithURL:url];
         return YES;
@@ -545,6 +558,14 @@ didCompleteWithError:(NSError *)error {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults setObject:deviceName forKey:KEY_AWARE_DEVICE_NAME];
     [userDefaults synchronize];
+}
+
+- (void) setStudyURL:(NSString *) studyURL {
+    if( studyURL != nil ){
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        [userDefaults setObject:studyURL forKey:KEY_STUDY_QR_CODE];
+        [userDefaults synchronize];
+    }
 }
 
 - (NSString *) getDeviceName {
@@ -628,6 +649,16 @@ didCompleteWithError:(NSError *)error {
 - (NSString* ) getWebserviceServer{ return webserviceServer; }
 
 
+- (NSString *)getStudyURL{
+    //objectForKey:KEY_STUDY_QR_CODE
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString * studyURL = [userDefaults objectForKey:KEY_STUDY_QR_CODE];
+    if(studyURL != nil){
+        return studyURL;
+    }else{
+        return @"";
+    }
+}
 
 /**
  * Get sensor settings from a local storage as a NSArray object

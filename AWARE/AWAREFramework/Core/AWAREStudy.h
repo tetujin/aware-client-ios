@@ -43,6 +43,7 @@ typedef enum: NSInteger {
 - (NSNumber* ) getMqttQos;
 - (NSString* ) getStudyId;
 - (NSString* ) getWebserviceServer;
+- (NSString* ) getStudyURL;
 
 - (void) setDeviceName:(NSString *) deviceName;
 - (NSString *) getDeviceName;
