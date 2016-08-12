@@ -838,7 +838,15 @@
     int spaceH = 10;
     [self addCommonContents:esm];
     // Add a value label
-    UILabel *valueLabel = [[UILabel alloc] initWithFrame:CGRectMake(mainContentRect.origin.x+60, totalHight, mainContentRect.size.width-120, valueLabelH)];
+    // UILabel *valueLabel = [[UILabel alloc] initWithFrame:CGRectMake(mainContentRect.origin.x+60, totalHight, mainContentRect.size.width-120, valueLabelH)];
+    UITextField *valueLabel = [[UITextField alloc] initWithFrame:CGRectMake(mainContentRect.origin.x+60,
+                                                                            totalHight,
+                                                                            mainContentRect.size.width-120,
+                                                                            valueLabelH)];
+    [valueLabel setKeyboardType:UIKeyboardTypeNumbersAndPunctuation];
+    [valueLabel addTarget:self action:@selector(changeTextFieldValue:) forControlEvents:UIControlEventEditingDidEndOnExit];
+    // valueLabel.tag = tag;
+    
     // Add  min/max/slider value
     UILabel *minLabel = [[UILabel alloc] initWithFrame:CGRectMake(mainContentRect.origin.x,
                                                                   totalHight+valueLabelH,
@@ -934,20 +942,37 @@
             double tempValue = value*10;
             int intValue = tempValue/10;
             [sender setValue:intValue];
-            UILabel * label = [_mainScrollView viewWithTag:sender.frame.origin.y-30];
-            [label setText:[NSString stringWithFormat:@"%0.1f", value]];
+            UITextField * textField = [_mainScrollView viewWithTag:sender.frame.origin.y-30];
+            [textField setText:[NSString stringWithFormat:@"%0.1f", value]];
         }else{
             [sender setValue:(int)value];
-            UILabel * label = [_mainScrollView viewWithTag:sender.frame.origin.y-30];
-            [label setText:[NSString stringWithFormat:@"%d", (int)value]];
+            UITextField * textField = [_mainScrollView viewWithTag:sender.frame.origin.y-30];
+            [textField setText:[NSString stringWithFormat:@"%d", (int)value]];
         }
-        
     }
-    
     // NSArray * contents = [[uiElements objectAtIndex:tag] objectForKey:KEY_ELEMENT];
     // NSArray * labels = [[uiElements objectAtIndex:tag] objectForKey:KEY_LABLES];
 }
 
+
+- (IBAction) changeTextFieldValue:(UITextField *) textField {
+//    // Get value from text field and convert the text format value to float format
+//    NSString * text = textField.text;
+//    float floatValue = text.floatValue;
+//    if( floatValue == 0 ||  ){
+//        textField.text = [NSString stringWithFormat:@"0"];
+//    }
+    
+//    if(uiElements.count >= tag ){
+//        EntityESM *esm = [[uiElements objectAtIndex:tag] objectForKey:KEY_OBJECT];
+//        NSNumber * step = esm.esm_scale_step;
+//        if([step isEqual:@0.1]){
+//            textField.text = [NSString stringWithFormat:@"%0.1f", floatValue];
+//        }else{
+//            textField.text = [NSString stringWithFormat:@"%d", (int)floatValue];
+//        }
+//    }
+}
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1613,7 +1638,8 @@
     context.mergePolicy = originalMergePolicy;
     
     if(!error){
-        currentESMNumber ++;
+        currentESMNumber--;
+        if(currentESMNumber < 0)currentESMNumber = 0;
         if ( currentESMNumber < esms.count ) {
             [self viewDidAppear:NO];
             return ;
