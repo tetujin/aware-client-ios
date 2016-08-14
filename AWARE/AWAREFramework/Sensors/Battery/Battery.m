@@ -302,10 +302,16 @@
         [userDefaults setObject:currentBatteryLevel forKey:KEY_LAST_BATTERY_LEVEL];
         [userDefaults setObject:currentTime forKey:KEY_LAST_BATTERY_EVENT_TIMESTAMP];
         
-        [batteryDischargeSensor saveBatteryDischargeEventWithStartTimestamp:lastBatteryEventTimestamp
-                                                               endTimestamp:currentTime
-                                                          startBatteryLevel:lastBatteryLevel
-                                                            endBatteryLevel:currentBatteryLevel];
+        @try {
+            [batteryDischargeSensor saveBatteryDischargeEventWithStartTimestamp:lastBatteryEventTimestamp
+                                                                   endTimestamp:currentTime
+                                                              startBatteryLevel:lastBatteryLevel
+                                                                endBatteryLevel:currentBatteryLevel];
+        } @catch (NSException *exception) {
+            [self saveDebugEventWithText:[exception debugDescription] type:DebugTypeCrash label:@"battery_discharge"];
+        } @finally {
+            
+        }
         
     // charge event
     }else if(lastBatteryEvent == UIDeviceBatteryStateCharging &&
@@ -315,13 +321,16 @@
         [userDefaults setObject:currentBatteryLevel forKey:KEY_LAST_BATTERY_LEVEL];
         [userDefaults setObject:currentTime forKey:KEY_LAST_BATTERY_EVENT_TIMESTAMP];
         
-        
-        [batteryChargeSensor saveBatteryChargeEventWithStartTimestamp:lastBatteryEventTimestamp
-                                                         endTimestamp:currentTime
-                                                    startBatteryLevel:lastBatteryLevel
-                                                      endBatteryLevel:currentBatteryLevel];
+        @try {
+            [batteryChargeSensor saveBatteryChargeEventWithStartTimestamp:lastBatteryEventTimestamp
+                                                             endTimestamp:currentTime
+                                                        startBatteryLevel:lastBatteryLevel
+                                                          endBatteryLevel:currentBatteryLevel];
+        } @catch (NSException *exception) {
+            [self saveDebugEventWithText:[exception debugDescription] type:DebugTypeCrash label:@"battery_charge"];
+        } @finally {
+        }
     }
-    
     switch (currentBatteryEvent) {
         case UIDeviceBatteryStateCharging:
 //            lastBatteryEvent = currentBatteryEvent;

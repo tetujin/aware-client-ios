@@ -169,7 +169,7 @@
 
 - (void) syncAwareDB {
     [visitLocationSensor syncAwareDB];
-    //[locationSensor syncAwareDB];
+    [locationSensor syncAwareDB];
     [super syncAwareDB];
 }
 
@@ -178,9 +178,9 @@
         return NO;
     }
     
-//    if(![locationSensor syncAwareDBInForeground]){
-//        return NO;
-//    }
+    if(![locationSensor syncAwareDBInForeground]){
+        return NO;
+    }
     
     if(![super syncAwareDBInForeground]){
         return NO;
@@ -266,7 +266,7 @@
 
 
 - (bool)isUploading:(CLAuthorizationStatus ) state{
-    if([self isUploading] || [visitLocationSensor isUploading]){
+    if([locationSensor isUploading] || [visitLocationSensor isUploading]){
         return YES;
     }else{
         return NO;

@@ -63,7 +63,6 @@
 		165A8B711C03B90500898C6C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 165A8B6E1C03B90500898C6C /* GoogleService-Info.plist */; };
 		165DECF61C83AD7D002C88CA /* ExternalAccessory.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 165DECF51C83AD7D002C88CA /* ExternalAccessory.framework */; };
 		16654EA21D027DC600280051 /* AWAREUploader.m in Sources */ = {isa = PBXBuildFile; fileRef = 16654EA11D027DC600280051 /* AWAREUploader.m */; };
-		167B37C61D4370FA00A99C64 /* AWARECoreDataMigrationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 167B37C51D4370FA00A99C64 /* AWARECoreDataMigrationManager.m */; };
 		1683ABCE1D347A5F001543D9 /* AWAREDebugMessageLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 1683ABCD1D347A5F001543D9 /* AWAREDebugMessageLogger.m */; };
 		168683031C07C43600CB4266 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 168683021C07C43600CB4266 /* AudioToolbox.framework */; };
 		168AEA921D3EE84100D02EA4 /* EntityGyroscope+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 168AEA8F1D3EE84100D02EA4 /* EntityGyroscope+CoreDataProperties.m */; };
