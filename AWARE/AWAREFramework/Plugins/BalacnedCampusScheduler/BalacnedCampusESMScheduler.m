@@ -44,6 +44,10 @@
 
 // Initializer
 - (instancetype)initWithAwareStudy:(AWAREStudy *)study{
+    return [self initWithAwareStudy:study dbType:AwareDBTypeTextFile];
+}
+
+- (instancetype) initWithAwareStudy:(AWAREStudy *)study dbType:(AwareDBType)dbType{
     self = [super initWithAwareStudy:study
                           sensorName:SENSOR_PLUGIN_CAMPUS
                         dbEntityName:nil
