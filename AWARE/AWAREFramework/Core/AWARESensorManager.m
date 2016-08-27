@@ -208,7 +208,7 @@
             
             awareSensor = nil;
             NSString *pluginName = [pluginSetting objectForKey:@"setting"];
-            
+            NSLog(@"%@", pluginName);
             if ([pluginName isEqualToString:[NSString stringWithFormat:@"status_%@",SENSOR_PLUGIN_GOOGLE_ACTIVITY_RECOGNITION]]) {
                 awareSensor = [[ActivityRecognition alloc] initWithAwareStudy:awareStudy dbType:dbType];
             } else if([pluginName isEqualToString:[NSString stringWithFormat:@"status_%@",SENSOR_PLUGIN_OPEN_WEATHER]]){
@@ -947,6 +947,43 @@
     NSFileManager *fileManager = [[NSFileManager alloc] init];
     return [fileManager removeItemAtPath:path error:NULL];
 }
+
+
+///////////////////////////////////////////////////////////////////
+-  (void)URLSession:(NSURLSession *)session
+didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
+  completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition,
+                              NSURLCredential * _Nullable credential)) completionHandler{
+    // http://stackoverflow.com/questions/19507207/how-do-i-accept-a-self-signed-ssl-certificate-using-ios-7s-nsurlsession-and-its
+    
+    if([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust]){
+        
+        NSURLProtectionSpace *protectionSpace = [challenge protectionSpace];
+        SecTrustRef trust = [protectionSpace serverTrust];
+        NSURLCredential *credential = [NSURLCredential credentialForTrust:trust];
+        
+        // NSArray *certs = [[NSArray alloc] initWithObjects:(id)[[self class] sslCertificate], nil];
+        // int err = SecTrustSetAnchorCertificates(trust, (CFArrayRef)certs);
+        // SecTrustResultType trustResult = 0;
+        // if (err == noErr) {
+        //    err = SecTrustEvaluate(trust, &trustResult);
+        // }
+        
+        // if ([challenge.protectionSpace.host isEqualToString:@"aware.ht.sfc.keio.ac.jp"]) {
+        //credential = [NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust];
+        // } else if ([challenge.protectionSpace.host isEqualToString:@"r2d2.hcii.cs.cmu.edu"]) {
+        //credential = [NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust];
+        // } else if ([challenge.protectionSpace.host isEqualToString:@"api.awareframework.com"]) {
+        //credential = [NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust];
+        // } else {
+        //credential = [NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust];
+        // }
+        
+        completionHandler(NSURLSessionAuthChallengeUseCredential,credential);
+    }
+}
+
+
 
 
 @end

@@ -198,6 +198,7 @@
     [self checkStorageUsageWithViewController:viewController];
     [self checkWifiStateWithViewController:viewController];
     [self checkLowPowerModeWithViewController:viewController];
+    // [self checkNotificationSettingWithViewController:viewController];
 }
 
 //////////////////////////////////////////////////////////////////
@@ -220,8 +221,10 @@
             UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"Settings" style:UIAlertActionStyleDefault
                                                                   handler:^(UIAlertAction * action) {
                                                                       // Send the user to the Settings for this app
-                                                                      //NSURL *settingsURL = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
-                                                                      NSURL *settingsURL = [NSURL URLWithString:@"prefs:root=LOCATION_SERVICES"];
+                                                                      NSURL *settingsURL = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
+                                                                      if([AWAREUtils getCurrentOSVersionAsFloat] < 10.0f ){
+                                                                          settingsURL = [NSURL URLWithString:@"prefs:root=LOCATION_SERVICES"];
+                                                                      }
                                                                       [[UIApplication sharedApplication] openURL:settingsURL];
                                                                   }];
             [alert addAction:defaultAction];
@@ -267,8 +270,10 @@
             UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"Settings" style:UIAlertActionStyleDefault
                                                                   handler:^(UIAlertAction * action) {
                                                                       // Send the user to the Settings for this app
-                                                                      // NSURL *settingsURL = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
-                                                                      NSURL *settingsURL = [NSURL URLWithString:@"prefs:root=General&path=AUTO_CONTENT_DOWNLOAD"];
+                                                                      NSURL *settingsURL = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
+                                                                      if([AWAREUtils getCurrentOSVersionAsFloat] < 10.0f ){
+                                                                          settingsURL = [NSURL URLWithString:@"prefs:root=General&path=AUTO_CONTENT_DOWNLOAD"];
+                                                                      }
                                                                       [[UIApplication sharedApplication] openURL:settingsURL];
                                                                   }];
             [alert addAction:defaultAction];
@@ -284,6 +289,46 @@
         [debugSensor syncAwareDBInBackground];
     } else if(backgroundRefreshStatus == UIBackgroundRefreshStatusAvailable){
         
+    }
+}
+
+- (void) checkNotificationSettingWithViewController:(UIViewController *) viewController {
+    if ([AWAREUtils getCurrentOSVersionAsFloat] >= 8) {
+        UIUserNotificationSettings *currentSettings = [[UIApplication sharedApplication] currentUserNotificationSettings];
+        if((currentSettings.types==0) || (currentSettings.types==4) || (currentSettings.types==5)) {
+            //[self showAlertview:@"通知設定が未許可です。\n設定 > 通知 > で通知を許可してください。"];
+            // currentSettings.types=0 >>> 通知off , sound - , aicon -
+            // currentSettings.types=4 >>> 通知on , soundOff , aiconOff
+            // currentSettings.types=5 >>> 通知on , soundOff , aiconOn
+            // currentSettings.types=6 >>> 通知on , soundOn , aiconOff
+            // currentSettings.types=7 >>> 通知on , soundOn , aiconOn
+            NSString *title = @"Notification service is not permitted.";
+            NSString *message = @"To send important notifications, please allow the 'Notification' service in the General Settings.";
+            if([AWAREUtils isForeground]  && viewController!=nil ){
+                UIAlertController* alert = [UIAlertController alertControllerWithTitle:title
+                                                                               message:message
+                                                                        preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"Settings" style:UIAlertActionStyleDefault
+                                                                      handler:^(UIAlertAction * action) {
+                                                                          // Send the user to the Settings for this app
+                                                                          NSURL *settingsURL = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
+                                                                          if([AWAREUtils getCurrentOSVersionAsFloat] < 10.0f ){
+                                                                              settingsURL = [NSURL URLWithString:@"prefs:root=Notifications"];
+                                                                          }
+                                                                          [[UIApplication sharedApplication] openURL:settingsURL];
+                                                                      }];
+                [alert addAction:defaultAction];
+                [viewController presentViewController:alert animated:YES completion:nil];
+            }else{
+                [AWAREUtils sendLocalNotificationForMessage:@"Please allow the 'Notification' service in the Settings.app->Notification->Allow Notifications." soundFlag:NO];
+            }
+            
+            Debug * debugSensor = [[Debug alloc] initWithAwareStudy:_sharedAwareStudy dbType:AwareDBTypeTextFile];
+            [debugSensor saveDebugEventWithText:title type:DebugTypeWarn label:message];
+            [debugSensor allowsDateUploadWithoutBatteryCharging];
+            [debugSensor allowsCellularAccess];
+            [debugSensor syncAwareDBInBackground];
+        }
     }
 }
 
@@ -334,12 +379,15 @@
                                                                         preferredStyle:UIAlertControllerStyleAlert];
                 UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"Settings" style:UIAlertActionStyleDefault
                                                                       handler:^(UIAlertAction * action) {
-                                                                          //                                                                       Send the user to the Settings for this app
-                                                                          //NSURL *settingsURL = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
-                                                                          // NSURL *settingsURL = [NSURL URLWithString:@"prefs:root=WIFI"];
-                                                                          // [[UIApplication sharedApplication] openURL:settingsURL];
-                                                                          [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"prefs:root=BATTERY_USAGE"]];
-                                                                          //[[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"prefs:root=BATTERY_USAGE"]];
+                                                                          NSURL * settingsURL = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
+                                                                          NSLog(@"%@", UIApplicationOpenSettingsURLString);
+                                                                          // settingsURL = [NSURL URLWithString:@"prefs:"];
+                                                                          
+                                                                          if([AWAREUtils getCurrentOSVersionAsFloat] < 10.0f ){
+                                                                              settingsURL = [NSURL URLWithString:@"prefs:root=BATTERY_USAGE"];
+                                                                          }
+                                                                          [[UIApplication sharedApplication] openURL:settingsURL];
+                                                                          
                                                                       }];
                 [alert addAction:defaultAction];
                 [viewController presentViewController:alert animated:YES completion:nil];
@@ -374,10 +422,12 @@
             UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"Settings" style:UIAlertActionStyleDefault
                                                                   handler:^(UIAlertAction * action) {
 //                                                                       Send the user to the Settings for this app
-                                                                      //NSURL *settingsURL = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
-                                                                      NSURL *settingsURL = [NSURL URLWithString:@"prefs:root=WIFI"];
+                                                                      NSURL *settingsURL = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
+                                                                      if([AWAREUtils getCurrentOSVersionAsFloat] < 10.0f ){
+                                                                          settingsURL = [NSURL URLWithString:@"prefs:root=WIFI"];
+                                                                      }
                                                                       [[UIApplication sharedApplication] openURL:settingsURL];
-                                                                      //[[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"prefs:root=BATTERY_USAGE"]];
+                                                                      
                                                                   }];
             [alert addAction:defaultAction];
             [viewController presentViewController:alert animated:YES completion:nil];

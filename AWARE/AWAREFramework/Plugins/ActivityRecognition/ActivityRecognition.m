@@ -156,11 +156,13 @@
                         [self setBufferSize:0];
                     }
                     
-                    for (CMMotionActivity * activity in activities) {
-                        [self addMotionActivity:activity];
-                    }
-                    [self setLastUpdateWithDate:toDate];
-                    [self setBufferSize:0];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        for (CMMotionActivity * activity in activities) {
+                            [self addMotionActivity:activity];
+                        }
+                        [self setLastUpdateWithDate:toDate];
+                        [self setBufferSize:0];
+                    });
                 }];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     if ([self isDebug]) {

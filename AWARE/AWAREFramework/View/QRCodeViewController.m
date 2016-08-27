@@ -196,31 +196,59 @@
 
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
-    if(alertView.tag == 1){
-        if( buttonIndex == 1){
-            [self joinStudy];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if(alertView.tag == 1){
+            if( buttonIndex == 1){
+                [self joinStudy];
+            }
+        }else if (alertView.tag == 2){
+            if( buttonIndex == 1){
+                SSLManager * sslManager = [[SSLManager alloc] init];
+                [sslManager installCRTWithTextOfQRCode:qrcodeStr];
+            }
         }
-    }else if (alertView.tag == 2){
-        if( buttonIndex == 1){
-            SSLManager * sslManager = [[SSLManager alloc] init];
-            [sslManager installCRTWithTextOfQRCode:qrcodeStr];
-        }
-    }
+    });
 }
 
 - (void) joinStudy {
-    
+    /*
+    dispatch_async(dispatch_get_main_queue(),^{
+        //                AWAREStudy *study = [[AWAREStudy alloc] initWithReachability:YES];
+        AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+        AWAREStudy * study = delegate.sharedAWARECore.sharedAwareStudy;
+        [study setStudyInformationWithURL:qrcodeStr];
+        //[study refreshStudy];
+        [self moveToTopPage];
+        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Thank you for joining our study!"
+                                                         message:nil
+                                                        delegate:self
+                                               cancelButtonTitle:@"Close"
+                                               otherButtonTitles:nil];
+        [alert show];
+    });
+     */
     // Check a SSL certification file
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
     [request setURL:[NSURL URLWithString:qrcodeStr]];
-    [request setHTTPMethod:@"GET"];
-    __weak NSURLSession *session = [NSURLSession sharedSession];
-    [[session dataTaskWithRequest: request  completionHandler: ^(NSData *data, NSURLResponse *response, NSError *error) {
-        [session finishTasksAndInvalidate];
-        [session invalidateAndCancel];
+    [request setHTTPMethod:@"POST"];
+    NSString *post = [NSString stringWithFormat:@"device_id"];
+    NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
+    NSString *postLength = [NSString stringWithFormat:@"%ld", [postData length]];
+    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+    [request setHTTPBody:postData];
+    
+    // __weak NSURLSession *session = [NSURLSession sharedSession];
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSession sharedSession].configuration
+                                                                 delegate:self
+                                                                delegateQueue:nil];
+    //[[session dataTaskWithRequest:request] resume];
+    
+    [[session dataTaskWithRequest:request completionHandler:^(NSData * data,
+                                                              NSURLResponse *  response,
+                                                              NSError * error) {
         // Success
         if (response && ! error) {
-            NSString *responseString = [[NSString alloc] initWithData: data  encoding: NSUTF8StringEncoding];
+            NSString *responseString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
             NSLog(@"Success: %@", responseString);
             // Join a study
             dispatch_async(dispatch_get_main_queue(),^{
@@ -246,7 +274,10 @@
                 });
             }
         }
+        [session finishTasksAndInvalidate];
+        [session invalidateAndCancel];
     }] resume];
+     
 }
 
 
@@ -262,6 +293,99 @@
     
     [alert show];
 }
+
+
+//////////////////////////////////////////////////////
+-  (void)URLSession:(NSURLSession *)session
+didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
+  completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition,
+                              NSURLCredential * _Nullable credential)) completionHandler{
+    // http://stackoverflow.com/questions/19507207/how-do-i-accept-a-self-signed-ssl-certificate-using-ios-7s-nsurlsession-and-its
+    
+    if([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust]){
+        
+        NSURLProtectionSpace *protectionSpace = [challenge protectionSpace];
+        SecTrustRef trust = [protectionSpace serverTrust];
+        NSURLCredential *credential = [NSURLCredential credentialForTrust:trust];
+        
+        // NSArray *certs = [[NSArray alloc] initWithObjects:(id)[[self class] sslCertificate], nil];
+        // int err = SecTrustSetAnchorCertificates(trust, (CFArrayRef)certs);
+        // SecTrustResultType trustResult = 0;
+        // if (err == noErr) {
+        //    err = SecTrustEvaluate(trust, &trustResult);
+        // }
+        
+        // if ([challenge.protectionSpace.host isEqualToString:@"aware.ht.sfc.keio.ac.jp"]) {
+        //credential = [NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust];
+        // } else if ([challenge.protectionSpace.host isEqualToString:@"r2d2.hcii.cs.cmu.edu"]) {
+        //credential = [NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust];
+        // } else if ([challenge.protectionSpace.host isEqualToString:@"api.awareframework.com"]) {
+        //credential = [NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust];
+        // } else {
+        //credential = [NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust];
+        // }
+        
+        completionHandler(NSURLSessionAuthChallengeUseCredential,credential);
+    }
+}
+
+
+/* The task has received a response and no further messages will be
+ * received until the completion block is called. The disposition
+ * allows you to cancel a request or to turn a data task into a
+ * download task. This delegate message is optional - if you do not
+ * implement it, you can get the response as a property of the task.
+ *
+ * This method will not be called for background upload tasks (which cannot be converted to download tasks).
+ */
+- (void)URLSession:(NSURLSession *)session
+          dataTask:(NSURLSessionDataTask *)dataTask
+didReceiveResponse:(NSURLResponse *)response
+ completionHandler:(void (^)(NSURLSessionResponseDisposition disposition))completionHandler {
+    NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
+    int responseCode = (int)[httpResponse statusCode];
+    NSLog(@"%d",responseCode);
+    [session finishTasksAndInvalidate];
+    [session invalidateAndCancel];
+    completionHandler(NSURLSessionResponseAllow);
+}
+
+
+/* Sent when data is available for the delegate to consume.  It is
+ * assumed that the delegate will retain and not copy the data.  As
+ * the data may be discontiguous, you should use
+ * [NSData enumerateByteRangesUsingBlock:] to access it.
+ */
+-(void)URLSession:(NSURLSession *)session
+         dataTask:(NSURLSessionDataTask *)dataTask
+   didReceiveData:(NSData *)data {
+    
+    [session finishTasksAndInvalidate];
+    [session invalidateAndCancel];
+}
+
+
+/* Sent as the last message related to a specific task.  Error may be
+ * nil, which implies that no error occurred and this task is complete.
+ */
+- (void)URLSession:(NSURLSession *)session
+              task:(NSURLSessionTask *)task
+didCompleteWithError:(NSError *)error {
+    /*
+    if (error != nil) {
+        NSLog(@"ERROR: %@ %ld", error.debugDescription , error.code);
+        if (error.code == -1202) {
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+            NSString* url = [userDefaults objectForKey:KEY_STUDY_QR_CODE];
+            SSLManager *sslManager = [[SSLManager alloc] init];
+            [sslManager installCRTWithTextOfQRCode:url];
+        }
+    }
+     */
+    [session finishTasksAndInvalidate];
+    [session invalidateAndCancel];
+}
+
 
 
 @end

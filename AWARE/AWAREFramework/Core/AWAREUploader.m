@@ -192,6 +192,8 @@
  * Get latest sensor data method
  */
 - (NSData *)getLatestSensorData:(NSString *)deviceId withUrl:(NSString *)url{
+    // https://forums.developer.apple.com/thread/11519
+    /*
     NSString *post = [NSString stringWithFormat:@"device_id=%@", deviceId];
     NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
     NSString *postLength = [NSString stringWithFormat:@"%ld", [postData length]];
@@ -206,13 +208,48 @@
                                             returningResponse:&response error:&error];
 
     return resData;
-//    NSString* newStr = [[NSString alloc] initWithData:resData encoding:NSUTF8StringEncoding];
-//    int responseCode = (int)[response statusCode];
-//    if(responseCode == 200){
-//        // NSLog(@"[%@] Recieved new data",sensorName);
-//        return newStr;
-//    }
-//    return @"";
+    */
+    NSString *post = [NSString stringWithFormat:@"device_id=%@", deviceId];
+    NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
+    NSString *postLength = [NSString stringWithFormat:@"%ld", [postData length]];
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+    [request setURL:[NSURL URLWithString:url]];
+    [request setHTTPMethod:@"POST"];
+    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+    [request setHTTPBody:postData];
+    
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSession sharedSession].configuration
+                                                          delegate:self
+                                                     delegateQueue:nil];
+    dispatch_semaphore_t    sem;
+    __block NSData *        result;
+    
+    result = nil;
+    
+    sem = dispatch_semaphore_create(0);
+    
+    [[session dataTaskWithRequest: request  completionHandler: ^(NSData *data, NSURLResponse *response, NSError *error) {
+        // Success
+        if (error != nil) {
+            NSLog(@"Error: %@", error.debugDescription);
+        }else{
+            NSLog(@"Success: %@", [[NSString alloc] initWithData: data  encoding: NSUTF8StringEncoding]);
+            result = data;
+        }
+        
+        [session finishTasksAndInvalidate];
+        [session invalidateAndCancel];
+        
+        dispatch_semaphore_signal(sem);
+        
+    }] resume];
+    
+    dispatch_semaphore_wait(sem, DISPATCH_TIME_FOREVER);  
+    
+    return result;
+    
+    
+    
 }
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -325,6 +362,44 @@
                                                       userInfo:userInfo];
     
 }
+
+
+///////////////////////////////////////////////////////////////////
+-  (void)URLSession:(NSURLSession *)session
+didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
+  completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition,
+                              NSURLCredential * _Nullable credential)) completionHandler{
+    // http://stackoverflow.com/questions/19507207/how-do-i-accept-a-self-signed-ssl-certificate-using-ios-7s-nsurlsession-and-its
+    
+    if([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust]){
+        
+        NSURLProtectionSpace *protectionSpace = [challenge protectionSpace];
+        SecTrustRef trust = [protectionSpace serverTrust];
+        NSURLCredential *credential = [NSURLCredential credentialForTrust:trust];
+        
+        // NSArray *certs = [[NSArray alloc] initWithObjects:(id)[[self class] sslCertificate], nil];
+        // int err = SecTrustSetAnchorCertificates(trust, (CFArrayRef)certs);
+        // SecTrustResultType trustResult = 0;
+        // if (err == noErr) {
+        //    err = SecTrustEvaluate(trust, &trustResult);
+        // }
+        
+        // if ([challenge.protectionSpace.host isEqualToString:@"aware.ht.sfc.keio.ac.jp"]) {
+        //credential = [NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust];
+        // } else if ([challenge.protectionSpace.host isEqualToString:@"r2d2.hcii.cs.cmu.edu"]) {
+        //credential = [NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust];
+        // } else if ([challenge.protectionSpace.host isEqualToString:@"api.awareframework.com"]) {
+        //credential = [NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust];
+        // } else {
+        //credential = [NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust];
+        // }
+        
+        completionHandler(NSURLSessionAuthChallengeUseCredential,credential);
+    }
+}
+
+
+
 
 
 @end

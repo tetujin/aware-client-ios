@@ -82,7 +82,7 @@
 
 @end
 
-@interface AWAREUploader : NSData <AWAREDataUploaderDelegate>
+@interface AWAREUploader : NSData <AWAREDataUploaderDelegate, NSURLSessionDataDelegate, NSURLSessionTaskDelegate>
 
 @property NSManagedObjectContext *mainQueueManagedObjectContext;
 @property NSManagedObjectContext *writeQueueManagedObjectContext;

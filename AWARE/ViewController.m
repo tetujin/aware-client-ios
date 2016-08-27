@@ -395,6 +395,8 @@
     [_sensors addObject:[self getCelContent:@"Balanced Campus Journal" desc:@"This plugin creates new events in the journal calendar and sends a reminder email to the user to update the journal." image:@"ic_action_google_cal_push" key:SENSOR_PLUGIN_GOOGLE_CAL_PUSH]];
     // Balanced Campus ESMs (ESM Scheduler)
     [_sensors addObject:[self getCelContent:@"Balanced Campus ESMs" desc:@"ESM Plugin" image:@"ic_action_campus" key:SENSOR_PLUGIN_CAMPUS]];
+    //
+    [_sensors addObject:[self getCelContent:@"Web ESMs" desc:@"Web ESM Plugin" image:@"ic_action_web_esm" key:SENSOR_PLUGIN_WEB_ESM]];
     // HealthKit
 //    [_sensors addObject:[self getCelContent:@"HealthKit" desc:@"This plugin collects stored data in HealthKit App on iOS" image:@"ic_action_health_kit" key:@"sensor_plugin_health_kit"]];
 
@@ -489,7 +491,23 @@
 
 - (IBAction)pushedEsmButtonOnNavigationBar:(id)sender {
 //    [self performSegueWithIdentifier:@"esmView" sender:self];
-    [self performSegueWithIdentifier:@"webEsmView" sender:self];
+//    [self performSegueWithIdentifier:@"webEsmView" sender:self];
+    
+    ESMStorageHelper * helper = [[ESMStorageHelper alloc] init];
+    NSArray * storedEsms = [helper getEsmTexts];
+    if(storedEsms != nil){
+        if (storedEsms.count > 0 ){
+            [ESM setAppearedState:YES];
+            [self performSegueWithIdentifier:@"esmView" sender:self];
+        }
+    }
+    
+    NSArray * esms = [webESM getValidESMsWithDatetime:[NSDate new]];
+    if(esms != nil && esms.count != 0 ){
+        [ESM setAppearedState:YES];
+        [self performSegueWithIdentifier:@"webEsmView" sender:self];
+    }
+    
 }
 
 /**

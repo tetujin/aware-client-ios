@@ -845,6 +845,7 @@
                                                                             valueLabelH)];
     [valueLabel setKeyboardType:UIKeyboardTypeNumbersAndPunctuation];
     [valueLabel addTarget:self action:@selector(changeTextFieldValue:) forControlEvents:UIControlEventEditingDidEndOnExit];
+    [valueLabel addTarget:self action:@selector(touchDownTextFiledValue:) forControlEvents:UIControlEventEditingDidBegin];
     // valueLabel.tag = tag;
     
     // Add  min/max/slider value
@@ -972,6 +973,16 @@
 //            textField.text = [NSString stringWithFormat:@"%d", (int)floatValue];
 //        }
 //    }
+}
+
+
+- (IBAction) touchDownTextFiledValue:(UITextField *) textField{
+    NSString * text = textField.text;
+    if([text isEqualToString:@"---"] ||
+       [text isEqualToString:@"--"] ||
+       [text isEqualToString:@"-"]){
+        textField.text = @"";
+    }
 }
 
 
@@ -1580,7 +1591,8 @@
             currentESMNumber = 0;
             // [esm performSelector:@selector(syncAwareDB) withObject:0 afterDelay:5];
             // [webESM syncAwareDB];
-            [webESM performSelector:@selector(syncAwareDB) withObject:nil afterDelay:3];
+            [webESM setUploadingState:NO];
+            [webESM performSelector:@selector(syncAwareDB) withObject:nil afterDelay:1];
             
             [webESM refreshNotifications];
         }

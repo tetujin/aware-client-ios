@@ -20,7 +20,7 @@ typedef enum: NSInteger {
     cleanOldDataTypeAlways = 4
 } cleanOldDataType;
 
-@interface AWAREStudy : NSObject <NSURLSessionDataDelegate, NSURLSessionTaskDelegate>
+@interface AWAREStudy : NSObject <NSURLSessionDataDelegate, NSURLSessionDelegate, NSURLSessionTaskDelegate, NSURLConnectionDelegate, NSURLConnectionDataDelegate, NSURLConnectionDownloadDelegate>
 
 @property (strong, nonatomic) NSString* getSettingIdentifier;
 @property (strong, nonatomic) NSString* makeDeviceTableIdentifier;
