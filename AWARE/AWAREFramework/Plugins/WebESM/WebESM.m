@@ -69,7 +69,7 @@
     
     NSArray *esms = [self getValidESMsWithDatetime:[NSDate new]];
     if(esms != nil){
-        [self setLatestValue:[NSString stringWithFormat:@"You have %ld scheduled notification(s)", esms.count]];
+        [self setLatestValue:[NSString stringWithFormat:@"You have %d esm(s)", (int)esms.count]];
     }
     
     return YES;

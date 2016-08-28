@@ -2035,6 +2035,7 @@
 					1623CE651BFD1B2C00EFAD72 = {
 						CreatedOnToolsVersion = 7.1;
 						DevelopmentTeam = FH352PYMNC;
+						ProvisioningStyle = Manual;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
 								enabled = 0;
@@ -2600,7 +2601,8 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = AWARE/AWARE.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				DEVELOPMENT_TEAM = FH352PYMNC;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2621,7 +2623,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = jp.ac.keio.sfc.ht.tetujin.AWARE;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "7f32aad0-6d34-4282-a14e-37ffd56b96f6";
+				PROVISIONING_PROFILE_SPECIFIER = "AWARE App Store";
 				SWIFT_OBJC_BRIDGING_HEADER = "AWARE/AWARE-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -2637,6 +2640,7 @@
 				CODE_SIGN_ENTITLEMENTS = AWARE/AWARE.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				DEVELOPMENT_TEAM = FH352PYMNC;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2657,7 +2661,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = jp.ac.keio.sfc.ht.tetujin.AWARE;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "7f32aad0-6d34-4282-a14e-37ffd56b96f6";
+				PROVISIONING_PROFILE_SPECIFIER = "AWARE App Store";
 				SWIFT_OBJC_BRIDGING_HEADER = "AWARE/AWARE-Bridging-Header.h";
 			};
 			name = Release;
