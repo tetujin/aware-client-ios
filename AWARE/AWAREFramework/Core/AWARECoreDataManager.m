@@ -778,7 +778,7 @@ didBecomeStreamTask:(NSURLSessionStreamTask *)streamTask{
                     NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:entityName];
                     NSNumber * timestamp = unixtimeOfUploadingData; // [self getTimeMark];
                     NSNumber * limitTimestamp = [AWAREUtils getUnixTimestamp:clearLimitDate];
-                    [request setPredicate:[NSPredicate predicateWithFormat:@"(timestamp < %@) AND (timestamp < %@)", timestamp, limitTimestamp]];
+                    [request setPredicate:[NSPredicate predicateWithFormat:@"(timestamp <= %@) AND (timestamp < %@)", timestamp, limitTimestamp]];
                     NSBatchDeleteRequest *delete = [[NSBatchDeleteRequest alloc] initWithFetchRequest:request];
                     NSError *deleteError = nil;
                     [private executeRequest:delete error:&deleteError];

@@ -38,6 +38,7 @@
         isLock = NO;
         [self allowsDateUploadWithoutBatteryCharging];
         [self allowsCellularAccess];
+        
     }
     
     return self;
@@ -66,6 +67,11 @@
     NSURL * url = [[NSURL alloc] initWithString:[NSString stringWithFormat:@"%@?device_id=%@",urlStr,[self getDeviceId]]];
     [self getESMConfigFileFromURL:url];
     
+    NSArray *esms = [self getValidESMsWithDatetime:[NSDate new]];
+    if(esms != nil){
+        [self setLatestValue:[NSString stringWithFormat:@"You have %d esm(s)", (int)esms.count]];
+    }
+    
     return YES;
 }
 
@@ -86,6 +92,7 @@
     
     // Make a HTTP session id
     currentHttpSessionId = [NSString stringWithFormat:@"%@_%f", baseHttpSessionId, [NSDate new].timeIntervalSince1970];
+    
     
     // Make a seesion config for HTTP/POST
     sessionConfig = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:currentHttpSessionId];
@@ -115,21 +122,20 @@
 didReceiveResponse:(NSURLResponse *)response
  completionHandler:(void (^)(NSURLSessionResponseDisposition disposition))completionHandler {
     
-
-    
-//    [session finishTasksAndInvalidate];
-//    [session invalidateAndCancel];
-//    completionHandler(NSURLSessionResponseAllow);
-    
-    NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
-    int responseCode = (int)[httpResponse statusCode];
-    if (responseCode == 200) {
-        if([self isDebug]){
-            NSLog(@"[%@] Got Web ESM configuration file from server", [self getSensorName]);
+    if([session.configuration.identifier isEqualToString:currentHttpSessionId]){
+        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
+        int responseCode = (int)[httpResponse statusCode];
+        if (responseCode == 200) {
+            if([self isDebug]){
+                NSLog(@"[%@] Got Web ESM configuration file from server", [self getSensorName]);
+            }
         }
+        [session finishTasksAndInvalidate];
+        [session invalidateAndCancel];
+        completionHandler(NSURLSessionResponseAllow);
+    }else{
+        [super URLSession:session dataTask:dataTask didReceiveResponse:response completionHandler:completionHandler];
     }
-    
-    [super URLSession:session dataTask:dataTask didReceiveResponse:response completionHandler:completionHandler];
 }
 
 
@@ -137,51 +143,58 @@ didReceiveResponse:(NSURLResponse *)response
          dataTask:(NSURLSessionDataTask *)dataTask
    didReceiveData:(NSData *)data {
     
-    if(data != nil){
-        NSLog(@"%@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
-    }
-    
-    if(data != nil){
+    if([session.configuration.identifier isEqualToString:currentHttpSessionId]){
+        if(data != nil){
+            NSLog(@"%@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+        }
         
-        [receiveData appendData:data];
-        
-        //[session finishTasksAndInvalidate];
-        // [session invalidateAndCancel];
-        return;
+        if(data != nil){
+            
+            [receiveData appendData:data];
+            
+            [session finishTasksAndInvalidate];
+            [session invalidateAndCancel];
+        }
+    }else{
+        [super URLSession:session dataTask:dataTask didReceiveData:data];
     }
-    
-    [super URLSession:session dataTask:dataTask didReceiveData:data];
 }
 
 - (void)URLSession:(NSURLSession *)session
               task:(NSURLSessionTask *)task
     didCompleteWithError:(NSError *)error{
     
-    if(receiveData.length != 0){
-        NSError *e = nil;
-        NSArray * webESMArray = [NSJSONSerialization JSONObjectWithData:receiveData
-                                                                options:NSJSONReadingAllowFragments
-                                                                  error:&e];
-        
-        if ( e != nil) {
-            NSLog(@"ERROR: %@", e.debugDescription);
+    if([session.configuration.identifier isEqualToString:currentHttpSessionId]){
+        if(receiveData.length != 0){
+            NSError *e = nil;
+            NSArray * webESMArray = [NSJSONSerialization JSONObjectWithData:receiveData
+                                                                    options:NSJSONReadingAllowFragments
+                                                                      error:&e];
+            if ( e != nil) {
+                NSLog(@"ERROR: %@", e.debugDescription);
+                [session finishTasksAndInvalidate];
+                [session invalidateAndCancel];
+                return;
+            }
+            
+            if(webESMArray == nil){
+                NSLog(@"ERROR: web esm array is null.");
+                [session finishTasksAndInvalidate];
+                [session invalidateAndCancel];
+                return;
+            }
+            NSString * jsonStr = [[NSString alloc] initWithData:receiveData encoding:NSUTF8StringEncoding];
+            NSLog(@"%@", jsonStr);
+            
+            [self setWebESMsWithArray:webESMArray];
+            receiveData = [[NSMutableData alloc] init];
             [session finishTasksAndInvalidate];
             [session invalidateAndCancel];
-            return;
-        };
-        
-        if(webESMArray == nil){
-            NSLog(@"ERROR: web esm array is null.");
-            [session finishTasksAndInvalidate];
-            [session invalidateAndCancel];
-            return;
         }
-        
-        [self setWebESMsWithArray:webESMArray];
-        receiveData = [[NSMutableData alloc] init];
+    }else{
+        [super URLSession:session task:task didCompleteWithError:error];
     }
-    [session finishTasksAndInvalidate];
-    [session invalidateAndCancel];
+
 }
 
 
@@ -692,5 +705,25 @@ didReceiveResponse:(NSURLResponse *)response
         }
     });
 }
+
+
+
+///////////////////////////////////////////////
+-  (void)URLSession:(NSURLSession *)session
+didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
+  completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition,
+                              NSURLCredential * _Nullable credential)) completionHandler{
+    // http://stackoverflow.com/questions/19507207/how-do-i-accept-a-self-signed-ssl-certificate-using-ios-7s-nsurlsession-and-its
+    
+    if([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust]){
+        
+        NSURLProtectionSpace *protectionSpace = [challenge protectionSpace];
+        SecTrustRef trust = [protectionSpace serverTrust];
+        NSURLCredential *credential = [NSURLCredential credentialForTrust:trust];
+    
+        completionHandler(NSURLSessionAuthChallengeUseCredential,credential);
+    }
+}
+
 
 @end

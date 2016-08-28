@@ -133,8 +133,8 @@
             [self.client.sensorManager requestHRUserConsentWithCompletion:^(BOOL userConsent, NSError *error) {
                 if (userConsent) {
                     dispatch_async(dispatch_get_main_queue(), ^{
-                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Alert"
-                                                                        message:@"Please push a refresh button on the navigation bar"
+                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"MicrosoftBand2"
+                                                                        message:@"Please push a refresh button on the navigation bar for initializing a sensor."
                                                                        delegate:self
                                                               cancelButtonTitle:nil
                                                               otherButtonTitles:@"OK", nil];

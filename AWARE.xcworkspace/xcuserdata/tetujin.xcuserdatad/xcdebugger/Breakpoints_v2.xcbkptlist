@@ -136,7 +136,7 @@
             startingLineNumber = "176"
             endingLineNumber = "176"
             landmarkName = "-createTable:withTableName:"
-            landmarkType = "5">
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -152,7 +152,7 @@
             startingLineNumber = "180"
             endingLineNumber = "180"
             landmarkName = "-clearTable"
-            landmarkType = "5">
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -161,14 +161,14 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "AWARE/AWAREFramework/Core/AWAREUploader.m"
-            timestampString = "490788401.2743"
+            filePath = "AWARE/AWAREFramework/Core/AWAREDelegate.m"
+            timestampString = "491727250.176383"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "131"
-            endingLineNumber = "131"
-            landmarkName = "-syncAwareDBInBackground"
-            landmarkType = "5">
+            startingLineNumber = "333"
+            endingLineNumber = "333"
+            landmarkName = "-application:handleActionWithIdentifier:forLocalNotification:withResponseInfo:completionHandler:"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -177,46 +177,14 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "AWARE/AWAREFramework/Core/AWAREUploader.m"
-            timestampString = "490788401.76043"
+            filePath = "AWARE/AWAREFramework/Plugins/BalacnedCampusScheduler/BalacnedCampusESMScheduler.m"
+            timestampString = "493175249.547328"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "135"
-            endingLineNumber = "135"
-            landmarkName = "-syncAwareDBInBackgroundWithSensorName:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "AWARE/AWAREFramework/Core/AWAREUploader.m"
-            timestampString = "490788402.795952"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "124"
-            endingLineNumber = "124"
-            landmarkName = "-saveDataToDB"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "AWARE/AWAREFramework/Core/AWAREDataUploader.m"
-            timestampString = "490788425.435258"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "468"
-            endingLineNumber = "468"
-            landmarkName = "-foregroundSyncRequestWithSensorName:"
-            landmarkType = "5">
+            startingLineNumber = "683"
+            endingLineNumber = "683"
+            landmarkName = "-setEsmApperedTimestamp:withTimestamp:"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy

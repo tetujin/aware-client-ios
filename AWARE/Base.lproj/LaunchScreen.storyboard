@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" initialViewController="j6U-JI-AT6">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11198.2" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="j6U-JI-AT6">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
@@ -14,39 +15,18 @@
                         <viewControllerLayoutGuide type="bottom" id="W5R-du-sH4"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Imr-IW-fxt">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" image="ic_launcher_aware-web" translatesAutoresizingMaskIntoConstraints="NO" id="cdZ-zr-gMM">
-                                <rect key="frame" x="200" y="83" width="200" height="200"/>
+                                <frame key="frameInset" minX="87" minY="136" width="200" height="200"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="200" id="PO3-07-kAp"/>
                                     <constraint firstAttribute="width" constant="200" id="mgb-DH-Ucf"/>
                                 </constraints>
-                                <variation key="heightClass=regular" fixedFrame="YES">
-                                    <rect key="frame" x="200" y="142" width="200" height="200"/>
-                                </variation>
-                                <variation key="widthClass=compact" fixedFrame="YES">
-                                    <rect key="frame" x="100" y="96" width="200" height="200"/>
-                                </variation>
-                                <variation key="widthClass=regular" fixedFrame="YES">
-                                    <rect key="frame" x="300" y="200" width="200" height="200"/>
-                                </variation>
-                                <variation key="heightClass=compact-widthClass=compact" fixedFrame="YES">
-                                    <rect key="frame" x="100" y="51" width="200" height="200"/>
-                                </variation>
-                                <variation key="heightClass=compact-widthClass=regular" fixedFrame="YES">
-                                    <rect key="frame" x="300" y="100" width="200" height="200"/>
-                                </variation>
-                                <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
-                                    <rect key="frame" x="100" y="300" width="200" height="200"/>
-                                </variation>
-                                <variation key="heightClass=regular-widthClass=regular" fixedFrame="YES">
-                                    <rect key="frame" x="300" y="300" width="200" height="200"/>
-                                </variation>
                             </imageView>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="cdZ-zr-gMM" firstAttribute="centerX" secondItem="Imr-IW-fxt" secondAttribute="centerX" id="FpA-mr-SwY"/>
                         </constraints>

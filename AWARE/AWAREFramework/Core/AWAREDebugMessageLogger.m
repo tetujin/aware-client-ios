@@ -24,7 +24,7 @@
     return [self initWithAwareStudy:[[AWAREStudy alloc] initWithReachability:YES]];
 }
 
-- (instancetype) initWithAwareStudy:(AWAREStudy *) study{
+- (instancetype) initWithAwareStudy:(AWAREStudy *) study {
     self = [super init];
     if(self != nil){
         localStorage = [[LocalFileStorageHelper alloc] initWithStorageName:@"aware_debug"];

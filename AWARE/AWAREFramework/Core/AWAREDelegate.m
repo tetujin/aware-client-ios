@@ -173,7 +173,7 @@
     UILocalNotification *notification = [[UILocalNotification alloc] init];
     if (notification){
         notification.repeatInterval = 0;
-        notification.alertBody = @"Application is stoped! Please reboot this app for logging your acitivties.";
+        notification.alertBody = @"Application is stopped! Please reboot this app for logging your acitivties.";
         notification.alertAction = @"Reboot";
         notification.soundName = UILocalNotificationDefaultSoundName;
         notification.applicationIconBadgeNumber = 1;

@@ -156,11 +156,13 @@
                         [self setBufferSize:0];
                     }
                     
-                    for (CMMotionActivity * activity in activities) {
-                        [self addMotionActivity:activity];
-                    }
-                    [self setLastUpdateWithDate:toDate];
-                    [self setBufferSize:0];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        for (CMMotionActivity * activity in activities) {
+                            [self addMotionActivity:activity];
+                        }
+                        [self setLastUpdateWithDate:toDate];
+                        [self setBufferSize:0];
+                    });
                 }];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     if ([self isDebug]) {
@@ -277,25 +279,25 @@
         NSLog(@"[%@] %@ %ld", motionActivity.startDate, motionName, motionActivity.confidence);
     }
     
-    dispatch_async(dispatch_get_main_queue(), ^{
-        NSNumber * unixtime = [AWAREUtils getUnixTimestamp:motionActivity.startDate];
+    // dispatch_async(dispatch_get_main_queue(), ^{
+    NSNumber * unixtime = [AWAREUtils getUnixTimestamp:motionActivity.startDate];
 
-        NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
-        [dict setObject:unixtime forKey:@"timestamp"];
-        [dict setObject:[self getDeviceId] forKey:@"device_id"];
-        [dict setObject:motionName forKey:@"activity_name"]; //varchar
-        [dict setObject:[motionType stringValue] forKey:@"activity_type"]; //text
-        [dict setObject:motionConfidence forKey:@"confidence"]; //int
-        [dict setObject:activitiesStr forKey:@"activities"]; //text
-        [self setLatestValue:[NSString stringWithFormat:@"%@, %@, %@", motionName, motionType, motionConfidence]];
-        [self saveData:dict];
-        
-        NSDictionary * userInfo = [NSDictionary dictionaryWithObject:dict
-                                                              forKey:EXTRA_DATA];
-        [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_GOOGLE_ACTIVITY_RECOGNITION
-                                                                object:nil
-                                                              userInfo:userInfo];
-    });
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    [dict setObject:unixtime forKey:@"timestamp"];
+    [dict setObject:[self getDeviceId] forKey:@"device_id"];
+    [dict setObject:motionName forKey:@"activity_name"]; //varchar
+    [dict setObject:[motionType stringValue] forKey:@"activity_type"]; //text
+    [dict setObject:motionConfidence forKey:@"confidence"]; //int
+    [dict setObject:activitiesStr forKey:@"activities"]; //text
+    [self setLatestValue:[NSString stringWithFormat:@"%@, %@, %@", motionName, motionType, motionConfidence]];
+    [self saveData:dict];
+    
+    NSDictionary * userInfo = [NSDictionary dictionaryWithObject:dict
+                                                          forKey:EXTRA_DATA];
+    [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_GOOGLE_ACTIVITY_RECOGNITION
+                                                            object:nil
+                                                          userInfo:userInfo];
+    // });
 }
 
 - (void)insertNewEntityWithData:(NSDictionary *)data

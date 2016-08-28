@@ -63,7 +63,6 @@
 		165A8B711C03B90500898C6C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 165A8B6E1C03B90500898C6C /* GoogleService-Info.plist */; };
 		165DECF61C83AD7D002C88CA /* ExternalAccessory.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 165DECF51C83AD7D002C88CA /* ExternalAccessory.framework */; };
 		16654EA21D027DC600280051 /* AWAREUploader.m in Sources */ = {isa = PBXBuildFile; fileRef = 16654EA11D027DC600280051 /* AWAREUploader.m */; };
-		167B37C61D4370FA00A99C64 /* AWARECoreDataMigrationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 167B37C51D4370FA00A99C64 /* AWARECoreDataMigrationManager.m */; };
 		1683ABCE1D347A5F001543D9 /* AWAREDebugMessageLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 1683ABCD1D347A5F001543D9 /* AWAREDebugMessageLogger.m */; };
 		168683031C07C43600CB4266 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 168683021C07C43600CB4266 /* AudioToolbox.framework */; };
 		168AEA921D3EE84100D02EA4 /* EntityGyroscope+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 168AEA8F1D3EE84100D02EA4 /* EntityGyroscope+CoreDataProperties.m */; };
@@ -75,7 +74,6 @@
 		169A7B321BFF282800A7C06D /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 169A7B311BFF282800A7C06D /* CoreLocation.framework */; };
 		169A7B3D1BFFC9F900A7C06D /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 169A7B3C1BFFC9F900A7C06D /* SystemConfiguration.framework */; };
 		169C85731D007EDC00825761 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 169C85721D007EDC00825761 /* ViewController.m */; };
-		169C85771D0127D700825761 /* BluetoothManager.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 169C85761D0127D700825761 /* BluetoothManager.framework */; };
 		169C882A1D01382C00825761 /* AWARECore.m in Sources */ = {isa = PBXBuildFile; fileRef = 169C87101D01382C00825761 /* AWARECore.m */; };
 		169C882B1D01382C00825761 /* AWARECoreDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 169C87121D01382C00825761 /* AWARECoreDataManager.m */; };
 		169C882C1D01382C00825761 /* AWAREDataUploader.m in Sources */ = {isa = PBXBuildFile; fileRef = 169C87141D01382C00825761 /* AWAREDataUploader.m */; };
@@ -168,9 +166,6 @@
 		169C88871D01382C00825761 /* Barometer.m in Sources */ = {isa = PBXBuildFile; fileRef = 169C87C41D01382C00825761 /* Barometer.m */; };
 		169C88881D01382C00825761 /* Battery.m in Sources */ = {isa = PBXBuildFile; fileRef = 169C87C71D01382C00825761 /* Battery.m */; };
 		169C88891D01382C00825761 /* Bluetooth.m in Sources */ = {isa = PBXBuildFile; fileRef = 169C87CA1D01382C00825761 /* Bluetooth.m */; };
-		169C888A1D01382C00825761 /* BluetoothScanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 169C87CF1D01382C00825761 /* BluetoothScanner.m */; };
-		169C888B1D01382C00825761 /* MDBluetoothDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 169C87D11D01382C00825761 /* MDBluetoothDevice.m */; };
-		169C888C1D01382C00825761 /* MDBluetoothManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 169C87D31D01382C00825761 /* MDBluetoothManager.m */; };
 		169C888E1D01382C00825761 /* Calls.m in Sources */ = {isa = PBXBuildFile; fileRef = 169C87D91D01382C00825761 /* Calls.m */; };
 		169C888F1D01382C00825761 /* Debug.m in Sources */ = {isa = PBXBuildFile; fileRef = 169C87DC1D01382C00825761 /* Debug.m */; };
 		169C88901D01382C00825761 /* Gravity.m in Sources */ = {isa = PBXBuildFile; fileRef = 169C87DF1D01382C00825761 /* Gravity.m */; };
@@ -812,7 +807,6 @@
 				164DD66A1C1FC1F900ADA92B /* MapKit.framework in Frameworks */,
 				16D810261C06242F00605DE2 /* Security.framework in Frameworks */,
 				169A7B3D1BFFC9F900A7C06D /* SystemConfiguration.framework in Frameworks */,
-				169C85771D0127D700825761 /* BluetoothManager.framework in Frameworks */,
 				16D91B5E1CA9447A00A5FD4F /* MicrosoftBandKit_iOS.framework in Frameworks */,
 				FC2AF85D761397B784DECBD3 /* libPods-AWARE.a in Frameworks */,
 			);
@@ -2041,6 +2035,7 @@
 					1623CE651BFD1B2C00EFAD72 = {
 						CreatedOnToolsVersion = 7.1;
 						DevelopmentTeam = FH352PYMNC;
+						ProvisioningStyle = Manual;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
 								enabled = 0;
@@ -2401,9 +2396,6 @@
 				16BDCCB61D366E3800B13BD4 /* MSBandRRInterval.m in Sources */,
 				169C889E1D01382C00825761 /* Wifi.m in Sources */,
 				16B078381D1F918B009C070B /* EntityMSBandUV.m in Sources */,
-				169C888B1D01382C00825761 /* MDBluetoothDevice.m in Sources */,
-				169C888A1D01382C00825761 /* BluetoothScanner.m in Sources */,
-				167B37C61D4370FA00A99C64 /* AWARECoreDataMigrationManager.m in Sources */,
 				1613E0CA1D3D33B0000528F5 /* EntityESMHistory+CoreDataProperties.m in Sources */,
 				160F0F051D04756800673343 /* EntityBatteryCharge+CoreDataProperties.m in Sources */,
 				1613E0BD1D3CA917000528F5 /* EntityESM.m in Sources */,
@@ -2432,7 +2424,6 @@
 				169C88AD1D0142C300825761 /* TCQMaker.m in Sources */,
 				16B077781D192C30009C070B /* EntityTimezone+CoreDataProperties.m in Sources */,
 				16B0780A1D1D8CCE009C070B /* CalEvent.m in Sources */,
-				169C888C1D01382C00825761 /* MDBluetoothManager.m in Sources */,
 				16B077C21D1A55FC009C070B /* EntityMemory.m in Sources */,
 				160F0E8A1D03D60500673343 /* EntityAccelerometer.m in Sources */,
 				1623CE6B1BFD1B2C00EFAD72 /* main.m in Sources */,
@@ -2610,7 +2601,8 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = AWARE/AWARE.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				DEVELOPMENT_TEAM = FH352PYMNC;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2631,7 +2623,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = jp.ac.keio.sfc.ht.tetujin.AWARE;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "7f32aad0-6d34-4282-a14e-37ffd56b96f6";
+				PROVISIONING_PROFILE_SPECIFIER = "AWARE App Store";
 				SWIFT_OBJC_BRIDGING_HEADER = "AWARE/AWARE-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -2647,6 +2640,7 @@
 				CODE_SIGN_ENTITLEMENTS = AWARE/AWARE.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				DEVELOPMENT_TEAM = FH352PYMNC;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2667,7 +2661,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = jp.ac.keio.sfc.ht.tetujin.AWARE;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "7f32aad0-6d34-4282-a14e-37ffd56b96f6";
+				PROVISIONING_PROFILE_SPECIFIER = "AWARE App Store";
 				SWIFT_OBJC_BRIDGING_HEADER = "AWARE/AWARE-Bridging-Header.h";
 			};
 			name = Release;

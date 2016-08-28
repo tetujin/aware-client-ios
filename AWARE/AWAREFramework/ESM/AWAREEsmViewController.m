@@ -1183,8 +1183,6 @@
     
     NSMutableArray *array = [[NSMutableArray alloc] init];
     ESM *esm = [[ESM alloc] initWithAwareStudy:study
-                                    sensorName:SENSOR_ESMS
-                                  dbEntityName:nil
                                         dbType:AwareDBTypeTextFile];
     
     NSNumber *NEW = @0;
@@ -1507,6 +1505,7 @@
             [alert show];
             
             esmNumber = 0;
+            [esm setUploadingState:NO]; //TEST
             [esm performSelector:@selector(syncAwareDB) withObject:0 afterDelay:5];
         }
 
@@ -1542,10 +1541,7 @@
     NSMutableArray *answers = [[NSMutableArray alloc] init];
     
     // Create
-    ESM *esm = [[ESM alloc] initWithAwareStudy:study
-                                    sensorName:SENSOR_ESMS
-                                  dbEntityName:nil
-                                        dbType:AwareDBTypeTextFile];
+    ESM *esm = [[ESM alloc] initWithAwareStudy:study dbType:AwareDBTypeTextFile];
     NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
     NSString *deviceId = [esm getDeviceId];
     for (int i=0; i<uiElements.count; i++) {

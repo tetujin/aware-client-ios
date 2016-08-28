@@ -16,9 +16,10 @@
  * This library(MDBluetoothManager) is made by @michaeldomer under the GPL(ver3) licence.
  * Also, you can access his original source code from GitHub(https://github.com/michaeldorner/BeeTee) .
  */
-#import "MDBluetoothManager.h"
+// #import "MDBluetoothManager.h"
 
-@interface Bluetooth : AWARESensor <AWARESensorDelegate, CBCentralManagerDelegate, CBPeripheralDelegate,MDBluetoothObserverProtocol>
+//@interface Bluetooth : AWARESensor <AWARESensorDelegate, CBCentralManagerDelegate, CBPeripheralDelegate,MDBluetoothObserverProtocol>
+@interface Bluetooth : AWARESensor <AWARESensorDelegate, CBCentralManagerDelegate, CBPeripheralDelegate>
 @property (nonatomic, strong) CBCentralManager *myCentralManager;
 //@property (nonatomic, strong) CBPeripheral *peripheralDevice;
 @property (strong,nonatomic) NSMutableArray *peripherals;

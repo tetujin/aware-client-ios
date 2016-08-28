@@ -178,15 +178,10 @@
         [self performSegueWithIdentifier:@"webEsmView" sender:self];
     }
     
-    if([AWAREUtils getCurrentOSVersionAsFloat] >= 9.0){
-        if ([NSProcessInfo processInfo].lowPowerModeEnabled ) {
-            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"prefs:root=BATTERY_USAGE"]];
-        }
-    }
-    
     AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
     AWARECore * core = delegate.sharedAWARECore;
-    [core checkLocationSensorWithViewController:self];
+    [core checkComplianceWithViewController:self];
+
 }
 
 
@@ -231,10 +226,12 @@
     if(name == nil) accountInfo = @"";
     if(email == nil) email = @"";
     
+    NSString *studyURL = [awareStudy getStudyURL];
     NSString *deviceId = [awareStudy getDeviceId];
     NSString *awareStudyId = [awareStudy getStudyId];
     NSString *mqttServerName = [awareStudy getMqttServer];
     NSString *awareDeviceName = [awareStudy getDeviceName];
+    if(studyURL == nil) studyURL = @"";
     if(deviceId == nil) deviceId = @"";
     if(awareStudyId == nil) awareStudyId = @"";
     if(mqttServerName == nil) mqttServerName = @"";
@@ -294,8 +291,8 @@
     if (maximumFileSize > 0 ) {
         maximumFileSize = maximumFileSize/1000;
     }
-    //NSString *maximumFileSizeDesc = [NSString stringWithFormat:@"%ld (KB)", maximumFileSize];
-    NSString *maximumFileSizeDesc = @"Not support now";
+    NSString *maximumFileSizeDesc = [NSString stringWithFormat:@"%ld (KB)", maximumFileSize];
+    //NSString *maximumFileSizeDesc = @"Not support now";
     
     
     // Get maximum fetch size per post
@@ -306,17 +303,20 @@
      */
     // title
     [_sensors addObject:[self getCelContent:@"Study" desc:@"" image:@"" key:@"TITLE_CELL_VIEW"]];
+    // study_url
+    [_sensors addObject:[self getCelContent:@"AWARE Study URL" desc:studyURL image:@"" key:@"STUDY_CELL_VIEW_STUDY_URL"]];
     // device_id
     [_sensors addObject:[self getCelContent:@"AWARE Device ID" desc:deviceId image:@"" key:@"STUDY_CELL_VIEW"]];
     // study_number
-    [_sensors addObject:[self getCelContent:@"AWARE Study" desc:awareStudyId image:@"" key:@"STUDY_CELL_VIEW"]];
+    [_sensors addObject:[self getCelContent:@"AWARE Study Number" desc:awareStudyId image:@"" key:@"STUDY_CELL_VIEW"]];
     // aware server information
     [_sensors addObject:[self getCelContent:@"AWARE Server" desc:mqttServerName image:@"" key:@"STUDY_CELL_VIEW"]];
     
     [_sensors addObject:[self getCelContent:@"Device Name" desc:awareDeviceName image:@"" key:KEY_AWARE_DEVICE_NAME]];
     
-//     Google Account Information if a user registered him/her google account.
-    [_sensors addObject:[self getCelContent:@"Google Account" desc:accountInfo image:@"" key:@"STUDY_CELL_VIEW"]];
+//     Google Account Information if a user registered him/her google account. //@"STUDY_CELL_VIEW"]];
+    [_sensors addObject:[self getCelContent:@"Google Account" desc:accountInfo image:@"" key:SENSOR_PLUGIN_GOOGLE_LOGIN]];
+    
     
     /**
      * Defualt iOS supported sensors
@@ -395,6 +395,8 @@
     [_sensors addObject:[self getCelContent:@"Balanced Campus Journal" desc:@"This plugin creates new events in the journal calendar and sends a reminder email to the user to update the journal." image:@"ic_action_google_cal_push" key:SENSOR_PLUGIN_GOOGLE_CAL_PUSH]];
     // Balanced Campus ESMs (ESM Scheduler)
     [_sensors addObject:[self getCelContent:@"Balanced Campus ESMs" desc:@"ESM Plugin" image:@"ic_action_campus" key:SENSOR_PLUGIN_CAMPUS]];
+    //
+    [_sensors addObject:[self getCelContent:@"Web ESMs" desc:@"Web ESM Plugin" image:@"ic_action_web_esm" key:SENSOR_PLUGIN_WEB_ESM]];
     // HealthKit
 //    [_sensors addObject:[self getCelContent:@"HealthKit" desc:@"This plugin collects stored data in HealthKit App on iOS" image:@"ic_action_health_kit" key:@"sensor_plugin_health_kit"]];
 
@@ -419,9 +421,9 @@
     // frequency of clean old data
     [_sensors addObject:[self getCelContent:@"Frequency of clean old data" desc:cleanIntervalStr image:@"" key:@"STUDY_CELL_CLEAN_OLD_DATA"]];
     // [userDefaults setInteger:10000 forKey:KEY_MAX_FETCH_SIZE_NORMAL_SENSOR];
-    [_sensors addObject:[self getCelContent:@"Maximum fetch records per POST" desc:fetchSizeStr image:@"" key:@"STUDY_CELL_MAX_FETCH_SIZE_NORMAL_SENSOR"]];
+    [_sensors addObject:[self getCelContent:@"Maximum fetch records per POST (for SQLite)" desc:fetchSizeStr image:@"" key:@"STUDY_CELL_MAX_FETCH_SIZE_NORMAL_SENSOR"]];
     // maximum data size per one HTTP/POST
-    [_sensors addObject:[self getCelContent:@"Maximum file size per POST" desc:maximumFileSizeDesc image:@"" key:@"STUDY_CELL_MAX_FILE_SIZE"]];
+    [_sensors addObject:[self getCelContent:@"Maximum fetch size(KB) per POST" desc:maximumFileSizeDesc image:@"" key:@"STUDY_CELL_MAX_FILE_SIZE"]];
     // current version of AWARE iOS
     NSString* version = [NSString stringWithFormat:@"%@",[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]];
     [_sensors addObject:[self getCelContent:@"Version" desc:version image:@"" key:@"STUDY_CELL_VIEW"]];
@@ -487,10 +489,25 @@
 }
 
 
-
 - (IBAction)pushedEsmButtonOnNavigationBar:(id)sender {
 //    [self performSegueWithIdentifier:@"esmView" sender:self];
-    [self performSegueWithIdentifier:@"webEsmView" sender:self];
+//    [self performSegueWithIdentifier:@"webEsmView" sender:self];
+    
+    ESMStorageHelper * helper = [[ESMStorageHelper alloc] init];
+    NSArray * storedEsms = [helper getEsmTexts];
+    if(storedEsms != nil){
+        if (storedEsms.count > 0 ){
+            [ESM setAppearedState:YES];
+            [self performSegueWithIdentifier:@"esmView" sender:self];
+        }
+    }
+    
+    NSArray * esms = [webESM getValidESMsWithDatetime:[NSDate new]];
+    if(esms != nil && esms.count != 0 ){
+        [ESM setAppearedState:YES];
+        [self performSegueWithIdentifier:@"webEsmView" sender:self];
+    }
+    
 }
 
 /**
@@ -664,6 +681,12 @@
         alert.alertViewStyle = UIAlertViewStylePlainTextInput;
         [alert textFieldAtIndex:0].text = awareStudy.getDeviceName;
         alert.tag = 16;
+        [alert show];
+    } else if ([key isEqualToString:@"STUDY_CELL_VIEW_STUDY_URL"]){
+        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Study URL" message:@"Please edit a study URL to join the aware study." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Done", nil];
+        alert.alertViewStyle = UIAlertViewStylePlainTextInput;
+        [alert textFieldAtIndex:0].text = awareStudy.getStudyURL;
+        alert.tag = 17;
         [alert show];
     }
 }
@@ -846,6 +869,25 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
         [awareStudy setDeviceName:newDeviceName];
         [self.tableView reloadData];
         [self initContentsOnTableView];
+    }else if(alertView.tag == 17){
+        if(buttonIndex == [alertView cancelButtonIndex]){
+            NSLog(@"Cancel");
+            return;
+        }else{
+            NSString * awareURL = [alertView textFieldAtIndex:0].text;
+            if([awareURL isEqualToString:@""]){
+                return;
+            }else{
+                BOOL state = [awareStudy setStudyInformationWithURL:awareURL];
+                if(state){
+                    [self.tableView reloadData];
+                    [self initContentsOnTableView];
+                }else{
+                    UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"The URL is wrong!" message:@"Please edit a correct URL." delegate:self cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+                    [alert show];
+                }
+            }
+        }
     }
 }
 

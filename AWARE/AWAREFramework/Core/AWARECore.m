@@ -8,7 +8,11 @@
 
 #import "AWARECore.h"
 #import "Debug.h"
+#import "AWAREDebugMessageLogger.h"
 #import "AWAREStudy.h"
+#import <ifaddrs.h>
+#import <net/if.h>
+#import <SystemConfiguration/CaptiveNetwork.h>
 
 @implementation AWARECore
 
@@ -91,6 +95,18 @@
     NSRunLoop *runLoop = [NSRunLoop currentRunLoop];
     //    [runLoop addTimer:dailyUpdateTimer forMode:NSDefaultRunLoopMode];
     [runLoop addTimer:_dailyUpdateTimer forMode:NSRunLoopCommonModes];
+    
+    // Compliance checker
+    NSDate* dailyCheckComplianceTime = [AWAREUtils getTargetNSDate:[NSDate new] hour:0 minute:0 second:0 nextDay:YES];
+    _complianceTimer = [[NSTimer alloc] initWithFireDate:dailyCheckComplianceTime
+                                                interval:60*60*6 //1 hour
+                                                  target:self
+                                                selector:@selector(checkCompliance)
+                                                userInfo:nil
+                                                 repeats:YES];
+    NSRunLoop *loop = [NSRunLoop currentRunLoop];
+    [loop addTimer:_complianceTimer forMode:NSRunLoopCommonModes];
+    // [_complianceTimer fire];
 }
 
 
@@ -98,6 +114,7 @@
     [_sharedSensorManager stopAndRemoveAllSensors];
     [_sharedLocationManager stopUpdatingLocation];
     [_dailyUpdateTimer invalidate];
+    [_complianceTimer invalidate];
 }
 
 /**
@@ -168,27 +185,66 @@
 }
 
 
+////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////
+
+- (void) checkCompliance {
+    [self checkComplianceWithViewController:nil];
+}
+
+- (void) checkComplianceWithViewController:(UIViewController *)viewController {
+    [self checkLocationSensorWithViewController:viewController];
+    [self checkBackgroundAppRefreshWithViewController:viewController];
+    [self checkStorageUsageWithViewController:viewController];
+    [self checkWifiStateWithViewController:viewController];
+    [self checkLowPowerModeWithViewController:viewController];
+    // [self checkNotificationSettingWithViewController:viewController];
+}
+
+//////////////////////////////////////////////////////////////////
+
 - (void) checkLocationSensorWithViewController:(UIViewController *) viewController {
     CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
     if (status == kCLAuthorizationStatusAuthorizedWhenInUse || status == kCLAuthorizationStatusDenied || status == kCLAuthorizationStatusRestricted) {
+        
         NSString *title;
         title = (status == kCLAuthorizationStatusDenied) ? @"Location services are off" : @"Background location is not enabled";
         NSString *message = @"To track your daily activity, you have to turn on 'Always' in the Location Services Settings.";
-        // To track your daily activity, AWARE client iOS needs access to your location in the background.
-        // To use background location you must turn on 'Always' in the Location Services Settings
-        
-        UIAlertController* alert = [UIAlertController alertControllerWithTitle:title
-                                                                       message:message
-                                                                preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"Settings" style:UIAlertActionStyleDefault
-                                                              handler:^(UIAlertAction * action) {
-                                                                  // Send the user to the Settings for this app
-                                                                  NSURL *settingsURL = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
-                                                                  [[UIApplication sharedApplication] openURL:settingsURL];
-                                                              }];
-        [alert addAction:defaultAction];
-        [viewController presentViewController:alert animated:YES completion:nil];
 
+        if([AWAREUtils isForeground]  && viewController != nil ){
+            // To track your daily activity, AWARE client iOS needs access to your location in the background.
+            // To use background location you must turn on 'Always' in the Location Services Settings
+            
+            UIAlertController* alert = [UIAlertController alertControllerWithTitle:title
+                                                                           message:message
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"Settings" style:UIAlertActionStyleDefault
+                                                                  handler:^(UIAlertAction * action) {
+                                                                      // Send the user to the Settings for this app
+                                                                      NSURL *settingsURL = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
+                                                                      if([AWAREUtils getCurrentOSVersionAsFloat] < 10.0f ){
+                                                                          settingsURL = [NSURL URLWithString:@"prefs:root=LOCATION_SERVICES"];
+                                                                      }
+                                                                      [[UIApplication sharedApplication] openURL:settingsURL];
+                                                                  }];
+            [alert addAction:defaultAction];
+            [viewController presentViewController:alert animated:YES completion:nil];
+        }else{
+            [AWAREUtils sendLocalNotificationForMessage:message
+                                                  title:title
+                                              soundFlag:NO
+                                               category:nil
+                                               fireDate:[NSDate new]
+                                         repeatInterval:0
+                                               userInfo:nil
+                                        iconBadgeNumber:1];
+        }
+//        DebugTypeUnknown = 0, DebugTypeInfo = 1, DebugTypeError = 2, DebugTypeWarn = 3, DebugTypeCrash = 4
+        Debug * debugSensor = [[Debug alloc] initWithAwareStudy:_sharedAwareStudy dbType:AwareDBTypeTextFile];
+        [debugSensor saveDebugEventWithText:title type:DebugTypeWarn label:message];
+        [debugSensor allowsCellularAccess];
+        [debugSensor allowsDateUploadWithoutBatteryCharging];
+        [debugSensor syncAwareDBInBackground];
     }
     // The user has not enabled any location services. Request background authorization.
     else if (status == kCLAuthorizationStatusNotDetermined) {
@@ -196,5 +252,225 @@
     }
     // status == kCLAuthorizationStatusAuthorizedAlways
 }
+
+///////////////////////////////////////////////////////
+
+- (void) checkBackgroundAppRefreshWithViewController:(UIViewController *) viewController {
+    //    UIBackgroundRefreshStatusRestricted, //< unavailable on this system due to device configuration; the user cannot enable the feature
+    //    UIBackgroundRefreshStatusDenied,     //< explicitly disabled by the user for this application
+    //    UIBackgroundRefreshStatusAvailable   //< enabled for this application
+    UIBackgroundRefreshStatus backgroundRefreshStatus = [UIApplication sharedApplication].backgroundRefreshStatus;
+    if(backgroundRefreshStatus == UIBackgroundRefreshStatusDenied || backgroundRefreshStatus == UIBackgroundRefreshStatusRestricted){
+        NSString *title = @"Background App Refresh service is Restricted or Denied"; // : @"Background location is not enabled";
+        NSString *message = @"To track your daily activity, you have to allow the 'Background App Refresh' service in the General Settings.";
+        if([AWAREUtils isForeground]  && viewController!=nil ){
+            UIAlertController* alert = [UIAlertController alertControllerWithTitle:title
+                                                                           message:message
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"Settings" style:UIAlertActionStyleDefault
+                                                                  handler:^(UIAlertAction * action) {
+                                                                      // Send the user to the Settings for this app
+                                                                      NSURL *settingsURL = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
+                                                                      if([AWAREUtils getCurrentOSVersionAsFloat] < 10.0f ){
+                                                                          settingsURL = [NSURL URLWithString:@"prefs:root=General&path=AUTO_CONTENT_DOWNLOAD"];
+                                                                      }
+                                                                      [[UIApplication sharedApplication] openURL:settingsURL];
+                                                                  }];
+            [alert addAction:defaultAction];
+            [viewController presentViewController:alert animated:YES completion:nil];
+        }else{
+            [AWAREUtils sendLocalNotificationForMessage:@"Please allow the 'Background App Refresh' service in the Settings->General." soundFlag:NO];
+        }
+        
+        Debug * debugSensor = [[Debug alloc] initWithAwareStudy:_sharedAwareStudy dbType:AwareDBTypeTextFile];
+        [debugSensor saveDebugEventWithText:title type:DebugTypeWarn label:message];
+        [debugSensor allowsDateUploadWithoutBatteryCharging];
+        [debugSensor allowsCellularAccess];
+        [debugSensor syncAwareDBInBackground];
+    } else if(backgroundRefreshStatus == UIBackgroundRefreshStatusAvailable){
+        
+    }
+}
+
+- (void) checkNotificationSettingWithViewController:(UIViewController *) viewController {
+    if ([AWAREUtils getCurrentOSVersionAsFloat] >= 8) {
+        UIUserNotificationSettings *currentSettings = [[UIApplication sharedApplication] currentUserNotificationSettings];
+        if((currentSettings.types==0) || (currentSettings.types==4) || (currentSettings.types==5)) {
+            //[self showAlertview:@"通知設定が未許可です。\n設定 > 通知 > で通知を許可してください。"];
+            // currentSettings.types=0 >>> 通知off , sound - , aicon -
+            // currentSettings.types=4 >>> 通知on , soundOff , aiconOff
+            // currentSettings.types=5 >>> 通知on , soundOff , aiconOn
+            // currentSettings.types=6 >>> 通知on , soundOn , aiconOff
+            // currentSettings.types=7 >>> 通知on , soundOn , aiconOn
+            NSString *title = @"Notification service is not permitted.";
+            NSString *message = @"To send important notifications, please allow the 'Notification' service in the General Settings.";
+            if([AWAREUtils isForeground]  && viewController!=nil ){
+                UIAlertController* alert = [UIAlertController alertControllerWithTitle:title
+                                                                               message:message
+                                                                        preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"Settings" style:UIAlertActionStyleDefault
+                                                                      handler:^(UIAlertAction * action) {
+                                                                          // Send the user to the Settings for this app
+                                                                          NSURL *settingsURL = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
+                                                                          if([AWAREUtils getCurrentOSVersionAsFloat] < 10.0f ){
+                                                                              settingsURL = [NSURL URLWithString:@"prefs:root=Notifications"];
+                                                                          }
+                                                                          [[UIApplication sharedApplication] openURL:settingsURL];
+                                                                      }];
+                [alert addAction:defaultAction];
+                [viewController presentViewController:alert animated:YES completion:nil];
+            }else{
+                [AWAREUtils sendLocalNotificationForMessage:@"Please allow the 'Notification' service in the Settings.app->Notification->Allow Notifications." soundFlag:NO];
+            }
+            
+            Debug * debugSensor = [[Debug alloc] initWithAwareStudy:_sharedAwareStudy dbType:AwareDBTypeTextFile];
+            [debugSensor saveDebugEventWithText:title type:DebugTypeWarn label:message];
+            [debugSensor allowsDateUploadWithoutBatteryCharging];
+            [debugSensor allowsCellularAccess];
+            [debugSensor syncAwareDBInBackground];
+        }
+    }
+}
+
+///////////////////////////////////////////////////////////////
+
+- (void) checkStorageUsageWithViewController:(UIViewController *) viewController{
+//    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES);
+//    NSDictionary *dictionary = [[NSFileManager defaultManager] attributesOfFileSystemForPath:[paths lastObject] error:nil];
+//    if (dictionary) {
+//        int GiB = 1024*1024*1024;
+//        float free = [[dictionary objectForKey: NSFileSystemFreeSize] floatValue]/GiB;
+//        float total = [[dictionary objectForKey: NSFileSystemSize] floatValue]/GiB;
+//        NSLog(@"Used: %.3f", total-free);
+//        NSLog(@"Space: %.3f", free);
+//        NSLog(@"Total: %.3f", total);
+//        float percentage = free/total * 100.0f;
+//        if(percentage < 5){ // %
+//            NSString * title = @"Please upload stored data manually!";
+//            NSString * message = [NSString stringWithFormat:@"You are using  %.3f GB ", free];
+//            if([AWAREUtils isForeground]){
+//                UIAlertView * alert = [[UIAlertView alloc] initWithTitle:title
+//                                                                 message:message
+//                                                                delegate:self
+//                                                       cancelButtonTitle:nil
+//                                                       otherButtonTitles:@"ON", nil];
+//                [alert show];
+//            }else{
+//                [AWAREUtils sendLocalNotificationForMessage:message soundFlag:NO];
+//            }
+//            Debug * debugSensor = [[Debug alloc] initWithAwareStudy:_sharedAwareStudy dbType:AwareDBTypeTextFile];
+//            [debugSensor saveDebugEventWithText:title type:DebugTypeWarn label:message];
+//            [debugSensor syncAwareDBInBackground];
+//        }
+//    }
+}
+
+
+- (void) checkLowPowerModeWithViewController:(UIViewController *) viewController {
+    
+    if([AWAREUtils getCurrentOSVersionAsFloat] >= 9.0){
+        if ([NSProcessInfo processInfo].lowPowerModeEnabled ) {
+            NSString * title = @"Please turn off the **Low Power Mode** for tracking your daily activites.";
+            NSString * message = @"";
+            // [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"prefs:root=BATTERY_USAGE"]];
+            if([AWAREUtils isForeground]){
+                UIAlertController* alert = [UIAlertController alertControllerWithTitle:title
+                                                                               message:message
+                                                                        preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"Settings" style:UIAlertActionStyleDefault
+                                                                      handler:^(UIAlertAction * action) {
+                                                                          NSURL * settingsURL = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
+                                                                          NSLog(@"%@", UIApplicationOpenSettingsURLString);
+                                                                          // settingsURL = [NSURL URLWithString:@"prefs:"];
+                                                                          
+                                                                          if([AWAREUtils getCurrentOSVersionAsFloat] < 10.0f ){
+                                                                              settingsURL = [NSURL URLWithString:@"prefs:root=BATTERY_USAGE"];
+                                                                          }
+                                                                          [[UIApplication sharedApplication] openURL:settingsURL];
+                                                                          
+                                                                      }];
+                [alert addAction:defaultAction];
+                [viewController presentViewController:alert animated:YES completion:nil];
+
+            }else{
+                [AWAREUtils sendLocalNotificationForMessage:title soundFlag:NO];
+
+            }
+            
+            Debug * debugSensor = [[Debug alloc] initWithAwareStudy:_sharedAwareStudy dbType:AwareDBTypeTextFile];
+            [debugSensor saveDebugEventWithText:title type:DebugTypeWarn label:message];
+            [debugSensor allowsDateUploadWithoutBatteryCharging];
+            [debugSensor allowsCellularAccess];
+            [debugSensor syncAwareDBInBackground];
+        }
+    }
+    
+}
+
+///////////////////////////////////////////////////////////////
+
+- (void) checkWifiStateWithViewController:(UIViewController *) viewController {
+    
+    if(![self isWiFiEnabled]){
+        NSString * title = @"Please turn on WiFi!";
+        NSString * message = @"WiFi is turned off now. AWARE client needs the wifi network for data uploading. Please keep turn on the WiFi during your study.";
+        
+        if ([AWAREUtils isForeground] && viewController!=nil) {
+            UIAlertController* alert = [UIAlertController alertControllerWithTitle:title
+                                                                           message:message
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"Settings" style:UIAlertActionStyleDefault
+                                                                  handler:^(UIAlertAction * action) {
+//                                                                       Send the user to the Settings for this app
+                                                                      NSURL *settingsURL = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
+                                                                      if([AWAREUtils getCurrentOSVersionAsFloat] < 10.0f ){
+                                                                          settingsURL = [NSURL URLWithString:@"prefs:root=WIFI"];
+                                                                      }
+                                                                      [[UIApplication sharedApplication] openURL:settingsURL];
+                                                                      
+                                                                  }];
+            [alert addAction:defaultAction];
+            [viewController presentViewController:alert animated:YES completion:nil];
+        }else{
+            [AWAREUtils sendLocalNotificationForMessage:@"Please turn on WiFi! AWARE client needs WiFi for data uploading." soundFlag:NO];
+        }
+        
+        Debug * debugSensor = [[Debug alloc] initWithAwareStudy:_sharedAwareStudy dbType:AwareDBTypeTextFile];
+        [debugSensor saveDebugEventWithText:title type:DebugTypeWarn label:message];
+        [debugSensor allowsCellularAccess];
+        [debugSensor allowsDateUploadWithoutBatteryCharging];
+        [debugSensor syncAwareDBInBackground];
+    }else{
+        
+    }
+}
+
+
+- (BOOL) isWiFiEnabled {
+    
+    NSCountedSet * cset = [NSCountedSet new];
+    
+    struct ifaddrs *interfaces;
+    
+    if( ! getifaddrs(&interfaces) ) {
+        for( struct ifaddrs *interface = interfaces; interface; interface = interface->ifa_next) {
+            if ( (interface->ifa_flags & IFF_UP) == IFF_UP ) {
+                [cset addObject:[NSString stringWithUTF8String:interface->ifa_name]];
+            }
+        }
+    }
+    
+    return [cset countForObject:@"awdl0"] > 1 ? YES : NO;
+}
+
+- (NSDictionary *) wifiDetails {
+    return
+    (__bridge NSDictionary *)
+    CNCopyCurrentNetworkInfo(
+                             CFArrayGetValueAtIndex( CNCopySupportedInterfaces(), 0)
+                             );
+}
+
+
 
 @end

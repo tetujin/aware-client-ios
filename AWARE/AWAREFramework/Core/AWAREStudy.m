@@ -101,12 +101,17 @@
  * @return The result of download and set a study configuration
  */
 - (BOOL) setStudyInformationWithURL:(NSString*)url {
-    if (url != nil) {
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        [userDefaults setObject:url forKey:KEY_STUDY_QR_CODE];
+//    if (url != nil) {
+//        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+//        [userDefaults setObject:url forKey:KEY_STUDY_QR_CODE];
+//    }
+    if(url != nil){
+        [self setStudyURL:url];
+        NSString * deviceId = [AWAREUtils getSystemUUID];
+        return [self setStudyInformation:url withDeviceId:deviceId];
+    }else{
+        return NO;
     }
-    NSString * deviceId = [AWAREUtils getSystemUUID];
-    return [self setStudyInformation:url withDeviceId:deviceId];
 }
 
 /**
@@ -117,7 +122,8 @@
  * @return The result of download and set a study configuration
  */
 - (bool) setStudyInformation:(NSString *)url withDeviceId:(NSString *) uuid {
-    __weak NSURLSession *session = nil;
+    // __weak NSURLSession *session = nil;
+    NSURLSession *session = nil;
     // Set session configuration
     NSURLSessionConfiguration *sessionConfig = nil;
     double unixtime = [[NSDate new] timeIntervalSince1970];
@@ -129,27 +135,34 @@
     NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
     NSString *postLength = [NSString stringWithFormat:@"%ld", [postData length]];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
-    [request setURL:[NSURL URLWithString:url]];
+    NSURL * urlObj = [NSURL URLWithString:url];
+    if(urlObj == nil){
+        return NO;
+    }
+    [request setURL:urlObj];
     [request setHTTPMethod:@"POST"];
     [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
     [request setHTTPBody:postData];
 
     
     if ( [AWAREUtils isForeground] ) { /// If the application in the foreground
-        NSURLSession *session = [NSURLSession sharedSession];
+        // NSURLSession *session = [NSURLSession sharedSession];
+        session = [NSURLSession sessionWithConfiguration:[NSURLSession sharedSession].configuration
+                                                              delegate:self
+                                                         delegateQueue:nil];
         [[session dataTaskWithRequest: request  completionHandler: ^(NSData *data, NSURLResponse *response, NSError *error) {
-            [session finishTasksAndInvalidate];
-            [session invalidateAndCancel];
             // Success
             if (response && ! error) {
-                NSString *responseString = [[NSString alloc] initWithData: data  encoding: NSUTF8StringEncoding];
-                NSLog(@"Success: %@", responseString);
-                
-                [self setStudySettings:data];
-                
+                if(data != nil){
+                    NSString *responseString = [[NSString alloc] initWithData: data  encoding: NSUTF8StringEncoding];
+                    NSLog(@"Success: %@", responseString);
+                    [self setStudySettings:data];
+                }else{
+                    NSLog(@"Error: Data is null");
+                }
             // Error
             } else {
-                NSLog(@"Error: %@", error);
+                // NSLog(@"Error: %@", error);
                 NSLog(@"ERROR: %@ %ld", error.debugDescription , error.code);
                 if (error.code == -1202) {
                     /**
@@ -162,6 +175,8 @@
                     [sslManager installCRTWithTextOfQRCode:url];
                 }
             }
+            [session finishTasksAndInvalidate];
+            [session invalidateAndCancel];
         }] resume];
     } else { // If the application in the background
         sessionConfig = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:_getSettingIdentifier];
@@ -426,22 +441,40 @@ didCompleteWithError:(NSError *)error {
     //[request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
     [request setHTTPBody:postData];
     
-    //    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-        NSError *error = nil;
-        NSHTTPURLResponse *response = nil;
-        NSData *resData = [NSURLConnection sendSynchronousRequest:request
-                                                returningResponse:&response error:&error];
-        int responseCode = (int)[response statusCode];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if(responseCode == 200){
-                NSLog(@"UPLOADED SENSOR DATA TO A SERVER");
-            }else{
-                NSLog(@"ERROR");
-            }
-        });
-    });
-    return true;
+    // NSURLConnection * connection = [NSURLConnection connectionWithRequest:request delegate:self];
+    // [connection start];
+    
+    // NSURLSessionConfiguration *sessionConfig = nil;
+    // _getSettingIdentifier = [NSString stringWithFormat:@"%@%@", _getSettingIdentifier, unixtime];
+    url = [NSString stringWithFormat:@"%@?%@", url, unixtime];
+    
+
+    NSURL * urlObj = [NSURL URLWithString:url];
+    if(urlObj == nil){
+        return NO;
+    }
+    [request setURL:urlObj];
+    [request setHTTPMethod:@"POST"];
+    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+    [request setHTTPBody:postData];
+    
+    
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSession sharedSession].configuration
+                                                          delegate:self
+                                                     delegateQueue:nil];
+    [[session dataTaskWithRequest: request  completionHandler: ^(NSData *data, NSURLResponse *response, NSError *error) {
+        if (error != nil) {
+            NSLog(@"Error: %@", error.debugDescription);
+        }
+        if( data != nil ){
+            NSLog(@"Success: %@", [[NSString alloc] initWithData: data  encoding: NSUTF8StringEncoding]);
+        }
+        [session finishTasksAndInvalidate];
+        [session invalidateAndCancel];
+        
+    }] resume];
+    
+     return true;
 }
 
 
@@ -477,18 +510,48 @@ didCompleteWithError:(NSError *)error {
   
     NSString *post = [NSString stringWithFormat:@"device_id=%@&fields=%@", uuid, query];
     NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
-    NSString *postLength = [NSString stringWithFormat:@"%ld", [postData length]];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
-    [request setURL:[NSURL URLWithString:url]];
+    NSString *postLength = [NSString stringWithFormat:@"%ld", [postData length]];
+
+    NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
+    url = [NSString stringWithFormat:@"%@?%@", url, unixtime];
+    
+    NSURL * urlObj = [NSURL URLWithString:url];
+    if(urlObj == nil){
+        return NO;
+    }
+    [request setURL:urlObj];
     [request setHTTPMethod:@"POST"];
     [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
-    //[request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
     [request setHTTPBody:postData];
     
-    //    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-//        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-    NSError *error = nil;
-    NSHTTPURLResponse *response = nil;
+    
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSession sharedSession].configuration
+                                                          delegate:self
+                                                     delegateQueue:nil];
+    [[session dataTaskWithRequest: request  completionHandler: ^(NSData *data, NSURLResponse *response, NSError *error) {
+        // Success
+        if (error != nil) {
+            NSLog(@"Error: %@", error.debugDescription);
+        }
+        if( data != nil ){
+            NSLog(@"Success: %@", [[NSString alloc] initWithData: data  encoding: NSUTF8StringEncoding]);
+        }
+        [session finishTasksAndInvalidate];
+        [session invalidateAndCancel];
+    }] resume];
+    
+    // NSURLConnection * connection = [NSURLConnection connectionWithRequest:request delegate:self];
+    // [connection start];
+    
+    return YES;
+    
+    /*
+    // NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    // dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+    // NSError *error = nil;
+    // NSHTTPURLResponse *response = nil;
+    
     NSData *resData = [NSURLConnection sendSynchronousRequest:request
                                             returningResponse:&response error:&error];
     NSString * resultDate = [[NSString alloc] initWithData:resData encoding:NSUTF8StringEncoding];
@@ -502,6 +565,7 @@ didCompleteWithError:(NSError *)error {
         return NO;
     }
     return NO;
+     */
 }
 
 
@@ -516,8 +580,9 @@ didCompleteWithError:(NSError *)error {
  * @return a refresh query is sent(YES) or not sent(NO) as a BOOL value
  */
 - (BOOL) refreshStudy {
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    NSString *url = [userDefaults objectForKey:KEY_STUDY_QR_CODE];
+//    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+//    NSString *url = [userDefaults objectForKey:KEY_STUDY_QR_CODE];
+    NSString * url = [self getStudyURL];
     if (url != nil) {
         [self setStudyInformationWithURL:url];
         return YES;
@@ -545,6 +610,14 @@ didCompleteWithError:(NSError *)error {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults setObject:deviceName forKey:KEY_AWARE_DEVICE_NAME];
     [userDefaults synchronize];
+}
+
+- (void) setStudyURL:(NSString *) studyURL {
+    if( studyURL != nil ){
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        [userDefaults setObject:studyURL forKey:KEY_STUDY_QR_CODE];
+        [userDefaults synchronize];
+    }
 }
 
 - (NSString *) getDeviceName {
@@ -628,6 +701,16 @@ didCompleteWithError:(NSError *)error {
 - (NSString* ) getWebserviceServer{ return webserviceServer; }
 
 
+- (NSString *)getStudyURL{
+    //objectForKey:KEY_STUDY_QR_CODE
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString * studyURL = [userDefaults objectForKey:KEY_STUDY_QR_CODE];
+    if(studyURL != nil){
+        return studyURL;
+    }else{
+        return @"";
+    }
+}
 
 /**
  * Get sensor settings from a local storage as a NSArray object
@@ -700,6 +783,10 @@ didCompleteWithError:(NSError *)error {
     mqttPort = 1883;
     mqttKeepAlive = 600;
     mqttQos = 2;
+    
+    
+    
+    
     return YES;
 }
 
@@ -829,5 +916,77 @@ didCompleteWithError:(NSError *)error {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     return [userDefaults integerForKey:SETTING_FREQUENCY_CLEAN_OLD_DATA];
 }
+
+
+//////////////////////////////////////////////////////
+-  (void)URLSession:(NSURLSession *)session
+didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
+  completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition,
+                              NSURLCredential * _Nullable credential)) completionHandler{
+    // http://stackoverflow.com/questions/19507207/how-do-i-accept-a-self-signed-ssl-certificate-using-ios-7s-nsurlsession-and-its
+    
+    if([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust]){
+        
+        NSURLProtectionSpace *protectionSpace = [challenge protectionSpace];
+        SecTrustRef trust = [protectionSpace serverTrust];
+        NSURLCredential *credential = [NSURLCredential credentialForTrust:trust];
+        
+        // NSArray *certs = [[NSArray alloc] initWithObjects:(id)[[self class] sslCertificate], nil];
+        // int err = SecTrustSetAnchorCertificates(trust, (CFArrayRef)certs);
+        // SecTrustResultType trustResult = 0;
+        // if (err == noErr) {
+        //    err = SecTrustEvaluate(trust, &trustResult);
+        // }
+        
+        // if ([challenge.protectionSpace.host isEqualToString:@"aware.ht.sfc.keio.ac.jp"]) {
+        //credential = [NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust];
+        // } else if ([challenge.protectionSpace.host isEqualToString:@"r2d2.hcii.cs.cmu.edu"]) {
+        //credential = [NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust];
+        // } else if ([challenge.protectionSpace.host isEqualToString:@"api.awareframework.com"]) {
+        //credential = [NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust];
+        // } else {
+        //credential = [NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust];
+        // }
+        
+        completionHandler(NSURLSessionAuthChallengeUseCredential,credential);
+    }
+}
+
+//////////////////////////////////////////////////////////
+
+
+- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response{
+    
+    if(response != nil){
+        NSLog(@"%@", response.debugDescription);
+    }
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data{
+    
+    if(data != nil){
+        NSLog(@"%@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] );
+    }
+    
+}
+
+- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error{
+    if(error != nil){
+        NSLog(@"%@", error.debugDescription);
+    }
+}
+
+- (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)protectionSpace {
+    return [protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust];
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge {
+    //if ([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust])
+    //    if ([trustedHosts containsObject:challenge.protectionSpace.host])
+    //        [challenge.sender useCredential:[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust] forAuthenticationChallenge:challenge];
+    
+    [challenge.sender continueWithoutCredentialForAuthenticationChallenge:challenge];
+}
+
 
 @end

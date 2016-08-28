@@ -110,6 +110,8 @@
     NSString *deviceId = [awareStudy getDeviceId];
     NSString *url = [self getInsertUrl:name];
     
+    NSLog(@"url: %@", url);
+    
     NSMutableString* sensorData = [awareLocalStorage getSensorDataForPost];
     NSString* formatedSensorData = [awareLocalStorage fixJsonFormat:sensorData];
     
@@ -520,17 +522,52 @@ didReceiveResponse:(NSURLResponse *)response
     [request setHTTPMethod:@"POST"];
     [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
     [request setHTTPBody:postData];
-    NSHTTPURLResponse *response = nil;
-    NSData *resData = [NSURLConnection sendSynchronousRequest:request
-                                            returningResponse:&response error:&error];
-    NSString* newStr = [[NSString alloc] initWithData:resData encoding:NSUTF8StringEncoding];
-    //    NSLog(@"%@", newStr);
-    int responseCode = (int)[response statusCode];
+    //NSData *resData = [NSURLConnection sendSynchronousRequest:request
+    //                                        returningResponse:&response error:&error];
+    // NSString* newStr = [[NSString alloc] initWithData:resData encoding:NSUTF8StringEncoding];
+
+    
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSession sharedSession].configuration
+                                                          delegate:self
+                                                     delegateQueue:nil];
+    dispatch_semaphore_t    sem;
+    __block NSData *        result;
+    __block NSURLResponse * response;
+    
+    result = nil;
+    
+    sem = dispatch_semaphore_create(0);
+    
+    [[session dataTaskWithRequest: request  completionHandler: ^(NSData *data, NSURLResponse *sessionResponse, NSError *sessionError) {
+        // Success
+        if (error != nil) {
+            NSLog(@"Error: %@", sessionError.debugDescription);
+            
+        }else{
+            NSLog(@"Success: %@", [[NSString alloc] initWithData: data  encoding: NSUTF8StringEncoding]);
+            result = data;
+        }
+        
+        response = sessionResponse;
+        
+        [session finishTasksAndInvalidate];
+        [session invalidateAndCancel];
+        
+        dispatch_semaphore_signal(sem);
+        
+    }] resume];
+    
+    dispatch_semaphore_wait(sem, DISPATCH_TIME_FOREVER);
+    
+    NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
+    // NSLog(@"response status code: %ld", (long)[httpResponse statusCode]);
+    
+    int responseCode = (int)[httpResponse statusCode];
     if(responseCode == 200){
-        NSLog(@"Success to upload the data: %@", newStr);
+        // NSLog(@"Success to upload the data: %@", [[NSString alloc] initWithData:result encoding:NSUTF8StringEncoding]);
         return YES;
     }else{
-        return NO;
+       return NO;
     }
 }
 
