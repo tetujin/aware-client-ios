@@ -60,7 +60,7 @@
 //    [self syncAwareDBWithSensorName:sensorName];
 //}
 
-- (void) syncAwareDBInBackground{
+- (void) syncAwareDBInBackground {
     [self syncAwareDBWithSensorName:sensorName];
 }
 
@@ -263,6 +263,14 @@ didReceiveResponse:(NSURLResponse *)response
                 [self postSensorDataWithSensorName:sensorName session:nil];
             } else {
                 [self dataSyncIsFinishedCorrectoly];
+                NSMutableDictionary * userInfo = [[NSMutableDictionary alloc] init];
+                [userInfo setObject:@(-1) forKey:@"KEY_UPLOAD_PROGRESS_STR"];
+                [userInfo setObject:@YES forKey:@"KEY_UPLOAD_FIN"];
+                [userInfo setObject:@NO forKey:@"KEY_UPLOAD_SUCCESS"];
+                [userInfo setObject:sensorName forKey:@"KEY_UPLOAD_SENSOR_NAME"];
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"ACTION_AWARE_DATA_UPLOAD_PROGRESS"
+                                                                    object:nil
+                                                                  userInfo:userInfo];
             }
         } else {
             //            [self dataSyncIsFinishedCorrectoly];
@@ -526,7 +534,6 @@ didReceiveResponse:(NSURLResponse *)response
     //                                        returningResponse:&response error:&error];
     // NSString* newStr = [[NSString alloc] initWithData:resData encoding:NSUTF8StringEncoding];
 
-    
     NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSession sharedSession].configuration
                                                           delegate:self
                                                      delegateQueue:nil];
@@ -542,7 +549,6 @@ didReceiveResponse:(NSURLResponse *)response
         // Success
         if (error != nil) {
             NSLog(@"Error: %@", sessionError.debugDescription);
-            
         }else{
             NSLog(@"Success: %@", [[NSString alloc] initWithData: data  encoding: NSUTF8StringEncoding]);
             result = data;

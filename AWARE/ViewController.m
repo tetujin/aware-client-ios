@@ -426,6 +426,10 @@
     [_sensors addObject:[self getCelContent:@"Maximum fetch size(KB) per POST" desc:maximumFileSizeDesc image:@"" key:@"STUDY_CELL_MAX_FILE_SIZE"]];
     // current version of AWARE iOS
     NSString* version = [NSString stringWithFormat:@"%@",[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]];
+    NSString *build = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
+    if(build != nil){
+        version = [version stringByAppendingFormat:@"(%@)", build];
+    }
     [_sensors addObject:[self getCelContent:@"Version" desc:version image:@"" key:@"STUDY_CELL_VIEW"]];
     // manual data upload button
     [_sensors addObject:[self getCelContent:@"Manual Data Upload" desc:@"Please push this row for uploading sensor data!" image:@"" key:@"STUDY_CELL_MANULA_UPLOAD"]];

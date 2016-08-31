@@ -99,22 +99,6 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "AWARE/AWAREFramework/Core/AWAREDelegate.m"
-            timestampString = "491727250.176383"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "333"
-            endingLineNumber = "333"
-            landmarkName = "-application:handleActionWithIdentifier:forLocalNotification:withResponseInfo:completionHandler:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "AWARE/AWAREFramework/Plugins/BalacnedCampusScheduler/BalacnedCampusESMScheduler.m"
             timestampString = "493175249.547328"
             startingColumnNumber = "9223372036854775807"
@@ -154,22 +138,6 @@
             startingLineNumber = "245"
             endingLineNumber = "245"
             landmarkName = "-getUnixtimeInEsm:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "AWARE/AWAREFramework/Core/AWARECoreDataManager.m"
-            timestampString = "491741620.692691"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "310"
-            endingLineNumber = "310"
-            landmarkName = "-insertNewEntityWithData:managedObjectContext:entityName:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -266,6 +234,22 @@
             startingLineNumber = "268"
             endingLineNumber = "268"
             landmarkName = "-joinStudy"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "AWARE/AWAREFramework/Core/AWAREDelegate.m"
+            timestampString = "494336080.210559"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "294"
+            endingLineNumber = "294"
+            landmarkName = "-application:didRegisterForRemoteNotificationsWithDeviceToken:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

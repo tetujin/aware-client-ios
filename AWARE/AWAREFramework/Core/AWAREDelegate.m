@@ -43,7 +43,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
-    [application unregisterForRemoteNotifications];
+    // [application unregisterForRemoteNotifications];
     
     if ([AWAREUtils getCurrentOSVersionAsFloat] >= 8.0) {
         // Set remote notifications
@@ -79,7 +79,7 @@
     [[UIApplication sharedApplication] cancelAllLocalNotifications];
     
     // DeployGate SDK
-    [[DeployGateSDK sharedInstance] launchApplicationWithAuthor:@"tetujin" key:@"b268f60ae48ecfca7352c0a01918c86a7bd4bc74"];
+    // [[DeployGateSDK sharedInstance] launchApplicationWithAuthor:@"tetujin" key:@"b268f60ae48ecfca7352c0a01918c86a7bd4bc74"];
     
     // Set background fetch for updating debug information
     [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
@@ -277,6 +277,14 @@ handleEventsForBackgroundURLSession:(NSString *)identifier
     
     NSString *token = deviceToken.description;
     
+    if([[NSUserDefaults standardUserDefaults] boolForKey:SETTING_DEBUG_STATE]){
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSLog(@"deviceToken: %@", token);
+            [AWAREUtils sendLocalNotificationForMessage:token soundFlag:YES];
+        });
+    }
+    
+    
     token = [token stringByReplacingOccurrencesOfString:@"<" withString:@""];
     token = [token stringByReplacingOccurrencesOfString:@">" withString:@""];
     token = [token stringByReplacingOccurrencesOfString:@" " withString:@""];
@@ -284,7 +292,7 @@ handleEventsForBackgroundURLSession:(NSString *)identifier
     PushNotification * pushNotification = [[PushNotification alloc] initWithAwareStudy:_sharedAWARECore.sharedAwareStudy dbType:AwareDBTypeCoreData];
     [pushNotification savePushNotificationDeviceToken:token];
     // [pushNotification syncAwareDBInForeground];
-    [pushNotification performSelector:@selector(syncAwareDBInForeground) withObject:nil afterDelay:5];
+    [pushNotification performSelector:@selector(syncAwareDBInForeground) withObject:nil afterDelay:3];
     
     NSLog(@"deviceToken: %@", token);
 }
@@ -580,6 +588,8 @@ void exceptionHandler(NSException *exception) {
 ////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////
 - (void) powerStateDidChange:(id) sender {
+    [_sharedAWARECore checkCompliance];
+    /*
     Debug * debugSensor = [[Debug alloc] initWithAwareStudy:_sharedAWARECore.sharedAwareStudy dbType:AwareDBTypeTextFile];
     if ([[NSProcessInfo processInfo] isLowPowerModeEnabled]) {
         // Low Power Mode is enabled. Start reducing activity to conserve energy.
@@ -596,6 +606,7 @@ void exceptionHandler(NSException *exception) {
         [debugSensor allowsDateUploadWithoutBatteryCharging];
         [debugSensor syncAwareDB];
     };
+     */
 }
 
 
