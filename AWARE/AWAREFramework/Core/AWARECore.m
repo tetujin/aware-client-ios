@@ -107,15 +107,53 @@
     NSRunLoop *loop = [NSRunLoop currentRunLoop];
     [loop addTimer:_complianceTimer forMode:NSRunLoopCommonModes];
     // [_complianceTimer fire];
+    
+    // Battery Save Mode
+    if([AWAREUtils getCurrentOSVersionAsFloat] >= 9.0){
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                  selector:@selector(checkCompliance)
+                                                      name:NSProcessInfoPowerStateDidChangeNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector( checkCompliance)
+                                                     name:UIApplicationBackgroundRefreshStatusDidChangeNotification
+                                                   object:nil];
+        
+    }
+    
+    // battery state trigger
+    // Set a battery state change event to a notification center
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(changedBatteryState:)
+                                                 name:UIDeviceBatteryStateDidChangeNotification object:nil];
+
+
 }
 
+- (void) changedBatteryState:(id) sender{
+    NSInteger batteryState = [UIDevice currentDevice].batteryState;
+    if (batteryState == UIDeviceBatteryStateCharging || batteryState == UIDeviceBatteryStateFull) {
+        Debug * debugSensor = [[Debug alloc] initWithAwareStudy:self.sharedAwareStudy dbType:AwareDBTypeTextFile];
+        [debugSensor saveDebugEventWithText:@"[Uploader] The battery is charging. AWARE iOS start to upload sensor data." type:DebugTypeInfo label:@""];
+        [self.sharedSensorManager syncAllSensorsWithDBInBackground];
+        [self.sharedSensorManager runBatteryStateChangeEvents];
+    }
+}
 
 - (void) deactivate{
     [_sharedSensorManager stopAndRemoveAllSensors];
     [_sharedLocationManager stopUpdatingLocation];
     [_dailyUpdateTimer invalidate];
     [_complianceTimer invalidate];
+    //
+    if([AWAREUtils getCurrentOSVersionAsFloat] >= 9.0){
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:NSProcessInfoPowerStateDidChangeNotification object:nil];
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationBackgroundRefreshStatusDidChangeNotification object:nil];
+    }
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceBatteryStateDidChangeNotification object:nil];
+
 }
+
+////////////////////////////////////////////////////////////////////////////////////
 
 /**
  * This method is an initializers for a location sensor.
@@ -183,6 +221,23 @@
 //        }
     }
 }
+
+
+
+
+
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+
+
+
+/**
+ * Start data sync with all sensors in the background when the device is started a battery charging.
+ */
+//- (void) changedBatteryState:(id) sender {
+
+//}
+
 
 
 ////////////////////////////////////////////////////////////////////
