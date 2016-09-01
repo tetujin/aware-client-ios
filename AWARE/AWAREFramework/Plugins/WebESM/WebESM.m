@@ -197,6 +197,22 @@ didReceiveResponse:(NSURLResponse *)response
 
 }
 
+- (void)URLSession:(NSURLSession *)session didBecomeInvalidWithError:(NSError *)error{
+    
+    if([session.configuration.identifier isEqualToString:currentHttpSessionId]){
+        if (error != nil) {
+            if([self isDebug]){
+                NSLog(@"[%@] the session did become invaild with error: %@", [self getSensorName], error.debugDescription);
+            }
+        }
+        [session invalidateAndCancel];
+        [session finishTasksAndInvalidate];
+    }else{
+        [super URLSession:session didBecomeInvalidWithError:error];
+    }
+}
+
+
 
 
 - (void) setWebESMsWithArray:(NSArray *) webESMArray {
@@ -627,16 +643,6 @@ didReceiveResponse:(NSURLResponse *)response
     return @"[]";
 }
 
-
-- (void)URLSession:(NSURLSession *)session didBecomeInvalidWithError:(NSError *)error{
-    if (error != nil) {
-        if([self isDebug]){
-            NSLog(@"[%@] the session did become invaild with error: %@", [self getSensorName], error.debugDescription);
-        }
-    }
-    [session invalidateAndCancel];
-    [session finishTasksAndInvalidate];
-}
 
 
 

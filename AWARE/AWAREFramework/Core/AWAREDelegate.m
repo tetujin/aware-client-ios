@@ -43,7 +43,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
-    [application unregisterForRemoteNotifications];
+    // [application unregisterForRemoteNotifications];
     
     if ([AWAREUtils getCurrentOSVersionAsFloat] >= 8.0) {
         // Set remote notifications
@@ -79,7 +79,7 @@
     [[UIApplication sharedApplication] cancelAllLocalNotifications];
     
     // DeployGate SDK
-    [[DeployGateSDK sharedInstance] launchApplicationWithAuthor:@"tetujin" key:@"b268f60ae48ecfca7352c0a01918c86a7bd4bc74"];
+    // [[DeployGateSDK sharedInstance] launchApplicationWithAuthor:@"tetujin" key:@"b268f60ae48ecfca7352c0a01918c86a7bd4bc74"];
     
     // Set background fetch for updating debug information
     [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
@@ -96,20 +96,6 @@
     // Error Tacking
     NSSetUncaughtExceptionHandler(&exceptionHandler);
     
-    // Battery Save Mode
-    if([AWAREUtils getCurrentOSVersionAsFloat] >= 9.0){
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(powerStateDidChange:)
-                                                     name:NSProcessInfoPowerStateDidChangeNotification
-                                                   object:nil];
-    }
-    
-    // battery state trigger
-    // Set a battery state change event to a notification center
-    [UIDevice currentDevice].batteryMonitoringEnabled = YES;
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(changedBatteryState:)
-                                                 name:UIDeviceBatteryStateDidChangeNotification object:nil];
     
     _sharedAWARECore = [[AWARECore alloc] init];
     [_sharedAWARECore activate];
@@ -277,6 +263,14 @@ handleEventsForBackgroundURLSession:(NSString *)identifier
     
     NSString *token = deviceToken.description;
     
+    if([[NSUserDefaults standardUserDefaults] boolForKey:SETTING_DEBUG_STATE]){
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSLog(@"deviceToken: %@", token);
+            [AWAREUtils sendLocalNotificationForMessage:token soundFlag:YES];
+        });
+    }
+    
+    
     token = [token stringByReplacingOccurrencesOfString:@"<" withString:@""];
     token = [token stringByReplacingOccurrencesOfString:@">" withString:@""];
     token = [token stringByReplacingOccurrencesOfString:@" " withString:@""];
@@ -284,7 +278,7 @@ handleEventsForBackgroundURLSession:(NSString *)identifier
     PushNotification * pushNotification = [[PushNotification alloc] initWithAwareStudy:_sharedAWARECore.sharedAwareStudy dbType:AwareDBTypeCoreData];
     [pushNotification savePushNotificationDeviceToken:token];
     // [pushNotification syncAwareDBInForeground];
-    [pushNotification performSelector:@selector(syncAwareDBInForeground) withObject:nil afterDelay:5];
+    [pushNotification performSelector:@selector(syncAwareDBInForeground) withObject:nil afterDelay:3];
     
     NSLog(@"deviceToken: %@", token);
 }
@@ -574,45 +568,6 @@ void exceptionHandler(NSException *exception) {
     [debugSensor saveDebugEventWithText:exception.debugDescription type:DebugTypeCrash label:exception.name];
     [debugSensor syncAwareDB];
 }
-
-
-
-////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////
-- (void) powerStateDidChange:(id) sender {
-    Debug * debugSensor = [[Debug alloc] initWithAwareStudy:_sharedAWARECore.sharedAwareStudy dbType:AwareDBTypeTextFile];
-    if ([[NSProcessInfo processInfo] isLowPowerModeEnabled]) {
-        // Low Power Mode is enabled. Start reducing activity to conserve energy.
-        [debugSensor saveDebugEventWithText:@"[Low Power Mode] On" type:DebugTypeWarn label:@""];
-        [AWAREUtils sendLocalNotificationForMessage:@"Please don't use **Low Power Mode** during a study!" soundFlag:YES];
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"prefs:root=BATTERY_USAGE"]];
-        [debugSensor allowsCellularAccess];
-        [debugSensor allowsDateUploadWithoutBatteryCharging];
-        [debugSensor syncAwareDB];
-    } else {
-        // Low Power Mode is not enabled.
-        [debugSensor saveDebugEventWithText:@"[Low Power Mode] Off" type:DebugTypeWarn label:@""];
-        [debugSensor allowsCellularAccess];
-        [debugSensor allowsDateUploadWithoutBatteryCharging];
-        [debugSensor syncAwareDB];
-    };
-}
-
-
-/**
- * Start data sync with all sensors in the background when the device is started a battery charging.
- */
-- (void) changedBatteryState:(id) sender {
-    NSInteger batteryState = [UIDevice currentDevice].batteryState;
-    if (batteryState == UIDeviceBatteryStateCharging || batteryState == UIDeviceBatteryStateFull) {
-        Debug * debugSensor = [[Debug alloc] initWithAwareStudy:_sharedAWARECore.sharedAwareStudy dbType:AwareDBTypeTextFile];
-        [debugSensor saveDebugEventWithText:@"[Uploader] The battery is charging. AWARE iOS start to upload sensor data." type:DebugTypeInfo label:@""];
-        [_sharedAWARECore.sharedSensorManager syncAllSensorsWithDBInBackground];
-        [_sharedAWARECore.sharedSensorManager runBatteryStateChangeEvents];
-    }
-}
-
-
 
 
 

@@ -107,15 +107,53 @@
     NSRunLoop *loop = [NSRunLoop currentRunLoop];
     [loop addTimer:_complianceTimer forMode:NSRunLoopCommonModes];
     // [_complianceTimer fire];
+    
+    // Battery Save Mode
+    if([AWAREUtils getCurrentOSVersionAsFloat] >= 9.0){
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                  selector:@selector(checkCompliance)
+                                                      name:NSProcessInfoPowerStateDidChangeNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector( checkCompliance)
+                                                     name:UIApplicationBackgroundRefreshStatusDidChangeNotification
+                                                   object:nil];
+        
+    }
+    
+    // battery state trigger
+    // Set a battery state change event to a notification center
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(changedBatteryState:)
+                                                 name:UIDeviceBatteryStateDidChangeNotification object:nil];
+
+
 }
 
+- (void) changedBatteryState:(id) sender{
+    NSInteger batteryState = [UIDevice currentDevice].batteryState;
+    if (batteryState == UIDeviceBatteryStateCharging || batteryState == UIDeviceBatteryStateFull) {
+        Debug * debugSensor = [[Debug alloc] initWithAwareStudy:self.sharedAwareStudy dbType:AwareDBTypeTextFile];
+        [debugSensor saveDebugEventWithText:@"[Uploader] The battery is charging. AWARE iOS start to upload sensor data." type:DebugTypeInfo label:@""];
+        [self.sharedSensorManager syncAllSensorsWithDBInBackground];
+        [self.sharedSensorManager runBatteryStateChangeEvents];
+    }
+}
 
 - (void) deactivate{
     [_sharedSensorManager stopAndRemoveAllSensors];
     [_sharedLocationManager stopUpdatingLocation];
     [_dailyUpdateTimer invalidate];
     [_complianceTimer invalidate];
+    //
+    if([AWAREUtils getCurrentOSVersionAsFloat] >= 9.0){
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:NSProcessInfoPowerStateDidChangeNotification object:nil];
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationBackgroundRefreshStatusDidChangeNotification object:nil];
+    }
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceBatteryStateDidChangeNotification object:nil];
+
 }
+
+////////////////////////////////////////////////////////////////////////////////////
 
 /**
  * This method is an initializers for a location sensor.
@@ -185,6 +223,23 @@
 }
 
 
+
+
+
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+
+
+
+/**
+ * Start data sync with all sensors in the background when the device is started a battery charging.
+ */
+//- (void) changedBatteryState:(id) sender {
+
+//}
+
+
+
 ////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////
 
@@ -198,7 +253,7 @@
     [self checkStorageUsageWithViewController:viewController];
     [self checkWifiStateWithViewController:viewController];
     [self checkLowPowerModeWithViewController:viewController];
-    // [self checkNotificationSettingWithViewController:viewController];
+    [self checkNotificationSettingWithViewController:viewController];
 }
 
 //////////////////////////////////////////////////////////////////
@@ -241,7 +296,7 @@
         }
 //        DebugTypeUnknown = 0, DebugTypeInfo = 1, DebugTypeError = 2, DebugTypeWarn = 3, DebugTypeCrash = 4
         Debug * debugSensor = [[Debug alloc] initWithAwareStudy:_sharedAwareStudy dbType:AwareDBTypeTextFile];
-        [debugSensor saveDebugEventWithText:title type:DebugTypeWarn label:message];
+        [debugSensor saveDebugEventWithText:@"[compliance] Location Services are OFF or Background Location is NOT enabled" type:DebugTypeWarn label:title];
         [debugSensor allowsCellularAccess];
         [debugSensor allowsDateUploadWithoutBatteryCharging];
         [debugSensor syncAwareDBInBackground];
@@ -249,6 +304,9 @@
     // The user has not enabled any location services. Request background authorization.
     else if (status == kCLAuthorizationStatusNotDetermined) {
         [self initLocationSensor];
+    }else{
+        Debug * debugSensor = [[Debug alloc] initWithAwareStudy:_sharedAwareStudy dbType:AwareDBTypeTextFile];
+        [debugSensor saveDebugEventWithText:@"[compliance] Location Services is enabled" type:DebugTypeInfo label:@""];
     }
     // status == kCLAuthorizationStatusAuthorizedAlways
 }
@@ -283,17 +341,20 @@
         }
         
         Debug * debugSensor = [[Debug alloc] initWithAwareStudy:_sharedAwareStudy dbType:AwareDBTypeTextFile];
-        [debugSensor saveDebugEventWithText:title type:DebugTypeWarn label:message];
+        [debugSensor saveDebugEventWithText:@"[compliance] Background App Refresh service is Restricted or Denied" type:DebugTypeWarn label:@""];
         [debugSensor allowsDateUploadWithoutBatteryCharging];
         [debugSensor allowsCellularAccess];
         [debugSensor syncAwareDBInBackground];
     } else if(backgroundRefreshStatus == UIBackgroundRefreshStatusAvailable){
-        
+        Debug * debugSensor = [[Debug alloc] initWithAwareStudy:_sharedAwareStudy dbType:AwareDBTypeTextFile];
+        [debugSensor saveDebugEventWithText:@"[compliance] Background App Refresh service is Allowed" type:DebugTypeInfo label:@""];
     }
 }
 
 - (void) checkNotificationSettingWithViewController:(UIViewController *) viewController {
     if ([AWAREUtils getCurrentOSVersionAsFloat] >= 8) {
+        // NSString *title = @"Notification service is permitted.";
+        // NSString *message = @"";
         UIUserNotificationSettings *currentSettings = [[UIApplication sharedApplication] currentUserNotificationSettings];
         if((currentSettings.types==0) || (currentSettings.types==4) || (currentSettings.types==5)) {
             //[self showAlertview:@"通知設定が未許可です。\n設定 > 通知 > で通知を許可してください。"];
@@ -302,8 +363,9 @@
             // currentSettings.types=5 >>> 通知on , soundOff , aiconOn
             // currentSettings.types=6 >>> 通知on , soundOn , aiconOff
             // currentSettings.types=7 >>> 通知on , soundOn , aiconOn
-            NSString *title = @"Notification service is not permitted.";
-            NSString *message = @"To send important notifications, please allow the 'Notification' service in the General Settings.";
+            //NSString *title = @"Notification service is not permitted.";
+            // NSString *message = @"To send important notifications, please allow the 'Notification' service in the General Settings.";
+            /*
             if([AWAREUtils isForeground]  && viewController!=nil ){
                 UIAlertController* alert = [UIAlertController alertControllerWithTitle:title
                                                                                message:message
@@ -322,12 +384,16 @@
             }else{
                 [AWAREUtils sendLocalNotificationForMessage:@"Please allow the 'Notification' service in the Settings.app->Notification->Allow Notifications." soundFlag:NO];
             }
+             */
             
             Debug * debugSensor = [[Debug alloc] initWithAwareStudy:_sharedAwareStudy dbType:AwareDBTypeTextFile];
-            [debugSensor saveDebugEventWithText:title type:DebugTypeWarn label:message];
+            [debugSensor saveDebugEventWithText:@"[compliance] Notification Service is NOT permitted" type:DebugTypeWarn label:@""];
             [debugSensor allowsDateUploadWithoutBatteryCharging];
             [debugSensor allowsCellularAccess];
             [debugSensor syncAwareDBInBackground];
+        }else{
+            Debug * debugSensor = [[Debug alloc] initWithAwareStudy:_sharedAwareStudy dbType:AwareDBTypeTextFile];
+            [debugSensor saveDebugEventWithText:@"[compliance] Notification Service is permitted" type:DebugTypeInfo label:@""];
         }
     }
 }
@@ -335,16 +401,20 @@
 ///////////////////////////////////////////////////////////////
 
 - (void) checkStorageUsageWithViewController:(UIViewController *) viewController{
-//    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES);
-//    NSDictionary *dictionary = [[NSFileManager defaultManager] attributesOfFileSystemForPath:[paths lastObject] error:nil];
-//    if (dictionary) {
-//        int GiB = 1024*1024*1024;
-//        float free = [[dictionary objectForKey: NSFileSystemFreeSize] floatValue]/GiB;
-//        float total = [[dictionary objectForKey: NSFileSystemSize] floatValue]/GiB;
-//        NSLog(@"Used: %.3f", total-free);
-//        NSLog(@"Space: %.3f", free);
-//        NSLog(@"Total: %.3f", total);
-//        float percentage = free/total * 100.0f;
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES);
+    NSDictionary *dictionary = [[NSFileManager defaultManager] attributesOfFileSystemForPath:[paths lastObject] error:nil];
+    if (dictionary) {
+        int GiB = 1024*1024*1024;
+        float free = [[dictionary objectForKey: NSFileSystemFreeSize] floatValue]/GiB;
+        float total = [[dictionary objectForKey: NSFileSystemSize] floatValue]/GiB;
+        NSLog(@"Used: %.3f", total-free);
+        NSLog(@"Space: %.3f", free);
+        NSLog(@"Total: %.3f", total);
+        // float percentage = free/total * 100.0f;
+        NSString * event = [NSString stringWithFormat:@"[compliance] TOTAL:%.3fGB, USED:%.3fGB, FREE:%.3fGB", total, total-free, free];
+        Debug * debugSensor = [[Debug alloc] initWithAwareStudy:_sharedAwareStudy dbType:AwareDBTypeTextFile];
+        [debugSensor saveDebugEventWithText:event type:DebugTypeInfo label:@""];
+        [debugSensor syncAwareDBInBackground];
 //        if(percentage < 5){ // %
 //            NSString * title = @"Please upload stored data manually!";
 //            NSString * message = [NSString stringWithFormat:@"You are using  %.3f GB ", free];
@@ -358,20 +428,17 @@
 //            }else{
 //                [AWAREUtils sendLocalNotificationForMessage:message soundFlag:NO];
 //            }
-//            Debug * debugSensor = [[Debug alloc] initWithAwareStudy:_sharedAwareStudy dbType:AwareDBTypeTextFile];
-//            [debugSensor saveDebugEventWithText:title type:DebugTypeWarn label:message];
-//            [debugSensor syncAwareDBInBackground];
 //        }
-//    }
+    }
 }
 
 
 - (void) checkLowPowerModeWithViewController:(UIViewController *) viewController {
     
     if([AWAREUtils getCurrentOSVersionAsFloat] >= 9.0){
+        NSString * title = @"Please turn off the **Low Power Mode** for tracking your daily activites.";
+        NSString * message = @"";
         if ([NSProcessInfo processInfo].lowPowerModeEnabled ) {
-            NSString * title = @"Please turn off the **Low Power Mode** for tracking your daily activites.";
-            NSString * message = @"";
             // [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"prefs:root=BATTERY_USAGE"]];
             if([AWAREUtils isForeground]){
                 UIAlertController* alert = [UIAlertController alertControllerWithTitle:title
@@ -398,10 +465,13 @@
             }
             
             Debug * debugSensor = [[Debug alloc] initWithAwareStudy:_sharedAwareStudy dbType:AwareDBTypeTextFile];
-            [debugSensor saveDebugEventWithText:title type:DebugTypeWarn label:message];
+            [debugSensor saveDebugEventWithText:@"[compliance] Low Power Mode is ON" type:DebugTypeWarn label:@""];
             [debugSensor allowsDateUploadWithoutBatteryCharging];
             [debugSensor allowsCellularAccess];
             [debugSensor syncAwareDBInBackground];
+        }else{
+            Debug * debugSensor = [[Debug alloc] initWithAwareStudy:_sharedAwareStudy dbType:AwareDBTypeTextFile];
+            [debugSensor saveDebugEventWithText:@"[compliance] Low Power Mode is OFF" type:DebugTypeInfo label:@""];
         }
     }
     
@@ -413,7 +483,7 @@
     
     if(![self isWiFiEnabled]){
         NSString * title = @"Please turn on WiFi!";
-        NSString * message = @"WiFi is turned off now. AWARE client needs the wifi network for data uploading. Please keep turn on the WiFi during your study.";
+        NSString * message = @"WiFi is turned off now. AWARE needs the wifi network for data uploading. Please keep turn on the WiFi during your study.";
         
         if ([AWAREUtils isForeground] && viewController!=nil) {
             UIAlertController* alert = [UIAlertController alertControllerWithTitle:title
@@ -436,12 +506,13 @@
         }
         
         Debug * debugSensor = [[Debug alloc] initWithAwareStudy:_sharedAwareStudy dbType:AwareDBTypeTextFile];
-        [debugSensor saveDebugEventWithText:title type:DebugTypeWarn label:message];
+        [debugSensor saveDebugEventWithText:@"[compliance] WiFi is OFF" type:DebugTypeWarn label:@""];
         [debugSensor allowsCellularAccess];
         [debugSensor allowsDateUploadWithoutBatteryCharging];
         [debugSensor syncAwareDBInBackground];
     }else{
-        
+        Debug * debugSensor = [[Debug alloc] initWithAwareStudy:_sharedAwareStudy dbType:AwareDBTypeTextFile];
+        [debugSensor saveDebugEventWithText:@"[compliance] WiFi is On" type:DebugTypeInfo label:@""];
     }
 }
 

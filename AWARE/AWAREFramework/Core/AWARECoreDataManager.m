@@ -594,25 +594,19 @@ didReceiveResponse:(NSURLResponse *)response
 
     if([[self getEntityName] isEqualToString:@"EntityOpenWeather"]){
         
-        //NSLog(@"%@", [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding]);
-        // NSLog(@"hello");
-        
     }else if([[self getEntityName] isEqualToString:NSStringFromClass([EntityESMAnswer class])]){
         
-        // NSLog(@"hey hey hey");
-        
     }
-    
     
     double diff = [[NSDate new] timeIntervalSince1970] - httpStartTimestamp;
     if (postedTextLength > 0 && diff > 0) {
         double kbs = postedTextLength/diff/1000.0f;
-//        NSString *networkPeformance = [NSString stringWithFormat:@"%0.2f KB/s",kbs];
         NSLog(@"[%@] %0.2f KB/s", sensorName, kbs);
     }
     
     [session finishTasksAndInvalidate];
     [session invalidateAndCancel];
+    
     completionHandler(NSURLSessionResponseAllow);
     
     if ([session.configuration.identifier isEqualToString:syncDataQueryIdentifier]) {
@@ -671,7 +665,6 @@ didBecomeStreamTask:(NSURLSessionStreamTask *)streamTask{
         // If the data is null, this method is not called.
         NSString * result = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
         NSLog(@"[%@] Data is coming! => %@", sensorName, result);
-
     } else if ([session.configuration.identifier isEqualToString:createTableQueryIdentifier]){
         NSString* newStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
         NSLog(@"[%@] %@",sensorName, newStr);
@@ -832,10 +825,10 @@ didCompleteWithError:(nullable NSError *)error;
             }
             if (errorPosts < 3) { //TODO
                 [self uploadSensorDataInBackground];
-                [self broadcastDBSyncEventWithProgress:@(-1) isFinish:@NO isSuccess:@NO sensorName:sensorName];
+                [self broadcastDBSyncEventWithProgress:@(-1) isFinish:NO isSuccess:NO sensorName:sensorName];
             } else {
                 [self dataSyncIsFinishedCorrectoly];
-                [self broadcastDBSyncEventWithProgress:@(-1) isFinish:@YES isSuccess:@NO sensorName:sensorName];
+                [self broadcastDBSyncEventWithProgress:@(-1) isFinish:YES isSuccess:NO sensorName:sensorName];
             }
         } else {
             

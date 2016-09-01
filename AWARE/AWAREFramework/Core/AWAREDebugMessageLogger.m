@@ -55,6 +55,10 @@
     NSString * osVersion = [[UIDevice currentDevice] systemVersion];
     NSString * deviceName = [AWAREUtils deviceName];
     NSString * appVersion = [NSString stringWithFormat:@"%@",[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]];
+    NSString *build = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
+    if(build != nil){
+        appVersion = [appVersion stringByAppendingFormat:@"(%@)", build];
+    }
     NSNumber * battery = [NSNumber numberWithInt:[[UIDevice currentDevice] batteryLevel] * 100];
     NSNumber * batterySate = [NSNumber numberWithInteger:[UIDevice currentDevice].batteryState];
     NSString * deviceId = [awareStudy getDeviceId];
