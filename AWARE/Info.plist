@@ -115,6 +115,8 @@
 	<true/>
 	<key>NSLocationUsageDescription</key>
 	<string>To track your daily activity, AWARE needs access to your location in the background.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>To track your daily activity, AWARE needs access to your location.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>To track ambient noise level, AWARE needs access to Microphone.</string>
 	<key>NSMotionUsageDescription</key>

@@ -19,7 +19,6 @@
     int dbWriteInterval; //second
     int currentBufferSize;
     NSMutableArray * bufferArray;
-    // NSManagedObjectContext * tempManagedObjectContext;
 }
 
 - (instancetype)initWithAwareStudy:(AWAREStudy *)study dbType:(AwareDBType)dbType{
@@ -73,7 +72,7 @@
 }
 
 
-- (BOOL) startSensor{
+- (BOOL) startSensor {
     return [self startSensorWithInterval:sensingInterval];
 }
 
