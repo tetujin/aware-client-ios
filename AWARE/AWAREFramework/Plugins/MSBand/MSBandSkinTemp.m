@@ -65,6 +65,7 @@
         [dict setObject:[self getDeviceId] forKey:@"device_id"];
         [dict setObject:[NSNumber numberWithDouble:skinData.temperature] forKey:@"skintemp"];
         [self setLatestValue:data];
+        [self setLatestData:dict];
         [self saveData:dict];
         
     };

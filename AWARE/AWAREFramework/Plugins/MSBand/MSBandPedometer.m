@@ -47,11 +47,12 @@
     NSError * error = nil;
     void (^pedometerHandler)(MSBSensorPedometerData *, NSError *) = ^(MSBSensorPedometerData *pedometerData, NSError *error){
             NSNumber* unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
-            NSMutableDictionary * dic = [[NSMutableDictionary alloc] init];
-            [dic setObject:unixtime forKey:@"timestamp"];
-            [dic setObject:[self getDeviceId] forKey:@"device_id"];
-            [dic setObject:@(pedometerData.totalSteps) forKey:@"pedometer"];
-            [self saveData:dic];
+            NSMutableDictionary * dict = [[NSMutableDictionary alloc] init];
+            [dict setObject:unixtime forKey:@"timestamp"];
+            [dict setObject:[self getDeviceId] forKey:@"device_id"];
+            [dict setObject:@(pedometerData.totalSteps) forKey:@"pedometer"];
+            [self saveData:dict];
+            [self setLatestData:dict];
     };
     
     if(![self.client.sensorManager startPedometerUpdatesToQueue:nil errorRef:&error withHandler:pedometerHandler]){

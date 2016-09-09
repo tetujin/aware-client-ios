@@ -60,7 +60,7 @@
         [dict setObject:[self getDeviceId] forKey:@"device_id"];
         [dict setObject:@(gsrData.resistance) forKey:@"gsr"];
         [self setLatestValue:data];
-
+        [self setLatestData:dict];
         [self saveData:dict];
     };
     NSError *stateError;

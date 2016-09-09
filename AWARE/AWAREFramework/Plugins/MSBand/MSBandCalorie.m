@@ -62,6 +62,7 @@
         [dict setObject:[self getDeviceId] forKey:@"device_id"];
         [dict setObject:@(calData.calories) forKey:@"calories"];
         [self setLatestValue:data];
+        [self setLatestData:dict];
         [self saveData:dict];
     };
     NSError *stateError;

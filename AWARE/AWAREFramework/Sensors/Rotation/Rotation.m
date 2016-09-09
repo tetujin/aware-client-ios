@@ -113,15 +113,16 @@
                                                    });
                                                }
                                                
-                                            
+                                               [self setLatestData:dict];
+                                               [self setLatestValue:[NSString stringWithFormat:@"%f, %f, %f",motion.attitude.pitch, motion.attitude.roll,motion.attitude.yaw]];
+
                                                NSDictionary *userInfo = [NSDictionary dictionaryWithObject:dict
                                                                                                     forKey:EXTRA_DATA];
                                                [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_ROTATION
                                                                                                    object:nil
                                                                                                  userInfo:userInfo];
                                                
-                                               [self setLatestValue:[NSString stringWithFormat:@"%f, %f, %f",motion.attitude.pitch, motion.attitude.roll,motion.attitude.yaw]];
-
+                                               
                                            }];
     }
     return YES;

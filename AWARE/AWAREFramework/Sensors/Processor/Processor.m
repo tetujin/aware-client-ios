@@ -77,17 +77,18 @@
 
     // Save sensor data to the local database.
     NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
-    NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-    [dic setObject:unixtime forKey:@"timestamp"];
-    [dic setObject:[self getDeviceId] forKey:@"device_id"];
-    [dic setObject:appCpuUsage forKey:@"double_last_user"]; //double
-    [dic setObject:@0 forKey:@"double_last_system"]; //double
-    [dic setObject:idleCpuUsage forKey:@"double_last_idle"]; //double
-    [dic setObject:@0 forKey:@"double_user_load"];//double
-    [dic setObject:@0 forKey:@"double_system_load"]; //double
-    [dic setObject:@0 forKey:@"double_idle_load"]; //double
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    [dict setObject:unixtime forKey:@"timestamp"];
+    [dict setObject:[self getDeviceId] forKey:@"device_id"];
+    [dict setObject:appCpuUsage forKey:@"double_last_user"]; //double
+    [dict setObject:@0 forKey:@"double_last_system"]; //double
+    [dict setObject:idleCpuUsage forKey:@"double_last_idle"]; //double
+    [dict setObject:@0 forKey:@"double_user_load"];//double
+    [dict setObject:@0 forKey:@"double_system_load"]; //double
+    [dict setObject:@0 forKey:@"double_idle_load"]; //double
     [self setLatestValue:[NSString stringWithFormat:@"%@ %%",appCpuUsage]];
-    [self saveData:dic];
+    [self saveData:dict];
+    [self setLatestData:dict];
     
     malloc(cpuUsageFloat);
 }

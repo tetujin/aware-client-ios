@@ -74,9 +74,9 @@
         
         NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
         
-        NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-        [dic setObject:unixtime forKey:@"timestamp"];
-        [dic setObject:[self getDeviceId] forKey:@"device_id"];
+        NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+        [dict setObject:unixtime forKey:@"timestamp"];
+        [dict setObject:[self getDeviceId] forKey:@"device_id"];
         
         
         int awareScreenState = 0;
@@ -90,8 +90,8 @@
         // screen off
         if(state == 0) {
             awareScreenState = 0;
-            [dic setObject:@(elapsedTime) forKey:@"elapsed_device_on"]; // real
-            [dic setObject:@0 forKey:@"elapsed_device_off"]; // real
+            [dict setObject:@(elapsedTime) forKey:@"elapsed_device_on"]; // real
+            [dict setObject:@0 forKey:@"elapsed_device_off"]; // real
             if ([self isDebug]) {
                 NSLog(@"screen off");
 //                NSString * message = [NSString stringWithFormat:@"Elapsed Time of device ON: %@ [Event at %@]",
@@ -103,8 +103,8 @@
         // screen on
         } else {
             awareScreenState = 1;
-            [dic setObject:@0 forKey:@"elapsed_device_on"]; // real
-            [dic setObject:[NSNumber numberWithDouble:elapsedTime] forKey:@"elapsed_device_off"]; // real
+            [dict setObject:@0 forKey:@"elapsed_device_on"]; // real
+            [dict setObject:[NSNumber numberWithDouble:elapsedTime] forKey:@"elapsed_device_off"]; // real
             if([self isDebug]){
                 NSLog(@"screen on");
 //                NSString * message = [NSString stringWithFormat:@"Elapsed Time of device OFF: %@ [Event at %@]",
@@ -116,7 +116,8 @@
         }
         
         [self setLatestValue:[NSString stringWithFormat:@"[%d] %f", awareScreenState, elapsedTime ]];
-        [self saveData:dic];
+        [self saveData:dict];
+        [self setLatestData:dict];
         
     });
 }

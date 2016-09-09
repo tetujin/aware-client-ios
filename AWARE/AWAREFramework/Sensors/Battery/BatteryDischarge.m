@@ -36,6 +36,8 @@
     [dict setObject:endTimestamp forKey:@"double_end_timestamp"];
     [self saveData:dict];
     
+    [self setLatestData:dict];
+    
     // Broadcast the battery discharge event
     NSDictionary *userInfo = [NSDictionary dictionaryWithObject:dict
                                                          forKey:EXTRA_DATA];

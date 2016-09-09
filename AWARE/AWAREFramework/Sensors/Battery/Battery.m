@@ -195,6 +195,7 @@
     [dict setObject:@0 forKey:@"battery_health"];
     [dict setObject:@"" forKey:@"battery_technology"];
     [self setLatestValue:[NSString stringWithFormat:@"%d", batLeft]];
+    [self setLatestData:dict];
     
     // Broadcast
     NSDictionary *userInfo = [NSDictionary dictionaryWithObject:dict

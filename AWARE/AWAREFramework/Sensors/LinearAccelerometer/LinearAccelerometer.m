@@ -128,7 +128,8 @@
                                                    [dict setObject:@0 forKey:@"accuracy"];//int
                                                    [dict setObject:@"" forKey:@"label"]; //text
                                                    [self setLatestValue:[NSString stringWithFormat:@"%f, %f, %f",motion.userAcceleration.x, motion.userAcceleration.y,motion.userAcceleration.z]];
-                                                   
+                                                   [self setLatestData:dict];
+                                               
                                                    NSDictionary *userInfo = [NSDictionary dictionaryWithObject:dict
                                                                                                         forKey:EXTRA_DATA];
                                                    [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_LINEAR_ACCELEROMETER

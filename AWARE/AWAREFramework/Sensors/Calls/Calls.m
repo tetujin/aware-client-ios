@@ -116,8 +116,8 @@ NSString* const KEY_CALLS_TRACE = @"trace";
             [dict setObject:callId forKey:KEY_CALLS_TRACE];
             
             [super saveData:dict];
-            
-            
+            [super setLatestData:dict];
+        
             // Set latest sensor data
             NSDateFormatter *timeFormat = [[NSDateFormatter alloc] init];
             [timeFormat setDateFormat:@"YYYY-MM-dd HH:mm"];

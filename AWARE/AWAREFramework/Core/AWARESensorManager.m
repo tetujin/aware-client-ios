@@ -396,7 +396,7 @@
  * @param sensorName A NSString sensor name (key)
  * @return A latest sensor value as
  */
-- (NSString*) getLatestSensorData:(NSString *) sensorName {
+- (NSString*) getLatestSensorValue:(NSString *) sensorName {
     if ([self isLocked]) return @"";
     
     if([sensorName isEqualToString:@"location_gps"] || [sensorName isEqualToString:@"location_network"]){
@@ -413,6 +413,25 @@
         }
     }
     return @"";
+}
+
+
+- (NSDictionary * ) getLatestSensorData:(NSString *) sensorName {
+    if ([self isLocked])
+        return [[NSDictionary alloc] init];
+    
+    if([sensorName isEqualToString:@"location_gps"] || [sensorName isEqualToString:@"location_network"]){
+        sensorName = @"locations";
+    }
+    
+    for (AWARESensor* sensor in awareSensors) {
+        if (sensor.getSensorName != nil) {
+            if ([sensor.getSensorName isEqualToString:sensorName]) {
+                return [sensor getLatestData];
+            }
+        }
+    }
+    return [[NSDictionary alloc] init];
 }
 
 

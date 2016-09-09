@@ -132,15 +132,16 @@
     }
     
     
-    NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
     NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
-    [dic setObject:unixtime           forKey:@"timestamp"];
-    [dic setObject:[self getDeviceId] forKey:@"device_id"];
-    [dic setObject:userId             forKey:KEY_GOOGLE_USER_ID];
-    [dic setObject:name               forKey:KEY_GOOGLE_NAME];
-    [dic setObject:email              forKey:KEY_GOOGLE_EMAIL];
+    [dict setObject:unixtime           forKey:@"timestamp"];
+    [dict setObject:[self getDeviceId] forKey:@"device_id"];
+    [dict setObject:userId             forKey:KEY_GOOGLE_USER_ID];
+    [dict setObject:name               forKey:KEY_GOOGLE_NAME];
+    [dict setObject:email              forKey:KEY_GOOGLE_EMAIL];
     //[dic setObject:[NSNull null]      forKey:KEY_GOOGLE_BLOB_PICTURE];
-    [self saveData:dic];
+    [self saveData:dict];
+    [self setLatestData:dict];
     [self performSelector:@selector(syncAwareDB) withObject:0 afterDelay:3];
     return YES;
 }

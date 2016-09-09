@@ -75,6 +75,10 @@
 //     AWARECoreDataManager * coreDataManager;
 
     BOOL sensorStatus;
+    
+    BOOL dataStoringState;
+    
+    NSDictionary * latestData;
 }
 
 @end
@@ -145,6 +149,10 @@
         
         // AWARE DB setting
         awareDBType = dbType;
+        
+        dataStoringState = YES;
+        
+        latestData = [[NSDictionary alloc] init];
         
         /**
          * NOTE: Switch to CoreData to TextFile DB if this device is using TextFile DB
@@ -319,6 +327,21 @@
     return awareDBType;
 }
 
+
+- (void) setLatestData:(NSDictionary *)dict{
+    if(dict != nil){
+        latestData = dict;
+    }
+}
+
+- (NSDictionary *) getLatestData{
+    if (latestData != nil) {
+        return latestData;
+    }else{
+        return [[NSDictionary alloc] init];
+    }
+}
+
 ///////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////
 
@@ -369,20 +392,24 @@
 
 //// save data
 - (bool) saveDataWithArray:(NSArray*) array {
-    if(localStorage != nil){
-        return [localStorage saveDataWithArray:array];
-    }else{
-        return [super saveDataWithArray:array];
+    if(dataStoringState){
+        if(localStorage != nil){
+            return [localStorage saveDataWithArray:array];
+        }else{
+            return [super saveDataWithArray:array];
+        }
     }
     return NO;
 }
 
 // save data
 - (bool) saveData:(NSDictionary *)data{
-    if(localStorage != nil){
-        return [localStorage saveData:data];
-    }else{
-        return [super saveData:data];
+    if(dataStoringState){
+        if(localStorage != nil){
+            return [localStorage saveData:data];
+        }else{
+            return [super saveData:data];
+        }
     }
     return NO;
 }
@@ -390,16 +417,69 @@
 
 // save data with local file
 - (bool) saveData:(NSDictionary *)data toLocalFile:(NSString *)fileName{
-    if(localStorage != nil){
-        return [localStorage saveData:data toLocalFile:fileName];
-    }else{
-        NSLog(@"[%@] Please use -saveData: method", awareSensorName);
-        return [super saveData:data];
+    if(dataStoringState){
+        if(localStorage != nil){
+            return [localStorage saveData:data toLocalFile:fileName];
+        }else{
+            NSLog(@"[%@] Please use -saveData: method", awareSensorName);
+            return [super saveData:data];
+        }
+    }
+    return NO;
+}
+
+- (bool) saveDataToDB {
+    if(dataStoringState){
+        if(baseDataUploader != nil){
+            return [baseDataUploader saveDataToDB];
+        }else{
+            return [super saveDataToDB];
+        }
     }
     return NO;
 }
 
 
+
+
+
+
+
+- (void) saveDummyData {
+    
+}
+
+/////////////////////////////
+////////////////////////////
+
+- (void) setDataStoring:(BOOL)state{
+    dataStoringState = state;
+}
+
+- (void) startDataStoring{
+    dataStoringState = YES;
+}
+
+- (void) stopDataStoring{
+    dataStoringState = NO;
+}
+
+- (bool) isDataStoring{
+    return dataStoringState;
+}
+
+
+
+//////////////////////////////////////////
+////////////////////////////////////////
+
+- (void) syncAwareDB {
+    if(baseDataUploader != nil){
+        [baseDataUploader syncAwareDBInBackground];
+    }else{
+        [super syncAwareDBInBackground];
+    }
+}
 
 - (BOOL) syncAwareDBWithData:(NSDictionary *) dictionary{
     if(baseDataUploader != nil){
@@ -408,37 +488,6 @@
         return [super syncAwareDBWithData:dictionary];
     }
     // return NO;
-}
-
-
-- (bool) saveDataToDB {
-    if(baseDataUploader != nil){
-        return [baseDataUploader saveDataToDB];
-    }else{
-        return [super saveDataToDB];
-    }
-}
-
-
-- (void) saveDummyData {
-    
-}
-
-//////////////////////////////////////////
-////////////////////////////////////////
-
-//////////////////////////////////////////
-////////////////////////////////////////
-/**
- * Background sync method
- */
-
-- (void) syncAwareDB {
-    if(baseDataUploader != nil){
-        [baseDataUploader syncAwareDBInBackground];
-    }else{
-        [super syncAwareDBInBackground];
-    }
 }
 
 

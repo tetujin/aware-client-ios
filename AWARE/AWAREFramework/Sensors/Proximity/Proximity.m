@@ -68,14 +68,15 @@
     int state = [UIDevice currentDevice].proximityState;
     // NSLog(@"Proximity: %d", state );
     NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
-    NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-    [dic setObject:unixtime forKey:@"timestamp"];
-    [dic setObject:[self getDeviceId] forKey:@"device_id"];
-    [dic setObject:[NSNumber numberWithInt:state] forKey:@"double_proximity"];
-    [dic setObject:@0 forKey:@"accuracy"];
-    [dic setObject:@"" forKey:@"label"];
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    [dict setObject:unixtime forKey:@"timestamp"];
+    [dict setObject:[self getDeviceId] forKey:@"device_id"];
+    [dict setObject:[NSNumber numberWithInt:state] forKey:@"double_proximity"];
+    [dict setObject:@0 forKey:@"accuracy"];
+    [dict setObject:@"" forKey:@"label"];
     [self setLatestValue:[NSString stringWithFormat:@"[%d]", state ]];
-    [self saveData:dic];
+    [self saveData:dict];
+    [self setLatestData:dict];
 }
 
 - (void)insertNewEntityWithData:(NSDictionary *)data managedObjectContext:(NSManagedObjectContext *)childContext entityName:(NSString *)entity{

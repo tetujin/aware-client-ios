@@ -168,14 +168,15 @@
 }
 
 
-- (void) saveScreenEvent:(int) state{
+- (void) saveScreenEvent:(int) state {
     /**  ======= Codes for TextFile DB ======= */
     NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
-    NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-    [dic setObject:unixtime forKey:@"timestamp"];
-    [dic setObject:[self getDeviceId] forKey:@"device_id"];
-    [dic setObject:[NSNumber numberWithInt:state] forKey:@"screen_status"]; // int
-    [self saveData:dic];
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    [dict setObject:unixtime forKey:@"timestamp"];
+    [dict setObject:[self getDeviceId] forKey:@"device_id"];
+    [dict setObject:[NSNumber numberWithInt:state] forKey:@"screen_status"]; // int
+    [self saveData:dict];
+    [self setLatestData:dict];
 }
 
 

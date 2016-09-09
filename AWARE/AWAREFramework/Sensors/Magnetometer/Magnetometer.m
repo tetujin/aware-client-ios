@@ -105,7 +105,8 @@
                                              [dict setObject:@0 forKey:@"accuracy"];
                                              [dict setObject:@"" forKey:@"label"];
                                              [self setLatestValue:[NSString stringWithFormat:@"%f, %f, %f",magnetometerData.magneticField.x, magnetometerData.magneticField.y, magnetometerData.magneticField.z]];
-
+                                             [self setLatestData:dict];
+                                         
                                              NSDictionary *userInfo = [NSDictionary dictionaryWithObject:dict
                                                                                                   forKey:EXTRA_DATA];
                                              [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_MAGNETOMETER

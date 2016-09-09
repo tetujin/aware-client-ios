@@ -38,6 +38,8 @@
     // Save battery charge event
     [self saveData:dict];
     
+    [self setLatestData:dict];
+    
     // Broadcast events
     NSDictionary *userInfo = [NSDictionary dictionaryWithObject:dict
                                                          forKey:EXTRA_DATA];
