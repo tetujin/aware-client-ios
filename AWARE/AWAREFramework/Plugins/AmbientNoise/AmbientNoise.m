@@ -331,23 +331,27 @@ static vDSP_Length const FFTViewControllerFFTWindowSize = 4096;
         [AWAREUtils sendLocalNotificationForMessage:[NSString stringWithFormat:@"dB:%f, RMS:%f, Frequency:%f", db, rms, maxFrequency] soundFlag:NO];
     }
     
-    NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-    [dic setObject:unixtime forKey:KEY_AMBIENT_NOISE_TIMESTAMP];
-    [dic setObject:[self getDeviceId] forKey:KEY_AMBIENT_NOISE_DEVICE_ID];
-    [dic setObject:[NSNumber numberWithFloat:maxFrequency] forKey:KEY_AMBIENT_NOISE_FREQUENCY];
-    [dic setObject:[NSNumber numberWithDouble:db] forKey:KEY_AMBIENT_NOISE_DECIDELS];
-    [dic setObject:[NSNumber numberWithDouble:rms] forKey:KEY_AMBIENT_NOISE_RMS];
-    [dic setObject:[NSNumber numberWithBool:[AudioAnalysis isSilent:rms threshold:silenceThreshold]] forKey:KEY_AMBIENT_NOISE_SILENT];
-    [dic setObject:[NSNumber numberWithInteger:silenceThreshold] forKey:KEY_AMBIENT_NOISE_SILENT_THRESHOLD];
+    // NSLog(@"%@", [NSString stringWithFormat:@"dB:%f, RMS:%f, Frequency:%f", db, rms, maxFrequency] );
+    
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    [dict setObject:unixtime forKey:KEY_AMBIENT_NOISE_TIMESTAMP];
+    [dict setObject:[self getDeviceId] forKey:KEY_AMBIENT_NOISE_DEVICE_ID];
+    [dict setObject:[NSNumber numberWithFloat:maxFrequency] forKey:KEY_AMBIENT_NOISE_FREQUENCY];
+    [dict setObject:[NSNumber numberWithDouble:db] forKey:KEY_AMBIENT_NOISE_DECIDELS];
+    [dict setObject:[NSNumber numberWithDouble:rms] forKey:KEY_AMBIENT_NOISE_RMS];
+    [dict setObject:[NSNumber numberWithBool:[AudioAnalysis isSilent:rms threshold:silenceThreshold]] forKey:KEY_AMBIENT_NOISE_SILENT];
+    [dict setObject:[NSNumber numberWithInteger:silenceThreshold] forKey:KEY_AMBIENT_NOISE_SILENT_THRESHOLD];
     if(saveRawData){
         NSData * data = [NSData dataWithContentsOfURL:[self testFilePathURLWithNumber:number]];
-        [dic setObject:[data base64EncodedStringWithOptions:0] forKey:KEY_AMBIENT_NOISE_RAW];
+        [dict setObject:[data base64EncodedStringWithOptions:0] forKey:KEY_AMBIENT_NOISE_RAW];
     }else{
-        [dic setObject:@"" forKey:KEY_AMBIENT_NOISE_RAW];
+        [dict setObject:@"" forKey:KEY_AMBIENT_NOISE_RAW];
     }
-
+    
+    [self setLatestData:dict];
+    
     @try {
-        [self saveData:dic];
+        [self saveData:dict];
     } @catch (NSException *exception) {
         NSLog(@"%@", exception.debugDescription);
     }

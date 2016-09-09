@@ -81,6 +81,7 @@
         [dict setObject:motionType forKey:@"motiontype"];
         
         [self setLatestValue:data];
+        [self setLatestData:dict];
         [self saveData:dict];
     };
     NSError *stateError;

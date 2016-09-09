@@ -67,16 +67,17 @@
     double offset = nc.networkOffset * 1000;
     NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
     NSNumber * ntpUnixtime = [AWAREUtils getUnixTimestamp:nt];
-    NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-    [dic setObject:unixtime forKey:@"timestamp"];
-    [dic setObject:[self getDeviceId] forKey:@"device_id"];
-    [dic setObject:[NSNumber numberWithDouble:offset] forKey:@"drift"]; // real
-    [dic setObject:ntpUnixtime forKey:@"ntp_time"]; // real
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    [dict setObject:unixtime forKey:@"timestamp"];
+    [dict setObject:[self getDeviceId] forKey:@"device_id"];
+    [dict setObject:[NSNumber numberWithDouble:offset] forKey:@"drift"]; // real
+    [dict setObject:ntpUnixtime forKey:@"ntp_time"]; // real
 
     [self setLatestValue:[NSString stringWithFormat:@"[%f] %@",offset, nt ]];
     
     //dispatch_async(dispatch_get_main_queue(), ^{
-    [self saveData:dic];
+    [self setLatestData:dict];
+    [self saveData:dict];
     //});
 }
 

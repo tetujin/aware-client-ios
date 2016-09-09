@@ -279,17 +279,18 @@
     
     [self setLatestValue:[NSString stringWithFormat:@"[%@] %d bps (RSSI:%f)",_manufacturer,_heartRate, _deviceRssi.doubleValue]];
 
-    NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
     NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
-    [dic setObject:unixtime forKey:KEY_HR_TIMESTAMP];
-    [dic setObject:[self getDeviceId] forKey:KEY_HR_DEVICE_ID];
-    [dic setObject:[NSNumber numberWithInt:_heartRate] forKey:KEY_HR_HEARTRATE]; //varchar
-    [dic setObject:_bodyLocation forKey:KEY_HR_LOCATION]; //1=chest, 2=wrist
-    [dic setObject:_manufacturer forKey:KEY_HR_MANUFACTURER];
-    [dic setObject:_deviceRssi forKey:KEY_HR_RSSI];
-    [dic setObject:@"BLE" forKey:KEY_HR_LABEL];
+    [dict setObject:unixtime forKey:KEY_HR_TIMESTAMP];
+    [dict setObject:[self getDeviceId] forKey:KEY_HR_DEVICE_ID];
+    [dict setObject:[NSNumber numberWithInt:_heartRate] forKey:KEY_HR_HEARTRATE]; //varchar
+    [dict setObject:_bodyLocation forKey:KEY_HR_LOCATION]; //1=chest, 2=wrist
+    [dict setObject:_manufacturer forKey:KEY_HR_MANUFACTURER];
+    [dict setObject:_deviceRssi forKey:KEY_HR_RSSI];
+    [dict setObject:@"BLE" forKey:KEY_HR_LABEL];
     
-    [self saveData:dic];
+    [self saveData:dict];
+    [self setLatestData:dict];
     
     return;
 }

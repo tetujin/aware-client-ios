@@ -149,6 +149,8 @@
 
         [self saveData:dict];
         
+        [self setLatestData:dict];
+        
         [self broadcastDetectedNewDevice];
         
         if ([self isDebug]) {

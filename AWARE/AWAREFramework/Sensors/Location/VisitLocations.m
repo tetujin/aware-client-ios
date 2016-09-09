@@ -150,6 +150,8 @@
                       [dict setObject:@"" forKey:@"label"]; //visitData.label = @"";
                       
                       [self saveData:dict];
+                      [self setLatestData:dict];
+                      
                   });
                   return;
               }];

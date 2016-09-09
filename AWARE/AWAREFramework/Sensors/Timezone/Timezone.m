@@ -101,6 +101,7 @@
     [dict setObject:[[NSTimeZone localTimeZone] description] forKey:@"timezone"];
     [self setLatestValue:[NSString stringWithFormat:@"%@", [[NSTimeZone localTimeZone] description]]];
     [self saveData:dict];
+    [self setLatestData:dict];
     
     // Broadcast
     NSDictionary *userInfo = [NSDictionary dictionaryWithObject:dict

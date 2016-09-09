@@ -119,13 +119,14 @@
             label = @"unknown";
             break;
     }
-    NSMutableDictionary * dic = [[NSMutableDictionary alloc] init];
-    [dic setObject:[AWAREUtils getUnixTimestamp:[NSDate new]] forKey:KEY_ORIENTATION_TIMESTAMP];
-    [dic setObject:[self getDeviceId] forKey:KEY_ORIENTATION_DEVICE_ID];
-    [dic setObject:deviceOrientation forKey:KEY_ORIENTATION_STATUS];
-    [dic setObject:label forKey:KEY_ORIENTATION_LABEL];
+    NSMutableDictionary * dict = [[NSMutableDictionary alloc] init];
+    [dict setObject:[AWAREUtils getUnixTimestamp:[NSDate new]] forKey:KEY_ORIENTATION_TIMESTAMP];
+    [dict setObject:[self getDeviceId] forKey:KEY_ORIENTATION_DEVICE_ID];
+    [dict setObject:deviceOrientation forKey:KEY_ORIENTATION_STATUS];
+    [dict setObject:label forKey:KEY_ORIENTATION_LABEL];
     [self setLatestValue:label];
-    [self saveData:dic];
+    [self saveData:dict];
+    [self setLatestData:dict];
     
     NSLog(@"%@", label);
 }

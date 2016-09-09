@@ -124,11 +124,15 @@
                                                                 accelerometerData.acceleration.y,
                                                                 accelerometerData.acceleration.z]];
                                           
+                                          [self setLatestData:dict];
+                                          
                                           NSDictionary *userInfo = [NSDictionary dictionaryWithObject:dict
                                                                                                forKey:EXTRA_DATA];
                                           [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_ACCELEROMETER
                                                                                               object:nil
                                                                                             userInfo:userInfo];
+                                          
+                                          
                                           ////// SQLite DB ////////
                                           if([self getDBType] == AwareDBTypeCoreData) {
                                               [self saveData:dict];

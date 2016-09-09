@@ -57,7 +57,7 @@
         [dict setObject:@(rrIntervalData.interval) forKey:@"rrinterval"];
         
         [self saveData:dict];
-        
+        [self setLatestData:dict];
     };
     
     NSError * stateError = nil;

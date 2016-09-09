@@ -288,6 +288,7 @@ didReceiveResponse:(NSURLResponse *)response
             [dict setObject:[self getSunSet] forKey:@"sunset"];
             
             [self saveData:dict];
+            [self setLatestData:dict];
         });
     }
 
