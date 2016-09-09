@@ -14,7 +14,7 @@
 #import "EAIntroView.h"
 #import "AWARESensorManager.h"
 
-@interface ViewController : UITableViewController <UITableViewDelegate,UITableViewDataSource, UITabBarControllerDelegate, UINavigationBarDelegate, UIAlertViewDelegate, EAIntroDelegate>
+@interface ViewController : UIViewController <UITabBarControllerDelegate, UINavigationBarDelegate, UIAlertViewDelegate, EAIntroDelegate>
 
 - (IBAction)pushedStudyRefreshButton:(id)sender;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *refreshButton;
