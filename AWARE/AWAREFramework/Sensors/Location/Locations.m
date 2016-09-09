@@ -102,22 +102,40 @@
         // extern const CLLocationAccuracy kCLLocationAccuracyHundredMeters;
         // extern const CLLocationAccuracy kCLLocationAccuracyKilometer;
         // extern const CLLocationAccuracy kCLLocationAccuracyThreeKilometers;
+        /*
+         if (accuracyMeter == 0) {
+         locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation;
+         } else if (accuracyMeter > 0 && accuracyMeter <= 5){
+         locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+         } else if (accuracyMeter > 10 && accuracyMeter <= 25 ){
+         locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
+         } else if (accuracyMeter > 25 && accuracyMeter <= 100 ){
+         locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters;
+         } else if (accuracyMeter > 100 && accuracyMeter <= 1000){
+         locationManager.desiredAccuracy = kCLLocationAccuracyKilometer;
+         } else if (accuracyMeter > 1000 && accuracyMeter <= 3000){
+         locationManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers;
+         } else {
+         locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters;
+         }
+         */
         
         if (accuracyMeter == 0) {
             locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation;
-        } else if (accuracyMeter > 0 && accuracyMeter <= 10){
+        } else if (accuracyMeter <= 5){
             locationManager.desiredAccuracy = kCLLocationAccuracyBest;
-        } else if (accuracyMeter > 10 && accuracyMeter <= 25 ){
+        } else if (accuracyMeter <= 25 ){
             locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
-        } else if (accuracyMeter > 25 && accuracyMeter <= 100 ){
+        } else if (accuracyMeter <= 100 ){
             locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters;
-        } else if (accuracyMeter > 100 && accuracyMeter <= 1000){
+        } else if (accuracyMeter <= 1000){
             locationManager.desiredAccuracy = kCLLocationAccuracyKilometer;
-        } else if (accuracyMeter > 1000 && accuracyMeter <= 3000){
+        } else if (accuracyMeter <= 3000){
             locationManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers;
         } else {
-            locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters;
+            locationManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers;
         }
+
         
         locationManager.pausesLocationUpdatesAutomatically = NO;
         CGFloat currentVersion = [[[UIDevice currentDevice] systemVersion] floatValue];

@@ -1051,6 +1051,7 @@
     //    datePicker.date = [[NSDate alloc] initWithTimeIntervalSince1970:0];
     datePicker.datePickerMode = UIDatePickerModeDateAndTime;
     datePicker.tag = tag;
+    // datePicker.minuteInterval = 30; //TODO
     [datePicker addTarget:self
                    action:@selector(setDateValue:)
          forControlEvents:UIControlEventValueChanged];

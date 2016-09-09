@@ -266,6 +266,7 @@
         title = (status == kCLAuthorizationStatusDenied) ? @"Location services are off" : @"Background location is not enabled";
         NSString *message = @"To track your daily activity, you have to turn on 'Always' in the Location Services Settings.";
 
+        
         if([AWAREUtils isForeground]  && viewController != nil ){
             // To track your daily activity, AWARE client iOS needs access to your location in the background.
             // To use background location you must turn on 'Always' in the Location Services Settings
@@ -282,7 +283,13 @@
                                                                       }
                                                                       [[UIApplication sharedApplication] openURL:settingsURL];
                                                                   }];
+            UIAlertAction * cancelAction = [UIAlertAction actionWithTitle:@"Cancel"
+                                                                    style:UIAlertActionStyleCancel
+                                                                  handler:^(UIAlertAction * _Nonnull action) {
+                                                                      
+                                                                  }];
             [alert addAction:defaultAction];
+            [alert addAction:cancelAction];
             [viewController presentViewController:alert animated:YES completion:nil];
         }else{
             [AWAREUtils sendLocalNotificationForMessage:message
@@ -294,6 +301,7 @@
                                                userInfo:nil
                                         iconBadgeNumber:1];
         }
+        
 //        DebugTypeUnknown = 0, DebugTypeInfo = 1, DebugTypeError = 2, DebugTypeWarn = 3, DebugTypeCrash = 4
         Debug * debugSensor = [[Debug alloc] initWithAwareStudy:_sharedAwareStudy dbType:AwareDBTypeTextFile];
         [debugSensor saveDebugEventWithText:@"[compliance] Location Services are OFF or Background Location is NOT enabled" type:DebugTypeWarn label:title];
@@ -319,6 +327,7 @@
     //    UIBackgroundRefreshStatusAvailable   //< enabled for this application
     UIBackgroundRefreshStatus backgroundRefreshStatus = [UIApplication sharedApplication].backgroundRefreshStatus;
     if(backgroundRefreshStatus == UIBackgroundRefreshStatusDenied || backgroundRefreshStatus == UIBackgroundRefreshStatusRestricted){
+        
         NSString *title = @"Background App Refresh service is Restricted or Denied"; // : @"Background location is not enabled";
         NSString *message = @"To track your daily activity, you have to allow the 'Background App Refresh' service in the General Settings.";
         if([AWAREUtils isForeground]  && viewController!=nil ){
@@ -334,6 +343,13 @@
                                                                       }
                                                                       [[UIApplication sharedApplication] openURL:settingsURL];
                                                                   }];
+            UIAlertAction * cancelAction = [UIAlertAction actionWithTitle:@"Cancel"
+                                                                    style:UIAlertActionStyleCancel
+                                                                  handler:^(UIAlertAction * _Nonnull action) {
+                
+                                                                }];
+                                            
+            [alert addAction:cancelAction];
             [alert addAction:defaultAction];
             [viewController presentViewController:alert animated:YES completion:nil];
         }else{
@@ -363,9 +379,9 @@
             // currentSettings.types=5 >>> 通知on , soundOff , aiconOn
             // currentSettings.types=6 >>> 通知on , soundOn , aiconOff
             // currentSettings.types=7 >>> 通知on , soundOn , aiconOn
-            //NSString *title = @"Notification service is not permitted.";
-            // NSString *message = @"To send important notifications, please allow the 'Notification' service in the General Settings.";
-            /*
+            NSString *title = @"Notification service is not permitted.";
+            NSString *message = @"To send important notifications, please allow the 'Notification' service in the General Settings.";
+        
             if([AWAREUtils isForeground]  && viewController!=nil ){
                 UIAlertController* alert = [UIAlertController alertControllerWithTitle:title
                                                                                message:message
@@ -379,12 +395,18 @@
                                                                           }
                                                                           [[UIApplication sharedApplication] openURL:settingsURL];
                                                                       }];
+                UIAlertAction * cancelAction = [UIAlertAction actionWithTitle:@"Cancel"
+                                                                        style:UIAlertActionStyleCancel
+                                                                      handler:^(UIAlertAction * _Nonnull action) {
+                                                                          
+                                                                      }];
                 [alert addAction:defaultAction];
+                [alert addAction:cancelAction];
                 [viewController presentViewController:alert animated:YES completion:nil];
             }else{
                 [AWAREUtils sendLocalNotificationForMessage:@"Please allow the 'Notification' service in the Settings.app->Notification->Allow Notifications." soundFlag:NO];
             }
-             */
+            
             
             Debug * debugSensor = [[Debug alloc] initWithAwareStudy:_sharedAwareStudy dbType:AwareDBTypeTextFile];
             [debugSensor saveDebugEventWithText:@"[compliance] Notification Service is NOT permitted" type:DebugTypeWarn label:@""];
@@ -436,9 +458,11 @@
 - (void) checkLowPowerModeWithViewController:(UIViewController *) viewController {
     
     if([AWAREUtils getCurrentOSVersionAsFloat] >= 9.0){
+        
         NSString * title = @"Please turn off the **Low Power Mode** for tracking your daily activites.";
         NSString * message = @"";
         if ([NSProcessInfo processInfo].lowPowerModeEnabled ) {
+            
             // [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"prefs:root=BATTERY_USAGE"]];
             if([AWAREUtils isForeground]){
                 UIAlertController* alert = [UIAlertController alertControllerWithTitle:title
@@ -456,7 +480,13 @@
                                                                           [[UIApplication sharedApplication] openURL:settingsURL];
                                                                           
                                                                       }];
+                UIAlertAction * cancelAction = [UIAlertAction actionWithTitle:@"Cancel"
+                                                                        style:UIAlertActionStyleCancel
+                                                                      handler:^(UIAlertAction * _Nonnull action) {
+                                                                          
+                                                                      }];
                 [alert addAction:defaultAction];
+                [alert addAction:cancelAction];
                 [viewController presentViewController:alert animated:YES completion:nil];
 
             }else{
@@ -464,6 +494,7 @@
 
             }
             
+        
             Debug * debugSensor = [[Debug alloc] initWithAwareStudy:_sharedAwareStudy dbType:AwareDBTypeTextFile];
             [debugSensor saveDebugEventWithText:@"[compliance] Low Power Mode is ON" type:DebugTypeWarn label:@""];
             [debugSensor allowsDateUploadWithoutBatteryCharging];
@@ -482,6 +513,7 @@
 - (void) checkWifiStateWithViewController:(UIViewController *) viewController {
     
     if(![self isWiFiEnabled]){
+        
         NSString * title = @"Please turn on WiFi!";
         NSString * message = @"WiFi is turned off now. AWARE needs the wifi network for data uploading. Please keep turn on the WiFi during your study.";
         
@@ -499,11 +531,18 @@
                                                                       [[UIApplication sharedApplication] openURL:settingsURL];
                                                                       
                                                                   }];
+            UIAlertAction * cancelAction = [UIAlertAction actionWithTitle:@"Cancel"
+                                                                    style:UIAlertActionStyleCancel
+                                                                  handler:^(UIAlertAction * _Nonnull action) {
+                                                                      
+                                                                  }];
             [alert addAction:defaultAction];
+            [alert addAction:cancelAction];
             [viewController presentViewController:alert animated:YES completion:nil];
         }else{
             [AWAREUtils sendLocalNotificationForMessage:@"Please turn on WiFi! AWARE client needs WiFi for data uploading." soundFlag:NO];
         }
+        
         
         Debug * debugSensor = [[Debug alloc] initWithAwareStudy:_sharedAwareStudy dbType:AwareDBTypeTextFile];
         [debugSensor saveDebugEventWithText:@"[compliance] WiFi is OFF" type:DebugTypeWarn label:@""];
