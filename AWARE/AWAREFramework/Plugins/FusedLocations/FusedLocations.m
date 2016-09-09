@@ -242,6 +242,7 @@
     [dict setObject:[NSNumber numberWithInt:accuracy] forKey:@"accuracy"];
     [dict setObject:@"" forKey:@"label"];
     [locationSensor saveData:dict];
+    [locationSensor setLatestData:dict];
     
     [self setLatestValue:[NSString stringWithFormat:@"%f, %f, %f",
                           location.coordinate.latitude,

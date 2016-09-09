@@ -83,6 +83,7 @@
         [dict setObject:unixtime forKey:@"timestamp"];
         [dict setObject:[self getDeviceId] forKey:@"device_id"];
         [dict setObject:uvLevelStr forKey:@"uv"];
+        [self setLatestData:dict];
         [self saveData:dict];
     };
     

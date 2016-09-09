@@ -110,6 +110,8 @@
                                          [dict setObject:@"" forKey:@"label"];
                                          [self setLatestValue:[NSString stringWithFormat:@"%f, %f, %f",gyroData.rotationRate.x,gyroData.rotationRate.y,gyroData.rotationRate.z]];
                                          
+                                         [self setLatestData:dict];
+                                         
                                          if([self getDBType] == AwareDBTypeCoreData){
                                              [self saveData:dict];
                                          }else if([self getDBType] == AwareDBTypeTextFile){

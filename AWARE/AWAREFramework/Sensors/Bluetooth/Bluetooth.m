@@ -145,6 +145,8 @@
     [self setLatestValue:[NSString stringWithFormat:@"%@(%@), %@", name, address,rssi]];
     [self saveData:dict];
     
+    [self setLatestData:dict];
+    
     // Boradcast events
     NSDictionary *userInfo = [NSDictionary dictionaryWithObject:dict
                                                          forKey:EXTRA_DATA];

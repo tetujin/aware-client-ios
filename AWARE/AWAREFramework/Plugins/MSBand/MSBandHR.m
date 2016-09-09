@@ -78,7 +78,7 @@
             NSLog(@"HR: %@", latestValue);
         }
         [super setLatestValue:latestValue];
-        
+        [self setLatestData:dict];
         [self saveData:dict];
     };
     

@@ -291,6 +291,7 @@
     [dict setObject:activitiesStr forKey:@"activities"]; //text
     [self setLatestValue:[NSString stringWithFormat:@"%@, %@, %@", motionName, motionType, motionConfidence]];
     [self saveData:dict];
+    [self setLatestData:dict];
     
     NSDictionary * userInfo = [NSDictionary dictionaryWithObject:dict
                                                           forKey:EXTRA_DATA];
@@ -347,7 +348,7 @@
     [defaults setObject:date forKey:KEY_TIMESTAMP_OF_LAST_UPDATE];
 }
 
-- (NSDate *) getLastUpdate{
+- (NSDate *) getLastUpdate {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSDate * date = [defaults objectForKey:KEY_TIMESTAMP_OF_LAST_UPDATE];
     if (date != nil) {

@@ -75,6 +75,7 @@
     [dict setObject:[self getDeviceId] forKey:KEY_PUSH_DEVICE_ID];
     [dict setObject:token forKey:KEY_PUSH_TOKEN];
     [self saveData:dict];
+    [self setLatestData:dict];
     
 
     // Save the token to user default

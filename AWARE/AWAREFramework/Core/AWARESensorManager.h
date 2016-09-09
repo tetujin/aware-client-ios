@@ -49,7 +49,8 @@
 - (void) stopUploadTimer;
 
 // get latest sensor data with sensor name
-- (NSString*) getLatestSensorData:(NSString *)sensorName;
+- (NSString *) getLatestSensorValue:(NSString *)sensorName;
+- (NSDictionary *) getLatestSensorData:(NSString *) sensorName;
 - (NSArray *) getAllSensors;
 
 - (void) testSensing;

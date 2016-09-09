@@ -247,6 +247,7 @@
     [dict setObject:[NSNumber numberWithInt:accuracy] forKey:@"accuracy"];
     [dict setObject:@"" forKey:@"label"];
     [self setLatestValue:[NSString stringWithFormat:@"%f, %f, %f", location.coordinate.latitude, location.coordinate.longitude, location.speed]];
+    [self setLatestData:dict];
     
     if([self getDBType] == AwareDBTypeCoreData){
         [self saveData:dict];

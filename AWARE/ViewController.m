@@ -611,7 +611,7 @@
         [googlePush showTargetCalendarCondition];
     // Google Calendar Calendar Plugin
     }else if([key isEqualToString:SENSOR_PLUGIN_CAMPUS]){
-        NSString* schedules = [sensorManager getLatestSensorData:SENSOR_PLUGIN_CAMPUS];
+        NSString* schedules = [sensorManager getLatestSensorValue:SENSOR_PLUGIN_CAMPUS];
         UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Current ESM Schedules" message:schedules delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
         alert.tag = 7;
         [alert show];
@@ -935,13 +935,12 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
     NSString *sensorKey = [item objectForKey:KEY_CEL_SENSOR_NAME];
     NSString* latestSensorData = nil;
     @autoreleasepool {
-         latestSensorData = [sensorManager getLatestSensorData:sensorKey];
+        latestSensorData = [sensorManager getLatestSensorValue:sensorKey];
         //update latest sensor data
         if(![latestSensorData isEqualToString:@""]){
             [cell.detailTextLabel setText:latestSensorData];
         }
     }
-    
 }
 
 
@@ -969,10 +968,10 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
         cell.imageView.image = theImage;
     
         NSString *sensorKey = [item objectForKey:KEY_CEL_SENSOR_NAME];
-        NSString* latestSensorData = [sensorManager getLatestSensorData:sensorKey];
+        NSString* latestSensorData = [sensorManager getLatestSensorValue:sensorKey];
     
     
-         latestSensorData = [sensorManager getLatestSensorData:sensorKey];
+         latestSensorData = [sensorManager getLatestSensorValue:sensorKey];
          //update latest sensor data
         if(![latestSensorData isEqualToString:@""]){
             [cell.detailTextLabel setText:latestSensorData];

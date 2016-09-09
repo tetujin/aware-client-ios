@@ -55,7 +55,13 @@ typedef enum: NSInteger {
 
 // get condition
 - (NSString *) getNetworkReachabilityAsText;
+
+- (void) setLatestValue:(NSString *) valueStr;
 - (NSString *) getLatestValue;
+
+- (void) setLatestData:(NSDictionary *)dict;
+- (NSDictionary *) getLatestData;
+
 - (NSString *) getDeviceId;
 - (double) getSensorSetting:(NSArray *)settings withKey:(NSString *)key;
 - (bool) isUploading;
@@ -71,15 +77,20 @@ typedef enum: NSInteger {
 - (void) setBufferSize:(int)size;
 - (void) setFetchLimit:(int)limit;
 - (void) setFetchBatchSize:(int)size;
+
 - (int) getFetchLimit;
 - (int) getFetchBatchSize;
 - (int) getBufferSize;
+
+- (void) setDataStoring:(BOOL)state;
+- (void) startDataStoring;
+- (void) stopDataStoring;
+- (bool) isDataStoring;
 
 - (bool) isDebug;
 - (bool) saveData:(NSDictionary *) data;
 - (bool) saveData:(NSDictionary *) data toLocalFile:(NSString*) fileName;
 - (bool) saveDataWithArray:(NSArray*) array;
-- (void) setLatestValue:(NSString *) valueStr;
 - (bool) saveDataToDB;
 
 - (void) saveDummyData;

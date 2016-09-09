@@ -127,6 +127,7 @@
     [dict setObject:[NSNumber numberWithInt:networkState] forKey:@"network_state"];
     
     [self saveData:dict];
+    [self setLatestData:dict];
 }
 
 - (void)insertNewEntityWithData:(NSDictionary *)data managedObjectContext:(NSManagedObjectContext *)childContext entityName:(NSString *)entity{

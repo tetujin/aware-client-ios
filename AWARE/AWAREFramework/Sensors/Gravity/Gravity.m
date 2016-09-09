@@ -104,7 +104,8 @@
                                                   [dict setObject:@"" forKey:@"label"]; //text
                                                   [self setLatestValue:[NSString stringWithFormat:@"%f, %f, %f",motion.attitude.pitch, motion.attitude.roll,motion.attitude.yaw]];
                                                   
-                                                   
+                                                  [self setLatestData:dict];
+                                               
                                                    NSDictionary *userInfo = [NSDictionary dictionaryWithObject:dict
                                                                                                         forKey:EXTRA_DATA];
                                                    [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_GRAVITY
