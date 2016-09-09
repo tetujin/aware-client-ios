@@ -402,7 +402,7 @@
                                                                       }];
                 [alert addAction:defaultAction];
                 [alert addAction:cancelAction];
-                [viewController presentViewController:alert animated:YES completion:nil];
+                // [viewController presentViewController:alert animated:YES completion:nil];
             }else{
                 [AWAREUtils sendLocalNotificationForMessage:@"Please allow the 'Notification' service in the Settings.app->Notification->Allow Notifications." soundFlag:NO];
             }
