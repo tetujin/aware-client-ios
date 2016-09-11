@@ -36,6 +36,7 @@
 #import "BLEHeartRate.h"
 #import "AmbientLight.h"
 #import "ESM.h"
+#import "Accelerometer.h"
 
 // Library
 #import <SVProgressHUD.h>
