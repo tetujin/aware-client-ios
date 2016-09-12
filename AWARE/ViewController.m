@@ -36,6 +36,7 @@
 #import "BLEHeartRate.h"
 #import "AmbientLight.h"
 #import "ESM.h"
+#import "Accelerometer.h"
 
 // Library
 #import <SVProgressHUD.h>
@@ -107,6 +108,7 @@
 //    }
 //    [userDefaults setBool:YES forKey:@"showed_introduction"];
     
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
 
     
@@ -124,7 +126,7 @@
     // A sensor list for table view
     _sensors = [[NSMutableArray alloc] init];
     
-    //[[AWAREStudy alloc] initWithReachability:YES];
+    // [awareStudy setStudyInformationWithURL:@"https://AWARE_SERVER_URL/index.php/webservice/index/STUDY_ID/PASS"];
     
     /**
      * Init a Debug Sensor for collecting a debug message.

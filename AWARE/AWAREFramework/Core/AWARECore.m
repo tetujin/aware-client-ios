@@ -290,8 +290,9 @@
                                                                   }];
             [alert addAction:defaultAction];
             [alert addAction:cancelAction];
-            [viewController presentViewController:alert animated:YES completion:nil];
+            // [viewController presentViewController:alert animated:YES completion:nil];
         }else{
+            /*
             [AWAREUtils sendLocalNotificationForMessage:message
                                                   title:title
                                               soundFlag:NO
@@ -300,6 +301,7 @@
                                          repeatInterval:0
                                                userInfo:nil
                                         iconBadgeNumber:1];
+             */
         }
         
 //        DebugTypeUnknown = 0, DebugTypeInfo = 1, DebugTypeError = 2, DebugTypeWarn = 3, DebugTypeCrash = 4
@@ -351,9 +353,9 @@
                                             
             [alert addAction:cancelAction];
             [alert addAction:defaultAction];
-            [viewController presentViewController:alert animated:YES completion:nil];
+            // [viewController presentViewController:alert animated:YES completion:nil];
         }else{
-            [AWAREUtils sendLocalNotificationForMessage:@"Please allow the 'Background App Refresh' service in the Settings->General." soundFlag:NO];
+            // [AWAREUtils sendLocalNotificationForMessage:@"Please allow the 'Background App Refresh' service in the Settings->General." soundFlag:NO];
         }
         
         Debug * debugSensor = [[Debug alloc] initWithAwareStudy:_sharedAwareStudy dbType:AwareDBTypeTextFile];
@@ -404,7 +406,7 @@
                 [alert addAction:cancelAction];
                 // [viewController presentViewController:alert animated:YES completion:nil];
             }else{
-                [AWAREUtils sendLocalNotificationForMessage:@"Please allow the 'Notification' service in the Settings.app->Notification->Allow Notifications." soundFlag:NO];
+                // [AWAREUtils sendLocalNotificationForMessage:@"Please allow the 'Notification' service in the Settings.app->Notification->Allow Notifications." soundFlag:NO];
             }
             
             
@@ -487,10 +489,10 @@
                                                                       }];
                 [alert addAction:defaultAction];
                 [alert addAction:cancelAction];
-                [viewController presentViewController:alert animated:YES completion:nil];
+                // [viewController presentViewController:alert animated:YES completion:nil];
 
             }else{
-                [AWAREUtils sendLocalNotificationForMessage:title soundFlag:NO];
+                // [AWAREUtils sendLocalNotificationForMessage:title soundFlag:NO];
 
             }
             
@@ -538,9 +540,9 @@
                                                                   }];
             [alert addAction:defaultAction];
             [alert addAction:cancelAction];
-            [viewController presentViewController:alert animated:YES completion:nil];
+            // [viewController presentViewController:alert animated:YES completion:nil];
         }else{
-            [AWAREUtils sendLocalNotificationForMessage:@"Please turn on WiFi! AWARE client needs WiFi for data uploading." soundFlag:NO];
+            // [AWAREUtils sendLocalNotificationForMessage:@"Please turn on WiFi! AWARE client needs WiFi for data uploading." soundFlag:NO];
         }
         
         

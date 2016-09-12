@@ -269,7 +269,6 @@
 //    [memory startSensor:uploadInterval withSettings:nil];
 //    [self addNewSensor:memory];
     
-
     // Observer
     AWARESensor *observerSensor = [[Observer alloc] initWithAwareStudy:awareStudy dbType:dbType];
     [self addNewSensor:observerSensor];
