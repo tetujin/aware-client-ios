@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
-@interface CertPinning : NSObject
+@interface CertPinning : NSObject <NSURLSessionDelegate>
+
++ (id)sharedPinner;
 
 @end

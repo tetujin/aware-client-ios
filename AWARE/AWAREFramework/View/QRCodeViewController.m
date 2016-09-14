@@ -13,6 +13,7 @@
 #import "AWAREUtils.h"
 #import "SSLManager.h"
 #import "AppDelegate.h"
+#import "CertPinning.h"
 
 
 @interface QRCodeViewController (){
@@ -87,6 +88,8 @@
     _button.enabled = NO;
     [_button addTarget:self action:@selector(pushedJoinButton:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:_button];
+    
+    [self performSelector:@selector(setTapToJoinTextToButton:) withObject:nil afterDelay:2];
 }
 
 
@@ -157,7 +160,7 @@
                     qrcodeStr = qrcode;
                     _button.enabled = YES;
                     _button.titleLabel.font = [UIFont boldSystemFontOfSize:20];
-                    [_button setTitle:@"Find a QR code!" forState:UIControlStateNormal];
+                    [_button setTitle:@"Found a QR code!" forState:UIControlStateNormal];
                     
                     [self performSelector:@selector(setTapToJoinTextToButton:) withObject:nil afterDelay:2];
                 }
@@ -209,49 +212,63 @@
 }
 
 - (void) joinStudy {
-    
-    // Check a SSL certification file
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
-    [request setURL:[NSURL URLWithString:qrcodeStr]];
-    [request setHTTPMethod:@"GET"];
-    __weak NSURLSession *session = [NSURLSession sharedSession];
-    [[session dataTaskWithRequest: request  completionHandler: ^(NSData *data, NSURLResponse *response, NSError *error) {
-        [session finishTasksAndInvalidate];
-        [session invalidateAndCancel];
-        // Success
+    // Get the certificate
+    NSURLComponents *qrURL = [NSURLComponents componentsWithString:qrcodeStr];
+    [qrURL setScheme:@"http"];
+    [qrURL setPath:@"/public/server.crt"];
+    NSURLSession *certSession = [NSURLSession sharedSession];
+    [[certSession dataTaskWithURL:[qrURL URL] completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         if (response && ! error) {
-            NSString *responseString = [[NSString alloc] initWithData: data  encoding: NSUTF8StringEncoding];
-            NSLog(@"Success: %@", responseString);
-            // Join a study
-            dispatch_async(dispatch_get_main_queue(),^{
-//                AWAREStudy *study = [[AWAREStudy alloc] initWithReachability:YES];
-                AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
-                AWAREStudy * study = delegate.sharedAWARECore.sharedAwareStudy;
-                [study setStudyInformationWithURL:qrcodeStr];
-                [self moveToTopPage];
-                UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Thank you for joining our study!"
-                                                                 message:nil
-                                                                delegate:self
-                                                       cancelButtonTitle:@"Close"
-                                                       otherButtonTitles:nil];
-                [alert show];
-            });
+            [[NSUserDefaults standardUserDefaults] setObject:data forKey:@"certificate"];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+            // Check a SSL certification file
+            NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+            [request setURL:[NSURL URLWithString:qrcodeStr]];
+            [request setHTTPMethod:@"GET"];
+            __weak NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:[CertPinning sharedPinner] delegateQueue:[NSOperationQueue mainQueue]];
+            [[session dataTaskWithRequest: request  completionHandler: ^(NSData *data, NSURLResponse *response, NSError *error) {
+                [session finishTasksAndInvalidate];
+                [session invalidateAndCancel];
+                // Success
+                if (response && ! error) {
+                    NSString *responseString = [[NSString alloc] initWithData: data  encoding: NSUTF8StringEncoding];
+                    NSLog(@"Success: %@", responseString);
+                    // Join a study
+                    dispatch_async(dispatch_get_main_queue(),^{
+                        //                AWAREStudy *study = [[AWAREStudy alloc] initWithReachability:YES];
+                        AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+                        AWAREStudy * study = delegate.sharedAWARECore.sharedAwareStudy;
+                        [study setStudyInformationWithURL:qrcodeStr];
+                        [self moveToTopPage];
+                        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Thank you for joining our study!"
+                                                                         message:nil
+                                                                        delegate:self
+                                                               cancelButtonTitle:@"Close"
+                                                               otherButtonTitles:nil];
+                        [alert show];
+                    });
+                } else {
+                    NSLog(@"ERROR: %@ %ld", error.debugDescription , error.code);
+                    if (error.code == -1202) {
+                        // Install CRT file for SSL: If the error code is -1202, this device needs .crt for SSL(secure) connection.
+                        dispatch_async(dispatch_get_main_queue(),^{
+                            [self installSSLCertificationFile];
+                            //                    [self joinStudy];
+                        });
+                    }
+                }
+            }] resume];
         } else {
             NSLog(@"ERROR: %@ %ld", error.debugDescription , error.code);
-            if (error.code == -1202) {
-                // Install CRT file for SSL: If the error code is -1202, this device needs .crt for SSL(secure) connection.
-                dispatch_async(dispatch_get_main_queue(),^{
-                    [self installSSLCertificationFile];
-//                    [self joinStudy];
-                });
-            }
         }
+
     }] resume];
+    
 }
 
 
 - (void)installSSLCertificationFile{
-    NSString * alertTitle = @"SLL certification is requred!";
+    NSString * alertTitle = @"SLL certification is required!";
     NSString * alertMessage = [NSString stringWithFormat:@"AWARE needs a SSL certification for secure network connection between the server. Could you install the certification file? "];
     UIAlertView * alert = [[UIAlertView alloc] initWithTitle:alertTitle
                                                      message:alertMessage
@@ -262,6 +279,5 @@
     
     [alert show];
 }
-
 
 @end

@@ -8,6 +8,7 @@
 
 #import "Observer.h"
 #import "AWAREUtils.h"
+#import "CertPinning.h"
 
 @implementation Observer{
     AWAREStudy * awareStudy;
@@ -83,7 +84,7 @@
     
     // Set a HTTP/POST session
     __weak NSURLSession *session = nil;
-    session = [NSURLSession sharedSession];
+    session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:[CertPinning sharedPinner] delegateQueue:[NSOperationQueue mainQueue]];
     [[session dataTaskWithRequest: request  completionHandler: ^(NSData *data, NSURLResponse *response, NSError *error) {
         [session finishTasksAndInvalidate];
         [session invalidateAndCancel];

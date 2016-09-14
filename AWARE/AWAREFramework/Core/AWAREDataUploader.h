@@ -11,7 +11,7 @@
 #import "AWAREUploader.h"
 #import "AWAREStudy.h"
 
-@interface AWAREDataUploader : AWAREUploader <AWAREDataUploaderDelegate,NSURLSessionDataDelegate, NSURLSessionTaskDelegate>
+@interface AWAREDataUploader : AWAREUploader <AWAREDataUploaderDelegate,NSURLSessionDelegate>
 
 - (instancetype) initWithLocalStorage:(LocalFileStorageHelper *)localStorage
                        withAwareStudy:(AWAREStudy *) study;

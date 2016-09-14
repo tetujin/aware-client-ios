@@ -136,7 +136,7 @@
 
     
     if ( [AWAREUtils isForeground] ) { /// If the application in the foreground
-        NSURLSession *session = [NSURLSession sharedSession];
+        NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:self delegateQueue:[NSOperationQueue mainQueue]];
         [[session dataTaskWithRequest: request  completionHandler: ^(NSData *data, NSURLResponse *response, NSError *error) {
             [session finishTasksAndInvalidate];
             [session invalidateAndCancel];
@@ -812,6 +812,21 @@ didCompleteWithError:(NSError *)error {
 - (cleanOldDataType) getCleanOldDataType{
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     return [userDefaults integerForKey:SETTING_FREQUENCY_CLEAN_OLD_DATA];
+}
+
+- (void)URLSession:(NSURLSession *)session didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition, NSURLCredential *))completionHandler{
+    NSData *localCertData = [[NSUserDefaults standardUserDefaults] objectForKey:@"certificate"];
+    SecTrustRef serverTrust = challenge.protectionSpace.serverTrust;
+    SecCertificateRef certificate = SecTrustGetCertificateAtIndex(serverTrust, 0);
+    NSData *remoteCertificateData = CFBridgingRelease(SecCertificateCopyData(certificate));
+    if (localCertData && [remoteCertificateData isEqualToData:localCertData]) {
+        NSURLCredential *credential = [NSURLCredential credentialForTrust:serverTrust];
+        [[challenge sender] useCredential:credential forAuthenticationChallenge:challenge];
+        completionHandler(NSURLSessionAuthChallengeUseCredential, credential);
+    } else {
+        [[challenge sender] cancelAuthenticationChallenge:challenge];
+        completionHandler(NSURLSessionAuthChallengeRejectProtectionSpace, nil);
+    }
 }
 
 @end

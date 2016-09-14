@@ -638,4 +638,19 @@ didReceiveResponse:(NSURLResponse *)response
     return url;
 }
 
+- (void)URLSession:(NSURLSession *)session didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition, NSURLCredential *))completionHandler{
+    NSData *localCertData = [[NSUserDefaults standardUserDefaults] objectForKey:@"certificate"];
+    SecTrustRef serverTrust = challenge.protectionSpace.serverTrust;
+    SecCertificateRef certificate = SecTrustGetCertificateAtIndex(serverTrust, 0);
+    NSData *remoteCertificateData = CFBridgingRelease(SecCertificateCopyData(certificate));
+    if (localCertData && [remoteCertificateData isEqualToData:localCertData]) {
+        NSURLCredential *credential = [NSURLCredential credentialForTrust:serverTrust];
+        [[challenge sender] useCredential:credential forAuthenticationChallenge:challenge];
+        completionHandler(NSURLSessionAuthChallengeUseCredential, credential);
+    } else {
+        [[challenge sender] cancelAuthenticationChallenge:challenge];
+        completionHandler(NSURLSessionAuthChallengeRejectProtectionSpace, nil);
+    }
+}
+
 @end
