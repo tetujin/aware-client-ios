@@ -107,24 +107,26 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>To use your iPhone as a Peripheral device, AWARE needs an access to Bluetooth Peripheral API.</string>
 	<key>NSCalendarsUsageDescription</key>
-	<string>To store your everyday events, AWARE needs access to your calendar.</string>
+	<string>To store your everyday events, AWARE needs an access to your calendar.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>To read a QRcode for joining a study, AWARE needs access to your camera.</string>
+	<string>To read a QRcode for joining a study, AWARE needs an access to your camera.</string>
 	<key>NSHealthShareUsageDescription</key>
-	<string>To write your activities from Health App, AWARE needs acces to Health API.</string>
+	<string>To write your activities from Health App, AWARE needs an acces to Health API.</string>
 	<key>NSHealthUpdateUsageDescription</key>
-	<string>To read your activities from Health App, AWARE needs acces to Health API.</string>
+	<string>To read your activities from Health App, AWARE needs an acces to Health API.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<true/>
 	<key>NSLocationUsageDescription</key>
-	<string>To track your daily activity, AWARE needs access to your location in the background.</string>
+	<string>To track your daily activity, AWARE needs an access to your location in the background.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>To track your daily activity, AWARE needs access to your location.</string>
+	<string>To track your daily activity, AWARE needs an access to your location.</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>To track ambient noise level, AWARE needs access to Microphone.</string>
+	<string>To track ambient noise level, AWARE needs an access to Microphone.</string>
 	<key>NSMotionUsageDescription</key>
-	<string>To track your daily activity, AWARE needs access to Motion &amp; Fitness API.</string>
+	<string>To track your daily activity, AWARE needs an access to Motion &amp; Fitness API.</string>
 	<key>UIApplicationShortcutItems</key>
 	<array>
 		<dict>
