@@ -93,8 +93,8 @@
     "battery_temperature integer default 0,"
     "battery_adaptor integer default 0,"
     "battery_health integer default 0,"
-    "battery_technology text default '',"
-    "UNIQUE (timestamp,device_id)";
+    "battery_technology text default ''";
+    // "UNIQUE (timestamp,device_id)";
     [super createTable:query];
 }
 

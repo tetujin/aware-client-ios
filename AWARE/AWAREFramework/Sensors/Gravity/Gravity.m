@@ -100,7 +100,7 @@
                                                   [dict setObject:[NSNumber numberWithDouble:motion.gravity.x] forKey:@"double_values_0"]; //double
                                                   [dict setObject:[NSNumber numberWithDouble:motion.gravity.y]  forKey:@"double_values_1"]; //double
                                                   [dict setObject:[NSNumber numberWithDouble:motion.gravity.z]  forKey:@"double_values_2"]; //double
-                                                  [dict setObject:@0 forKey:@"accuracy"];//int
+                                                  [dict setObject:@3 forKey:@"accuracy"];//int
                                                   [dict setObject:@"" forKey:@"label"]; //text
                                                   [self setLatestValue:[NSString stringWithFormat:@"%f, %f, %f",motion.attitude.pitch, motion.attitude.roll,motion.attitude.yaw]];
                                                   

@@ -49,8 +49,8 @@
     "double_values_2 real default 0,"
     "double_values_3 real default 0,"
     "accuracy integer default 0,"
-    "label text default '',"
-    "UNIQUE (timestamp,device_id)";
+    "label text default ''";
+    // "UNIQUE (timestamp,device_id)";
     [super createTable:query];
 }
 
@@ -102,7 +102,7 @@
                                               [dict setObject:@(motion.attitude.roll)  forKey:@"double_values_1"]; //double
                                               [dict setObject:@(motion.attitude.yaw)  forKey:@"double_values_2"]; //double
                                               [dict setObject:@0 forKey:@"double_values_3"]; //double
-                                              [dict setObject:@0 forKey:@"accuracy"];//int
+                                              [dict setObject:@3 forKey:@"accuracy"];//int
                                               [dict setObject:@"" forKey:@"label"]; //text
                                                
                                                if([self getDBType] == AwareDBTypeCoreData){

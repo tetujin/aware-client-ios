@@ -110,7 +110,7 @@
     NSString *deviceId = [awareStudy getDeviceId];
     NSString *url = [self getInsertUrl:name];
     
-    NSLog(@"url: %@", url);
+    // NSLog(@"url: %@", url);
     
     NSMutableString* sensorData = [awareLocalStorage getSensorDataForPost];
     NSString* formatedSensorData = [awareLocalStorage fixJsonFormat:sensorData];

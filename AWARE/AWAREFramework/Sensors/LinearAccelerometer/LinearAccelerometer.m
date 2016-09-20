@@ -68,8 +68,8 @@
                         "double_values_1 real default 0,"
                         "double_values_2 real default 0,"
                         "accuracy integer default 0,"
-                        "label text default '',"
-                        "UNIQUE (timestamp,device_id)";
+                        "label text default ''";
+                        // "UNIQUE (timestamp,device_id)";
     [super createTable:query];
 }
 
@@ -125,7 +125,7 @@
                                                    [dict setObject:[NSNumber numberWithDouble:motion.userAcceleration.x] forKey:@"double_values_0"]; //double
                                                    [dict setObject:[NSNumber numberWithDouble:motion.userAcceleration.y]  forKey:@"double_values_1"]; //double
                                                    [dict setObject:[NSNumber numberWithDouble:motion.userAcceleration.z]  forKey:@"double_values_2"]; //double
-                                                   [dict setObject:@0 forKey:@"accuracy"];//int
+                                                   [dict setObject:@3 forKey:@"accuracy"];//int
                                                    [dict setObject:@"" forKey:@"label"]; //text
                                                    [self setLatestValue:[NSString stringWithFormat:@"%f, %f, %f",motion.userAcceleration.x, motion.userAcceleration.y,motion.userAcceleration.z]];
                                                    [self setLatestData:dict];

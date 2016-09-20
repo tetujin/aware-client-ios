@@ -41,8 +41,8 @@
     "double_values_1 real default 0,"
     "double_values_2 real default 0,"
     "accuracy integer default 0,"
-    "label text default '',"
-    "UNIQUE (timestamp,device_id)";
+    "label text default ''";
+    // "UNIQUE (timestamp,device_id)";
     [super createTable:query];
 }
 
@@ -102,7 +102,7 @@
                                              [dict setObject:[NSNumber numberWithDouble:magnetometerData.magneticField.x] forKey:@"double_values_0"];
                                              [dict setObject:[NSNumber numberWithDouble:magnetometerData.magneticField.y] forKey:@"double_values_1"];
                                              [dict setObject:[NSNumber numberWithDouble:magnetometerData.magneticField.z] forKey:@"double_values_2"];
-                                             [dict setObject:@0 forKey:@"accuracy"];
+                                             [dict setObject:@3 forKey:@"accuracy"];
                                              [dict setObject:@"" forKey:@"label"];
                                              [self setLatestValue:[NSString stringWithFormat:@"%f, %f, %f",magnetometerData.magneticField.x, magnetometerData.magneticField.y, magnetometerData.magneticField.z]];
                                              [self setLatestData:dict];

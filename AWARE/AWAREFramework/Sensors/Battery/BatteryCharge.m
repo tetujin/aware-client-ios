@@ -19,8 +19,8 @@
     "device_id text default '',"
     "battery_start integer default 0,"
     "battery_end integer default 0,"
-    "double_end_timestamp real default 0,"
-    "UNIQUE (timestamp,device_id)";
+    "double_end_timestamp real default 0";
+    // "UNIQUE (timestamp,device_id)";
     [self createTable:query];
 }
 

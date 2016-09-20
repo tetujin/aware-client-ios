@@ -13,7 +13,8 @@
 
 @implementation DeviceUsage {
     double lastTime;
-    int _notifyTokenForDidChangeDisplayStatus;
+    int _notifyTokenForDidChangeLockStatus;
+    // int _notifyTokenForDidChangeDisplayStatus;
 }
 
 - (instancetype)initWithAwareStudy:(AWAREStudy *)study dbType:(AwareDBType)dbType{
@@ -33,8 +34,8 @@
     "timestamp real default 0,"
     "device_id text default '',"
     "elapsed_device_on real default 0,"
-    "elapsed_device_off real default 0,"
-    "UNIQUE (timestamp,device_id)";
+    "elapsed_device_off real default 0";
+    // "UNIQUE (timestamp,device_id)";
     [super createTable:query];
 }
 
@@ -70,7 +71,8 @@
 
 - (void) registerAppforDetectDisplayStatus {
 //    int notify_token;
-    notify_register_dispatch("com.apple.iokit.hid.displayStatus", &_notifyTokenForDidChangeDisplayStatus,dispatch_get_main_queue(), ^(int token) {
+    // notify_register_dispatch("com.apple.iokit.hid.displayStatus", &_notifyTokenForDidChangeDisplayStatus,dispatch_get_main_queue(), ^(int token) {
+    notify_register_dispatch("com.apple.springboard.lockstate", &_notifyTokenForDidChangeLockStatus,dispatch_get_main_queue(), ^(int token) {
         
         NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
         
@@ -125,11 +127,22 @@
 
 - (void) unregisterAppforDetectDisplayStatus {
     //    notify_suspend(_notifyTokenForDidChangeDisplayStatus);
+    /*
     uint32_t result = notify_cancel(_notifyTokenForDidChangeDisplayStatus);
     if (result == NOTIFY_STATUS_OK) {
         NSLog(@"[screen] OK ==> %d", result);
     } else {
         NSLog(@"[screen] NO ==> %d", result);
+    }
+    */
+    
+    //    notify_suspend(_notifyTokenForDidChangeLockStatus);
+    uint32_t result = notify_cancel(_notifyTokenForDidChangeLockStatus);
+    
+    if (result == NOTIFY_STATUS_OK) {
+        NSLog(@"[screen] OK --> %d", result);
+    } else {
+        NSLog(@"[screen] NO --> %d", result);
     }
 }
 

@@ -42,8 +42,8 @@
     "device_id text default '',"
     "network_type integer default 0,"
     "network_subtype text default '',"
-    "network_state integer default 0,"
-    "UNIQUE (timestamp,device_id)";
+    "network_state integer default 0";
+    // "UNIQUE (timestamp,device_id)";
     [super createTable:query];
 }
 

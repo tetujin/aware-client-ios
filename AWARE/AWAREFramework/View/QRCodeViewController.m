@@ -159,7 +159,7 @@
                     _button.titleLabel.font = [UIFont boldSystemFontOfSize:20];
                     [_button setTitle:@"Find a QR code!" forState:UIControlStateNormal];
                     
-                    [self performSelector:@selector(setTapToJoinTextToButton:) withObject:nil afterDelay:2];
+                    [self performSelector:@selector(setTapToJoinTextToButton:) withObject:nil afterDelay:1];
                 }
             }
         }
