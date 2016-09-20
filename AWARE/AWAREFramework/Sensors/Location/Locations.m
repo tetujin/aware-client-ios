@@ -44,9 +44,9 @@
         "double_speed real default 0,"
         "double_altitude real default 0,"
         "provider text default '',"
-        "accuracy integer default 0,"
-        "label text default '',"
-        "UNIQUE (timestamp,device_id)";
+        "accuracy real default 0,"
+        "label text default ''";
+        // "UNIQUE (timestamp,device_id)";
     [super createTable:query];
 }
 
@@ -232,7 +232,7 @@
 
 - (void) saveLocation:(CLLocation *)location{
 
-    int accuracy = (location.verticalAccuracy + location.horizontalAccuracy) / 2;
+    double accuracy = (location.verticalAccuracy + location.horizontalAccuracy) / 2;
     
     NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
@@ -244,7 +244,7 @@
     [dict setObject:[NSNumber numberWithDouble:location.speed] forKey:@"double_speed"];
     [dict setObject:[NSNumber numberWithDouble:location.altitude] forKey:@"double_altitude"];
     [dict setObject:@"gps" forKey:@"provider"];
-    [dict setObject:[NSNumber numberWithInt:accuracy] forKey:@"accuracy"];
+    [dict setObject:@(accuracy) forKey:@"accuracy"];
     [dict setObject:@"" forKey:@"label"];
     [self setLatestValue:[NSString stringWithFormat:@"%f, %f, %f", location.coordinate.latitude, location.coordinate.longitude, location.speed]];
     [self setLatestData:dict];

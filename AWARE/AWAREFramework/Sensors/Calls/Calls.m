@@ -56,8 +56,8 @@ NSString* const KEY_CALLS_TRACE = @"trace";
     [query appendString:[NSString stringWithFormat:@"%@ text default '',", KEY_CALLS_DEVICEID]];
     [query appendString:[NSString stringWithFormat:@"%@ integer default 0,", KEY_CALLS_CALL_TYPE]];
     [query appendString:[NSString stringWithFormat:@"%@ integer default 0,", KEY_CALLS_CALL_DURATION]];
-    [query appendString:[NSString stringWithFormat:@"%@ text default '',", KEY_CALLS_TRACE ]];
-    [query appendString:@"UNIQUE (timestamp,device_id)"];
+    [query appendString:[NSString stringWithFormat:@"%@ text default ''", KEY_CALLS_TRACE ]];
+    // [query appendString:@"UNIQUE (timestamp,device_id)"];
     [super createTable:query];
 }
 

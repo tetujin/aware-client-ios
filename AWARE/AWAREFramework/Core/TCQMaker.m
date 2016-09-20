@@ -63,7 +63,8 @@
 
 
 - (NSString *) getDefaudltTableCreateQuery{
-    return [self getTableCreateQueryWithUniques:@[@"timestamp", @"device_id"]];
+    // return [self getTableCreateQueryWithUniques:@[@"timestamp", @"device_id"]];
+    return [self getTableCreateQueryWithUniques:nil];
 }
 
 
@@ -74,7 +75,6 @@
 //"double_values_1 real default 0,"
 //"double_values_2 real default 0,"
 //"accuracy integer default 0,"
-//"label text default '',"
-//"UNIQUE (timestamp,device_id)";
+//"label text default ''"
 
 @end

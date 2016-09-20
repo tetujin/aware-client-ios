@@ -41,8 +41,8 @@
     query = @"_id integer primary key autoincrement,"
     "timestamp real default 0,"
     "device_id text default '',"
-    "screen_status integer default 0,"
-    "UNIQUE (timestamp,device_id)";
+    "screen_status integer default 0";
+    // "UNIQUE (timestamp,device_id)";
     [super createTable:query];
 }
 

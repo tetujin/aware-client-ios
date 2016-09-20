@@ -72,6 +72,7 @@ extern NSString* const SENSOR_LABELS;
 extern NSString* const SENSOR_ORIENTATION;
 
 extern NSString* const SENSOR_PLUGIN_GOOGLE_ACTIVITY_RECOGNITION;
+extern NSString* const SENSOR_IOS_ACTIVITY_RECOGNITION;
 extern NSString* const SENSOR_GOOGLE_FUSED_LOCATION;
 extern NSString* const SENSOR_PLUGIN_OPEN_WEATHER;
 extern NSString* const SENSOR_PLUGIN_MSBAND;
@@ -211,6 +212,7 @@ extern NSString * const ACTION_AWARE_WIFI_REQUEST_SCAN; //: request a Wi-Fi scan
 
 // Activity Recognition
 extern NSString * const ACTION_AWARE_GOOGLE_ACTIVITY_RECOGNITION;
+extern NSString * const ACTION_AWARE_IOS_ACTIVITY_RECOGNITION;
 
 // upload progress
 extern NSString * const KEY_UPLOAD_PROGRESS_STR;
@@ -218,6 +220,9 @@ extern NSString * const KEY_UPLOAD_FIN;
 extern NSString * const KEY_UPLOAD_SENSOR_NAME;
 extern NSString * const KEY_UPLOAD_SUCCESS;
 extern NSString * const ACTION_AWARE_DATA_UPLOAD_PROGRESS;
+
+
+extern NSString * const ACTION_AWARE_PEDOMETER;
 
 @interface AWAREKeys: NSObject
 

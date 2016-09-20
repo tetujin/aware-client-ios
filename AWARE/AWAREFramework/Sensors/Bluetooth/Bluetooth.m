@@ -58,9 +58,9 @@
     [query appendFormat:@"%@ text default '',", KEY_BLUETOOTH_DEVICE_ID];
     [query appendFormat:@"%@ text default '',", KEY_BLUETOOTH_ADDRESS];
     [query appendFormat:@"%@ text default '',", KEY_BLUETOOTH_NAME];
-    [query appendFormat:@"%@ real default 0,", KEY_BLUETOOTH_RSSI];
-    [query appendFormat:@"%@ text default '',", KEY_BLUETOOTH_LABLE];
-    [query appendFormat:@"UNIQUE (timestamp,device_id)"];
+    [query appendFormat:@"%@ integer default 0,", KEY_BLUETOOTH_RSSI];
+    [query appendFormat:@"%@ text default ''", KEY_BLUETOOTH_LABLE];
+    // [query appendFormat:@"UNIQUE (timestamp,device_id)"];
     
     [super createTable:query];
 }

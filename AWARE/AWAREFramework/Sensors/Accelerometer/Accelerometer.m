@@ -108,14 +108,14 @@
                                           NSLog(@"%@:%ld", [error domain], [error code] );
                                       } else {
                                           
-                                         // SQLite
+                                          // SQLite
                                           NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
                                           [dict setObject:[AWAREUtils getUnixTimestamp:[NSDate new]] forKey:@"timestamp"];
                                           [dict setObject:[self getDeviceId] forKey:@"device_id"];
                                           [dict setObject:@(accelerometerData.acceleration.x) forKey:@"double_values_0"];
                                           [dict setObject:@(accelerometerData.acceleration.y) forKey:@"double_values_1"];
                                           [dict setObject:@(accelerometerData.acceleration.z) forKey:@"double_values_2"];
-                                          [dict setObject:@0 forKey:@"accuracy"];
+                                          [dict setObject:@3 forKey:@"accuracy"];
                                           [dict setObject:@"" forKey:@"label"];
                                           
                                           [self setLatestValue:[NSString stringWithFormat:

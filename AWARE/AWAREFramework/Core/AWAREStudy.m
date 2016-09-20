@@ -117,7 +117,7 @@
 /**
  * This method downloads and sets a study configuration by using study URL. (NOTE: This URL can get from a study QRCode.)
  *
- * @param url An study URL (e.g., https://r2d2.hcii.cs.cmu.edu/aware/dashboard/index.php/webservice/index/41/4LtzPxcAIrdi)
+ * @param url An study URL (e.g., https://r2d2.hcii.cs.cmu.edu/aware/dashboard/index.php/webservice/index/study_number/PASSWORD)
  * @param a device_id of this device
  * @return The result of download and set a study configuration
  */
@@ -504,9 +504,9 @@ didCompleteWithError:(NSError *)error {
     "serial text default '',"
     "release text default '',"
     "release_type text default '',"
-    "sdk text default '',"
+    "sdk test default ''," // version
     "label text default '',"
-    "UNIQUE (timestamp,device_id)";
+    "UNIQUE (device_id)";
   
     NSString *post = [NSString stringWithFormat:@"device_id=%@&fields=%@", uuid, query];
     NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];

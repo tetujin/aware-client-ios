@@ -64,7 +64,7 @@ static vDSP_Length const FFTViewControllerFFTWindowSize = 4096;
         KEY_AMBIENT_NOISE_RMS = @"double_rms";
         KEY_AMBIENT_NOISE_SILENT = @"is_silent";
         KEY_AMBIENT_NOISE_SILENT_THRESHOLD = @"double_silent_threshold";
-        KEY_AMBIENT_NOISE_RAW = @"raw";
+        KEY_AMBIENT_NOISE_RAW = @"blob_raw";
         
         /**
          * How frequently do we sample the microphone (default = 5) in minutes
@@ -125,9 +125,9 @@ static vDSP_Length const FFTViewControllerFFTWindowSize = 4096;
 //    AmbientNoise_Data.IS_SILENT + " integer default 0," +
     [query appendFormat:@"%@ real default 0,", KEY_AMBIENT_NOISE_SILENT_THRESHOLD];
 //    AmbientNoise_Data.SILENCE_THRESHOLD + " real default 0," +
-    [query appendFormat:@"%@ blob default null,", KEY_AMBIENT_NOISE_RAW];
+    [query appendFormat:@"%@ blob default null", KEY_AMBIENT_NOISE_RAW];
 //    AmbientNoise_Data.RAW + " blob default null," +
-    [query appendFormat:@"UNIQUE (%@,%@)", KEY_AMBIENT_NOISE_TIMESTAMP, KEY_AMBIENT_NOISE_DEVICE_ID];
+//    [query appendFormat:@"UNIQUE (%@,%@)", KEY_AMBIENT_NOISE_TIMESTAMP, KEY_AMBIENT_NOISE_DEVICE_ID];
 //    "UNIQUE("+AmbientNoise_Data.TIMESTAMP+","+AmbientNoise_Data.DEVICE_ID+")"
     [super createTable:query];
 }

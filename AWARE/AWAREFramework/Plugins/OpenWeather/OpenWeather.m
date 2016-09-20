@@ -95,13 +95,13 @@ int ONE_HOUR = 60*60;
     "wind_speed real default 0,"
     "wind_degrees real default 0,"
     "cloudiness real default 0,"
-    "weather_icon_id int default 0,"
-    "weather_description text default '',"
     "rain real default 0,"
     "snow real default 0,"
     "sunrise real default 0,"
     "sunset real default 0,"
-    "UNIQUE (timestamp,device_id)";
+    "weather_icon_id int default 0,"
+    "weather_description text default ''";
+    //"UNIQUE (timestamp,device_id)";
     [super createTable:query];
 }
 

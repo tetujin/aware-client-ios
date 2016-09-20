@@ -41,8 +41,8 @@
     "double_values_1 real default 0,"
     "double_values_2 real default 0,"
     "accuracy integer default 0,"
-    "label text default '',"
-    "UNIQUE (timestamp,device_id)";
+    "label text default ''";
+    // "UNIQUE (timestamp,device_id)";
     [super createTable:query];
 }
 
@@ -106,7 +106,7 @@
                                          [dict setObject:@(gyroData.rotationRate.x) forKey:@"double_values_0"];
                                          [dict setObject:@(gyroData.rotationRate.y) forKey:@"double_values_1"];
                                          [dict setObject:@(gyroData.rotationRate.z) forKey:@"double_values_2"];
-                                         [dict setObject:@0 forKey:@"accuracy"];
+                                         [dict setObject:@3 forKey:@"accuracy"];
                                          [dict setObject:@"" forKey:@"label"];
                                          [self setLatestValue:[NSString stringWithFormat:@"%f, %f, %f",gyroData.rotationRate.x,gyroData.rotationRate.y,gyroData.rotationRate.z]];
                                          

@@ -40,6 +40,7 @@
 
 // AWARE Plugins
 #import "ActivityRecognition.h"
+#import "IOSActivityRecognition.h"
 #import "OpenWeather.h"
 #import "DeviceUsage.h"
 #import "MSBand.h"
@@ -57,6 +58,8 @@
 #import "IBeacon.h"
 
 #import "Observer.h"
+
+#import "Pedometer.h"
 
 @implementation AWARESensorManager{
     /** upload timer */
@@ -182,7 +185,8 @@
         }else if([setting isEqualToString:[NSString stringWithFormat:@"status_%@",SENSOR_TIMEZONE]]){
             awareSensor = [[Timezone alloc] initWithAwareStudy:awareStudy dbType:dbType];
         }else if([setting isEqualToString:[NSString stringWithFormat:@"status_%@",SENSOR_ESMS]]){
-            awareSensor = [[ESM alloc] initWithAwareStudy:awareStudy dbType:dbType];
+            // awareSensor = [[ESM alloc] initWithAwareStudy:awareStudy dbType:dbType];
+            awareSensor = [[WebESM alloc] initWithAwareStudy:awareStudy dbType:dbType];
         }else if([setting isEqualToString:[NSString stringWithFormat:@"status_%@",SENSOR_CALLS]]){
             awareSensor = [[Calls alloc] initWithAwareStudy:awareStudy dbType:dbType];
         }else if([setting isEqualToString:[NSString stringWithFormat:@"status_%@",SENSOR_ROTATION]]){
@@ -209,8 +213,12 @@
             awareSensor = nil;
             NSString *pluginName = [pluginSetting objectForKey:@"setting"];
             NSLog(@"%@", pluginName);
-            if ([pluginName isEqualToString:[NSString stringWithFormat:@"status_%@",SENSOR_PLUGIN_GOOGLE_ACTIVITY_RECOGNITION]]) {
+            if ([pluginName isEqualToString:[NSString stringWithFormat:@"status_%@",SENSOR_PLUGIN_GOOGLE_ACTIVITY_RECOGNITION]]){
+                //if([self checkFileExistance:SENSOR_PLUGIN_GOOGLE_ACTIVITY_RECOGNITION]){ // For supporting old version
                 awareSensor = [[ActivityRecognition alloc] initWithAwareStudy:awareStudy dbType:dbType];
+                //}
+            }else if([pluginName isEqualToString:[NSString stringWithFormat:@"status_%@",SENSOR_IOS_ACTIVITY_RECOGNITION ]] ) {
+                awareSensor = [[IOSActivityRecognition alloc] initWithAwareStudy:awareStudy dbType:dbType];
             } else if([pluginName isEqualToString:[NSString stringWithFormat:@"status_%@",SENSOR_PLUGIN_OPEN_WEATHER]]){
                 awareSensor = [[OpenWeather alloc] initWithAwareStudy:awareStudy dbType:dbType];
             }else if([pluginName isEqualToString:[NSString stringWithFormat:@"status_%@",SENSOR_PLUGIN_DEVICE_USAGE]]){
@@ -250,14 +258,14 @@
     
     /**
      * [Additional hidden sensors]
-     * You can add your own AWARESensor and AWAREPlugin to AWARESensorManager directly using following source code.
+     * You can add your own AWARESensor to AWARESensorManager directly using following source code.
      * The "-addNewSensor" method is versy userful for testing and debuging a AWARESensor without registlating a study.
      */
     
     // Pedometer
-//    AWARESensor * steps = [[Pedometer alloc] initWithSensorName:SENSOR_PLUGIN_PEDOMETER withAwareStudy:awareStudy];
-//    [steps startSensor:uploadInterval withSettings:nil];
-//    [self addNewSensor:steps];
+    // AWARESensor * steps = [[Pedometer alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
+    // [steps startSensorWithSettings:nil];
+    // [self addNewSensor:steps];
     
     // HealthKit
 //    AWARESensor *healthKit = [[AWAREHealthKit alloc] initWithSensorName:@"plugin_health_kit" withAwareStudy:awareStudy];
@@ -270,8 +278,9 @@
 //    [self addNewSensor:memory];
     
     // Observer
-    AWARESensor *observerSensor = [[Observer alloc] initWithAwareStudy:awareStudy dbType:dbType];
-    [self addNewSensor:observerSensor];
+    // AWARESensor *observerSensor = [[Observer alloc] initWithAwareStudy:awareStudy dbType:dbType];
+    // [observerSensor startSensorWithSettings:nil];
+    // [self addNewSensor:observerSensor];
 
     // Push Notification
     AWARESensor * pushNotification = [[PushNotification alloc] initWithAwareStudy:awareStudy dbType:dbType];
@@ -480,9 +489,6 @@
             [progresses setObject:@0 forKey:[sensor getSensorName]];
         }
         
-        
-    
-
         observer = [[NSNotificationCenter defaultCenter]
                                addObserverForName:ACTION_AWARE_DATA_UPLOAD_PROGRESS
                                object:nil
@@ -844,7 +850,7 @@
     NSNumber * timestamp = [AWAREUtils getUnixTimestamp:[NSDate new]];
     
     // NSLog(@"============== Set a study for a test ====================");
-    [awareStudy setStudyInformationWithURL:@"https://aware.ht.sfc.keio.ac.jp/index.php/webservice/index/11/wVupTkDhRy9z"];
+    [awareStudy setStudyInformationWithURL:@"https://api.awareframework.com/index.php/webservice/index/876/Dtw61qkZ7Sc4"];
     
     switch (caseId) {
         case 0:
@@ -1001,7 +1007,26 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
 
+- (BOOL) checkFileExistance:(NSString *)name {
+    /**
+     * NOTE: Switch to CoreData to TextFile DB if this device is using TextFile DB
+     */
+    BOOL textFileExistance = NO;
+    
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString * path = [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.dat",name]];
+    NSFileManager *manager = [NSFileManager defaultManager];
+    if (![manager fileExistsAtPath:path]) {
+        textFileExistance = YES;
+    }else{
+        textFileExistance = NO;
+    }
+    return textFileExistance;
+}
 
 
 @end
