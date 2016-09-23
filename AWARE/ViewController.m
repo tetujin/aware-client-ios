@@ -82,6 +82,8 @@
     WebESM *webESM;
     
     CLLocationManager * locationManager;
+    
+    UIView *rootView;
 }
 
 - (void)viewDidLoad {
@@ -94,15 +96,16 @@
     KEY_CEL_STATE = @"state";
     KEY_CEL_SENSOR_NAME = @"sensorName";
     
+    rootView = self.navigationController.view;
+    
     webViewURL = [NSURL URLWithString:@"http://www.awareframework.com"];
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     uploadInterval = [userDefaults doubleForKey:SETTING_SYNC_INT];
     
     
-    // EAIntroView
-    intro = [[EAIntroView alloc] initWithFrame:self.view.bounds andPages:[self getIntroPages]];
-    [intro setDelegate:self];
+    // [self showIntro];
+    
 //    if (![userDefaults boolForKey:@"showed_introduction"]) {
 //         [intro showInView:self.view animateDuration:0.0];
 //    }
@@ -661,9 +664,10 @@
         webViewURL = [NSURL URLWithString:@"http://www.awareframework.com/team/"];
         [self performSegueWithIdentifier:@"webView" sender:self];
     } else if ([key isEqualToString:@"STUDY_CELL_SHOW_INTRODUCTION"]){
-         [intro showInView:self.view animateDuration:0.0];
-         NSIndexPath* indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-         [tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];
+//         [intro showInView:self.view animateDuration:0.0];
+        [self showIntro];
+//         NSIndexPath* indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+//         [tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];
     } else if ([key isEqualToString:@"STUDY_CELL_CLEAN_OLD_DATA"]){
         UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"AWARE Setting"
                                                          message:@"Please select when old data will be cleared."
@@ -995,9 +999,7 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
 ///////////////////////////////////////////////
 ///////////////////////////////////////////////
 
-- (NSArray *) getIntroPages {
-    NSMutableArray * pages = [[NSMutableArray alloc] init];
-    
+- (void) showIntro {
     // basic
     EAIntroPage *page1 = [EAIntroPage page];
     page1.title = @"About AWARE";
@@ -1006,7 +1008,7 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
     page1.descPositionY = 300;
     page1.titleColor = [UIColor darkGrayColor];
     page1.descColor = [UIColor darkGrayColor];
-    page1.bgColor = [UIColor whiteColor];
+    //page1.bgColor = [UIColor whiteColor];
     page1.titleIconView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_launcher_aware-web"]];
     [page1.titleIconView setBounds:CGRectMake(0,0,200,200)];
     
@@ -1018,7 +1020,7 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
     page2.descPositionY = 300;
     page2.titleColor = [UIColor darkGrayColor];
     page2.descColor = [UIColor darkGrayColor];
-    page2.bgColor = [UIColor whiteColor];
+    // page2.bgColor = [UIColor whiteColor];
     page2.titleIconView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"personal"]];
     [page2.titleIconView setBounds:CGRectMake(0,0,200,200)];
     
@@ -1030,7 +1032,7 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
     page3.descPositionY = 300;
     page3.titleColor = [UIColor darkGrayColor];
     page3.descColor = [UIColor darkGrayColor];
-    page3.bgColor = [UIColor whiteColor];
+    //page3.bgColor = [UIColor whiteColor];
     page3.titleIconView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"scientist"]];
     [page3.titleIconView setBounds:CGRectMake(0,0,200,200)];
     
@@ -1041,29 +1043,71 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
     page4.descPositionY = 300;
     page4.titleColor = [UIColor darkGrayColor];
     page4.descColor = [UIColor darkGrayColor];
-    page4.bgColor = [UIColor whiteColor];
+    //page4.bgColor = [UIColor whiteColor];
     page4.titleIconView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"aware_qrcode"]];
     [page4.titleIconView setBounds:CGRectMake(0,0,200,200)];
     
-    EAIntroPage *page5 = [EAIntroPage page];
-    page5.titleColor = [UIColor darkGrayColor];
-    page5.title = @"Welcome to AWARE Framework!!";
-    page5.titleFont = [UIFont fontWithName:@"Georgia-BoldItalic" size:30];
-    page5.titlePositionY = 500;
-    page5.descColor = [UIColor darkGrayColor];
-    page5.desc = @"You can get more detail information about AWARE Framework from the following URL.\nhttp://www.awareframework.com/";
-    page5.descPositionY = 400;
-    page5.bgColor = [UIColor whiteColor];
+    // EAIntroPage *page5 = [EAIntroPage pageWithCustomViewFromNibNamed:@"IntroPage"];
     
-    [pages addObject:page1];
-    [pages addObject:page2];
-    [pages addObject:page3];
-    [pages addObject:page4];
-    [pages addObject:page5];
+    EAIntroPage *page6 = [EAIntroPage page];
+    page6.titleColor = [UIColor darkGrayColor];
+    page6.title = @"Welcome to AWARE Framework!!";
+    page6.titleFont = [UIFont fontWithName:@"Georgia-BoldItalic" size:30];
+    page6.titlePositionY = 500;
+    page6.descColor = [UIColor darkGrayColor];
+    page6.desc = @"You can get more detail information about AWARE Framework from the following URL.\nhttp://www.awareframework.com/";
+    page6.descPositionY = 400;
+    // page5.bgColor = [UIColor whiteColor];
     
-    return pages;
+    //NSMutableArray * pages = [[NSMutableArray alloc] initWithObjects:page1,page2,page3,page4,page5,page6,nil];
+    NSMutableArray * pages = [[NSMutableArray alloc] initWithObjects:page1,page2,page3,page4,page6,nil];
+    
+    intro = [[EAIntroView alloc] initWithFrame:rootView.bounds andPages:pages];
+    [intro setDelegate:self];
+    intro.swipeToExit = NO;
+    intro.showSkipButtonOnlyOnLastPage = YES;
+    // intro.scrollingEnabled = NO;
+    
+    intro.backgroundColor = [UIColor whiteColor];
+    intro.pageControl.pageIndicatorTintColor = [UIColor lightGrayColor];
+    intro.pageControl.currentPageIndicatorTintColor = [UIColor darkGrayColor];
+    [intro.skipButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
+    [intro.skipButton setTitle:@"Let's Start!" forState:UIControlStateNormal];
+    
+    [intro showInView:rootView animateDuration:0.3];
+    
+    // page2.bgImage = [UIImage imageNamed:@"bg2"];
+    // UISwitch *locationSwitchControl = (UISwitch *)[page5.pageView viewWithTag:1];
+    // if(locationSwitchControl) {
+    //    [locationSwitchControl addTarget:self action:@selector(locationSwitchFlip:) forControlEvents:UIControlEventValueChanged];
+    //}
 }
 
+- (IBAction)locationSwitchFlip:(id)sender {
+    UISwitch *switchControl = (UISwitch *) sender;
+    NSLog(@"%@", switchControl.on ? @"On" : @"Off");
+    
+    // limit scrolling on one, currently visible page (can't go previous or next page)
+    //[_intro setScrollingEnabled:switchControl.on];
+    
+    if(!switchControl.on) {
+        // scroll no further selected page (can go previous pages, but not next)
+        // _intro.limitPageIndex = _intro.visiblePageIndex;
+    } else {
+        // [_intro setScrollingEnabled:YES];
+    }
+}
 
+- (void)intro:(EAIntroView *)introView pageAppeared:(EAIntroPage *)page withIndex:(NSUInteger)pageIndex{
+    
+}
+
+- (void)intro:(EAIntroView *)introView pageStartScrolling:(EAIntroPage *)page withIndex:(NSUInteger)pageIndex{
+    
+}
+
+- (void)intro:(EAIntroView *)introView pageEndScrolling:(EAIntroPage *)page withIndex:(NSUInteger)pageIndex{
+    
+}
 
 @end

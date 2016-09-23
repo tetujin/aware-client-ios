@@ -54,7 +54,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>3</string>
+	<string>5</string>
 	<key>LSApplicationCategoryType</key>
 	<string></string>
 	<key>LSRequiresIPhoneOS</key>
@@ -85,8 +85,15 @@
 			</dict>
 			<key>aware.ht.sfc.keio.ac.jp</key>
 			<dict>
-				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+				<key>NSThirdPartyExceptionAllowsInsecureHTTPLoads</key>
 				<true/>
+				<key>NSThirdPartyExceptionMinimumTLSVersion</key>
+				<string>TLSv1.0</string>
+				<key>NSThirdPartyExceptionRequiresForwardSecrecy</key>
+				<false/>
+			</dict>
+			<key>aware.koota.zgib.net</key>
+			<dict>
 				<key>NSThirdPartyExceptionAllowsInsecureHTTPLoads</key>
 				<true/>
 				<key>NSThirdPartyExceptionMinimumTLSVersion</key>
@@ -113,10 +120,6 @@
 	<string>To store your everyday events, AWARE needs an access to your calendar.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>To read a QRcode for joining a study, AWARE needs an access to your camera.</string>
-	<key>NSHealthShareUsageDescription</key>
-	<string>To write your activities from Health App, AWARE needs an acces to Health API.</string>
-	<key>NSHealthUpdateUsageDescription</key>
-	<string>To read your activities from Health App, AWARE needs an acces to Health API.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<true/>
 	<key>NSLocationUsageDescription</key>

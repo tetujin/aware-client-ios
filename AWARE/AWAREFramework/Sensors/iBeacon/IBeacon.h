@@ -8,12 +8,13 @@
 
 #import "AWARESensor.h"
 
-#import <CoreLocation/CoreLocation.h>
-#import <CoreBluetooth/CoreBluetooth.h>
+//#import <CoreLocation/CoreLocation.h>
+//#import <CoreBluetooth/CoreBluetooth.h>
 
-@interface IBeacon : AWARESensor <CLLocationManagerDelegate>
+@interface IBeacon : AWARESensor
+// <CLLocationManagerDelegate>
 
-@property (strong, nonatomic) CLBeaconRegion *myBeaconRegion;
-@property (strong, nonatomic) CLLocationManager *locationManager;
+//@property (strong, nonatomic) CLBeaconRegion *myBeaconRegion;
+//@property (strong, nonatomic) CLLocationManager *locationManager;
 
 @end
