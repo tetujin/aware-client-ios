@@ -47,6 +47,7 @@
 
 
 - (void) activate {
+    [self deactivate];
     /// Set defualt settings
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     if (![userDefaults boolForKey:@"aware_inited"]) {
@@ -184,9 +185,9 @@
         _sharedLocationManager.allowsBackgroundLocationUpdates = YES;
     }
     
-    if ([_sharedLocationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
-        [_sharedLocationManager requestAlwaysAuthorization];
-    }
+//    if ([_sharedLocationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
+//        [_sharedLocationManager requestAlwaysAuthorization];
+//    }
      
     CLAuthorizationStatus state = [CLLocationManager authorizationStatus];
     if(state == kCLAuthorizationStatusAuthorizedAlways){

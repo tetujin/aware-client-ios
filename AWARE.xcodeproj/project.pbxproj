@@ -64,7 +64,7 @@
 		165A8B701C03B90500898C6C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 165A8B6E1C03B90500898C6C /* GoogleService-Info.plist */; };
 		165A8B711C03B90500898C6C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 165A8B6E1C03B90500898C6C /* GoogleService-Info.plist */; };
 		165DECF61C83AD7D002C88CA /* ExternalAccessory.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 165DECF51C83AD7D002C88CA /* ExternalAccessory.framework */; };
-		166082CC1D93DC1A004D1858 /* IntroPage.xib in Resources */ = {isa = PBXBuildFile; fileRef = 166082CB1D93DC1A004D1858 /* IntroPage.xib */; };
+		166082CC1D93DC1A004D1858 /* IntroPage5.xib in Resources */ = {isa = PBXBuildFile; fileRef = 166082CB1D93DC1A004D1858 /* IntroPage5.xib */; };
 		16654EA21D027DC600280051 /* AWAREUploader.m in Sources */ = {isa = PBXBuildFile; fileRef = 16654EA11D027DC600280051 /* AWAREUploader.m */; };
 		1683ABCE1D347A5F001543D9 /* AWAREDebugMessageLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 1683ABCD1D347A5F001543D9 /* AWAREDebugMessageLogger.m */; };
 		168683031C07C43600CB4266 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 168683021C07C43600CB4266 /* AudioToolbox.framework */; };
@@ -407,7 +407,7 @@
 		165A8B6E1C03B90500898C6C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
 		165DECF51C83AD7D002C88CA /* ExternalAccessory.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ExternalAccessory.framework; path = System/Library/Frameworks/ExternalAccessory.framework; sourceTree = SDKROOT; };
 		165DECF71C83AD7D002C88CA /* AWARE.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = AWARE.entitlements; sourceTree = "<group>"; };
-		166082CB1D93DC1A004D1858 /* IntroPage.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = IntroPage.xib; sourceTree = "<group>"; };
+		166082CB1D93DC1A004D1858 /* IntroPage5.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = IntroPage5.xib; sourceTree = "<group>"; };
 		16654EA01D027DC600280051 /* AWAREUploader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AWAREUploader.h; sourceTree = "<group>"; };
 		16654EA11D027DC600280051 /* AWAREUploader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AWAREUploader.m; sourceTree = "<group>"; };
 		167B37C41D4370FA00A99C64 /* AWARECoreDataMigrationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AWARECoreDataMigrationManager.h; sourceTree = "<group>"; };
@@ -1848,7 +1848,7 @@
 				169C88271D01382C00825761 /* QRCodeViewController.m */,
 				169C88281D01382C00825761 /* WebViewController.h */,
 				169C88291D01382C00825761 /* WebViewController.m */,
-				166082CB1D93DC1A004D1858 /* IntroPage.xib */,
+				166082CB1D93DC1A004D1858 /* IntroPage5.xib */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -2147,7 +2147,7 @@
 				169C88631D01382C00825761 /* 5_3.jpg in Resources */,
 				169C88641D01382C00825761 /* 6_1.jpg in Resources */,
 				169C88651D01382C00825761 /* 6_2.jpg in Resources */,
-				166082CC1D93DC1A004D1858 /* IntroPage.xib in Resources */,
+				166082CC1D93DC1A004D1858 /* IntroPage5.xib in Resources */,
 				169C88661D01382C00825761 /* 6_3.jpg in Resources */,
 				169C88671D01382C00825761 /* 7_1.jpg in Resources */,
 				169C88681D01382C00825761 /* 7_2.jpg in Resources */,

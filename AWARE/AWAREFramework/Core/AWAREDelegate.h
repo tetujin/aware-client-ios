@@ -24,6 +24,9 @@
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
 - (void)saveContext;
+
+- (void)setNotification:(UIApplication *)application;
+
 // for migration
 //- (BOOL)isRequiredMigration;
 //- (BOOL)doMigration;

@@ -104,12 +104,12 @@
     uploadInterval = [userDefaults doubleForKey:SETTING_SYNC_INT];
     
     
-    // [self showIntro];
     
-//    if (![userDefaults boolForKey:@"showed_introduction"]) {
-//         [intro showInView:self.view animateDuration:0.0];
-//    }
-//    [userDefaults setBool:YES forKey:@"showed_introduction"];
+    // [self showIntro];
+    if (![userDefaults boolForKey:@"showed_introduction"]) {
+        [self showIntro];
+    }
+    [userDefaults setBool:YES forKey:@"showed_introduction"];
     
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
@@ -1047,7 +1047,7 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
     page4.titleIconView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"aware_qrcode"]];
     [page4.titleIconView setBounds:CGRectMake(0,0,200,200)];
     
-    // EAIntroPage *page5 = [EAIntroPage pageWithCustomViewFromNibNamed:@"IntroPage"];
+    // EAIntroPage *page5 = [EAIntroPage pageWithCustomViewFromNibNamed:@"IntroPage5"];
     
     EAIntroPage *page6 = [EAIntroPage page];
     page6.titleColor = [UIColor darkGrayColor];
@@ -1059,7 +1059,7 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
     page6.descPositionY = 400;
     // page5.bgColor = [UIColor whiteColor];
     
-    //NSMutableArray * pages = [[NSMutableArray alloc] initWithObjects:page1,page2,page3,page4,page5,page6,nil];
+    //NSArray * pages = [[NSArray alloc] initWithObjects:page1,page2,page3,page4,page5,page6,nil];
     NSMutableArray * pages = [[NSMutableArray alloc] initWithObjects:page1,page2,page3,page4,page6,nil];
     
     intro = [[EAIntroView alloc] initWithFrame:rootView.bounds andPages:pages];
@@ -1076,27 +1076,88 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
     
     [intro showInView:rootView animateDuration:0.3];
     
-    // page2.bgImage = [UIImage imageNamed:@"bg2"];
-    // UISwitch *locationSwitchControl = (UISwitch *)[page5.pageView viewWithTag:1];
-    // if(locationSwitchControl) {
-    //    [locationSwitchControl addTarget:self action:@selector(locationSwitchFlip:) forControlEvents:UIControlEventValueChanged];
-    //}
+    //page2.bgImage = [UIImage imageNamed:@"bg2"];
+//    UIButton *nextButton = (UIButton *)[page5.pageView viewWithTag:1];
+//    nextButton.hidden = YES;
+//    if(nextButton) {
+//        [nextButton addTarget:self action:@selector(pushedNextButton:) forControlEvents:UIControlEventTouchDown];
+//    }
+//    
+//    UIButton *locationButton = (UIButton *)[page5.pageView viewWithTag:2];
+//    if(locationButton){
+//        [locationButton addTarget:self action:@selector(pushedLocationButton:) forControlEvents:UIControlEventTouchDown];
+//    }
+//    
+//    UIButton *activityButton = (UIButton *)[page5.pageView viewWithTag:3];
+//    if(activityButton){
+//        [activityButton addTarget:self action:@selector(pushedActivityButton:) forControlEvents:UIControlEventTouchDown];
+//    }
+//    
+//    UIButton *notificationButton = (UIButton *)[page5.pageView viewWithTag:4];
+//    if(notificationButton){
+//        [notificationButton addTarget:self action:@selector(pushedNotificationButton:) forControlEvents:UIControlEventTouchDown];
+//    }
+    
 }
 
-- (IBAction)locationSwitchFlip:(id)sender {
-    UISwitch *switchControl = (UISwitch *) sender;
-    NSLog(@"%@", switchControl.on ? @"On" : @"Off");
+- (IBAction)pushedNextButton:(id)sender {
+    UIButton * nextButton = (UIButton *) sender;
+//    NSLog(@"%d", [nextButton isSelected]);
+//    if (nextButton.selected) {
+//        nextButton.selected = NO;
+//    }else{
+//        [intro setCurrentPageIndex:intro.currentPageIndex+1];
+//        nextButton.selected = YES;
+//    }
+//    UISwitch *switchControl = (UISwitch *) sender;
+//    NSLog(@"%@", switchControl.on ? @"On" : @"Off");
+//    
+//    // limit scrolling on one, currently visible page (can't go previous or next page)
+//    //[_intro setScrollingEnabled:switchControl.on];
+//    
+//    if(!switchControl.on) {
+//        // scroll no further selected page (can go previous pages, but not next)
+//        // _intro.limitPageIndex = _intro.visiblePageIndex;
+//    } else {
+//        // [_intro setScrollingEnabled:YES];
+//    }
+}
+
+- (IBAction)pushedLocationButton:(id)sender {
+    UIButton * button = (UIButton *) sender;
     
-    // limit scrolling on one, currently visible page (can't go previous or next page)
-    //[_intro setScrollingEnabled:switchControl.on];
-    
-    if(!switchControl.on) {
-        // scroll no further selected page (can go previous pages, but not next)
-        // _intro.limitPageIndex = _intro.visiblePageIndex;
-    } else {
-        // [_intro setScrollingEnabled:YES];
+    if (button.selected) {
+        button.selected = NO;
+        [button setBackgroundColor:[UIColor groupTableViewBackgroundColor]];
+    }else{
+        [button setBackgroundColor:self.view.tintColor];
+        button.selected = YES;
     }
 }
+
+- (IBAction)pushedActivityButton:(id)sender {
+    UIButton * button = (UIButton *) sender;
+    if (button.selected) {
+        [button setBackgroundColor:[UIColor groupTableViewBackgroundColor]];
+        button.selected = NO;
+    }else{
+        [button setBackgroundColor:self.view.tintColor];
+        button.selected = YES;
+    }
+}
+
+- (IBAction)pushedNotificationButton:(id)sender {
+    UIButton * button = (UIButton *) sender;
+    if (button.selected) {
+        [button setBackgroundColor:[UIColor groupTableViewBackgroundColor]];
+        button.selected = NO;
+    }else{
+        [button setBackgroundColor:self.view.tintColor];
+        button.selected = YES;
+    }
+}
+
+
 
 - (void)intro:(EAIntroView *)introView pageAppeared:(EAIntroPage *)page withIndex:(NSUInteger)pageIndex{
     
@@ -1107,6 +1168,20 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
 }
 
 - (void)intro:(EAIntroView *)introView pageEndScrolling:(EAIntroPage *)page withIndex:(NSUInteger)pageIndex{
+    
+}
+
+- (void)introDidFinish:(EAIntroView *)introView wasSkipped:(BOOL)wasSkipped{
+    
+    AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+    
+    if ([locationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
+        [locationManager requestAlwaysAuthorization];
+        AWARECore * core = delegate.sharedAWARECore;
+        [core activate];
+    }
+    
+    [delegate setNotification:[UIApplication sharedApplication]];
     
 }
 
