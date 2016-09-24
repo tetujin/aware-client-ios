@@ -521,11 +521,11 @@
                                            if(isFinish == YES && isSuccess == NO){
                                                AudioServicesPlayAlertSound(1324);
                                                if([AWAREUtils isBackground]){
-                                                   [AWAREUtils sendLocalNotificationForMessage:@"[Manual Upload] Fail to upload sensor data. Please try upload again." soundFlag:YES];
+                                                   [AWAREUtils sendLocalNotificationForMessage:@"[Manual Upload] Failed to upload sensor data. Please try uploading again." soundFlag:YES];
                                                }else{
                                                    UIAlertView *alert = [ [UIAlertView alloc]
                                                                          initWithTitle:@""
-                                                                         message:@"[Manual Upload] Fail to upload sensor data. Please try upload again."
+                                                                         message:@"[Manual Upload] Failed to upload sensor data. Please try upload again."
                                                                          delegate:nil
                                                                          cancelButtonTitle:@"OK"
                                                                          otherButtonTitles:nil];
@@ -606,25 +606,25 @@
 //            [SVProgressHUD showSuccessWithStatus:@"Success to upload all sensor data!"];
             AudioServicesPlayAlertSound(1000);
             if([AWAREUtils isBackground]){
-                [AWAREUtils sendLocalNotificationForMessage:@"[Manual Upload] Success to upload all sensor data!" soundFlag:YES];
+                [AWAREUtils sendLocalNotificationForMessage:@"[Manual Upload] Uploading all sensor data succeded!" soundFlag:YES];
             }else{
                 UIAlertView *alert = [ [UIAlertView alloc]
                                       initWithTitle:@""
-                                      message:@"[Manual Upload] Success to upload all sensor data!"
+                                      message:@"[Manual Upload] Uploading all sensor data succeded!"
                                       delegate:nil
                                       cancelButtonTitle:@"OK"
                                       otherButtonTitles:nil];
                 [alert show];
             }
         } else {
-//            [SVProgressHUD showErrorWithStatus:@"Fail to upload sensor data. Please try upload again."];
+//            [SVProgressHUD showErrorWithStatus:@"Failed to upload sensor data. Please try upload again."];
             AudioServicesPlayAlertSound(1324);
             if([AWAREUtils isBackground]){
-                [AWAREUtils sendLocalNotificationForMessage:@"[Manual Upload] Fail to upload sensor data. Please try upload again." soundFlag:YES];
+                [AWAREUtils sendLocalNotificationForMessage:@"[Manual Upload] Failed to upload sensor data. Please try uploading again." soundFlag:YES];
             }else{
                 UIAlertView *alert = [ [UIAlertView alloc]
                                       initWithTitle:@""
-                                      message:@"[Manual Upload] Fail to upload sensor data. Please try upload again."
+                                      message:@"[Manual Upload] Failed to upload sensor data. Please try uploading again."
                                       delegate:nil
                                       cancelButtonTitle:@"OK"
                                       otherButtonTitles:nil];
@@ -646,7 +646,7 @@
                     alertState = YES;
                     UIAlertView *alert = [ [UIAlertView alloc]
                                           initWithTitle:@"Manual Upload"
-                                          message:@"Do you continue to upload sensor data? Perhaps, this manual upload process occurred an error. Please try manual upload again."
+                                          message:@"The manual upload process might have encountered an error. Do you want to continue uploading sensor data? Please try manually uploading again."
                                           delegate:self
                                           cancelButtonTitle:@"NO"
                                           otherButtonTitles:@"YES",nil];
@@ -719,7 +719,7 @@
         manualUploadMonitor = nil;
         // remove observer from DefaultCenter
         [[NSNotificationCenter defaultCenter] removeObserver:observer];
-        [SVProgressHUD showErrorWithStatus:@"fail to upload your data to the server."];
+        [SVProgressHUD showErrorWithStatus:@"Failed to upload data to the server."];
         AudioServicesPlayAlertSound(1324);
         [SVProgressHUD performSelector:@selector(dismiss) withObject:nil afterDelay:3.0f];
     }
@@ -756,7 +756,7 @@
 //                    [SVProgressHUD showSuccessWithStatus:@"Success to upload your data to the server!"];
 //                    AudioServicesPlayAlertSound(1000);
 //                }else{
-//                    [SVProgressHUD showErrorWithStatus:@"Fail to upload your data to the server."];
+//                    [SVProgressHUD showErrorWithStatus:@"Failed to upload data to the server."];
 //                    AudioServicesPlayAlertSound(1324);
 //                }
 //                [SVProgressHUD performSelector:@selector(dismiss) withObject:nil afterDelay:3.0f];
