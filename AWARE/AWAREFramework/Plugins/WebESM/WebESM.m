@@ -27,7 +27,7 @@
 
 -(instancetype)initWithAwareStudy:(AWAREStudy *)study dbType:(AwareDBType)dbType{
     self = [super initWithAwareStudy:study
-                          sensorName:@"esms"//SENSOR_PLUGIN_WEB_ESM
+                          sensorName:SENSOR_PLUGIN_WEB_ESM //@"esms"
                         dbEntityName:NSStringFromClass([EntityESMAnswer class])
                               dbType:AwareDBTypeCoreData];
     if(self != nil){

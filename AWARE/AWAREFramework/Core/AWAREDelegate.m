@@ -43,6 +43,32 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    
+    // [self setNotification:application];
+    
+    // Set background fetch for updating debug information
+    [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
+    
+    // Google Login Plugin
+    NSError* configureError;
+    [[GGLContext sharedInstance] configureWithError: &configureError];
+    NSAssert(!configureError, @"Error configuring Google services: %@", configureError);
+    [GIDSignIn sharedInstance].delegate = self;
+    
+    NSLog(@"Turn 'OFF' the auto sleep mode on this app");
+    [UIApplication sharedApplication].idleTimerDisabled = YES;
+    
+    // Error Tacking
+    NSSetUncaughtExceptionHandler(&exceptionHandler);
+    
+    
+    _sharedAWARECore = [[AWARECore alloc] init];
+    [_sharedAWARECore activate];
+    
+    return YES;
+}
+
+- (void) setNotification:(UIApplication *)application {
     // [application unregisterForRemoteNotifications];
     
     if ([AWAREUtils getCurrentOSVersionAsFloat] >= 8.0) {
@@ -74,46 +100,8 @@
         }
     }
     
-    
-    
     [[UIApplication sharedApplication] cancelAllLocalNotifications];
-    
-    // DeployGate SDK
-    // [[DeployGateSDK sharedInstance] launchApplicationWithAuthor:@"tetujin" key:@"b268f60ae48ecfca7352c0a01918c86a7bd4bc74"];
-    
-    // Set background fetch for updating debug information
-    [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
-    
-    // Google Login Plugin
-    NSError* configureError;
-    [[GGLContext sharedInstance] configureWithError: &configureError];
-    NSAssert(!configureError, @"Error configuring Google services: %@", configureError);
-    [GIDSignIn sharedInstance].delegate = self;
-    
-    NSLog(@"Turn 'OFF' the auto sleep mode on this app");
-    [UIApplication sharedApplication].idleTimerDisabled = YES;
-    
-    // Error Tacking
-    NSSetUncaughtExceptionHandler(&exceptionHandler);
-    
-    
-    _sharedAWARECore = [[AWARECore alloc] init];
-    [_sharedAWARECore activate];
-    
-    //if(![self isRequiredMigration]){
-//    _sharedAWARECore = [[AWARECore alloc] init];
-//    [_sharedAWARECore activate];
-    //}else{
-        // init with only location server
-        // migrationManager = [[AWARECoreDataMigrationManager alloc] init];
-        // [migrationManager activate];
-        //[AWAREUtils sendLocalNotificationForMessage:@"Please open AWARE client iOS for migrating database!" soundFlag:YES];
-    //}
-    
-    return YES;
 }
-
-
 
 
 - (void)applicationWillResignActive:(UIApplication *)application {

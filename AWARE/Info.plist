@@ -54,7 +54,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>5</string>
 	<key>LSApplicationCategoryType</key>
 	<string></string>
 	<key>LSRequiresIPhoneOS</key>
@@ -85,8 +85,15 @@
 			</dict>
 			<key>aware.ht.sfc.keio.ac.jp</key>
 			<dict>
-				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+				<key>NSThirdPartyExceptionAllowsInsecureHTTPLoads</key>
 				<true/>
+				<key>NSThirdPartyExceptionMinimumTLSVersion</key>
+				<string>TLSv1.0</string>
+				<key>NSThirdPartyExceptionRequiresForwardSecrecy</key>
+				<false/>
+			</dict>
+			<key>aware.koota.zgib.net</key>
+			<dict>
 				<key>NSThirdPartyExceptionAllowsInsecureHTTPLoads</key>
 				<true/>
 				<key>NSThirdPartyExceptionMinimumTLSVersion</key>
@@ -107,20 +114,22 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>To use your iPhone as a Peripheral device, AWARE needs an access to Bluetooth Peripheral API.</string>
 	<key>NSCalendarsUsageDescription</key>
-	<string>To store your everyday events, AWARE needs access to your calendar.</string>
+	<string>To store your everyday events, AWARE needs an access to your calendar.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>To read a QRcode for joining a study, AWARE needs access to your camera.</string>
+	<string>To read a QRcode for joining a study, AWARE needs an access to your camera.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<true/>
 	<key>NSLocationUsageDescription</key>
-	<string>To track your daily activity, AWARE needs access to your location in the background.</string>
+	<string>To track your daily activity, AWARE needs an access to your location in the background.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>To track your daily activity, AWARE needs access to your location.</string>
+	<string>To track your daily activity, AWARE needs an access to your location.</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>To track ambient noise level, AWARE needs access to Microphone.</string>
+	<string>To track ambient noise level, AWARE needs an access to Microphone.</string>
 	<key>NSMotionUsageDescription</key>
-	<string>To track your daily activity, AWARE needs access to Motion &amp; Fitness API.</string>
+	<string>To track your daily activity, AWARE needs an access to Motion &amp; Fitness API.</string>
 	<key>UIApplicationShortcutItems</key>
 	<array>
 		<dict>
@@ -135,7 +144,6 @@
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>bluetooth-central</string>
-		<string>bluetooth-peripheral</string>
 		<string>fetch</string>
 		<string>location</string>
 		<string>remote-notification</string>
