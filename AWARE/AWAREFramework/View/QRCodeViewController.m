@@ -157,9 +157,10 @@
                     qrcodeStr = qrcode;
                     _button.enabled = YES;
                     _button.titleLabel.font = [UIFont boldSystemFontOfSize:20];
-                    [_button setTitle:@"Find a QR code!" forState:UIControlStateNormal];
+                    // [_button setTitle:@"Find a QR code!" forState:UIControlStateNormal];
+                    [_button setTitle:@"Tap to join a study!" forState:UIControlStateNormal];
                     
-                    [self performSelector:@selector(setTapToJoinTextToButton:) withObject:nil afterDelay:1];
+                    // [self performSelector:@selector(setTapToJoinTextToButton:) withObject:nil afterDelay:1];
                 }
             }
         }
@@ -182,15 +183,61 @@
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults setObject:qrcodeStr forKey:KEY_STUDY_QR_CODE];
     
-    NSString * alertTitle = @"Join this study?";
-    NSString * alertMessage = qrcodeStr;
-    UIAlertView * alert = [[UIAlertView alloc] initWithTitle:alertTitle
-                                                     message:alertMessage
-                                                    delegate:self
-                                           cancelButtonTitle:@"Cancel"
-                                           otherButtonTitles:@"Join", nil];
-    alert.tag = 1;
-    [alert show];
+    // https://github.com/tetujin/aware-client/blob/master/aware-core/src/main/java/com/aware/ui/Aware_QRCode.java
+    
+    // Get the study information from the aware server using the study url
+    // https://HOST/index.php/webservice/client_get_study_info/STUDY_API_KEY
+    NSURL *url = [NSURL URLWithString:qrcodeStr];
+
+    NSString * apiKey = @"";
+    NSArray * pathComponents = [url pathComponents];
+    for (NSString * component in pathComponents) {
+        apiKey = component;
+    }
+    NSString * requestUrl = [NSString stringWithFormat:@"https://%@/index.php/webservice/client_get_study_info/%@", url.host, apiKey];
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+    [request setURL:[NSURL URLWithString:requestUrl]];
+    [request setHTTPMethod:@"GET"];
+    
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSession sharedSession].configuration
+                                                          delegate:self
+                                                     delegateQueue:nil];
+    [[session dataTaskWithRequest:request completionHandler:^(NSData * data,
+                                                              NSURLResponse *  response,
+                                                              NSError * error) {
+        dispatch_async(dispatch_get_main_queue(),^{
+            // Success
+            if (response && ! error) {
+                NSString *responseString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+                // NSLog(@"Success: %@", responseString);
+                NSDictionary  * studyInfo    = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
+                NSString * studyTitle        = [studyInfo objectForKey:@"study_name"];
+                NSString * studyDescription  = [studyInfo objectForKey:@"study_description"];
+                NSString * researcherFirst   = [studyInfo objectForKey:@"researcher_first"];
+                NSString * researcherLast    = [studyInfo objectForKey:@"researcher_first"];
+                NSString * researcherContact = [studyInfo objectForKey:@"researcher_contact"];
+                
+                UIAlertView * alert = [[UIAlertView alloc] initWithTitle:studyTitle
+                                                                 message:studyDescription
+                                                                delegate:self
+                                                       cancelButtonTitle:@"Cancel"
+                                                       otherButtonTitles:@"Join", nil];
+                alert.tag = 1;
+                [alert show];
+            // Error
+            } else {
+                NSLog(@"ERROR: %@ %ld", error.debugDescription , error.code);
+                if (error.code == -1202) {
+                    // Install CRT file for SSL: If the error code is -1202, this device needs .crt for SSL(secure) connection.
+                    [self installSSLCertificationFile];
+                    [self joinStudy];
+                }
+            }
+            [session finishTasksAndInvalidate];
+            [session invalidateAndCancel];
+        });
+
+    }] resume];
 
 }
 
@@ -211,13 +258,11 @@
 }
 
 - (void) joinStudy {
-    /*
+    // Join a study
     dispatch_async(dispatch_get_main_queue(),^{
-        //                AWAREStudy *study = [[AWAREStudy alloc] initWithReachability:YES];
         AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
         AWAREStudy * study = delegate.sharedAWARECore.sharedAwareStudy;
         [study setStudyInformationWithURL:qrcodeStr];
-        //[study refreshStudy];
         [self moveToTopPage];
         UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Thank you for joining our study!"
                                                          message:nil
@@ -226,58 +271,6 @@
                                                otherButtonTitles:nil];
         [alert show];
     });
-     */
-    // Check a SSL certification file
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
-    [request setURL:[NSURL URLWithString:qrcodeStr]];
-    [request setHTTPMethod:@"POST"];
-    NSString *post = [NSString stringWithFormat:@"device_id"];
-    NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
-    NSString *postLength = [NSString stringWithFormat:@"%ld", [postData length]];
-    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
-    [request setHTTPBody:postData];
-    
-    // __weak NSURLSession *session = [NSURLSession sharedSession];
-    NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSession sharedSession].configuration
-                                                                 delegate:self
-                                                                delegateQueue:nil];
-    //[[session dataTaskWithRequest:request] resume];
-    
-    [[session dataTaskWithRequest:request completionHandler:^(NSData * data,
-                                                              NSURLResponse *  response,
-                                                              NSError * error) {
-        // Success
-        if (response && ! error) {
-            NSString *responseString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-            NSLog(@"Success: %@", responseString);
-            // Join a study
-            dispatch_async(dispatch_get_main_queue(),^{
-//                AWAREStudy *study = [[AWAREStudy alloc] initWithReachability:YES];
-                AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
-                AWAREStudy * study = delegate.sharedAWARECore.sharedAwareStudy;
-                [study setStudyInformationWithURL:qrcodeStr];
-                [self moveToTopPage];
-                UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Thank you for joining our study!"
-                                                                 message:nil
-                                                                delegate:self
-                                                       cancelButtonTitle:@"Close"
-                                                       otherButtonTitles:nil];
-                [alert show];
-            });
-        } else {
-            NSLog(@"ERROR: %@ %ld", error.debugDescription , error.code);
-            if (error.code == -1202) {
-                // Install CRT file for SSL: If the error code is -1202, this device needs .crt for SSL(secure) connection.
-                dispatch_async(dispatch_get_main_queue(),^{
-                    [self installSSLCertificationFile];
-//                    [self joinStudy];
-                });
-            }
-        }
-        [session finishTasksAndInvalidate];
-        [session invalidateAndCancel];
-    }] resume];
-     
 }
 
 
