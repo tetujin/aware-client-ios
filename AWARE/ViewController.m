@@ -28,6 +28,7 @@
     AWARESensorManager * sensorManager;
     WebESM *webESM;
     AWARECore * core;
+    
 }
 
 - (void)viewDidLoad
@@ -40,10 +41,16 @@
                                                object:nil];
 
     /// Initi Core Data Manager
-    AppDelegate *delegate= (AppDelegate*)[UIApplication sharedApplication].delegate;
-    core = delegate.sharedAWARECore;
+    AppDelegate *delegate = (AppDelegate*)[UIApplication sharedApplication].delegate;
+    core          = delegate.sharedAWARECore;
     sensorManager =     core.sharedSensorManager;
-    awareStudy =        core.sharedAwareStudy;
+    awareStudy    =     core.sharedAwareStudy;
+    
+    if ([core.sharedLocationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
+        [core.sharedLocationManager requestAlwaysAuthorization];
+        [core activate];
+    }
+    [delegate setNotification:[UIApplication sharedApplication]];
     
     /// Start an update timer for list view. This timer refreshed the list view every 0.1 sec.
     webESM = [[WebESM alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeCoreData];
@@ -52,6 +59,9 @@
     if ([AWAREUtils getCurrentOSVersionAsFloat] >= 9.0) {
         [self.navigationController.navigationBar setDelegate:self];
     }
+
+    // For test
+    // [sensorManager performSelector:@selector(testSensing) withObject:nil afterDelay:10];
 }
 
 /**
@@ -127,66 +137,5 @@
  * ======================
  */
 
-- (IBAction)pushedLocationButton:(id)sender {
-    UIButton * button = (UIButton *) sender;
-    
-    if (button.selected) {
-        button.selected = NO;
-        [button setBackgroundColor:[UIColor groupTableViewBackgroundColor]];
-    }else{
-        [button setBackgroundColor:self.view.tintColor];
-        button.selected = YES;
-    }
-}
-
-- (IBAction)pushedActivityButton:(id)sender {
-    UIButton * button = (UIButton *) sender;
-    if (button.selected) {
-        [button setBackgroundColor:[UIColor groupTableViewBackgroundColor]];
-        button.selected = NO;
-    }else{
-        [button setBackgroundColor:self.view.tintColor];
-        button.selected = YES;
-    }
-}
-
-- (IBAction)pushedNotificationButton:(id)sender {
-    UIButton * button = (UIButton *) sender;
-    if (button.selected) {
-        [button setBackgroundColor:[UIColor groupTableViewBackgroundColor]];
-        button.selected = NO;
-    }else{
-        [button setBackgroundColor:self.view.tintColor];
-        button.selected = YES;
-    }
-}
-
-
-
-- (void)intro:(EAIntroView *)introView pageAppeared:(EAIntroPage *)page withIndex:(NSUInteger)pageIndex{
-    
-}
-
-- (void)intro:(EAIntroView *)introView pageStartScrolling:(EAIntroPage *)page withIndex:(NSUInteger)pageIndex{
-    
-}
-
-- (void)intro:(EAIntroView *)introView pageEndScrolling:(EAIntroPage *)page withIndex:(NSUInteger)pageIndex{
-    
-}
-
-- (void)introDidFinish:(EAIntroView *)introView wasSkipped:(BOOL)wasSkipped{
-    
-    AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
-    
-    if ([locationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
-        [locationManager requestAlwaysAuthorization];
-        AWARECore * core = delegate.sharedAWARECore;
-        [core activate];
-    }
-    
-    [delegate setNotification:[UIApplication sharedApplication]];
-    
-}
 
 @end
