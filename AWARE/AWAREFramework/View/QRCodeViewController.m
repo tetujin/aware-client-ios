@@ -231,6 +231,13 @@
                     // Install CRT file for SSL: If the error code is -1202, this device needs .crt for SSL(secure) connection.
                     [self installSSLCertificationFile];
                     [self joinStudy];
+                } else if (error.code == -1009){
+                    UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Network Error"
+                                                                     message:@"Please connect the Internet. The operation couldn't be completed."
+                                                                    delegate:self
+                                                           cancelButtonTitle:@"Close"
+                                                           otherButtonTitles:nil];
+                    [alert show];
                 }
             }
             [session finishTasksAndInvalidate];
