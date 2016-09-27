@@ -127,5 +127,66 @@
  * ======================
  */
 
+- (IBAction)pushedLocationButton:(id)sender {
+    UIButton * button = (UIButton *) sender;
+    
+    if (button.selected) {
+        button.selected = NO;
+        [button setBackgroundColor:[UIColor groupTableViewBackgroundColor]];
+    }else{
+        [button setBackgroundColor:self.view.tintColor];
+        button.selected = YES;
+    }
+}
+
+- (IBAction)pushedActivityButton:(id)sender {
+    UIButton * button = (UIButton *) sender;
+    if (button.selected) {
+        [button setBackgroundColor:[UIColor groupTableViewBackgroundColor]];
+        button.selected = NO;
+    }else{
+        [button setBackgroundColor:self.view.tintColor];
+        button.selected = YES;
+    }
+}
+
+- (IBAction)pushedNotificationButton:(id)sender {
+    UIButton * button = (UIButton *) sender;
+    if (button.selected) {
+        [button setBackgroundColor:[UIColor groupTableViewBackgroundColor]];
+        button.selected = NO;
+    }else{
+        [button setBackgroundColor:self.view.tintColor];
+        button.selected = YES;
+    }
+}
+
+
+
+- (void)intro:(EAIntroView *)introView pageAppeared:(EAIntroPage *)page withIndex:(NSUInteger)pageIndex{
+    
+}
+
+- (void)intro:(EAIntroView *)introView pageStartScrolling:(EAIntroPage *)page withIndex:(NSUInteger)pageIndex{
+    
+}
+
+- (void)intro:(EAIntroView *)introView pageEndScrolling:(EAIntroPage *)page withIndex:(NSUInteger)pageIndex{
+    
+}
+
+- (void)introDidFinish:(EAIntroView *)introView wasSkipped:(BOOL)wasSkipped{
+    
+    AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+    
+    if ([locationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
+        [locationManager requestAlwaysAuthorization];
+        AWARECore * core = delegate.sharedAWARECore;
+        [core activate];
+    }
+    
+    [delegate setNotification:[UIApplication sharedApplication]];
+    
+}
 
 @end

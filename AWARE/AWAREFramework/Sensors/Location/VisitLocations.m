@@ -35,8 +35,8 @@
      "name text default '',"
      "provider text default '',"
      "accuracy integer default 0,"
-     "label text default '',"
-     "UNIQUE (timestamp,device_id)"];
+     "label text default ''"];
+     // "UNIQUE (timestamp,device_id)"];
 }
 
 - (BOOL)startSensorWithSettings:(NSArray *)settings{

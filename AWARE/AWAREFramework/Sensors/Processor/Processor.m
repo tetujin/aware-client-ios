@@ -45,8 +45,8 @@
     "double_last_idle real default 0,"
     "double_user_load real default 0,"
     "double_system_load real default 0,"
-    "double_idle real default 0,"
-    "UNIQUE (timestamp,device_id)";
+    "double_idle real default 0";
+    // "UNIQUE (timestamp,device_id)";
     [super createTable:query];
 }
 

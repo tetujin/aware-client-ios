@@ -29,9 +29,9 @@
     "timestamp real default 0,"
     "device_id text default '',"
     "double_proximity real default 0,"
-    "accuracy real default 0,"
-    "label text default '',"
-    "UNIQUE (timestamp,device_id)";
+    "accuracy integer default 0,"
+    "label text default ''";
+    //"UNIQUE (timestamp,device_id)";
     [super createTable:query];
 }
 

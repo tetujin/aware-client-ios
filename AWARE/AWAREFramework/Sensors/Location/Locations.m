@@ -44,9 +44,9 @@
         "double_speed real default 0,"
         "double_altitude real default 0,"
         "provider text default '',"
-        "accuracy integer default 0,"
-        "label text default '',"
-        "UNIQUE (timestamp,device_id)";
+        "accuracy real default 0,"
+        "label text default ''";
+        // "UNIQUE (timestamp,device_id)";
     [super createTable:query];
 }
 
@@ -232,7 +232,7 @@
 
 - (void) saveLocation:(CLLocation *)location{
 
-    int accuracy = (location.verticalAccuracy + location.horizontalAccuracy) / 2;
+    double accuracy = (location.verticalAccuracy + location.horizontalAccuracy) / 2;
     
     NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
@@ -244,7 +244,7 @@
     [dict setObject:[NSNumber numberWithDouble:location.speed] forKey:@"double_speed"];
     [dict setObject:[NSNumber numberWithDouble:location.altitude] forKey:@"double_altitude"];
     [dict setObject:@"gps" forKey:@"provider"];
-    [dict setObject:[NSNumber numberWithInt:accuracy] forKey:@"accuracy"];
+    [dict setObject:@(accuracy) forKey:@"accuracy"];
     [dict setObject:@"" forKey:@"label"];
     [self setLatestValue:[NSString stringWithFormat:@"%f, %f, %f", location.coordinate.latitude, location.coordinate.longitude, location.speed]];
     [self setLatestData:dict];
@@ -337,13 +337,13 @@
         NSString * message = @"Please allow to use location sensor on AWARE client iOS from 'Settings > AWARE > Location> Always'";
         [self saveDebugEventWithText:@"Location sensor's authorization is restrcted" type:DebugTypeWarn label:@""];
         if([AWAREUtils isBackground]){
-            [AWAREUtils sendLocalNotificationForMessage:message title:title soundFlag:YES
+            [AWAREUtils sendLocalNotificationForMessage:message title:title soundFlag:NO
                                                category:nil fireDate:[NSDate new] repeatInterval:0 userInfo:nil iconBadgeNumber:1];
         }else{
             UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title
                                                                 message:message
                                                                delegate:nil
-                                                      cancelButtonTitle:@"OK"
+                                                      cancelButtonTitle:@"Close"
                                                       otherButtonTitles:nil];
             [alertView show];
         }
@@ -354,10 +354,10 @@
         NSString * message = @"Please turn on the location service from 'Settings > General > Privacy > Location Services'";
         [self saveDebugEventWithText:@"Location sensor's authorization is denied" type:DebugTypeWarn label:@""];
         if([AWAREUtils isBackground]){
-            [AWAREUtils sendLocalNotificationForMessage:message title:title soundFlag:YES
+            [AWAREUtils sendLocalNotificationForMessage:message title:title soundFlag:NO
                                                category:nil fireDate:[NSDate new] repeatInterval:0 userInfo:nil iconBadgeNumber:1];
         }else{
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title message:message delegate:nil cancelButtonTitle:@"Close" otherButtonTitles:nil];
             [alertView show];
         }
         //////////////////// kCLAuthorizationStatusAuthorized /////////////////////////
@@ -380,10 +380,14 @@
         NSString * message = @"Please allow to use location sensor 'Always' on AWARE client iOS from 'Settings > AWARE > Location> Always'";
         [self saveDebugEventWithText:@"Location sensor's authorization is denied" type:DebugTypeWarn label:@""];
         if([AWAREUtils isBackground]){
-            [AWAREUtils sendLocalNotificationForMessage:message title:title soundFlag:YES
+            [AWAREUtils sendLocalNotificationForMessage:message title:title soundFlag:NO
                                                category:nil fireDate:[NSDate new] repeatInterval:0 userInfo:nil iconBadgeNumber:1];
         }else{
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title
+                                                                message:message
+                                                               delegate:nil
+                                                      cancelButtonTitle:@"Close"
+                                                      otherButtonTitles:nil];
             [alertView show];
         }
         

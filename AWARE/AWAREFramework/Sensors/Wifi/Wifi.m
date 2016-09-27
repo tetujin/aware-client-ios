@@ -44,8 +44,8 @@
     "security text default '',"
     "frequency integer default 0,"
     "rssi integer default 0,"
-    "label text default '',"
-    "UNIQUE (timestamp,device_id)";
+    "label text default ''";
+    //"UNIQUE (timestamp,device_id)";
     [super createTable:query];
 }
 

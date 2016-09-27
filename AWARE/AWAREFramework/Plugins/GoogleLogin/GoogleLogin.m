@@ -33,7 +33,7 @@
         KEY_GOOGLE_NAME = @"name";
         KEY_GOOGLE_EMAIL = @"email";
         KEY_GOOGLE_BLOB_PICTURE = @"blob_picture";
-        // KEY_GOOGLE_PHONENUMBER = @"phonenumber";
+        KEY_GOOGLE_PHONENUMBER = @"phonenumber";
         encryptionName = NO;
         encryptionEmail = NO;
         encryptionUserId = NO;

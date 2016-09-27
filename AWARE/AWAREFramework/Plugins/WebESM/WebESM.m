@@ -27,7 +27,7 @@
 
 -(instancetype)initWithAwareStudy:(AWAREStudy *)study dbType:(AwareDBType)dbType{
     self = [super initWithAwareStudy:study
-                          sensorName:SENSOR_PLUGIN_WEB_ESM
+                          sensorName:SENSOR_PLUGIN_WEB_ESM //@"esms"
                         dbEntityName:NSStringFromClass([EntityESMAnswer class])
                               dbType:AwareDBTypeCoreData];
     if(self != nil){
@@ -46,13 +46,12 @@
 
 - (void)createTable{
     TCQMaker *tcqMaker = [[TCQMaker alloc] init];
-    [tcqMaker addColumn:@"esm_trigger" type:TCQTypeText default:@"''"];
-    [tcqMaker addColumn:@"esm_json" type:TCQTypeText default:@"''"];
-    [tcqMaker addColumn:@"esm_user_answer" type:TCQTypeText default:@"''"];
-    [tcqMaker addColumn:@"esm_expiration_threshold" type:TCQTypeInteger default:@"0"];
-    [tcqMaker addColumn:@"double_esm_user_answer_timestamp" type:TCQTypeReal default:@"0"];
-    [tcqMaker addColumn:@"esm_status" type:TCQTypeInteger default:@"0"];
-    
+    [tcqMaker addColumn:@"esm_json"                         type:TCQTypeText    default:@"''"];
+    [tcqMaker addColumn:@"esm_status"                       type:TCQTypeInteger default:@"0"];
+    [tcqMaker addColumn:@"esm_expiration_threshold"         type:TCQTypeInteger default:@"0"];
+    [tcqMaker addColumn:@"double_esm_user_answer_timestamp" type:TCQTypeReal    default:@"0"];
+    [tcqMaker addColumn:@"esm_user_answer"                  type:TCQTypeText    default:@"''"];
+    [tcqMaker addColumn:@"esm_trigger"                      type:TCQTypeText    default:@"''"];
     NSString * query = [tcqMaker getTableCreateQueryWithUniques:nil];
     
     [self createTable:query];

@@ -70,22 +70,24 @@ NSString* const SENSOR_CALLS = @"calls";
 NSString* const SENSOR_LABELS = @"labels";
 NSString* const SENSOR_ORIENTATION = @"orientation";
 
+NSString* const SENSOR_IOS_ACTIVITY_RECOGNITION = @"ios_activity_recognition";
+
 
 NSString* const SENSOR_PLUGIN_GOOGLE_ACTIVITY_RECOGNITION = @"plugin_google_activity_recognition";
-NSString* const SENSOR_GOOGLE_FUSED_LOCATION = @"google_fused_location";
+NSString* const SENSOR_GOOGLE_FUSED_LOCATION  = @"google_fused_location";
 NSString* const SENSOR_PLUGIN_GOOGLE_CAL_PULL = @"plugin_balancedcampuscalendar";
 NSString* const SENSOR_PLUGIN_GOOGLE_CAL_PUSH = @"plugin_balancedcampusjournal";
-NSString* const SENSOR_PLUGIN_GOOGLE_LOGIN = @"plugin_google_login";
-NSString* const SENSOR_PLUGIN_OPEN_WEATHER = @"plugin_openweather";
-NSString* const SENSOR_PLUGIN_MSBAND = @"plugin_msband_sensors";
-NSString* const SENSOR_PLUGIN_DEVICE_USAGE = @"plugin_device_usage";
-NSString* const SENSOR_PLUGIN_NTPTIME = @"plugin_ntptime";
-NSString* const SENSOR_PLUGIN_SCHEDULER = @"scheduler";
-NSString* const SENSOR_PLUGIN_CAMPUS = @"plugin_cmu_esm";
-NSString* const SENSOR_PLUGIN_PEDOMETER = @"plugin_pedometer";
-NSString* const SENSOR_PLUGIN_WEB_ESM = @"plugin_web_esm";
-NSString* const SENSOR_PLUGIN_BLE_HEARTRATE = @"plugin_ble_heartrate";
-NSString* const SENSOR_AWARE_DEBUG = @"aware_debug";
+NSString* const SENSOR_PLUGIN_GOOGLE_LOGIN    = @"plugin_google_login";
+NSString* const SENSOR_PLUGIN_OPEN_WEATHER    = @"plugin_openweather";
+NSString* const SENSOR_PLUGIN_MSBAND          = @"plugin_msband_sensors";
+NSString* const SENSOR_PLUGIN_DEVICE_USAGE    = @"plugin_device_usage";
+NSString* const SENSOR_PLUGIN_NTPTIME         = @"plugin_ntptime";
+NSString* const SENSOR_PLUGIN_SCHEDULER       = @"scheduler";
+NSString* const SENSOR_PLUGIN_CAMPUS          = @"plugin_cmu_esm";
+NSString* const SENSOR_PLUGIN_PEDOMETER       = @"plugin_pedometer";
+NSString* const SENSOR_PLUGIN_WEB_ESM         = @"plugin_web_esm";
+NSString* const SENSOR_PLUGIN_BLE_HEARTRATE   = @"plugin_ble_heartrate";
+NSString* const SENSOR_AWARE_DEBUG            = @"aware_debug";
 
 
 NSString* const SENSOR_PLUGIN_MSBAND_SENSORS_CALORIES      = @"plugin_msband_sensors_calories";
@@ -230,6 +232,7 @@ NSString * const ACTION_AWARE_WIFI_REQUEST_SCAN = @"ACTION_AWARE_WIFI_REQUEST_SC
 
 // Activity Recognition
 NSString * const ACTION_AWARE_GOOGLE_ACTIVITY_RECOGNITION = @"ACTION_AWARE_GOOGLE_ACTIVITY_RECOGNITION";
+NSString * const ACTION_AWARE_IOS_ACTIVITY_RECOGNITION = @"ACTION_AWARE_IOS_ACTIVITY_RECOGNITION";
 
 // upload progress
 NSString * const KEY_UPLOAD_PROGRESS_STR = @"KEY_UPLOAD_PROGRESS_STR";
@@ -237,6 +240,8 @@ NSString * const KEY_UPLOAD_FIN = @"KEY_UPLOAD_FIN";
 NSString * const KEY_UPLOAD_SENSOR_NAME = @"KEY_UPLOAD_SENSOR_NAME";
 NSString * const KEY_UPLOAD_SUCCESS = @"KEY_UPLOAD_SUCCESS";
 NSString * const ACTION_AWARE_DATA_UPLOAD_PROGRESS = @"ACTION_AWARE_DATA_UPLOAD_PROGRESS";
+
+NSString * const ACTION_AWARE_PEDOMETER = @"ACTION_AWARE_PEDOMETER";
 
 @implementation AWAREKeys
 

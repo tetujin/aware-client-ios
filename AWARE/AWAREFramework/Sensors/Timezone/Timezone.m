@@ -34,8 +34,8 @@
     query = @"_id integer primary key autoincrement,"
     "timestamp real default 0,"
     "device_id text default '',"
-    "timezone text default '',"
-    "UNIQUE (timestamp,device_id)";
+    "timezone text default ''";
+    //"UNIQUE (timestamp,device_id)";
     [super createTable:query];
 }
 
@@ -123,7 +123,6 @@
     entityTimezone.device_id = [data objectForKey:@"device_id"];
     entityTimezone.timestamp = [data objectForKey:@"timestamp"];
     entityTimezone.timezone = [[NSTimeZone localTimeZone] description];
-
 }
 
 @end

@@ -1,43 +1,57 @@
 //
-//  ActivityRecognition.m
+//  IOSActivityRecognition.m
 //  AWARE
 //
-//  Created by Yuuki Nishiyama on 11/26/15.
-//  Copyright © 2015 Yuuki NISHIYAMA. All rights reserved.
+//  Created by Yuuki Nishiyama on 9/19/16.
+//  Copyright © 2016 Yuuki NISHIYAMA. All rights reserved.
 //
-//
 
-/**
-- [Document for CoreMotion API]( https://developer.apple.com/library/ios/documentation/EventHandling/Conceptual/EventHandlingiPhoneOS/motion_event_basics/motion_event_basics.html )
-- [Document for CMDeviceMotion API] ( https://developer.apple.com/library/ios/documentation/CoreMotion/Reference/CMDeviceMotion_Class/index.html#//apple_ref/occ/cl/CMDeviceMotion )
- */
-
-
-#import "ActivityRecognition.h"
+#import "IOSActivityRecognition.h"
 #import "AppDelegate.h"
-#import "EntityActivityRecognition.h"
+#import "EntityIOSActivityRecognition+CoreDataClass.h"
 
-@implementation ActivityRecognition {
+@implementation IOSActivityRecognition {
     CMMotionActivityManager *motionActivityManager;
     NSString * KEY_TIMESTAMP_OF_LAST_UPDATE;
     NSTimer * timer;
     double defaultInterval;
-    ActivityRecognitionMode sensingMode;
+    IOSActivityRecognitionMode sensingMode;
     CMMotionActivityConfidence confidenceFilter;
+    
+    /* stationary,walking,running,automotive,cycling,unknown */
+    NSString * ACTIVITY_NAME_STATIONARY;
+    NSString * ACTIVITY_NAME_WALKING;
+    NSString * ACTIVITY_NAME_RUNNING;
+    NSString * ACTIVITY_NAME_AUTOMOTIVE;
+    NSString * ACTIVITY_NAME_CYCLING;
+    NSString * ACTIVITY_NAME_UNKNOWN;
+    NSString * CONFIDENCE;
+    NSString * ACTIVITIES;
+    NSString * LABEL;
 }
 
 - (instancetype)initWithAwareStudy:(AWAREStudy *)study dbType:(AwareDBType)dbType{
+    ACTIVITIES = @"activities";
+    CONFIDENCE = @"confidence";
+    ACTIVITY_NAME_STATIONARY = @"stationary";
+    ACTIVITY_NAME_WALKING    = @"walking";
+    ACTIVITY_NAME_RUNNING    = @"running";
+    ACTIVITY_NAME_AUTOMOTIVE = @"automotive";
+    ACTIVITY_NAME_CYCLING    = @"cycling";
+    ACTIVITY_NAME_UNKNOWN    = @"unknown";
+    LABEL = @"label";
+    
     self = [super initWithAwareStudy:study
-                          sensorName:SENSOR_PLUGIN_GOOGLE_ACTIVITY_RECOGNITION
-                        dbEntityName:NSStringFromClass([EntityActivityRecognition class])
+                          sensorName:SENSOR_IOS_ACTIVITY_RECOGNITION
+                        dbEntityName:NSStringFromClass([EntityIOSActivityRecognition class])
                               dbType:dbType];
-
+    
     
     if (self) {
         motionActivityManager = [[CMMotionActivityManager alloc] init];
-        KEY_TIMESTAMP_OF_LAST_UPDATE = @"key_plugin_sensor_activity_recognition_last_update_timestamp";
+        KEY_TIMESTAMP_OF_LAST_UPDATE = @"key_sensor_ios_activity_recognition_last_update_timestamp";
         defaultInterval = 60*3; // 3 min
-        sensingMode = ActivityRecognitionModeLive;
+        sensingMode = IOSActivityRecognitionModeLive;
         confidenceFilter = CMMotionActivityConfidenceLow;
     }
     return self;
@@ -45,9 +59,10 @@
 
 - (void) createTable{
     
-    // creata original table 
+    // creata original table
     NSString *query = [[NSString alloc] init];
     
+    /*
     query = @"_id integer primary key autoincrement,"
     "timestamp real default 0,"
     "device_id text default '',"
@@ -55,32 +70,23 @@
     "activity_type text default '',"
     "confidence int default 4,"
     "activities text default ''";
-    //"UNIQUE (timestamp,device_id)";
-    
-    // TCQMaker * tcqMaker = [[TCQMaker alloc] init];
-    // confidence
-    // [tcqMaker addColumn:@"confidence" type:TCQTypeText default:@""];
-    // [tcqMaker addColumn:@"confidence_name" type:TCQTypeText default:@""];
-    // [tcqMaker addColumn:@"activity_name" type:TCQTypeText default:@""];
-    // [tcqMaker addColumn:@"stationary" type:TCQTypeInteger default:0];
-    // [tcqMaker addColumn:@"walking" type:TCQTypeInteger default:0];
-    // [tcqMaker addColumn:@"running" type:TCQTypeInteger default:0];
-    // [tcqMaker addColumn:@"automotive" type:TCQTypeInteger default:0];
-    // [tcqMaker addColumn:@"cycling" type:TCQTypeInteger default:0];
-    // [tcqMaker addColumn:@"unknown" type:TCQTypeInteger default:0];
-    
-    // [tcqMaker addColumn:@"activities" type:TCQTypeInteger default:0];
-
-    
-    /*
-    stationary
-    walking
-    running
-    automotive
-    cycling
-    unknown
     */
-     
+    
+    // https://developer.apple.com/reference/coremotion/cmmotionactivity?language=objc
+    TCQMaker * tcqMaker = [[TCQMaker alloc] init];
+    [tcqMaker addColumn:ACTIVITIES               type:TCQTypeText    default:@"''"  ];   // e.g., stationary,cycling
+    [tcqMaker addColumn:CONFIDENCE               type:TCQTypeInteger default:@"-1"];   // -1=Unknown; 0=Low(low); 1=Medium(good); 2=High(high)
+    [tcqMaker addColumn:ACTIVITY_NAME_STATIONARY type:TCQTypeInteger default:@"0" ];   // 0 or 1
+    [tcqMaker addColumn:ACTIVITY_NAME_WALKING    type:TCQTypeInteger default:@"0" ];   // 0 or 1
+    [tcqMaker addColumn:ACTIVITY_NAME_RUNNING    type:TCQTypeInteger default:@"0" ];   // 0 or 1
+    [tcqMaker addColumn:ACTIVITY_NAME_AUTOMOTIVE type:TCQTypeInteger default:@"0" ];   // 0 or 1
+    [tcqMaker addColumn:ACTIVITY_NAME_CYCLING    type:TCQTypeInteger default:@"0" ];   // 0 or 1
+    [tcqMaker addColumn:ACTIVITY_NAME_UNKNOWN    type:TCQTypeInteger default:@"0" ];   // 0 or 1
+    [tcqMaker addColumn:LABEL                    type:TCQTypeText    default:@"''"  ];
+    
+    query = [tcqMaker getDefaudltTableCreateQuery];
+    /* stationary,walking,running,automotive,cycling,unknown */
+    
     [super createTable:query];
 }
 
@@ -88,42 +94,42 @@
 - (BOOL)startSensorWithSettings:(NSArray *)settings{
     NSLog(@"Start Motion Activity Manager! ");
     
-
+    
     double frequency = [self getSensorSetting:settings withKey:@"frequency_plugin_google_activity_recognition"];
     if (frequency < defaultInterval) {
         frequency = defaultInterval;
     }
     
-    return [self startSensorWithConfidenceFilter:CMMotionActivityConfidenceLow mode:ActivityRecognitionModeHistory interval:frequency];
-//    return [self startSensorWithConfidenceFilter:CMMotionActivityConfidenceLow mode:ActivityRecognitionModeLive interval:frequency];
+    //return [self startSensorWithConfidenceFilter:CMMotionActivityConfidenceLow mode:IOSActivityRecognitionModeHistory interval:frequency];
+    return [self startSensorWithConfidenceFilter:CMMotionActivityConfidenceLow mode:IOSActivityRecognitionModeLive interval:frequency];
 }
 
 
 - (BOOL) startSensorWithLiveMode:(CMMotionActivityConfidence) filterLevel{
-    return [self startSensorWithConfidenceFilter:filterLevel mode:ActivityRecognitionModeLive interval:defaultInterval];
+    return [self startSensorWithConfidenceFilter:filterLevel mode:IOSActivityRecognitionModeLive interval:defaultInterval];
 }
 
 - (BOOL) startSensorWithHistoryMode:(CMMotionActivityConfidence)filterLevel interval:(double) interval{
-    return [self startSensorWithConfidenceFilter:filterLevel mode:ActivityRecognitionModeHistory interval:interval];
+    return [self startSensorWithConfidenceFilter:filterLevel mode:IOSActivityRecognitionModeHistory interval:interval];
 }
 
 - (BOOL) startSensorWithConfidenceFilter:(CMMotionActivityConfidence) filterLevel
-                        mode:(ActivityRecognitionMode)mode
-                    interval:(double) interval{
+                                    mode:(IOSActivityRecognitionMode)mode
+                                interval:(double) interval{
     
     confidenceFilter = filterLevel;
     sensingMode = mode;
     
     // history mode
-    if( mode == ActivityRecognitionModeHistory){
+    if( mode == IOSActivityRecognitionModeHistory){
         [self getMotionActivity:nil];
         timer = [NSTimer scheduledTimerWithTimeInterval:interval
                                                  target:self
                                                selector:@selector(getMotionActivity:)
                                                userInfo:nil
                                                 repeats:YES];
-    // live mode
-    }else if( mode == ActivityRecognitionModeLive ){
+        // live mode
+    }else if( mode == IOSActivityRecognitionModeLive ){
         /** motion activity */
         if([CMMotionActivityManager isActivityAvailable]){
             motionActivityManager = [CMMotionActivityManager new];
@@ -165,7 +171,7 @@
     if([CMMotionActivityManager isActivityAvailable]){
         // from data
         NSDate * fromDate = [self getLastUpdate];
-//        NSDate * fromDate = [AWAREUtils getTargetNSDate:[NSDate new] hour:-7*24 nextDay:NO];
+        //        NSDate * fromDate = [AWAREUtils getTargetNSDate:[NSDate new] hour:-7*24 nextDay:NO];
         // to date
         NSDate * toDate = [NSDate new];
         motionActivityManager = [CMMotionActivityManager new];
@@ -235,56 +241,41 @@
     
     // NSLog(@"stored");
     
-    NSNumber *motionConfidence = [NSNumber numberWithInt:0];
+    NSNumber *motionConfidence = @(-1);
     if (motionActivity.confidence  == CMMotionActivityConfidenceHigh){
-        motionConfidence = [NSNumber numberWithInt:100];
+        motionConfidence = @2;
     }else if(motionActivity.confidence == CMMotionActivityConfidenceMedium){
-        motionConfidence = [NSNumber numberWithInt:50];
+        motionConfidence = @1;
     }else if(motionActivity.confidence == CMMotionActivityConfidenceLow){
-        motionConfidence = [NSNumber numberWithInt:0];
+        motionConfidence = @0;
     }
     
     // Motion types are refere from Google Activity Recognition
     //https://developers.google.com/android/reference/com/google/android/gms/location/DetectedActivity
-    NSString *motionName = @"unknown";
-    NSNumber *motionType = @4;
     NSMutableArray * activities = [[NSMutableArray alloc] init];
-//    NSLog(@"Quite probably a new activity.");
     
     if (motionActivity.unknown){
-        motionName = @"unknown";
-        motionType = @4;
-        [activities addObject:[self getActivityDicWithName:motionName confidence:motionConfidence]];
+        [activities addObject:ACTIVITY_NAME_UNKNOWN];
     }
     
     if (motionActivity.stationary){
-        motionName = @"still";
-        motionType = @3;
-        [activities addObject:[self getActivityDicWithName:motionName confidence:motionConfidence]];
+        [activities addObject:ACTIVITY_NAME_STATIONARY];
     }
     
     if (motionActivity.running){
-        motionName = @"running";
-        motionType = @8;
-        [activities addObject:[self getActivityDicWithName:motionName confidence:motionConfidence]];
+        [activities addObject:ACTIVITY_NAME_RUNNING];
     }
     
     if (motionActivity.walking){
-        motionName = @"walking";
-        motionType = @7;
-        [activities addObject:[self getActivityDicWithName:motionName confidence:motionConfidence]];
+        [activities addObject:ACTIVITY_NAME_WALKING];
     }
     
     if (motionActivity.automotive){
-        motionName = @"in_vehicle";
-        motionType = @0;
-        [activities addObject:[self getActivityDicWithName:motionName confidence:motionConfidence]];
+        [activities addObject:ACTIVITY_NAME_AUTOMOTIVE];
     }
     
     if (motionActivity.cycling){
-        motionName = @"on_bicycle";
-        motionType = @1;
-        [activities addObject:[self getActivityDicWithName:motionName confidence:motionConfidence]];
+        [activities addObject:ACTIVITY_NAME_CYCLING];
     }
     
     NSString * activitiesStr = @"";
@@ -299,49 +290,59 @@
             }
         }
     }
-
-    if([self getDBType] == AwareDBTypeTextFile){
-        activitiesStr = @"";
-    }
+    
+    //if([self getDBType] == AwareDBTypeTextFile){
+    //    activitiesStr = @"";
+    //}
     
     if ([self isDebug]) {
-        NSLog(@"[%@] %@ %ld", motionActivity.startDate, motionName, motionActivity.confidence);
+        NSLog(@"[%@] %@ %ld", motionActivity.startDate, activitiesStr, motionActivity.confidence);
     }
     
-    // dispatch_async(dispatch_get_main_queue(), ^{
     NSNumber * unixtime = [AWAREUtils getUnixTimestamp:motionActivity.startDate];
-
+    
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
-    [dict setObject:unixtime forKey:@"timestamp"];
-    [dict setObject:[self getDeviceId] forKey:@"device_id"];
-    [dict setObject:motionName forKey:@"activity_name"]; //varchar
-    [dict setObject:[motionType stringValue] forKey:@"activity_type"]; //text
-    [dict setObject:motionConfidence forKey:@"confidence"]; //int
-    [dict setObject:activitiesStr forKey:@"activities"]; //text
-    [self setLatestValue:[NSString stringWithFormat:@"%@, %@, %@", motionName, motionType, motionConfidence]];
+    [dict setObject:unixtime                     forKey:@"timestamp"];
+    [dict setObject:[self getDeviceId]           forKey:@"device_id"];
+    [dict setObject:activitiesStr                forKey:ACTIVITIES];
+    [dict setObject:motionConfidence             forKey:CONFIDENCE];
+    [dict setObject:@(motionActivity.stationary) forKey:ACTIVITY_NAME_STATIONARY];   // 0 or 1
+    [dict setObject:@(motionActivity.walking)    forKey:ACTIVITY_NAME_WALKING];   // 0 or 1
+    [dict setObject:@(motionActivity.running)    forKey:ACTIVITY_NAME_RUNNING];   // 0 or 1
+    [dict setObject:@(motionActivity.automotive) forKey:ACTIVITY_NAME_AUTOMOTIVE];   // 0 or 1
+    [dict setObject:@(motionActivity.cycling)    forKey:ACTIVITY_NAME_CYCLING];   // 0 or 1
+    [dict setObject:@(motionActivity.unknown)    forKey:ACTIVITY_NAME_UNKNOWN];   // 0 or 1
+    [dict setObject:@""                          forKey:LABEL];
+    
+    [self setLatestValue:[NSString stringWithFormat:@"%@ (%@)", activities, motionConfidence]];
     [self saveData:dict];
     [self setLatestData:dict];
     
     NSDictionary * userInfo = [NSDictionary dictionaryWithObject:dict
                                                           forKey:EXTRA_DATA];
-    [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_GOOGLE_ACTIVITY_RECOGNITION
-                                                            object:nil
-                                                          userInfo:userInfo];
-    // });
+    [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_IOS_ACTIVITY_RECOGNITION
+                                                        object:nil
+                                                      userInfo:userInfo];
 }
+
 
 - (void)insertNewEntityWithData:(NSDictionary *)data
            managedObjectContext:(NSManagedObjectContext *)childContext
                      entityName:(NSString *)entity{
     
-    EntityActivityRecognition * entityActivity = (EntityActivityRecognition *)[NSEntityDescription insertNewObjectForEntityForName:entity
-                                                                                                  inManagedObjectContext:childContext];
-    entityActivity.device_id = [data objectForKey:@"device_id"];
-    entityActivity.timestamp = [data objectForKey:@"timestamp"];
-    entityActivity.confidence = [data objectForKey:@"confidence"];
-    entityActivity.activities =    [data objectForKey:@"activities"];
-    entityActivity.activity_name = [data objectForKey:@"activity_name"];
-    entityActivity.activity_type = [data objectForKey:@"activity_type"];
+    EntityIOSActivityRecognition * entityActivity = (EntityIOSActivityRecognition *)[NSEntityDescription insertNewObjectForEntityForName:entity
+                                                                                                            inManagedObjectContext:childContext];
+    entityActivity.device_id  = [data objectForKey:@"device_id"];
+    entityActivity.timestamp  = [data objectForKey:@"timestamp"];
+    entityActivity.confidence = [data objectForKey:CONFIDENCE];
+    entityActivity.activities = [data objectForKey:ACTIVITIES];
+    entityActivity.label      = [data objectForKey:LABEL];
+    entityActivity.stationary = [data objectForKey:ACTIVITY_NAME_STATIONARY];
+    entityActivity.walking    = [data objectForKey:ACTIVITY_NAME_WALKING];
+    entityActivity.running    = [data objectForKey:ACTIVITY_NAME_RUNNING];
+    entityActivity.automotive = [data objectForKey:ACTIVITY_NAME_AUTOMOTIVE];
+    entityActivity.cycling    = [data objectForKey:ACTIVITY_NAME_CYCLING];
+    entityActivity.unknown    = [data objectForKey:ACTIVITY_NAME_UNKNOWN];
     
 }
 
@@ -349,14 +350,21 @@
 - (void)saveDummyData{
     NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
-    [dict setObject:unixtime forKey:@"timestamp"];
-    [dict setObject:[self getDeviceId] forKey:@"device_id"];
-    [dict setObject:@"dummy" forKey:@"activity_name"]; //varchar
-    [dict setObject:@"dummy" forKey:@"activity_type"]; //text
-    [dict setObject:@0 forKey:@"confidence"]; //int
-    [dict setObject:@"" forKey:@"activities"]; //text
+    [dict setObject:unixtime            forKey:@"timestamp"];
+    [dict setObject:[self getDeviceId]  forKey:@"device_id"];
+    [dict setObject:@"test activites"   forKey:ACTIVITIES];
+    [dict setObject:@(-1)   forKey:CONFIDENCE];
+    [dict setObject:@0      forKey:ACTIVITY_NAME_STATIONARY];   // 0 or 1
+    [dict setObject:@0      forKey:ACTIVITY_NAME_WALKING];   // 0 or 1
+    [dict setObject:@0      forKey:ACTIVITY_NAME_RUNNING];   // 0 or 1
+    [dict setObject:@0      forKey:ACTIVITY_NAME_AUTOMOTIVE];   // 0 or 1
+    [dict setObject:@0      forKey:ACTIVITY_NAME_CYCLING];   // 0 or 1
+    [dict setObject:@0      forKey:ACTIVITY_NAME_UNKNOWN];   // 0 or 1
+    [dict setObject:@"test" forKey:LABEL];
+    
     [self saveData:dict];
 }
+
 
 -(NSString*)timestamp2date:(NSDate*)date{
     //[timeStampString stringByAppendingString:@"000"];   //convert to ms
@@ -386,5 +394,6 @@
         return [NSDate new];
     }
 }
+
 
 @end
