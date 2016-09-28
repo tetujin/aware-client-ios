@@ -39,6 +39,7 @@
         defaultInterval = 60*3; // 3 min
         sensingMode = ActivityRecognitionModeLive;
         confidenceFilter = CMMotionActivityConfidenceLow;
+        [self setCSVHeader:@[@"timestamp",@"device_id",@"activity_name",@"activity_type",@"confidence",@"activities"]];
     }
     return self;
 }
@@ -56,22 +57,7 @@
     "confidence int default 4,"
     "activities text default ''";
     //"UNIQUE (timestamp,device_id)";
-    
-    // TCQMaker * tcqMaker = [[TCQMaker alloc] init];
-    // confidence
-    // [tcqMaker addColumn:@"confidence" type:TCQTypeText default:@""];
-    // [tcqMaker addColumn:@"confidence_name" type:TCQTypeText default:@""];
-    // [tcqMaker addColumn:@"activity_name" type:TCQTypeText default:@""];
-    // [tcqMaker addColumn:@"stationary" type:TCQTypeInteger default:0];
-    // [tcqMaker addColumn:@"walking" type:TCQTypeInteger default:0];
-    // [tcqMaker addColumn:@"running" type:TCQTypeInteger default:0];
-    // [tcqMaker addColumn:@"automotive" type:TCQTypeInteger default:0];
-    // [tcqMaker addColumn:@"cycling" type:TCQTypeInteger default:0];
-    // [tcqMaker addColumn:@"unknown" type:TCQTypeInteger default:0];
-    
-    // [tcqMaker addColumn:@"activities" type:TCQTypeInteger default:0];
 
-    
     /*
     stationary
     walking

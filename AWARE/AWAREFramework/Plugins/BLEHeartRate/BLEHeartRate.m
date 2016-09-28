@@ -45,6 +45,14 @@
         KEY_HR_RSSI = @"rssi";
         KEY_HR_LABEL = @"label";
         
+        [self setCSVHeader:@[KEY_HR_TIMESTAMP,
+                             KEY_HR_DEVICE_ID,
+                             KEY_HR_HEARTRATE,
+                             KEY_HR_LOCATION,
+                             KEY_HR_MANUFACTURER,
+                             KEY_HR_RSSI,
+                             KEY_HR_LABEL]];
+        
         _bodyLocation = @-1;
         _manufacturer = @"";
         _heartRate = 0;

@@ -30,6 +30,7 @@ NSString* const KEY_CALLS_TRACE = @"trace";
                         dbEntityName:NSStringFromClass([EntityCall class])
                               dbType:dbType];
     if (self) {
+        [self setCSVHeader:@[KEY_CALLS_TIMESTAMP, KEY_CALLS_DEVICEID, KEY_CALLS_CALL_TYPE, KEY_CALLS_CALL_DURATION, KEY_CALLS_TRACE]];
     }
     return self;
 }

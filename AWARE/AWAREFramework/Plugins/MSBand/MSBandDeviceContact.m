@@ -21,6 +21,7 @@
     self = [super initWithAwareStudy:study sensorName:name dbEntityName:entity dbType:dbType bufferSize:buffer];
     if( self != nil ){
         self.client = msbClient;
+        [self setCSVHeader:@[@"timestamp", @"device_id", @"devicecontact"]];
     }
     return self;
 }
@@ -30,8 +31,8 @@
     NSString * query = @"_id integer primary key autoincrement,"
     "timestamp real default 0,"
     "device_id text default '',"
-    "devicecontact text default '',"
-    "UNIQUE (timestamp,device_id)";
+    "devicecontact text default ''";
+    // "UNIQUE (timestamp,device_id)";
     [self createTable:query];
 }
 

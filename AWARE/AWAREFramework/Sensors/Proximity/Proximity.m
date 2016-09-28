@@ -18,6 +18,7 @@
                               dbType:dbType
                           bufferSize:0];
     if (self) {
+        [self setCSVHeader:@[@"timestamp",@"device_id",@"double_proximity",@"accuracy",@"label"]];
     }
     return self;
 }

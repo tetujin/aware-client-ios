@@ -26,6 +26,7 @@
                           bufferSize:buffer];
     if(self != nil){
         self.client = msbClient;
+        [self setCSVHeader:@[@"timestamp", @"device_id", @"skintemp"]];
     }
     
     return self;
@@ -36,8 +37,8 @@
     NSString *query  = @"_id integer primary key autoincrement,"
     "timestamp real default 0,"
     "device_id text default '',"
-    "skintemp real default 0,"
-    "UNIQUE (timestamp,device_id)";
+    "skintemp real default 0";
+    // "UNIQUE (timestamp,device_id)";
     [super createTable:query];
 }
 

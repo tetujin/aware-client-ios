@@ -252,6 +252,32 @@
         debugState = @"OFF";
     }
     
+    // Get auto-sync state (bool)
+    NSString * autoSyncState = @"OFF";
+    if ([userDefaults boolForKey:SETTING_AUTO_SYNC_STATE]){
+        autoSyncState = @"ON";
+    }else{
+        autoSyncState = @"OFF";
+    }
+    
+    // Get DB Type
+    NSString * dbTypeStr = @"Light Weight";
+    if([userDefaults integerForKey:SETTING_DB_TYPE] == AwareDBTypeTextFile){
+        dbTypeStr = @"Light Weight (Text File)";
+    }else if([userDefaults integerForKey:SETTING_DB_TYPE] == AwareDBTypeCoreData){
+        dbTypeStr = @"SQLite (Beta Version)";
+    }else{
+        dbTypeStr = @"Unknown";
+    }
+    
+    // Get Export Format
+    NSString * csvExportState = @"YES";
+    if([userDefaults boolForKey:SETTING_CSV_EXPORT_STATE]){
+        csvExportState = @"YES";
+    }else {
+        csvExportState = @"NO";
+    }
+        
     // Get sync interval (min)
     NSString *syncInterval = [NSString stringWithFormat:@"%d",(int)[userDefaults doubleForKey:SETTING_SYNC_INT]/60];
     
@@ -419,6 +445,12 @@
     [_sensors addObject:[self getCelContent:@"Settings" desc:@"" image:@"" key:@"TITLE_CELL_VIEW"]];
     // debug state
     [_sensors addObject:[self getCelContent:@"Debug" desc:debugState image:@"" key:@"STUDY_CELL_DEBUG"]];
+    // Database Type
+    [_sensors addObject:[self getCelContent:@"DB Type" desc:dbTypeStr image:@"" key:SETTING_DB_TYPE]];
+    // Export CSV
+    [_sensors addObject:[self getCelContent:@"Export CSV file" desc:csvExportState image:@"" key:SETTING_CSV_EXPORT_STATE]];
+    // auto sync
+    // [_sensors addObject:[self getCelContent:@"Auto Sync" desc:autoSyncState image:@"" key:SETTING_AUTO_SYNC_STATE]];
     // sync interval
     [_sensors addObject:[self getCelContent:@"Sync Interval (min)" desc:syncInterval image:@"" key:@"STUDY_CELL_SYNC"]];
     // sync network condition
@@ -699,6 +731,36 @@
         [alert textFieldAtIndex:0].text = awareStudy.getStudyURL;
         alert.tag = 17;
         [alert show];
+    } else if ([key isEqualToString:SETTING_DB_TYPE]) {
+        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"AWARE Setting"
+                                                         message:@"Please select DB Type."
+                                                        delegate:self
+                                               cancelButtonTitle:@"Cancel"
+                                               otherButtonTitles:@"Light Weight (Default)",@"SQLite (Beta Version)",nil];
+        alert.tag = 18;
+        [alert show];
+    } else if ([key isEqualToString:SETTING_CSV_EXPORT_STATE]){
+        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"AWARE Setting"
+                                                         message:@"Do you need to export CSV file? If you select 'YES', the collected data is saved to .csv file. \n[NOTE]\n The CSV export mode does not sync collected data with server."
+                                                        delegate:self
+                                               cancelButtonTitle:@"Cancel"
+                                               otherButtonTitles:@"YES",@"NO",nil];
+        alert.tag = 19;
+        [alert show];
+    } else if ([key isEqualToString:SETTING_AUTO_SYNC_STATE]){
+        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"AWARE Setting"
+                                                         message:@"Do you need to upload data in the background?"
+                                                        delegate:self
+                                               cancelButtonTitle:@"Cancel"
+                                               otherButtonTitles:@"YES",@"NO",nil];
+        alert.tag = 20;
+        [alert show];
+        
+    }
+    
+    
+    if ([key isEqualToString:SENSOR_ACCELEROMETER]){
+        [self performSegueWithIdentifier:@"settingView" sender:self];
     }
 }
 
@@ -817,6 +879,7 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
         if(buttonIndex == 1){
             [sensorManager stopAndRemoveAllSensors];
             [awareStudy clearAllSetting];
+            [sensorManager removeAllFilesFromDocumentRoot];
             [self pushedStudyRefreshButton:nil];
             UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"The study is quitted"
                                                              message:nil
@@ -897,6 +960,45 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
                     UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"The URL is wrong!" message:@"Please edit a correct URL." delegate:self cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
                     [alert show];
                 }
+            }
+        }
+    }else if (alertView.tag == 18){
+        if(buttonIndex == [alertView cancelButtonIndex]){
+            return;
+        }else{
+            // NSLog(@"%ld",buttonIndex);
+            switch (buttonIndex) {
+                case 1:
+                    [userDefaults setInteger:AwareDBTypeTextFile forKey:SETTING_DB_TYPE];
+                    [userDefaults synchronize];
+                    [self pushedStudyRefreshButton:alertView];
+                    break;
+                case 2:
+                    [userDefaults setInteger:AwareDBTypeCoreData forKey:SETTING_DB_TYPE];
+                    [userDefaults synchronize];
+                    [self pushedStudyRefreshButton:alertView];
+                default:
+                    break;
+            }
+        }
+    }else if (alertView.tag == 19){
+        if(buttonIndex == [alertView cancelButtonIndex]){
+            return;
+        }else{
+            // NSLog(@"%ld",buttonIndex);
+            switch (buttonIndex) {
+                case 1:
+                    [userDefaults setBool:YES forKey:SETTING_CSV_EXPORT_STATE];
+                    [userDefaults synchronize];
+                    [self pushedStudyRefreshButton:alertView];
+                    break;
+                case 2:
+                    [userDefaults setBool:NO forKey:SETTING_CSV_EXPORT_STATE];
+                    [userDefaults synchronize];
+                    [self pushedStudyRefreshButton:alertView];
+                    break;
+                default:
+                    break;
             }
         }
     }

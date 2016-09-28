@@ -34,6 +34,10 @@
     int lostedTextLength;
     
     NSInteger latestTextLength;
+    
+    BOOL isCSVExport;
+    
+    NSArray * csvHeader;
 }
 
 
@@ -54,8 +58,12 @@
         bufferSize = 0;
         // last text length
         latestTextLength = 0;
+        // csv export state
+        NSUserDefaults * userDefaults = [NSUserDefaults standardUserDefaults];
+        isCSVExport = [userDefaults boolForKey:SETTING_CSV_EXPORT_STATE];
+        
         // create new local storage with sensor name
-        [self createNewFile:sensorName];
+        [self createNewFile:sensorName csvExport:isCSVExport];
     }
     return self;
 }
@@ -64,6 +72,9 @@
 ///////////////////////////////////////////////////
 ///////////////////////////////////////////////////
 
+- (void) setCSVHeader:(NSArray *) headers{
+    csvHeader = headers;
+}
 
 /**
  * Save data to the local storage with NSArray
@@ -114,30 +125,64 @@
     
     if ( bufferArray.count >  bufferSize) {
         
-        NSError*error=nil;
-        NSData*d=[NSJSONSerialization dataWithJSONObject:bufferArray options:2 error:&error];
-        NSMutableString* jsonstr = nil;
-        if (!error) {
-            jsonstr = [[NSMutableString alloc] initWithData:d encoding:NSUTF8StringEncoding];
-        } else {
-            NSString * errorStr = [NSString stringWithFormat:@"[%@] %@", [self getSensorName], [error localizedDescription]];
-            // [AWAREUtils sendLocalNotificationForMessage:errorStr soundFlag:YES];
-            [self saveDebugEventWithText:errorStr type:DebugTypeError label:@""];
-            return NO;
+        NSMutableString* lines = [[NSMutableString alloc] init];
+        
+        if (isCSVExport) {
+            for (NSDictionary *dict in bufferArray) {
+                if(csvHeader != nil){
+                    for (NSString *key in csvHeader) {
+                        NSObject * d = [dict objectForKey:key];
+                         [lines appendFormat:@"%@,", d.description];
+                    }
+                }else{
+                    NSNumber * timestamp = [dict objectForKey:@"timestamp"];
+                    [lines appendFormat:@"%@,",timestamp];
+                    
+                    NSString * device_id = [dict objectForKey:@"device_id"];
+                    [lines appendFormat:@"%@,",device_id];
+                    
+                    NSArray *keys = [dict allKeys];
+                    keys = [keys sortedArrayUsingComparator:^(id o1, id o2) {
+                        return [o1 compare:o2];
+                    }];
+                    
+                    for(NSString * key in keys){
+                        if(![key isEqualToString:@"timestamp"] &&
+                           ![key isEqualToString:@"device_id"]){
+                            NSObject * d = [dict objectForKey:key];
+                            [lines appendFormat:@"%@,", d.description];
+                        }
+                    }
+                }
+                [lines deleteCharactersInRange:NSMakeRange(lines.length-1, 1)];
+                [lines appendString:@"\n"];
+                // NSLog(@"%@", lines);
+            }
+
+        }else{
+            NSError*error=nil;
+            NSData*d=[NSJSONSerialization dataWithJSONObject:bufferArray options:2 error:&error];
+            if (!error) {
+                lines = [[NSMutableString alloc] initWithData:d encoding:NSUTF8StringEncoding];
+            } else {
+                NSString * errorStr = [NSString stringWithFormat:@"[%@] %@", [self getSensorName], [error localizedDescription]];
+                // [AWAREUtils sendLocalNotificationForMessage:errorStr soundFlag:YES];
+                [self saveDebugEventWithText:errorStr type:DebugTypeError label:@""];
+                return NO;
+            }
+            // remove head and tail object ([]) TODO check
+            NSRange deleteRangeHead = NSMakeRange(0, 1);
+            [lines deleteCharactersInRange:deleteRangeHead];
+            NSRange deleteRangeTail = NSMakeRange(lines.length-1, 1);
+            [lines deleteCharactersInRange:deleteRangeTail];
+            // append "," to the tail of object
+            [lines appendFormat:@","];
+            //        NSLog(@"%@", jsonstr);
+            
         }
-        // remove head and tail object ([]) TODO check
-        NSRange deleteRangeHead = NSMakeRange(0, 1);
-        [jsonstr deleteCharactersInRange:deleteRangeHead];
-        NSRange deleteRangeTail = NSMakeRange(jsonstr.length-1, 1);
-        [jsonstr deleteCharactersInRange:deleteRangeTail];
-        // append "," to the tail of object
-        [jsonstr appendFormat:@","];
-//        NSLog(@"%@", jsonstr);
         // save the data to local storage
-        [self appendLine:jsonstr];
-        
+        [self appendLine:lines];
         // init buffer array
-        
         [bufferArray removeAllObjects];
     }
     return YES;
@@ -161,7 +206,24 @@
         [self saveDebugEventWithText:debugMassage type:DebugTypeError label:fileName];
         return NO;
     }else{
-        [fh seekToEndOfFile];
+        NSMutableString * header = nil;
+        NSInteger fSize  = [fh seekToEndOfFile];
+        
+        /////////////////////////////////////////////////////
+        // Only CSV
+        if( isCSVExport && fSize == 0 && csvHeader != nil ){
+            header = [[NSMutableString alloc] init];
+            for (NSString * columnName in csvHeader) {
+                [header appendFormat:@"%@,", columnName];
+            }
+            [header deleteCharactersInRange:NSMakeRange(header.length-1, 1)];
+            [header appendString:@"\n"];
+        }
+        if(header != nil){
+            line = [NSString stringWithFormat:@"%@%@",header,line];
+        }
+        //////////////////////////////////////////////////////////
+        
         NSData * tempdataLine = [line dataUsingEncoding:NSUTF8StringEncoding];
         [fh writeData:tempdataLine];
         [fh synchronizeFile];
@@ -193,6 +255,10 @@
  *   {"timestamp":1,"device_id":"xxxx-xxxx-xx","value":"1234"}
  */
 - (NSMutableString *) getSensorDataForPost {
+    
+    if (isCSVExport) {
+        return nil; //TODO
+    }
     
     NSInteger maxLength = [self getMaxDateLength];
     NSInteger seek = [self getMarker] * maxLength;
@@ -294,7 +360,7 @@
 }
 
 - (uint64_t) getFileSizeWithName:(NSString*) name {
-    NSString * path = [self getFilePathWithName:name];
+    NSString * path = [self getFilePathWithName:name csvExport:isCSVExport];
     return [[[NSFileManager defaultManager] attributesOfItemAtPath:path error:nil] fileSize];
 }
 
@@ -383,7 +449,7 @@
  * @return NSString     A file path of a text file based storage
  */
 - (NSString *) getFilePath {
-    return [self getFilePathWithName:[self getSensorName]];
+    return [self getFilePathWithName:[self getSensorName] csvExport:isCSVExport];
 }
 
 
@@ -392,10 +458,16 @@
  * @param   NSString    A name for a text file based storage
  * @return  NSString    A file path of a text file based storage
  */
-- (NSString *) getFilePathWithName:(NSString *) name {
+- (NSString *) getFilePathWithName:(NSString *) fileName csvExport:(BOOL) csvExport{
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
-    NSString * path = [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.dat",name]];
+    NSString * file = @"";
+    if (csvExport) {
+        file = [NSString stringWithFormat:@"%@.csv",fileName];
+    }else{
+        file = [NSString stringWithFormat:@"%@.dat",fileName];
+    }
+    NSString * path = [documentsDirectory stringByAppendingPathComponent:file];
     return path;
 }
 
@@ -408,10 +480,20 @@
  * @param   NSString  A file name of local storage
  * @return  A result of data storing
  */
--(BOOL)createNewFile:(NSString*) fileName {
+- (BOOL)createNewFile:(NSString *)fileName{
+    return [self createNewFile:fileName csvExport:isCSVExport];
+}
+
+-(BOOL)createNewFile:(NSString*) fileName csvExport:(BOOL)csvExport {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
-    NSString * path = [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.dat",fileName]];
+    NSString * file = @"";
+    if (csvExport) {
+        file = [NSString stringWithFormat:@"%@.csv",fileName];
+    }else{
+        file = [NSString stringWithFormat:@"%@.dat",fileName];
+    }
+    NSString * path = [documentsDirectory stringByAppendingPathComponent:file];
     NSFileManager *manager = [NSFileManager defaultManager];
     if (![manager fileExistsAtPath:path]) { // yes
         BOOL result = [manager createFileAtPath:path
@@ -436,11 +518,22 @@
  * @param   NSStr   ing    A file name for a local storage
  * @return  A result of data clearing
  */
-- (bool) clearFile:(NSString *) fileName {
+- (bool)clearFile:(NSString *)fileName{
+    return [self createNewFile:fileName csvExport:isCSVExport];
+}
+
+- (bool) clearFile:(NSString *) fileName csvExport:(BOOL)csvExport {
     NSFileManager *manager = [NSFileManager defaultManager];
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
-    NSString * path = [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.dat",fileName]];
+    NSString * file = @"";
+    if (csvExport) {
+        file = [NSString stringWithFormat:@"%@.csv",fileName];
+    }else{
+        file = [NSString stringWithFormat:@"%@.dat",fileName];
+    }
+    
+    NSString * path = [documentsDirectory stringByAppendingPathComponent:file];
     if ([manager fileExistsAtPath:path]) { // yes
         bool result = [@"" writeToFile:path atomically:NO encoding:NSUTF8StringEncoding error:nil];
         if (result) {

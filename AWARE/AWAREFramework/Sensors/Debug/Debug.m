@@ -38,6 +38,19 @@
     if (self) {
         awareStudy = study;
         dmLogger = [[AWAREDebugMessageLogger alloc] initWithAwareStudy:awareStudy];
+        [self setCSVHeader:@[
+                             dmLogger.KEY_DEBUG_TIMESTAMP,
+                             dmLogger.KEY_DEBUG_DEVICE_ID,
+                             dmLogger.KEY_DEBUG_EVENT,
+                             dmLogger.KEY_DEBUG_TYPE,
+                             dmLogger.KEY_DEBUG_LABEL,
+                             dmLogger.KEY_DEBUG_NETWORK,
+                             dmLogger.KEY_DEBUG_APP_VERSION,
+                             dmLogger.KEY_DEBUG_DEVICE,
+                             dmLogger.KEY_DEBUG_OS,
+                             dmLogger.KEY_DEBUG_BATTERY,
+                             dmLogger.KEY_DEBUG_BATTERY_STATE
+                             ]];
     }
     return self;
 }

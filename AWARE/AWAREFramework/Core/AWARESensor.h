@@ -17,8 +17,9 @@
 
 
 typedef enum: NSInteger {
-    AwareDBTypeCoreData = 0,
-    AwareDBTypeTextFile = 1
+    AwareDBTypeUnknown  = 0,
+    AwareDBTypeTextFile = 1,
+    AwareDBTypeCoreData = 2
 } AwareDBType;
 
 

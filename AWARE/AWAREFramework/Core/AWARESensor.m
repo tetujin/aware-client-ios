@@ -193,6 +193,15 @@
     return self;
 }
 
+- (void)setCSVHeader:(NSArray *)headers{
+    [super setCSVHeader:headers];
+    if (localStorage != nil) {
+        [localStorage setCSVHeader:headers];
+    }
+    [super setCSVHeader:headers];
+}
+
+/////////////////////////////////////////////////
 
 /**
  * DEFAULT:

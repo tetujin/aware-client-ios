@@ -38,7 +38,12 @@
         isLock = NO;
         [self allowsDateUploadWithoutBatteryCharging];
         [self allowsCellularAccess];
-        
+        [self setCSVHeader:@[@"esm_json",
+                             @"esm_status",
+                             @"esm_expiration_threshold",
+                             @"double_esm_user_answer_timestamp",
+                             @"esm_user_answer",
+                             @"esm_trigger"]];
     }
     
     return self;

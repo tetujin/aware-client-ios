@@ -46,13 +46,23 @@
                         dbEntityName:NSStringFromClass([EntityIOSActivityRecognition class])
                               dbType:dbType];
     
-    
     if (self) {
         motionActivityManager = [[CMMotionActivityManager alloc] init];
         KEY_TIMESTAMP_OF_LAST_UPDATE = @"key_sensor_ios_activity_recognition_last_update_timestamp";
         defaultInterval = 60*3; // 3 min
         sensingMode = IOSActivityRecognitionModeLive;
         confidenceFilter = CMMotionActivityConfidenceLow;
+        [self setCSVHeader:@[@"timestamp",
+                             @"device_id",
+                             ACTIVITIES,
+                             CONFIDENCE,
+                             ACTIVITY_NAME_STATIONARY,
+                             ACTIVITY_NAME_WALKING,
+                             ACTIVITY_NAME_RUNNING,
+                             ACTIVITY_NAME_AUTOMOTIVE,
+                             ACTIVITY_NAME_CYCLING,
+                             ACTIVITY_NAME_UNKNOWN,
+                             LABEL]];
     }
     return self;
 }

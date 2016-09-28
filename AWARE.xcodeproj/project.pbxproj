@@ -66,6 +66,7 @@
 		165DECF61C83AD7D002C88CA /* ExternalAccessory.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 165DECF51C83AD7D002C88CA /* ExternalAccessory.framework */; };
 		166082CC1D93DC1A004D1858 /* IntroPage5.xib in Resources */ = {isa = PBXBuildFile; fileRef = 166082CB1D93DC1A004D1858 /* IntroPage5.xib */; };
 		16654EA21D027DC600280051 /* AWAREUploader.m in Sources */ = {isa = PBXBuildFile; fileRef = 16654EA11D027DC600280051 /* AWAREUploader.m */; };
+		1683920F1D9BDCE1006D6607 /* SettingTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1683920E1D9BDCE1006D6607 /* SettingTableViewController.m */; };
 		1683ABCE1D347A5F001543D9 /* AWAREDebugMessageLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 1683ABCD1D347A5F001543D9 /* AWAREDebugMessageLogger.m */; };
 		168683031C07C43600CB4266 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 168683021C07C43600CB4266 /* AudioToolbox.framework */; };
 		168AEA921D3EE84100D02EA4 /* EntityGyroscope+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 168AEA8F1D3EE84100D02EA4 /* EntityGyroscope+CoreDataProperties.m */; };
@@ -412,6 +413,8 @@
 		16654EA11D027DC600280051 /* AWAREUploader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AWAREUploader.m; sourceTree = "<group>"; };
 		167B37C41D4370FA00A99C64 /* AWARECoreDataMigrationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AWARECoreDataMigrationManager.h; sourceTree = "<group>"; };
 		167B37C51D4370FA00A99C64 /* AWARECoreDataMigrationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AWARECoreDataMigrationManager.m; sourceTree = "<group>"; };
+		1683920D1D9BDCE1006D6607 /* SettingTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingTableViewController.h; sourceTree = "<group>"; };
+		1683920E1D9BDCE1006D6607 /* SettingTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingTableViewController.m; sourceTree = "<group>"; };
 		1683ABCC1D347A5F001543D9 /* AWAREDebugMessageLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AWAREDebugMessageLogger.h; sourceTree = "<group>"; };
 		1683ABCD1D347A5F001543D9 /* AWAREDebugMessageLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AWAREDebugMessageLogger.m; sourceTree = "<group>"; };
 		168683021C07C43600CB4266 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
@@ -1848,6 +1851,8 @@
 				169C88271D01382C00825761 /* QRCodeViewController.m */,
 				169C88281D01382C00825761 /* WebViewController.h */,
 				169C88291D01382C00825761 /* WebViewController.m */,
+				1683920D1D9BDCE1006D6607 /* SettingTableViewController.h */,
+				1683920E1D9BDCE1006D6607 /* SettingTableViewController.m */,
 				166082CB1D93DC1A004D1858 /* IntroPage5.xib */,
 			);
 			path = View;
@@ -2331,6 +2336,7 @@
 				160F0ED91D041B5D00673343 /* EntityLinearAccelerometer.m in Sources */,
 				16B0783A1D1F918B009C070B /* EntityMSBandBatteryGauge.m in Sources */,
 				169C888E1D01382C00825761 /* Calls.m in Sources */,
+				1683920F1D9BDCE1006D6607 /* SettingTableViewController.m in Sources */,
 				16B078411D1F918B009C070B /* EntityMSBandSkinTemp+CoreDataProperties.m in Sources */,
 				16BDCCA71D3626F500B13BD4 /* MSBandSkinTemp.m in Sources */,
 				16B078401D1F918B009C070B /* EntityMSBandCalorie.m in Sources */,

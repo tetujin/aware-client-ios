@@ -268,7 +268,6 @@ didCompleteWithError:(NSError *)error {
     NSData *data = [NSJSONSerialization dataWithJSONObject:obj options:0 error:nil];
     NSString * studyConfiguration = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     
-    
     // compare the latest configuration string with the previous configuration string.
     NSString * previousConfig = [self removeStudyStartTimeFromConfig:[self getStudyConfigurationAsText]];
     NSString * currentConfig = [self removeStudyStartTimeFromConfig:studyConfiguration];
@@ -350,7 +349,6 @@ didCompleteWithError:(NSError *)error {
     [userDefaults setInteger:frequencyCleanOldData forKey:SETTING_FREQUENCY_CLEAN_OLD_DATA];
     [userDefaults synchronize];
 
-    
     // run in the main thread
     dispatch_async(dispatch_get_main_queue(), ^{
         AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;

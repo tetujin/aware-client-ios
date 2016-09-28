@@ -26,6 +26,7 @@
     if (self) {
         sensingInterval = 0.2f;
         dbWriteInterval = 30;
+        [self setCSVHeader:@[@"timestamp",@"device_id", @"double_values_0",@"accuracy",@"label"]];
     }
     return self;
 }
@@ -102,7 +103,7 @@
                                                  NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
                                                  [dict setObject:unixtime forKey:@"timestamp"];
                                                  [dict setObject:[self getDeviceId] forKey:@"device_id"];
-                                                 [dict setObject:[NSNumber numberWithDouble:pressureDouble*10.0f] forKey:@"double_values_0"];
+                                                 [dict setObject:@(pressureDouble*10.0f) forKey:@"double_values_0"];
                                                  [dict setObject:@3 forKey:@"accuracy"];
                                                  [dict setObject:@"" forKey:@"label"];
                                                  [self setLatestValue:[NSString stringWithFormat:@"%f", pressureDouble*10.0f]];

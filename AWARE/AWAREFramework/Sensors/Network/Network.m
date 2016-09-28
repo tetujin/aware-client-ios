@@ -28,6 +28,11 @@
         networkState= YES;
         networkType = @0;
         networkSubtype = @"";
+        [self setCSVHeader:@[@"timestamp",
+                             @"device_id",
+                             @"network_type",
+                             @"network_subtype",
+                             @"network_state"]];
     }
     return self;
 }

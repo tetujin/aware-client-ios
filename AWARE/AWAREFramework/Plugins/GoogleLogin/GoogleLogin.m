@@ -39,6 +39,12 @@
         encryptionUserId = NO;
         [self allowsCellularAccess];
         [self allowsDateUploadWithoutBatteryCharging];
+        
+        [self setCSVHeader:@[@"device_id",
+                             @"timestamp",
+                             KEY_GOOGLE_USER_ID,
+                             KEY_GOOGLE_NAME,
+                             KEY_GOOGLE_EMAIL]];
     }
     return self;
 }

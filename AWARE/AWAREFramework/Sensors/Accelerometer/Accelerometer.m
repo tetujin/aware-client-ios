@@ -33,7 +33,7 @@
         bufferArray = [[NSMutableArray alloc] init];
         currentBufferSize = 0;
         // tempManagedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-        
+        [self setCSVHeader:@[@"timestamp",@"device_id",@"double_values_0",@"double_values_1",@"double_values_2",@"accuracy",@"label"]];
     }
     return self;
 }

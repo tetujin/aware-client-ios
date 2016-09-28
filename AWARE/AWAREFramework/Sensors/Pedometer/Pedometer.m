@@ -51,6 +51,14 @@
         totalDistance = @0;
         totalFloorsAscended = @0;
         totalFllorsDescended = @0;
+        [self setCSVHeader:@[KEY_DEVICE_ID,
+                             KEY_TIMESTAMP,
+                             KEY_NUMBER_OF_STEPS,
+                             KEY_DISTANCE,
+                             KEY_CURRENT_PACE,
+                             KEY_CURRENT_CADENCE,
+                             KEY_FLOORS_ASCENDED,
+                             KEY_FLOORS_DESCENDED]];
     }
     return self;
 }
@@ -68,8 +76,8 @@
     [query appendFormat:@"%@ real default 0,", KEY_CURRENT_PACE];
     [query appendFormat:@"%@ real default 0,", KEY_CURRENT_CADENCE];
     [query appendFormat:@"%@ integer default 0,", KEY_FLOORS_ASCENDED];
-    [query appendFormat:@"%@ integer default 0,", KEY_FLOORS_DESCENDED];
-    [query appendString:@"UNIQUE (timestamp,device_id)"];
+    [query appendFormat:@"%@ integer default 0", KEY_FLOORS_DESCENDED];
+    // [query appendString:@"UNIQUE (timestamp,device_id)"];
     [super createTable:query];
 }
 

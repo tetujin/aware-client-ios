@@ -25,6 +25,16 @@
     if (self) {
         defaultInterval = 180; // 180sec(=3min)
         defaultAccuracy = 250; // 250m
+        [self setCSVHeader:@[@"timestamp",
+                             @"device_id",
+                             @"double_latitude",
+                             @"double_longitude",
+                             @"double_bearing",
+                             @"double_speed",
+                             @"double_altitude",
+                             @"provider",
+                             @"accuracy",
+                             @"label"]];
     }
     return self;
 }
@@ -268,7 +278,7 @@
 }
 
 
-- (void)insertNewEntityWithData:(NSDictionary *)data
+- (void)insertNewEntit25yWithData:(NSDictionary *)data
            managedObjectContext:(NSManagedObjectContext *)childContext
                      entityName:(NSString *)entity{
     

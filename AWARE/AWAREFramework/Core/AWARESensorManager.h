@@ -33,6 +33,9 @@
 - (BOOL) startAllSensorsWithStudy:(AWAREStudy *) study dbType:(AwareDBType)dbType;
 - (BOOL) createAllTables;
 
+// - (BOOL) clearDataFromLocalDB;
+- (void)removeAllFilesFromDocumentRoot;
+
 - (void) stopAndRemoveAllSensors;
 - (void) stopASensor:(NSString *) sensorName;
 

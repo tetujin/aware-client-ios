@@ -71,6 +71,25 @@ int ONE_HOUR = 60*60;
     if (self) {
         locationManager = nil;
         identificationForOpenWeather = @"http_for_open_weather_";
+        [self setCSVHeader:@[@"timestamp",
+                             @"device_id",
+                             @"city",
+                             @"temperature",
+                             @"temperature_max",
+                             @"temperature_min",
+                             @"unit",
+                             @"humidity",
+                             @"pressure",
+                             @"wind_speed",
+                             @"wind_degrees",
+                             @"cloudiness",
+                             @"rain",
+                             @"snow",
+                             @"sunrise",
+                             @"sunset",
+                             @"weather_icon_id",
+                             @"weather_description"
+                             ]];
         [self updateWeatherData:[NSDate new] Lat:0 Lon:0];
         userApiKey = nil;
     }

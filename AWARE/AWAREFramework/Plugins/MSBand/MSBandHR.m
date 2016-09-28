@@ -22,6 +22,7 @@
     self = [super initWithAwareStudy:study sensorName:name dbEntityName:entity dbType:dbType bufferSize:buffer];
     if(self != nil){
         self.client = msbClient;
+        [self setCSVHeader:@[@"timestamp", @"device_id", @"heartrate", @"heartrate_quality"]];
     }
     return self;
 }
@@ -32,8 +33,8 @@
     "timestamp real default 0,"
     "device_id text default '',"
     "heartrate integer default 0,"
-    "heartrate_quality text default '',"
-    "UNIQUE (timestamp,device_id)";
+    "heartrate_quality text default ''";
+    // "UNIQUE (timestamp,device_id)";
     [super createTable:query];
 }
 

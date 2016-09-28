@@ -121,7 +121,9 @@
 
 - (BOOL)startAllSensorsWithStudy:(AWAREStudy *) study{
     //return [self startAllSensorsWithStudy:study dbType:AwareDBTypeCoreData];
-    return [self startAllSensorsWithStudy:study dbType:AwareDBTypeTextFile];
+    NSUserDefaults * userDefaults = [NSUserDefaults standardUserDefaults];
+    NSInteger dbType = [userDefaults integerForKey:SETTING_DB_TYPE];
+    return [self startAllSensorsWithStudy:study dbType:dbType];
 }
 
 - (BOOL)startAllSensorsWithStudy:(AWAREStudy *) study dbType:(AwareDBType)dbType{

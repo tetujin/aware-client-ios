@@ -38,7 +38,9 @@ NSString* const SETTING_SYNC_WIFI_ONLY = @"setting_sync_wifi_only";
 NSString* const SETTING_SYNC_INT = @"setting_sync_interval";
 NSString* const SETTING_SYNC_BATTERY_CHARGING_ONLY = @"setting_sync_battery_charging_only";
 NSString* const SETTING_FREQUENCY_CLEAN_OLD_DATA = @"setting_frequency_clean_old_data";
-
+NSString* const SETTING_AUTO_SYNC_STATE = @"setting_auto_sync_state";
+NSString* const SETTING_CSV_EXPORT_STATE = @"setting_csv_export_state";
+NSString* const SETTING_DB_TYPE = @"setting_db_type";
 
 NSString* const TABLE_INSERT = @"insert";
 NSString* const TABLE_LATEST = @"latest";

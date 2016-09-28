@@ -55,16 +55,22 @@
             [userDefaults setObject:[AWAREUtils getUnixTimestamp:[NSDate new]] forKey:KEY_LAST_BATTERY_EVENT_TIMESTAMP];
             [userDefaults setInteger:[UIDevice currentDevice].batteryLevel*100 forKey:KEY_LAST_BATTERY_LEVEL];
         }
+        [self setCSVHeader:@[@"timestamp",@"device_id",@"battery_status",@"battery_level",@"battery_scale",@"battery_voltage", @"battery_temperature",@"battery_adaptor",@"battery_health",@"battery_technology"]];
+        
         // Get default information from local storage
         batteryChargeSensor = [[BatteryCharge alloc] initWithAwareStudy:study
                                                            sensorName:BATTERY_CHARGERES
                                                          dbEntityName:NSStringFromClass([EntityBatteryCharge class])
                                                                dbType:dbType];
+        [batteryChargeSensor setCSVHeader:@[@"timestamp",@"device_id",@"battery_start",@"battery_end",@"double_end_timestamp"]];
         
         batteryDischargeSensor = [[BatteryDischarge alloc] initWithAwareStudy:study
                                                               sensorName:BATTERY_DISCHARGERES
                                                             dbEntityName:NSStringFromClass([EntityBatteryDischarge class])
                                                                   dbType:dbType];
+        
+        [batteryDischargeSensor setCSVHeader:@[@"timestamp",@"device_id",@"battery_start",@"battery_end",@"double_end_timestamp"]];
+        
         [batteryChargeSensor trackDebugEvents];
         [batteryDischargeSensor trackDebugEvents];
         previousBatteryLevel = [UIDevice currentDevice].batteryLevel*100;

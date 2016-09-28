@@ -66,7 +66,13 @@
         [userDefaults setInteger:10000 forKey:KEY_MAX_FETCH_SIZE_NORMAL_SENSOR];         // Defualt Value: 10000
         [userDefaults setBool:YES forKey:@"aware_inited_1.8.2"];
     }
+    
+    if([userDefaults integerForKey:SETTING_DB_TYPE] == AwareDBTypeUnknown){
+        [userDefaults setInteger:AwareDBTypeTextFile forKey:SETTING_DB_TYPE];
+    }
+    
     double uploadInterval = [userDefaults doubleForKey:SETTING_SYNC_INT];
+    
     
     /**
      * Start a location sensor for background sensing.

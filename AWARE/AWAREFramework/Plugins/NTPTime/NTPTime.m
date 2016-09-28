@@ -21,6 +21,7 @@
                         dbEntityName:NSStringFromClass([EntityNTPTime class])
                               dbType:dbType];
     if (self) {
+        [self setCSVHeader:@[@"timestamp", @"device_id", @"drift", @"ntp_time"]];
     }
     return self;
 }
@@ -32,8 +33,8 @@
     "timestamp real default 0,"
     "device_id text default '',"
     "drift real default 0," //clocks drift from ntp time
-    "ntp_time real default 0," //actual ntp timestamp in milliseconds
-    "UNIQUE (timestamp,device_id)";
+    "ntp_time real default 0"; //actual ntp timestamp in milliseconds
+    // "UNIQUE (timestamp,device_id)";
     [super createTable:query];
 }
 

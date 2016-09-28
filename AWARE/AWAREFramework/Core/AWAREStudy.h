@@ -20,6 +20,14 @@ typedef enum: NSInteger {
     cleanOldDataTypeAlways = 4
 } cleanOldDataType;
 
+typedef enum: NSInteger {
+    dataExportTYpeUnknown = 0,
+    dataExportTypeForAutoSync = 1,
+    dataExportTypeAsCSV = 2,
+    dataExportTypeAsJSON = 3
+} dataExportType;
+
+
 @interface AWAREStudy : NSObject <NSURLSessionDataDelegate, NSURLSessionDelegate, NSURLSessionTaskDelegate, NSURLConnectionDelegate, NSURLConnectionDataDelegate, NSURLConnectionDownloadDelegate>
 
 @property (strong, nonatomic) NSString* getSettingIdentifier;

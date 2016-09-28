@@ -33,6 +33,7 @@
         KEY_MEMORY_USED = @"mem_used";
         KEY_MEMORY_FREE = @"mem_free";
         KEY_MEMORY_TOTAL = @"mem_total";
+        [self setCSVHeader:@[KEY_MEMORY_TIMESTAMP, KEY_MEMORY_DEVICE_ID, KEY_MEMORY_USED, KEY_MEMORY_FREE, KEY_MEMORY_TOTAL]];
     }
     return self;
 }

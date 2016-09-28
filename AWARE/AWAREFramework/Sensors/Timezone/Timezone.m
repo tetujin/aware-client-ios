@@ -24,6 +24,7 @@
                           bufferSize:0];
     if (self) {
         defaultInterval = 60*60;// 3600 sec. = 1 hour
+        [self setCSVHeader:@[@"timestamp",@"device_id",@"timezone"]];
     }
     return self;
 }

@@ -29,6 +29,7 @@
                               dbType:dbType
                           bufferSize:0];
     if (self) {
+        [self setCSVHeader:@[@"timestamp",@"device_id",@"double_last_user",@"double_last_system",@"double_last_idle",@"double_user_load",@"double_system_load",@"double_idle"]];
     }
     return self;
 }

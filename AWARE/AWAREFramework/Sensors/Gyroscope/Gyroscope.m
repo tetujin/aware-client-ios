@@ -26,6 +26,7 @@
         gyroManager = [[CMMotionManager alloc] init];
         defaultInterval = 0.1f;
         dbWriteInterval = 30;
+        [self setCSVHeader:@[@"timestamp",@"device_id", @"double_values_0", @"double_values_1",@"double_values_2", @"accuracy",@"label"]];
     }
     return self;
 }

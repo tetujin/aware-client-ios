@@ -44,6 +44,8 @@
         KEY_BLUETOOTH_NAME = @"bt_name";
         KEY_BLUETOOTH_RSSI = @"bt_rssi";
         KEY_BLUETOOTH_LABLE = @"label";
+        
+        [self setCSVHeader:@[KEY_BLUETOOTH_TIMESTAMP, KEY_BLUETOOTH_DEVICE_ID, KEY_BLUETOOTH_ADDRESS, KEY_BLUETOOTH_NAME, KEY_BLUETOOTH_RSSI, KEY_BLUETOOTH_LABLE]];
     }
     return self;
 }

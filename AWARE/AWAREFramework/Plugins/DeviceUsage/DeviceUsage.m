@@ -23,6 +23,7 @@
                         dbEntityName:NSStringFromClass([EntityDeviceUsage class])
                               dbType:dbType];
     if (self) {
+        [self setCSVHeader:@[@"timestamp",@"device_id",@"elapsed_device_on",@"elapsed_device_off"]];
     }
     return self;
 }

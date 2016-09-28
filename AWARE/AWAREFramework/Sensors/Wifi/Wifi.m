@@ -27,6 +27,7 @@
                               dbType:dbType];
     if (self) {
         defaultInterval = 60.0f; // 60sec. = 1min.
+        [self setCSVHeader:@[@"timestamp",@"device_id",@"bssid",@"ssid",@"security",@"frequency",@"rssi",@"label"]];
     }
     return self;
 }

@@ -23,6 +23,8 @@
 - (void) unlockDB;
 - (BOOL) isDBLock;
 
+- (void) setCSVHeader:(NSArray *) headers;
+- (NSArray *) getCSVHeader;
 
 - (void) allowsCellularAccess;
 - (void) forbidCellularAccess;

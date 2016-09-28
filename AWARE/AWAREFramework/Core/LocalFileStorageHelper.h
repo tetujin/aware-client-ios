@@ -15,6 +15,7 @@
 
 // An array list for a buffer
 //@property (weak, nonatomic) NSMutableArray * bufferArray;
+- (void) setCSVHeader:(NSArray *) headers;
 
 /// create file
 - (BOOL) createNewFile:(NSString*)fileName;

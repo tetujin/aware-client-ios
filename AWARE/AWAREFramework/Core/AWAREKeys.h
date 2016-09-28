@@ -39,6 +39,9 @@ extern NSString *const SETTING_SYNC_WIFI_ONLY;
 extern NSString* const SETTING_SYNC_INT;
 extern NSString* const SETTING_SYNC_BATTERY_CHARGING_ONLY;
 extern NSString* const SETTING_FREQUENCY_CLEAN_OLD_DATA;
+extern NSString* const SETTING_AUTO_SYNC_STATE;
+extern NSString* const SETTING_CSV_EXPORT_STATE;
+extern NSString* const SETTING_DB_TYPE;
 
 
 extern NSString* const TABLE_INSER;

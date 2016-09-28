@@ -66,6 +66,14 @@ static vDSP_Length const FFTViewControllerFFTWindowSize = 4096;
         KEY_AMBIENT_NOISE_SILENT_THRESHOLD = @"double_silent_threshold";
         KEY_AMBIENT_NOISE_RAW = @"blob_raw";
         
+        [self setCSVHeader:@[KEY_AMBIENT_NOISE_TIMESTAMP,
+                             KEY_AMBIENT_NOISE_DEVICE_ID,
+                             KEY_AMBIENT_NOISE_FREQUENCY,
+                             KEY_AMBIENT_NOISE_DECIDELS,
+                             KEY_AMBIENT_NOISE_RMS,
+                             KEY_AMBIENT_NOISE_SILENT,
+                             KEY_AMBIENT_NOISE_SILENT_THRESHOLD,
+                             KEY_AMBIENT_NOISE_RAW]];
         /**
          * How frequently do we sample the microphone (default = 5) in minutes
          */

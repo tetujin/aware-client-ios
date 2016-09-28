@@ -29,7 +29,7 @@
                         dbEntityName:NSStringFromClass([EntityScreen class])
                               dbType:dbType];
     if (self) {
-        
+        [self setCSVHeader:@[@"timestamp",@"device_id",@"screen_status"]];
     }
     return self;
 }

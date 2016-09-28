@@ -24,6 +24,7 @@
         awareStudy = study;
         KEY_TIMESTAMP = @"timestamp";
         KEY_DEVICE_ID = @"device_id";
+        [self setCSVHeader:@[KEY_TIMESTAMP, KEY_DEVICE_ID]];
     }
     return self;
 }
@@ -32,7 +33,7 @@
     NSMutableString *query = [[NSMutableString alloc] init];
     [query appendString:@"_id integer primary key autoincrement,"];
     [query appendFormat:@"%@ real default 0,", KEY_TIMESTAMP];
-    [query appendFormat:@"%@ text default '',", KEY_DEVICE_ID];
+    [query appendFormat:@"%@ text default ''", KEY_DEVICE_ID];
 //    [query appendFormat:@"UNIQUE (timestamp,device_id)"];
     [self createTable:query];
 }

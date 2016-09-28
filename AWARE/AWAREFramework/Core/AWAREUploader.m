@@ -29,6 +29,8 @@
     int fetchLimit;
     int batchSize;
     int bufferSize;
+    
+    NSArray * csvHeader;
 }
 
 - (instancetype) initWithAwareStudy:(AWAREStudy *)study sensorName:(NSString *)name{
@@ -51,6 +53,15 @@
     return self;
 }
 
+/////////////////////////////////////////////////
+
+- (void) setCSVHeader:(NSArray *) headers {
+    csvHeader = headers;
+}
+
+- (NSArray *) getCSVHeader{
+    return csvHeader;
+}
 
 ////////////////////////////////////////////////////////////////
 /**
