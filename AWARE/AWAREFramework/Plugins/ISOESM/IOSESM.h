@@ -1,17 +1,15 @@
 //
-//  WebESM.h
+//  IOSESM.h
 //  AWARE
 //
-//  Created by Yuuki Nishiyama on 7/8/16.
+//  Created by Yuuki Nishiyama on 10/4/16.
 //  Copyright © 2016 Yuuki NISHIYAMA. All rights reserved.
 //
 
 #import "AWARESensor.h"
 #import "ESMSchedule.h"
 
-@interface WebESM : AWARESensor <AWARESensorDelegate, NSURLSessionDataDelegate> //NSURLSessionTaskDelegate
-
-/////////////////////////////////////////////////////////
+@interface IOSESM : AWARESensor <AWARESensorDelegate>
 
 - (BOOL) setWebESMsWithSchedule:(ESMSchedule *) esmSchedule;
 // - (void) setWebESMsWithArray:(NSArray *) webESMArray;
@@ -30,4 +28,9 @@
 - (void) setNotificationSchedules;
 - (void) removeNotificationSchedules;
 - (void) refreshNotifications;
+
+/////////////////////////////////
++ (BOOL) isAppearedThisSection;
++ (void) setAppearedState:(BOOL)state;
+
 @end

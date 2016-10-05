@@ -9,13 +9,14 @@
 //
 
 #import "AWAREEsmViewController.h"
-#import "ESM.h"
+// #import "ESM.h"
 #import "AWAREStudy.h"
 #import "AWAREKeys.h"
 #import "ViewController.h"
 #import "SingleESMObject.h"
 #import "ESMStorageHelper.h"
 #import "AppDelegate.h"
+#import "IOSESM.h"
 
 #import "PamSchema.h"
 #import "QuartzCore/CALayer.h"
@@ -1182,13 +1183,13 @@
     NSLog(@"Submit button was pushed!");
     
     NSMutableArray *array = [[NSMutableArray alloc] init];
-    ESM *esm = [[ESM alloc] initWithAwareStudy:study
+    IOSESM *esm = [[IOSESM alloc] initWithAwareStudy:study
                                         dbType:AwareDBTypeTextFile];
     
-    NSNumber *NEW = @0;
+    // NSNumber *NEW = @0;
     NSNumber *DISMISSED = @1;
     NSNumber *ANSWERED = @2;
-    NSNumber *EXPIRED = @3;
+    // NSNumber *EXPIRED = @3;
     
 //    double timeStamp = [[NSDate date] timeIntervalSince1970] * 1000;
 //    NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
@@ -1541,7 +1542,7 @@
     NSMutableArray *answers = [[NSMutableArray alloc] init];
     
     // Create
-    ESM *esm = [[ESM alloc] initWithAwareStudy:study dbType:AwareDBTypeTextFile];
+    IOSESM *esm = [[IOSESM alloc] initWithAwareStudy:study dbType:AwareDBTypeTextFile];
     NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
     NSString *deviceId = [esm getDeviceId];
     for (int i=0; i<uiElements.count; i++) {
@@ -1616,6 +1617,7 @@
                                                                       type:@0
                                                                      title:@""
                                                               instructions:@""
+                                                                    submit:@""
                                                        expirationThreshold:@0
                                                                    trigger:@""];
     

@@ -148,6 +148,7 @@ extern NSString* const KEY_ESM_IOS;
                                                  type:(NSNumber *) type
                                                 title:(NSString *) title
                                          instructions:(NSString *) instructions
+                                               submit:(NSString *) submit
                                   expirationThreshold:(NSNumber *) expirationThreshold
                                               trigger:(NSString*) trigger;
 

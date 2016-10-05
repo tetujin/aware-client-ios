@@ -13,7 +13,8 @@
 #import "AWAREKeys.h"
 #import "ESM.h"
 #import "AWAREEsmUtils.h"
-// #import "Debug.h"
+#import "ESMStorageHelper.h"
+#import "ESMManager.h"
 
 @implementation BalacnedCampusESMScheduler {
     // -- Notification Body --
@@ -39,6 +40,9 @@
     NSString * KEY_SCHEDULE;
     NSString * KEY_TIMER;
     NSString * KEY_PREVIOUS_SCHEDULE_JSON;
+    
+    ESMStorageHelper * helper;
+    ESMManager * esmManager;
 
 }
 
@@ -53,6 +57,10 @@
                         dbEntityName:nil
                               dbType:AwareDBTypeTextFile];
     if (self) {
+        
+        helper = [[ESMStorageHelper alloc] init];
+        esmManager = [[ESMManager alloc] init];
+        
         /** Notification Body */
         notificationTitle = @"BalancedCampus Question";
         notificationBody = @"Tap to answer.";
@@ -80,11 +88,45 @@
 }
 
 
+- (void) createTable {
+    NSLog(@"[%@] Create Table", [self getSensorName]);
+    NSString *query = [[NSString alloc] init];
+    query =
+    @"_id integer primary key autoincrement,"
+    "timestamp real default 0,"
+    "device_id text default '',"
+    "esm_type integer default 0,"
+    "esm_title text default '',"
+    "esm_submit text default '',"
+    "esm_instructions text default '',"
+    "esm_radios text default '',"
+    "esm_checkboxes text default '',"
+    "esm_likert_max integer default 0,"
+    "esm_likert_max_label text default '',"
+    "esm_likert_min_label text default '',"
+    "esm_likert_step real default 0,"
+    "esm_quick_answers text default '',"
+    "esm_expiration_threshold integer default 0,"
+    "esm_status integer default 0,"
+    "double_esm_user_answer_timestamp real default 0,"
+    "esm_user_answer text default '',"
+    "esm_trigger text default '',"
+    "esm_scale_min integer default 0,"
+    "esm_scale_max integer default 0,"
+    "esm_scale_start integer default 0,"
+    "esm_scale_max_label text default '',"
+    "esm_scale_min_label text default '',"
+    "esm_scale_step integer default 0";
+    [super createTable:query withTableName:@"esms"];
+}
+
 // Start sensor
 - (BOOL)startSensorWithSettings:(NSArray *)settings{
     
     // Remove all scheduled notification
     [self stopSchedules];
+    
+    [helper removeEsmTexts];
     
     // remove ESMs from temp local storage
 //    ESMStorageHelper *helper = [[ESMStorageHelper alloc] init];
@@ -155,6 +197,7 @@
 
 // Stop sensor
 - (BOOL)stopSensor {
+    [esmManager stopAllESMSchedules];
     [self stopSchedules];
     return YES;
 }
@@ -185,6 +228,17 @@
 ///////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////
 
+- (void) syncAwareDB {
+    [self syncAwareDBInBackgroundWithSensorName:@"esms"];
+}
+
+- (void) syncAwareDBInBackground{
+    [self syncAwareDBInBackgroundWithSensorName:@"esms"];
+}
+
+- (void)syncAwareDBInBackgroundWithSensorName:(NSString *)name{
+    [super syncAwareDBInBackgroundWithSensorName:name];
+}
 
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
@@ -198,12 +252,12 @@
     for (AWARESchedule * s in schedules) {
     
         NSMutableDictionary * userInfo = [[NSMutableDictionary alloc] init];
-        [userInfo setObject:s.esmStr forKey:@"esm_json_str"];
-        [userInfo setObject:s.scheduleId forKey:@"esm_schedule_id"];
-        [userInfo setObject:s.schedule forKey:@"esm_schedule"];
+        [userInfo setObject:s.esmStr       forKey:@"esm_json_str"];
+        [userInfo setObject:s.scheduleId   forKey:@"esm_schedule_id"];
+        [userInfo setObject:s.schedule     forKey:@"esm_schedule"];
         [userInfo setObject:s.scheduleType forKey:@"esm_schedule_type"];
-        [userInfo setObject:s.title forKey:@"esm_schedule_title"];
-        [userInfo setObject:s.body forKey:@"esm_schedule_body"];
+        [userInfo setObject:s.title        forKey:@"esm_schedule_title"];
+        [userInfo setObject:s.body         forKey:@"esm_schedule_body"];
         
 //        NSDate * testFireDate = [AWAREUtils getTargetNSDate:[NSDate new] hour:11 minute:18 second:0 nextDay:YES];
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
@@ -244,7 +298,7 @@
     NSNumber* timeout = [self getTimeout:esmJsonStr];
     
     // Add esm to local temp storage
-    ESMStorageHelper * helper = [[ESMStorageHelper alloc] init];
+    // ESMStorageHelper * helper = [[ESMStorageHelper alloc] init];
     [helper addEsmText:esmStr withId:scheduleId timeout:timeout];
     
     // Save ESM to main storage
@@ -328,7 +382,7 @@
         
         
         // Set ESM texts to temp-esm-storage. (version:1.6.4)
-        ESMStorageHelper * helper = [[ESMStorageHelper alloc] init];
+//        ESMStorageHelper * helper = [[ESMStorageHelper alloc] init];
         [helper addEsmText:s.esmStr withId:s.scheduleId];
 //        [helper addEsmText:esmStr withId:scheduleId timeout:timeout];
     }
@@ -350,7 +404,7 @@
             NSString* esmStr = [self setEsmApperedTimestamp:schedule.esmStr withTimestamp:unixtime];
             NSNumber* timeout = [self getTimeout:schedule.esmStr];
             // Add esm text to local storage
-            ESMStorageHelper * helper = [[ESMStorageHelper alloc] init];
+            // ESMStorageHelper * helper = [[ESMStorageHelper alloc] init];
             [helper addEsmText:esmStr withId:scheduleId timeout:timeout];
             
             // Sned notification with schdule_id with the device is debug mode.
@@ -596,7 +650,7 @@ didCompleteWithError:(NSError *)error {
     [self saveDebugEventWithText:currentEsmSchedules type:DebugTypeInfo label:@""];
 
     // Remove previus ESMs
-    ESMStorageHelper *helper = [[ESMStorageHelper alloc] init];
+    // ESMStorageHelper *helper = [[ESMStorageHelper alloc] init];
     [helper removeEsmTexts];
     
     // Stop previus notification schdules

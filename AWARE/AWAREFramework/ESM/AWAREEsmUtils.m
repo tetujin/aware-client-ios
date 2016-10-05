@@ -79,6 +79,7 @@
                                                                       type:@0
                                                                      title:@""
                                                               instructions:@""
+                                                                    submit:@""
                                                        expirationThreshold:@0
                                                                    trigger:@""];
     // init array objects to NSString object

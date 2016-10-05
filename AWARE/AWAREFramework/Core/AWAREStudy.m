@@ -334,21 +334,22 @@ didCompleteWithError:(NSError *)error {
     }
     
     // save the new configuration to the local storage
-    [userDefaults setObject:mqttServer forKey:KEY_MQTT_SERVER];
-    [userDefaults setObject:mqttPassword forKey:KEY_MQTT_PASS];
-    [userDefaults setObject:mqttUsername forKey:KEY_MQTT_USERNAME];
-    [userDefaults setObject:[NSNumber numberWithInt:mqttPort] forKey:KEY_MQTT_PORT];
-    [userDefaults setObject:[NSNumber numberWithInt:mqttKeepAlive] forKey:KEY_MQTT_KEEP_ALIVE];
-    [userDefaults setObject:[NSNumber numberWithInt:mqttQos] forKey:KEY_MQTT_QOS];
-    [userDefaults setObject:studyId forKey:KEY_STUDY_ID];
+    [userDefaults setObject:mqttServer       forKey:KEY_MQTT_SERVER];
+    [userDefaults setObject:mqttPassword     forKey:KEY_MQTT_PASS];
+    [userDefaults setObject:mqttUsername     forKey:KEY_MQTT_USERNAME];
+    [userDefaults setObject:@(mqttPort)      forKey:KEY_MQTT_PORT];
+    [userDefaults setObject:@(mqttKeepAlive) forKey:KEY_MQTT_KEEP_ALIVE];
+    [userDefaults setObject:@(mqttQos)       forKey:KEY_MQTT_QOS];
+    [userDefaults setObject:studyId          forKey:KEY_STUDY_ID];
     [userDefaults setObject:webserviceServer forKey:KEY_WEBSERVICE_SERVER];
-    [userDefaults setObject:array forKey:KEY_SENSORS];
-    [userDefaults setObject:plugins forKey:KEY_PLUGINS];
     [userDefaults setDouble:frequencySyncDB*60 forKey:SETTING_SYNC_INT]; // save data as second
     [userDefaults setBool:webserviceWifiOnly forKey:SETTING_SYNC_WIFI_ONLY];
     [userDefaults setInteger:frequencyCleanOldData forKey:SETTING_FREQUENCY_CLEAN_OLD_DATA];
     [userDefaults synchronize];
 
+    [userDefaults setObject:array            forKey:KEY_SENSORS];
+    [userDefaults setObject:plugins          forKey:KEY_PLUGINS];
+    
     // run in the main thread
     dispatch_async(dispatch_get_main_queue(), ^{
         AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
@@ -361,7 +362,94 @@ didCompleteWithError:(NSError *)error {
     readingState = YES;
 }
 
+///////////////////////////////////////////////////
 
+- (void)setUserSensorSettingWithKey:(NSString *)key value:(NSString *)setting{
+    NSUserDefaults * userDefaults = [NSUserDefaults standardUserDefaults];
+    NSArray * userSensors = [userDefaults objectForKey:KEY_USER_SENSORS];
+    NSMutableArray * newUserSensors = [[NSMutableArray alloc] initWithArray:userSensors];
+    if(userSensors != nil){
+        for (NSDictionary * preSensorSetting in userSensors) {
+            for (NSString * preKey in [preSensorSetting allKeys]) {
+                if ([preKey isEqualToString:key]) {
+                    [newUserSensors removeObject:preSensorSetting];
+                    [newUserSensors addObject:[[NSDictionary alloc] initWithObjects:@[setting] forKeys:@[key]]];
+                    break;
+                }
+            }
+        }
+    }
+    [userDefaults setObject:newUserSensors forKey:KEY_USER_SENSORS];
+    [userDefaults synchronize];
+}
+
+- (void) setUserPluginSetting:(NSDictionary *) setting {
+//    NSUserDefaults * userDefaults = [NSUserDefaults standardUserDefaults];
+//    NSArray * userSensors = [userDefaults objectForKey:KEY_USER_SENSORS];
+//    NSMutableArray * newUserSensors = [[NSMutableArray alloc] initWithArray:userSensors];
+//    if(userSensors != nil){
+//        for (NSDictionary * preSensorSetting in userSensors) {
+//            for (NSString * preKey in [preSensorSetting allKeys]) {
+//                if ([preKey isEqualToString:key]) {
+//                    [newUserSensors removeObject:preSensorSetting];
+//                    [newUserSensors addObject:[[NSDictionary alloc] initWithObjects:@[setting] forKeys:@[key]]];
+//                    break;
+//                }
+//            }
+//        }
+//    }
+//    [userDefaults setObject:newUserSensors forKey:KEY_USER_SENSORS];
+//    [userDefaults synchronize];
+    
+    
+//    {
+//        plugin = "";
+//        settings =     (
+//                        {
+//                            setting = "status_plugin_ambient_noise";
+//                            value = true;
+//                        }
+//                        );
+//    },
+}
+
+
+- (void) removeUserSensorSettingWithKey:(NSString *)key{
+    NSUserDefaults * userDefaults = [NSUserDefaults standardUserDefaults];
+    NSArray * userSensors = [userDefaults objectForKey:KEY_USER_SENSORS];
+    NSMutableArray * newUserSensors = [[NSMutableArray alloc] initWithArray:userSensors];
+    if(userSensors != nil){
+        for (NSDictionary * preSensorSetting in userSensors) {
+            for (NSString * preKey in [preSensorSetting allKeys]) {
+                if ([preKey isEqualToString:key]) {
+                    [newUserSensors removeObject:preSensorSetting];
+                    break;
+                }
+            }
+        }
+    }
+    [userDefaults setObject:newUserSensors forKey:KEY_USER_SENSORS];
+    [userDefaults synchronize];
+}
+
+- (void) removeUserPluginSettingWithKey:(NSString *)key{
+    
+}
+
+
+- (void) removeAllUserSensors{
+    NSUserDefaults * userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults removeObjectForKey:KEY_USER_SENSORS];
+    [userDefaults synchronize];
+}
+
+- (void) removeAllUserPlugins{
+    NSUserDefaults * userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults removeObjectForKey:KEY_USER_PLUGINS];
+    [userDefaults synchronize];
+}
+
+///////////////////////////////////////////////////////
 
 /**
  * This method sets downloaded study configurations.
@@ -379,9 +467,9 @@ didCompleteWithError:(NSError *)error {
     uname(&systemInfo);
     
     NSString* machine =  [NSString stringWithCString:systemInfo.machine  encoding:NSUTF8StringEncoding]; // ok
-    NSString* nodeName = [NSString stringWithCString:systemInfo.nodename encoding:NSUTF8StringEncoding]; // ok
+    // NSString* nodeName = [NSString stringWithCString:systemInfo.nodename encoding:NSUTF8StringEncoding]; // ok
     NSString* release =  [NSString stringWithCString:systemInfo.release  encoding:NSUTF8StringEncoding]; // ok
-    NSString* systemName = [NSString stringWithCString:systemInfo.sysname encoding:NSUTF8StringEncoding];// ok
+    // NSString* systemName = [NSString stringWithCString:systemInfo.sysname encoding:NSUTF8StringEncoding];// ok
     NSString* version = [NSString stringWithCString:systemInfo.version encoding:NSUTF8StringEncoding];
     NSString *name = [self getDeviceName]; //[[UIDevice currentDevice] name];//ok
     NSString *systemVersion = [[UIDevice currentDevice] systemVersion];//ok
@@ -721,12 +809,38 @@ didCompleteWithError:(NSError *)error {
 
 /**
  * Get plugin settings from a local storage as a NSArray object
- * @return a plugin settings as a NSArray object
+ * @return plugin settings as a NSArray object
  */
 - (NSArray *) getPlugins{
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     return [userDefaults objectForKey:KEY_PLUGINS];
 }
+
+
+/**
+ * Get plugin settings using a key of a setting element
+ * @return Plugin settings as a NSArray
+ */
+- (NSArray *) getPluginSettingsWithKey:(NSString *) key {
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSArray * plugins = [userDefaults objectForKey:KEY_PLUGINS];
+    
+    if(plugins != nil){
+        for (NSDictionary * plugin in plugins) {
+            NSArray *pluginSettings = [plugin objectForKey:@"settings"];
+            for (NSDictionary* pluginSetting in pluginSettings) {
+                NSString * setting = [pluginSetting objectForKey:@"setting"];
+                if ([setting isEqualToString:key]){
+                    return pluginSettings;
+                }
+            }
+        }
+    }
+    
+    return nil;
+}
+
 
 /**
  * Get a study configuration as text

@@ -309,7 +309,32 @@ didReceiveResponse:(NSURLResponse *)response
     error = nil;
     httpResponse = nil;
     
-    if ( responseCode == 200 ) {
+//    if([newStr rangeOfString:@"A PHP Error was encountered"].location != NSNotFound){
+//        NSString * message = [NSString stringWithFormat:@"[%@] A PHP Error was encountered", sensorName];
+//        NSLog(@"%@", message);
+//        [self saveDebugEventWithText:message type:DebugTypeInfo label:syncDataQueryIdentifier];
+//        
+//        // send notification
+//        if ([self isDebug]) [AWAREUtils sendLocalNotificationForMessage:message soundFlag:NO];
+//        
+//        // upload sensor data again
+//        [self saveDebugEventWithText:[NSString stringWithFormat:@"[%@] Upload stored data again", sensorName]
+//                                type:DebugTypeInfo
+//                               label:syncDataQueryIdentifier];
+//        [self postSensorDataWithSensorName:sensorName session:nil];
+//
+//        NSMutableDictionary * userInfo = [[NSMutableDictionary alloc] init];
+//        [userInfo setObject:@(-1) forKey:@"KEY_UPLOAD_PROGRESS_STR"];
+//        [userInfo setObject:@YES forKey:@"KEY_UPLOAD_FIN"];
+//        [userInfo setObject:@NO forKey:@"KEY_UPLOAD_SUCCESS"];
+//        [userInfo setObject:sensorName forKey:@"KEY_UPLOAD_SENSOR_NAME"];
+//        [[NSNotificationCenter defaultCenter] postNotificationName:@"ACTION_AWARE_DATA_UPLOAD_PROGRESS"
+//                                                            object:nil
+//                                                          userInfo:userInfo];
+//        return;
+//    }
+    
+    if (responseCode == 200) {
         [awareLocalStorage setNextMark];
         NSString *bytes = [self getFileStrSize:(double)[awareLocalStorage getFileSize]];
         NSString *message = @"";

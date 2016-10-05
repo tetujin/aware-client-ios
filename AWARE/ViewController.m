@@ -22,7 +22,7 @@
 #import "ESMStorageHelper.h"
 #import "AppDelegate.h"
 #import "Observer.h"
-#import "WebESM.h"
+// #import "WebESM.h"
 
 // Plugins
 #import "GoogleCalPush.h"
@@ -35,7 +35,8 @@
 #import "Labels.h"
 #import "BLEHeartRate.h"
 #import "AmbientLight.h"
-#import "ESM.h"
+// #import "ESM.h"
+#import "IOSESM.h"
 #import "Accelerometer.h"
 
 // Library
@@ -79,7 +80,8 @@
     
     EAIntroView *intro;
     
-    WebESM *webESM;
+    // WebESM *webESM;
+    IOSESM * iOSESM;
     
     CLLocationManager * locationManager;
     
@@ -153,8 +155,8 @@
                                                       repeats:YES];
     [[NSRunLoop mainRunLoop] addTimer:listUpdateTimer forMode:NSRunLoopCommonModes];
 
-    webESM = [[WebESM alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeCoreData];
-    
+    // webESM = [[WebESM alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeCoreData];
+    iOSESM = [[IOSESM alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeCoreData];
     
     // For test
     // [sensorManager performSelector:@selector(testSensing) withObject:nil afterDelay:10];
@@ -173,16 +175,16 @@
     ESMStorageHelper * helper = [[ESMStorageHelper alloc] init];
     NSArray * storedEsms = [helper getEsmTexts];
     if(storedEsms != nil){
-        if (storedEsms.count > 0 && ![ESM isAppearedThisSection]) {
-            [ESM setAppearedState:YES];
+        if (storedEsms.count > 0 && ![IOSESM isAppearedThisSection]) {
+            [IOSESM setAppearedState:YES];
             [self performSegueWithIdentifier:@"esmView" sender:self];
         }
     }
     
-    NSArray * esms = [webESM getValidESMsWithDatetime:[NSDate new]];
-    if(esms != nil && esms.count != 0 && ![ESM isAppearedThisSection]){
-        [ESM setAppearedState:YES];
-        [self performSegueWithIdentifier:@"webEsmView" sender:self];
+    NSArray * esms = [iOSESM getValidESMsWithDatetime:[NSDate new]];
+    if(esms != nil && esms.count != 0 && ![IOSESM isAppearedThisSection]){
+        [IOSESM setAppearedState:YES];
+        [self performSegueWithIdentifier:@"iOSEsmView" sender:self];
     }
     
     AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
@@ -429,7 +431,7 @@
     // Balanced Campus ESMs (ESM Scheduler)
     [_sensors addObject:[self getCelContent:@"Balanced Campus ESMs" desc:@"ESM Plugin" image:@"ic_action_campus" key:SENSOR_PLUGIN_CAMPUS]];
     //
-    [_sensors addObject:[self getCelContent:@"Web ESMs" desc:@"Web ESM Plugin" image:@"ic_action_web_esm" key:SENSOR_PLUGIN_WEB_ESM]];
+    [_sensors addObject:[self getCelContent:@"iOS ESM" desc:@"ESM plugin for iOS" image:@"ic_action_web_esm" key:SENSOR_PLUGIN_IOS_ESM]];
     // HealthKit
 //    [_sensors addObject:[self getCelContent:@"HealthKit" desc:@"This plugin collects stored data in HealthKit App on iOS" image:@"ic_action_health_kit" key:@"sensor_plugin_health_kit"]];
 
@@ -539,15 +541,15 @@
     NSArray * storedEsms = [helper getEsmTexts];
     if(storedEsms != nil){
         if (storedEsms.count > 0 ){
-            [ESM setAppearedState:YES];
+            [IOSESM setAppearedState:YES];
             [self performSegueWithIdentifier:@"esmView" sender:self];
         }
     }
     
-    NSArray * esms = [webESM getValidESMsWithDatetime:[NSDate new]];
+    NSArray * esms = [iOSESM getValidESMsWithDatetime:[NSDate new]];
     if(esms != nil && esms.count != 0 ){
-        [ESM setAppearedState:YES];
-        [self performSegueWithIdentifier:@"webEsmView" sender:self];
+        [IOSESM setAppearedState:YES];
+        [self performSegueWithIdentifier:@"iOSEsmView" sender:self];
     }
     
 }
@@ -1203,7 +1205,7 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
 }
 
 - (IBAction)pushedNextButton:(id)sender {
-    UIButton * nextButton = (UIButton *) sender;
+//    UIButton * nextButton = (UIButton *) sender;
 //    NSLog(@"%d", [nextButton isSelected]);
 //    if (nextButton.selected) {
 //        nextButton.selected = NO;

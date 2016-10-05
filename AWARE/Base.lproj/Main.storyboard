@@ -57,7 +57,7 @@
                         <segue destination="z9G-jw-719" kind="push" identifier="esmView" id="tu2-01-ZjG"/>
                         <segue destination="Civ-lf-EA0" kind="push" identifier="googleLogin" id="ci2-wr-KRg"/>
                         <segue destination="I95-pj-nZf" kind="push" id="RVj-Ej-0uT"/>
-                        <segue destination="i9p-mR-dRh" kind="push" identifier="webEsmView" id="BPs-9k-tMb"/>
+                        <segue destination="i9p-mR-dRh" kind="push" identifier="iOSEsmView" id="BPs-9k-tMb"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eTN-Zo-OWZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -302,10 +302,10 @@
             </objects>
             <point key="canvasLocation" x="1204" y="-150"/>
         </scene>
-        <!--WebESM View Controller-->
+        <!--iOSESM View Controller-->
         <scene sceneID="Xiy-tc-SxH">
             <objects>
-                <viewController id="i9p-mR-dRh" customClass="WebESMViewController" sceneMemberID="viewController">
+                <viewController id="i9p-mR-dRh" customClass="IOSESMViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Pyc-re-wKi"/>
                         <viewControllerLayoutGuide type="bottom" id="1SP-Y5-eZw"/>

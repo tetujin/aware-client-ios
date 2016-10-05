@@ -158,6 +158,7 @@
 }
 
 - (BOOL) syncAwareDBInForegroundWithSensorName:(NSString*) name{
+    [self syncAwareDBInBackgroundWithSensorName:name];
     return NO;
 }
 

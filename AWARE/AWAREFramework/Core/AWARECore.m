@@ -48,6 +48,9 @@
 
 - (void) activate {
     [self deactivate];
+    
+    [UIDevice currentDevice].batteryMonitoringEnabled = YES;
+    
     /// Set defualt settings
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     if (![userDefaults boolForKey:@"aware_inited"]) {

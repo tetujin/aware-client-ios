@@ -105,13 +105,18 @@
     NSLog(@"Start Motion Activity Manager! ");
     
     
-    double frequency = [self getSensorSetting:settings withKey:@"frequency_plugin_google_activity_recognition"];
+    double frequency = [self getSensorSetting:settings withKey:@"frequency_plugin_ios_activity_recognition"];
     if (frequency < defaultInterval) {
         frequency = defaultInterval;
     }
     
-    //return [self startSensorWithConfidenceFilter:CMMotionActivityConfidenceLow mode:IOSActivityRecognitionModeHistory interval:frequency];
-    return [self startSensorWithConfidenceFilter:CMMotionActivityConfidenceLow mode:IOSActivityRecognitionModeLive interval:frequency];
+    int liveMode = [self getSensorSetting:settings withKey:@"status_plugin_ios_activity_recognition_live"];
+    
+    if(liveMode){
+        return [self startSensorWithConfidenceFilter:CMMotionActivityConfidenceLow mode:IOSActivityRecognitionModeLive interval:frequency];
+    }else{
+        return [self startSensorWithConfidenceFilter:CMMotionActivityConfidenceLow mode:IOSActivityRecognitionModeHistory interval:frequency];
+    }
 }
 
 

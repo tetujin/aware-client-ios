@@ -56,6 +56,7 @@
 #import "AmbientNoise.h"
 #import "WebESM.h"
 #import "IBeacon.h"
+#import "IOSESM.h"
 
 #import "Observer.h"
 
@@ -187,8 +188,9 @@
         }else if([setting isEqualToString:[NSString stringWithFormat:@"status_%@",SENSOR_TIMEZONE]]){
             awareSensor = [[Timezone alloc] initWithAwareStudy:awareStudy dbType:dbType];
         }else if([setting isEqualToString:[NSString stringWithFormat:@"status_%@",SENSOR_ESMS]]){
+            /** ESM and WebESM plugin are replaced to iOS ESM ( = IOSESM class) plugin */
             // awareSensor = [[ESM alloc] initWithAwareStudy:awareStudy dbType:dbType];
-            awareSensor = [[WebESM alloc] initWithAwareStudy:awareStudy dbType:dbType];
+            // awareSensor = [[WebESM alloc] initWithAwareStudy:awareStudy dbType:dbType];
         }else if([setting isEqualToString:[NSString stringWithFormat:@"status_%@",SENSOR_CALLS]]){
             awareSensor = [[Calls alloc] initWithAwareStudy:awareStudy dbType:dbType];
         }else if([setting isEqualToString:[NSString stringWithFormat:@"status_%@",SENSOR_ROTATION]]){
@@ -245,6 +247,8 @@
                 awareSensor = [[WebESM alloc] initWithAwareStudy:awareStudy dbType:dbType];
             }else if([pluginName isEqualToString:[NSString stringWithFormat:@"status_%@",SENSOR_PLUGIN_BLE_HEARTRATE]]){
                 awareSensor = [[BLEHeartRate alloc] initWithAwareStudy:awareStudy dbType:dbType];
+            }else if([pluginName isEqualToString:[NSString stringWithFormat:@"status_%@",SENSOR_PLUGIN_IOS_ESM]]){
+                awareSensor = [[IOSESM alloc] initWithAwareStudy:awareStudy dbType:dbType];
             }
             
             if(awareSensor != nil){
@@ -263,6 +267,7 @@
      * You can add your own AWARESensor to AWARESensorManager directly using following source code.
      * The "-addNewSensor" method is versy userful for testing and debuging a AWARESensor without registlating a study.
      */
+    
     
     // Pedometer
     // AWARESensor * steps = [[Pedometer alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
@@ -469,7 +474,7 @@
         manualUploadMonitor = nil;
     }
     
-    [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeBlack];
+    // [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeBlack];
     [SVProgressHUD showWithStatus:@"Start manual upload"];
     
 //    [self stopAndRemoveAllSensors];
@@ -539,6 +544,7 @@
                                }];
         
         for ( AWARESensor * sensor in awareSensors ) {
+            // NSLog(sensor.getSensorName);
             [sensor syncAwareDBInForeground];
         }
         

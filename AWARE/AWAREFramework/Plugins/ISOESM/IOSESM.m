@@ -1,11 +1,12 @@
 //
-//  WebESM.m
+//  IOSESM.m
 //  AWARE
 //
-//  Created by Yuuki Nishiyama on 7/8/16.
+//  Created by Yuuki Nishiyama on 10/4/16.
 //  Copyright © 2016 Yuuki NISHIYAMA. All rights reserved.
 //
 
+#import "IOSESM.h"
 #import "WebESM.h"
 #import "TCQMaker.h"
 #import "AppDelegate.h"
@@ -17,23 +18,32 @@
 #import "AWAREUtils.h"
 #import "AWAREKeys.h"
 
-@implementation WebESM {
+@implementation IOSESM {
     NSString * baseHttpSessionId;
     NSString * currentHttpSessionId;
-    NSString * categoryWebESM;
+    NSString * categoryIOSESM;
     NSMutableData * receiveData;
     bool isLock;
+    NSString * tableName;
+    NSArray * pluginSettings;
+}
+
+-(instancetype)initWithAwareStudy:(AWAREStudy *)study{
+    return [super initWithAwareStudy:study
+                          sensorName:SENSOR_PLUGIN_IOS_ESM
+                        dbEntityName:NSStringFromClass([EntityESMAnswer class])
+                              dbType:AwareDBTypeCoreData];
 }
 
 -(instancetype)initWithAwareStudy:(AWAREStudy *)study dbType:(AwareDBType)dbType{
     self = [super initWithAwareStudy:study
-                          sensorName:SENSOR_PLUGIN_WEB_ESM //@"esms"
+                          sensorName:SENSOR_PLUGIN_IOS_ESM
                         dbEntityName:NSStringFromClass([EntityESMAnswer class])
                               dbType:AwareDBTypeCoreData];
     if(self != nil){
-        baseHttpSessionId = [NSString stringWithFormat:@"plugin_web_esm_http_session_id"];
+        baseHttpSessionId = [NSString stringWithFormat:@"plugin_ios_esm_http_session_id"];
         currentHttpSessionId = [NSString stringWithFormat:@"%@_%f", baseHttpSessionId, [NSDate new].timeIntervalSince1970];
-        categoryWebESM = @"plugin_web_esm_category";
+        categoryIOSESM = @"plugin_ios_esm_category";
         receiveData = [[NSMutableData alloc] init];
         isLock = NO;
         [self allowsDateUploadWithoutBatteryCharging];
@@ -44,11 +54,20 @@
                              @"double_esm_user_answer_timestamp",
                              @"esm_user_answer",
                              @"esm_trigger"]];
+        tableName = @"esms";
+        
+        pluginSettings = [study getPluginSettingsWithKey:[NSString stringWithFormat:@"status_%@", SENSOR_PLUGIN_IOS_ESM]];
+        NSString * tempTableName = [self getStringFromSettings:pluginSettings key:@"plugin_ios_esm_table_name"];
+        if(tempTableName != nil){
+            tableName = tempTableName;
+        }
+        
     }
-    
     return self;
 }
 
+
+///////////////////////////////////////////////////////////////////
 - (void)createTable{
     TCQMaker *tcqMaker = [[TCQMaker alloc] init];
     [tcqMaker addColumn:@"esm_json"                         type:TCQTypeText    default:@"''"];
@@ -59,17 +78,26 @@
     [tcqMaker addColumn:@"esm_trigger"                      type:TCQTypeText    default:@"''"];
     NSString * query = [tcqMaker getTableCreateQueryWithUniques:nil];
     
-    [self createTable:query withTableName:@"esms"];
+    [self createTable:query withTableName:tableName];
 }
 
+
+///////////////////////////////////////////////////////////////////
 - (BOOL)startSensorWithSettings:(NSArray *)settings{
+    
     // Get contents from URL
     [self setBufferSize:0];
     
     // url
-    NSString * urlStr = [self getURLFromSettings:settings key:@"plugin_web_esm_url"];
+    NSString * urlStr = [self getStringFromSettings:settings key:@"plugin_ios_esm_config_url"];
     NSURL * url = [[NSURL alloc] initWithString:[NSString stringWithFormat:@"%@?device_id=%@",urlStr,[self getDeviceId]]];
     [self getESMConfigFileFromURL:url];
+    
+    tableName = [self getStringFromSettings:settings key:@"plugin_ios_esm_table_name"];
+    
+    if(tableName == nil){
+        tableName = @"esms";
+    }
     
     NSArray *esms = [self getValidESMsWithDatetime:[NSDate new]];
     if(esms != nil){
@@ -84,22 +112,20 @@
     return YES;
 }
 
-///////////////////////////////////////////////////////////
+- (void)syncAwareDB{
+    [self syncAwareDBInBackgroundWithSensorName:tableName];
+}
 
 
-//- (void)syncAwareDB{
-//    [self syncAwareDBInBackgroundWithSensorName:@"esms"];
-//}
-//
-//
-//- (void) syncAwareDBInBackground{
-//    [self syncAwareDBInBackgroundWithSensorName:@"esms"];
-//}
-//
-//
-//- (void)syncAwareDBInBackgroundWithSensorName:(NSString *)name{
-//    [super syncAwareDBInBackgroundWithSensorName:name];
-//}
+- (void) syncAwareDBInBackground{
+    [self syncAwareDBInBackgroundWithSensorName:tableName];
+}
+
+//////////////////////////////////////////////////////////
+- (void)syncAwareDBInBackgroundWithSensorName:(NSString *)name{
+    [super syncAwareDBInBackgroundWithSensorName:name];
+}
+
 
 ///////////////////////////////////////////////////////////
 - (void) getESMConfigFileFromURL:(NSURL *)url{
@@ -184,7 +210,7 @@ didReceiveResponse:(NSURLResponse *)response
 
 - (void)URLSession:(NSURLSession *)session
               task:(NSURLSessionTask *)task
-    didCompleteWithError:(NSError *)error{
+didCompleteWithError:(NSError *)error{
     
     NSLog(@"did compleate");
     
@@ -193,7 +219,7 @@ didReceiveResponse:(NSURLResponse *)response
         NSLog(@"%@", r);
         if(receiveData.length != 0){
             NSError *e = nil;
-            NSArray * webESMArray = [NSJSONSerialization JSONObjectWithData:receiveData
+            NSArray * esmArray = [NSJSONSerialization JSONObjectWithData:receiveData
                                                                     options:NSJSONReadingAllowFragments
                                                                       error:&e];
             if ( e != nil) {
@@ -203,7 +229,7 @@ didReceiveResponse:(NSURLResponse *)response
                 return;
             }
             
-            if(webESMArray == nil){
+            if(esmArray == nil){
                 NSLog(@"ERROR: web esm array is null.");
                 [session finishTasksAndInvalidate];
                 [session invalidateAndCancel];
@@ -212,7 +238,7 @@ didReceiveResponse:(NSURLResponse *)response
             NSString * jsonStr = [[NSString alloc] initWithData:receiveData encoding:NSUTF8StringEncoding];
             NSLog(@"%@", jsonStr);
             
-            [self setWebESMsWithArray:webESMArray];
+            [self setWebESMsWithArray:esmArray];
             receiveData = [[NSMutableData alloc] init];
             [session finishTasksAndInvalidate];
             [session invalidateAndCancel];
@@ -220,7 +246,7 @@ didReceiveResponse:(NSURLResponse *)response
     }else{
         [super URLSession:session task:task didCompleteWithError:error];
     }
-
+    
 }
 
 - (void)URLSession:(NSURLSession *)session didBecomeInvalidWithError:(NSError *)error{
@@ -380,7 +406,7 @@ didReceiveResponse:(NSURLResponse *)response
     } @finally {
         
     }
-
+    
 }
 
 - (void) refreshNotifications {
@@ -422,7 +448,7 @@ didReceiveResponse:(NSURLResponse *)response
     for (int i=0; i<results.count; i++) {
         
         EntityESMSchedule * schedule = results[i];
-    
+        
         NSNumber * randomize = schedule.randomize_schedule;
         if(randomize == nil) randomize = @0;
         
@@ -456,19 +482,19 @@ didReceiveResponse:(NSURLResponse *)response
         // NSLog(@"[%@] Fire Date: %@ (%@)", scheduleId, fireDate, [AWAREUtils getTargetNSDate:[NSDate new] hour:[fireHour intValue] nextDay:YES]);
         
         NSDictionary * userInfo = [[NSDictionary alloc] initWithObjects:@[originalFireDate, randomize, scheduleId,expiration]
-                                                               forKeys:@[@"original_fire_date", @"randomize",
-                                                                         @"schedule_id", @"expiration_threshold"]];
+                                                                forKeys:@[@"original_fire_date", @"randomize",
+                                                                          @"schedule_id", @"expiration_threshold"]];
         if(![fireHour isEqualToNumber:@-1]){
             // [TEST]
             // fireDate = [AWAREUtils getTargetNSDate:[NSDate new] hour:11 minute:30 second:0 nextDay:YES];
             [AWAREUtils sendLocalNotificationForMessage:schedule.noitification_body
-                                      title:schedule.notification_title
-                                  soundFlag:YES
-                                   category:categoryWebESM
-                                   fireDate:fireDate
-                             repeatInterval:NSCalendarUnitDay
-                                   userInfo:userInfo
-                            iconBadgeNumber:1];
+                                                  title:schedule.notification_title
+                                              soundFlag:YES
+                                               category:categoryIOSESM
+                                               fireDate:fireDate
+                                         repeatInterval:NSCalendarUnitDay
+                                               userInfo:userInfo
+                                        iconBadgeNumber:1];
         }
         // WIP: Quick ESM (YES/NO and Text)
         
@@ -481,7 +507,7 @@ didReceiveResponse:(NSURLResponse *)response
     [self getValidESMsWithDatetime:[NSDate new]];
     
     [self setLatestValue:[NSString stringWithFormat:@"You have %ld scheduled notification(s)", results.count]];
-// });
+    // });
 }
 
 
@@ -498,7 +524,7 @@ didReceiveResponse:(NSURLResponse *)response
     }
     
     for (UILocalNotification * notification in notifications) {
-        if([notification.category isEqualToString:categoryWebESM]) {
+        if([notification.category isEqualToString:categoryIOSESM]) {
             [[UIApplication sharedApplication] cancelLocalNotification:notification];
         }
     }
@@ -517,7 +543,7 @@ didReceiveResponse:(NSURLResponse *)response
     NSMutableArray * validSchedules = [[NSMutableArray alloc] init];
     AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
     for (UILocalNotification * notification in notifications) {
-        if([notification.category isEqualToString:categoryWebESM]) {
+        if([notification.category isEqualToString:categoryIOSESM]) {
             //@"fire_date",@"randomize",@"schedule_id"
             NSDictionary * userInfo = notification.userInfo;
             NSDate * fireDate = notification.fireDate;
@@ -557,8 +583,8 @@ didReceiveResponse:(NSURLResponse *)response
             }
         }
     }
-
-
+    
+    
     
     for (UILocalNotification * notif  in validSchedules) {
         NSString * scheduleId = [notif.userInfo objectForKey:@"schedule_id"];
@@ -619,7 +645,7 @@ didReceiveResponse:(NSURLResponse *)response
     // get fixed esm schedules
     NSFetchRequest *req = [[NSFetchRequest alloc] initWithEntityName:NSStringFromClass([EntityESMSchedule class])];
     [req setEntity:[NSEntityDescription entityForName:NSStringFromClass([EntityESMSchedule class])
-                                        inManagedObjectContext:delegate.managedObjectContext]];
+                               inManagedObjectContext:delegate.managedObjectContext]];
     [req setFetchLimit:1];
     [req setPredicate:[NSPredicate predicateWithFormat:@"(start_date <= %@) AND (end_date >= %@) AND (fire_hour=-1)", datetime, datetime]];
     
@@ -646,7 +672,7 @@ didReceiveResponse:(NSURLResponse *)response
         NSArray *sortDescriptors = [NSArray arrayWithObjects:sort,nil];
         NSArray *sortedEsms = [childEsms sortedArrayUsingDescriptors:sortDescriptors];
         for (EntityESM * esm in sortedEsms) {
-
+            
             esm.timestamp = [AWAREUtils getUnixTimestamp:datetime];
             [esmSchedules addObject:esm];
             NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
@@ -660,7 +686,7 @@ didReceiveResponse:(NSURLResponse *)response
                   esm.esm_trigger, date, esm.esm_title );
         }
     }
-
+    
     ////////////////////////////////////////////
     // return
     return esmSchedules;
@@ -711,16 +737,16 @@ didReceiveResponse:(NSURLResponse *)response
 
 ////////////////////////////////////////////////////////////
 
-- (NSString *)getURLFromSettings:(NSArray *)settings key:(NSString *)key{
-    NSString * url;
+- (NSString *)getStringFromSettings:(NSArray *)settings key:(NSString *)key{
+    NSString * value;
     for (NSDictionary * dict in settings ) {
-        for (NSString * key in [dict allKeys]) {
-            if([key isEqualToString:key]){
-                url = [dict objectForKey:key];
-            }
+        NSString * setting = [dict objectForKey:@"setting"];
+        if( [setting isEqualToString:key]){
+            value = [dict objectForKey:@"value"];
+            break;
         }
     }
-    return url;
+    return value;
 }
 
 //////////////////////////////////////////////////////////////
@@ -788,9 +814,22 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
         NSURLProtectionSpace *protectionSpace = [challenge protectionSpace];
         SecTrustRef trust = [protectionSpace serverTrust];
         NSURLCredential *credential = [NSURLCredential credentialForTrust:trust];
-    
+        
         completionHandler(NSURLSessionAuthChallengeUseCredential,credential);
     }
+}
+
+
+//////////////////////////////////////////////////
+
++ (BOOL)isAppearedThisSection{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    return [userDefaults boolForKey:@"key_esm_appeared_section"];
+}
+
++ (void)setAppearedState:(BOOL)state{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setBool:state forKey:@"key_esm_appeared_section"];
 }
 
 

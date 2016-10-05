@@ -6,7 +6,7 @@
 //  Copyright © 2016 Yuuki NISHIYAMA. All rights reserved.
 //
 
-#import "WebESMViewController.h"
+#import "IOSESMViewController.h"
 // #import "AWAREEsmViewController.h"
 #import "ESM.h"
 #import "AWAREStudy.h"
@@ -15,7 +15,8 @@
 #import "SingleESMObject.h"
 #import "ESMStorageHelper.h"
 #import "AppDelegate.h"
-#import "WebESM.h"
+// #import "WebESM.h"
+#import "IOSESM.h"
 #import "EntityESMHistory.h"
 #import "EntityESM.h"
 
@@ -30,7 +31,7 @@
 //
 //@end
 
-@implementation WebESMViewController
+@implementation IOSESMViewController
 {
     CGRect frameRect;
     int WIDTH_VIEW;
@@ -63,7 +64,8 @@
     
     int esmNumber;
     
-    WebESM * webESM;
+    // WebESM * webESM;
+    IOSESM * iOSESM;
     NSArray * esms;
     int currentESMNumber;
     
@@ -127,9 +129,14 @@
     
     esmNumber = 0;
     
-    webESM = [[WebESM alloc] initWithAwareStudy:study dbType:AwareDBTypeCoreData];
-    [webESM allowsCellularAccess];
-    [webESM allowsDateUploadWithoutBatteryCharging];
+//    webESM = [[WebESM alloc] initWithAwareStudy:study dbType:AwareDBTypeCoreData];
+//    [webESM allowsCellularAccess];
+//    [webESM allowsDateUploadWithoutBatteryCharging];
+    
+    iOSESM = [[IOSESM alloc] initWithAwareStudy:study dbType:AwareDBTypeCoreData];
+    [iOSESM allowsCellularAccess];
+    [iOSESM allowsDateUploadWithoutBatteryCharging];
+    
     currentESMNumber = 0;
     
     [_mainScrollView setBackgroundColor:[UIColor whiteColor]];
@@ -139,7 +146,9 @@
                 object:nil
                 queue:nil
                 usingBlock:^(NSNotification *notif) {
-                    if ([[notif.userInfo objectForKey:@"KEY_UPLOAD_SENSOR_NAME"] isEqualToString:SENSOR_PLUGIN_WEB_ESM]) {
+                    if ([[notif.userInfo objectForKey:@"KEY_UPLOAD_SENSOR_NAME"] isEqualToString:SENSOR_PLUGIN_WEB_ESM] ||
+                        [[notif.userInfo objectForKey:@"KEY_UPLOAD_SENSOR_NAME"] isEqualToString:@"esms"] ||
+                        [[notif.userInfo objectForKey:@"KEY_UPLOAD_SENSOR_NAME"] isEqualToString:SENSOR_PLUGIN_IOS_ESM] ) {
                         dispatch_async(dispatch_get_main_queue(), ^{
                             NSLog(@"%@", notif.debugDescription);
                             //[SVProgressHUD showSuccessWithStatus:@"Thank you for your submission!"];
@@ -226,7 +235,8 @@
     }
     
     // Get ESM using an ESMStorageHelper
-    esms = [webESM getValidESMsWithDatetime:[NSDate new]];
+    // esms = [webESM getValidESMsWithDatetime:[NSDate new]];
+    esms = [iOSESM getValidESMsWithDatetime:[NSDate new]];
     if(esms != nil && esms.count > currentESMNumber){
         // set title bar
         self.navigationItem.title = [NSString stringWithFormat:@"%d/%ld", currentESMNumber+1, esms.count];
@@ -326,8 +336,8 @@
     [self addCommonContents:esm];
     
     UITextView * textView = [[UITextView alloc] initWithFrame:CGRectMake(mainContentRect.origin.x, totalHight, mainContentRect.size.width, mainContentRect.size.height)];
-    textView.layer.borderWidth = 1.0f;    // 枠線の幅
-    textView.layer.cornerRadius = 5.0f;   // 角の丸み
+    textView.layer.borderWidth = 1.0f;
+    textView.layer.cornerRadius = 5.0f;
     //    [textView.layer setBorderColor:(__bridge CGColorRef _Nullable)([UIColor lightGrayColor])];
     [freeTextViews addObject:textView];
     [textView setDelegate:self];
@@ -1326,10 +1336,10 @@
 - (void) pushedSubmitButton:(id) senser {
     NSLog(@"Submit button was pushed!");
     
-    NSNumber *NEW = @0;
+    // NSNumber *NEW = @0;
     NSNumber *DISMISSED = @1;
     NSNumber *ANSWERED = @2;
-    NSNumber *EXPIRED = @3;
+    // NSNumber *EXPIRED = @3;
     
     AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
     // the status of the ESM (0-new, 1-dismissed, 2-answered, 3-expired) -> Defualt is zero(0).
@@ -1615,8 +1625,10 @@
         NSLog(@"%@", error);
         
         [delegate.managedObjectContext reset];
-        webESM = [[WebESM alloc] initWithAwareStudy:study dbType:AwareDBTypeCoreData];
-        esms = [webESM getValidESMsWithDatetime:[NSDate new]];
+        // webESM = [[WebESM alloc] initWithAwareStudy:study dbType:AwareDBTypeCoreData];
+        // esms = [webESM getValidESMsWithDatetime:[NSDate new]];
+        iOSESM = [[IOSESM alloc] initWithAwareStudy:study dbType:AwareDBTypeCoreData];
+        esms = [iOSESM getValidESMsWithDatetime:[NSDate new]];
         
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"AWARE can not save your answer" message:@"Please push submit button again." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [alert show];
@@ -1628,27 +1640,19 @@
             [self viewDidAppear:NO];
             return ;
         }else{
-            // Thank You!!
-            // UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Thank for submitting your answer!"
-            //                                                message:@""
-            //                                               delegate:nil
-            //                                      cancelButtonTitle:@"OK"
-            //                                      otherButtonTitles:nil];
-            // [alert show];
-            
             esmNumber = 0;
             currentESMNumber = 0;
 
-            [webESM setUploadingState:NO];
-            [webESM syncAwareDB];
-            // [webESM performSelector:@selector(syncAwareDB) withObject:nil afterDelay:1];
-            [webESM refreshNotifications];
+//            [webESM setUploadingState:NO];
+//            [webESM syncAwareDB];
+//            [webESM refreshNotifications];
+            [iOSESM setUploadingState:NO];
+            [iOSESM syncAwareDB];
+            [iOSESM refreshNotifications];
             
             // progress view
             [SVProgressHUD showWithStatus:@"uploading"];
         }
-        
-        // [self.navigationController popToRootViewControllerAnimated:YES];
     } else {
         
     }
@@ -1711,11 +1715,12 @@
             currentESMNumber = 0;
         }
     }else{
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"AWARE can not save your answer" message:@"Please push submit button again." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"AWARE could not save your answer" message:@"Please push submit button again." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [alert show];
         
         [delegate.managedObjectContext reset];
-        esms = [webESM getValidESMsWithDatetime:[NSDate new]];
+        // esms = [webESM getValidESMsWithDatetime:[NSDate new]];
+        esms = [iOSESM getValidESMsWithDatetime:[NSDate new]];
         //[self viewDidAppear:NO];
     }
 }
@@ -1772,6 +1777,7 @@
                                                                          type:@0
                                                                         title:@""
                                                                  instructions:@""
+                                                                       submit:@""
                                                           expirationThreshold:@0
                                                                       trigger:@""];
     

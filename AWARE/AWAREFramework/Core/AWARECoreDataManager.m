@@ -50,6 +50,8 @@
     NSString * syncProgress;
     
     NSMutableArray * bufferArray;
+    
+    NSString * tableName;
 }
 
 - (instancetype)initWithAwareStudy:(AWAREStudy *)study
@@ -59,6 +61,7 @@
     if(self != nil){
         awareStudy = study;
         sensorName = name;
+        tableName = name;
         entityName = entity;
         isUploading = NO;
         httpStartTimestamp = [[NSDate new] timeIntervalSince1970];
@@ -115,11 +118,18 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:dbSessionFinishNotification object:nil];
 }
 
+
 - (void)syncAwareDBInBackground{
+    [self syncAwareDBInBackgroundWithSensorName:sensorName];
+}
+
+- (void)syncAwareDBInBackgroundWithSensorName:(NSString *)name{
     
 //    if([sensorName isEqualToString:@"push_notification_device_tokens"]){
 //        NSLog(@"***");
 //    }
+    
+    tableName = name;
     
     // check wifi state
     if(isUploading){
@@ -427,7 +437,8 @@
 - (void) uploadSensorDataInBackground {
     
     NSString *deviceId = [self getDeviceId];
-    NSString *url = [self getInsertUrl:sensorName];
+    // NSString *url = [self getInsertUrl:sensorName];
+    NSString *url = [self getInsertUrl:tableName];
     
     // Get sensor data from CoreData
     if(unixtimeOfUploadingData == nil){
@@ -478,8 +489,6 @@
             
             //Get NSManagedObject from managedObjectContext by using fetch setting
             NSArray *results = [private executeFetchRequest:fetchRequest error:nil] ;
-            
-            
             
             [self unlockDB];
             

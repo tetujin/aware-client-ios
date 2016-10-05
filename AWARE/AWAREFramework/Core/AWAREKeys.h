@@ -21,6 +21,9 @@ extern NSString* const KEY_UPLOAD_MARK;
 extern NSString* const KEY_SENSORS;
 extern NSString* const KEY_PLUGINS;
 extern NSString* const KEY_PLUGIN;
+extern NSString* const KEY_USER_SENSORS;
+extern NSString* const KEY_USER_PLUGINS;
+
 
 extern NSString* const KEY_STUDY_QR_CODE;
 
@@ -90,6 +93,7 @@ extern NSString* const SENSOR_PLUGIN_PEDOMETER;
 extern NSString* const SENSOR_PLUGIN_WEB_ESM;
 extern NSString* const SENSOR_PLUGIN_BLE_HEARTRATE;
 extern NSString* const SENSOR_AWARE_DEBUG;
+extern NSString* const SENSOR_PLUGIN_IOS_ESM;
 
 
 extern NSString* const SENSOR_PLUGIN_MSBAND_SENSORS_CALORIES;

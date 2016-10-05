@@ -119,6 +119,16 @@
     
 }
 
+- (void)clientManager:(MSBClientManager *)clientManager clientDidConnect:(MSBClient *)client{
+    
+}
 
+- (void)clientManager:(MSBClientManager *)clientManager clientDidDisconnect:(MSBClient *)client{
+    
+}
+
+- (void)clientManager:(MSBClientManager *)clientManager client:(MSBClient *)client didFailToConnectWithError:(NSError *)error{
+    
+}
 
 @end

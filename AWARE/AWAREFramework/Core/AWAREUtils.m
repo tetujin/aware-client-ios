@@ -279,12 +279,13 @@ This method provides a system uuid.
                             second:(int) second
                            nextDay:(BOOL)nextDay {
     NSCalendar *calendar = [NSCalendar currentCalendar];
-    NSDateComponents *dateComps = [calendar components:NSYearCalendarUnit |
-                                   NSMonthCalendarUnit  |
-                                   NSDayCalendarUnit    |
-                                   NSHourCalendarUnit   |
-                                   NSMinuteCalendarUnit |
-                                   NSSecondCalendarUnit fromDate:nsDate];
+    NSDateComponents *dateComps = [calendar components:NSCalendarUnitYear   |
+                                                       NSCalendarUnitMonth  |
+                                                       NSCalendarUnitDay    |
+                                                       NSCalendarUnitHour   |
+                                                       NSCalendarUnitMinute |
+                                                       NSCalendarUnitSecond
+                                              fromDate:nsDate];
     [dateComps setDay:dateComps.day];
     [dateComps setHour:hour];
     [dateComps setMinute:minute];

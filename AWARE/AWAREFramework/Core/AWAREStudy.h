@@ -41,6 +41,15 @@ typedef enum: NSInteger {
 - (BOOL) clearAllSetting;
 - (void) refreshAllSetting;
 
+- (void) setUserSensorSettingWithKey:(NSString *)key value:(NSString *)setting;
+- (void) setUserPluginSettingWithKey:(NSString *)key value:(NSString *)setting;
+
+- (void) removeUserSensorSettingWithKey:(NSString *)key;
+- (void) removeUserPluginSettingWithKey:(NSString *)key;
+
+- (void) removeAllUserSensors;
+- (void) removeAllUserPlugins;
+
 // Getter
 - (NSString *) getDeviceId;
 - (NSString* ) getMqttServer;
@@ -61,6 +70,7 @@ typedef enum: NSInteger {
 // Sensor and plugin infromation
 - (NSArray *) getSensors;
 - (NSArray *) getPlugins;
+- (NSArray *) getPluginSettingsWithKey:(NSString *) key;
 
 // Check some thing
 - (BOOL) isAvailable;

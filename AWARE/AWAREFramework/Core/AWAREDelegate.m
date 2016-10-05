@@ -16,7 +16,8 @@
 #import "Debug.h"
 #import "PushNotification.h"
 #import "BalacnedCampusESMScheduler.h"
-#import "ESM.h"
+// #import "ESM.h"
+#import "IOSESM.h"
 #import "WebESM.h"
 #import "Labels.h"
 #import "GoogleCalPush.h"
@@ -116,7 +117,8 @@
     NSLog(@"Turn 'ON' the auto sleep mode on this app");
     [UIApplication sharedApplication].idleTimerDisabled = NO;
     
-    [ESM setAppearedState:NO];
+    //[ESM setAppearedState:NO];
+    [IOSESM setAppearedState:NO];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
@@ -344,39 +346,39 @@ forLocalNotification:(UILocalNotification *)notification
                    triggerTime:notification.fireDate
                   answeredTime:[NSDate new]];
     } else if ([identifier isEqualToString:@"edit_label_action"]){
-        NSString * inputText = [responseInfo objectForKey:UIUserNotificationActionResponseTypedTextKey];
-        ESM * esm = [[ESM alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
-        NSMutableDictionary *dic =  [AWAREEsmUtils getEsmFormatDictionary:(NSMutableDictionary *)notification.userInfo
-                                                             withTimesmap:[AWAREUtils getUnixTimestamp:notification.fireDate]
-                                                                  devieId:[awareStudy getDeviceId]];
-        //        [dic setObject:unixtime forKey:@"timestamp"];
-        [dic setObject:[AWAREUtils getUnixTimestamp:[NSDate new]] forKey:KEY_ESM_USER_ANSWER_TIMESTAMP];
-        [dic setObject:[awareStudy getDeviceId] forKey:@"device_id"];
-        [dic setObject:@2 forKey:KEY_ESM_STATUS];
-        [dic setObject:inputText forKey:KEY_ESM_USER_ANSWER];
-        [esm saveData:dic];
+//        NSString * inputText = [responseInfo objectForKey:UIUserNotificationActionResponseTypedTextKey];
+//        ESM * esm = [[ESM alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
+//        NSMutableDictionary *dic =  [AWAREEsmUtils getEsmFormatDictionary:(NSMutableDictionary *)notification.userInfo
+//                                                             withTimesmap:[AWAREUtils getUnixTimestamp:notification.fireDate]
+//                                                                  devieId:[awareStudy getDeviceId]];
+//        //        [dic setObject:unixtime forKey:@"timestamp"];
+//        [dic setObject:[AWAREUtils getUnixTimestamp:[NSDate new]] forKey:KEY_ESM_USER_ANSWER_TIMESTAMP];
+//        [dic setObject:[awareStudy getDeviceId] forKey:@"device_id"];
+//        [dic setObject:@2 forKey:KEY_ESM_STATUS];
+//        [dic setObject:inputText forKey:KEY_ESM_USER_ANSWER];
+//        [esm saveData:dic];
     } else if ([identifier isEqualToString:@"esm_answer_yes_action"]){
-        ESM * esm = [[ESM alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
-        NSMutableDictionary *dic =  [AWAREEsmUtils getEsmFormatDictionary:(NSMutableDictionary *)notification.userInfo
-                                                             withTimesmap:[AWAREUtils getUnixTimestamp:notification.fireDate]
-                                                                  devieId:[awareStudy getDeviceId]];
-        //        [dic setObject:unixtime forKey:@"timestamp"];
-        [dic setObject:[AWAREUtils getUnixTimestamp:[NSDate new]] forKey:KEY_ESM_USER_ANSWER_TIMESTAMP];
-        [dic setObject:[awareStudy getDeviceId] forKey:@"device_id"];
-        [dic setObject:@2 forKey:KEY_ESM_STATUS];
-        [dic setObject:@"YES" forKey:KEY_ESM_USER_ANSWER];
-        [esm saveData:dic];
+//        ESM * esm = [[ESM alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
+//        NSMutableDictionary *dic =  [AWAREEsmUtils getEsmFormatDictionary:(NSMutableDictionary *)notification.userInfo
+//                                                             withTimesmap:[AWAREUtils getUnixTimestamp:notification.fireDate]
+//                                                                  devieId:[awareStudy getDeviceId]];
+//        //        [dic setObject:unixtime forKey:@"timestamp"];
+//        [dic setObject:[AWAREUtils getUnixTimestamp:[NSDate new]] forKey:KEY_ESM_USER_ANSWER_TIMESTAMP];
+//        [dic setObject:[awareStudy getDeviceId] forKey:@"device_id"];
+//        [dic setObject:@2 forKey:KEY_ESM_STATUS];
+//        [dic setObject:@"YES" forKey:KEY_ESM_USER_ANSWER];
+//        [esm saveData:dic];
     } else if ([identifier isEqualToString:@"esm_answer_no_action"]){
-        ESM * esm = [[ESM alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
-        NSMutableDictionary *dic =  [AWAREEsmUtils getEsmFormatDictionary:(NSMutableDictionary *)notification.userInfo
-                                                             withTimesmap:[AWAREUtils getUnixTimestamp:notification.fireDate]
-                                                                  devieId:[awareStudy getDeviceId]];
-        //        [dic setObject:unixtime forKey:@"timestamp"];
-        [dic setObject:[AWAREUtils getUnixTimestamp:[NSDate new]] forKey:KEY_ESM_USER_ANSWER_TIMESTAMP];
-        [dic setObject:[awareStudy getDeviceId] forKey:@"device_id"];
-        [dic setObject:@2 forKey:KEY_ESM_STATUS];
-        [dic setObject:@"NO" forKey:KEY_ESM_USER_ANSWER];
-        [esm saveData:dic];
+//        ESM * esm = [[ESM alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
+//        NSMutableDictionary *dic =  [AWAREEsmUtils getEsmFormatDictionary:(NSMutableDictionary *)notification.userInfo
+//                                                             withTimesmap:[AWAREUtils getUnixTimestamp:notification.fireDate]
+//                                                                  devieId:[awareStudy getDeviceId]];
+//        //        [dic setObject:unixtime forKey:@"timestamp"];
+//        [dic setObject:[AWAREUtils getUnixTimestamp:[NSDate new]] forKey:KEY_ESM_USER_ANSWER_TIMESTAMP];
+//        [dic setObject:[awareStudy getDeviceId] forKey:@"device_id"];
+//        [dic setObject:@2 forKey:KEY_ESM_STATUS];
+//        [dic setObject:@"NO" forKey:KEY_ESM_USER_ANSWER];
+//        [esm saveData:dic];
     }
     
     
@@ -404,22 +406,23 @@ fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
         [_sharedAWARECore.sharedAwareStudy refreshStudy];
     }else if([awareCategory isEqualToString:@"upload"]){
         [_sharedAWARECore.sharedSensorManager syncAllSensorsWithDBInForeground];
-    }else if ([awareCategory isEqualToString:@"web_esm"]){
-        NSString * trigger = [userInfo objectForKey:@"trigger"];
-        NSString * title = [userInfo objectForKey:@"title"];
-        NSNumber * firedTimestamp = [AWAREUtils getUnixTimestamp:[NSDate new]];
-        NSNumber * scheduledTimestamp = [userInfo objectForKey:@"schedule"];
-        if(firedTimestamp == nil) firedTimestamp = @0;
-        WebESM * webESM = [[WebESM alloc] initWithAwareStudy:_sharedAWARECore.sharedAwareStudy dbType:AwareDBTypeCoreData];
-        [webESM saveESMAnswerWithTimestamp:scheduledTimestamp
-                                  deviceId:[_sharedAWARECore.sharedAwareStudy getDeviceId]
-                                   esmJson:[webESM convertNSArraytoJsonStr:@[userInfo]]
-                                esmTrigger:trigger
-                    esmExpirationThreshold:@0
-                    esmUserAnswerTimestamp:firedTimestamp
-                             esmUserAnswer:title
-                                 esmStatus:@0];
     }
+//    else if ([awareCategory isEqualToString:@"web_esm"]){
+//        NSString * trigger = [userInfo objectForKey:@"trigger"];
+//        NSString * title = [userInfo objectForKey:@"title"];
+//        NSNumber * firedTimestamp = [AWAREUtils getUnixTimestamp:[NSDate new]];
+//        NSNumber * scheduledTimestamp = [userInfo objectForKey:@"schedule"];
+//        if(firedTimestamp == nil) firedTimestamp = @0;
+//        WebESM * webESM = [[WebESM alloc] initWithAwareStudy:_sharedAWARECore.sharedAwareStudy dbType:AwareDBTypeCoreData];
+//        [webESM saveESMAnswerWithTimestamp:scheduledTimestamp
+//                                  deviceId:[_sharedAWARECore.sharedAwareStudy getDeviceId]
+//                                   esmJson:[webESM convertNSArraytoJsonStr:@[userInfo]]
+//                                esmTrigger:trigger
+//                    esmExpirationThreshold:@0
+//                    esmUserAnswerTimestamp:firedTimestamp
+//                             esmUserAnswer:title
+//                                 esmStatus:@0];
+//    }
     completionHandler(UIBackgroundFetchResultNoData);
 }
 

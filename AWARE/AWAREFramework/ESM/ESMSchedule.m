@@ -18,7 +18,7 @@
 - (instancetype)init{
     self = [self initWithIdentifier:@""
                       scheduledESMs:nil
-                          fireDates:nil
+                          fireHours:nil
                               title:@""
                                body:@""
                            interval:NSCalendarUnitDay
@@ -34,7 +34,7 @@
 - (instancetype)initWithIdentifier:(NSString *)esmIdentifier{
     return [self initWithIdentifier:esmIdentifier
                       scheduledESMs:nil
-                          fireDates:nil
+                        fireHours:nil
                               title:@""
                                body:@""
                            interval:NSCalendarUnitDay
@@ -45,7 +45,7 @@
 
 - (instancetype)initWithIdentifier:(NSString *)esmIdentifier
                      scheduledESMs:(NSMutableArray *)esms
-                         fireDates:(NSMutableArray *)dates
+                             fireHours:(NSArray *)hours
                              title:(NSString *)notificationTitle
                               body:(NSString *)notificationBody
                           interval:(NSCalendarUnit)interval
@@ -53,7 +53,7 @@
                               icon:(NSInteger)iconNumber{
     return [self initWithIdentifier:esmIdentifier
                       scheduledESMs:esms
-                          fireDates:dates
+                             fireHours:hours
                               title:notificationTitle
                                body:notificationBody
                            interval:interval
@@ -64,31 +64,85 @@
 
 - (instancetype)initWithIdentifier:(NSString *)esmIdentifier
                      scheduledESMs:(NSMutableArray *)esms
-                         fireDates:(NSMutableArray *)dates
+                             fireHours:(NSArray *)hours
                              title:(NSString *)notificationTitle
                               body:(NSString *)notificationBody
                           interval:(NSCalendarUnit)interval
                           category:(NSString *)notificationCategory
                               icon:(NSInteger)iconNumber
                            timeout:(NSInteger)second{
+    return [self initWithIdentifier:esmIdentifier
+                      scheduledESMs:esms
+                              fireHours:hours
+                              title:notificationTitle
+                               body:notificationBody
+                           interval:interval
+                           category:notificationCategory
+                               icon:iconNumber
+                            timeout:second
+                  randomizeSchedule:@0
+                            context:@[]
+                          startDate:nil
+                            endDate:nil];
+}
+
+- (instancetype)initWithIdentifier:(NSString *)esmIdentifier
+                     scheduledESMs:(NSMutableArray *) esms
+                             fireHours:(NSArray *) hours
+                             title:(NSString *) notificationTitle
+                              body:(NSString *) notificationBody
+                          interval:(NSCalendarUnit) interval
+                          category:(NSString *) notificationCategory
+                              icon:(NSInteger) iconNumber
+                           timeout:(NSInteger) second
+                 randomizeSchedule:(NSNumber *) randomizeSchedule
+                           context:(NSArray  *) context
+                         startDate:(NSDate *)start
+                           endDate:(NSDate *)end{
     self = [super init];
     if (self != nil) {
         helper = [[ESMStorageHelper alloc] init];
         _identifier = esmIdentifier;
         _scheduledESMs = esms;
-        _fireDates = dates;
+        if(hours != nil){
+            _fireHours = hours;
+            NSMutableArray * fireDates = [[NSMutableArray alloc] init]; // Generate fire NSDates
+            NSDate * now = [NSDate new];
+            for (NSNumber * hour in hours) {
+                [fireDates addObject:[AWAREUtils getTargetNSDate:now hour:[hour intValue] nextDay:YES]];
+            }
+            _fireDates = fireDates;
+        }else{
+            _fireHours = [[NSMutableArray alloc] initWithArray:@[@(-1)]];
+            _fireDates = [[NSMutableArray alloc] init];
+        }
         _title = notificationTitle;
         _body = notificationBody;
         _interval = interval;
         _category = notificationCategory;
         _icon = iconNumber;
         _timeoutSecond = second;
+        _randomizeSchedule = randomizeSchedule;
         if (_scheduledESMs == nil) _scheduledESMs = [[NSMutableArray alloc] init];
         if (_fireDates == nil) _fireDates = [[NSMutableArray alloc] init];
         if (_timeoutSecond <= 0) _timeoutSecond = 60*10; // defualt timeout duration is 10 min
+        if (context !=nil){
+            _context = context;
+        }else{
+            _context = @[];
+        }
+        if(start != nil){
+            _startDate = start;
+        }else{
+            _startDate = [NSDate new];
+        }
+        if(end != nil){
+            _endDate = end;
+        }else{
+            _endDate = [NSDate distantFuture];
+        }
     }
     return self;
-
 }
 
 - (void)addESM:(NSDictionary *)esm{

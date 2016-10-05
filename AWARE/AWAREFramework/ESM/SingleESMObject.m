@@ -147,6 +147,7 @@ NSString* const KEY_ESM_SCALE_STEP = @"esm_scale_step";
                                                  type:(NSNumber *) type
                                                 title:(NSString *) title
                                          instructions:(NSString *) instructions
+                                               submit:(NSString *) submit
                                   expirationThreshold:(NSNumber *) expirationThreshold
                                               trigger:(NSString*) trigger {
     NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
@@ -154,7 +155,7 @@ NSString* const KEY_ESM_SCALE_STEP = @"esm_scale_step";
     [dic setObject:deviceId forKey:@"device_id"];
     [dic setObject:type forKey:KEY_ESM_TYPE];
     [dic setObject:title forKey:KEY_ESM_TITLE];
-    [dic setObject:@"" forKey:KEY_ESM_SUBMIT];
+    [dic setObject:submit forKey:KEY_ESM_SUBMIT];
     [dic setObject:instructions forKey:KEY_ESM_INSTRUCTIONS];
     [dic setObject:[[NSArray alloc] init] forKey:KEY_ESM_RADIOS];
     [dic setObject:[[NSArray alloc] init] forKey:KEY_ESM_CHECKBOXES];
@@ -205,6 +206,7 @@ NSString* const KEY_ESM_SCALE_STEP = @"esm_scale_step";
                                                                      type:@1
                                                                     title:title
                                                              instructions:instructions
+                                                                   submit:submit
                                                       expirationThreshold:expirationThreshold
                                                                   trigger:trigger];
     return [NSMutableDictionary dictionaryWithObject:freeTextEsm forKey:@"esm"];
@@ -237,7 +239,8 @@ NSString* const KEY_ESM_SCALE_STEP = @"esm_scale_step";
                                                             timestamp:timestamp
                                                                  type:@2
                                                                 title:title
-                                                         instructions:instructions
+                                                            instructions:instructions
+                                                                  submit:submit
                                                   expirationThreshold:expirationThreshold
                                                               trigger:trigger];
     [radiosEsm setObject:radios forKey:KEY_ESM_RADIOS];
@@ -273,6 +276,7 @@ NSString* const KEY_ESM_SCALE_STEP = @"esm_scale_step";
                                                                       type:@3
                                                                      title:title
                                                               instructions:instructions
+                                                                    submit:submit
                                                        expirationThreshold:expirationThreshold
                                                                    trigger:trigger];
     [checkBoxEsm setObject:checkBoxes forKey:KEY_ESM_CHECKBOXES];
@@ -314,6 +318,7 @@ NSString* const KEY_ESM_SCALE_STEP = @"esm_scale_step";
                                                                     type:@4
                                                                    title:title
                                                             instructions:instructions
+                                                                  submit:submit
                                                      expirationThreshold:expirationThreshold
                                                                  trigger:trigger];
     [likertEsm setObject:likertMax forKey:KEY_ESM_LIKERT_MAX];
@@ -352,6 +357,7 @@ NSString* const KEY_ESM_SCALE_STEP = @"esm_scale_step";
                                                                          type:@5
                                                                         title:title
                                                                  instructions:instructions
+                                                                       submit:submit
                                                           expirationThreshold:expirationThreshold
                                                                       trigger:trigger];
     [quickAnswerEsm setObject:quickAnswers forKey:KEY_ESM_QUICK_ANSWERS];
@@ -397,6 +403,7 @@ NSString* const KEY_ESM_SCALE_STEP = @"esm_scale_step";
                                                                   type:@6
                                                                  title:title
                                                           instructions:instructions
+                                                                submit:submit
                                                    expirationThreshold:expirationThreshold
                                                                trigger:trigger];
     [scaleEsm setObject:min forKey:KEY_ESM_SCALE_MIN];
@@ -431,6 +438,7 @@ NSString* const KEY_ESM_SCALE_STEP = @"esm_scale_step";
                                                                         type:@7
                                                                        title:title
                                                                 instructions:instructions
+                                                                      submit:submit
                                                          expirationThreshold:expirationThreshold
                                                                      trigger:trigger];
     return [NSMutableDictionary dictionaryWithObject:datePickerEsm forKey:@"esm"];
@@ -460,6 +468,7 @@ NSString* const KEY_ESM_SCALE_STEP = @"esm_scale_step";
                                                                         type:@8
                                                                        title:title
                                                                 instructions:instructions
+                                                                      submit:submit
                                                          expirationThreshold:expirationThreshold
                                                                      trigger:trigger];
     return [NSMutableDictionary dictionaryWithObject:datePickerEsm forKey:@"esm"];

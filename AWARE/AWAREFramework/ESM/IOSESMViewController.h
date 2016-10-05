@@ -9,7 +9,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface WebESMViewController : UIViewController <UIScrollViewDelegate, UITextViewDelegate, UIGestureRecognizerDelegate, UITextFieldDelegate, UIAlertViewDelegate>
+@interface IOSESMViewController : UIViewController <UIScrollViewDelegate, UITextViewDelegate, UIGestureRecognizerDelegate, UITextFieldDelegate, UIAlertViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UIScrollView *mainScrollView;
 @property(nonatomic, strong) UITapGestureRecognizer *singleTap;
