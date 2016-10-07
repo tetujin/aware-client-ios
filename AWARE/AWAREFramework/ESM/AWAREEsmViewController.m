@@ -9,14 +9,14 @@
 //
 
 #import "AWAREEsmViewController.h"
-// #import "ESM.h"
+#import "ESM.h"
 #import "AWAREStudy.h"
 #import "AWAREKeys.h"
 #import "ViewController.h"
 #import "SingleESMObject.h"
 #import "ESMStorageHelper.h"
 #import "AppDelegate.h"
-#import "IOSESM.h"
+// #import "IOSESM.h"
 
 #import "PamSchema.h"
 #import "QuartzCore/CALayer.h"
@@ -1183,7 +1183,7 @@
     NSLog(@"Submit button was pushed!");
     
     NSMutableArray *array = [[NSMutableArray alloc] init];
-    IOSESM *esm = [[IOSESM alloc] initWithAwareStudy:study
+    ESM *esm = [[ESM alloc] initWithAwareStudy:study
                                         dbType:AwareDBTypeTextFile];
     
     // NSNumber *NEW = @0;
@@ -1542,7 +1542,7 @@
     NSMutableArray *answers = [[NSMutableArray alloc] init];
     
     // Create
-    IOSESM *esm = [[IOSESM alloc] initWithAwareStudy:study dbType:AwareDBTypeTextFile];
+    ESM *esm = [[ESM alloc] initWithAwareStudy:study dbType:AwareDBTypeTextFile];
     NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
     NSString *deviceId = [esm getDeviceId];
     for (int i=0; i<uiElements.count; i++) {
