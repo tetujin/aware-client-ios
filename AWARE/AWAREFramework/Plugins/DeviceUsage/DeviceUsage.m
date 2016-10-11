@@ -11,6 +11,8 @@
 #import "AppDelegate.h"
 #import "EntityDeviceUsage.h"
 
+NSString* const AWARE_PREFERENCES_STATUS_DEVICE_USAGE = @"status_plugin_device_usage";
+
 @implementation DeviceUsage {
     double lastTime;
     int _notifyTokenForDidChangeLockStatus;
@@ -24,6 +26,10 @@
                               dbType:dbType];
     if (self) {
         [self setCSVHeader:@[@"timestamp",@"device_id",@"elapsed_device_on",@"elapsed_device_off"]];
+    
+        [self setTypeAsPlugin];
+        
+        [self addDefaultSettingWithBool:@NO key:AWARE_PREFERENCES_STATUS_DEVICE_USAGE desc:@"true or false to activate or deactivate accelerometer sensor."];
     }
     return self;
 }

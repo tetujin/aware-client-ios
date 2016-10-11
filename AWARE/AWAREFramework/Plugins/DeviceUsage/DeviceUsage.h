@@ -8,6 +8,8 @@
 
 #import "AWARESensor.h"
 
+extern NSString* const AWARE_PREFERENCES_STATUS_DEVICE_USAGE;
+
 @interface DeviceUsage : AWARESensor <AWARESensorDelegate>
 
 @end

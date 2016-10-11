@@ -10,6 +10,10 @@
 #import "EntityMagnetometer.h"
 #import "AppDelegate.h"
 
+NSString* const AWARE_PREFERENCES_STATUS_MAGNETOMETER = @"status_magnetometer";
+NSString* const AWARE_PREFERENCES_FREQUENCY_MAGNETOMETER = @"frequency_magnetometer";
+NSString* const AWARE_PREFERENCES_FREQUENCY_HZ_MAGNETOMETER = @"frequency_hz_magnetometer";
+
 @implementation Magnetometer{
     CMMotionManager* manager;
     double defaultInterval;
@@ -26,6 +30,11 @@
         defaultInterval = 0.1f;
         dbWriteInterval = 30;
         [self setCSVHeader:@[@"timestamp",@"device_id", @"double_values_0", @"double_values_1",@"double_values_2", @"accuracy",@"label"]];
+    
+        [self addDefaultSettingWithBool:@NO       key:AWARE_PREFERENCES_STATUS_MAGNETOMETER        desc:@"e.g., True or False"];
+        [self addDefaultSettingWithNumber:@200000 key:AWARE_PREFERENCES_FREQUENCY_MAGNETOMETER     desc:@"e.g., 200000 (normal), 60000 (UI), 20000 (game), 0 (fastest)."];
+        [self addDefaultSettingWithNumber:@0      key:AWARE_PREFERENCES_FREQUENCY_HZ_MAGNETOMETER  desc:@"e.g., 1-100hz (default=0)"];
+
     }
     return self;
 }
@@ -59,6 +68,12 @@
     }else{
         frequency = defaultInterval;
     }
+    
+    double tempHz = [self getSensorSetting:settings withKey:AWARE_PREFERENCES_FREQUENCY_HZ_MAGNETOMETER];
+    if(tempHz > 0){
+        frequency = 1.0f/tempHz;
+    }
+    
     int buffer = dbWriteInterval/frequency;
     return [self startSensorWithInterval:frequency bufferSize:buffer];
 }

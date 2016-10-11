@@ -11,6 +11,10 @@
 
 @interface IOSESM : AWARESensor <AWARESensorDelegate>
 
+extern NSString * const AWARE_PREFERENCES_STATUS_PLUGIN_IOS_ESM;
+extern NSString * const AWARE_PREFERENCES_PLUGIN_IOS_ESM_TABLE_NAME;
+extern NSString * const AWARE_PREFERENCES_PLUGIN_IOS_ESM_CONFIG_URL;
+
 - (BOOL) setWebESMsWithSchedule:(ESMSchedule *) esmSchedule;
 // - (void) setWebESMsWithArray:(NSArray *) webESMArray;
 

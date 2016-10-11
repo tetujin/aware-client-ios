@@ -8,6 +8,8 @@
 
 #import "AWARESensor.h"
 
+extern NSString * const AWARE_PREFERENCES_STATUS_NTPTIME;
+
 @interface NTPTime : AWARESensor <AWARESensorDelegate>
 
 @end

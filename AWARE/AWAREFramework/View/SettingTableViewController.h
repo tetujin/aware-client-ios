@@ -8,6 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@interface SettingTableViewController : UITableViewController
+@interface SettingTableViewController : UITableViewController<UITableViewDelegate,UIAlertViewDelegate>
+
+@property (nonatomic, strong) NSString *selectedRowKey;
+
+@property (nonatomic, strong) NSMutableArray *settingRows;
 
 @end

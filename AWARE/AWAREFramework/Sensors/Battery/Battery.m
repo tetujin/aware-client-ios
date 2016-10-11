@@ -75,6 +75,8 @@
         [batteryDischargeSensor trackDebugEvents];
         previousBatteryLevel = [UIDevice currentDevice].batteryLevel*100;
         [self batteryLevelChanged:nil];
+        
+        [self addDefaultSettingWithBool:@NO key:[NSString stringWithFormat:@"status_%@",SENSOR_BATTERY] desc:@"true or false"];
     }
     return self;
 }

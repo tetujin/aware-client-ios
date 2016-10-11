@@ -18,6 +18,9 @@
  */
 // #import "MDBluetoothManager.h"
 
+extern NSString* const AWARE_PREFERENCES_STATUS_BLUETOOTH;
+extern NSString* const AWARE_PREFERENCES_FREQUENCY_BLUETOOTH;
+
 //@interface Bluetooth : AWARESensor <AWARESensorDelegate, CBCentralManagerDelegate, CBPeripheralDelegate,MDBluetoothObserverProtocol>
 @interface Bluetooth : AWARESensor <AWARESensorDelegate, CBCentralManagerDelegate, CBPeripheralDelegate>
 @property (nonatomic, strong) CBCentralManager *myCentralManager;

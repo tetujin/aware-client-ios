@@ -18,6 +18,9 @@
 #import <mach/processor_info.h>
 #import <mach/mach_host.h>
 
+NSString* const AWARE_PREFERENCES_STATUS_PROCESSOR = @"status_processor";
+NSString* const AWARE_PREFERENCES_FREQUENCY_PROCESSOR = @"frequency_processor";
+
 @implementation Processor{
     NSTimer * sensingTimer;
 }
@@ -30,6 +33,9 @@
                           bufferSize:0];
     if (self) {
         [self setCSVHeader:@[@"timestamp",@"device_id",@"double_last_user",@"double_last_system",@"double_last_idle",@"double_user_load",@"double_system_load",@"double_idle"]];
+        
+        [self addDefaultSettingWithBool:@NO key:AWARE_PREFERENCES_STATUS_PROCESSOR desc:@"true or false to activate or deactivate sensor."];
+        [self addDefaultSettingWithNumber:@10 key:AWARE_PREFERENCES_FREQUENCY_PROCESSOR desc:@"frequency in seconds to update the processor load, by default is 10 seconds."];
     }
     return self;
 }

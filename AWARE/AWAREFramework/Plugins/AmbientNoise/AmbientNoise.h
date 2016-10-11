@@ -21,6 +21,17 @@
 #define kAudioFilePath @"rawAudio.m4a"
 #define kRawAudioDirectory @"rawAudioData"
 
+extern NSString * const AWARE_PREFERENCES_STATUS_PLUGIN_AMBIENT_NOISE;
+
+/** How frequently do we sample the microphone (default = 5) in minutes */
+extern NSString * const AWARE_PREFERENCES_FREQUENCY_PLUGIN_AMBIENT_NOISE;
+
+/** For how long we listen (default = 30) in seconds */
+extern NSString * const AWARE_PREFERENCES_PLUGIN_AMBIENT_NOISE_SAMPLE_SIZE;
+
+/** Silence threshold (default = 50) in dB */
+extern NSString * const AWARE_PREFERENCES_PLUGIN_AMBIENT_NOISE_SILENCE_THRESHOLD;
+
 @interface AmbientNoise : AWARESensor <AWARESensorDelegate, EZMicrophoneDelegate, EZRecorderDelegate, EZAudioFFTDelegate>
 //
 // The microphone component

@@ -8,6 +8,10 @@
 
 #import "Orientation.h"
 
+NSString * const AWARE_PREFERENCES_STATUS_ORIENTATION = @"status_orientation";
+NSString * const AWARE_PREFERENCES_FREQUENCY_ORIENTATION = @"frequency_orientation";
+NSString * const AWARE_PREFERENCES_FREQUENCY_HZ_ORIENTATION = @"frequency_hz_orientation";
+
 @implementation Orientation{
     NSString * KEY_ORIENTATION_TIMESTAMP;
     NSString * KEY_ORIENTATION_DEVICE_ID;

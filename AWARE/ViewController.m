@@ -11,6 +11,7 @@
 // Views
 #import "ViewController.h"
 #import "GoogleLoginViewController.h"
+#import "SettingTableViewController.h"
 #import "AWAREEsmViewController.h"
 #import "AWARECore.h"
 #import "WebViewController.h"
@@ -48,18 +49,6 @@
 @end
 
 @implementation ViewController{
-    /**  Keys for contetns of a table view raw */
-    /// A key for a title in a raw
-    NSString *KEY_CEL_TITLE;
-    /// A key for a description in a raw
-    NSString *KEY_CEL_DESC;
-    /// A key for a image in a raw
-    NSString *KEY_CEL_IMAGE;
-    /// A key for a status in a raw
-    NSString *KEY_CEL_STATE;
-    /// A key for a sensor_name in a raw
-    NSString *KEY_CEL_SENSOR_NAME;
-    
     /** Study Settings */
     /// A deault intrval for uploading sensor data
     double uploadInterval;
@@ -86,17 +75,12 @@
     CLLocationManager * locationManager;
     
     UIView *rootView;
+    
+    NSString * selectedRow;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    /// Init keys and default interval
-    KEY_CEL_TITLE = @"title";
-    KEY_CEL_DESC = @"desc";
-    KEY_CEL_IMAGE = @"image";
-    KEY_CEL_STATE = @"state";
-    KEY_CEL_SENSOR_NAME = @"sensorName";
     
     rootView = self.navigationController.view;
     
@@ -201,6 +185,9 @@
     } else if ([segue.identifier isEqualToString:@"webView"]) {
         WebViewController *webViewController = [segue destinationViewController];
         webViewController.url = webViewURL;
+    } else if([segue.identifier isEqualToString:@"settingView"]){
+        SettingTableViewController * settingViewController = [segue destinationViewController];
+        settingViewController.selectedRowKey = selectedRow;
     }
 }
 
@@ -408,7 +395,7 @@
     // Ambient Noise
     [_sensors addObject:[self getCelContent:@"Ambient Noise" desc:@"Anbient noise sensing by using a microphone on a smartphone." image:@"ic_action_ambient_noise" key:SENSOR_AMBIENT_NOISE]];
     // Activity Recognition
-    [_sensors addObject:[self getCelContent:@"Activity Recognition" desc:@"iOS Activity Recognition" image:@"ic_action_running" key:SENSOR_PLUGIN_GOOGLE_ACTIVITY_RECOGNITION]];
+    [_sensors addObject:[self getCelContent:@"Activity Recognition" desc:@"iOS Activity Recognition" image:@"ic_action_running" key:SENSOR_IOS_ACTIVITY_RECOGNITION]];
     // Device Usage
     [_sensors addObject:[self getCelContent:@"Device Usage" desc:@"This plugin measures how much you use your device" image:@"ic_action_device_usage" key:SENSOR_PLUGIN_DEVICE_USAGE]];
     // Open Weather
@@ -597,6 +584,7 @@
 //    NSLog(@"%ld is selected!", indexPath.row);
     NSDictionary *item = (NSDictionary *)[_sensors objectAtIndex:indexPath.row];
     NSString *key = [item objectForKey:KEY_CEL_SENSOR_NAME];
+    selectedRow = key;
     // Debug Model ON/OFF
     if ([key isEqualToString:@"STUDY_CELL_DEBUG"]) { //Debug
         UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Debug Statement" message:@"" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"ON", @"OFF", nil];
@@ -758,10 +746,7 @@
         alert.tag = 20;
         [alert show];
         
-    }
-    
-    
-    if ([key isEqualToString:SENSOR_ACCELEROMETER]){
+    } else {
         [self performSegueWithIdentifier:@"settingView" sender:self];
     }
 }
@@ -881,7 +866,7 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
         if(buttonIndex == 1){
             [sensorManager stopAndRemoveAllSensors];
             [awareStudy clearAllSetting];
-            [sensorManager removeAllFilesFromDocumentRoot];
+            // [sensorManager removeAllFilesFromDocumentRoot];
             [self pushedStudyRefreshButton:nil];
             UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"The study is quitted"
                                                              message:nil

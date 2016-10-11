@@ -41,14 +41,6 @@ typedef enum: NSInteger {
 - (BOOL) clearAllSetting;
 - (void) refreshAllSetting;
 
-- (void) setUserSensorSettingWithKey:(NSString *)key value:(NSString *)setting;
-- (void) setUserPluginSettingWithKey:(NSString *)key value:(NSString *)setting;
-
-- (void) removeUserSensorSettingWithKey:(NSString *)key;
-- (void) removeUserPluginSettingWithKey:(NSString *)key;
-
-- (void) removeAllUserSensors;
-- (void) removeAllUserPlugins;
 
 // Getter
 - (NSString *) getDeviceId;
@@ -71,6 +63,13 @@ typedef enum: NSInteger {
 - (NSArray *) getSensors;
 - (NSArray *) getPlugins;
 - (NSArray *) getPluginSettingsWithKey:(NSString *) key;
+
+
+- (BOOL) isSensorSettingWithKey:(NSString *)key;
+
+// - (void) setUserSettingWithNumber:(NSNumber *)number key:(NSString*)key;
+- (void) setUserSensorSettingWithString:(NSString *)str  key:(NSString *)key;
+- (void) setUserPluginSettingWithString:(NSString *)str  key:(NSString *)key statusKey:(NSString *)statusKey;
 
 // Check some thing
 - (BOOL) isAvailable;

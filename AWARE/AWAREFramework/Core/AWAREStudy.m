@@ -362,93 +362,6 @@ didCompleteWithError:(NSError *)error {
     readingState = YES;
 }
 
-///////////////////////////////////////////////////
-
-- (void)setUserSensorSettingWithKey:(NSString *)key value:(NSString *)setting{
-    NSUserDefaults * userDefaults = [NSUserDefaults standardUserDefaults];
-    NSArray * userSensors = [userDefaults objectForKey:KEY_USER_SENSORS];
-    NSMutableArray * newUserSensors = [[NSMutableArray alloc] initWithArray:userSensors];
-    if(userSensors != nil){
-        for (NSDictionary * preSensorSetting in userSensors) {
-            for (NSString * preKey in [preSensorSetting allKeys]) {
-                if ([preKey isEqualToString:key]) {
-                    [newUserSensors removeObject:preSensorSetting];
-                    [newUserSensors addObject:[[NSDictionary alloc] initWithObjects:@[setting] forKeys:@[key]]];
-                    break;
-                }
-            }
-        }
-    }
-    [userDefaults setObject:newUserSensors forKey:KEY_USER_SENSORS];
-    [userDefaults synchronize];
-}
-
-- (void) setUserPluginSetting:(NSDictionary *) setting {
-//    NSUserDefaults * userDefaults = [NSUserDefaults standardUserDefaults];
-//    NSArray * userSensors = [userDefaults objectForKey:KEY_USER_SENSORS];
-//    NSMutableArray * newUserSensors = [[NSMutableArray alloc] initWithArray:userSensors];
-//    if(userSensors != nil){
-//        for (NSDictionary * preSensorSetting in userSensors) {
-//            for (NSString * preKey in [preSensorSetting allKeys]) {
-//                if ([preKey isEqualToString:key]) {
-//                    [newUserSensors removeObject:preSensorSetting];
-//                    [newUserSensors addObject:[[NSDictionary alloc] initWithObjects:@[setting] forKeys:@[key]]];
-//                    break;
-//                }
-//            }
-//        }
-//    }
-//    [userDefaults setObject:newUserSensors forKey:KEY_USER_SENSORS];
-//    [userDefaults synchronize];
-    
-    
-//    {
-//        plugin = "";
-//        settings =     (
-//                        {
-//                            setting = "status_plugin_ambient_noise";
-//                            value = true;
-//                        }
-//                        );
-//    },
-}
-
-
-- (void) removeUserSensorSettingWithKey:(NSString *)key{
-    NSUserDefaults * userDefaults = [NSUserDefaults standardUserDefaults];
-    NSArray * userSensors = [userDefaults objectForKey:KEY_USER_SENSORS];
-    NSMutableArray * newUserSensors = [[NSMutableArray alloc] initWithArray:userSensors];
-    if(userSensors != nil){
-        for (NSDictionary * preSensorSetting in userSensors) {
-            for (NSString * preKey in [preSensorSetting allKeys]) {
-                if ([preKey isEqualToString:key]) {
-                    [newUserSensors removeObject:preSensorSetting];
-                    break;
-                }
-            }
-        }
-    }
-    [userDefaults setObject:newUserSensors forKey:KEY_USER_SENSORS];
-    [userDefaults synchronize];
-}
-
-- (void) removeUserPluginSettingWithKey:(NSString *)key{
-    
-}
-
-
-- (void) removeAllUserSensors{
-    NSUserDefaults * userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults removeObjectForKey:KEY_USER_SENSORS];
-    [userDefaults synchronize];
-}
-
-- (void) removeAllUserPlugins{
-    NSUserDefaults * userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults removeObjectForKey:KEY_USER_PLUGINS];
-    [userDefaults synchronize];
-}
-
 ///////////////////////////////////////////////////////
 
 /**
@@ -458,7 +371,8 @@ didCompleteWithError:(NSError *)error {
  */
 - (bool) addNewDeviceToAwareServer:(NSString *)url withDeviceId:(NSString *) uuid {
     NSLog(@"Create an aware_device table on the aware server");
-    [self createTable:url withDeviceId:uuid];
+    [self createTable:url
+         withDeviceId:uuid];
     
     // preparing for insert device information
     url = [NSString stringWithFormat:@"%@/aware_device/insert", url];
@@ -666,12 +580,16 @@ didCompleteWithError:(NSError *)error {
  * @return a refresh query is sent(YES) or not sent(NO) as a BOOL value
  */
 - (BOOL) refreshStudy {
-//    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-//    NSString *url = [userDefaults objectForKey:KEY_STUDY_QR_CODE];
     NSString * url = [self getStudyURL];
-    if (url != nil) {
+    if (![url isEqualToString:@""]) {
         [self setStudyInformationWithURL:url];
         return YES;
+    }else{
+        AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+        AWARECore * core = delegate.sharedAWARECore;
+        // [core.sharedSensorManager stopAndRemoveAllSensors];
+        [core.sharedSensorManager startAllSensorsWithStudy:self];
+        // [core.sharedSensorManager createAllTables];
     }
     return NO;
 }
@@ -804,17 +722,102 @@ didCompleteWithError:(NSError *)error {
  */
 - (NSArray *) getSensors {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    return [userDefaults objectForKey:KEY_SENSORS];
+    NSArray * studySettings = [userDefaults objectForKey:KEY_SENSORS];
+    NSArray * userSettings = [userDefaults objectForKey:KEY_USER_SENSORS];
+    
+    NSMutableArray * tempSettings  = [[NSMutableArray alloc] init];
+    NSMutableArray * currentSettings = [[NSMutableArray alloc] initWithArray:tempSettings];
+    /*
+     Marge the study and user setting
+     If the keys are duplicate, the study settings are overwrited by user settings.
+    */
+//    if(studySettings!=nil && userSettings!=nil){
+//        // overwrite duplicate settings
+//        for (NSDictionary * studySetting in studySettings) {
+//            NSDictionary * tempSetting = [[NSDictionary alloc] initWithDictionary:studySetting];
+//            NSString * studyKey   = [studySetting objectForKey:@"setting"];
+//            for (NSDictionary * userSetting in userSettings) {
+//                NSString * userKey = [userSetting objectForKey:@"setting"];
+//                if( [studyKey isEqualToString:userKey] ) {
+//                    tempSetting = [[NSDictionary alloc] initWithDictionary:userSetting];
+//                }
+//            }
+//            [tempSettings addObject:tempSetting];
+//        }
+        
+//        tempSettings = [[NSMutableArray alloc] initWithArray:studySettings];
+//
+//        // add deficient settings
+//        for (NSDictionary * userSetting in userSettings) {
+//            NSString * userKey   = [userSetting objectForKey:@"setting"];
+//            for (NSDictionary * tempSetting in tempSettings) {
+//                NSString * tempKey   = [tempSetting objectForKey:@"setting"];
+//                if (![tempKey isEqualToString:userKey]) {
+//                    [currentSettings addObject:userSetting];
+//                    break;
+//                }
+//            }
+//        }
+//
+//        return currentSettings;
+//    }else if(studySettings != nil){
+//        return studySettings;
+//    }else if(userSettings != nil){
+//        return userSettings;
+//    }
+    
+    NSArray * studySensors = [userDefaults objectForKey:KEY_SENSORS];
+    NSArray * userSensors  = [userDefaults objectForKey:KEY_USER_SENSORS];
+    
+    if(studySensors != nil){
+        return studySensors;
+    }else if(userSensors != nil){
+        return userSensors;
+    }else{
+        return nil;
+    }
 }
+
 
 /**
  * Get plugin settings from a local storage as a NSArray object
  * @return plugin settings as a NSArray object
  */
 - (NSArray *) getPlugins{
+    
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    return [userDefaults objectForKey:KEY_PLUGINS];
+    
+    NSArray * studyPlugins = [userDefaults objectForKey:KEY_PLUGINS];
+    NSArray * userPlugins  = [userDefaults objectForKey:KEY_USER_PLUGINS];
+    
+    if(studyPlugins != nil){
+        return studyPlugins;
+    }else if(userPlugins != nil){
+        return userPlugins;
+    }else{
+        return nil;
+    }
 }
+
+
+/**
+ * Get user's sensor settings from a local storage as a NSArray object
+ * @return user's sensor settings as a NSArray object
+ */
+- (NSArray *) getUserSensors {
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    return [userDefaults objectForKey:KEY_USER_SENSORS];
+}
+
+/**
+ * Get user's plugin settings from a local storage as a NSArray object
+ * @return user's plugin settings as a NSArray object
+ */
+- (NSArray *) getUserPlugins{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    return [userDefaults objectForKey:KEY_USER_PLUGINS];
+}
+
 
 
 /**
@@ -840,6 +843,91 @@ didCompleteWithError:(NSError *)error {
     
     return nil;
 }
+
+
+////////////////////////////////////////////
+
+/**
+ * Get plugin settings using a key of a setting element
+ * @return Plugin settings as a NSArray
+ */
+- (NSArray *) getUserPluginSettingsWithKey:(NSString *) key {
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSArray * plugins = [userDefaults objectForKey:KEY_USER_PLUGINS];
+    
+    if(plugins != nil){
+        for (NSDictionary * plugin in plugins) {
+            NSArray *pluginSettings = [plugin objectForKey:@"settings"];
+            for (NSDictionary* pluginSetting in pluginSettings) {
+                NSString * setting = [pluginSetting objectForKey:@"setting"];
+                if ([setting isEqualToString:key]){
+                    return pluginSettings;
+                }
+            }
+        }
+    }
+    return nil;
+}
+
+/**
+ * Get plugin settings using a key of a setting element
+ * @return Plugin settings as a NSArray
+ */
+- (void) removeUserPluginWithKey:(NSString *) key {
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSArray * plugins = [userDefaults objectForKey:KEY_USER_PLUGINS];
+    
+    NSMutableArray * newPlugins = [[NSMutableArray alloc] init];
+    
+    if(plugins != nil){
+        for (NSDictionary * plugin in plugins) {
+            bool isKeyExist = false;
+            NSArray *pluginSettings = [plugin objectForKey:@"settings"];
+            for (NSDictionary* pluginSetting in pluginSettings) {
+                NSString * setting = [pluginSetting objectForKey:@"setting"];
+                if ([setting isEqualToString:key]){
+                    isKeyExist = true;
+                }
+            }
+            if(!isKeyExist){
+                [newPlugins addObject:plugin];
+            }
+        }
+    }
+    [userDefaults setObject:newPlugins forKey:KEY_USER_PLUGINS];
+}
+
+/**
+ * Get plugin settings using a key of a setting element
+ * @return Plugin settings as a NSArray
+ */
+- (void) removeUserPluginSettingWithKey:(NSString *) key {
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSArray * plugins = [userDefaults objectForKey:KEY_USER_PLUGINS];
+    
+    NSMutableArray * newPlugins = [[NSMutableArray alloc] init];
+    
+    if(plugins != nil){
+        for (NSDictionary * plugin in plugins) {
+            bool isKeyExist = false;
+            NSArray *pluginSettings = [plugin objectForKey:@"settings"];
+            for (NSDictionary* pluginSetting in pluginSettings) {
+                NSString * setting = [pluginSetting objectForKey:@"setting"];
+                if ([setting isEqualToString:key]){
+                    isKeyExist = true;
+                }
+            }
+            if(!isKeyExist){
+                [newPlugins addObject:plugin];
+            }
+        }
+    }
+    [userDefaults setObject:newPlugins forKey:KEY_USER_PLUGINS];
+}
+
 
 
 /**
@@ -884,6 +972,8 @@ didCompleteWithError:(NSError *)error {
     [userDefaults removeObjectForKey:KEY_WEBSERVICE_SERVER];
     [userDefaults removeObjectForKey:KEY_SENSORS];
     [userDefaults removeObjectForKey:KEY_PLUGINS];
+    [userDefaults removeObjectForKey:KEY_USER_SENSORS];
+    [userDefaults removeObjectForKey:KEY_USER_PLUGINS];
     [userDefaults removeObjectForKey:KEY_STUDY_QR_CODE];
     [userDefaults removeObjectForKey:@"key_aware_study_configuration_json_text"];
     [userDefaults synchronize];
@@ -914,6 +1004,71 @@ didCompleteWithError:(NSError *)error {
     studyId = [userDefaults objectForKey:KEY_STUDY_ID];
     webserviceServer = [userDefaults objectForKey:KEY_WEBSERVICE_SERVER];
 }
+
+
+
+
+
+/////////////////////////////////////////
+
+
+//- (BOOL) isSensorSettingWithKey:(NSString *)key{
+//    for (NSDictionary * dict in [self getSensors]) {
+//        if ([[dict objectForKey:@"setting"] isEqualToString:key]) {
+//            return YES;
+//        }
+//    }
+//    return NO;
+//}
+
+
+- (void) setUserSensorSettingWithString:(NSString *) str key:(NSString*)key{
+    NSArray * sensorSettings = [self getUserSensors];
+    NSMutableArray * currentSettings = [[NSMutableArray alloc] init];
+    for (NSDictionary * dict in sensorSettings) {
+        if ([[dict objectForKey:@"setting"] isEqualToString:key]) {
+        }else{
+            [currentSettings addObject:dict];
+        }
+    }
+    NSDictionary * setting = [[NSDictionary alloc] initWithObjects:@[key,str] forKeys:@[@"setting",@"value"]];
+    [currentSettings addObject:setting];
+    NSUserDefaults * userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setObject:currentSettings forKey:KEY_USER_SENSORS];
+}
+
+
+- (void) setUserPluginSettingWithString:(NSString *) str key:(NSString*)key statusKey:(NSString *)statusKey {
+    
+    NSArray * pluginSettings = [self getUserPluginSettingsWithKey:statusKey];
+    
+    if(pluginSettings != nil){
+        [self removeUserPluginWithKey:statusKey];
+    }
+
+    NSMutableArray * currentSettings = [[NSMutableArray alloc] init];
+    
+    for (NSDictionary * dict in pluginSettings) {
+        if ([[dict objectForKey:@"setting"] isEqualToString:key]) {
+        }else{
+            [currentSettings addObject:dict];
+        }
+    }
+    NSDictionary * setting = [[NSDictionary alloc] initWithObjects:@[key,str] forKeys:@[@"setting",@"value"]];
+    [currentSettings addObject:setting];
+    
+    // "plugin","settings"->"setting","valu"
+    NSDictionary * newPlugin = [[NSDictionary alloc] initWithObjects:@[@"",currentSettings] forKeys:@[@"plugin",@"settings"]];
+    
+    NSMutableArray * plugins = [[NSMutableArray alloc] initWithArray:[self getUserPlugins]];
+    [plugins addObject:newPlugin];
+    
+    NSUserDefaults * userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setObject:plugins forKey:KEY_USER_PLUGINS];
+}
+
+/////////////////////////////////////////////////////////////
+
 
 /**
  * Get a Wi-Fi network reachable as a boolean

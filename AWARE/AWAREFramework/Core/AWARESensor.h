@@ -23,6 +23,12 @@ typedef enum: NSInteger {
 } AwareDBType;
 
 
+typedef enum: NSInteger {
+    AwareSettingTypeBool   = 0,
+    AwareSettingTypeString = 1,
+    AwareSettingTypeNumber = 2
+} AwareSettingType;
+
 
 @protocol AWARESensorDelegate <NSObject>
 
@@ -49,6 +55,27 @@ typedef enum: NSInteger {
 - (instancetype) initWithAwareStudy:(AWAREStudy *) study sensorName:(NSString *)name dbEntityName:(NSString *)entity;
 - (instancetype) initWithAwareStudy:(AWAREStudy *) study sensorName:(NSString *)name dbEntityName:(NSString *)entity dbType:(AwareDBType)dbType;
 - (instancetype) initWithAwareStudy:(AWAREStudy *) study sensorName:(NSString *)name dbEntityName:(NSString *)entity dbType:(AwareDBType)dbType bufferSize:(int)buffer;
+
+- (NSArray *) getDefaultSettings;
+
+- (void) addDefaultSettingWithBool:(NSNumber *)boolValue   key:(NSString *)key desc:(NSString *)desc;
+- (void) addDefaultSettingWithString:(NSString *)strValue key:(NSString *)key desc:(NSString *)desc;
+- (void) addDefaultSettingWithNumber:(NSNumber *)numberValue key:(NSString *)key desc:(NSString *)desc;
+
+// set & get settings
+//- (void) setDefaultSettingWithString:(NSString *) value key:(NSString *) key;
+//- (void) setDefaultSettingWithNumber:(NSNumber *) value key:(NSString *) key;
+//- (void) setDefaultSettings:(NSDictionary *) dict;
+//- (NSDictionary *) getDefaultSettings;
+//- (NSString *) getKeyForDefaultSettings;
+
+- (void) setSensorStatusKey:(NSString *)key;
+- (NSString *) getSensorStatusKey;
+
+- (void) setTypeAsPlugin;
+- (void) setTypeAsSensor;
+- (bool) isPlugin;
+- (bool) isSensor;
 
 // save debug events
 - (void) trackDebugEvents;

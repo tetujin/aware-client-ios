@@ -24,6 +24,18 @@ NSString* const KEY_PLUGIN       = @"plugin";
 NSString* const KEY_USER_SENSORS = @"key_user_sensors";
 NSString* const KEY_USER_PLUGINS = @"key_user_plugins";
 
+/// Init keys and default interval
+NSString* const KEY_CEL_TITLE = @"title";
+NSString* const KEY_CEL_DESC = @"desc";
+NSString* const KEY_CEL_IMAGE = @"image";
+NSString* const KEY_CEL_STATE = @"state";
+NSString* const KEY_CEL_SENSOR_NAME = @"sensor_name";
+NSString* const KEY_CEL_SETTING_TYPE = @"setting_type";
+NSString* const KEY_CEL_SETTING_VALUE = @"setting_value";
+NSString* const KEY_CEL_SETTING_TYPE_NUMBER = @"setting_type_number";
+NSString* const KEY_CEL_SETTING_TYPE_STRING = @"setting_type_string";
+NSString* const KEY_CEL_SETTING_TYPE_BOOL   = @"setting_type_boolean";
+
 NSString* const KEY_STUDY_QR_CODE = @"study_qr_code";
 
 NSString* const KEY_MQTT_PASS     = @"mqtt_password";

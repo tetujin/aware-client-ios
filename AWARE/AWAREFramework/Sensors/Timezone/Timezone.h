@@ -8,6 +8,9 @@
 
 #import "AWARESensor.h"
 
+extern NSString* const AWARE_PREFERENCES_STATUS_TIMEZONE;
+extern NSString* const AWARE_PREFERENCES_FREQUENCY_TIMEZONE;
+
 @interface Timezone : AWARESensor <AWARESensorDelegate>
 
 - (BOOL) startSensor;

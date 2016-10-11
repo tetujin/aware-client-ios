@@ -12,6 +12,9 @@
 #import "EntityBluetooth.h"
 #import "AppDelegate.h"
 
+NSString * const AWARE_PREFERENCES_STATUS_BLUETOOTH    = @"status_bluetooth";
+NSString * const AWARE_PREFERENCES_FREQUENCY_BLUETOOTH = @"frequency_bluetooth";
+
 @implementation Bluetooth {
     //MDBluetoothManager * mdBluetoothManager;
     NSTimer * scanTimer;
@@ -46,6 +49,9 @@
         KEY_BLUETOOTH_LABLE = @"label";
         
         [self setCSVHeader:@[KEY_BLUETOOTH_TIMESTAMP, KEY_BLUETOOTH_DEVICE_ID, KEY_BLUETOOTH_ADDRESS, KEY_BLUETOOTH_NAME, KEY_BLUETOOTH_RSSI, KEY_BLUETOOTH_LABLE]];
+        
+        [self addDefaultSettingWithBool:@NO key:AWARE_PREFERENCES_STATUS_BLUETOOTH desc:@"true or false"];
+        [self addDefaultSettingWithNumber:@(60*5) key:AWARE_PREFERENCES_FREQUENCY_BLUETOOTH desc:@"Defualt value is 300 second."];
     }
     return self;
 }

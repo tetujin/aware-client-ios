@@ -24,6 +24,25 @@ extern NSString* const KEY_PLUGIN;
 extern NSString* const KEY_USER_SENSORS;
 extern NSString* const KEY_USER_PLUGINS;
 
+/**  Keys for contetns of a table view raw */
+/// A key for a title in a raw
+extern NSString* const KEY_CEL_TITLE;
+/// A key for a description in a raw
+extern NSString* const KEY_CEL_DESC;
+/// A key for a image in a raw
+extern NSString* const KEY_CEL_IMAGE;
+/// A key for a status in a raw
+extern NSString* const KEY_CEL_STATE;
+/// A key for a sensor_name in a raw
+extern NSString* const KEY_CEL_SENSOR_NAME;
+/// A key for a sensor setting type
+extern NSString* const KEY_CEL_SETTING_TYPE;
+/// A key for a sensor current setting
+extern NSString* const KEY_CEL_SETTING_VALUE;
+extern NSString* const KEY_CEL_SETTING_TYPE_NUMBER;
+extern NSString* const KEY_CEL_SETTING_TYPE_STRING;
+extern NSString* const KEY_CEL_SETTING_TYPE_BOOL;
+
 
 extern NSString* const KEY_STUDY_QR_CODE;
 

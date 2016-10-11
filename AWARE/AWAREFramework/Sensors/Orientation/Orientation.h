@@ -8,6 +8,10 @@
 
 #import "AWARESensor.h"
 
+extern NSString * const AWARE_PREFERENCES_STATUS_ORIENTATION;
+extern NSString * const AWARE_PREFERENCES_FREQUENCY_ORIENTATION;
+extern NSString * const AWARE_PREFERENCES_FREQUENCY_HZ_ORIENTATION;
+
 @interface Orientation : AWARESensor <AWARESensorDelegate>
 
 - (BOOL) startSensor;

@@ -12,6 +12,10 @@
 
 @interface LinearAccelerometer : AWARESensor <AWARESensorDelegate>
 
+extern NSString* const AWARE_PREFERENCES_STATUS_LINEAR_ACCELEROMETER;
+extern NSString* const AWARE_PREFERENCES_FREQUENCY_LINEAR_ACCELEROMETER;
+extern NSString* const AWARE_PREFERENCES_FREQUENCY_HZ_LINEAR_ACCELEROMETER;
+
 - (BOOL) startSensor;
 - (BOOL) startSensorWithInterval:(double)interval;
 - (BOOL) startSensorWithInterval:(double)interval bufferSize:(int)buffer;

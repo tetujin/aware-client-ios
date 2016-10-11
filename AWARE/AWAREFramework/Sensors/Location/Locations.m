@@ -10,6 +10,11 @@
 #import "EntityLocation.h"
 #import "AppDelegate.h"
 
+
+NSString * const AWARE_PREFERENCES_STATUS_LOCATION_GPS = @"status_location_gps";
+NSString * const AWARE_PREFERENCES_FREQUENCY_GPS = @"frequency_gps";
+NSString * const AWARE_PREFERENCES_MIN_GPS_ACCURACY = @"min_gps_accuracy";
+
 @implementation Locations{
     NSTimer *locationTimer;
     IBOutlet CLLocationManager *locationManager;
@@ -35,6 +40,9 @@
                              @"provider",
                              @"accuracy",
                              @"label"]];
+        [self addDefaultSettingWithBool:@NO key:AWARE_PREFERENCES_STATUS_LOCATION_GPS desc:@"true or false"];
+        [self addDefaultSettingWithNumber:@180 key:AWARE_PREFERENCES_FREQUENCY_GPS desc:@"Default value is 180 sec"];
+        [self addDefaultSettingWithNumber:@250 key:AWARE_PREFERENCES_MIN_GPS_ACCURACY desc:@"Default value is 250 m"];
     }
     return self;
 }

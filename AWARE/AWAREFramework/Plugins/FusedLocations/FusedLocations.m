@@ -12,6 +12,11 @@
 #import "EntityLocation.h"
 #import "EntityLocationVisit.h"
 
+
+NSString * const AWARE_PREFERENCES_STATUS_GOOGLE_FUSED_LOCATION  = @"status_google_fused_location";
+NSString * const AWARE_PREFERENCES_ACCURACY_GOOGLE_FUSED_LOCATION  = @"accuracy_google_fused_location";
+NSString * const AWARE_PREFERENCES_FREQUENCY_GOOGLE_FUSED_LOCATION  = @"frequency_google_fused_location";
+
 @implementation FusedLocations {
     NSTimer *locationTimer;
     IBOutlet CLLocationManager *locationManager;
@@ -35,6 +40,13 @@
         
         // Make a visit location sensor
         visitLocationSensor = [[VisitLocations alloc] initWithAwareStudy:awareStudy dbType:dbType];
+        
+        [self setTypeAsPlugin];
+        
+        [self addDefaultSettingWithBool:@NO key:AWARE_PREFERENCES_STATUS_GOOGLE_FUSED_LOCATION desc:@"true or false to activate or deactivate accelerometer sensor."];
+        [self addDefaultSettingWithNumber:@0 key:AWARE_PREFERENCES_FREQUENCY_GOOGLE_FUSED_LOCATION desc:@"How frequently to fetch user's location (in seconds.)"];
+        [self addDefaultSettingWithNumber:@102 key:AWARE_PREFERENCES_ACCURACY_GOOGLE_FUSED_LOCATION desc:@"One of the following numbers: 100 (high power): uses GPS only - works best outdoors, highest accuracy 102 (balanced): uses GPS, Network and Wifi - works both indoors and outdoors, good accuracy 104 (low power): uses only Network and WiFi - poorest accuracy, medium accuracy 105 (no power) - scavenges location requests from other apps."];
+    
     }
     return self;
 }

@@ -10,6 +10,10 @@
 #import "AppDelegate.h"
 #import "EntityIOSActivityRecognition+CoreDataClass.h"
 
+
+NSString * const AWARE_PREFERENCES_STATUS_IOS_ACTIVITY_RECOGNITION    = @"status_plugin_ios_activity_recognition";
+NSString * const AWARE_PREFERENCES_FREQUENCY_IOS_ACTIVITY_RECOGNITION = @"frequency_plugin_ios_activity_recognition";
+
 @implementation IOSActivityRecognition {
     CMMotionActivityManager *motionActivityManager;
     NSString * KEY_TIMESTAMP_OF_LAST_UPDATE;
@@ -63,6 +67,9 @@
                              ACTIVITY_NAME_CYCLING,
                              ACTIVITY_NAME_UNKNOWN,
                              LABEL]];
+        [self setTypeAsPlugin];
+        [self addDefaultSettingWithBool:@NO    key:AWARE_PREFERENCES_STATUS_IOS_ACTIVITY_RECOGNITION    desc:@"activate/deactivate plugin"];
+        [self addDefaultSettingWithNumber:@180 key:AWARE_PREFERENCES_FREQUENCY_IOS_ACTIVITY_RECOGNITION desc:@" How frequently to detect user's activity (in seconds)"];
     }
     return self;
 }
@@ -71,17 +78,7 @@
     
     // creata original table
     NSString *query = [[NSString alloc] init];
-    
-    /*
-    query = @"_id integer primary key autoincrement,"
-    "timestamp real default 0,"
-    "device_id text default '',"
-    "activity_name text default '',"
-    "activity_type text default '',"
-    "confidence int default 4,"
-    "activities text default ''";
-    */
-    
+
     // https://developer.apple.com/reference/coremotion/cmmotionactivity?language=objc
     TCQMaker * tcqMaker = [[TCQMaker alloc] init];
     [tcqMaker addColumn:ACTIVITIES               type:TCQTypeText    default:@"''"  ];   // e.g., stationary,cycling
@@ -329,7 +326,7 @@
     [dict setObject:@(motionActivity.unknown)    forKey:ACTIVITY_NAME_UNKNOWN];   // 0 or 1
     [dict setObject:@""                          forKey:LABEL];
     
-    [self setLatestValue:[NSString stringWithFormat:@"%@ (%@)", activities, motionConfidence]];
+    [self setLatestValue:[NSString stringWithFormat:@"%@ (%@)", activitiesStr, motionConfidence]];
     [self saveData:dict];
     [self setLatestData:dict];
     

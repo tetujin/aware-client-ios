@@ -11,6 +11,8 @@
 #import "AppDelegate.h"
 #import "EntityNTPTime.h"
 
+NSString * const AWARE_PREFERENCES_STATUS_NTPTIME = @"status_plugin_ntptime";
+
 @implementation NTPTime  {
     NSTimer * sensingTimer;
  }
@@ -22,6 +24,10 @@
                               dbType:dbType];
     if (self) {
         [self setCSVHeader:@[@"timestamp", @"device_id", @"drift", @"ntp_time"]];
+        
+        [self setTypeAsPlugin];
+        [self addDefaultSettingWithBool:@NO key:AWARE_PREFERENCES_STATUS_NTPTIME desc:@"true or false to activate or deactivate accelerometer sensor."];
+        
     }
     return self;
 }

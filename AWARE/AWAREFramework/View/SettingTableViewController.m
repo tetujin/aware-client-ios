@@ -7,8 +7,16 @@
 //
 
 #import "SettingTableViewController.h"
+#import "AWAREKeys.h"
+#import "AWARESensors.h"
+#import "AppDelegate.h"
+#import "AWAREStudy.h"
 
-@interface SettingTableViewController ()
+@interface SettingTableViewController (){
+    AWAREStudy * awareStudy;
+    AWARESensor * awareSensor;
+    NSString* selectedSettingKey;
+}
 
 @end
 
@@ -16,12 +24,151 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+
+    selectedSettingKey = @"";
+    
+    AppDelegate * delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    awareStudy = delegate.sharedAWARECore.sharedAwareStudy;
+    
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+
+    [self refreshRows];
+}
+
+- (void) refreshRows {
+    _settingRows = [[NSMutableArray alloc] init];
+    
+    // AWARESensor * sensor = nil;
+    if([_selectedRowKey isEqualToString:SENSOR_ACCELEROMETER]){
+        awareSensor = [[Accelerometer alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeCoreData];
+    }else if([_selectedRowKey isEqualToString:SENSOR_BAROMETER]){
+        awareSensor = [[Barometer alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeCoreData];
+    }else if([_selectedRowKey isEqualToString:SENSOR_BATTERY]){
+        awareSensor = [[Battery alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeCoreData];
+    }else if([_selectedRowKey isEqualToString:SENSOR_BLUETOOTH]){
+        awareSensor = [[Bluetooth alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeCoreData];
+    }else if([_selectedRowKey isEqualToString:SENSOR_CALLS]){
+        awareSensor = [[Calls alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeCoreData];
+    }else if([_selectedRowKey isEqualToString:SENSOR_GRAVITY]){
+        awareSensor = [[Gravity alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeCoreData];
+    }else if([_selectedRowKey isEqualToString:SENSOR_GYROSCOPE]){
+        awareSensor = [[Gyroscope alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeCoreData];
+    }else if([_selectedRowKey isEqualToString:SENSOR_LINEAR_ACCELEROMETER]){
+        awareSensor = [[LinearAccelerometer alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeCoreData];
+    }else if([_selectedRowKey isEqualToString:SENSOR_LOCATIONS]){
+        awareSensor = [[Locations alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeCoreData];
+    }else if([_selectedRowKey isEqualToString:SENSOR_MAGNETOMETER]){
+        awareSensor = [[Magnetometer alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeCoreData];
+    }else if([_selectedRowKey isEqualToString:SENSOR_NETWORK]){
+        awareSensor = [[Network alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeCoreData];
+    }else if([_selectedRowKey isEqualToString:SENSOR_ORIENTATION]){
+        awareSensor = [[Orientation alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeCoreData];
+    }else if([_selectedRowKey isEqualToString:SENSOR_PROCESSOR]){
+        awareSensor = [[Processor alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeCoreData];
+    }else if([_selectedRowKey isEqualToString:SENSOR_PROXIMITY]){
+        awareSensor = [[Proximity alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeCoreData];
+    }else if([_selectedRowKey isEqualToString:SENSOR_ROTATION]){
+        awareSensor = [[Rotation alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeCoreData];
+    }else if([_selectedRowKey isEqualToString:SENSOR_SCREEN]){
+        awareSensor = [[Screen alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeCoreData];
+    }else if([_selectedRowKey isEqualToString:SENSOR_TIMEZONE]){
+        awareSensor = [[Timezone alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeCoreData];
+    }else if([_selectedRowKey isEqualToString:SENSOR_WIFI]){
+        awareSensor = [[Wifi alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeCoreData];
+    ///// plugins
+    }else if([_selectedRowKey isEqualToString:SENSOR_IOS_ACTIVITY_RECOGNITION]){
+        awareSensor = [[IOSActivityRecognition alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeCoreData];
+    }else if([_selectedRowKey isEqualToString:SENSOR_GOOGLE_FUSED_LOCATION]){
+        awareSensor = [[FusedLocations alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeCoreData];
+    }else if([_selectedRowKey isEqualToString:SENSOR_AMBIENT_NOISE]){
+        awareSensor = [[AmbientNoise alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeCoreData];
+    }else if([_selectedRowKey isEqualToString:SENSOR_PLUGIN_MSBAND]){
+        awareSensor = [[MSBand alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeCoreData];
+    }else if([_selectedRowKey isEqualToString:SENSOR_PLUGIN_NTPTIME]){
+        awareSensor = [[NTPTime alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeCoreData];
+    }else if([_selectedRowKey isEqualToString:SENSOR_PLUGIN_DEVICE_USAGE]){
+        awareSensor = [[DeviceUsage alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeCoreData];
+    }else if([_selectedRowKey isEqualToString:SENSOR_PLUGIN_OPEN_WEATHER]){
+        awareSensor = [[OpenWeather alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeCoreData];
+    }else if([_selectedRowKey isEqualToString:SENSOR_PLUGIN_IOS_ESM]){
+        awareSensor = [[IOSESM alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeCoreData];
+    }
+    
+    if(awareSensor != nil){
+        NSMutableArray * currentSetting  = [[NSMutableArray alloc] init];
+        
+        if([awareSensor isSensor]){
+            for (NSDictionary * dict in [awareSensor getDefaultSettings]) {
+                NSString * key = [dict objectForKey:KEY_CEL_TITLE];
+                NSString * value = [self getSensorSettingWithKey:key];
+                NSMutableDictionary * mutDict = [[NSMutableDictionary alloc] initWithDictionary:dict];
+                if(value !=nil){
+                    [mutDict setValue:value forKey:KEY_CEL_SETTING_VALUE];
+                }
+                [currentSetting addObject:mutDict];
+            }
+        }else{
+            for (NSDictionary * dict in [awareSensor getDefaultSettings]) {
+                NSString * key = [dict objectForKey:KEY_CEL_TITLE];
+                NSString * value = [self getPluginSettingWithKey:key];
+                NSMutableDictionary * mutDict = [[NSMutableDictionary alloc] initWithDictionary:dict];
+                if(value !=nil){
+                    [mutDict setValue:value forKey:KEY_CEL_SETTING_VALUE];
+                }
+                [currentSetting addObject:mutDict];
+            }
+        }
+        
+        _settingRows = [[NSMutableArray alloc] initWithArray:currentSetting];
+    }
+    
+    [self.tableView reloadData];
+}
+
+//////////////////////////////////////////////////////////////
+
+- (NSString *) getSensorSettingWithKey:(NSString *)key{
+    NSArray * sensorSettings = [awareStudy getSensors];
+    NSString * stringValue = nil;
+    for (NSDictionary * dict in sensorSettings) {
+        if ([[dict objectForKey:@"setting"] isEqualToString:key]) {
+            stringValue = [dict objectForKey:@"value"];
+        }
+    }
+    return stringValue;
+}
+
+- (NSString *) getPluginSettingWithKey:(NSString *)key{
+    NSArray * plugins = [awareStudy getPlugins];
+    NSString * stringValue = nil;
+    for (NSDictionary * plugin in plugins) {
+        for (NSDictionary * setting in [plugin objectForKey:@"settings"]) {
+            if ([[setting objectForKey:@"setting"] isEqualToString:key]) {
+                stringValue = [setting objectForKey:@"value"];
+            }
+        }
+    }
+    return stringValue;
+}
+
+
+////////////////////////////////////////////////////////////////
+
+
+
+
+///////////////////////////////////////////////////////////////
+
+- (void) viewDidAppear:(BOOL)animated{
+    [self.tableView reloadData];
+    [super viewWillAppear:animated];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -32,25 +179,158 @@
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-#warning Incomplete implementation, return the number of sections
-    return 0;
+// #warning Incomplete implementation, return the number of sections
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-#warning Incomplete implementation, return the number of rows
-    return 0;
+// #warning Incomplete implementation, return the number of rows
+    return _settingRows.count;
 }
 
-/*
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:<#@"reuseIdentifier"#> forIndexPath:indexPath];
-    
-    // Configure the cell...
-    
-    return cell;
-}
-*/
 
+- (UITableViewCell *)tableView:(UITableView *)tableView
+         cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    @autoreleasepool {
+        static NSString *MyIdentifier = @"settingViewCellId";
+        if(_settingRows==nil) return nil;
+        
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:MyIdentifier];
+        if (cell == nil) {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle  reuseIdentifier:MyIdentifier];
+        }
+        
+        NSDictionary * dict = [_settingRows objectAtIndex:indexPath.row];
+        
+        NSString * title = [dict objectForKey:KEY_CEL_TITLE];
+        NSString * value = [dict objectForKey:KEY_CEL_SETTING_VALUE];
+        
+        cell.textLabel.text = title;
+        if(value !=nil){
+            cell.detailTextLabel.text = value;
+        }
+        
+        return cell;
+    }
+}
+
+- (CGFloat)tableView:(UITableView*)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    return 80;
+}
+
+/////////////////////////////////
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    if(_settingRows == nil) return;
+    
+    NSDictionary * dict = [_settingRows objectAtIndex:indexPath.row];
+    
+    NSString * title = [dict objectForKey:KEY_CEL_TITLE];
+    NSString * value = [dict objectForKey:KEY_CEL_SETTING_VALUE];
+    NSString * type  = [dict objectForKey:KEY_CEL_SETTING_TYPE];
+    NSString * desc  = [dict objectForKey:KEY_CEL_DESC];
+
+    selectedSettingKey = title;
+    
+    value = [dict objectForKey:KEY_CEL_SETTING_VALUE];
+    
+    UIAlertView * alert = nil;
+    if([type isEqualToString:KEY_CEL_SETTING_TYPE_BOOL]){
+        alert = [[UIAlertView alloc] initWithTitle:title
+                                           message:desc
+                                          delegate:self
+                                 cancelButtonTitle:@"Cancel"
+                                 otherButtonTitles:@"true",@"false",nil];
+        alert.tag = 0;
+    }else if ([type isEqualToString:KEY_CEL_SETTING_TYPE_NUMBER]){
+        alert = [[UIAlertView alloc] initWithTitle:title
+                                           message:desc
+                                          delegate:self
+                                 cancelButtonTitle:@"Cancel"
+                                 otherButtonTitles:@"Done",nil];
+        alert.alertViewStyle = UIAlertViewStylePlainTextInput;
+        [[alert textFieldAtIndex:0] setKeyboardType:UIKeyboardTypeNumberPad];
+        [[alert textFieldAtIndex:0] becomeFirstResponder];
+        
+        [alert textFieldAtIndex:0].text = value;
+        alert.tag = 1;
+    }else if ([type isEqualToString:KEY_CEL_SETTING_TYPE_STRING]) {
+        alert = [[UIAlertView alloc] initWithTitle:title
+                                           message:desc
+                                          delegate:self
+                                 cancelButtonTitle:@"Cancel"
+                                 otherButtonTitles:@"Done",nil];
+        alert.alertViewStyle = UIAlertViewStylePlainTextInput;
+        [[alert textFieldAtIndex:0] becomeFirstResponder];
+        [alert textFieldAtIndex:0].text = value;
+        alert.tag = 2;
+    }
+    
+    if(alert != nil){
+        [alert show];
+    }
+}
+
+
+- (void)alertView:(UIAlertView *)alertView
+clickedButtonAtIndex:(NSInteger)buttonIndex{
+    
+    NSInteger tag = alertView.tag;
+    NSString * stringValue = [alertView textFieldAtIndex:0].text;
+    
+    if([awareSensor isSensor]){
+        switch (tag) {
+            case 0: // BOOLEAN(Yes/No)
+                if (buttonIndex == 1) { //YES
+                    [awareStudy setUserSensorSettingWithString:@"true" key:selectedSettingKey];
+                    [awareStudy refreshStudy];
+                }else if (buttonIndex == 2){ // NO
+                    [awareStudy setUserSensorSettingWithString:@"false" key:selectedSettingKey];
+                    [awareStudy refreshStudy];
+                }
+                break;
+            case 1: // Number
+                [awareStudy setUserSensorSettingWithString:stringValue key:selectedSettingKey];
+                [awareStudy refreshStudy];
+                break;
+            case 2: // Text
+                [awareStudy setUserSensorSettingWithString:stringValue key:selectedSettingKey];
+                [awareStudy refreshStudy];
+                break;
+            default:
+                break;
+        }
+    }else{
+        switch (tag) {
+            case 0: // BOOLEAN(Yes/No)
+                if (buttonIndex == 1) { //YES
+                    [awareStudy setUserPluginSettingWithString:@"true" key:selectedSettingKey statusKey:[awareSensor getSensorStatusKey] ];
+                    [awareStudy refreshStudy];
+                }else if (buttonIndex == 2){ // NO
+                    [awareStudy setUserPluginSettingWithString:@"false" key:selectedSettingKey statusKey:[awareSensor getSensorStatusKey]];
+                    [awareStudy refreshStudy];
+                }
+                break;
+            case 1: // Number
+                [awareStudy setUserPluginSettingWithString:stringValue key:selectedSettingKey statusKey:[awareSensor getSensorStatusKey]];
+                [awareStudy refreshStudy];
+                break;
+            case 2: // Text
+                [awareStudy setUserPluginSettingWithString:stringValue key:selectedSettingKey statusKey:[awareSensor getSensorStatusKey]];
+                [awareStudy refreshStudy];
+                break;
+            default:
+                break;
+        }
+    }
+
+    [self refreshRows];
+    // [self.tableView reloadData];
+
+}
+
+
+////////////////////////////////
 /*
 // Override to support conditional editing of the table view.
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {

@@ -11,9 +11,13 @@
 #import "AppDelegate.h"
 #import "EntityOpenWeather.h"
 
+
+NSString * const AWARE_PREFERENCES_STATUS_OPENWEATHER    = @"status_plugin_openweather_frequency";
+NSString * const AWARE_PREFERENCES_OPENWEATHER_FREQUENCY = @"plugin_openweather_frequency";
+NSString * const AWARE_PREFERENCES_OPENWEATHER_API_KEY   = @"api_key_plugin_openweather";
+
 @implementation OpenWeather{
     IBOutlet CLLocationManager *locationManager;
-//    NSTimer* syncTimer;
     NSTimer* sensingTimer;
     NSDictionary* jsonWeatherData;
     NSDate* thisDate;
@@ -22,6 +26,7 @@
     NSString* identificationForOpenWeather;
     NSString * userApiKey;
 }
+
 /** api */
 NSString* OPEN_WEATHER_API_URL = @"http://api.openweathermap.org/data/2.5/weather?lat=%d&lon=%d&APPID=%@";
 NSString* OPEN_WEATHER_API_DEFAULT_KEY = @"54e5dee2e6a2479e0cc963cf20f233cc";
@@ -92,6 +97,12 @@ int ONE_HOUR = 60*60;
                              ]];
         [self updateWeatherData:[NSDate new] Lat:0 Lon:0];
         userApiKey = nil;
+        
+        [self setTypeAsPlugin];
+        [self addDefaultSettingWithBool:@NO key:AWARE_PREFERENCES_STATUS_OPENWEATHER desc:@"(boolean) to activate / deactivate the plugin."];
+        [self addDefaultSettingWithNumber:@15 key:AWARE_PREFERENCES_OPENWEATHER_FREQUENCY desc:@"weather check interval in minutes."];
+        [self addDefaultSettingWithString:@"54e5dee2e6a2479e0cc963cf20f233cc" key:AWARE_PREFERENCES_OPENWEATHER_API_KEY desc:@" get a valid key at http://openweathermap.org/"];
+        
     }
     return self;
 }

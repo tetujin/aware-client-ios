@@ -8,6 +8,9 @@
 
 #import "AWARESensor.h"
 
+extern NSString* const AWARE_PREFERENCES_STATUS_PROXIMITY;
+extern NSString* const AWARE_PREFERENCES_FREQUENCY_PROXIMITY;
+
 @interface Proximity : AWARESensor <AWARESensorDelegate>
 
 @end

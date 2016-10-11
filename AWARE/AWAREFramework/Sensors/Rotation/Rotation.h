@@ -10,6 +10,11 @@
 #import "AWAREKeys.h"
 #import <CoreMotion/CoreMotion.h>
 
+extern NSString* const AWARE_PREFERENCES_STATUS_ROTATION;
+extern NSString* const AWARE_PREFERENCES_FREQUENCY_ROTATION;
+extern NSString* const AWARE_PREFERENCES_FREQUENCY_HZ_ROTATION;
+
+
 @interface Rotation : AWARESensor <AWARESensorDelegate>
 
 - (BOOL) startSensor;

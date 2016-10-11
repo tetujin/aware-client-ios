@@ -59,6 +59,7 @@
 		162B7DDC1C4EF792006972B5 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 162B7DDB1C4EF792006972B5 /* CoreTelephony.framework */; };
 		163ADFC01D8F2C1900B15C8F /* EntityIOSActivityRecognition+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 163ADFBD1D8F2C1900B15C8F /* EntityIOSActivityRecognition+CoreDataClass.m */; };
 		163ADFC11D8F2C1900B15C8F /* EntityIOSActivityRecognition+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 163ADFBF1D8F2C1900B15C8F /* EntityIOSActivityRecognition+CoreDataProperties.m */; };
+		1648FE931DAB2E87001D870A /* AWARESensors.m in Sources */ = {isa = PBXBuildFile; fileRef = 1648FE921DAB2E87001D870A /* AWARESensors.m */; };
 		164DD66A1C1FC1F900ADA92B /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 164DD6691C1FC1F900ADA92B /* MapKit.framework */; };
 		1658700A1C986D4F008B99D2 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 165870091C986D4F008B99D2 /* QuartzCore.framework */; };
 		165A8B6F1C03B90500898C6C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 165A8B6E1C03B90500898C6C /* GoogleService-Info.plist */; };
@@ -406,6 +407,8 @@
 		163ADFBD1D8F2C1900B15C8F /* EntityIOSActivityRecognition+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "EntityIOSActivityRecognition+CoreDataClass.m"; path = "IOSActivityRecognition/EntityIOSActivityRecognition+CoreDataClass.m"; sourceTree = "<group>"; };
 		163ADFBE1D8F2C1900B15C8F /* EntityIOSActivityRecognition+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "EntityIOSActivityRecognition+CoreDataProperties.h"; path = "IOSActivityRecognition/EntityIOSActivityRecognition+CoreDataProperties.h"; sourceTree = "<group>"; };
 		163ADFBF1D8F2C1900B15C8F /* EntityIOSActivityRecognition+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "EntityIOSActivityRecognition+CoreDataProperties.m"; path = "IOSActivityRecognition/EntityIOSActivityRecognition+CoreDataProperties.m"; sourceTree = "<group>"; };
+		1648FE911DAB2E87001D870A /* AWARESensors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AWARESensors.h; sourceTree = "<group>"; };
+		1648FE921DAB2E87001D870A /* AWARESensors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AWARESensors.m; sourceTree = "<group>"; };
 		164DD6691C1FC1F900ADA92B /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		165870091C986D4F008B99D2 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		165A8B6E1C03B90500898C6C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
@@ -990,6 +993,8 @@
 				169C871C1D01382C00825761 /* AWARESchedule.m */,
 				169C871D1D01382C00825761 /* AWARESensor.h */,
 				169C871E1D01382C00825761 /* AWARESensor.m */,
+				1648FE911DAB2E87001D870A /* AWARESensors.h */,
+				1648FE921DAB2E87001D870A /* AWARESensors.m */,
 				169C871F1D01382C00825761 /* AWARESensorManager.h */,
 				169C87201D01382C00825761 /* AWARESensorManager.m */,
 				169C87211D01382C00825761 /* AWAREStudy.h */,
@@ -2411,6 +2416,7 @@
 				169C887F1D01382C00825761 /* MSBand.m in Sources */,
 				169C889F1D01382C00825761 /* GoogleLoginViewController.m in Sources */,
 				160F0EF81D042AB600673343 /* EntityNetwork.m in Sources */,
+				1648FE931DAB2E87001D870A /* AWARESensors.m in Sources */,
 				160F0F091D04756800673343 /* EntityBattery+CoreDataProperties.m in Sources */,
 				160F0F0A1D04756800673343 /* EntityBattery.m in Sources */,
 				16BDCCA41D36159500B13BD4 /* MSBandCalorie.m in Sources */,

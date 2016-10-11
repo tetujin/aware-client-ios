@@ -18,6 +18,10 @@
 #import "AWAREUtils.h"
 #import "AWAREKeys.h"
 
+NSString * const AWARE_PREFERENCES_STATUS_PLUGIN_IOS_ESM     = @"status_plugin_ios_esm";
+NSString * const AWARE_PREFERENCES_PLUGIN_IOS_ESM_TABLE_NAME = @"plugin_ios_esm_table_name";
+NSString * const AWARE_PREFERENCES_PLUGIN_IOS_ESM_CONFIG_URL = @"plugin_ios_esm_config_url";
+
 @implementation IOSESM {
     NSString * baseHttpSessionId;
     NSString * currentHttpSessionId;
@@ -62,6 +66,11 @@
             tableName = tempTableName;
         }
         
+        [self setTypeAsPlugin];
+        
+        [self addDefaultSettingWithBool:@NO key:AWARE_PREFERENCES_STATUS_PLUGIN_IOS_ESM desc:@""];
+        [self addDefaultSettingWithString:@"esms" key:AWARE_PREFERENCES_PLUGIN_IOS_ESM_TABLE_NAME desc:@"default value is 'esms'"];
+        [self addDefaultSettingWithString:@"" key:AWARE_PREFERENCES_PLUGIN_IOS_ESM_CONFIG_URL desc:@"https://www.xxx.yyy"];
     }
     return self;
 }
@@ -496,6 +505,8 @@ didCompleteWithError:(NSError *)error{
                                                userInfo:userInfo
                                         iconBadgeNumber:1];
         }
+        // WIP: WEEKLY and MONTHLY Notifications 
+        
         // WIP: Quick ESM (YES/NO and Text)
         
         // WIP: Event based ESMs (battery, activity, and/or network)
