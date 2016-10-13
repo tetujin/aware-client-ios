@@ -261,7 +261,7 @@
                 if(awareSensor != nil){
                     NSString * pluginState = [pluginSetting objectForKey:@"value"];
                     if ([pluginState isEqualToString:@"true"]) {
-                        [awareSensor startSensorWithSettings:sensors];
+                        [awareSensor startSensorWithSettings:pluginSettings];
                     }
                     [awareSensor trackDebugEvents];
                     [self addNewSensor:awareSensor];

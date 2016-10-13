@@ -322,7 +322,10 @@ didCompleteWithError:(NSError *)error{
             
             for (NSDictionary * schedule in webESMArray) {
                 NSArray * hours = [schedule objectForKey:@"hours"];
+                NSArray * weekdays = [schedule objectForKey:@"weekdays"];
+                NSArray * months = [schedule objectForKey:@"months"];
                 NSArray * esms = [schedule objectForKey:@"esms"];
+                
                 NSNumber * randomize_schedule = [schedule objectForKey:@"randomize_schedule"];
                 NSNumber * expiration = [schedule objectForKey:@"expiration"];
                 
@@ -505,7 +508,8 @@ didCompleteWithError:(NSError *)error{
                                                userInfo:userInfo
                                         iconBadgeNumber:1];
         }
-        // WIP: WEEKLY and MONTHLY Notifications 
+        // WIP: WEEKLY and MONTHLY Notifications
+        
         
         // WIP: Quick ESM (YES/NO and Text)
         

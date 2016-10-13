@@ -81,7 +81,7 @@
     
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     NSString * userId = [defaults objectForKey:@"GOOGLE_ID"];
-    if(userId != nil){
+    if(userId == nil){
         NSLog(@"[%@] Google account information is empty", [self getSensorName]);
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"[NOTE] Google account information is empty"
                                                         message:@"Please login to Google account using Google Login Plugin."
