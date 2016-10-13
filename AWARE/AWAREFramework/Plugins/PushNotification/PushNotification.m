@@ -51,9 +51,9 @@
 
 
 - (BOOL)startSensorWithSettings:(NSArray *)settings{
-    [self saveStoredPushNotificationDeviceToken];
-    [self setUploadingState:NO];
-    [self performSelector:@selector(syncAwareDBInBackground) withObject:nil afterDelay:3];
+    // [self saveStoredPushNotificationDeviceToken];
+    // [self setUploadingState:NO];
+    // [self performSelector:@selector(syncAwareDBInBackground) withObject:nil afterDelay:3];
     return YES;
 }
 

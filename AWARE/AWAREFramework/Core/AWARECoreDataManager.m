@@ -375,6 +375,12 @@
  */
 - (BOOL) setRepetationCountAfterStartToSyncDB:(NSNumber *) timestamp {
     @try {
+        
+        if (entityName == nil) {
+            NSLog(@"***** ERROR: Entity Name is nil! *****");
+            return NO;
+        }
+        
         if ([self isDBLock]) {
             [self dataSyncIsFinishedCorrectoly];
             return NO;

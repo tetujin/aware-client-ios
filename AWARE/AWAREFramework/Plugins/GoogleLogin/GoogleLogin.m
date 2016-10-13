@@ -69,25 +69,28 @@
 
 - (BOOL)startSensorWithSettings:(NSArray *)settings{
     
-    encryptionName = [self getBoolFromSettings:settings withKey:@"encryption_name_sha1"];
-    encryptionEmail = [self getBoolFromSettings:settings withKey:@"encryption_email_sha1"];
-    encryptionUserId = [self getBoolFromSettings:settings withKey:@"encryption_user_id_sha1"];
+//    encryptionName = [self getBoolFromSettings:settings withKey:@"encryption_name_sha1"];
+//    encryptionEmail = [self getBoolFromSettings:settings withKey:@"encryption_email_sha1"];
+//    encryptionUserId = [self getBoolFromSettings:settings withKey:@"encryption_user_id_sha1"];
+//    
+//    [defaults setBool:encryptionName    forKey:@"encryption_name_sha1"];
+//    [defaults setBool:encryptionEmail   forKey:@"encryption_email_sha1"];
+//    [defaults setBool:encryptionUserId  forKey:@"encryption_user_id_sha1"];
+//    
+
     
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setBool:encryptionName    forKey:@"encryption_name_sha1"];
-    [defaults setBool:encryptionEmail   forKey:@"encryption_email_sha1"];
-    [defaults setBool:encryptionUserId  forKey:@"encryption_user_id_sha1"];
-    
-    BOOL success = [self saveStoredGoogleAccount];
-    if(!success){
+    NSString * userId = [defaults objectForKey:@"GOOGLE_ID"];
+    if(userId != nil){
         NSLog(@"[%@] Google account information is empty", [self getSensorName]);
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Google account is required!"
-                                                        message:@"Please login to Google account from Google Login row."
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"[NOTE] Google account information is empty"
+                                                        message:@"Please login to Google account using Google Login Plugin."
                                                        delegate:nil
-                                              cancelButtonTitle:nil
-                                              otherButtonTitles:@"OK", nil];
+                                              cancelButtonTitle:@"Close"
+                                              otherButtonTitles:nil];
         [alert show];
     }
+    
     return YES;
 }
 
@@ -110,6 +113,31 @@
     [self saveStoredGoogleAccount];
 }
 
++ (void) deleteGoogleAccountFromLocalStorage {
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    [defaults removeObjectForKey:@"GOOGLE_ID"];
+    [defaults removeObjectForKey:@"GOOGLE_NAME"];
+    [defaults removeObjectForKey:@"GOOGLE_EMAIL"];
+    [defaults synchronize];
+}
+
++ (NSString *) getGoogleAccountId {
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSString * userId = [defaults objectForKey:@"GOOGLE_ID"];
+    return userId;
+}
+
++ (NSString *) getGoogleAccountName{
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSString * name = [defaults objectForKey:@"GOOGLE_NAME"];
+    return name;
+}
+
++ (NSString *) getGoogleAccountEmail{
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSString * email = [defaults objectForKey:@"GOOGLE_EMAIL"];
+    return email;
+}
 
 - (BOOL) saveStoredGoogleAccount {
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
@@ -180,6 +208,9 @@
     [dic setObject:email              forKey:KEY_GOOGLE_EMAIL];
     [self saveData:dic];
 }
+
+
+///////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////
 
