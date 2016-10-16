@@ -86,7 +86,6 @@ extern NSString* const SENSOR_ROTATION;
 extern NSString* const SENSOR_SCREEN;
 extern NSString* const SENSOR_TELEPHONY;
 extern NSString* const SENSOR_WIFI;
-extern NSString* const SENSOR_BLE_HEARTRATE;
 extern NSString* const SENSOR_GRAVITY;
 extern NSString* const SENSOR_LINEAR_ACCELEROMETER;
 extern NSString* const SENSOR_TIMEZONE;
@@ -110,7 +109,7 @@ extern NSString* const SENSOR_PLUGIN_GOOGLE_LOGIN;
 extern NSString* const SENSOR_PLUGIN_CAMPUS;
 extern NSString* const SENSOR_PLUGIN_PEDOMETER;
 extern NSString* const SENSOR_PLUGIN_WEB_ESM;
-extern NSString* const SENSOR_PLUGIN_BLE_HEARTRATE;
+extern NSString* const SENSOR_PLUGIN_BLE_HR;
 extern NSString* const SENSOR_AWARE_DEBUG;
 extern NSString* const SENSOR_PLUGIN_IOS_ESM;
 

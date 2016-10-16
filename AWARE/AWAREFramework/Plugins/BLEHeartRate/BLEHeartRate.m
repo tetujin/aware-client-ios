@@ -17,6 +17,14 @@
 #import "AppDelegate.h"
 #import "EntityBLEHeartRate.h"
 
+NSString* const AWARE_PREFERENCES_STATUS_BLE_HR = @"status_plugin_ble_heartrate";
+
+/** (default = 5) in minutes */
+NSString * const AWARE_PREFERENCES_PLUGIN_BLE_HR_INTERVAL_TIME_MIN = @"plugin_ble_heartrate_interval_min";
+
+/** (default = 30) in seconds */
+NSString * const AWARE_PREFERENCES_PLUGIN_BLE_HR_ACTIVE_TIME_SEC = @"plugin_ble_heartrate_active_time_sec";
+
 @implementation BLEHeartRate {
     NSString * KEY_HR_TIMESTAMP;
     NSString * KEY_HR_DEVICE_ID;
@@ -29,11 +37,14 @@
     NSArray *services;
     
     NSTimer * timer;
+    
+    double intervalSec;
+    double activeTimeSec;
 }
 
 - (instancetype)initWithAwareStudy:(AWAREStudy *)study dbType:(AwareDBType)dbType{
     self = [super initWithAwareStudy:study
-                          sensorName:SENSOR_PLUGIN_BLE_HEARTRATE
+                          sensorName:SENSOR_PLUGIN_BLE_HR
                         dbEntityName:NSStringFromClass([EntityBLEHeartRate class])
                               dbType:dbType];
     if (self) {
@@ -44,6 +55,9 @@
         KEY_HR_MANUFACTURER = @"manufacturer";
         KEY_HR_RSSI = @"rssi";
         KEY_HR_LABEL = @"label";
+        
+        intervalSec = 60.0f*5.0f;
+        activeTimeSec = 30.0f;
         
         [self setCSVHeader:@[KEY_HR_TIMESTAMP,
                              KEY_HR_DEVICE_ID,
@@ -62,7 +76,11 @@
                   [CBUUID UUIDWithString:POLARH7_HRM_HEART_RATE_SERVICE_UUID],
                   [CBUUID UUIDWithString:POLARH7_HRM_DEVICE_INFO_SERVICE_UUID]
                   ];
-    }
+        [self setTypeAsPlugin];
+        [self addDefaultSettingWithBool:@NO   key:AWARE_PREFERENCES_STATUS_BLE_HR desc:@"true or false to activate or deactivate sensor."];
+        [self addDefaultSettingWithNumber:@5  key:AWARE_PREFERENCES_PLUGIN_BLE_HR_INTERVAL_TIME_MIN desc:@"Sensing interval (default = 5) in minutes. NOTE: If you set '0' as a sensing interval, the plugin connects the heart-rate sensor always."];
+        [self addDefaultSettingWithNumber:@30 key:AWARE_PREFERENCES_PLUGIN_BLE_HR_ACTIVE_TIME_SEC desc:@"Active time (default = 30) for a duty cycle in seconds. NOTE: If you set '0' as an active time, the plugin connects the heart-rate sensor always."];
+   }
     return self;
 }
 
@@ -81,25 +99,49 @@
 }
 
 
+
+- (BOOL) startSensor{
+    return [self startSensorWithSettings:nil];
+}
+
 - (BOOL)startSensorWithSettings:(NSArray *)settings{
-    [self startSensor];
+    
+    bool always = NO;
+    
+    if (settings != nil) {
+        double tempIntervalMin = [self getSensorSetting:settings withKey:AWARE_PREFERENCES_PLUGIN_BLE_HR_INTERVAL_TIME_MIN];
+        if(tempIntervalMin > 0){
+            intervalSec = 60.0f * tempIntervalMin;
+        }
+        
+        double tempActiveTimeSec = [self getSensorSetting:settings withKey:AWARE_PREFERENCES_PLUGIN_BLE_HR_ACTIVE_TIME_SEC];
+        if(tempActiveTimeSec > 0){
+            activeTimeSec = tempActiveTimeSec;
+        }
+        
+        if(tempIntervalMin == 0 || tempActiveTimeSec == 0){
+            always = YES;
+        }
+    }
+    
+    if(always){
+        [self startHeartRateSensor];
+    }else{
+        timer = [NSTimer scheduledTimerWithTimeInterval:intervalSec
+                                                 target:self
+                                               selector:@selector(startDutyCycle)
+                                               userInfo:nil
+                                                repeats:YES];
+        [timer fire];
+    }
     return YES;
 }
 
-- (BOOL) startSensor{
-//    [self setBufferSize:1];
-    timer = [NSTimer scheduledTimerWithTimeInterval:60.0f * 5
-                                             target:self
-                                           selector:@selector(startDutyCycle)
-                                           userInfo:nil
-                                            repeats:YES];
-    [timer fire];
-    return YES;
-}
 
 - (BOOL)stopSensor{
     // Stop a BLE central manager
-    [_myCentralManager stopScan];
+    //[_myCentralManager stopScan];
+    [self stopHeartRateSensor];
     [timer invalidate];
     timer = nil;
     return YES;
@@ -111,9 +153,9 @@
 /////////////////////////////////////////////////////////////////
 
 - (void) startDutyCycle {
-    NSLog(@"Start a duty cycle...");
+    NSLog(@"[%@] Start a duty cycle...", [self getSensorName]);
     [self startHeartRateSensor];
-    [self performSelector:@selector(stopHeartRateSensor) withObject:nil afterDelay:30.0f];
+    [self performSelector:@selector(stopHeartRateSensor) withObject:nil afterDelay:activeTimeSec];
 }
 
 - (void) startHeartRateSensor{
@@ -123,8 +165,11 @@
 
 - (void) stopHeartRateSensor{
     // Start a BLE central manager
-    [_myCentralManager stopScan];
-    _myCentralManager = nil;
+    NSLog(@"[%@]...Stop a duty cycle", [self getSensorName]);
+    if(_myCentralManager != nil){
+        [_myCentralManager stopScan];
+        _myCentralManager = nil;
+    }
 }
 
 

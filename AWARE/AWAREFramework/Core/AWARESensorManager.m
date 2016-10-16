@@ -252,7 +252,7 @@
                     awareSensor = [[AmbientNoise alloc] initWithAwareStudy:awareStudy dbType:dbType];
                 }else if([pluginName isEqualToString:[NSString stringWithFormat:@"status_%@",SENSOR_PLUGIN_WEB_ESM]]){
                     awareSensor = [[WebESM alloc] initWithAwareStudy:awareStudy dbType:dbType];
-                }else if([pluginName isEqualToString:[NSString stringWithFormat:@"status_%@",SENSOR_PLUGIN_BLE_HEARTRATE]]){
+                }else if([pluginName isEqualToString:[NSString stringWithFormat:@"status_%@",SENSOR_PLUGIN_BLE_HR]]){
                     awareSensor = [[BLEHeartRate alloc] initWithAwareStudy:awareStudy dbType:dbType];
                 }else if([pluginName isEqualToString:[NSString stringWithFormat:@"status_%@",SENSOR_PLUGIN_IOS_ESM]]){
                     awareSensor = [[IOSESM alloc] initWithAwareStudy:awareStudy dbType:dbType];
@@ -789,6 +789,11 @@
  *
  */
 - (bool) syncAllSensorsWithDBInBackground {
+    
+    if([[awareStudy getStudyURL] isEqualToString:@""]){
+        return NO;
+    }
+    
     // Sync local stored data with aware server.
     if(awareSensors == nil){
         return NO;

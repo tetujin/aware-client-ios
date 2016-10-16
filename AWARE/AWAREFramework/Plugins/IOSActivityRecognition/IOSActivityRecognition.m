@@ -13,6 +13,7 @@
 
 NSString * const AWARE_PREFERENCES_STATUS_IOS_ACTIVITY_RECOGNITION    = @"status_plugin_ios_activity_recognition";
 NSString * const AWARE_PREFERENCES_FREQUENCY_IOS_ACTIVITY_RECOGNITION = @"frequency_plugin_ios_activity_recognition";
+NSString * const AWARE_PREFERENCES_LIVE_MODE_IOS_ACTIVITY_RECOGNITION = @"status_plugin_ios_activity_recognition_live";
 
 @implementation IOSActivityRecognition {
     CMMotionActivityManager *motionActivityManager;
@@ -69,7 +70,8 @@ NSString * const AWARE_PREFERENCES_FREQUENCY_IOS_ACTIVITY_RECOGNITION = @"freque
                              LABEL]];
         [self setTypeAsPlugin];
         [self addDefaultSettingWithBool:@NO    key:AWARE_PREFERENCES_STATUS_IOS_ACTIVITY_RECOGNITION    desc:@"activate/deactivate plugin"];
-        [self addDefaultSettingWithNumber:@180 key:AWARE_PREFERENCES_FREQUENCY_IOS_ACTIVITY_RECOGNITION desc:@" How frequently to detect user's activity (in seconds)"];
+        [self addDefaultSettingWithNumber:@180 key:AWARE_PREFERENCES_FREQUENCY_IOS_ACTIVITY_RECOGNITION desc:@"How frequently to detect user's activity (in seconds)"];
+        [self addDefaultSettingWithNumber:@0   key:AWARE_PREFERENCES_LIVE_MODE_IOS_ACTIVITY_RECOGNITION desc:@"0=Off, 1=On (default setting is '0')"];
     }
     return self;
 }
@@ -109,7 +111,7 @@ NSString * const AWARE_PREFERENCES_FREQUENCY_IOS_ACTIVITY_RECOGNITION = @"freque
     
     int liveMode = [self getSensorSetting:settings withKey:@"status_plugin_ios_activity_recognition_live"];
     
-    if(liveMode){
+    if(liveMode == 1){
         return [self startSensorWithConfidenceFilter:CMMotionActivityConfidenceLow mode:IOSActivityRecognitionModeLive interval:frequency];
     }else{
         return [self startSensorWithConfidenceFilter:CMMotionActivityConfidenceLow mode:IOSActivityRecognitionModeHistory interval:frequency];

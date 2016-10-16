@@ -237,7 +237,7 @@
 }
 
 - (void)syncAwareDBInBackgroundWithSensorName:(NSString *)name{
-    [super syncAwareDBInBackgroundWithSensorName:name];
+    [super syncAwareDBWithSensorName:name];
 }
 
 ////////////////////////////////////////////////////////////////

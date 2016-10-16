@@ -638,7 +638,7 @@
 
 
 //////////////////////////////////////////
-////////////////////////////////////////
+////////////////////////////////////////s
 
 - (void) syncAwareDB {
     if(baseDataUploader != nil){
@@ -647,6 +647,15 @@
         [super syncAwareDBInBackground];
     }
 }
+
+- (void) syncAwareDBWithSensorName:(NSString *)name{
+    if(baseDataUploader != nil){
+        return [baseDataUploader syncAwareDBInBackgroundWithSensorName:name];
+    }else{
+        return [super syncAwareDBInBackgroundWithSensorName:name];
+    }
+}
+
 
 - (BOOL) syncAwareDBWithData:(NSDictionary *) dictionary{
     if(baseDataUploader != nil){
@@ -657,7 +666,16 @@
     // return NO;
 }
 
+////////////////////////////////////////
+///////////////////////////////////////
 
+- (NSData *) getCSVData {
+    if(baseDataUploader != nil){
+        return [baseDataUploader getCSVData];
+    }else{
+        return nil;//[super syncAwareDBWithData:dictionary];
+    }
+}
 
 //////////////////////////////////////////
 ////////////////////////////////////////

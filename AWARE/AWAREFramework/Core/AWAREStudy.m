@@ -350,8 +350,13 @@ didCompleteWithError:(NSError *)error {
     [userDefaults setObject:array            forKey:KEY_SENSORS];
     [userDefaults setObject:plugins          forKey:KEY_PLUGINS];
     
+    // change csv export mode
+    [userDefaults setBool:NO forKey:SETTING_CSV_EXPORT_STATE];
+    [userDefaults synchronize];
+    
     // run in the main thread
     dispatch_async(dispatch_get_main_queue(), ^{
+
         AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
         AWARECore * core = delegate.sharedAWARECore;
         [core.sharedSensorManager stopAndRemoveAllSensors];

@@ -167,6 +167,9 @@
     return NO;
 }
 
+- (NSData *)getCSVData{
+    return nil;
+}
 
 ////////////////////////////////////////////////////////////////////////
 - (NSString *) getSyncProgressAsText{

@@ -23,7 +23,7 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="95"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Jlv-Hb-QNm" id="9JS-s5-0aB">
-                                    <rect key="frame" x="0.0" y="0.0" width="308" height="94"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="308" height="94.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                                 <connections>
@@ -151,7 +151,7 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="8np-8w-s12" id="Do0-n6-4i6">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>
@@ -161,7 +161,13 @@
                             <outlet property="delegate" destination="0tU-Ir-X24" id="lvh-UL-UNv"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="tCR-Zf-Ifh"/>
+                    <navigationItem key="navigationItem" id="tCR-Zf-Ifh">
+                        <barButtonItem key="rightBarButtonItem" systemItem="action" id="6kH-dy-Iji">
+                            <connections>
+                                <action selector="pushedActionButton:" destination="0tU-Ir-X24" id="zY9-bh-uPE"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dzs-lN-Pc2" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

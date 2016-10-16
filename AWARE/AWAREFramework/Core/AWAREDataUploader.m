@@ -46,6 +46,12 @@
 }
 
 
+//////////////////////////////
+
+- (NSData *)getCSVData{
+    return [awareLocalStorage getCSVData];
+}
+
 /////////////////////////////////
 /////////////////////////////////
 
@@ -64,11 +70,16 @@
     [self syncAwareDBWithSensorName:sensorName];
 }
 
+- (void)syncAwareDBInBackgroundWithSensorName:(NSString *)name{
+    [self syncAwareDBWithSensorName:sensorName];
+}
+
 /** 
  * Background data sync with database name
  * @param NSString  A sensor name
  */
 - (void) syncAwareDBWithSensorName:(NSString*) name {
+        
     // chekc wifi state
     if(isUploading){
         NSString * message= [NSString stringWithFormat:@"[%@] Now sendsor data is uploading.", name];

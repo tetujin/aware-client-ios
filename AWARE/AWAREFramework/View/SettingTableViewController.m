@@ -33,6 +33,8 @@
 
     selectedSettingKey = @"";
     
+    self.title = _selectedRowKey;
+    
     AppDelegate * delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     awareStudy = delegate.sharedAWARECore.sharedAwareStudy;
     
@@ -47,58 +49,60 @@
     
     // AWARESensor * sensor = nil;
     if([_selectedRowKey isEqualToString:SENSOR_ACCELEROMETER]){
-        awareSensor = [[Accelerometer alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeCoreData];
+        awareSensor = [[Accelerometer alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
     }else if([_selectedRowKey isEqualToString:SENSOR_BAROMETER]){
-        awareSensor = [[Barometer alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeCoreData];
+        awareSensor = [[Barometer alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
     }else if([_selectedRowKey isEqualToString:SENSOR_BATTERY]){
-        awareSensor = [[Battery alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeCoreData];
+        awareSensor = [[Battery alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
     }else if([_selectedRowKey isEqualToString:SENSOR_BLUETOOTH]){
-        awareSensor = [[Bluetooth alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeCoreData];
+        awareSensor = [[Bluetooth alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
     }else if([_selectedRowKey isEqualToString:SENSOR_CALLS]){
-        awareSensor = [[Calls alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeCoreData];
+        awareSensor = [[Calls alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
     }else if([_selectedRowKey isEqualToString:SENSOR_GRAVITY]){
-        awareSensor = [[Gravity alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeCoreData];
+        awareSensor = [[Gravity alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
     }else if([_selectedRowKey isEqualToString:SENSOR_GYROSCOPE]){
-        awareSensor = [[Gyroscope alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeCoreData];
+        awareSensor = [[Gyroscope alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
     }else if([_selectedRowKey isEqualToString:SENSOR_LINEAR_ACCELEROMETER]){
-        awareSensor = [[LinearAccelerometer alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeCoreData];
+        awareSensor = [[LinearAccelerometer alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
     }else if([_selectedRowKey isEqualToString:SENSOR_LOCATIONS]){
-        awareSensor = [[Locations alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeCoreData];
+        awareSensor = [[Locations alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
     }else if([_selectedRowKey isEqualToString:SENSOR_MAGNETOMETER]){
-        awareSensor = [[Magnetometer alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeCoreData];
+        awareSensor = [[Magnetometer alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
     }else if([_selectedRowKey isEqualToString:SENSOR_NETWORK]){
-        awareSensor = [[Network alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeCoreData];
+        awareSensor = [[Network alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
     }else if([_selectedRowKey isEqualToString:SENSOR_ORIENTATION]){
-        awareSensor = [[Orientation alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeCoreData];
+        awareSensor = [[Orientation alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
     }else if([_selectedRowKey isEqualToString:SENSOR_PROCESSOR]){
-        awareSensor = [[Processor alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeCoreData];
+        awareSensor = [[Processor alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
     }else if([_selectedRowKey isEqualToString:SENSOR_PROXIMITY]){
-        awareSensor = [[Proximity alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeCoreData];
+        awareSensor = [[Proximity alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
     }else if([_selectedRowKey isEqualToString:SENSOR_ROTATION]){
-        awareSensor = [[Rotation alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeCoreData];
+        awareSensor = [[Rotation alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
     }else if([_selectedRowKey isEqualToString:SENSOR_SCREEN]){
-        awareSensor = [[Screen alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeCoreData];
+        awareSensor = [[Screen alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
     }else if([_selectedRowKey isEqualToString:SENSOR_TIMEZONE]){
-        awareSensor = [[Timezone alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeCoreData];
+        awareSensor = [[Timezone alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
     }else if([_selectedRowKey isEqualToString:SENSOR_WIFI]){
-        awareSensor = [[Wifi alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeCoreData];
+        awareSensor = [[Wifi alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
     ///// plugins
     }else if([_selectedRowKey isEqualToString:SENSOR_IOS_ACTIVITY_RECOGNITION]){
-        awareSensor = [[IOSActivityRecognition alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeCoreData];
+        awareSensor = [[IOSActivityRecognition alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
     }else if([_selectedRowKey isEqualToString:SENSOR_GOOGLE_FUSED_LOCATION]){
-        awareSensor = [[FusedLocations alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeCoreData];
+        awareSensor = [[FusedLocations alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
     }else if([_selectedRowKey isEqualToString:SENSOR_AMBIENT_NOISE]){
-        awareSensor = [[AmbientNoise alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeCoreData];
+        awareSensor = [[AmbientNoise alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
     }else if([_selectedRowKey isEqualToString:SENSOR_PLUGIN_MSBAND]){
-        awareSensor = [[MSBand alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeCoreData];
+        awareSensor = [[MSBand alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
     }else if([_selectedRowKey isEqualToString:SENSOR_PLUGIN_NTPTIME]){
-        awareSensor = [[NTPTime alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeCoreData];
+        awareSensor = [[NTPTime alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
     }else if([_selectedRowKey isEqualToString:SENSOR_PLUGIN_DEVICE_USAGE]){
-        awareSensor = [[DeviceUsage alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeCoreData];
+        awareSensor = [[DeviceUsage alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
     }else if([_selectedRowKey isEqualToString:SENSOR_PLUGIN_OPEN_WEATHER]){
-        awareSensor = [[OpenWeather alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeCoreData];
+        awareSensor = [[OpenWeather alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
     }else if([_selectedRowKey isEqualToString:SENSOR_PLUGIN_IOS_ESM]){
-        awareSensor = [[IOSESM alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeCoreData];
+        awareSensor = [[IOSESM alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
+    }else if([_selectedRowKey isEqualToString:SENSOR_PLUGIN_BLE_HR]){
+        awareSensor = [[BLEHeartRate alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
     }
     
     if(awareSensor != nil){
@@ -374,5 +378,55 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
     // Pass the selected object to the new view controller.
 }
 */
+
+- (IBAction)pushedActionButton:(id)sender {
+    
+    if (![MFMailComposeViewController canSendMail]){
+        return;
+    }
+    
+    MFMailComposeViewController *picker = [[MFMailComposeViewController alloc] init];
+    picker.mailComposeDelegate = self;
+    
+    [picker setSubject:[NSString stringWithFormat:@"[AWARE][CSV][%@][%@]",[awareSensor getSensorName],[awareSensor getDeviceId]]];
+    [picker setMessageBody:@"" isHTML:NO];
+    
+    // set 'text/csv' as a mimeType
+    NSData * csvData = [awareSensor getCSVData];
+    if(csvData != nil){
+        NSString * fileName = [NSString stringWithFormat:@"%@_%@_%@.csv",[awareSensor getSensorName], [awareSensor getDeviceId],[NSDate new].debugDescription];
+        [picker addAttachmentData:csvData mimeType:@"text/csv" fileName:fileName];
+    }
+    
+    [self presentViewController:picker animated:YES completion:^{
+        
+    }];
+}
+
+
+- (void)mailComposeController:(MFMailComposeViewController*)controller
+          didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error{
+    
+    switch (result) {
+        case MFMailComposeResultCancelled:
+            NSLog(@"Mail cancelled");
+            break;
+        case MFMailComposeResultSaved:
+            NSLog(@"Mail saved");
+            break;
+        case MFMailComposeResultSent:
+            NSLog(@"Mail sent");
+            break;
+        case MFMailComposeResultFailed:
+            NSLog(@"Mail sent failure: %@", [error localizedDescription]);
+            break;
+        default:
+            break;
+    }
+    
+    [self dismissViewControllerAnimated:YES completion:^{
+        
+    }];
+}
 
 @end

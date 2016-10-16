@@ -76,7 +76,6 @@ NSString* const SENSOR_ROTATION      = @"rotation";
 NSString* const SENSOR_SCREEN        = @"screen";
 NSString* const SENSOR_TELEPHONY     = @"telephony";
 NSString* const SENSOR_WIFI          = @"wifi";
-NSString* const SENSOR_BLE_HEARTRATE = @"ble_heartrate";
 NSString* const SENSOR_GRAVITY       = @"gravity";
 NSString* const SENSOR_LINEAR_ACCELEROMETER = @"linear_accelerometer";
 NSString* const SENSOR_TIMEZONE      = @"timezone";
@@ -104,6 +103,8 @@ NSString* const SENSOR_PLUGIN_WEB_ESM         = @"plugin_web_esm";
 NSString* const SENSOR_PLUGIN_BLE_HEARTRATE   = @"plugin_ble_heartrate";
 NSString* const SENSOR_AWARE_DEBUG            = @"aware_debug";
 NSString* const SENSOR_PLUGIN_IOS_ESM         = @"plugin_ios_esm";
+
+NSString* const SENSOR_PLUGIN_BLE_HR          = @"plugin_ble_heartrate";
 
 
 NSString* const SENSOR_PLUGIN_MSBAND_SENSORS_CALORIES      = @"plugin_msband_sensors_calories";

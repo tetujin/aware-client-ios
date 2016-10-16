@@ -130,7 +130,7 @@
 //    }
     
     tableName = name;
-    
+
     // check wifi state
     if(isUploading){
         NSString * message= [NSString stringWithFormat:@"[%@] Now sendsor data is uploading.", sensorName];

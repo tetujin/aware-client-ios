@@ -17,6 +17,8 @@
 //@property (weak, nonatomic) NSMutableArray * bufferArray;
 - (void) setCSVHeader:(NSArray *) headers;
 
+- (NSData *) getCSVData;
+
 /// create file
 - (BOOL) createNewFile:(NSString*)fileName;
 

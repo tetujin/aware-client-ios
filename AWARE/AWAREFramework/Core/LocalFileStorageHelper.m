@@ -76,6 +76,18 @@
     csvHeader = headers;
 }
 
+- (NSData *) getCSVData {
+    NSString  * csvFilePath = [self getFilePathWithName:sensorName csvExport:YES];
+    NSFileHandle *fileHandle = [NSFileHandle fileHandleForReadingAtPath:csvFilePath];
+    if (!fileHandle) {
+        NSLog(@"[%@] AWARE can not handle the file.", [self getSensorName]);
+        return nil;
+    }
+    NSData *csvData = [fileHandle readDataToEndOfFile];
+    [fileHandle closeFile];
+    return csvData;
+}
+
 /**
  * Save data to the local storage with NSArray
  * @param   NSArray A sensor data(NSDictionary) as NSArray

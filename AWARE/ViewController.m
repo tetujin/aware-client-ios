@@ -379,7 +379,7 @@
     [_sensors addObject:[self getCelContent:@"Processor" desc:@"CPU workload for user, system and idle(%)" image:@"ic_action_processor" key:SENSOR_PROCESSOR]];
     // WiFi sensing
     [_sensors addObject:[self getCelContent:@"WiFi" desc:@"Wi-Fi sensing" image:@"ic_action_wifi" key:SENSOR_WIFI]];
-    [_sensors addObject:[self getCelContent:@"BLE Heart Rate" desc:@"Collect heart rate data from an external heart rate sensor via BLE." image:@"ic_action_heartrate" key:SENSOR_BLE_HEARTRATE]];
+    [_sensors addObject:[self getCelContent:@"BLE Heart Rate" desc:@"Collect heart rate data from an external heart rate sensor via BLE." image:@"ic_action_heartrate" key:SENSOR_PLUGIN_BLE_HR]];
     
     // [_sensors addObject:[self getCelContent:@"AmbientNoise" desc:@"AmbientNoise sensor" image:@"" key:SENSOR_AMBIENT_NOISE]];
     // [_sensors addObject:[self getCelContent:@"Light" desc:@"Ambient Light (lux)" image:@"ic_action_light"]];
@@ -406,7 +406,7 @@
     // [_sensors addObject:[self getCelContent:@"Pedometer" desc:@"This plugin collects user's daily steps." image:@"ic_action_steps" key:SENSOR_PLUGIN_PEDOMETER]];
     // communication
     [_sensors addObject:[self getCelContent:@"Communication" desc:@"The Communication sensor logs communication events such as calls and messages, performed by or received by the user." image:@"ic_action_communication" key:SENSOR_CALLS]];
-    [_sensors addObject:[self getCelContent:@"Label" desc:@"Save event labels to the AWARE server" image:@"ic_action_label" key:SENSOR_LABELS]];
+    // [_sensors addObject:[self getCelContent:@"Label" desc:@"Save event labels to the AWARE server" image:@"ic_action_label" key:SENSOR_LABELS]];
      // Microsoft Band
     [_sensors addObject:[self getCelContent:@"Microsoft Band" desc:@"Wearable sensor data (such as Heart Rate, UV, and Skin Temperature) from Microsoft Band." image:@"ic_action_msband" key:SENSOR_PLUGIN_MSBAND]];
     // Google Login
@@ -437,7 +437,7 @@
     // Database Type
     [_sensors addObject:[self getCelContent:@"DB Type" desc:dbTypeStr image:@"" key:SETTING_DB_TYPE]];
     // Export CSV
-    [_sensors addObject:[self getCelContent:@"Export CSV file" desc:csvExportState image:@"" key:SETTING_CSV_EXPORT_STATE]];
+    [_sensors addObject:[self getCelContent:@"CSV file export" desc:csvExportState image:@"" key:SETTING_CSV_EXPORT_STATE]];
     // auto sync
     // [_sensors addObject:[self getCelContent:@"Auto Sync" desc:autoSyncState image:@"" key:SETTING_AUTO_SYNC_STATE]];
     // sync interval
@@ -479,11 +479,11 @@
         studyInfo = [NSString stringWithFormat:@"%@ (%@)", awareStudy.getMqttServer, awareStudy.getStudyId];
     }
     [_sensors addObject:[self getCelContent:@"Quit Study" desc:studyInfo image:@"" key:@"STUDY_CELL_QUIT_STUDY"]];
-//    [_sensors addObject:[self getCelContent:@"Privacy Policy" desc:@"" image:@"" key:@"STUDY_CELL_PRIVACY_POLICY"]];
     [_sensors addObject:[self getCelContent:@"About AWARE" desc:@"" image:@"" key:@"STUDY_CELL_ABOUT_AWARE"]];
     [_sensors addObject:[self getCelContent:@"Team" desc:@"" image:@"" key:@"STUDY_CELL_TEAM"]];
-//    [_sensors addObject:[self getCelContent:@"Terms of Use" desc:@"" image:@"" key:@"STUDY_CELL_TERMS_OF_USE"]];
     [_sensors addObject:[self getCelContent:@"Introduction" desc:@"" image:@"" key:@"STUDY_CELL_SHOW_INTRODUCTION"]];
+    //    [_sensors addObject:[self getCelContent:@"Privacy Policy" desc:@"" image:@"" key:@"STUDY_CELL_PRIVACY_POLICY"]];
+    //    [_sensors addObject:[self getCelContent:@"Terms of Use" desc:@"" image:@"" key:@"STUDY_CELL_TERMS_OF_USE"]];
     
     [self.tableView reloadData];
 }
@@ -669,7 +669,9 @@
         
         if([awareStudy getMqttServer] != nil){
             UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Quit the current study?"
-                                                             message:[NSString stringWithFormat:@"Now you are joining %@(%@)", [awareStudy getMqttServer], [awareStudy getStudyId]]
+                                                             message:[NSString stringWithFormat:@"Now you are joining %@(%@). \n[NOTE]\n If you push the 'Quit' button, all of the stored data and study settings are removed from this app.",
+                                                                      [awareStudy getMqttServer],
+                                                                      [awareStudy getStudyId]]
                                                             delegate:self
                                                    cancelButtonTitle:@"Cancel"
                                                    otherButtonTitles:@"Quit",nil];
@@ -722,21 +724,50 @@
         alert.tag = 17;
         [alert show];
     } else if ([key isEqualToString:SETTING_DB_TYPE]) {
-        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"AWARE Setting"
-                                                         message:@"Please select DB Type."
-                                                        delegate:self
-                                               cancelButtonTitle:@"Cancel"
-                                               otherButtonTitles:@"Light Weight (Default)",@"SQLite (Beta Version)",nil];
-        alert.tag = 18;
-        [alert show];
+        NSString * awareStudyURL = [awareStudy getStudyURL];
+        if(![awareStudyURL isEqualToString:@""]){
+            UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Warning"
+                                                             message:@"You can't change the DB Type during a study."
+                                                            delegate:self
+                                                   cancelButtonTitle:@"Close"
+                                                   otherButtonTitles:nil];
+            [alert show];
+        }else{
+            UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"AWARE Setting"
+                                                             message:@"Please select DB Type."
+                                                            delegate:self
+                                                   cancelButtonTitle:@"Cancel"
+                                                   otherButtonTitles:@"Light Weight (Default)",@"SQLite (Beta Version)",nil];
+            alert.tag = 18;
+            [alert show];
+        }
     } else if ([key isEqualToString:SETTING_CSV_EXPORT_STATE]){
-        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"AWARE Setting"
-                                                         message:@"Do you need to export CSV file? If you select 'YES', the collected data is saved to .csv file. \n[NOTE]\n The CSV export mode does not sync collected data with server."
-                                                        delegate:self
-                                               cancelButtonTitle:@"Cancel"
-                                               otherButtonTitles:@"YES",@"NO",nil];
-        alert.tag = 19;
-        [alert show];
+        NSString * awareStudyURL = [awareStudy getStudyURL];
+        NSUserDefaults * userDefaults = [NSUserDefaults standardUserDefaults];
+        AwareDBType dbType = [userDefaults integerForKey:SETTING_DB_TYPE];
+        if(![awareStudyURL isEqualToString:@""]){
+            UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Warning"
+                                                             message:@"You are joining a study. During the study, you can't use the CSV Export mode."
+                                                            delegate:self
+                                                   cancelButtonTitle:@"Close"
+                                                   otherButtonTitles:nil];
+            [alert show];
+        }else if (dbType == AwareDBTypeCoreData){
+            UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Warning"
+                                                             message:@"You are using SQLite database now. Please use Light Weight (= Text File) database for exporting a data to a CSV file."
+                                                            delegate:self
+                                                   cancelButtonTitle:@"Close"
+                                                   otherButtonTitles:nil];
+            [alert show];
+        }else{
+            UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"CSV File Export"
+                                                             message:@"Do you need to export CSV file? If you select 'YES', the collected data is saved to a .csv file. \n[NOTE]\n The CSV export mode does not upload collected data to aware server."
+                                                            delegate:self
+                                                   cancelButtonTitle:@"Cancel"
+                                                   otherButtonTitles:@"YES",@"NO",nil];
+            alert.tag = 19;
+            [alert show];
+        }
     } else if ([key isEqualToString:SETTING_AUTO_SYNC_STATE]){
         UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"AWARE Setting"
                                                          message:@"Do you need to upload data in the background?"
@@ -866,7 +897,7 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
         if(buttonIndex == 1){
             [sensorManager stopAndRemoveAllSensors];
             [awareStudy clearAllSetting];
-            // [sensorManager removeAllFilesFromDocumentRoot];
+            [sensorManager removeAllFilesFromDocumentRoot];
             [self pushedStudyRefreshButton:nil];
             UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"The study is quitted"
                                                              message:nil
@@ -1055,6 +1086,7 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
         }
         cell.textLabel.text = [item objectForKey:KEY_CEL_TITLE];
         cell.detailTextLabel.text = [item objectForKey:KEY_CEL_DESC];
+        cell.detailTextLabel.numberOfLines = 3;
         NSString * imageName = [item objectForKey:KEY_CEL_IMAGE];
         UIImage *theImage= nil;
         if (![imageName isEqualToString:@""]) {

@@ -125,6 +125,7 @@ typedef enum: NSInteger {
 
 // sync data
 - (void) syncAwareDB;
+- (void) syncAwareDBWithSensorName:(NSString *)name;
 - (BOOL) syncAwareDBInForeground;
 - (BOOL) syncAwareDBWithData:(NSDictionary *) dictionary;
 
@@ -133,6 +134,8 @@ typedef enum: NSInteger {
 - (void) forbidCellularAccess;
 - (void) allowsDateUploadWithoutBatteryCharging;
 - (void) forbidDatauploadWithoutBatteryCharging;
+
+- (NSData *) getCSVData;
 
 // show progress of uploading
 - (NSString *) getSyncProgressAsText;

@@ -82,6 +82,8 @@
                                 isSuccess:(BOOL)success
                                sensorName:(NSString *)name;
 
+- (NSData *) getCSVData;
+
 @end
 
 @interface AWAREUploader : NSData <AWAREDataUploaderDelegate, NSURLSessionDataDelegate, NSURLSessionTaskDelegate>
