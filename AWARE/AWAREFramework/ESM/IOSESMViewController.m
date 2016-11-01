@@ -1118,7 +1118,7 @@
     NSArray * elements = [uiElement objectForKey:KEY_ELEMENT];
     
     NSMutableArray * array = [[NSMutableArray alloc] initWithArray:elements];
-    NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
+    NSNumber * unixtime = [AWAREUtils getUnixTimestamp:sender.date];
     [array setObject:unixtime atIndexedSubscript:0];
     
     [uiElement setObject:array forKey:KEY_ELEMENT];
@@ -1548,7 +1548,8 @@
                 if ( [contents objectAtIndex:0] != zero ){
 //                    [dic setObject:[[contents objectAtIndex:0] stringValue] forKey:KEY_ESM_USER_ANSWER];
 //                    [dic setObject:@2 forKey:KEY_ESM_STATUS];
-                    answer.esm_user_answer = [[contents objectAtIndex:0] stringValue];
+                    NSString * strTimestamp = [[contents objectAtIndex:0] stringValue];
+                    answer.esm_user_answer = strTimestamp;
                     answer.esm_status = ANSWERED;
                     NSLog(@"selecte date => %@", [contents objectAtIndex:0]);
                 }else{

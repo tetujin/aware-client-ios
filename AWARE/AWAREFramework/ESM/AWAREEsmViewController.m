@@ -965,7 +965,7 @@
     NSArray * elements = [uiElement objectForKey:KEY_ELEMENT];
     
     NSMutableArray * array = [[NSMutableArray alloc] initWithArray:elements];
-    NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
+    NSNumber * unixtime = [AWAREUtils getUnixTimestamp:sender.date];
     [array setObject:unixtime atIndexedSubscript:0];
     
     [uiElement setObject:array forKey:KEY_ELEMENT];

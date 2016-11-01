@@ -77,6 +77,13 @@ typedef enum: NSInteger {
 - (bool) isPlugin;
 - (bool) isSensor;
 
+//+ (NSString *) sensorTitle;
+//+ (NSString *) sensorDescription;
+//+ (NSString *) sensorKey;
+//+ (NSString *) sensorIconName;
+//+ (NSString *) sensorDeveloper;
+//+ (NSString *) sensorDeveloperURL;
+
 // save debug events
 - (void) trackDebugEvents;
 - (bool) saveDebugEventWithText:(NSString *)eventText type:(NSInteger)type label:(NSString *)label;
