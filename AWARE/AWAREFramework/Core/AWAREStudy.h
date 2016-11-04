@@ -73,6 +73,7 @@ typedef enum: NSInteger {
 
 // Check some thing
 - (BOOL) isAvailable;
+- (bool) isNetworkReachable;
 - (bool) isWifiReachable;
 - (NSString *) getNetworkReachabilityAsText;
 - (cleanOldDataType) getCleanOldDataType;

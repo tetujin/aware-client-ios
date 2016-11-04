@@ -35,6 +35,7 @@
     SCNetworkReachability * reachability;
     
     bool wifiReachable;
+    bool networkReachable;
     NSInteger networkState;
 }
 
@@ -78,12 +79,15 @@
                 switch (status){
                     case SCNetworkStatusReachableViaWiFi:
                         wifiReachable = YES;
+                        networkReachable = YES;
                         break;
                     case SCNetworkStatusReachableViaCellular:
                         wifiReachable = NO;
+                        networkReachable = YES;
                         break;
                     case SCNetworkStatusNotReachable:
                         wifiReachable = NO;
+                        networkReachable = NO;
                         break;
                 }
             }];
@@ -1081,6 +1085,8 @@ didCompleteWithError:(NSError *)error {
  */
 - (bool) isWifiReachable { return wifiReachable; }
 
+
+- (bool) isNetworkReachable { return networkReachable; }
 
 /**
  * Get a network condition as text

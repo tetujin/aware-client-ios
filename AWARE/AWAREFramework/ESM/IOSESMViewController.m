@@ -151,33 +151,35 @@
                         [[notif.userInfo objectForKey:@"KEY_UPLOAD_SENSOR_NAME"] isEqualToString:SENSOR_PLUGIN_IOS_ESM] ) {
                         dispatch_async(dispatch_get_main_queue(), ^{
                             NSLog(@"%@", notif.debugDescription);
-                            //[SVProgressHUD showSuccessWithStatus:@"Thank you for your submission!"];
-                            //[SVProgressHUD dismissWithDelay:3];
                             
-                            // [userInfo setObject:@(progress) forKey:@"KEY_UPLOAD_PROGRESS_STR"];
-                            // [userInfo setObject:@YES forKey:@"KEY_UPLOAD_FIN"];
-                            // [userInfo setObject:@YES forKey:@"KEY_UPLOAD_SUCCESS"];
-                            // [userInfo setObject:sensorName forKey:@"KEY_UPLOAD_SENSOR_NAME"];
-                            // [[NSNotificationCenter defaultCenter] postNotificationName:@"ACTION_AWARE_DATA_UPLOAD_PROGRESS"
                             BOOL uploadSuccess = [[notif.userInfo objectForKey:@"KEY_UPLOAD_SUCCESS"] boolValue];
                             BOOL uploadFin = [[notif.userInfo objectForKey:@"KEY_UPLOAD_FIN"] boolValue];
+                            
+                            // uploadSuccess = NO; // ** Just for TEST **
+                            
                             if( uploadFin == YES && uploadSuccess == YES ){
                                 [SVProgressHUD dismiss];
-                                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Submission is succeeded!"
-                                                                                message:@"Thank you for your submission."
-                                                                            delegate:nil
-                                                                    cancelButtonTitle:@"OK"
-                                                                    otherButtonTitles:nil];
-                                [alert show];
-                                [self.navigationController popToRootViewControllerAnimated:YES];
-                            }else if(uploadFin == YES &&  uploadSuccess == NO){
+                                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Submission is succeeded!" message:@"Thank you for your submission." preferredStyle:UIAlertControllerStyleAlert];
+                                
+                                [alertController addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                                    esmNumber = 0;
+                                    currentESMNumber = 0;
+                                    [self.navigationController popToRootViewControllerAnimated:YES];
+                                }]];
+                                [self presentViewController:alertController animated:YES completion:nil];
+                                
+                            //}else if(uploadFin == YES &&  uploadSuccess == NO){
+                            }else if(uploadSuccess == NO){
                                 [SVProgressHUD dismiss];
-                                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Submission is failed!"
-                                                                                message:@"Please submit your answer again."
-                                                                               delegate:nil
-                                                                      cancelButtonTitle:@"Close"
-                                                                      otherButtonTitles:nil];
-                                [alert show];
+                                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"** Submission is failed! **" message:@"Please submit your answer again." preferredStyle:UIAlertControllerStyleAlert];
+                                alertController.view.subviews.firstObject.backgroundColor = [UIColor redColor];
+                                alertController.view.subviews.firstObject.layer.cornerRadius = 15;
+                                alertController.view.subviews.firstObject.tintColor = [UIColor whiteColor];
+                                
+                                [alertController addAction:[UIAlertAction actionWithTitle:@"Close" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+                                    // [self.navigationController popToRootViewControllerAnimated:YES];
+                                }]];
+                                [self presentViewController:alertController animated:YES completion:nil];
                             }else{
                                 
                             }
@@ -251,14 +253,6 @@
 }
 
 - (void) setEsm:(EntityESM *) esm {
-//    NSDate * originalFireDate = [AWAREUtils getTargetNSDate:[NSDate new] hour:[esm.fire_hour intValue] nextDay:NO];
-//    NSLog(@"--------> %@", [AWAREUtils getUnixTimestamp:originalFireDate]);
-//    [self saveESMHistoryWithScheduleId:esm.schedule_id
-//                      originalFireDate:[AWAREUtils getUnixTimestamp:originalFireDate]
-//                             randomize:esm.randomize
-//                              fireDate:esm.timestamp
-//                   expirationThreshold:esm.expiration_threshold];
-    
     // Set ESM Elements
     int tag = 0;
     NSLog(@"====== Hello ESM !! =======");
@@ -309,18 +303,12 @@
     [self addNullElement];
     [self addLineElement];
     // tag++;
-    
-    
-    //    if (results.count == 1 && quick){
-    
-    //    } else {
+
     [self addNullElement];
     [self addSubmitButtonWithText:esm.esm_submit];
     [self addNullElement];
     [self addCancelButtonWithText:@"Cancel"];
     [self addNullElement];
-    //    }
-    //return YES;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1626,8 +1614,6 @@
         NSLog(@"%@", error);
         
         [delegate.managedObjectContext reset];
-        // webESM = [[WebESM alloc] initWithAwareStudy:study dbType:AwareDBTypeCoreData];
-        // esms = [webESM getValidESMsWithDatetime:[NSDate new]];
         iOSESM = [[IOSESM alloc] initWithAwareStudy:study dbType:AwareDBTypeCoreData];
         esms = [iOSESM getValidESMsWithDatetime:[NSDate new]];
         
@@ -1641,18 +1627,21 @@
             [self viewDidAppear:NO];
             return ;
         }else{
-            esmNumber = 0;
-            currentESMNumber = 0;
-
-//            [webESM setUploadingState:NO];
-//            [webESM syncAwareDB];
-//            [webESM refreshNotifications];
-            [iOSESM setUploadingState:NO];
-            [iOSESM syncAwareDB];
-            [iOSESM refreshNotifications];
-            
-            // progress view
-            [SVProgressHUD showWithStatus:@"uploading"];
+            if([study getStudyId] == nil){
+                esmNumber = 0;
+                currentESMNumber = 0;
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Thank you for your answer!"
+                                                                message:nil delegate:nil cancelButtonTitle:@"Close" otherButtonTitles:nil];
+                [alert show];
+                [self.navigationController popToRootViewControllerAnimated:YES];
+            }else{
+                // progress view
+                [SVProgressHUD showWithStatus:@"uploading"];
+                
+                [iOSESM setUploadingState:NO];
+                [iOSESM syncAwareDB];
+                [iOSESM refreshNotifications];
+            }
         }
     } else {
         

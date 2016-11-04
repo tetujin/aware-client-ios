@@ -1073,6 +1073,7 @@
     NSMutableArray * buttons = [elements objectForKey:KEY_ELEMENT];
     NSString *  selected = sender.titleLabel.text;
     for (UIButton * uiButton in buttons) {
+        
         uiButton.layer.borderWidth = 0;
         uiButton.selected = NO;
         if ([uiButton.titleLabel.text isEqualToString:selected]) {

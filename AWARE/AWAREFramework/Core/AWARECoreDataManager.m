@@ -853,6 +853,12 @@ didCompleteWithError:(nullable NSError *)error;
     } else if ([session.configuration.identifier isEqualToString:createTableQueryIdentifier]){
         session = nil;
         task = nil;
+    } else {
+        session = nil;
+        task = nil;
+        [self dataSyncIsFinishedCorrectoly];
+        NSLog(@"--> SensorName: %@", sensorName);
+        [self broadcastDBSyncEventWithProgress:@(-1) isFinish:YES isSuccess:NO sensorName:sensorName];
     }
 }
 
