@@ -69,6 +69,8 @@
     return YES;
 }
 
+
+
 - (void) setNotification:(UIApplication *)application {
     // [application unregisterForRemoteNotifications];
     
@@ -565,14 +567,30 @@ void exceptionHandler(NSException *exception) {
 ////////////////////////////////////////////////////////////////////////////////
 //// For Google Login
 ///////////////////////////////////////////////////////////////////////////////
+
+
 - (BOOL)application:(UIApplication *)application
             openURL:(NSURL *)url
   sourceApplication:(NSString *)sourceApplication
          annotation:(id)annotation {
 
-    return [[GIDSignIn sharedInstance] handleURL:url
-                               sourceApplication:sourceApplication
-                                      annotation:annotation];
+    if([[url scheme] isEqualToString:@"aware-client"] || [[url scheme] isEqualToString:@"aware"]){
+        if([[url host] isEqualToString:@"com.aware.ios.study.settings"]){
+            NSDictionary *dict = [AWAREUtils getDictionaryFromURLParameter:url];
+            if (dict != nil) {
+                NSString * studyURL = [dict objectForKey:@"study_url"];
+                if(studyURL != nil){
+                    [_sharedAWARECore.sharedAwareStudy setStudyInformationWithURL:studyURL];
+                }
+            }
+        }
+        return YES;
+    }else{
+        return [[GIDSignIn sharedInstance] handleURL:url
+                                   sourceApplication:sourceApplication
+                                          annotation:annotation];
+    }
+    
 }
 
 - (void)signIn:(GIDSignIn *)signIn

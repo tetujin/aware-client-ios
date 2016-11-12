@@ -897,7 +897,8 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
         if(buttonIndex == 1){
             [sensorManager stopAndRemoveAllSensors];
             [awareStudy clearAllSetting];
-            [sensorManager removeAllFilesFromDocumentRoot];
+            // Add question about removing data or not.
+            // [sensorManager removeAllFilesFromDocumentRoot];
             [self pushedStudyRefreshButton:nil];
             UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"The study is quitted"
                                                              message:nil

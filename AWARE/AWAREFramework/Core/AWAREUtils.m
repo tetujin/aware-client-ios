@@ -468,5 +468,28 @@ This method provides a system uuid.
     }
 }
 
+
++ (NSDictionary*)getDictionaryFromURLParameter:(NSURL *)url{
+    
+    NSString * query = [url query];
+    
+    if (query){
+        NSMutableDictionary* result = [[NSMutableDictionary alloc] init];
+        NSArray* parameters = [query componentsSeparatedByString:@"&"];
+        for (NSString* parameter in parameters){
+            if (parameter.length > 0){
+                NSArray* elements = [parameter componentsSeparatedByString:@"="];
+                id key = [elements[0] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+                id value = (elements.count == 1 ? @YES : [elements[1] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding]);
+                [result setObject:value forKey:key];
+            }
+        }
+        return [result copy];
+    }
+    else{
+        return nil;
+    }
+}
+
 @end
 
