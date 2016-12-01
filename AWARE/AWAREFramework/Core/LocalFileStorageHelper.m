@@ -518,6 +518,8 @@
             NSLog(@"[%@] Create the file.", fileName);
             return YES;
         }
+    }else{
+        NSLog(@"[%@] file is existed", fileName);
     }
     return NO;
 }
@@ -531,7 +533,8 @@
  * @return  A result of data clearing
  */
 - (bool)clearFile:(NSString *)fileName{
-    return [self createNewFile:fileName csvExport:isCSVExport];
+    // return [self createNewFile:fileName csvExport:isCSVExport];
+    return [self clearFile:fileName csvExport:isCSVExport];
 }
 
 - (bool) clearFile:(NSString *) fileName csvExport:(BOOL)csvExport {

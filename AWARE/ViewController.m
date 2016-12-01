@@ -39,6 +39,7 @@
 // #import "ESM.h"
 #import "IOSESM.h"
 #import "Accelerometer.h"
+#import "PushNotification.h"
 
 // Library
 #import <SVProgressHUD.h>
@@ -425,7 +426,7 @@
     // [_sensors addObject:[self getCelContent:@"Direction (iOS)" desc:@"Device's direction (0-360)" image:@"safari_copyrighted" key:SENSOR_DIRECTION]];
     //    [_sensors addObject:[self getCelContent:@"Rotation (iOS)" desc:@"Orientation of the device" image:@"ic_action_rotation" key:SENSOR_ROTATION]];
     
-
+    
     
     /**
      * Setting
@@ -478,6 +479,7 @@
     if([awareStudy getMqttServer] != nil){
         studyInfo = [NSString stringWithFormat:@"%@ (%@)", awareStudy.getMqttServer, awareStudy.getStudyId];
     }
+    [_sensors addObject:[self getCelContent:@"Push Notification Token" desc:@"Push to upload your push notification token to AWARE server." image:@"" key:@"push_notification_device_tokens"]];
     [_sensors addObject:[self getCelContent:@"Quit Study" desc:studyInfo image:@"" key:@"STUDY_CELL_QUIT_STUDY"]];
     [_sensors addObject:[self getCelContent:@"About AWARE" desc:@"" image:@"" key:@"STUDY_CELL_ABOUT_AWARE"]];
     [_sensors addObject:[self getCelContent:@"Team" desc:@"" image:@"" key:@"STUDY_CELL_TEAM"]];
@@ -777,7 +779,15 @@
         alert.tag = 20;
         [alert show];
         
-    } else {
+    } else if ([key isEqualToString:@"push_notification_device_tokens"]){
+        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Push Notification Setting"
+                                                         message:nil //@"Upload a push notification token?"
+                                                        delegate:self
+                                               cancelButtonTitle:@"Cancel"
+                                               otherButtonTitles:@"Upload current token",nil];
+        alert.tag = 21;
+        [alert show];
+    }else {
         [self performSegueWithIdentifier:@"settingView" sender:self];
     }
 }
@@ -1019,6 +1029,18 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
                 default:
                     break;
             }
+        }
+    }else if(alertView.tag == 21){
+        PushNotification * pushNotification = [[PushNotification alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeCoreData];
+        [pushNotification allowsDateUploadWithoutBatteryCharging];
+        [pushNotification allowsCellularAccess];
+        switch (buttonIndex) {
+            case 1:
+                [pushNotification saveStoredPushNotificationDeviceToken];
+                [pushNotification performSelector:@selector(syncAwareDBInBackground) withObject:nil afterDelay:1];
+                break;
+            default:
+                break;
         }
     }
 }

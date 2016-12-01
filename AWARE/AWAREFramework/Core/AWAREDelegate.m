@@ -262,14 +262,14 @@ handleEventsForBackgroundURLSession:(NSString *)identifier
         });
     }
     
-    
     token = [token stringByReplacingOccurrencesOfString:@"<" withString:@""];
     token = [token stringByReplacingOccurrencesOfString:@">" withString:@""];
     token = [token stringByReplacingOccurrencesOfString:@" " withString:@""];
         
     PushNotification * pushNotification = [[PushNotification alloc] initWithAwareStudy:_sharedAWARECore.sharedAwareStudy dbType:AwareDBTypeCoreData];
     [pushNotification savePushNotificationDeviceToken:token];
-    // [pushNotification syncAwareDBInForeground];
+    [pushNotification allowsCellularAccess];
+    [pushNotification allowsDateUploadWithoutBatteryCharging];
     [pushNotification performSelector:@selector(syncAwareDBInForeground) withObject:nil afterDelay:3];
     
     NSLog(@"deviceToken: %@", token);

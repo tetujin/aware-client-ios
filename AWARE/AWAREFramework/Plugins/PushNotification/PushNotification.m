@@ -53,7 +53,7 @@
 - (BOOL)startSensorWithSettings:(NSArray *)settings{
     // [self saveStoredPushNotificationDeviceToken];
     // [self setUploadingState:NO];
-    // [self performSelector:@selector(syncAwareDBInBackground) withObject:nil afterDelay:3];
+    [self performSelector:@selector(syncAwareDBInBackground) withObject:nil afterDelay:1];
     return YES;
 }
 
@@ -68,7 +68,6 @@
 - (void) savePushNotificationDeviceToken:(NSString*) token {
     if (token == nil) {
         return;
-    
     }
     NSMutableDictionary * dict = [[NSMutableDictionary alloc] init];
     [dict setObject:[AWAREUtils getUnixTimestamp:[NSDate new]] forKey:KEY_PUSH_TIMESTAMP];
@@ -77,7 +76,6 @@
     [self saveData:dict];
     [self setLatestData:dict];
     
-
     // Save the token to user default
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     [defaults setObject:token forKey:KEY_APNS_TOKEN];
