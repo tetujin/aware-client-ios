@@ -273,7 +273,8 @@
 
 //////////////////////////////////////////////////////////////////
 
-- (void) checkLocationSensorWithViewController:(UIViewController *) viewController {
+- (bool) checkLocationSensorWithViewController:(UIViewController *) viewController {
+    bool state = NO;
     CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
     if (status == kCLAuthorizationStatusAuthorizedWhenInUse || status == kCLAuthorizationStatusDenied || status == kCLAuthorizationStatusRestricted) {
         
@@ -332,13 +333,17 @@
     }else{
         Debug * debugSensor = [[Debug alloc] initWithAwareStudy:_sharedAwareStudy dbType:AwareDBTypeTextFile];
         [debugSensor saveDebugEventWithText:@"[compliance] Location Services is enabled" type:DebugTypeInfo label:@""];
+        state = YES;
     }
     // status == kCLAuthorizationStatusAuthorizedAlways
+    return state;
 }
 
 ///////////////////////////////////////////////////////
 
-- (void) checkBackgroundAppRefreshWithViewController:(UIViewController *) viewController {
+- (bool) checkBackgroundAppRefreshWithViewController:(UIViewController *) viewController {
+    bool state = NO;
+    
     //    UIBackgroundRefreshStatusRestricted, //< unavailable on this system due to device configuration; the user cannot enable the feature
     //    UIBackgroundRefreshStatusDenied,     //< explicitly disabled by the user for this application
     //    UIBackgroundRefreshStatusAvailable   //< enabled for this application
@@ -381,10 +386,15 @@
     } else if(backgroundRefreshStatus == UIBackgroundRefreshStatusAvailable){
         Debug * debugSensor = [[Debug alloc] initWithAwareStudy:_sharedAwareStudy dbType:AwareDBTypeTextFile];
         [debugSensor saveDebugEventWithText:@"[compliance] Background App Refresh service is Allowed" type:DebugTypeInfo label:@""];
+        state = YES;
     }
+    return state;
 }
 
-- (void) checkNotificationSettingWithViewController:(UIViewController *) viewController {
+- (bool) checkNotificationSettingWithViewController:(UIViewController *) viewController {
+    
+    bool state = NO;
+    
     if ([AWAREUtils getCurrentOSVersionAsFloat] >= 8) {
         // NSString *title = @"Notification service is permitted.";
         // NSString *message = @"";
@@ -433,8 +443,10 @@
         }else{
             Debug * debugSensor = [[Debug alloc] initWithAwareStudy:_sharedAwareStudy dbType:AwareDBTypeTextFile];
             [debugSensor saveDebugEventWithText:@"[compliance] Notification Service is permitted" type:DebugTypeInfo label:@""];
+            state = YES;
         }
     }
+    return state;
 }
 
 ///////////////////////////////////////////////////////////////
@@ -472,7 +484,9 @@
 }
 
 
-- (void) checkLowPowerModeWithViewController:(UIViewController *) viewController {
+- (bool) checkLowPowerModeWithViewController:(UIViewController *) viewController {
+    
+    bool state = NO;
     
     if([AWAREUtils getCurrentOSVersionAsFloat] >= 9.0){
         
@@ -520,15 +534,15 @@
         }else{
             Debug * debugSensor = [[Debug alloc] initWithAwareStudy:_sharedAwareStudy dbType:AwareDBTypeTextFile];
             [debugSensor saveDebugEventWithText:@"[compliance] Low Power Mode is OFF" type:DebugTypeInfo label:@""];
+            state = YES;
         }
     }
-    
+    return state;
 }
 
 ///////////////////////////////////////////////////////////////
 
-- (void) checkWifiStateWithViewController:(UIViewController *) viewController {
-    
+- (bool) checkWifiStateWithViewController:(UIViewController *) viewController {
     if(![self isWiFiEnabled]){
         
         NSString * title = @"Please turn on WiFi!";
@@ -570,6 +584,8 @@
         Debug * debugSensor = [[Debug alloc] initWithAwareStudy:_sharedAwareStudy dbType:AwareDBTypeTextFile];
         [debugSensor saveDebugEventWithText:@"[compliance] WiFi is On" type:DebugTypeInfo label:@""];
     }
+    
+    return [self isWiFiEnabled];
 }
 
 

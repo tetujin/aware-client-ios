@@ -22,6 +22,7 @@
 #import "Labels.h"
 #import "GoogleCalPush.h"
 #import "GoogleLogin.h"
+#import "Observer.h"
 
 @implementation AWAREDelegate{
     AWARECoreDataMigrationManager * migrationManager;
@@ -408,23 +409,51 @@ fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
         [_sharedAWARECore.sharedAwareStudy refreshStudy];
     }else if([awareCategory isEqualToString:@"upload"]){
         [_sharedAWARECore.sharedSensorManager syncAllSensorsWithDBInForeground];
+    }else if([awareCategory isEqualToString:@"compliance"]){
+        // [WIP] New function
+        [_sharedAWARECore checkCompliance];
+        Observer * observer = [[Observer alloc] initWithAwareStudy:_sharedAWARECore.sharedAwareStudy dbType:AwareDBTypeTextFile];
+        [observer sendComplianceState];
+    }else if([awareCategory isEqualToString:@"ping"]){
+        // [WIP] New function
+        Observer * observer = [[Observer alloc] initWithAwareStudy:_sharedAWARECore.sharedAwareStudy dbType:AwareDBTypeTextFile];
+        [observer sendSurvivalSignalWithLabel:@"{\"message\":\"ping\"}"];
+    }else if ([awareCategory isEqualToString:@"ios_esm"]){
+        NSString * trigger = [userInfo objectForKey:@"trigger"];
+        NSString * title = [userInfo objectForKey:@"title"];
+        NSNumber * firedTimestamp = [AWAREUtils getUnixTimestamp:[NSDate new]];
+        NSNumber * scheduledTimestamp = [userInfo objectForKey:@"schedule"];
+        
+        if([trigger isEqual:[NSNull null]] || trigger == nil){
+            trigger = @"";
+        }
+        if([title  isEqual:[NSNull null]] || title == nil){
+            title = @"";
+        }
+        if([scheduledTimestamp isEqual:[NSNull null]] || scheduledTimestamp == nil){
+            scheduledTimestamp = [AWAREUtils getUnixTimestamp:[NSDate new]];
+        }
+        if(userInfo == NULL){
+            userInfo = [[NSDictionary alloc] init];
+        }
+        
+        IOSESM * iOSESM = [[IOSESM alloc] initWithAwareStudy:_sharedAWARECore.sharedAwareStudy dbType:AwareDBTypeCoreData];
+        [iOSESM saveESMAnswerWithTimestamp:scheduledTimestamp
+                                  deviceId:[_sharedAWARECore.sharedAwareStudy getDeviceId]
+                                   esmJson:[iOSESM convertNSArraytoJsonStr:@[userInfo]]
+                                esmTrigger:trigger
+                    esmExpirationThreshold:@0
+                    esmUserAnswerTimestamp:firedTimestamp
+                             esmUserAnswer:title
+                                 esmStatus:@0];
     }
-//    else if ([awareCategory isEqualToString:@"web_esm"]){
-//        NSString * trigger = [userInfo objectForKey:@"trigger"];
-//        NSString * title = [userInfo objectForKey:@"title"];
-//        NSNumber * firedTimestamp = [AWAREUtils getUnixTimestamp:[NSDate new]];
-//        NSNumber * scheduledTimestamp = [userInfo objectForKey:@"schedule"];
-//        if(firedTimestamp == nil) firedTimestamp = @0;
-//        WebESM * webESM = [[WebESM alloc] initWithAwareStudy:_sharedAWARECore.sharedAwareStudy dbType:AwareDBTypeCoreData];
-//        [webESM saveESMAnswerWithTimestamp:scheduledTimestamp
-//                                  deviceId:[_sharedAWARECore.sharedAwareStudy getDeviceId]
-//                                   esmJson:[webESM convertNSArraytoJsonStr:@[userInfo]]
-//                                esmTrigger:trigger
-//                    esmExpirationThreshold:@0
-//                    esmUserAnswerTimestamp:firedTimestamp
-//                             esmUserAnswer:title
-//                                 esmStatus:@0];
-//    }
+    
+    if (awareCategory == nil) {
+        awareCategory = @"unknown";
+    }
+    Debug * debugSensor = [[Debug alloc] initWithAwareStudy:[[AWAREStudy alloc] initWithReachability:YES] dbType:AwareDBTypeTextFile];
+    [debugSensor saveDebugEventWithText:@"[notification] received a push notification" type:DebugTypeInfo label:awareCategory];
+    
     completionHandler(UIBackgroundFetchResultNoData);
 }
 

@@ -11,5 +11,8 @@
 @interface Observer : AWARESensor <AWARESensorDelegate>
 
 - (bool) sendSurvivalSignal;
+- (bool) sendSurvivalSignalWithLabel:(NSString *)label;
+
+- (bool) sendComplianceState;
 
 @end

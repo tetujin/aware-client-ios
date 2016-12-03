@@ -35,9 +35,11 @@
 - (void) checkCompliance;
 - (void) checkComplianceWithViewController:(UIViewController *)viewController;
 
-- (void) checkLocationSensorWithViewController:(UIViewController *) viewController;
-- (void) checkBackgroundAppRefreshWithViewController:(UIViewController *) viewController;
+- (bool) checkLocationSensorWithViewController:(UIViewController *) viewController;
+- (bool) checkBackgroundAppRefreshWithViewController:(UIViewController *) viewController;
+- (bool) checkWifiStateWithViewController:(UIViewController *) viewController;
+- (bool) checkNotificationSettingWithViewController:(UIViewController *) viewController;
+- (bool) checkLowPowerModeWithViewController:(UIViewController *) viewController;
 - (void) checkStorageUsageWithViewController:(UIViewController *) viewController;
-- (void) checkWifiStateWithViewController:(UIViewController *) viewController;
 
 @end

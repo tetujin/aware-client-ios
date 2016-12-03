@@ -293,9 +293,9 @@
 //    [self addNewSensor:memory];
     
     // Observer
-    // AWARESensor *observerSensor = [[Observer alloc] initWithAwareStudy:awareStudy dbType:dbType];
-    // [observerSensor startSensorWithSettings:nil];
-    // [self addNewSensor:observerSensor];
+     AWARESensor *observerSensor = [[Observer alloc] initWithAwareStudy:awareStudy dbType:dbType];
+     [observerSensor startSensorWithSettings:nil];
+     [self addNewSensor:observerSensor];
 
     // Push Notification
     AWARESensor * pushNotification = [[PushNotification alloc] initWithAwareStudy:awareStudy dbType:dbType];
