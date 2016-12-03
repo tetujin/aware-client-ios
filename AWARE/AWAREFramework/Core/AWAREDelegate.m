@@ -446,6 +446,10 @@ fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
                     esmUserAnswerTimestamp:firedTimestamp
                              esmUserAnswer:title
                                  esmStatus:@0];
+        
+        // [WIP] New function
+        Observer * observer = [[Observer alloc] initWithAwareStudy:_sharedAWARECore.sharedAwareStudy dbType:AwareDBTypeTextFile];
+        [observer sendSurvivalSignalWithLabel:@"{\"message\":\"recived a notification for iOS EMS.\"}"];
     }
     
     if (awareCategory == nil) {
