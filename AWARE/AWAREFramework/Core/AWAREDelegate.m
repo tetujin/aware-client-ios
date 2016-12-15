@@ -404,59 +404,123 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo
 fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
     NSLog(@"pushInfo in Background: %@", [userInfo description]);
     
-    NSString *awareCategory = [userInfo objectForKey:@"category"];
-    if([awareCategory isEqualToString:@"refresh"]){
-        [_sharedAWARECore.sharedAwareStudy refreshStudy];
-    }else if([awareCategory isEqualToString:@"upload"]){
-        [_sharedAWARECore.sharedSensorManager syncAllSensorsWithDBInForeground];
-    }else if([awareCategory isEqualToString:@"compliance"]){
-        // [WIP] New function
-        [_sharedAWARECore checkCompliance];
+    NSDictionary * awareAps= [userInfo objectForKey:@"aware-aps"];
+    if(awareAps != nil){
         Observer * observer = [[Observer alloc] initWithAwareStudy:_sharedAWARECore.sharedAwareStudy dbType:AwareDBTypeTextFile];
-        [observer sendComplianceState];
-    }else if([awareCategory isEqualToString:@"ping"]){
-        // [WIP] New function
-        Observer * observer = [[Observer alloc] initWithAwareStudy:_sharedAWARECore.sharedAwareStudy dbType:AwareDBTypeTextFile];
-        [observer sendSurvivalSignalWithLabel:@"{\"message\":\"ping\"}"];
-    }else if ([awareCategory isEqualToString:@"ios_esm"]){
-        NSString * trigger = [userInfo objectForKey:@"trigger"];
-        NSString * title = [userInfo objectForKey:@"title"];
-        NSNumber * firedTimestamp = [AWAREUtils getUnixTimestamp:[NSDate new]];
-        NSNumber * scheduledTimestamp = [userInfo objectForKey:@"schedule"];
+        NSString *awareCategory = [awareAps objectForKey:@"category"];
+        /////////////// refresh /////////////////
+        if([awareCategory isEqualToString:@"refresh"]){
+            [_sharedAWARECore.sharedAwareStudy refreshStudy];
+            [observer sendSurvivalSignalWithCategory:awareCategory message:@"try"];
+        /////////////// forcibly upload /////////////////
+        }else if([awareCategory isEqualToString:@"upload"]){
+            [_sharedAWARECore.sharedSensorManager syncAllSensorsWithDBInForeground];
+            [observer sendSurvivalSignalWithCategory:awareCategory message:@"try"];
+        /////////////// compliance check /////////////////
+        }else if([awareCategory isEqualToString:@"compliance"]){
+            // [WIP] New function
+            [_sharedAWARECore checkCompliance];
+            [observer sendComplianceState];
+        /////////////// ping ///////////////////////
+        }else if([awareCategory isEqualToString:@"ping"]){
+            // [WIP] New function
+            [observer sendSurvivalSignalWithCategory:awareCategory message:@"ping"];
+            /////////////// ios_esm ///////////////////////
+        }else if ([awareCategory isEqualToString:@"ios_esm"]){
+            NSString * trigger = [userInfo objectForKey:@"trigger"];
+            NSString * title = [userInfo objectForKey:@"title"];
+            NSNumber * firedTimestamp = [AWAREUtils getUnixTimestamp:[NSDate new]];
+            NSNumber * scheduledTimestamp = [userInfo objectForKey:@"schedule"];
+            
+            if([trigger isEqual:[NSNull null]] || trigger == nil){
+                trigger = @"";
+            }
+            if([title  isEqual:[NSNull null]] || title == nil){
+                title = @"";
+            }
+            if([scheduledTimestamp isEqual:[NSNull null]] || scheduledTimestamp == nil){
+                scheduledTimestamp = [AWAREUtils getUnixTimestamp:[NSDate new]];
+            }
+            if(userInfo == NULL){
+                userInfo = [[NSDictionary alloc] init];
+            }
+            
+            IOSESM * iOSESM = [[IOSESM alloc] initWithAwareStudy:_sharedAWARECore.sharedAwareStudy dbType:AwareDBTypeCoreData];
+            [iOSESM saveESMAnswerWithTimestamp:scheduledTimestamp
+                                      deviceId:[_sharedAWARECore.sharedAwareStudy getDeviceId]
+                                       esmJson:[iOSESM convertNSArraytoJsonStr:@[userInfo]]
+                                    esmTrigger:trigger
+                        esmExpirationThreshold:@0
+                        esmUserAnswerTimestamp:firedTimestamp
+                                 esmUserAnswer:title
+                                     esmStatus:@0];
+            
+            // [WIP] New function
+            [observer sendSurvivalSignalWithCategory:awareCategory message:@"recived a notification for iOS EMS."];
+        /////////////// version check ///////////////////////
+        }else if([awareCategory isEqualToString:@"version"]){
+            NSString* version = [NSString stringWithFormat:@"%@",[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]];
+            NSString *build = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
+            if(build != nil){
+                version = [version stringByAppendingFormat:@"(%@)", build];
+            }
+            [observer sendSurvivalSignalWithCategory:awareCategory message:version];
+        /////////////// wifi ///////////////////////
+        }else if([awareCategory isEqualToString:@"only_wifi"]){
+            NSNumber * state = [awareAps objectForKey:@"value"];
+            if(state != nil){
+                if(state.intValue == 0){
+                    [_sharedAWARECore.sharedAwareStudy setDataUploadStateInWifi:NO];
+                }else{
+                    [_sharedAWARECore.sharedAwareStudy setDataUploadStateInWifi:YES];
+                }
+                [observer sendSurvivalSignalWithCategory:awareCategory message:state.stringValue];
+            }else{
+                [observer sendSurvivalSignalWithCategory:awareCategory message:@"-1"];
+            }
+        /////////////// battery ///////////////////////
+        }else if([awareCategory isEqualToString:@"only_battery"]){
+            NSNumber * state = [awareAps objectForKey:@"value"];
+            if(state != nil){
+                if(state.intValue == 0){
+                    [_sharedAWARECore.sharedAwareStudy setDataUploadStateWithOnlyBatterChargning:NO];
+                }else{
+                    [_sharedAWARECore.sharedAwareStudy setDataUploadStateWithOnlyBatterChargning:YES];
+                }
+                [observer sendSurvivalSignalWithCategory:awareCategory message:state.stringValue];
+            }else{
+                [observer sendSurvivalSignalWithCategory:awareCategory message:@"-1"];
+            }
+        /////////////// max upload length ///////////////////////
+        }else if([awareCategory isEqualToString:@"max_upload_length"]){
+            NSNumber * length = [awareAps objectForKey:@"value"];
+            if(length != nil){
+                [_sharedAWARECore.sharedAwareStudy setMaximumByteSizeForDataUpload:length.intValue];
+                [observer sendSurvivalSignalWithCategory:awareCategory message:length.stringValue];
+                [_sharedAWARECore.sharedSensorManager startAllSensors];
+            }else{
+                [observer sendSurvivalSignalWithCategory:awareCategory message:@"-1"];
+            }
+        ////////////// sync interval //////////////
+        }else if([awareCategory isEqualToString:@"sync_interval_min"]){
+            NSNumber * interval = [awareAps objectForKey:@"value"];
+            if(interval != nil){
+                [_sharedAWARECore.sharedAwareStudy setUploadIntervalWithMinutue:interval.intValue];
+                int uploadInterval = [_sharedAWARECore.sharedAwareStudy getUploadIntervalAsSecond];
+                [_sharedAWARECore.sharedSensorManager startUploadTimerWithInterval:uploadInterval];
+                [observer sendSurvivalSignalWithCategory:awareCategory message:interval.stringValue];
+            }else{
+                [observer sendSurvivalSignalWithCategory:awareCategory message:@"-1"];
+            }
+        }
         
-        if([trigger isEqual:[NSNull null]] || trigger == nil){
-            trigger = @"";
+        if (awareCategory == nil) {
+            awareCategory = @"unknown";
         }
-        if([title  isEqual:[NSNull null]] || title == nil){
-            title = @"";
-        }
-        if([scheduledTimestamp isEqual:[NSNull null]] || scheduledTimestamp == nil){
-            scheduledTimestamp = [AWAREUtils getUnixTimestamp:[NSDate new]];
-        }
-        if(userInfo == NULL){
-            userInfo = [[NSDictionary alloc] init];
-        }
+        Debug * debugSensor = [[Debug alloc] initWithAwareStudy:[[AWAREStudy alloc] initWithReachability:YES] dbType:AwareDBTypeTextFile];
+        [debugSensor saveDebugEventWithText:@"[notification] received a push notification" type:DebugTypeInfo label:awareCategory];
         
-        IOSESM * iOSESM = [[IOSESM alloc] initWithAwareStudy:_sharedAWARECore.sharedAwareStudy dbType:AwareDBTypeCoreData];
-        [iOSESM saveESMAnswerWithTimestamp:scheduledTimestamp
-                                  deviceId:[_sharedAWARECore.sharedAwareStudy getDeviceId]
-                                   esmJson:[iOSESM convertNSArraytoJsonStr:@[userInfo]]
-                                esmTrigger:trigger
-                    esmExpirationThreshold:@0
-                    esmUserAnswerTimestamp:firedTimestamp
-                             esmUserAnswer:title
-                                 esmStatus:@0];
-        
-        // [WIP] New function
-        Observer * observer = [[Observer alloc] initWithAwareStudy:_sharedAWARECore.sharedAwareStudy dbType:AwareDBTypeTextFile];
-        [observer sendSurvivalSignalWithLabel:@"{\"message\":\"recived a notification for iOS EMS.\"}"];
     }
-    
-    if (awareCategory == nil) {
-        awareCategory = @"unknown";
-    }
-    Debug * debugSensor = [[Debug alloc] initWithAwareStudy:[[AWAREStudy alloc] initWithReachability:YES] dbType:AwareDBTypeTextFile];
-    [debugSensor saveDebugEventWithText:@"[notification] received a push notification" type:DebugTypeInfo label:awareCategory];
     
     completionHandler(UIBackgroundFetchResultNoData);
 }

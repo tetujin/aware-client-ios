@@ -15,6 +15,7 @@
 #import "SSLManager.h"
 #import "AWAREUtils.h"
 #import "PushNotification.h"
+#import "TCQMaker.h"
 
 @implementation AWAREStudy {
     NSString *mqttPassword;
@@ -513,7 +514,7 @@ didCompleteWithError:(NSError *)error {
     "serial text default '',"
     "release text default '',"
     "release_type text default '',"
-    "sdk test default ''," // version
+    "sdk text default ''," // version
     "label text default '',"
     "UNIQUE (device_id)";
   
@@ -1266,5 +1267,119 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
     [challenge.sender continueWithoutCredentialForAuthenticationChallenge:challenge];
 }
 
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+
+- (void) setDebugState:(bool)state{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setBool:state forKey:SETTING_DEBUG_STATE];
+    [userDefaults synchronize];
+}
+
+- (void) setDataUploadStateInWifiAndMobileNetwork:(bool)state{
+    if(state){
+        state = NO;
+    }else{
+        state = YES;
+    }
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setBool:state forKey:SETTING_SYNC_WIFI_ONLY];
+    [userDefaults synchronize];
+}
+
+- (void) setDataUploadStateInWifi:(bool)state{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setBool:state forKey:SETTING_SYNC_WIFI_ONLY];
+    [userDefaults synchronize];
+}
+
+- (void) setDataUploadStateWithOnlyBatterChargning:(bool)state{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setBool:state forKey:SETTING_SYNC_BATTERY_CHARGING_ONLY];
+    [userDefaults synchronize];
+}
+
+- (void) setUploadIntervalWithMinutue:(int)min{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setObject:@((double)min*60.0f) forKey:SETTING_SYNC_INT];
+    [userDefaults synchronize];
+}
+
+
+- (void) setMaximumByteSizeForDataUpload:(NSInteger)size{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setObject:@(size) forKey:KEY_MAX_DATA_SIZE];
+    [userDefaults synchronize];
+    
+    AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+    AWARECore * core = delegate.sharedAWARECore;
+    if(core != nil){
+        [core.sharedSensorManager resetAllMarkerPositionsInDB];
+    }
+}
+
+- (void) setMaximumNumberOfRecordsForDataUpload:(NSInteger)number{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setObject:@(number) forKey:KEY_MAX_FETCH_SIZE_NORMAL_SENSOR];
+    [userDefaults synchronize];
+}
+
+- (void) setDBType:(AwareDBType)type{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setInteger:type forKey:SETTING_DB_TYPE];
+    [userDefaults synchronize];
+}
+
+- (void) setCleanOldDataType:(cleanOldDataType)type{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setInteger:type forKey:SETTING_FREQUENCY_CLEAN_OLD_DATA];
+    [userDefaults synchronize];
+}
+
+- (void) setCSVExport:(bool)state{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setBool:state forKey:SETTING_CSV_EXPORT_STATE];
+    [userDefaults synchronize];
+}
+
+//////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
+
+- (bool) getDebugState{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    return [userDefaults boolForKey:SETTING_DEBUG_STATE];
+}
+
+
+- (bool) getDataUploadStateInWifi{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    return [userDefaults boolForKey:SETTING_SYNC_WIFI_ONLY];
+}
+
+- (bool) getDataUploadStateWithOnlyBatterChargning{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    return [userDefaults boolForKey:SETTING_SYNC_BATTERY_CHARGING_ONLY];
+}
+
+- (int) getUploadIntervalAsSecond{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    return (int)[userDefaults integerForKey:SETTING_SYNC_INT];
+}
+
+- (NSInteger) getMaximumByteSizeForDataUpload{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    return [userDefaults integerForKey:KEY_MAX_DATA_SIZE];
+}
+
+- (AwareDBType) getDBType{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    return [userDefaults integerForKey:SETTING_DB_TYPE];
+}
+
+- (bool) getCSVExport{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    return [userDefaults boolForKey:SETTING_CSV_EXPORT_STATE];
+}
 
 @end

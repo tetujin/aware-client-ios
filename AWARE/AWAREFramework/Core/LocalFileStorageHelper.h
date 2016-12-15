@@ -40,7 +40,7 @@
 
 // set and get mark
 - (void) setNextMark;
-- (void) restMark;
+- (void) resetMark;
 - (int)  getMarker;
 
 // set and get a losted text length

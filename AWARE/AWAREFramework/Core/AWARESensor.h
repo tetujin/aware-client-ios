@@ -17,13 +17,6 @@
 
 
 typedef enum: NSInteger {
-    AwareDBTypeUnknown  = 0,
-    AwareDBTypeTextFile = 1,
-    AwareDBTypeCoreData = 2
-} AwareDBType;
-
-
-typedef enum: NSInteger {
     AwareSettingTypeBool   = 0,
     AwareSettingTypeString = 1,
     AwareSettingTypeNumber = 2
@@ -116,6 +109,9 @@ typedef enum: NSInteger {
 - (int) getFetchLimit;
 - (int) getFetchBatchSize;
 - (int) getBufferSize;
+
+- (void) resetMarkerPosition;
+- (int)  getMarkerPosition;
 
 - (void) setDataStoring:(BOOL)state;
 - (void) startDataStoring;

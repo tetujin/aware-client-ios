@@ -59,6 +59,12 @@
     return [self sendSurvivalSignalWithLabel:@""];
 }
 
+- (bool) sendSurvivalSignalWithCategory:(NSString *)category message:(NSString *)message{
+    NSString * label = [NSString stringWithFormat:@"{\"category\":\"%@\",\"message\":\"%@\"}", category, message];
+    NSLog(@"%@", label);
+    return [self sendSurvivalSignalWithLabel:label];
+}
+
 - (bool)sendSurvivalSignalWithLabel:(NSString *) label{
     if(label == nil){
         label = @"";
@@ -131,6 +137,29 @@
     // "airplane":false,
     // "roaming":false,
     // "bt":true,
+    
+    // sensors' permission:
+    //  o location
+    //  - picture
+    //  o wifi
+    //  - bluetooth
+    //  o network
+    //  - keyboard
+    //  - contact
+    //  - calendar
+    //  - microphone
+    //  - healthkit
+    //  - music
+    //  - motion
+    //  - homekit
+    //  - speech
+    //  - reminder
+    
+    // device setting:
+    //  o low power mode
+    //  o background reresh
+    //  o notification
+    //  - storage
     
     AppDelegate * delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     bool wifi = [delegate.sharedAWARECore checkWifiStateWithViewController:nil];

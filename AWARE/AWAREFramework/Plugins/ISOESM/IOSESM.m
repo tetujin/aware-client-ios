@@ -255,7 +255,7 @@ didCompleteWithError:(NSError *)error{
         if(receiveData.length != 0){
             
             NSError *e = nil;
-            NSArray * esmArray = [NSJSONSerialization JSONObjectWithData:receiveData
+            NSArray * esmArray = [NSJSONSerialization JSONObjectWithData:[r dataUsingEncoding:NSUTF8StringEncoding]
                                                                     options:NSJSONReadingAllowFragments
                                                                       error:&e];
             if ( e != nil) {
@@ -634,15 +634,30 @@ didCompleteWithError:(NSError *)error{
         if([notification.category isEqualToString:categoryIOSESM]) {
             //@"fire_date",@"randomize",@"schedule_id"
             NSDictionary * userInfo = notification.userInfo;
-            NSDate * fireDate = notification.fireDate;
+            // NSDate * fireDate = notification.fireDate;
+            // NSDate * fireDate = [notification.fireDate dateByAddingTimeInterval:-1*randomize];
             //NSNumber * randomize = [userInfo objectForKey:@"randomize"];
             NSNumber * expiration = [userInfo objectForKey:@"expiration_threshold"];
             NSString * scheduleId = [userInfo objectForKey:@"schedule_id"];
-            // NSDate * originalFireDate = [userInfo objectForKey:@"original_fire_date"];
-            // NSNumber * randomize = [userInfo objectForKey:@"randomize"];
+            NSDate * fireDate = [userInfo objectForKey:@"original_fire_date"];
+            if(fireDate == nil) fireDate = notification.fireDate;
+            NSNumber * randomize = [userInfo objectForKey:@"randomize"];
+            if(randomize == nil) randomize = 0;
+            
             
             // check expiration
             NSDate * expirationTime = [fireDate dateByAddingTimeInterval:expiration.integerValue * 60];
+
+            if(randomize > 0){
+                // expirationTime = [fireDate dateByAddingTimeInterval:expiration.integerValue * 60 + randomize.integerValue*60];
+                fireDate = [fireDate dateByAddingTimeInterval:-1*randomize.integerValue * 60];
+            }
+            
+            if(fireDate.timeIntervalSince1970 > datetime.timeIntervalSince1970){
+                // expire_time = [current_time] - [24hours] - [randomized_time];
+                expirationTime = [expirationTime dateByAddingTimeInterval:-1*(60*60*24)];
+                fireDate       = [fireDate dateByAddingTimeInterval:-1*(60*60*24)];
+            }
             
             NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
             [dateFormat setDateFormat:@"dd HH:mm"];
@@ -653,9 +668,9 @@ didCompleteWithError:(NSError *)error{
                   [dateFormat stringFromDate:fireDate],
                   [dateFormat stringFromDate:expirationTime]
                   );
-            if( expiration.integerValue == 0 ||
-               (datetime.timeIntervalSince1970 >= fireDate.timeIntervalSince1970 &&
-                datetime.timeIntervalSince1970 <= expirationTime.timeIntervalSince1970))
+            NSLog(@"Expiration ---> %ld",expiration.integerValue);
+            NSLog(@"Randomize  ---> %ld",randomize.integerValue);
+            if( expiration.integerValue == 0 || (datetime.timeIntervalSince1970 >= fireDate.timeIntervalSince1970 && datetime.timeIntervalSince1970 <= expirationTime.timeIntervalSince1970))
             {
                 bool isNew = YES;
                 for (UILocalNotification * notif in validSchedules ) {

@@ -236,8 +236,11 @@ NSString * const AWARE_PREFERENCES_PLUGIN_AMBIENT_NOISE_SILENCE_THRESHOLD = @"pl
     //
     AVAudioSession *session = [AVAudioSession sharedInstance];
     NSError *error;
-    [session setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionInterruptSpokenAudioAndMixWithOthers|
-     AVAudioSessionCategoryOptionDefaultToSpeaker | AVAudioSessionCategoryOptionAllowBluetooth error:&error];
+    [session setCategory:AVAudioSessionCategoryPlayAndRecord
+             withOptions:AVAudioSessionCategoryOptionInterruptSpokenAudioAndMixWithOthers |
+                         AVAudioSessionCategoryOptionDefaultToSpeaker |
+                         AVAudioSessionCategoryOptionAllowBluetooth
+                   error:&error];
     if (error) {
         NSLog(@"Error setting up audio session category: %@", error.localizedDescription);
     }
@@ -434,6 +437,7 @@ NSString * const AWARE_PREFERENCES_PLUGIN_AMBIENT_NOISE_SILENCE_THRESHOLD = @"pl
     dispatch_async(dispatch_get_main_queue(), ^{
         // Update UI here
         NSLog(@"Changed input device: %@", device);
+        
     });
 }
 

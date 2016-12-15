@@ -402,7 +402,7 @@
 /**
  * Reset a progress maker with zero(0)
  */
-- (void) restMark {
+- (void) resetMark {
     [self setMarker:0];
 }
 

@@ -27,6 +27,7 @@
 
 // Plugins
 #import "GoogleCalPush.h"
+#import "GoogleLogin.h"
 #import "Pedometer.h"
 #import "Orientation.h"
 #import "Debug.h"
@@ -88,8 +89,8 @@
     webViewURL = [NSURL URLWithString:@"http://www.awareframework.com"];
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    uploadInterval = [userDefaults doubleForKey:SETTING_SYNC_INT];
-    
+    // uploadInterval = [userDefaults doubleForKey:SETTING_SYNC_INT];
+    uploadInterval = [awareStudy getUploadIntervalAsSecond];
     
     
     // [self showIntro];
@@ -213,16 +214,19 @@
     [_sensors removeAllObjects];
     
     // Get a study and device information from local default storage
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults synchronize];
+    // NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    // [userDefaults synchronize];
     
-    NSString *email = [userDefaults objectForKey:@"GOOGLE_EMAIL"];
-    NSString *name = [userDefaults objectForKey:@"GOOGLE_NAME"];
-    NSInteger maximumFileSize = [userDefaults integerForKey:KEY_MAX_DATA_SIZE];
+    NSString *email = [GoogleLogin getGoogleAccountEmail]; // [userDefaults objectForKey:@"GOOGLE_EMAIL"];
+    NSString *name  = [GoogleLogin getGoogleAccountName];  // [userDefaults objectForKey:@"GOOGLE_NAME"];
     NSString *accountInfo = [NSString stringWithFormat:@"%@ (%@)", name, email];
     if(name == nil) accountInfo = @"";
     if(email == nil) email = @"";
     
+    //[userDefaults integerForKey:KEY_MAX_DATA_SIZE];
+    NSInteger maximumFileSize = [awareStudy getMaximumByteSizeForDataUpload];
+    
+    //////////////////////////////////////////////////
     NSString *studyURL = [awareStudy getStudyURL];
     NSString *deviceId = [awareStudy getDeviceId];
     NSString *awareStudyId = [awareStudy getStudyId];
@@ -234,61 +238,58 @@
     if(mqttServerName == nil) mqttServerName = @"";
     if(awareDeviceName == nil) awareDeviceName = @"";
     
-    // Get debug state (bool)
+    //////////// Debug State ///////////////
     NSString* debugState = @"OFF";
-    if ([userDefaults boolForKey:SETTING_DEBUG_STATE]) {
+    // if ([userDefaults boolForKey:SETTING_DEBUG_STATE]) {
+    if ([awareStudy getDebugState]) {
         debugState = @"ON";
     }else{
         debugState = @"OFF";
     }
-    
-    // Get auto-sync state (bool)
-    NSString * autoSyncState = @"OFF";
-    if ([userDefaults boolForKey:SETTING_AUTO_SYNC_STATE]){
-        autoSyncState = @"ON";
-    }else{
-        autoSyncState = @"OFF";
-    }
-    
-    // Get DB Type
+
+    ///////////   DB Type   ////////////////////
     NSString * dbTypeStr = @"Light Weight";
-    if([userDefaults integerForKey:SETTING_DB_TYPE] == AwareDBTypeTextFile){
+    if([awareStudy getDBType] == AwareDBTypeTextFile){
         dbTypeStr = @"Light Weight (Text File)";
-    }else if([userDefaults integerForKey:SETTING_DB_TYPE] == AwareDBTypeCoreData){
+    }else if([awareStudy getDBType] == AwareDBTypeCoreData){
         dbTypeStr = @"SQLite (Beta Version)";
     }else{
         dbTypeStr = @"Unknown";
     }
     
-    // Get Export Format
+    ///////////   CSV Export   //////////////////////
     NSString * csvExportState = @"YES";
-    if([userDefaults boolForKey:SETTING_CSV_EXPORT_STATE]){
+    if([awareStudy getCSVExport]){
         csvExportState = @"YES";
     }else {
         csvExportState = @"NO";
     }
         
-    // Get sync interval (min)
-    NSString *syncInterval = [NSString stringWithFormat:@"%d",(int)[userDefaults doubleForKey:SETTING_SYNC_INT]/60];
+    /////////////  Upload Interval (min)  ///////////////
+    // NSString *syncInterval = [NSString stringWithFormat:@"%d",(int)[userDefaults doubleForKey:SETTING_SYNC_INT]/60];
+    NSString *syncInterval = [NSString stringWithFormat:@"%d",(int)[awareStudy getUploadIntervalAsSecond]/60];
     
-    // Get data uploading network for sensor data
+    // if ([userDefaults boolForKey:SETTING_SYNC_WIFI_ONLY]) {
+    ////////// Upload State (WiFi)
     NSString *wifiOnly = @"YES";
-    if ([userDefaults boolForKey:SETTING_SYNC_WIFI_ONLY]) {
-        wifiOnly = @"YES";
+    if ([awareStudy getDataUploadStateInWifi]) {
+         wifiOnly = @"YES";
     }else{
         wifiOnly = @"NO";
     }
     
-    
+    ////////// Upload State(Battery) ///////////
     NSString * batteryChargingOnly = @"YES";
-    if ([userDefaults boolForKey:SETTING_SYNC_BATTERY_CHARGING_ONLY]) {
+    // if ([userDefaults boolForKey:SETTING_SYNC_BATTERY_CHARGING_ONLY]) {
+    if([awareStudy getDataUploadStateWithOnlyBatterChargning]){
         batteryChargingOnly = @"YES";
     }else{
         batteryChargingOnly = @"NO";
     }
     
-    
-    cleanOldDataType cleanInterval = [userDefaults integerForKey:SETTING_FREQUENCY_CLEAN_OLD_DATA];
+    ///////////// Data Cleaning Frequency ////////////
+    // cleanOldDataType cleanInterval = [userDefaults integerForKey:SETTING_FREQUENCY_CLEAN_OLD_DATA];
+    cleanOldDataType cleanInterval = [awareStudy getCleanOldDataType];
     NSString * cleanIntervalStr = @"";
     switch (cleanInterval) {
         case cleanOldDataTypeNever:
@@ -595,9 +596,10 @@
     // Set Sync Interval
     } else if ([key isEqualToString:@"STUDY_CELL_SYNC"]) { //Sync
         // Get the interval
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        double interval = [userDefaults doubleForKey:SETTING_SYNC_INT];
+        // NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        // double interval = [userDefaults doubleForKey:SETTING_SYNC_INT];
         // Set the interval
+        double interval = [awareStudy getUploadIntervalAsSecond];
         UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Sync Interval (min)" message:@"Please inpute a sync interval to the server." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Done",nil];
         alert.alertViewStyle = UIAlertViewStylePlainTextInput;
         [[alert textFieldAtIndex:0] setKeyboardType:UIKeyboardTypeNumberPad];
@@ -618,8 +620,9 @@
     }else if([key isEqualToString:@"STUDY_CELL_MAX_FILE_SIZE"]){ //max file size
         UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Maximum Size of Post Data(KB)" message:@"Please input a maximum file size for uploading sensor data." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Done",nil];
         alert.alertViewStyle = UIAlertViewStylePlainTextInput;
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        NSInteger maximumFileValue =  [userDefaults integerForKey:KEY_MAX_DATA_SIZE];
+        // NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        // NSInteger maximumFileValue =  [userDefaults integerForKey:KEY_MAX_DATA_SIZE];
+        NSInteger maximumFileValue = [awareStudy getMaximumByteSizeForDataUpload];
         if (maximumFileValue > 0 ) {
             maximumFileValue = maximumFileValue/1000;
         }
@@ -706,8 +709,9 @@
         // @"Maximum fetch size for SQLite"
         UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Maximum Fetch Records Per POST" message:@"Please input the maximum fetch records per POST." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Done",nil];
         alert.alertViewStyle = UIAlertViewStylePlainTextInput;
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        NSInteger fetchSize = [userDefaults integerForKey:KEY_MAX_FETCH_SIZE_NORMAL_SENSOR];
+        // NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        // NSInteger fetchSize = [userDefaults integerForKey:KEY_MAX_FETCH_SIZE_NORMAL_SENSOR];
+        NSInteger fetchSize = [awareStudy getMaxFetchSize];
         [[alert textFieldAtIndex:0] setKeyboardType:UIKeyboardTypeNumberPad];
         [[alert textFieldAtIndex:0] becomeFirstResponder];
         [alert textFieldAtIndex:0].text = [NSString stringWithFormat:@"%ld", fetchSize];
@@ -745,8 +749,9 @@
         }
     } else if ([key isEqualToString:SETTING_CSV_EXPORT_STATE]){
         NSString * awareStudyURL = [awareStudy getStudyURL];
-        NSUserDefaults * userDefaults = [NSUserDefaults standardUserDefaults];
-        AwareDBType dbType = [userDefaults integerForKey:SETTING_DB_TYPE];
+        // NSUserDefaults * userDefaults = [NSUserDefaults standardUserDefaults];
+        // AwareDBType dbType = [userDefaults integerForKey:SETTING_DB_TYPE];
+        AwareDBType dbType = [awareStudy getDBType];
         if(![awareStudyURL isEqualToString:@""]){
             UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Warning"
                                                              message:@"You are joining a study. During the study, you can't use the CSV Export mode."
@@ -799,22 +804,24 @@
 - (void)alertView:(UIAlertView *)alertView
 clickedButtonAtIndex:(NSInteger)buttonIndex{
     NSString* title = alertView.title;
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    
+    NSLog(@"%ld", buttonIndex);
+    // NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    ///////////// Debug State //////////////////
     if([title isEqualToString:@"Debug Statement"]){
-//        NSLog(@"%ld", buttonIndex);
         if (buttonIndex == 1){ //yes
-            [userDefaults setBool:YES forKey:SETTING_DEBUG_STATE];
+            [awareStudy setDebugState:YES];
+            // [userDefaults setBool:YES forKey:SETTING_DEBUG_STATE];
             [self pushedStudyRefreshButton:alertView];
         } else if (buttonIndex == 2){ // no
-            //reset clicked
-            [userDefaults setBool:NO forKey:SETTING_DEBUG_STATE];
+            // [userDefaults setBool:NO forKey:SETTING_DEBUG_STATE];
+            [awareStudy setDebugState:NO];
             [self pushedStudyRefreshButton:alertView];
         } else {
             NSLog(@"Cancel");
         }
         [self.tableView reloadData];
         [self initContentsOnTableView];
+    ////////////// Sync Interval //////////////
     }else if([title isEqualToString:@"Sync Interval (min)"]){
         // cancel
         if ( buttonIndex == [alertView cancelButtonIndex]){
@@ -827,45 +834,44 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
             return;
         }
         // Set the sync interval to userDedaults
-        double syncInterval = [interval doubleValue] * 60.0f;
-        [userDefaults setObject:[NSNumber numberWithDouble:syncInterval] forKey:SETTING_SYNC_INT];
-        [userDefaults synchronize];
-        
-        // restart uploader
-        [sensorManager startUploadTimerWithInterval:syncInterval];
+        // double syncInterval = [interval doubleValue] * 60.0f;
+        [awareStudy setUploadIntervalWithMinutue:[interval doubleValue]];
+        [sensorManager startUploadTimerWithInterval:[interval doubleValue]*60.0f];
         
         [self.tableView reloadData];
         [self initContentsOnTableView];
-        
+    ///////////////////// Upload Setting (Wifi) ////////////////////
     }else if(alertView.tag == 3){
-//        NSLog(@"%ld", buttonIndex);
         if (buttonIndex == 1){ //yes
-            [userDefaults setBool:YES forKey:SETTING_SYNC_WIFI_ONLY];
+            // [userDefaults setBool:YES forKey:SETTING_SYNC_WIFI_ONLY];
+            [awareStudy setDataUploadStateInWifi:YES];
             [self pushedStudyRefreshButton:alertView];
-//            [self initContentsOnTableView];
         } else if (buttonIndex == 2){ // no
-            //reset clicked
-            [userDefaults setBool:NO forKey:SETTING_SYNC_WIFI_ONLY];
-//            [self initContentsOnTableView];
+            // [userDefaults setBool:NO forKey:SETTING_SYNC_WIFI_ONLY];
+            [awareStudy setDataUploadStateInWifi:NO];
             [self pushedStudyRefreshButton:alertView];
         } else {
             NSLog(@"Cancel");
         }
         [self.tableView reloadData];
         [self initContentsOnTableView];
+    ///////////////// Upload Setting (Battery) //////////////////////////
     }else if (alertView.tag == 9){ // Set Sync Setting
-//        NSLog(@"%ld", buttonIndex);
         if (buttonIndex == 1){ //yes
-            [userDefaults setBool:YES forKey:SETTING_SYNC_BATTERY_CHARGING_ONLY];
+            // [userDefaults setBool:YES forKey:SETTING_SYNC_BATTERY_CHARGING_ONLY];
+            [awareStudy setDataUploadStateWithOnlyBatterChargning:YES];
             [self pushedStudyRefreshButton:alertView];
         } else if (buttonIndex == 2){ // no
-            [userDefaults setBool:NO forKey:SETTING_SYNC_BATTERY_CHARGING_ONLY];
+            // [userDefaults setBool:NO forKey:SETTING_SYNC_BATTERY_CHARGING_ONLY];
+            [awareStudy setDataUploadStateWithOnlyBatterChargning:NO];
             [self pushedStudyRefreshButton:alertView];
         } else {
             NSLog(@"Cancel");
         }
         [self.tableView reloadData];
         [self initContentsOnTableView];
+    
+    /////////// Maximum Size of Post Data(KB) //////////////
     }else if([title isEqualToString:@"Maximum Size of Post Data(KB)"]){
         if ( buttonIndex == [alertView cancelButtonIndex]){
             NSLog(@"Cancel");
@@ -876,24 +882,23 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
             return;
         }
         NSInteger maximumValue = [maximumValueStr integerValue] * 1000;
-        [userDefaults setObject:[NSNumber numberWithInteger:maximumValue] forKey:KEY_MAX_DATA_SIZE];
+        [awareStudy setMaximumByteSizeForDataUpload:maximumValue];
+        // [userDefaults setObject:[NSNumber numberWithInteger:maximumValue] forKey:KEY_MAX_DATA_SIZE];
         [self pushedStudyRefreshButton:alertView];
-        
         [self.tableView reloadData];
         [self initContentsOnTableView];
+    ////////////////////// Button for manual upload  /////////////////
     }else if(alertView.tag == 8){ //manual data upload
-        if (buttonIndex == [alertView cancelButtonIndex]) {
-            
-        }else if (buttonIndex == 1){
+        if (buttonIndex == 1){
             [sensorManager syncAllSensorsWithDBInForeground];
         }
+    //////////////////////  Link to Settings.app ////////////////////////
     }else if(alertView.tag == 10){
-        if (buttonIndex == [alertView cancelButtonIndex]) {
-            
-        }else if (buttonIndex == 1){
-//            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"prefs://"]];
+        if (buttonIndex == 1){
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+            //            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"prefs://"]];
         }
+    ///////////////////// Label  ////////////////////////////////
     }else if(alertView.tag == 11){
         if ( buttonIndex == [alertView cancelButtonIndex]){
             NSLog(@"Cancel");
@@ -903,12 +908,11 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
         Labels * labelsSensor = [[Labels alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
         [labelsSensor saveLabel:label withKey:@"top" type:@"text" body:@"" triggerTime:[NSDate new] answeredTime:[NSDate new]];
         [labelsSensor syncAwareDB];
+    ////////////////////// Study Quit Operation ///////////
     }else if (alertView.tag == 12){
         if(buttonIndex == 1){
             [sensorManager stopAndRemoveAllSensors];
             [awareStudy clearAllSetting];
-            // Add question about removing data or not.
-            // [sensorManager removeAllFilesFromDocumentRoot];
             [self pushedStudyRefreshButton:nil];
             UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"The study is quitted"
                                                              message:nil
@@ -917,32 +921,38 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
                                                    otherButtonTitles:nil];
             [alert show];
         }
+    ////////////////////////// data cleaning ///////////////
     }else if (alertView.tag == 14){
         switch (buttonIndex) {
             case 0:
                 NSLog(@"cancel");
                 break;
             case 1:
-                [userDefaults setInteger:cleanOldDataTypeNever forKey:SETTING_FREQUENCY_CLEAN_OLD_DATA];
+                //[userDefaults setInteger:cleanOldDataTypeNever forKey:SETTING_FREQUENCY_CLEAN_OLD_DATA];
+                [awareStudy setCleanOldDataType:cleanOldDataTypeNever];
                 break;
             case 2:
-                [userDefaults setInteger:cleanOldDataTypeWeekly forKey:SETTING_FREQUENCY_CLEAN_OLD_DATA];
+                //[userDefaults setInteger:cleanOldDataTypeWeekly forKey:SETTING_FREQUENCY_CLEAN_OLD_DATA];
+                [awareStudy setCleanOldDataType:cleanOldDataTypeWeekly];
                 break;
             case 3:
-                [userDefaults setInteger:cleanOldDataTypeMonthly forKey:SETTING_FREQUENCY_CLEAN_OLD_DATA];
+                //[userDefaults setInteger:cleanOldDataTypeMonthly forKey:SETTING_FREQUENCY_CLEAN_OLD_DATA];
+                [awareStudy setCleanOldDataType:cleanOldDataTypeMonthly];
                 break;
             case 4:
-                [userDefaults setInteger:cleanOldDataTypeDaily forKey:SETTING_FREQUENCY_CLEAN_OLD_DATA];
+                //[userDefaults setInteger:cleanOldDataTypeDaily forKey:SETTING_FREQUENCY_CLEAN_OLD_DATA];
+                [awareStudy setCleanOldDataType:cleanOldDataTypeDaily];
                 break;
             case 5:
-                [userDefaults setInteger:cleanOldDataTypeAlways forKey:SETTING_FREQUENCY_CLEAN_OLD_DATA];
+                //[userDefaults setInteger:cleanOldDataTypeAlways forKey:SETTING_FREQUENCY_CLEAN_OLD_DATA];
+                [awareStudy setCleanOldDataType:cleanOldDataTypeAlways];
                 break;
             default:
-                
                 break;
         }
         [self.tableView reloadData];
         [self initContentsOnTableView];
+    ///////////////////  Maximum Fetch Size for SQLite ///////////////////////
     }else if (alertView.tag == 15){
         if ( buttonIndex == [alertView cancelButtonIndex]){
             NSLog(@"Cancel");
@@ -953,13 +963,15 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
             return;
         }
         NSInteger maximumValue = [maximumValueStr integerValue];
-        [userDefaults setObject:[NSNumber numberWithInteger:maximumValue] forKey:KEY_MAX_FETCH_SIZE_NORMAL_SENSOR];
-        [userDefaults synchronize];
+        [awareStudy setMaximumNumberOfRecordsForDataUpload:maximumValue];
+        // [userDefaults setObject:[NSNumber numberWithInteger:maximumValue] forKey:KEY_MAX_FETCH_SIZE_NORMAL_SENSOR];
+        // [userDefaults synchronize];
         
         [self pushedStudyRefreshButton:alertView];
         
         [self.tableView reloadData];
         [self initContentsOnTableView];
+    ///////////////  Device Name ///////////////
     }else if(alertView.tag == 16){
         if ( buttonIndex == [alertView cancelButtonIndex]){
             NSLog(@"Cancel");
@@ -972,6 +984,7 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
         [awareStudy setDeviceName:newDeviceName];
         [self.tableView reloadData];
         [self initContentsOnTableView];
+    //////////////////// Study URL /////////////////
     }else if(alertView.tag == 17){
         if(buttonIndex == [alertView cancelButtonIndex]){
             NSLog(@"Cancel");
@@ -991,25 +1004,26 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
                 }
             }
         }
+    /////////////////// DB Type ////////////////////
     }else if (alertView.tag == 18){
         if(buttonIndex == [alertView cancelButtonIndex]){
             return;
         }else{
-            // NSLog(@"%ld",buttonIndex);
             switch (buttonIndex) {
                 case 1:
-                    [userDefaults setInteger:AwareDBTypeTextFile forKey:SETTING_DB_TYPE];
-                    [userDefaults synchronize];
+                    // [userDefaults setInteger:AwareDBTypeTextFile forKey:SETTING_DB_TYPE];
+                    [awareStudy setDBType:AwareDBTypeTextFile];
                     [self pushedStudyRefreshButton:alertView];
                     break;
                 case 2:
-                    [userDefaults setInteger:AwareDBTypeCoreData forKey:SETTING_DB_TYPE];
-                    [userDefaults synchronize];
+                    // [userDefaults setInteger:AwareDBTypeCoreData forKey:SETTING_DB_TYPE];
+                    [awareStudy setDBType:AwareDBTypeCoreData];
                     [self pushedStudyRefreshButton:alertView];
                 default:
                     break;
             }
         }
+    ///////////////////// CSV Export  ///////////////////////
     }else if (alertView.tag == 19){
         if(buttonIndex == [alertView cancelButtonIndex]){
             return;
@@ -1017,19 +1031,18 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
             // NSLog(@"%ld",buttonIndex);
             switch (buttonIndex) {
                 case 1:
-                    [userDefaults setBool:YES forKey:SETTING_CSV_EXPORT_STATE];
-                    [userDefaults synchronize];
+                    [awareStudy setCSVExport:YES];
                     [self pushedStudyRefreshButton:alertView];
                     break;
                 case 2:
-                    [userDefaults setBool:NO forKey:SETTING_CSV_EXPORT_STATE];
-                    [userDefaults synchronize];
+                    [awareStudy setCSVExport:NO];
                     [self pushedStudyRefreshButton:alertView];
                     break;
                 default:
                     break;
             }
         }
+    ///////////////////// Push Notification //////////////////////
     }else if(alertView.tag == 21){
         PushNotification * pushNotification = [[PushNotification alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeCoreData];
         [pushNotification allowsDateUploadWithoutBatteryCharging];

@@ -131,7 +131,7 @@
         NSLog(@"%@", message);
         [self saveDebugEventWithText:message type:DebugTypeInfo  label:@""];
         [self dataSyncIsFinishedCorrectoly];
-        [awareLocalStorage restMark];
+        [awareLocalStorage resetMark];
         
         
         NSMutableDictionary * userInfo = [[NSMutableDictionary alloc] init];
@@ -494,7 +494,7 @@ didReceiveResponse:(NSURLResponse *)response
             NSString * message = [NSString stringWithFormat:@"[%@] Data length is zero => %ld", name, sensorData.length ];
             NSLog(@"%@", message);
             [self saveDebugEventWithText:message type:DebugTypeInfo label:@""];
-            [awareLocalStorage restMark];
+            [awareLocalStorage resetMark];
             return YES;
         }
         NSString * message = [NSString stringWithFormat:@"[%@] Start sensor data upload in the foreground => %ld", name, sensorData.length ];

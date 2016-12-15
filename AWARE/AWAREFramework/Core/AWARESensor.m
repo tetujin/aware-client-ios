@@ -457,6 +457,19 @@
     }
 }
 
+- (void) resetMarkerPosition{
+    if(localStorage != nil){
+        [localStorage resetMark];
+    }
+}
+
+- (int) getMarkerPosition{
+    if(localStorage != nil){
+        return [localStorage getMarker];
+    }
+    return 0;
+}
+
 //////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////
 

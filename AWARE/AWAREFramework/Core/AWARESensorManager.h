@@ -39,6 +39,7 @@
 - (void) stopAndRemoveAllSensors;
 - (void) stopASensor:(NSString *) sensorName;
 
+- (void) resetAllMarkerPositionsInDB;
 
 // uploader in the foreground and background
 - (bool) syncAllSensorsWithDBInForeground;

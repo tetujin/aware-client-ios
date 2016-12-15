@@ -60,7 +60,7 @@
 
 #import "Observer.h"
 
-#import "Pedometer.h"
+// #import "Pedometer.h"
 
 @implementation AWARESensorManager{
     /** upload timer */
@@ -225,9 +225,18 @@
                 NSString *pluginName = [pluginSetting objectForKey:@"setting"];
                 NSLog(@"%@", pluginName);
                 if ([pluginName isEqualToString:[NSString stringWithFormat:@"status_%@",SENSOR_PLUGIN_GOOGLE_ACTIVITY_RECOGNITION]]){
-                    //if([self checkFileExistance:SENSOR_PLUGIN_GOOGLE_ACTIVITY_RECOGNITION]){ // For supporting old version
+                    // NOTE: This sensor is not longer supported. We will move to iOS activity recognition plugin.
                     awareSensor = [[ActivityRecognition alloc] initWithAwareStudy:awareStudy dbType:dbType];
-                    //}
+                    
+                    // WIP: iOS Activity Recognition API
+                    NSString * pluginState = [pluginSetting objectForKey:@"value"];
+                    if ([pluginState isEqualToString:@"true"]) {
+                        AWARESensor * iosActivityRecognition = [[IOSActivityRecognition alloc] initWithAwareStudy:awareStudy dbType:dbType];
+                        [iosActivityRecognition startSensorWithSettings:pluginSettings];
+                        [iosActivityRecognition trackDebugEvents];
+                        [self addNewSensor:iosActivityRecognition];
+                    }
+                    
                 }else if([pluginName isEqualToString:[NSString stringWithFormat:@"status_%@",SENSOR_IOS_ACTIVITY_RECOGNITION ]] ) {
                     awareSensor = [[IOSActivityRecognition alloc] initWithAwareStudy:awareStudy dbType:dbType];
                 } else if([pluginName isEqualToString:[NSString stringWithFormat:@"status_%@",SENSOR_PLUGIN_OPEN_WEATHER]]){
@@ -969,6 +978,17 @@
     }
 }
 
+- (void) resetAllMarkerPositionsInDB {
+    NSLog(@"------- Start to reset marker Position in DB -------");
+    for (AWARESensor * sensor in awareSensors) {
+        int preMark = [sensor getMarkerPosition];
+        [sensor resetMarkerPosition];
+        int currentMark = [sensor getMarkerPosition];
+        NSLog(@"[%@] %d -> %d", [sensor getSensorName], preMark, currentMark);
+    }
+    NSLog(@"------- Finish to reset marker Position in DB -------");
+}
+
 - (void)removeAllFilesFromDocumentRoot{
     NSFileManager   *fileManager    = [NSFileManager defaultManager];
     NSArray         *ducumentDir    =  NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
@@ -984,7 +1004,6 @@
             [self removeFilePath:[NSString stringWithFormat:@"%@/%@",docRoot, dirName]];
         }
     }
-
 }
 
 - (BOOL)removeFilePath:(NSString*)path {
