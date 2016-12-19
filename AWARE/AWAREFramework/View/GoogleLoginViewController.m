@@ -30,6 +30,11 @@
     googleLogin = [[GoogleLogin alloc] initWithAwareStudy:delegate.sharedAWARECore.sharedAwareStudy dbType:AwareDBTypeTextFile];
     
     _account.text = [GoogleLogin getGoogleAccountEmail];
+    if([GoogleLogin getGoogleAccountEmail] == nil){
+        [self accountIsEmpty];
+    }else{
+        [self accountIsExist];
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -37,6 +42,19 @@
     // Dispose of any resources that can be recreated.
 }
 
+
+//////////////////////////
+- (void) accountIsExist{
+    NSString * message = @"Thank you for registering your Google Account.";
+    _messageLabel.text = message;
+}
+
+- (void) accountIsEmpty{
+    NSString * message = @"Google Login is required for this study. Please tap to Login to your account.";
+    _messageLabel.text = message;
+}
+
+/////////////////////////
 
 // Implement these methods only if the GIDSignInUIDelegate is not a subclass of
 // UIViewController.
@@ -71,6 +89,9 @@ dismissViewController:(UIViewController *)viewController {
                                           cancelButtonTitle:nil
                                           otherButtonTitles:@"Close", nil];
         [av show];
+        [self accountIsExist];
+    }else{
+        [self accountIsEmpty];
     }
 }
 
@@ -87,6 +108,7 @@ dismissViewController:(UIViewController *)viewController {
     [av show];
     
     _account.text = @"";
+    [self accountIsEmpty];
 }
 
 /*

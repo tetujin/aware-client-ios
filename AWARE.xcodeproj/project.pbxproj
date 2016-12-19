@@ -262,6 +262,8 @@
 		16D91B5E1CA9447A00A5FD4F /* MicrosoftBandKit_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16D91B5D1CA9447A00A5FD4F /* MicrosoftBandKit_iOS.framework */; };
 		16E155391C27C2AC00316321 /* EventKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16E155371C27C2AC00316321 /* EventKit.framework */; };
 		16E1553A1C27C2AC00316321 /* EventKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16E155381C27C2AC00316321 /* EventKitUI.framework */; };
+		16E225031E063CD1000C239E /* EntityESMAnswerBC+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 16E225001E063CD1000C239E /* EntityESMAnswerBC+CoreDataClass.m */; };
+		16E225041E063CD1000C239E /* EntityESMAnswerBC+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 16E225021E063CD1000C239E /* EntityESMAnswerBC+CoreDataProperties.m */; };
 		16E7AF961C3DF8A9005C9EDC /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16E7AF951C3DF8A9005C9EDC /* CoreData.framework */; };
 		16EC4F171D2E7D8200524424 /* EntityMSBandRRInterval+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 16EC4F141D2E7D8200524424 /* EntityMSBandRRInterval+CoreDataProperties.m */; };
 		16EC4F181D2E7D8200524424 /* EntityMSBandRRInterval.m in Sources */ = {isa = PBXBuildFile; fileRef = 16EC4F161D2E7D8200524424 /* EntityMSBandRRInterval.m */; };
@@ -782,6 +784,10 @@
 		16D91B5D1CA9447A00A5FD4F /* MicrosoftBandKit_iOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MicrosoftBandKit_iOS.framework; path = ThirdPatyFrameworks/MicrosoftBandKit_iOS.framework; sourceTree = "<group>"; };
 		16E155371C27C2AC00316321 /* EventKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKit.framework; path = System/Library/Frameworks/EventKit.framework; sourceTree = SDKROOT; };
 		16E155381C27C2AC00316321 /* EventKitUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKitUI.framework; path = System/Library/Frameworks/EventKitUI.framework; sourceTree = SDKROOT; };
+		16E224FF1E063CD1000C239E /* EntityESMAnswerBC+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EntityESMAnswerBC+CoreDataClass.h"; sourceTree = "<group>"; };
+		16E225001E063CD1000C239E /* EntityESMAnswerBC+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EntityESMAnswerBC+CoreDataClass.m"; sourceTree = "<group>"; };
+		16E225011E063CD1000C239E /* EntityESMAnswerBC+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EntityESMAnswerBC+CoreDataProperties.h"; sourceTree = "<group>"; };
+		16E225021E063CD1000C239E /* EntityESMAnswerBC+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EntityESMAnswerBC+CoreDataProperties.m"; sourceTree = "<group>"; };
 		16E7AF951C3DF8A9005C9EDC /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		16EC4F131D2E7D8200524424 /* EntityMSBandRRInterval+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EntityMSBandRRInterval+CoreDataProperties.h"; sourceTree = "<group>"; };
 		16EC4F141D2E7D8200524424 /* EntityMSBandRRInterval+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EntityMSBandRRInterval+CoreDataProperties.m"; sourceTree = "<group>"; };
@@ -1881,6 +1887,10 @@
 			children = (
 				16A45CDD1D2392A1008A02B1 /* BalacnedCampusESMScheduler.h */,
 				16A45CDE1D2392A1008A02B1 /* BalacnedCampusESMScheduler.m */,
+				16E224FF1E063CD1000C239E /* EntityESMAnswerBC+CoreDataClass.h */,
+				16E225001E063CD1000C239E /* EntityESMAnswerBC+CoreDataClass.m */,
+				16E225011E063CD1000C239E /* EntityESMAnswerBC+CoreDataProperties.h */,
+				16E225021E063CD1000C239E /* EntityESMAnswerBC+CoreDataProperties.m */,
 			);
 			path = BalacnedCampusScheduler;
 			sourceTree = "<group>";
@@ -2389,6 +2399,7 @@
 				16EC4F1B1D2EAA3600524424 /* WebESM.m in Sources */,
 				169C883F1D01382C00825761 /* MultiESMObject.m in Sources */,
 				160F0EF11D04277000673343 /* EntityMagnetometer+CoreDataProperties.m in Sources */,
+				16E225041E063CD1000C239E /* EntityESMAnswerBC+CoreDataProperties.m in Sources */,
 				16B077BB1D1A54BF009C070B /* EntityPushNotification+CoreDataProperties.m in Sources */,
 				16B0776C1D192663009C070B /* EntityRotation+CoreDataProperties.m in Sources */,
 				168AEA991D3EFEC300D02EA4 /* EntityProcessor.m in Sources */,
@@ -2416,6 +2427,7 @@
 				169C887F1D01382C00825761 /* MSBand.m in Sources */,
 				169C889F1D01382C00825761 /* GoogleLoginViewController.m in Sources */,
 				160F0EF81D042AB600673343 /* EntityNetwork.m in Sources */,
+				16E225031E063CD1000C239E /* EntityESMAnswerBC+CoreDataClass.m in Sources */,
 				1648FE931DAB2E87001D870A /* AWARESensors.m in Sources */,
 				160F0F091D04756800673343 /* EntityBattery+CoreDataProperties.m in Sources */,
 				160F0F0A1D04756800673343 /* EntityBattery.m in Sources */,

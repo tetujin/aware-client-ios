@@ -146,6 +146,13 @@
     
     // For test
     // [sensorManager performSelector:@selector(testSensing) withObject:nil afterDelay:10];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(moveToGoogleLogin:)
+                                                 name:ACTION_AWARE_GOOGLE_LOGIN_REQUEST
+                                               object:nil];
+    
+
 }
 
 
@@ -1148,7 +1155,12 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
         }
         return cell;
     }
-    
+}
+
+- (void) moveToGoogleLogin:(id)sender{
+    if([AWAREUtils isForeground]){
+        [self performSegueWithIdentifier:@"googleLogin" sender:self];
+    }
 }
 
 
@@ -1315,6 +1327,8 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
 }
 
 
+
+/////////////////////////////////////////////////////////////////////////////////
 
 - (void)intro:(EAIntroView *)introView pageAppeared:(EAIntroPage *)page withIndex:(NSUInteger)pageIndex{
     

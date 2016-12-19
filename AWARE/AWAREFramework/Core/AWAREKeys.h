@@ -249,6 +249,8 @@ extern NSString * const ACTION_AWARE_DATA_UPLOAD_PROGRESS;
 
 extern NSString * const ACTION_AWARE_PEDOMETER;
 
+extern NSString * const ACTION_AWARE_GOOGLE_LOGIN_REQUEST;
+
 @interface AWAREKeys: NSObject
 
 @end
