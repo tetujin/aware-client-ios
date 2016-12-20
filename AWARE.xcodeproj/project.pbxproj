@@ -272,6 +272,7 @@
 		16FD37561CF0B1F700EEB416 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 16FD37541CF0B1DE00EEB416 /* Settings.bundle */; };
 		30A047F415EDD1A1102770C0 /* libPods-AWARE.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DE3C89E784FB0D0E431B768 /* libPods-AWARE.a */; };
 		5215289A1DFEC23D0031641F /* Contacts.m in Sources */ = {isa = PBXBuildFile; fileRef = 521528991DFEC23D0031641F /* Contacts.m */; };
+		5219C2CD1E081B8D00B686BD /* Contacts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5219C2CC1E081B8D00B686BD /* Contacts.framework */; };
 		8E4FF30F666C69E395957B79 /* libPods-AWAREUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 23BCF749FAD6B1C1D27F1922 /* libPods-AWAREUITests.a */; };
 		98900AA661F2AE7402FD2927 /* libPods-AWARETests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 14CF9161D924065583D5CF4A /* libPods-AWARETests.a */; };
 /* End PBXBuildFile section */
@@ -554,7 +555,7 @@
 		169C879C1D01382C00825761 /* GoogleCalPush.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GoogleCalPush.m; sourceTree = "<group>"; };
 		169C879E1D01382C00825761 /* GoogleLogin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GoogleLogin.h; sourceTree = "<group>"; };
 		169C879F1D01382C00825761 /* GoogleLogin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GoogleLogin.m; sourceTree = "<group>"; };
-		169C87A11D01382C00825761 /* AWAREHealthKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AWAREHealthKit.h; sourceTree = "<group>"; };
+		169C87A11D01382C00825761 /* AWAREHealthKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AWAREHealthKit.h; path = HealthKit/AWAREHealthKit.h; sourceTree = "<group>"; };
 		169C87A21D01382C00825761 /* AWAREHealthKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AWAREHealthKit.m; sourceTree = "<group>"; };
 		169C87A41D01382C00825761 /* Labels.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Labels.h; sourceTree = "<group>"; };
 		169C87A51D01382C00825761 /* Labels.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Labels.m; sourceTree = "<group>"; };
@@ -804,6 +805,7 @@
 		3D6EB0B7585814E530659C9F /* Pods-AWAREUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AWAREUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AWAREUITests/Pods-AWAREUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		521528981DFEC23D0031641F /* Contacts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Contacts.h; sourceTree = "<group>"; };
 		521528991DFEC23D0031641F /* Contacts.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Contacts.m; sourceTree = "<group>"; };
+		5219C2CC1E081B8D00B686BD /* Contacts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Contacts.framework; path = System/Library/Frameworks/Contacts.framework; sourceTree = SDKROOT; };
 		7DE3C89E784FB0D0E431B768 /* libPods-AWARE.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AWARE.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B014D520B3F5CF8F6C36C6B /* Pods-AWARETests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AWARETests.release.xcconfig"; path = "Pods/Target Support Files/Pods-AWARETests/Pods-AWARETests.release.xcconfig"; sourceTree = "<group>"; };
 		AD867768C19FAEE46073BEE5 /* Pods-AWARE.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AWARE.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AWARE/Pods-AWARE.debug.xcconfig"; sourceTree = "<group>"; };
@@ -816,6 +818,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5219C2CD1E081B8D00B686BD /* Contacts.framework in Frameworks */,
 				160E1A011CD1D9C700D825BA /* libEZAudio.a in Frameworks */,
 				1658700A1C986D4F008B99D2 /* QuartzCore.framework in Frameworks */,
 				165DECF61C83AD7D002C88CA /* ExternalAccessory.framework in Frameworks */,
@@ -1281,6 +1284,7 @@
 				169C879A1D01382C00825761 /* GoogleCalPush */,
 				169C879D1D01382C00825761 /* GoogleLogin */,
 				169C87A01D01382C00825761 /* HealthKit */,
+				169C87A11D01382C00825761 /* AWAREHealthKit.h */,
 				169C87A31D01382C00825761 /* Labels */,
 				169C87A61D01382C00825761 /* Memory */,
 				169C87A91D01382C00825761 /* MSBand */,
@@ -1396,7 +1400,6 @@
 		169C87A01D01382C00825761 /* HealthKit */ = {
 			isa = PBXGroup;
 			children = (
-				169C87A11D01382C00825761 /* AWAREHealthKit.h */,
 				169C87A21D01382C00825761 /* AWAREHealthKit.m */,
 			);
 			path = HealthKit;
@@ -1977,6 +1980,7 @@
 		2A3CA9F5620967BACB187EB7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				5219C2CC1E081B8D00B686BD /* Contacts.framework */,
 				160E1A001CD1D9C700D825BA /* libEZAudio.a */,
 				169C85761D0127D700825761 /* BluetoothManager.framework */,
 				16D91B5D1CA9447A00A5FD4F /* MicrosoftBandKit_iOS.framework */,
@@ -2108,7 +2112,7 @@
 				TargetAttributes = {
 					1623CE651BFD1B2C00EFAD72 = {
 						CreatedOnToolsVersion = 7.1;
-						DevelopmentTeam = FH352PYMNC;
+						DevelopmentTeam = U6JP7S27NV;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
@@ -2729,7 +2733,7 @@
 				CODE_SIGN_ENTITLEMENTS = AWARE/AWARE.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = FH352PYMNC;
+				DEVELOPMENT_TEAM = U6JP7S27NV;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2748,7 +2752,7 @@
 					"$(PROJECT_DIR)/PrivateFrameworks",
 					"$(SDKROOT)$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = jp.ac.keio.sfc.ht.tetujin.AWARE;
+				PRODUCT_BUNDLE_IDENTIFIER = jp.ac.keio.sfc.ht.shiba.AWARE;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -2767,7 +2771,7 @@
 				CODE_SIGN_ENTITLEMENTS = AWARE/AWARE.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = FH352PYMNC;
+				DEVELOPMENT_TEAM = U6JP7S27NV;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2786,7 +2790,7 @@
 					"$(PROJECT_DIR)/PrivateFrameworks",
 					"$(SDKROOT)$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = jp.ac.keio.sfc.ht.tetujin.AWARE;
+				PRODUCT_BUNDLE_IDENTIFIER = jp.ac.keio.sfc.ht.shiba.AWARE;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";

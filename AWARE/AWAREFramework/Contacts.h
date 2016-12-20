@@ -7,7 +7,8 @@
 //
 
 #import "AWARESensor.h"
+#import <AddressBook/AddressBook.h>
 
-@interface Contacts : AWARESensor
+@interface Contacts : AWARESensor<AWARESensorDelegate>
 
 @end
