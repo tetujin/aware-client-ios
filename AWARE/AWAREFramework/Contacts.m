@@ -28,12 +28,16 @@
     NSString * query = @"_id integer primary key autoincrement,"
     "timestamp real default 0,"
     "device_id text default '',"
-    "value text default ''";
+    "name text default ''"
+    "phone_number text default ''"
+    "email_address text default ''";
+    
     [super createTable:query];
 }
 
 /** start sensor */
 - (BOOL)startSensorWithSettings:(NSArray *)settings{
+    [self checkStatus];
     return YES;
 }
 
@@ -94,11 +98,13 @@
         // 全件取得成功
         for(CNContact *contact in people){
             NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
-            [dict setObject:contact.givenName forKey:@"givenName"];
-            [dict setObject:contact.middleName forKey:@"middleName"];
-            [dict setObject:contact.familyName forKey:@"familyName"];
-            [dict setObject:contact.phoneNumbers forKey:@"phoneNumbers"];
-            [dict setObject:contact.emailAddresses forKey:@"emailAddressws"];
+            NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
+            NSString *name = [NSString stringWithFormat:@"%@ %@", contact.givenName, contact.familyName];
+            [dict setObject:unixtime forKey:@"timestamp"];
+            [dict setObject:[self getDeviceId] forKey:@"device_id"];
+            [dict setObject:name forKey:@"givenName"];
+            [dict setObject:contact.phoneNumbers[0] forKey:@"phoneNumber"];
+            [dict setObject:contact.emailAddresses[0] forKey:@"emailAddress"];
             [self saveData:dict];
         }
     } else {
