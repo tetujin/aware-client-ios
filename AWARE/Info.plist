@@ -139,6 +139,8 @@
 	<string>To store your everyday events, AWARE needs an access to your calendar.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>To read a QRcode for joining a study, AWARE needs an access to your camera.</string>
+	<key>NSHealthShareUsageDescription</key>
+	<string>To collect your daily activities, AWARE needs an access to HealthKit.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<true/>
 	<key>NSLocationUsageDescription</key>
@@ -148,7 +150,7 @@
 	<key>NSMicrophoneUsageDescription</key>
 	<string>To track ambient noise level, AWARE needs an access to Microphone.</string>
 	<key>NSMotionUsageDescription</key>
-	<string>To track your daily activity, AWARE needs an access to Motion &amp; Fitness API.</string>
+	<string>To track your daily activities, AWARE needs an access to Motion &amp; Fitness API.</string>
 	<key>UIApplicationShortcutItems</key>
 	<array>
 		<dict>
@@ -177,6 +179,7 @@
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>
+		<string>healthkit</string>
 	</array>
 	<key>UIRequiresPersistentWiFi</key>
 	<true/>

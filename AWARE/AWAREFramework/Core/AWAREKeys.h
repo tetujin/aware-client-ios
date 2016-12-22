@@ -94,6 +94,8 @@ extern NSString* const SENSOR_SCHEDULER;
 extern NSString* const SENSOR_CALLS;
 extern NSString* const SENSOR_LABELS;
 extern NSString* const SENSOR_ORIENTATION;
+extern NSString* const SENSOR_HEALTH_KIT;
+extern NSString* const SENSOR_IOS_ESM;
 
 extern NSString* const SENSOR_PLUGIN_GOOGLE_ACTIVITY_RECOGNITION;
 extern NSString* const SENSOR_IOS_ACTIVITY_RECOGNITION;
@@ -131,6 +133,7 @@ extern NSString* const SENSOR_PLUGIN_MSBAND_SENSORS_RRINTERVAL;
 
 extern NSString* const SENSOR_PLUGIN_MSBAND_KEY_ACTIVE_TIME_INTERVAL_IN_MINUTE;
 extern NSString* const SENSOR_PLUGIN_MSBAND_KEY_ACTIVE_IN_MINUTE;
+
 
 
 
@@ -250,6 +253,7 @@ extern NSString * const ACTION_AWARE_DATA_UPLOAD_PROGRESS;
 extern NSString * const ACTION_AWARE_PEDOMETER;
 
 extern NSString * const ACTION_AWARE_GOOGLE_LOGIN_REQUEST;
+extern NSString * const ACTION_AWARE_GOOGLE_LOGIN_SUCCESS;
 
 @interface AWAREKeys: NSObject
 

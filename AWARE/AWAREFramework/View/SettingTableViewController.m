@@ -84,7 +84,9 @@
         awareSensor = [[Timezone alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
     }else if([_selectedRowKey isEqualToString:SENSOR_WIFI]){
         awareSensor = [[Wifi alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
-    ///// plugins
+    }else if([_selectedRowKey isEqualToString:SENSOR_HEALTH_KIT]){
+        awareSensor = [[AWAREHealthKit alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
+        ///// plugins
     }else if([_selectedRowKey isEqualToString:SENSOR_IOS_ACTIVITY_RECOGNITION]){
         awareSensor = [[IOSActivityRecognition alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
     }else if([_selectedRowKey isEqualToString:SENSOR_GOOGLE_FUSED_LOCATION]){
@@ -103,6 +105,8 @@
         awareSensor = [[IOSESM alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
     }else if([_selectedRowKey isEqualToString:SENSOR_PLUGIN_BLE_HR]){
         awareSensor = [[BLEHeartRate alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
+    }else if([_selectedRowKey isEqualToString:SENSOR_PLUGIN_PEDOMETER]){
+        awareSensor = [[Pedometer alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
     }
     
     if(awareSensor != nil){
@@ -410,15 +414,19 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
     switch (result) {
         case MFMailComposeResultCancelled:
             NSLog(@"Mail cancelled");
+            [AWAREUtils sendLocalNotificationForMessage:@"Mail is cancelled!" soundFlag:NO];
             break;
         case MFMailComposeResultSaved:
             NSLog(@"Mail saved");
+            [AWAREUtils sendLocalNotificationForMessage:@"Mail is saved!" soundFlag:NO];
             break;
         case MFMailComposeResultSent:
             NSLog(@"Mail sent");
+            [AWAREUtils sendLocalNotificationForMessage:@"Mail is sent!" soundFlag:NO];
             break;
         case MFMailComposeResultFailed:
             NSLog(@"Mail sent failure: %@", [error localizedDescription]);
+            [AWAREUtils sendLocalNotificationForMessage:@"Sending the mail is failured. Please try it again." soundFlag:YES];
             break;
         default:
             break;

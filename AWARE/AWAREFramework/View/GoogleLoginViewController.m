@@ -76,8 +76,13 @@
 - (void)signIn:(GIDSignIn *)signIn
 dismissViewController:(UIViewController *)viewController {
     [self dismissViewControllerAnimated:YES completion:nil];
-//    [self.navigationController popToRootViewControllerAnimated:YES];
     [self performSelector:@selector(showGoogleInfo) withObject:nil afterDelay:1];
+    
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSString * userId = [defaults objectForKey:@"GOOGLE_ID"];
+    if(userId == nil){
+        [self.navigationController popToRootViewControllerAnimated:YES];
+    }
 }
 
 - (void) showGoogleInfo{

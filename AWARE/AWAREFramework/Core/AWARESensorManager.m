@@ -57,6 +57,7 @@
 #import "WebESM.h"
 #import "IBeacon.h"
 #import "IOSESM.h"
+#import "AWAREHealthKit.h"
 
 #import "Observer.h"
 
@@ -200,6 +201,8 @@
                 awareSensor = [[Calls alloc] initWithAwareStudy:awareStudy dbType:dbType];
             }else if([setting isEqualToString:[NSString stringWithFormat:@"status_%@",SENSOR_ROTATION]]){
                 awareSensor = [[Rotation alloc] initWithAwareStudy:awareStudy dbType:dbType];
+            }else if([setting isEqualToString:[NSString stringWithFormat:@"status_%@",SENSOR_IOS_ESM]]){
+                awareSensor = [[IOSESM alloc] initWithAwareStudy:awareStudy dbType:dbType];
             }
             
             if (awareSensor != nil) {
@@ -259,12 +262,14 @@
                     awareSensor = [[FusedLocations alloc] initWithAwareStudy:awareStudy dbType:dbType];
                 }else if([pluginName isEqualToString:[NSString stringWithFormat:@"status_%@",SENSOR_AMBIENT_NOISE]]){
                     awareSensor = [[AmbientNoise alloc] initWithAwareStudy:awareStudy dbType:dbType];
-                }else if([pluginName isEqualToString:[NSString stringWithFormat:@"status_%@",SENSOR_PLUGIN_WEB_ESM]]){
-                    awareSensor = [[WebESM alloc] initWithAwareStudy:awareStudy dbType:dbType];
                 }else if([pluginName isEqualToString:[NSString stringWithFormat:@"status_%@",SENSOR_PLUGIN_BLE_HR]]){
                     awareSensor = [[BLEHeartRate alloc] initWithAwareStudy:awareStudy dbType:dbType];
                 }else if([pluginName isEqualToString:[NSString stringWithFormat:@"status_%@",SENSOR_PLUGIN_IOS_ESM]]){
                     awareSensor = [[IOSESM alloc] initWithAwareStudy:awareStudy dbType:dbType];
+                }else if([pluginName isEqualToString:[NSString stringWithFormat:@"status_%@",SENSOR_PLUGIN_PEDOMETER]]){
+                    awareSensor = [[Pedometer alloc] initWithAwareStudy:awareStudy dbType:dbType];
+                }else if([pluginName isEqualToString:[NSString stringWithFormat:@"status_%@",SENSOR_HEALTH_KIT]]){
+                    awareSensor = [[AWAREHealthKit alloc] initWithAwareStudy:awareStudy dbType:dbType];
                 }
                 
                 if(awareSensor != nil){
@@ -284,17 +289,6 @@
      * You can add your own AWARESensor to AWARESensorManager directly using following source code.
      * The "-addNewSensor" method is versy userful for testing and debuging a AWARESensor without registlating a study.
      */
-    
-    
-    // Pedometer
-    // AWARESensor * steps = [[Pedometer alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
-    // [steps startSensorWithSettings:nil];
-    // [self addNewSensor:steps];
-    
-    // HealthKit
-//    AWARESensor *healthKit = [[AWAREHealthKit alloc] initWithSensorName:@"plugin_health_kit" withAwareStudy:awareStudy];
-//    [healthKit startSensor:uploadInterval withSettings:nil];
-//    [self addNewSensor:healthKit];
     
     // Memory
 //    AWARESensor *memory = [[Memory alloc] initWithSensorName:@"memory" withAwareStudy:awareStudy];
@@ -317,7 +311,7 @@
     
     /**
      * Debug Sensor
-     * NOTE: don't remove this sensor. This sensor collects and upload debug message to the server each 15 min.
+     * NOTE: don't remove this sensor. This sensor collects debug messages.
      */
     AWARESensor * debug = [[Debug alloc] initWithAwareStudy:awareStudy dbType:dbType];
     [debug startSensorWithSettings:nil];
