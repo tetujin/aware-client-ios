@@ -142,7 +142,7 @@
 - (void) readAllDate {
     // Set your start and end date for your query of interest
     NSDate * startDate = [self getLastUpdate];
-    //NSDate * startDate =  [NSDate dateWithTimeIntervalSinceNow:-60*60*1]; // <- test
+    //NSDate * startDate =  [NSDate dateWithTimeIntervalSinceNow:-60*60*24]; // <- test
     NSDate * endDate = [NSDate new];
     
     NSLog(@"[%@] %@ <---> %@", [self getSensorName], startDate, endDate);

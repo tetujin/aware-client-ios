@@ -371,7 +371,7 @@ didCompleteWithError:(NSError *)error{
         NSMutableDictionary * dictSchedule = [[NSMutableDictionary alloc] init];
         [dictSchedule setObject:esmSchedule.fireHours forKey:@"hours"];
         [dictSchedule setObject:esmSchedule.scheduledESMs forKey:@"esms"];
-        [dictSchedule setObject:esmSchedule.randomizeSchedule  forKey:@"randomize_schedule"];
+        [dictSchedule setObject:esmSchedule.randomizeSchedule  forKey:@"randomize"];
         [dictSchedule setObject:@(esmSchedule.timeoutSecond) forKey:@"expiration"];
         
         [dictSchedule setObject:esmSchedule.title forKey:@"notification_title"];
