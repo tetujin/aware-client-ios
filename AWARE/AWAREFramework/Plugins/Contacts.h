@@ -9,8 +9,11 @@
 #import "AWARESensor.h"
 #import <AddressBook/AddressBook.h>
 
+extern NSString * const KEY_PLUGIN_SETTING_CONTACTS_LAST_UPDATE_NSDATE;
+
 @interface Contacts : AWARESensor<AWARESensorDelegate>
 
--(void)checkStatus;
+- (void) checkStatus;
+- (NSDate *) getLastUpdateDate;
 
 @end

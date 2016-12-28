@@ -10,6 +10,7 @@
 
 @interface ContactsViewController : UIViewController
 
+@property (weak, nonatomic) IBOutlet UILabel *lastUpdate;
 @property(weak, nonatomic) IBOutlet UIButton *uploadButton;
 
 @end

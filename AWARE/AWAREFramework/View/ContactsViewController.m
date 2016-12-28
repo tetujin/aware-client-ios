@@ -24,6 +24,8 @@
     AppDelegate * delegate = (AppDelegate *) [UIApplication sharedApplication].delegate;
     
     contacts = [[Contacts alloc] initWithAwareStudy:delegate.sharedAWARECore.sharedAwareStudy dbType:AwareDBTypeTextFile];
+
+    [self updateLastUpdateDate];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -33,6 +35,14 @@
 
 - (IBAction)uploadContacts:(id)sender {
     [contacts checkStatus];
+    [self performSelector:@selector(updateLastUpdateDate) withObject:nil afterDelay:3];
+}
+
+- (void) updateLastUpdateDate{
+    NSDate * lastUpdateDate = [contacts getLastUpdateDate];
+    if(lastUpdateDate != nil){
+        _lastUpdate.text = [NSString stringWithFormat:@"Last Update:\n%@",lastUpdateDate.debugDescription];
+    }
 }
 
 /*

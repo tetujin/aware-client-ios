@@ -9,15 +9,18 @@
 #import "Contacts.h"
 @import Contacts;
 
-@implementation Contacts
+NSString * const KEY_PLUGIN_SETTING_CONTACTS_LAST_UPDATE_NSDATE = @"key_plugin_setting_contanct_last_update_date";
+
+@implementation Contacts{
+    
+}
 
 - (instancetype) initWithAwareStudy:(AWAREStudy *)study
                              dbType:(AwareDBType)dbType {
     self = [super initWithAwareStudy:study
                           sensorName:SENSOR_PLUGIN_CONTACTS
                         dbEntityName:nil
-                              dbType:dbType];
-    
+                              dbType:AwareDBTypeTextFile];
     if (self) {
     }
     return self;
@@ -37,6 +40,9 @@
 
 /** start sensor */
 - (BOOL)startSensorWithSettings:(NSArray *)settings{
+    
+    
+    
     return YES;
 }
 
@@ -89,12 +95,12 @@
     NSMutableArray *people = @[].mutableCopy;
     BOOL success = [store enumerateContactsWithFetchRequest:request error:&error
                                                  usingBlock:^(CNContact * _Nonnull contact, BOOL * _Nonnull stop) {
-                                                     // 全て追加
+                                                     // Add all
                                                      [people addObject:contact];
                                                  }];
     
     if (success) {
-        // 全件取得成功
+        // Success to collect all contacts
         for(CNContact *contact in people){
             NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
             NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
@@ -104,23 +110,46 @@
             [dict setObject:name forKey:@"name"];
             if (contact.phoneNumbers.count != 0){
                 CNPhoneNumber *phoneNumber = contact.phoneNumbers[0].value;
-                NSLog(@"%@",phoneNumber.stringValue);
-                [dict setObject:phoneNumber.stringValue forKey:@"phoneNumber"];
+                // NSLog(@"%@",phoneNumber.stringValue);
+                [dict setObject:phoneNumber.stringValue forKey:@"phone_number"];
             }
             if (contact.emailAddresses.count != 0){
                 NSString *email = [NSString stringWithFormat:@"%@", contact.emailAddresses[0].value];
-                [dict setObject:email forKey:@"emailAddress"];
+                [dict setObject:email forKey:@"email_address"];
             }
             [self saveData:dict];
         }
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil
-                                                                       message:@"Success!"
-                                                                preferredStyle:UIAlertControllerStyleAlert];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Success!"
+                                                            message:[NSString stringWithFormat:@"Saved %ld contacts", people.count]
+                                                           delegate:nil
+                                                  cancelButtonTitle:@"Close"
+                                                  otherButtonTitles:nil];
+            [alert show];
+            [self setLastUpdateDateWithDate:[NSDate new]];
+            [self syncAwareDBInBackground];
+        });
         
     } else {
         NSLog(@"%s %@",__func__, error);
     }
 }
 
+- (NSDate *) getLastUpdateDate{
+    NSUserDefaults * userDefaults = [NSUserDefaults standardUserDefaults];
+    NSDate * date = [userDefaults objectForKey:KEY_PLUGIN_SETTING_CONTACTS_LAST_UPDATE_NSDATE];
+    if(date != nil){
+        return date;
+    }else{
+        return nil;
+    }
+}
+
+- (void) setLastUpdateDateWithDate:(NSDate *)date{
+    NSUserDefaults * userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setObject:date forKey:KEY_PLUGIN_SETTING_CONTACTS_LAST_UPDATE_NSDATE];
+    [userDefaults synchronize];
+}
 
 @end
