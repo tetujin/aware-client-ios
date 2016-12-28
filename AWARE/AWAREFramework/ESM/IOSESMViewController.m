@@ -26,7 +26,8 @@
 #import "AWARESensorManager.h"
 
 #import "SVProgressHUD.h"
-
+#import "BalacnedCampusESMScheduler.h"
+#import "EntityESMAnswerBC+CoreDataClass.h"
 //@interface WebESMViewController ()
 //
 //@end
@@ -66,6 +67,7 @@
     
     // WebESM * webESM;
     IOSESM * iOSESM;
+    BalacnedCampusESMScheduler * bcESM;
     NSArray * esms;
     int currentESMNumber;
     
@@ -81,7 +83,6 @@
     // Pass the selected object to the new view controller.
 }
 */
-
 
 - (void)viewDidLoad {
 
@@ -132,10 +133,15 @@
 //    webESM = [[WebESM alloc] initWithAwareStudy:study dbType:AwareDBTypeCoreData];
 //    [webESM allowsCellularAccess];
 //    [webESM allowsDateUploadWithoutBatteryCharging];
-    
+
     iOSESM = [[IOSESM alloc] initWithAwareStudy:study dbType:AwareDBTypeCoreData];
     [iOSESM allowsCellularAccess];
     [iOSESM allowsDateUploadWithoutBatteryCharging];
+    
+    // WIP
+    bcESM = [[BalacnedCampusESMScheduler alloc] initWithAwareStudy:study dbType:AwareDBTypeCoreData];
+    [bcESM allowsCellularAccess];
+    [bcESM allowsDateUploadWithoutBatteryCharging];
     
     currentESMNumber = 0;
     
@@ -148,7 +154,8 @@
                 usingBlock:^(NSNotification *notif) {
                     if ([[notif.userInfo objectForKey:@"KEY_UPLOAD_SENSOR_NAME"] isEqualToString:SENSOR_PLUGIN_WEB_ESM] ||
                         [[notif.userInfo objectForKey:@"KEY_UPLOAD_SENSOR_NAME"] isEqualToString:@"esms"] ||
-                        [[notif.userInfo objectForKey:@"KEY_UPLOAD_SENSOR_NAME"] isEqualToString:SENSOR_PLUGIN_IOS_ESM] ) {
+                        [[notif.userInfo objectForKey:@"KEY_UPLOAD_SENSOR_NAME"] isEqualToString:SENSOR_PLUGIN_IOS_ESM] ||
+                        [[notif.userInfo objectForKey:@"KEY_UPLOAD_SENSOR_NAME"] isEqualToString:SENSOR_PLUGIN_CAMPUS]) {
                         dispatch_async(dispatch_get_main_queue(), ^{
                             NSLog(@"%@", notif.debugDescription);
                             
@@ -381,9 +388,6 @@
         
         [uiElements addObject:uiElement];
     }
-    
-    
-    
 }
 
 
@@ -1327,6 +1331,7 @@
     // NSNumber *NEW = @0;
     NSNumber *DISMISSED = @1;
     NSNumber *ANSWERED = @2;
+    NSString * NA = @"NA";
     // NSNumber *EXPIRED = @3;
     
     AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
@@ -1336,9 +1341,7 @@
     
     NSMergePolicy *originalMergePolicy = context.mergePolicy;
     context.mergePolicy = NSOverwriteMergePolicy;
-    
-    NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
-    NSString * deviceId = [study getDeviceId];
+
     
     for (int i=0; i<uiElements.count; i++) {
         
@@ -1348,18 +1351,9 @@
         NSArray * contents = [[uiElements objectAtIndex:i] objectForKey:KEY_ELEMENT];
         NSArray * labels = [[uiElements objectAtIndex:i] objectForKey:KEY_LABLES];
 
-        EntityESMAnswer * answer = (EntityESMAnswer *)
-        [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([EntityESMAnswer class])
-                                                                                        inManagedObjectContext:context];
-        // add special data to dic from each uielements
         NSNumber* type = esm.esm_type; // [esmDic objectForKey:KEY_ESM_TYPE];
-        
-        answer.device_id = deviceId;
-        answer.timestamp = esm.timestamp;
-        answer.esm_json = esm.esm_json;
-        answer.esm_trigger = esm.esm_trigger;
-        answer.esm_expiration_threshold = esm.esm_expiration_threshold;
-        answer.double_esm_user_answer_timestamp = unixtime;
+        NSString * esmUserAnswer = @"";
+        NSNumber * esmState = DISMISSED;
         
         // save each data to the dictionary
         ///////////// Free Test //////////////////
@@ -1367,20 +1361,21 @@
             NSLog(@"Get free text data.");
             if (contents != nil) {
                 UITextView * textView = [contents objectAtIndex:0];
-                //[dic setObject:textView.text forKey:KEY_ESM_USER_ANSWER];
-                answer.esm_user_answer = textView.text;
+                // answer.esm_user_answer = textView.text;
+                esmUserAnswer = textView.text;
+                esmState = ANSWERED;
                 NSLog(@"Value is = %@", textView.text);
                 if ([textView.text isEqualToString:@""]) {
-                    //[dic setObject:DISMISSED forKey:KEY_ESM_STATUS];
-                    answer.esm_status = DISMISSED;
+                    //answer.esm_status = DISMISSED;
+                    esmState = DISMISSED;
                 }
                 if (contents.count > 1) {
                     UIButton * naButton = [contents objectAtIndex:1];
                     if (naButton.selected) {
-                        //[dic setObject:@"NA" forKey:KEY_ESM_USER_ANSWER];
-                        //[dic setObject:ANSWERED forKey:KEY_ESM_STATUS];
-                        answer.esm_user_answer = @"NA";
-                        answer.esm_status = ANSWERED;
+                        //answer.esm_user_answer = @"NA";
+                        // answer.esm_status = ANSWERED;
+                        esmUserAnswer = NA;
+                        esmState = ANSWERED;
                     }
                 }
             }
@@ -1400,11 +1395,15 @@
                 }
             }
             if(skip){
-                answer.esm_user_answer = @"";
-                answer.esm_status = DISMISSED;
+                //answer.esm_user_answer = @"";
+                //answer.esm_status = DISMISSED;
+                esmUserAnswer = @"";
+                esmState = DISMISSED;
             }else{
-                answer.esm_user_answer = selectedItem;
-                answer.esm_status = ANSWERED;
+                //answer.esm_user_answer = selectedItem;
+                //answer.esm_status = ANSWERED;
+                esmUserAnswer = selectedItem;
+                esmState = ANSWERED;
             }
         /////////////// Check Box //////////////////
         } else if ([type isEqualToNumber:@3]) {
@@ -1427,11 +1426,11 @@
                 selectedItemsStr = [self convertArrayToCSVFormat:results];
             }
             if(skip){
-                answer.esm_user_answer = @"";
-                answer.esm_status = DISMISSED;
+                esmUserAnswer = @"";
+                esmState = DISMISSED;
             }else{
-                answer.esm_user_answer = selectedItemsStr;
-                answer.esm_status = ANSWERED;
+                esmUserAnswer = selectedItemsStr;
+                esmState = ANSWERED;
             }
         ////////////////// Likert Scale ////////////////////
         } else if ([type isEqualToNumber:@4]) {
@@ -1448,19 +1447,16 @@
                     }
                     
                     if (selectedOption == -1) {
-                        // [dic setObject:DISMISSED forKey:KEY_ESM_STATUS];
-                        answer.esm_user_answer = @"";
-                        answer.esm_status = DISMISSED;
+                        esmUserAnswer = @"";
+                        esmState = DISMISSED;
                     }else{
-                        
                         /**
                          * ========================================================================================
                          * [NOTE]: If the dic include "esm_radios", we have to change the value to the label's text
                          * ========================================================================================
                          */
-                        //[dic setObject:[NSNumber numberWithInt:selectedOption] forKey:KEY_ESM_USER_ANSWER];
-                        answer.esm_user_answer = @(selectedOption).stringValue;
-                        answer.esm_status = ANSWERED;
+                        esmUserAnswer = @(selectedOption).stringValue;
+                        esmState = ANSWERED;
                         NSLog(@"%d", selectedOption);
                         
                         NSArray * radios = [self convertJsonStringToArray:esm.esm_radios]; //(NSArray *)[esmDic objectForKey:@"esm_radios"];
@@ -1471,7 +1467,8 @@
                                     // Set user answer
                                     // [dic setObject:selectedLabel forKey:KEY_ESM_USER_ANSWER];
                                     // Change ESM type to radio button
-                                    answer.esm_user_answer = selectedLabel;
+                                    // answer.esm_user_answer = selectedLabel;
+                                    esmUserAnswer = selectedLabel;
                                     NSLog(@"selected label: %@", selectedLabel);
                                 }
                             }
@@ -1494,15 +1491,15 @@
                     }
                     
                     if (selectedItem == nil) { // dismissed
-                        //[dic setObject:@1 forKey:KEY_ESM_STATUS];
-                        //[dic setObject:@"" forKey:KEY_ESM_USER_ANSWER];
-                        answer.esm_user_answer = @"";
-                        answer.esm_status = DISMISSED;
+//                        answer.esm_user_answer = @"";
+//                        answer.esm_status = DISMISSED;
+                        esmUserAnswer = @"";
+                        esmState = DISMISSED;
                     } else if (selectedItem != nil){ // answered
-                        //[dic setObject:title forKey:KEY_ESM_USER_ANSWER];
-                        //[dic setObject:@2 forKey:KEY_ESM_STATUS];
-                        answer.esm_user_answer = selectedItem;
-                        answer.esm_status = ANSWERED;
+//                        answer.esm_user_answer = selectedItem;
+//                        answer.esm_status = ANSWERED;
+                        esmUserAnswer = selectedItem;
+                        esmState = ANSWERED;
                     }
                 }
             }
@@ -1512,18 +1509,18 @@
             if (contents != nil) {
                 UILabel * label = [contents objectAtIndex:0];
                 if ([label.text isEqualToString:@"---"]) {
-                    answer.esm_user_answer = @"";
-                    answer.esm_status = DISMISSED;
+                    esmUserAnswer = @"";
+                    esmState = DISMISSED;
                 }else{
-                    answer.esm_user_answer = label.text;
-                    answer.esm_status = ANSWERED;
+                    esmUserAnswer = label.text;
+                    esmState = ANSWERED;
                 }
                 
                 if ( contents.count > 1) {
                     UIButton * naButton = [contents objectAtIndex:1];
                     if(naButton.selected){
-                        answer.esm_user_answer = @"NA";
-                        answer.esm_status = ANSWERED;
+                        esmUserAnswer = NA;
+                        esmState = ANSWERED;
                     }
                 }
             }
@@ -1534,26 +1531,20 @@
                 // DatePicker Value
                 NSNumber *zero = @0;
                 if ( [contents objectAtIndex:0] != zero ){
-//                    [dic setObject:[[contents objectAtIndex:0] stringValue] forKey:KEY_ESM_USER_ANSWER];
-//                    [dic setObject:@2 forKey:KEY_ESM_STATUS];
                     NSString * strTimestamp = [[contents objectAtIndex:0] stringValue];
-                    answer.esm_user_answer = strTimestamp;
-                    answer.esm_status = ANSWERED;
+                    esmUserAnswer = strTimestamp;
+                    esmState = ANSWERED;
                     NSLog(@"selecte date => %@", [contents objectAtIndex:0]);
                 }else{
-                    // [dic setObject:@"0" forKey:KEY_ESM_USER_ANSWER];
-                    // [dic setObject:@1 forKey:KEY_ESM_STATUS];
-                    answer.esm_user_answer = @"";
-                    answer.esm_status = DISMISSED;
+                    esmUserAnswer = @"";
+                    esmState = DISMISSED;
                 }
                 if ( contents.count > 1) {
                     // Get N/A button value and set N/A condition
                     UIButton* naButton = [contents objectAtIndex:1];
                     if(naButton.selected){
-                        answer.esm_user_answer = @"NA";
-                        answer.esm_status = ANSWERED;
-                        // [dic setObject:@"NA" forKey:KEY_ESM_USER_ANSWER];
-                        // [dic setObject:@2 forKey:KEY_ESM_STATUS];
+                        esmUserAnswer = NA;
+                        esmState = ANSWERED;
                     }
                 }
             }
@@ -1573,37 +1564,115 @@
                     
                     if(pamNumber >= 1 && pamNumber <= 16){ // answered
                         NSString * emotionStr = [PamSchema getEmotionString:pamNumber];
-                        // [dic setObject:emotionStr forKey:KEY_ESM_USER_ANSWER];
-                        // [dic setObject:@2 forKey:KEY_ESM_STATUS];
-                        answer.esm_user_answer = emotionStr;
-                        answer.esm_status = ANSWERED;
+                        esmUserAnswer = emotionStr;
+                        esmState = ANSWERED;
                     } else {// errored
                         NSLog(@"dissmiss");
-                        // [dic setObject:@"" forKey:KEY_ESM_USER_ANSWER];
-                        // [dic setObject:@1 forKey:KEY_ESM_STATUS];
-                        answer.esm_user_answer = @"";
-                        answer.esm_status = DISMISSED;
+                        esmUserAnswer = @"";
+                        esmState = DISMISSED;
                     }
                 }
             }
         /////////////////// web page //////////////////
         } else if ( [type isEqual:@9]){
-            answer.esm_status = ANSWERED;
-            answer.esm_user_answer = @"";
+            esmUserAnswer = @"";
+            esmState = ANSWERED;
         } else {
             
         }
         
-        NSLog(@"-----------------");
-        NSLog(@"%@", answer.esm_user_answer);
-        NSLog(@"%@", answer.device_id);
-        NSLog(@"%@", answer.timestamp);
-        NSLog(@"%@", answer.esm_trigger);
-        NSLog(@"%@", answer.esm_json);
-        NSLog(@"%@", answer.esm_expiration_threshold);
-        NSLog(@"%@", answer.double_esm_user_answer_timestamp);
-        NSLog(@"%@", answer.esm_status);
-        NSLog(@"-----------------");
+        ///////////////////////////////////////////////////
+        
+        NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
+        NSString * deviceId = [study getDeviceId];
+        
+        if([IOSESM getTableVersion] == 1){
+            EntityESMAnswerBC * answer = (EntityESMAnswerBC *)
+            [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([EntityESMAnswerBC class])
+                                          inManagedObjectContext:context];
+            // add special data to dic from each uielements
+            // 24 items
+            NSLog(@"--> %@", esm.debugDescription);
+            
+            answer.timestamp = esm.timestamp;
+            
+            answer.double_esm_user_answer_timestamp = unixtime;
+            answer.device_id = deviceId;
+            answer.esm_user_answer = esmUserAnswer;
+            if(answer.esm_user_answer == nil) answer.esm_user_answer = @"";
+            answer.esm_type = type;
+            if(answer.esm_type == nil) answer.esm_type = @0;
+            answer.esm_trigger = esm.esm_trigger;
+            if(answer.esm_trigger == nil) answer.esm_trigger = @"";
+            ////////////////////////////////////////////
+            answer.esm_title = esm.esm_title;
+            if(answer.esm_title == nil) answer.esm_title = @"";
+            answer.esm_status  = esmState;
+            if(answer.esm_status == nil) answer.esm_status = DISMISSED;
+            answer.esm_instructions = esm.esm_instructions;
+            if(answer.esm_instructions == nil) answer.esm_instructions = @"";
+            answer.esm_expiration_threshold = esm.esm_expiration_threshold;
+            if(answer.esm_expiration_threshold == nil) answer.esm_expiration_threshold = @0;
+            answer.esm_submit = esm.esm_submit;
+            if(answer.esm_submit == nil) answer.esm_submit = @"";
+            //////////////////////
+            answer.esm_scale_step = esm.esm_scale_step;
+            if(answer.esm_scale_step == nil) answer.esm_scale_step = @0;
+            answer.esm_scale_start = esm.esm_scale_start;
+            if(answer.esm_scale_start == nil) answer.esm_scale_start = @0;
+            answer.esm_scale_min = esm.esm_scale_min;
+            if(answer.esm_scale_min == nil) answer.esm_scale_min = @0;
+            answer.esm_scale_max = esm.esm_scale_max;
+            if(answer.esm_scale_max == nil) answer.esm_scale_max = @0;
+            answer.esm_scale_min_label = esm.esm_scale_min_label;
+            if(answer.esm_scale_min_label == nil) answer.esm_scale_min_label = @"";
+            answer.esm_scale_max_label = esm.esm_scale_max_label;
+            if(answer.esm_scale_max_label == nil)answer.esm_scale_max_label = @"";
+            //////////////////////
+            answer.esm_radios = esm.esm_radios;
+            if(answer.esm_radios == nil) answer.esm_radios = @"";
+            ////////////////////////
+            answer.esm_quick_answers = esm.esm_quick_answers;
+            if(answer.esm_quick_answers == nil) answer.esm_quick_answers = @"";
+            ////////////////////////
+            answer.esm_likert_step = esm.esm_likert_step;
+            if(answer.esm_likert_step == nil) answer.esm_likert_step = @0;
+            answer.esm_likert_max = esm.esm_likert_max;
+            if(answer.esm_likert_max == nil) answer.esm_likert_max = @0;
+            answer.esm_likert_max_label = esm.esm_likert_max_label;
+            if(answer.esm_likert_max_label == nil) answer.esm_likert_max_label = @"";
+            answer.esm_likert_min_label = esm.esm_likert_min_label;
+            if(answer.esm_likert_min_label == nil) answer.esm_likert_min_label = @"";
+
+            ////////////////////////
+            answer.esm_checkboxes = esm.esm_checkboxes;
+            if(answer.esm_checkboxes == nil) answer.esm_checkboxes = @"";
+        }else if([IOSESM getTableVersion] == 2){
+            EntityESMAnswer * answer = (EntityESMAnswer *)
+            [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([EntityESMAnswer class])
+                                          inManagedObjectContext:context];
+            // add special data to dic from each uielements
+            
+            answer.device_id = deviceId;
+            answer.timestamp = esm.timestamp;
+            answer.esm_json = esm.esm_json;
+            answer.esm_trigger = esm.esm_trigger;
+            answer.esm_expiration_threshold = esm.esm_expiration_threshold;
+            answer.double_esm_user_answer_timestamp = unixtime;
+            
+            NSLog(@"-----------------");
+            NSLog(@"%@", answer.esm_user_answer);
+            NSLog(@"%@", answer.device_id);
+            NSLog(@"%@", answer.timestamp);
+            NSLog(@"%@", answer.esm_trigger);
+            NSLog(@"%@", answer.esm_json);
+            NSLog(@"%@", answer.esm_expiration_threshold);
+            NSLog(@"%@", answer.double_esm_user_answer_timestamp);
+            NSLog(@"%@", answer.esm_status);
+            NSLog(@"-----------------");
+        }else{
+            NSLog(@"Error at IOSESMViewController.m");
+        }
     }
     
     NSError * error = nil;
@@ -1614,6 +1683,7 @@
         NSLog(@"%@", error);
         
         [delegate.managedObjectContext reset];
+        
         iOSESM = [[IOSESM alloc] initWithAwareStudy:study dbType:AwareDBTypeCoreData];
         esms = [iOSESM getValidESMsWithDatetime:[NSDate new]];
         
@@ -1625,7 +1695,7 @@
         currentESMNumber++;
         if (currentESMNumber < esms.count){
             [self viewDidAppear:NO];
-            return ;
+            return;
         }else{
             if([study getStudyId] == nil){
                 esmNumber = 0;
@@ -1635,12 +1705,25 @@
                 [alert show];
                 [self.navigationController popToRootViewControllerAnimated:YES];
             }else{
-                // progress view
-                [SVProgressHUD showWithStatus:@"uploading"];
                 
-                [iOSESM setUploadingState:NO];
-                [iOSESM syncAwareDB];
-                [iOSESM refreshNotifications];
+                if([delegate.sharedAWARECore.sharedSensorManager isExist:SENSOR_PLUGIN_CAMPUS]){
+                    [SVProgressHUD showWithStatus:@"uploading"];
+                    [bcESM setUploadingState:NO];
+                    [bcESM syncAwareDB];
+                    
+                    // [iOSESM setUploadingState:NO];
+                    // [iOSESM syncAwareDB];
+                    [iOSESM refreshNotifications];
+                }
+                
+                if([delegate.sharedAWARECore.sharedSensorManager isExist:SENSOR_PLUGIN_IOS_ESM]){
+                    [SVProgressHUD showWithStatus:@"uploading"];
+                    [iOSESM setUploadingState:NO];
+                    [iOSESM syncAwareDB];
+                    [iOSESM refreshNotifications];
+                }
+                
+                
             }
         }
     } else {
@@ -1674,17 +1757,77 @@
         
         EntityESM *esm = [[uiElements objectAtIndex:i] objectForKey:KEY_OBJECT];
         
-        EntityESMAnswer * answer = (EntityESMAnswer *)[NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([EntityESMAnswer class])
-                                                                                    inManagedObjectContext:context];
-        answer.timestamp = esm.timestamp;
-        answer.device_id = [study getDeviceId];
-        answer.double_esm_user_answer_timestamp = unixtime;
-        answer.esm_user_answer = @"";
-        answer.esm_status = @1; //dissmiss
-        answer.esm_json = esm.esm_json;
-        answer.esm_trigger = esm.esm_trigger;
-        answer.esm_expiration_threshold = esm.expiration_threshold;
-        NSLog(@"%@", answer);
+        if([IOSESM getTableVersion] == 1){ //TODO
+            EntityESMAnswerBC * answer = (EntityESMAnswerBC *)[NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([EntityESMAnswerBC class])
+                                                                                        inManagedObjectContext:context];
+            
+            answer.timestamp = esm.timestamp;
+            answer.double_esm_user_answer_timestamp = unixtime;
+            answer.device_id = [delegate.sharedAWARECore.sharedAwareStudy getDeviceId];
+            answer.esm_user_answer = @"";
+            answer.esm_type = esm.esm_type;
+            if(answer.esm_type == nil) answer.esm_type = @1;
+            answer.esm_trigger = esm.esm_trigger;
+            if(answer.esm_trigger == nil) answer.esm_trigger = @"";
+            ////////////////////////////////////////////
+            answer.esm_title = esm.esm_title;
+            if(answer.esm_title == nil) answer.esm_title = @"";
+            answer.esm_status  = @1;
+            answer.esm_instructions = esm.esm_instructions;
+            if(answer.esm_instructions == nil) answer.esm_instructions = @"";
+            answer.esm_submit = esm.esm_submit;
+            if(answer.esm_submit == nil) answer.esm_submit = @"";
+            answer.esm_expiration_threshold = esm.esm_expiration_threshold;
+            if(answer.esm_expiration_threshold == nil) answer.esm_expiration_threshold = @0;
+            ////////////////////////
+            answer.esm_scale_step = esm.esm_scale_step;
+            if(answer.esm_scale_step == nil) answer.esm_scale_step = @0;
+            answer.esm_scale_start = esm.esm_scale_start;
+            if(answer.esm_scale_start == nil) answer.esm_scale_start = @0;
+            answer.esm_scale_min = esm.esm_scale_min;
+            if(answer.esm_scale_min == nil) answer.esm_scale_min = @0;
+            answer.esm_scale_max = esm.esm_scale_max;
+            if(answer.esm_scale_max == nil) answer.esm_scale_max = @0;
+            answer.esm_scale_min_label = esm.esm_scale_min_label;
+            if(answer.esm_scale_min_label == nil) answer.esm_scale_min_label = @"";
+            answer.esm_scale_max_label = esm.esm_scale_max_label;
+            if(answer.esm_scale_max_label == nil)answer.esm_scale_max_label = @"";
+            ////////////////////////
+            answer.esm_radios = esm.esm_radios;
+            if(answer.esm_radios == nil) answer.esm_radios = @"";
+            ////////////////////////
+            answer.esm_quick_answers = esm.esm_quick_answers;
+            if(answer.esm_quick_answers == nil) answer.esm_quick_answers = @"";
+            ////////////////////////
+            answer.esm_likert_step = esm.esm_likert_step;
+            if(answer.esm_likert_step == nil) answer.esm_likert_step = @0;
+            answer.esm_likert_max = esm.esm_likert_max;
+            if(answer.esm_likert_max == nil) answer.esm_likert_max = @0;
+            answer.esm_likert_max_label = esm.esm_likert_max_label;
+            if(answer.esm_likert_max_label == nil) answer.esm_likert_max_label = @"";
+            answer.esm_likert_min_label = esm.esm_likert_min_label;
+            if(answer.esm_likert_min_label == nil) answer.esm_likert_min_label = @"";
+            
+            ////////////////////////
+            answer.esm_checkboxes = esm.esm_checkboxes;
+            if(answer.esm_checkboxes == nil) answer.esm_checkboxes = @"";
+            
+        }else if([IOSESM getTableVersion] == 2){
+            EntityESMAnswer * answer = (EntityESMAnswer *)[NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([EntityESMAnswer class])
+                                                                                        inManagedObjectContext:context];
+            answer.timestamp = esm.timestamp;
+            answer.device_id = [study getDeviceId];
+            answer.double_esm_user_answer_timestamp = unixtime;
+            answer.esm_user_answer = @"";
+            answer.esm_status = @1; //dissmiss
+            answer.esm_json = esm.esm_json;
+            answer.esm_trigger = esm.esm_trigger;
+            answer.esm_expiration_threshold = esm.expiration_threshold;
+            NSLog(@"%@", answer);
+        }else{
+            NSLog(@"Table version is not set");
+        }
+        
     }
     
     NSError * error = nil;
@@ -1705,13 +1848,14 @@
             currentESMNumber = 0;
         }
     }else{
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"AWARE could not save your answer" message:@"Please push submit button again." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"AWARE could not save your answer"
+                                                        message:@"Please push submit button again."
+                                                       delegate:nil
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
         [alert show];
-        
         [delegate.managedObjectContext reset];
-        // esms = [webESM getValidESMsWithDatetime:[NSDate new]];
         esms = [iOSESM getValidESMsWithDatetime:[NSDate new]];
-        //[self viewDidAppear:NO];
     }
 }
 

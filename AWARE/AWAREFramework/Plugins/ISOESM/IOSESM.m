@@ -74,6 +74,8 @@ NSString * const AWARE_PREFERENCES_PLUGIN_IOS_ESM_CONFIG_URL = @"plugin_ios_esm_
         [self addDefaultSettingWithBool:@NO key:AWARE_PREFERENCES_STATUS_PLUGIN_IOS_ESM desc:@""];
         [self addDefaultSettingWithString:@"esms" key:AWARE_PREFERENCES_PLUGIN_IOS_ESM_TABLE_NAME desc:@"default value is 'esms'"];
         [self addDefaultSettingWithString:@"" key:AWARE_PREFERENCES_PLUGIN_IOS_ESM_CONFIG_URL desc:@"https://www.xxx.yyy"];
+        
+        // [self setFetchLimit:10];
     }
     return self;
 }
@@ -97,25 +99,32 @@ NSString * const AWARE_PREFERENCES_PLUGIN_IOS_ESM_CONFIG_URL = @"plugin_ios_esm_
 ///////////////////////////////////////////////////////////////////
 - (BOOL)startSensorWithSettings:(NSArray *)settings{
     
-    // Get contents from URL
+    [IOSESM setTableVersion:2];
+    
+    NSString * urlStr = [self getStringFromSettings:settings key:@"plugin_ios_esm_config_url"];
+    
+    NSString * table = [self getStringFromSettings:settings key:@"plugin_ios_esm_table_name"];
+    
+    [self startSensorWithURL:urlStr tableName:table];
+    
+    return YES;
+}
+
+- (BOOL) startSensorWithURL:(NSString *)urlStr tableName:(NSString *)table{
+    
     [self setBufferSize:0];
     
-    // url
-    NSString * urlStr = [self getStringFromSettings:settings key:@"plugin_ios_esm_config_url"];
+    // Get contents from URL
     NSURL * url = [[NSURL alloc] initWithString:[NSString stringWithFormat:@"%@?device_id=%@",urlStr,[self getDeviceId]]];
     [self getESMConfigFileFromURL:url];
-    
-    tableName = [self getStringFromSettings:settings key:@"plugin_ios_esm_table_name"];
-    
+
+    tableName = table;
     if(tableName == nil){
         tableName = @"esms";
     }
     
-    NSArray *esms = [self getValidESMsWithDatetime:[NSDate new]];
-    if(esms != nil){
-        [self setLatestValue:[NSString stringWithFormat:@"You have %d esm(s)", (int)esms.count]];
-    }
-    
+    [self performSelector:@selector(updateLatestValue:) withObject:nil afterDelay:3];
+
     return YES;
 }
 
@@ -132,6 +141,37 @@ NSString * const AWARE_PREFERENCES_PLUGIN_IOS_ESM_CONFIG_URL = @"plugin_ios_esm_
 - (void) syncAwareDBInBackground{
     [self syncAwareDBInBackgroundWithSensorName:tableName];
 }
+
+////////////////////////////////////////////////////////////
+
+- (void) updateLatestValue:(id)sender{
+    NSDateFormatter *format = [[NSDateFormatter alloc] init];
+    [format setDateFormat:@"MM/dd HH:mm"];
+    
+    NSArray * esms = [self getScheduledESMs];
+    NSMutableString * value = [[NSMutableString alloc] init];
+    for(NSDictionary * dict in esms){
+        
+        NSDate   * fireDate   = [dict objectForKey:@"fire_date"];
+        NSNumber * expiration = [dict objectForKey:@"expiration_threshold"];
+        NSString * scheduleId = [dict objectForKey:@"schedule_id"];
+        NSDate   * originalFireDate     = [dict objectForKey:@"original_fire_date"];
+        NSNumber * randomize  = [dict objectForKey:@"randomize"];
+        
+        if(fireDate != nil &&
+           expiration != nil &&
+           scheduleId != nil &&
+           originalFireDate != nil &&
+           randomize != nil){
+            NSString * tempValue = [NSString stringWithFormat:@"[%@][%@][%@][%@]", scheduleId, [format stringFromDate:fireDate], expiration, randomize];
+            NSLog(@"%@",tempValue);
+            [value appendFormat:@"%@\n",tempValue];
+        }
+    }
+    [self setLatestValue:value];
+    // [self setLatestData:[NSDictionary ]esms];
+}
+
 
 //////////////////////////////////////////////////////////
 - (void)syncAwareDBInBackgroundWithSensorName:(NSString *)name{
@@ -154,9 +194,9 @@ NSString * const AWARE_PREFERENCES_PLUGIN_IOS_ESM_CONFIG_URL = @"plugin_ios_esm_
     
     // Make a seesion config for HTTP/POST
     sessionConfig = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:currentHttpSessionId];
-    sessionConfig.timeoutIntervalForRequest = 60.0;
+    sessionConfig.timeoutIntervalForRequest = 30.0;
     sessionConfig.timeoutIntervalForResource = 30.0;
-    sessionConfig.HTTPMaximumConnectionsPerHost = 30;
+    sessionConfig.HTTPMaximumConnectionsPerHost = 20;
     sessionConfig.allowsCellularAccess = YES;
     sessionConfig.discretionary = YES;
     
@@ -179,8 +219,6 @@ NSString * const AWARE_PREFERENCES_PLUGIN_IOS_ESM_CONFIG_URL = @"plugin_ios_esm_
             [self sendAlertMessageWithTitle:@"Network Connection Error on iOS ESM plugin" message:@"Network connection is failed" cancelButton:@"Close"];
         }
     }
-    
-    
 }
 
 
@@ -333,7 +371,7 @@ didCompleteWithError:(NSError *)error{
         NSMutableDictionary * dictSchedule = [[NSMutableDictionary alloc] init];
         [dictSchedule setObject:esmSchedule.fireHours forKey:@"hours"];
         [dictSchedule setObject:esmSchedule.scheduledESMs forKey:@"esms"];
-        [dictSchedule setObject:esmSchedule.randomizeSchedule  forKey:@"randomize_schedule"];
+        [dictSchedule setObject:esmSchedule.randomizeSchedule  forKey:@"randomize"];
         [dictSchedule setObject:@(esmSchedule.timeoutSecond) forKey:@"expiration"];
         
         [dictSchedule setObject:esmSchedule.title forKey:@"notification_title"];
@@ -380,7 +418,7 @@ didCompleteWithError:(NSError *)error{
                 NSArray * months = [schedule objectForKey:@"months"];
                 NSArray * esms = [schedule objectForKey:@"esms"];
                 
-                NSNumber * randomize_schedule = [schedule objectForKey:@"randomize_schedule"];
+                NSNumber * randomize_schedule = [schedule objectForKey:@"randomize"];
                 NSNumber * expiration = [schedule objectForKey:@"expiration"];
                 
                 NSString * startDateStr = [schedule objectForKey:@"start_date"];
@@ -543,32 +581,50 @@ didCompleteWithError:(NSError *)error{
         NSDate * originalFireDate = [AWAREUtils getTargetNSDate:[NSDate new] hour:[fireHour intValue] nextDay:YES];
         NSString * scheduleId = schedule.schedule_id;
         
-        // original fire date
-        // NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:NSStringFromClass([EntityESMHistory class])];
-        // [request setEntity:[NSEntityDescription entityForName:NSStringFromClass([EntityESMHistory class])
-        //                                    inManagedObjectContext:delegate.managedObjectContext]];
-        // [request setPredicate:[NSPredicate predicateWithFormat:@"original_fire_date = %@", [AWAREUtils getUnixTimestamp:originalFireDate]]];
-        
-        //NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:@"original_fire_date" ascending:NO];
-        //[fetchRequest setSortDescriptors:[NSArray arrayWithObject:sort]];
-        //[request setSortDescriptors:@[sort]];
-        
-        // NSError* e = nil;
-        // NSUInteger count = [delegate.managedObjectContext countForFetchRequest:request error:&e];
-        // NSLog(@"original_fire_date = %@ ===> count: %ld", [AWAREUtils getUnixTimestamp:originalFireDate], count);
-        
         if(![randomize isEqualToNumber:@0]){
             // Make a andom date
             int randomMin = (int)[self randomNumberBetween:-1*randomize.integerValue maxNumber:randomize.integerValue];
             fireDate = [AWAREUtils getTargetNSDate:[NSDate new] hour:[fireHour intValue] minute:randomMin second:0 nextDay:YES];
         }
         
+        // The fireData is Valid Time?
+        NSDate * expirationTime = [originalFireDate dateByAddingTimeInterval:expiration.integerValue * 60];
+        NSDate * inspirationTime = originalFireDate;
+        if(randomize > 0){
+            // expirationTime = [fireDate dateByAddingTimeInterval:expiration.integerValue * 60 + randomize.integerValue*60];
+            inspirationTime = [originalFireDate dateByAddingTimeInterval:-1*randomize.integerValue * 60];
+        }
+        bool isInTime = NO;
+        if(inspirationTime.timeIntervalSince1970 <= now.timeIntervalSince1970
+           && expirationTime.timeIntervalSince1970 >= now.timeIntervalSince1970){
+            isInTime = YES;
+        }
+        NSLog(@"%@ %@ %@ -> %d", inspirationTime, now, expirationTime, isInTime);
+        // Check an answering condition
+        if(isInTime){
+            
+            [fireDate dateByAddingTimeInterval:60*60*24]; // <- temporary solution
+            
+//            NSFetchRequest *fetchRequest4History = [[NSFetchRequest alloc] initWithEntityName:NSStringFromClass([EntityESMHistory class])];
+//            [fetchRequest4History setEntity:[NSEntityDescription entityForName:NSStringFromClass([EntityESMHistory class])
+//                                                        inManagedObjectContext:delegate.managedObjectContext]];
+//            [fetchRequest4History setPredicate:[NSPredicate predicateWithFormat:@"(trigger==%@) AND (original_fire_date >= %@) AND (original_fire_date <= %@)",
+//                                                scheduleId,[AWAREUtils getUnixTimestamp:inspirationTime], [AWAREUtils getUnixTimestamp:expirationTime]]];
+//            NSError *error4History = nil;
+//            NSArray *histories = [delegate.managedObjectContext executeFetchRequest:fetchRequest4History error:&error4History] ;
+//            if(histories != nil){
+//                if (histories.count > 0) {
+//                    [fireDate dateByAddingTimeInterval:60*60*24];
+//                }
+//            }
+        }
+        
         // NSLog(@"[%@] Fire Date: %@", scheduleId, [AWAREUtils getTargetNSDate:[NSDate new] hour:[fireHour intValue] nextDay:YES]);
         // NSLog(@"[%@] Fire Date: %@ (%@)", scheduleId, fireDate, [AWAREUtils getTargetNSDate:[NSDate new] hour:[fireHour intValue] nextDay:YES]);
         
-        NSDictionary * userInfo = [[NSDictionary alloc] initWithObjects:@[originalFireDate, randomize, scheduleId,expiration]
+        NSDictionary * userInfo = [[NSDictionary alloc] initWithObjects:@[originalFireDate, randomize, scheduleId,expiration,fireDate]
                                                                 forKeys:@[@"original_fire_date", @"randomize",
-                                                                          @"schedule_id", @"expiration_threshold"]];
+                                                                          @"schedule_id", @"expiration_threshold",@"fire_date"]];
         if(![fireHour isEqualToNumber:@-1]){
             // [TEST]
             // fireDate = [AWAREUtils getTargetNSDate:[NSDate new] hour:11 minute:30 second:0 nextDay:YES];
@@ -581,20 +637,22 @@ didCompleteWithError:(NSError *)error{
                                                userInfo:userInfo
                                         iconBadgeNumber:1];
         }
-        // WIP: WEEKLY and MONTHLY Notifications
         
+        // WIP: WEEKLY and MONTHLY Notifications
         
         // WIP: Quick ESM (YES/NO and Text)
         
         // WIP: Event based ESMs (battery, activity, and/or network)
         
         // WIP: Location based ESMs
-        
     }
+    
+
+    
     
     [self getValidESMsWithDatetime:[NSDate new]];
     
-    [self setLatestValue:[NSString stringWithFormat:@"You have %ld scheduled notification(s)", results.count]];
+    // [self setLatestValue:[NSString stringWithFormat:@"You have %ld scheduled notification(s)", results.count]];
     // });
 }
 
@@ -821,6 +879,25 @@ didCompleteWithError:(NSError *)error{
 //                }
 //            }
 
+
+- (NSArray *) getScheduledESMs{
+    NSMutableArray * esms = [[NSMutableArray alloc] init];
+    NSArray * notifications = [UIApplication sharedApplication].scheduledLocalNotifications;
+    
+    if(notifications == nil){
+        return esms;
+    }
+    
+    for (UILocalNotification * notification in notifications) {
+        if([notification.category isEqualToString:categoryIOSESM]) {
+            // [[UIApplication sharedApplication] cancelLocalNotification:notification];
+            [esms addObject:notification.userInfo];
+        }
+    }
+    
+    return esms;
+}
+
 ////////////////////////////////////////////////////////////////
 
 - (NSString *) convertNSArraytoJsonStr:(NSArray *)array{
@@ -933,7 +1010,23 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
 + (void)setAppearedState:(BOOL)state{
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults setBool:state forKey:@"key_esm_appeared_section"];
+    [userDefaults synchronize];
 }
 
++ (void)setTableVersion:(int)version{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setInteger:version forKey:@"key_esm_table_version"];
+    [userDefaults synchronize];
+}
+
++ (int)getTableVersion{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSInteger version = [userDefaults integerForKey:@"key_esm_table_version"];
+    
+    if(version == 0){ // "0" means that the table version is not setted yet.
+        version = 2; // verion 2 is the latest version (2016/12/16)
+    }
+    return (int)version;
+}
 
 @end

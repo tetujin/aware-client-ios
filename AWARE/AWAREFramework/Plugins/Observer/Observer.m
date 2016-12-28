@@ -106,7 +106,9 @@
     __weak NSURLSession *session = nil;
     // session = [NSURLSession sharedSession];
     NSURLSessionConfiguration *sessionConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
+    sessionConfiguration.allowsCellularAccess = YES;
     session = [NSURLSession sessionWithConfiguration:sessionConfiguration delegate:self delegateQueue:Nil];
+    
     
     [[session dataTaskWithRequest: request  completionHandler: ^(NSData *data, NSURLResponse *response, NSError *error) {
         [session finishTasksAndInvalidate];

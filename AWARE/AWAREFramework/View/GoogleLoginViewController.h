@@ -13,5 +13,6 @@
 
 @property(weak, nonatomic) IBOutlet GIDSignInButton *signInButton;
 @property (weak, nonatomic) IBOutlet UILabel *account;
+@property (weak, nonatomic) IBOutlet UILabel *messageLabel;
 
 @end

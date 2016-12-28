@@ -84,6 +84,8 @@ NSString* const SENSOR_SCHEDULER     = @"scheduler";
 NSString* const SENSOR_CALLS         = @"calls";
 NSString* const SENSOR_LABELS        = @"labels";
 NSString* const SENSOR_ORIENTATION   = @"orientation";
+NSString* const SENSOR_HEALTH_KIT      = @"health_kit";
+NSString* const SENSOR_IOS_ESM         = @"plugin_ios_esm";
 
 NSString* const SENSOR_IOS_ACTIVITY_RECOGNITION = @"plugin_ios_activity_recognition";
 
@@ -259,6 +261,9 @@ NSString * const KEY_UPLOAD_SUCCESS = @"KEY_UPLOAD_SUCCESS";
 NSString * const ACTION_AWARE_DATA_UPLOAD_PROGRESS = @"ACTION_AWARE_DATA_UPLOAD_PROGRESS";
 
 NSString * const ACTION_AWARE_PEDOMETER = @"ACTION_AWARE_PEDOMETER";
+
+NSString * const ACTION_AWARE_GOOGLE_LOGIN_REQUEST = @"ACTION_AWARE_GOOGLE_LOGIN_REQUEST";
+NSString * const ACTION_AWARE_GOOGLE_LOGIN_SUCCESS = @"ACTION_AWARE_GOOGLE_LOGIN_SUCCESS";
 
 @implementation AWAREKeys
 

@@ -18,8 +18,11 @@ extern NSString * const AWARE_PREFERENCES_PLUGIN_IOS_ESM_CONFIG_URL;
 - (BOOL) setWebESMsWithSchedule:(ESMSchedule *) esmSchedule;
 // - (void) setWebESMsWithArray:(NSArray *) webESMArray;
 
+- (BOOL) startSensorWithURL:(NSString *)urlStr tableName:(NSString *)table;
+
 /////////////////////////////////////////////////////////
 - (NSArray *) getValidESMsWithDatetime:(NSDate *) datetime;
+- (NSArray *) getScheduledESMs;
 - (void) saveESMAnswerWithTimestamp:(NSNumber * )timestamp
                            deviceId:(NSString *) deviceId
                             esmJson:(NSString *) esmJson
@@ -36,5 +39,7 @@ extern NSString * const AWARE_PREFERENCES_PLUGIN_IOS_ESM_CONFIG_URL;
 /////////////////////////////////
 + (BOOL) isAppearedThisSection;
 + (void) setAppearedState:(BOOL)state;
++ (void) setTableVersion:(int)version;
++ (int)  getTableVersion;
 
 @end

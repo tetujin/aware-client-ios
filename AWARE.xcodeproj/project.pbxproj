@@ -262,6 +262,12 @@
 		16D91B5E1CA9447A00A5FD4F /* MicrosoftBandKit_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16D91B5D1CA9447A00A5FD4F /* MicrosoftBandKit_iOS.framework */; };
 		16E155391C27C2AC00316321 /* EventKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16E155371C27C2AC00316321 /* EventKit.framework */; };
 		16E1553A1C27C2AC00316321 /* EventKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16E155381C27C2AC00316321 /* EventKitUI.framework */; };
+		16E225031E063CD1000C239E /* EntityESMAnswerBC+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 16E225001E063CD1000C239E /* EntityESMAnswerBC+CoreDataClass.m */; };
+		16E225041E063CD1000C239E /* EntityESMAnswerBC+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 16E225021E063CD1000C239E /* EntityESMAnswerBC+CoreDataProperties.m */; };
+		16E225061E077E09000C239E /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16E225051E077E09000C239E /* HealthKit.framework */; };
+		16E2250A1E0A378C000C239E /* AWAREHealthKitWorkout.m in Sources */ = {isa = PBXBuildFile; fileRef = 16E225091E0A378C000C239E /* AWAREHealthKitWorkout.m */; };
+		16E2250D1E0A37BB000C239E /* AWAREHealthKitCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 16E2250C1E0A37BB000C239E /* AWAREHealthKitCategory.m */; };
+		16E225101E0A37DA000C239E /* AWAREHealthKitQuantity.m in Sources */ = {isa = PBXBuildFile; fileRef = 16E2250F1E0A37DA000C239E /* AWAREHealthKitQuantity.m */; };
 		16E7AF961C3DF8A9005C9EDC /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16E7AF951C3DF8A9005C9EDC /* CoreData.framework */; };
 		16EC4F171D2E7D8200524424 /* EntityMSBandRRInterval+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 16EC4F141D2E7D8200524424 /* EntityMSBandRRInterval+CoreDataProperties.m */; };
 		16EC4F181D2E7D8200524424 /* EntityMSBandRRInterval.m in Sources */ = {isa = PBXBuildFile; fileRef = 16EC4F161D2E7D8200524424 /* EntityMSBandRRInterval.m */; };
@@ -785,6 +791,17 @@
 		16D91B5D1CA9447A00A5FD4F /* MicrosoftBandKit_iOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MicrosoftBandKit_iOS.framework; path = ThirdPatyFrameworks/MicrosoftBandKit_iOS.framework; sourceTree = "<group>"; };
 		16E155371C27C2AC00316321 /* EventKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKit.framework; path = System/Library/Frameworks/EventKit.framework; sourceTree = SDKROOT; };
 		16E155381C27C2AC00316321 /* EventKitUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKitUI.framework; path = System/Library/Frameworks/EventKitUI.framework; sourceTree = SDKROOT; };
+		16E224FF1E063CD1000C239E /* EntityESMAnswerBC+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EntityESMAnswerBC+CoreDataClass.h"; sourceTree = "<group>"; };
+		16E225001E063CD1000C239E /* EntityESMAnswerBC+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EntityESMAnswerBC+CoreDataClass.m"; sourceTree = "<group>"; };
+		16E225011E063CD1000C239E /* EntityESMAnswerBC+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EntityESMAnswerBC+CoreDataProperties.h"; sourceTree = "<group>"; };
+		16E225021E063CD1000C239E /* EntityESMAnswerBC+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EntityESMAnswerBC+CoreDataProperties.m"; sourceTree = "<group>"; };
+		16E225051E077E09000C239E /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
+		16E225081E0A378C000C239E /* AWAREHealthKitWorkout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AWAREHealthKitWorkout.h; sourceTree = "<group>"; };
+		16E225091E0A378C000C239E /* AWAREHealthKitWorkout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AWAREHealthKitWorkout.m; sourceTree = "<group>"; };
+		16E2250B1E0A37BB000C239E /* AWAREHealthKitCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AWAREHealthKitCategory.h; sourceTree = "<group>"; };
+		16E2250C1E0A37BB000C239E /* AWAREHealthKitCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AWAREHealthKitCategory.m; sourceTree = "<group>"; };
+		16E2250E1E0A37DA000C239E /* AWAREHealthKitQuantity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AWAREHealthKitQuantity.h; sourceTree = "<group>"; };
+		16E2250F1E0A37DA000C239E /* AWAREHealthKitQuantity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AWAREHealthKitQuantity.m; sourceTree = "<group>"; };
 		16E7AF951C3DF8A9005C9EDC /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		16EC4F131D2E7D8200524424 /* EntityMSBandRRInterval+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EntityMSBandRRInterval+CoreDataProperties.h"; sourceTree = "<group>"; };
 		16EC4F141D2E7D8200524424 /* EntityMSBandRRInterval+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EntityMSBandRRInterval+CoreDataProperties.m"; sourceTree = "<group>"; };
@@ -836,6 +853,7 @@
 				164DD66A1C1FC1F900ADA92B /* MapKit.framework in Frameworks */,
 				16D810261C06242F00605DE2 /* Security.framework in Frameworks */,
 				169A7B3D1BFFC9F900A7C06D /* SystemConfiguration.framework in Frameworks */,
+				16E225061E077E09000C239E /* HealthKit.framework in Frameworks */,
 				16D91B5E1CA9447A00A5FD4F /* MicrosoftBandKit_iOS.framework in Frameworks */,
 				FC2AF85D761397B784DECBD3 /* libPods-AWARE.a in Frameworks */,
 			);
@@ -1399,6 +1417,12 @@
 			children = (
 				169C87A11D01382C00825761 /* AWAREHealthKit.h */,
 				169C87A21D01382C00825761 /* AWAREHealthKit.m */,
+				16E225081E0A378C000C239E /* AWAREHealthKitWorkout.h */,
+				16E225091E0A378C000C239E /* AWAREHealthKitWorkout.m */,
+				16E2250B1E0A37BB000C239E /* AWAREHealthKitCategory.h */,
+				16E2250C1E0A37BB000C239E /* AWAREHealthKitCategory.m */,
+				16E2250E1E0A37DA000C239E /* AWAREHealthKitQuantity.h */,
+				16E2250F1E0A37DA000C239E /* AWAREHealthKitQuantity.m */,
 			);
 			path = HealthKit;
 			sourceTree = "<group>";
@@ -1893,6 +1917,10 @@
 			children = (
 				16A45CDD1D2392A1008A02B1 /* BalacnedCampusESMScheduler.h */,
 				16A45CDE1D2392A1008A02B1 /* BalacnedCampusESMScheduler.m */,
+				16E224FF1E063CD1000C239E /* EntityESMAnswerBC+CoreDataClass.h */,
+				16E225001E063CD1000C239E /* EntityESMAnswerBC+CoreDataClass.m */,
+				16E225011E063CD1000C239E /* EntityESMAnswerBC+CoreDataProperties.h */,
+				16E225021E063CD1000C239E /* EntityESMAnswerBC+CoreDataProperties.m */,
 			);
 			path = BalacnedCampusScheduler;
 			sourceTree = "<group>";
@@ -2118,7 +2146,7 @@
 								enabled = 0;
 							};
 							com.apple.HealthKit = {
-								enabled = 0;
+								enabled = 1;
 							};
 							com.apple.InterAppAudio = {
 								enabled = 0;
@@ -2412,6 +2440,7 @@
 				16EC4F1B1D2EAA3600524424 /* WebESM.m in Sources */,
 				169C883F1D01382C00825761 /* MultiESMObject.m in Sources */,
 				160F0EF11D04277000673343 /* EntityMagnetometer+CoreDataProperties.m in Sources */,
+				16E225041E063CD1000C239E /* EntityESMAnswerBC+CoreDataProperties.m in Sources */,
 				16B077BB1D1A54BF009C070B /* EntityPushNotification+CoreDataProperties.m in Sources */,
 				16B0776C1D192663009C070B /* EntityRotation+CoreDataProperties.m in Sources */,
 				168AEA991D3EFEC300D02EA4 /* EntityProcessor.m in Sources */,
@@ -2439,6 +2468,7 @@
 				169C887F1D01382C00825761 /* MSBand.m in Sources */,
 				169C889F1D01382C00825761 /* GoogleLoginViewController.m in Sources */,
 				160F0EF81D042AB600673343 /* EntityNetwork.m in Sources */,
+				16E225031E063CD1000C239E /* EntityESMAnswerBC+CoreDataClass.m in Sources */,
 				1648FE931DAB2E87001D870A /* AWARESensors.m in Sources */,
 				160F0F091D04756800673343 /* EntityBattery+CoreDataProperties.m in Sources */,
 				160F0F0A1D04756800673343 /* EntityBattery.m in Sources */,
@@ -2461,6 +2491,7 @@
 				16B077791D192C30009C070B /* EntityTimezone.m in Sources */,
 				169C88811D01382C00825761 /* Observer.m in Sources */,
 				169C88311D01382C00825761 /* AWARESensor.m in Sources */,
+				16E2250A1E0A378C000C239E /* AWAREHealthKitWorkout.m in Sources */,
 				160F0EB41D03E2EC00673343 /* EntityBluetooth+CoreDataProperties.m in Sources */,
 				16B0777E1D192D72009C070B /* EntityWifi+CoreDataProperties.m in Sources */,
 				169C88891D01382C00825761 /* Bluetooth.m in Sources */,
@@ -2530,10 +2561,12 @@
 				169C882B1D01382C00825761 /* AWARECoreDataManager.m in Sources */,
 				169C883E1D01382C00825761 /* ESMStorageHelper.m in Sources */,
 				16B077911D1999B5009C070B /* EntityBLEHeartRate.m in Sources */,
+				16E225101E0A37DA000C239E /* AWAREHealthKitQuantity.m in Sources */,
 				16B078421D1F918B009C070B /* EntityMSBandSkinTemp.m in Sources */,
 				169C887B1D01382C00825761 /* GoogleLogin.m in Sources */,
 				16BDCCAA1D362AA500B13BD4 /* MSBandDistance.m in Sources */,
 				169C887A1D01382C00825761 /* GoogleCalPush.m in Sources */,
+				16E2250D1E0A37BB000C239E /* AWAREHealthKitCategory.m in Sources */,
 				16B077D31D1A5F51009C070B /* EntityOpenWeather+CoreDataProperties.m in Sources */,
 				168AEA981D3EFEC300D02EA4 /* EntityProcessor+CoreDataProperties.m in Sources */,
 			);

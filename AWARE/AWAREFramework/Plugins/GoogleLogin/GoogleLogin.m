@@ -57,13 +57,7 @@
     [tcqMaker addColumn:KEY_GOOGLE_USER_ID type:TCQTypeText default:@"''"];
     [tcqMaker addColumn:KEY_GOOGLE_NAME type:TCQTypeText default:@"''"];
     [tcqMaker addColumn:KEY_GOOGLE_EMAIL type:TCQTypeText default:@"''"];
-    
-    // [query appendFormat:@"%@ text default '',", KEY_GOOGLE_USER_ID];
-    // [query appendFormat:@"%@ text default ''", KEY_GOOGLE_EMAIL];
-    // [query appendFormat:@"%@ text default '',", KEY_GOOGLE_PHONENUMBER];
-    // [query appendFormat:@"%@ blob ", KEY_GOOGLE_BLOB_PICTURE];
-    // [query appendString:@"UNIQUE (timestamp,device_id)"];
-    
+
     [super createTable:[tcqMaker getDefaudltTableCreateQuery]];
 }
 
@@ -78,17 +72,14 @@
 //    [defaults setBool:encryptionUserId  forKey:@"encryption_user_id_sha1"];
 //    
 
-    
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     NSString * userId = [defaults objectForKey:@"GOOGLE_ID"];
     if(userId == nil){
-        NSLog(@"[%@] Google account information is empty", [self getSensorName]);
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"[NOTE] Google account information is empty"
-                                                        message:@"Please login to Google account using Google Login Plugin."
-                                                       delegate:nil
-                                              cancelButtonTitle:@"Close"
-                                              otherButtonTitles:nil];
-        [alert show];
+        [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_GOOGLE_LOGIN_REQUEST
+                                                            object:nil
+                                                          userInfo:nil];
+    }else{
+        [self performSelector:@selector(syncAwareDBInBackground) withObject:nil afterDelay:1];
     }
     
     return YES;

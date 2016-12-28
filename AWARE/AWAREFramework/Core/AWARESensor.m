@@ -404,7 +404,9 @@
 
 - (void) setLatestValue:(NSString *)valueStr{
     latestSensorValue = valueStr;
+    [NSString stringWithFormat:@""];
 }
+
 
 /**
  * Set buffer size of sensor data
