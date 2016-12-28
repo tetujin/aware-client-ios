@@ -270,6 +270,8 @@
 		16EC4F221D2FA1F000524424 /* EntityAmbientNoise.m in Sources */ = {isa = PBXBuildFile; fileRef = 16EC4F201D2FA1F000524424 /* EntityAmbientNoise.m */; };
 		16ECFC481D8F0C95005C3DA6 /* IOSActivityRecognition.m in Sources */ = {isa = PBXBuildFile; fileRef = 16ECFC471D8F0C95005C3DA6 /* IOSActivityRecognition.m */; };
 		16FD37561CF0B1F700EEB416 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 16FD37541CF0B1DE00EEB416 /* Settings.bundle */; };
+		52022F3E1E13B7EF00AB52AB /* Contacts.m in Sources */ = {isa = PBXBuildFile; fileRef = 52022F3D1E13B7EF00AB52AB /* Contacts.m */; };
+		52022F401E13B81200AB52AB /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52022F3F1E13B81200AB52AB /* AddressBook.framework */; };
 		838F57A5098E1568A8309466 /* libPods-AWARETests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 822CF9BC899B8DB64922E564 /* libPods-AWARETests.a */; };
 		FC2AF85D761397B784DECBD3 /* libPods-AWARE.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9ED04F29ED60F3FCC960F6CD /* libPods-AWARE.a */; };
 /* End PBXBuildFile section */
@@ -797,6 +799,9 @@
 		16ECFC471D8F0C95005C3DA6 /* IOSActivityRecognition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IOSActivityRecognition.m; path = IOSActivityRecognition/IOSActivityRecognition.m; sourceTree = "<group>"; };
 		16FD37541CF0B1DE00EEB416 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		2D9485D496C581405478FC4A /* Pods-AWARETests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AWARETests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AWARETests/Pods-AWARETests.debug.xcconfig"; sourceTree = "<group>"; };
+		52022F3C1E13B7EF00AB52AB /* Contacts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Contacts.h; sourceTree = "<group>"; };
+		52022F3D1E13B7EF00AB52AB /* Contacts.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Contacts.m; sourceTree = "<group>"; };
+		52022F3F1E13B81200AB52AB /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		7698B2A23049D1EDF9D0AD6F /* Pods-AWARETests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AWARETests.release.xcconfig"; path = "Pods/Target Support Files/Pods-AWARETests/Pods-AWARETests.release.xcconfig"; sourceTree = "<group>"; };
 		822CF9BC899B8DB64922E564 /* libPods-AWARETests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AWARETests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B5BAD09F1FBEE0838867ACF /* Pods-AWARE.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AWARE.release.xcconfig"; path = "Pods/Target Support Files/Pods-AWARE/Pods-AWARE.release.xcconfig"; sourceTree = "<group>"; };
@@ -809,6 +814,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				52022F401E13B81200AB52AB /* AddressBook.framework in Frameworks */,
 				160E1A011CD1D9C700D825BA /* libEZAudio.a in Frameworks */,
 				1658700A1C986D4F008B99D2 /* QuartzCore.framework in Frameworks */,
 				165DECF61C83AD7D002C88CA /* ExternalAccessory.framework in Frameworks */,
@@ -1262,6 +1268,7 @@
 		169C87851D01382C00825761 /* Plugins */ = {
 			isa = PBXGroup;
 			children = (
+				52022F3B1E13B7D100AB52AB /* Contacts */,
 				169C87861D01382C00825761 /* ActivityRecognition */,
 				169C87891D01382C00825761 /* AmbientNoise */,
 				16A45CDC1D2392A1008A02B1 /* BalacnedCampusScheduler */,
@@ -1968,6 +1975,7 @@
 		2A3CA9F5620967BACB187EB7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				52022F3F1E13B81200AB52AB /* AddressBook.framework */,
 				160E1A001CD1D9C700D825BA /* libEZAudio.a */,
 				169C85761D0127D700825761 /* BluetoothManager.framework */,
 				16D91B5D1CA9447A00A5FD4F /* MicrosoftBandKit_iOS.framework */,
@@ -1995,6 +2003,15 @@
 				822CF9BC899B8DB64922E564 /* libPods-AWARETests.a */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		52022F3B1E13B7D100AB52AB /* Contacts */ = {
+			isa = PBXGroup;
+			children = (
+				52022F3C1E13B7EF00AB52AB /* Contacts.h */,
+				52022F3D1E13B7EF00AB52AB /* Contacts.m */,
+			);
+			name = Contacts;
 			sourceTree = "<group>";
 		};
 		FB81DBFF7EDA98B8AA03FF24 /* Pods */ = {
@@ -2457,6 +2474,7 @@
 				169C88381D01382C00825761 /* SSLManager.m in Sources */,
 				160F0EF71D042AB600673343 /* EntityNetwork+CoreDataProperties.m in Sources */,
 				169C88361D01382C00825761 /* LocalFileStorageHelper.m in Sources */,
+				52022F3E1E13B7EF00AB52AB /* Contacts.m in Sources */,
 				169C88971D01382C00825761 /* Pedometer.m in Sources */,
 				169C88761D01382C00825761 /* BLEHeartRate.m in Sources */,
 				16B077971D1A01A0009C070B /* EntityLocationVisit.m in Sources */,
