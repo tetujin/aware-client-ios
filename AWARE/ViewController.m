@@ -153,7 +153,10 @@
                                                  name:ACTION_AWARE_GOOGLE_LOGIN_REQUEST
                                                object:nil];
     
-
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(moveToContacts:)
+                                                 name:ACTION_AWARE_CONTACT_REQUEST
+                                               object:nil];
 }
 
 
@@ -1166,7 +1169,11 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
     }
 }
 
-
+- (void) moveToContacts:(id)sender{
+    if([AWAREUtils isForeground]){
+        [self performSegueWithIdentifier:@"contacts" sender:self];
+    }
+}
 
 ///////////////////////////////////////////////
 ///////////////////////////////////////////////

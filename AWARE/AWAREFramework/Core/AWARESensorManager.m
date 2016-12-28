@@ -267,7 +267,11 @@
                     awareSensor = [[BLEHeartRate alloc] initWithAwareStudy:awareStudy dbType:dbType];
                 }else if([pluginName isEqualToString:[NSString stringWithFormat:@"status_%@",SENSOR_PLUGIN_IOS_ESM]]){
                     awareSensor = [[IOSESM alloc] initWithAwareStudy:awareStudy dbType:dbType];
-                }else if([pluginName isEqualToString:[NSString stringWithFormat:@"status_%@",SENSOR_PLUGIN_CONTACTS]]){
+                }else if([pluginName isEqualToString:[NSString stringWithFormat:@"status_%@",SENSOR_PLUGIN_PEDOMETER]]){
+                    awareSensor = [[Pedometer alloc] initWithAwareStudy:awareStudy dbType:dbType];
+                }else if([pluginName isEqualToString:[NSString stringWithFormat:@"status_%@",SENSOR_HEALTH_KIT]]){
+                    awareSensor = [[AWAREHealthKit alloc] initWithAwareStudy:awareStudy dbType:dbType];
+                }else if([pluginName isEqualToString:[NSString stringWithFormat:@"status_%@", SENSOR_PLUGIN_CONTACTS]]){
                     awareSensor = [[Contacts alloc] initWithAwareStudy:awareStudy dbType:dbType];
                 }
                 

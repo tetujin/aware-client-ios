@@ -36,6 +36,7 @@
 - (IBAction)uploadContacts:(id)sender {
     [contacts checkStatus];
     [self performSelector:@selector(updateLastUpdateDate) withObject:nil afterDelay:3];
+    [self performSelector:@selector(backToRootView:) withObject:nil afterDelay:1];
 }
 
 - (void) updateLastUpdateDate{
@@ -43,6 +44,10 @@
     if(lastUpdateDate != nil){
         _lastUpdate.text = [NSString stringWithFormat:@"Last Update:\n%@",lastUpdateDate.debugDescription];
     }
+}
+
+- (void) backToRootView:(id)sender{
+    [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 /*

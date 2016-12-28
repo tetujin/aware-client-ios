@@ -7,6 +7,8 @@
 //
 
 #import "Contacts.h"
+#import "AWAREKeys.h"
+
 @import Contacts;
 
 NSString * const KEY_PLUGIN_SETTING_CONTACTS_LAST_UPDATE_NSDATE = @"key_plugin_setting_contanct_last_update_date";
@@ -22,6 +24,12 @@ NSString * const KEY_PLUGIN_SETTING_CONTACTS_LAST_UPDATE_NSDATE = @"key_plugin_s
                         dbEntityName:nil
                               dbType:AwareDBTypeTextFile];
     if (self) {
+        NSDate * lastUpdate = [self getLastUpdateDate];
+        if(lastUpdate != nil){
+            NSString * message= [NSString stringWithFormat:@"Last Update:\n%@",
+                                 lastUpdate.debugDescription];
+            [self setLatestValue:message];
+        }
     }
     return self;
 }
@@ -41,8 +49,10 @@ NSString * const KEY_PLUGIN_SETTING_CONTACTS_LAST_UPDATE_NSDATE = @"key_plugin_s
 /** start sensor */
 - (BOOL)startSensorWithSettings:(NSArray *)settings{
     
-    
-    
+    if([self getLastUpdateDate] == nil){
+        [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_CONTACT_REQUEST object:nil];
+    }
+
     return YES;
 }
 
@@ -127,8 +137,11 @@ NSString * const KEY_PLUGIN_SETTING_CONTACTS_LAST_UPDATE_NSDATE = @"key_plugin_s
                                                   cancelButtonTitle:@"Close"
                                                   otherButtonTitles:nil];
             [alert show];
-            [self setLastUpdateDateWithDate:[NSDate new]];
+            NSDate * now = [NSDate new];
+            [self setLastUpdateDateWithDate:now];
             [self syncAwareDBInBackground];
+            NSString * message= [NSString stringWithFormat:@"Last Update:\n%@",now.debugDescription];
+            [self setLatestValue:message];
         });
         
     } else {

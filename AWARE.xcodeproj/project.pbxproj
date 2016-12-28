@@ -2009,6 +2009,7 @@
 			isa = PBXGroup;
 			children = (
 				52022F3F1E13B81200AB52AB /* AddressBook.framework */,
+				16E225051E077E09000C239E /* HealthKit.framework */,
 				160E1A001CD1D9C700D825BA /* libEZAudio.a */,
 				169C85761D0127D700825761 /* BluetoothManager.framework */,
 				16D91B5D1CA9447A00A5FD4F /* MicrosoftBandKit_iOS.framework */,
