@@ -272,6 +272,7 @@
 		16FD37561CF0B1F700EEB416 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 16FD37541CF0B1DE00EEB416 /* Settings.bundle */; };
 		52022F3E1E13B7EF00AB52AB /* Contacts.m in Sources */ = {isa = PBXBuildFile; fileRef = 52022F3D1E13B7EF00AB52AB /* Contacts.m */; };
 		52022F401E13B81200AB52AB /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52022F3F1E13B81200AB52AB /* AddressBook.framework */; };
+		52BBE03D1E13C6EE00F57906 /* ContactsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 52BBE03C1E13C6EE00F57906 /* ContactsViewController.m */; };
 		838F57A5098E1568A8309466 /* libPods-AWARETests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 822CF9BC899B8DB64922E564 /* libPods-AWARETests.a */; };
 		FC2AF85D761397B784DECBD3 /* libPods-AWARE.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9ED04F29ED60F3FCC960F6CD /* libPods-AWARE.a */; };
 /* End PBXBuildFile section */
@@ -802,6 +803,8 @@
 		52022F3C1E13B7EF00AB52AB /* Contacts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Contacts.h; sourceTree = "<group>"; };
 		52022F3D1E13B7EF00AB52AB /* Contacts.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Contacts.m; sourceTree = "<group>"; };
 		52022F3F1E13B81200AB52AB /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
+		52BBE03B1E13C6EE00F57906 /* ContactsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactsViewController.h; sourceTree = "<group>"; };
+		52BBE03C1E13C6EE00F57906 /* ContactsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactsViewController.m; sourceTree = "<group>"; };
 		7698B2A23049D1EDF9D0AD6F /* Pods-AWARETests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AWARETests.release.xcconfig"; path = "Pods/Target Support Files/Pods-AWARETests/Pods-AWARETests.release.xcconfig"; sourceTree = "<group>"; };
 		822CF9BC899B8DB64922E564 /* libPods-AWARETests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AWARETests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B5BAD09F1FBEE0838867ACF /* Pods-AWARE.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AWARE.release.xcconfig"; path = "Pods/Target Support Files/Pods-AWARE/Pods-AWARE.release.xcconfig"; sourceTree = "<group>"; };
@@ -1879,6 +1882,8 @@
 				1683920D1D9BDCE1006D6607 /* SettingTableViewController.h */,
 				1683920E1D9BDCE1006D6607 /* SettingTableViewController.m */,
 				166082CB1D93DC1A004D1858 /* IntroPage5.xib */,
+				52BBE03B1E13C6EE00F57906 /* ContactsViewController.h */,
+				52BBE03C1E13C6EE00F57906 /* ContactsViewController.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -2380,6 +2385,7 @@
 				169C889A1D01382C00825761 /* Rotation.m in Sources */,
 				16B077851D1978FF009C070B /* EntityActivityRecognition.m in Sources */,
 				16B078371D1F918B009C070B /* EntityMSBandUV+CoreDataProperties.m in Sources */,
+				52BBE03D1E13C6EE00F57906 /* ContactsViewController.m in Sources */,
 				16B077C71D1A57DD009C070B /* EntityNTPTime+CoreDataProperties.m in Sources */,
 				1613E0CB1D3D33B0000528F5 /* EntityESMHistory.m in Sources */,
 				16BDCCAD1D364B3400B13BD4 /* MSBandHR.m in Sources */,

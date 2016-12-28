@@ -40,6 +40,7 @@
 #import "IOSESM.h"
 #import "Accelerometer.h"
 #import "PushNotification.h"
+#import "Contacts.h"
 
 // Library
 #import <SVProgressHUD.h>
@@ -420,6 +421,7 @@
     [_sensors addObject:[self getCelContent:@"Balanced Campus ESMs" desc:@"ESM Plugin" image:@"ic_action_campus" key:SENSOR_PLUGIN_CAMPUS]];
     //
     [_sensors addObject:[self getCelContent:@"iOS ESM" desc:@"ESM plugin for iOS" image:@"ic_action_web_esm" key:SENSOR_PLUGIN_IOS_ESM]];
+    [_sensors addObject:[self getCelContent:@"Contacts" desc:@"This plugin get your contacts" image:@"ic_action_contacts" key:SENSOR_PLUGIN_CONTACTS]];
     // HealthKit
 //    [_sensors addObject:[self getCelContent:@"HealthKit" desc:@"This plugin collects stored data in HealthKit App on iOS" image:@"ic_action_health_kit" key:@"sensor_plugin_health_kit"]];
 
@@ -787,7 +789,9 @@
                                                otherButtonTitles:@"Upload current token",nil];
         alert.tag = 21;
         [alert show];
-    }else {
+    } else if ([key isEqualToString:SENSOR_PLUGIN_CONTACTS]){
+        [self performSegueWithIdentifier:@"contacts" sender:self];
+    } else {
         [self performSegueWithIdentifier:@"settingView" sender:self];
     }
 }

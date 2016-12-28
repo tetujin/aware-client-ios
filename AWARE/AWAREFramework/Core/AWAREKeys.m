@@ -103,6 +103,7 @@ NSString* const SENSOR_PLUGIN_WEB_ESM         = @"plugin_web_esm";
 NSString* const SENSOR_PLUGIN_BLE_HEARTRATE   = @"plugin_ble_heartrate";
 NSString* const SENSOR_AWARE_DEBUG            = @"aware_debug";
 NSString* const SENSOR_PLUGIN_IOS_ESM         = @"plugin_ios_esm";
+NSString* const SENSOR_PLUGIN_CONTACTS        = @"plugin_contacts";
 
 NSString* const SENSOR_PLUGIN_BLE_HR          = @"plugin_ble_heartrate";
 
@@ -159,7 +160,6 @@ NSString* const SENSOR_LABELS_TYPE_BOOLEAN = @"labels_boolean";
 
 NSString* const SENSOR_PLUGIN_CAMPUS_ESM_NOTIFICATION_BOOLEAN = @"plugin_cmu_esm_notification_boolean";
 NSString* const SENSOR_PLUGIN_CAMPUS_ESM_NOTIFICATION_LABEL = @"plugin_cmu_esm_notification_label";
-
 
 ///////////////////////////////////////
 NSString* const EXTRA_DATA = @"EXTRA_DATA";

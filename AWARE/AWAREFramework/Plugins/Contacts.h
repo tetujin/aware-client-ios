@@ -11,4 +11,6 @@
 
 @interface Contacts : AWARESensor<AWARESensorDelegate>
 
+-(void)checkStatus;
+
 @end
