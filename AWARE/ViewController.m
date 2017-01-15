@@ -42,6 +42,7 @@
 #import "IOSESM.h"
 #import "Accelerometer.h"
 #import "PushNotification.h"
+#import "Contacts.h"
 
 // Library
 #import <SVProgressHUD.h>
@@ -153,7 +154,10 @@
                                                  name:ACTION_AWARE_GOOGLE_LOGIN_REQUEST
                                                object:nil];
     
-
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(moveToContacts:)
+                                                 name:ACTION_AWARE_CONTACT_REQUEST
+                                               object:nil];
 }
 
 
@@ -799,7 +803,9 @@
                                                otherButtonTitles:@"Upload current token",nil];
         alert.tag = 21;
         [alert show];
-    }else {
+    } else if ([key isEqualToString:SENSOR_PLUGIN_CONTACTS]){
+        [self performSegueWithIdentifier:@"contacts" sender:self];
+    } else {
         [self performSegueWithIdentifier:@"settingView" sender:self];
     }
 }
@@ -1163,7 +1169,11 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
     }
 }
 
-
+- (void) moveToContacts:(id)sender{
+    if([AWAREUtils isForeground]){
+        [self performSegueWithIdentifier:@"contacts" sender:self];
+    }
+}
 
 ///////////////////////////////////////////////
 ///////////////////////////////////////////////

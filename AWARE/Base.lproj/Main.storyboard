@@ -6,7 +6,6 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -62,6 +61,7 @@
                         <segue destination="z9G-jw-719" kind="push" identifier="esmView" id="tu2-01-ZjG"/>
                         <segue destination="Civ-lf-EA0" kind="push" identifier="googleLogin" id="ci2-wr-KRg"/>
                         <segue destination="i9p-mR-dRh" kind="push" identifier="iOSEsmView" id="BPs-9k-tMb"/>
+                        <segue destination="ZN0-uA-Adf" kind="push" identifier="contacts" id="xvm-oW-D4M"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eTN-Zo-OWZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -173,6 +173,49 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dzs-lN-Pc2" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2508" y="755"/>
+        </scene>
+        <!--Contacts View Controller-->
+        <scene sceneID="mY7-Kv-hnT">
+            <objects>
+                <viewController id="ZN0-uA-Adf" customClass="ContactsViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="ZoA-ul-ygE"/>
+                        <viewControllerLayoutGuide type="bottom" id="vg9-XI-06o"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="nQ3-3b-ZK6">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="AWARE for iOS" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="BxV-fX-m9z">
+                                <rect key="frame" x="43" y="373" width="288" height="58"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="ic_launcher_aware-web" translatesAutoresizingMaskIntoConstraints="NO" id="qyw-ua-A1i">
+                                <rect key="frame" x="87" y="165" width="200" height="200"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZZd-pn-YjO">
+                                <rect key="frame" x="115" y="439" width="144" height="43"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Upload Contacts"/>
+                                <connections>
+                                    <action selector="uploadContacts:" destination="ZN0-uA-Adf" eventType="touchUpInside" id="iDs-ly-yck"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="eIX-Up-F0v"/>
+                    <connections>
+                        <outlet property="lastUpdate" destination="BxV-fX-m9z" id="7CG-Dj-2R4"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dPh-SE-aD8" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3268" y="-1727.5862068965519"/>
         </scene>
         <!--Account-->
         <scene sceneID="LNL-BY-Rix">

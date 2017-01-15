@@ -255,6 +255,8 @@ extern NSString * const ACTION_AWARE_PEDOMETER;
 extern NSString * const ACTION_AWARE_GOOGLE_LOGIN_REQUEST;
 extern NSString * const ACTION_AWARE_GOOGLE_LOGIN_SUCCESS;
 
+extern NSString * const ACTION_AWARE_CONTACT_REQUEST;
+
 @interface AWAREKeys: NSObject
 
 @end

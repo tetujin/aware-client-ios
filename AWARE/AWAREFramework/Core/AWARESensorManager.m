@@ -60,6 +60,7 @@
 #import "AWAREHealthKit.h"
 
 #import "Observer.h"
+#import "Contacts.h"
 
 #import "Fitbit.h"
 

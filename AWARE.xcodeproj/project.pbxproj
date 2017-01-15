@@ -1315,6 +1315,7 @@
 		169C87851D01382C00825761 /* Plugins */ = {
 			isa = PBXGroup;
 			children = (
+				52022F3B1E13B7D100AB52AB /* Contacts */,
 				169C87861D01382C00825761 /* ActivityRecognition */,
 				169C87891D01382C00825761 /* AmbientNoise */,
 				16A45CDC1D2392A1008A02B1 /* BalacnedCampusScheduler */,
@@ -1932,6 +1933,8 @@
 				1683920D1D9BDCE1006D6607 /* SettingTableViewController.h */,
 				1683920E1D9BDCE1006D6607 /* SettingTableViewController.m */,
 				166082CB1D93DC1A004D1858 /* IntroPage5.xib */,
+				52BBE03B1E13C6EE00F57906 /* ContactsViewController.h */,
+				52BBE03C1E13C6EE00F57906 /* ContactsViewController.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -2032,6 +2035,7 @@
 		2A3CA9F5620967BACB187EB7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				52022F3F1E13B81200AB52AB /* AddressBook.framework */,
 				16E225051E077E09000C239E /* HealthKit.framework */,
 				160E1A001CD1D9C700D825BA /* libEZAudio.a */,
 				169C85761D0127D700825761 /* BluetoothManager.framework */,
@@ -2482,6 +2486,7 @@
 				169C889A1D01382C00825761 /* Rotation.m in Sources */,
 				16B077851D1978FF009C070B /* EntityActivityRecognition.m in Sources */,
 				16B078371D1F918B009C070B /* EntityMSBandUV+CoreDataProperties.m in Sources */,
+				52BBE03D1E13C6EE00F57906 /* ContactsViewController.m in Sources */,
 				16B077C71D1A57DD009C070B /* EntityNTPTime+CoreDataProperties.m in Sources */,
 				1613E0CB1D3D33B0000528F5 /* EntityESMHistory.m in Sources */,
 				16BDCCAD1D364B3400B13BD4 /* MSBandHR.m in Sources */,
@@ -2581,6 +2586,7 @@
 				169C88381D01382C00825761 /* SSLManager.m in Sources */,
 				160F0EF71D042AB600673343 /* EntityNetwork+CoreDataProperties.m in Sources */,
 				169C88361D01382C00825761 /* LocalFileStorageHelper.m in Sources */,
+				52022F3E1E13B7EF00AB52AB /* Contacts.m in Sources */,
 				169C88971D01382C00825761 /* Pedometer.m in Sources */,
 				169C88761D01382C00825761 /* BLEHeartRate.m in Sources */,
 				16B077971D1A01A0009C070B /* EntityLocationVisit.m in Sources */,
