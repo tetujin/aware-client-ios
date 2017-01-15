@@ -275,6 +275,8 @@
                     awareSensor = [[AWAREHealthKit alloc] initWithAwareStudy:awareStudy dbType:dbType];
                 }else if( [pluginName isEqualToString:[NSString stringWithFormat:@"status_%@",SENSOR_PLUGIN_FITBIT]] ){
                     // awareSensor = [[Fitbit alloc] initWithAwareStudy:awareStudy dbType:dbType];
+                }else if([pluginName isEqualToString:[NSString stringWithFormat:@"status_%@", SENSOR_PLUGIN_CONTACTS]]){
+                    // awareSensor = [[Contacts alloc] initWithAwareStudy:awareStudy dbType:dbType];
                 }
                 
                 if(awareSensor != nil){

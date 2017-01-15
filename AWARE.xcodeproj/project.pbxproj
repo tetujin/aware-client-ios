@@ -281,7 +281,10 @@
 		16ECFC481D8F0C95005C3DA6 /* IOSActivityRecognition.m in Sources */ = {isa = PBXBuildFile; fileRef = 16ECFC471D8F0C95005C3DA6 /* IOSActivityRecognition.m */; };
 		16FD37561CF0B1F700EEB416 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 16FD37541CF0B1DE00EEB416 /* Settings.bundle */; };
 		203B6E54AD52B82C466D0569 /* libPods-AWARE.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 379F418CD10461E03A9A20DB /* libPods-AWARE.a */; };
+		52022F3E1E13B7EF00AB52AB /* Contacts.m in Sources */ = {isa = PBXBuildFile; fileRef = 52022F3D1E13B7EF00AB52AB /* Contacts.m */; };
+		52022F401E13B81200AB52AB /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52022F3F1E13B81200AB52AB /* AddressBook.framework */; };
 		5266C34301CF82F2CDD3CC16 /* libPods-AWAREUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BDCDEE4E14B822B3D731795 /* libPods-AWAREUITests.a */; };
+		52BBE03D1E13C6EE00F57906 /* ContactsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 52BBE03C1E13C6EE00F57906 /* ContactsViewController.m */; };
 		78DBB6F63C0F1CF54633738A /* libPods-AWARETests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9076E54A4185775AE17EC4C /* libPods-AWARETests.a */; };
 /* End PBXBuildFile section */
 
@@ -831,6 +834,11 @@
 		1EB67F5CA2CB715737A0C978 /* Pods-AWAREUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AWAREUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-AWAREUITests/Pods-AWAREUITests.release.xcconfig"; sourceTree = "<group>"; };
 		379F418CD10461E03A9A20DB /* libPods-AWARE.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AWARE.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4BDCDEE4E14B822B3D731795 /* libPods-AWAREUITests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AWAREUITests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		52022F3C1E13B7EF00AB52AB /* Contacts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Contacts.h; sourceTree = "<group>"; };
+		52022F3D1E13B7EF00AB52AB /* Contacts.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Contacts.m; sourceTree = "<group>"; };
+		52022F3F1E13B81200AB52AB /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
+		52BBE03B1E13C6EE00F57906 /* ContactsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactsViewController.h; sourceTree = "<group>"; };
+		52BBE03C1E13C6EE00F57906 /* ContactsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactsViewController.m; sourceTree = "<group>"; };
 		5729A1F1B1B1EB372A04B8FE /* Pods-AWARE.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AWARE.release.xcconfig"; path = "Pods/Target Support Files/Pods-AWARE/Pods-AWARE.release.xcconfig"; sourceTree = "<group>"; };
 		A9076E54A4185775AE17EC4C /* libPods-AWARETests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AWARETests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B2348D8C3EC4DD151389123D /* Pods-AWARETests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AWARETests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AWARETests/Pods-AWARETests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -844,6 +852,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				52022F401E13B81200AB52AB /* AddressBook.framework in Frameworks */,
 				1658700A1C986D4F008B99D2 /* QuartzCore.framework in Frameworks */,
 				165DECF61C83AD7D002C88CA /* ExternalAccessory.framework in Frameworks */,
 				1623CEB11BFD40FB00EFAD72 /* AVFoundation.framework in Frameworks */,
@@ -2065,6 +2074,15 @@
 				4BDCDEE4E14B822B3D731795 /* libPods-AWAREUITests.a */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		52022F3B1E13B7D100AB52AB /* Contacts */ = {
+			isa = PBXGroup;
+			children = (
+				52022F3C1E13B7EF00AB52AB /* Contacts.h */,
+				52022F3D1E13B7EF00AB52AB /* Contacts.m */,
+			);
+			name = Contacts;
 			sourceTree = "<group>";
 		};
 		D9FFFA3D323B573A8AA96D3B /* Pods */ = {

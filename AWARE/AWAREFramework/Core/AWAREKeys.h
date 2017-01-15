@@ -115,6 +115,7 @@ extern NSString* const SENSOR_PLUGIN_BLE_HR;
 extern NSString* const SENSOR_AWARE_DEBUG;
 extern NSString* const SENSOR_PLUGIN_IOS_ESM;
 extern NSString* const SENSOR_PLUGIN_FITBIT;
+extern NSString* const SENSOR_PLUGIN_CONTACTS;
 
 extern NSString* const SENSOR_PLUGIN_MSBAND_SENSORS_CALORIES;
 extern NSString* const SENSOR_PLUGIN_MSBAND_SENSORS_DEVICECONTACT;
