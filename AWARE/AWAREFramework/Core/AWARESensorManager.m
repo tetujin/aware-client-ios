@@ -61,6 +61,8 @@
 
 #import "Observer.h"
 
+#import "Fitbit.h"
+
 // #import "Pedometer.h"
 
 @implementation AWARESensorManager{
@@ -270,6 +272,8 @@
                     awareSensor = [[Pedometer alloc] initWithAwareStudy:awareStudy dbType:dbType];
                 }else if([pluginName isEqualToString:[NSString stringWithFormat:@"status_%@",SENSOR_HEALTH_KIT]]){
                     awareSensor = [[AWAREHealthKit alloc] initWithAwareStudy:awareStudy dbType:dbType];
+                }else if( [pluginName isEqualToString:[NSString stringWithFormat:@"status_%@",SENSOR_PLUGIN_FITBIT]] ){
+                    // awareSensor = [[Fitbit alloc] initWithAwareStudy:awareStudy dbType:dbType];
                 }
                 
                 if(awareSensor != nil){
@@ -304,6 +308,11 @@
     AWARESensor * pushNotification = [[PushNotification alloc] initWithAwareStudy:awareStudy dbType:dbType];
     [pushNotification startSensorWithSettings:nil];
     [self addNewSensor:pushNotification];
+    
+    // Fitbit
+//    AWARESensor * fitbit = [[Fitbit alloc] initWithAwareStudy:awareStudy dbType:dbType];
+//    [fitbit startSensorWithSettings:nil];
+//    [self addNewSensor:fitbit];
     
 //    IBeacon * iBeacon = [[IBeacon alloc] initWithAwareStudy:awareStudy];
 //    [iBeacon startSensorWithSettings:nil];

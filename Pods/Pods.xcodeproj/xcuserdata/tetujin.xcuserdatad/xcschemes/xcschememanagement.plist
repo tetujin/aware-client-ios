@@ -4,27 +4,57 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>CocoaAsyncSocket.xcscheme</key>
+		<key>CocoaAsyncSocket-iOS10.0.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>EAIntroView.xcscheme</key>
+		<key>CocoaAsyncSocket-iOS8.0.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>EARestrictedScrollView.xcscheme</key>
+		<key>EAIntroView-iOS10.0.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>EZAudio.xcscheme</key>
+		<key>EAIntroView-iOS8.0.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>MQTTKit.xcscheme</key>
+		<key>EARestrictedScrollView-iOS10.0.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>EARestrictedScrollView-iOS8.0.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>EZAudio-iOS10.0.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>EZAudio-iOS8.0.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>MQTTKit-iOS10.0.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>MQTTKit-iOS8.0.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>NXOAuth2Client.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -39,22 +69,47 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>SCNetworkReachability.xcscheme</key>
+		<key>Pods-AWAREUITests.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>SVProgressHUD.xcscheme</key>
+		<key>SCNetworkReachability-iOS10.0.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>TPCircularBuffer.xcscheme</key>
+		<key>SCNetworkReachability-iOS8.0.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>ios-ntp.xcscheme</key>
+		<key>SVProgressHUD-iOS10.0.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>SVProgressHUD-iOS8.0.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>TPCircularBuffer-iOS10.0.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>TPCircularBuffer-iOS8.0.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>ios-ntp-iOS10.0.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>ios-ntp-iOS8.0.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -62,57 +117,112 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>066EE8EF0B6469B50BD9A827F6EE5DF6</key>
+		<key>0C8114BA619576D0804F5ECF84C07245</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>1BF13B35F364BA0B42EF9AC24C7DA945</key>
+		<key>1BB5923642B96B042D78EB5A5DA75BDE</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>3935BDF21A5D6A5E00CD4F252F7087E6</key>
+		<key>1D172FC79DE02E661DE180C240C25838</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>4547FD42E303C73D12CCC45748CC491D</key>
+		<key>2F12F9D8B052284517C521971386E3B0</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>48F687CDE9990BD471D7883061F7E5D4</key>
+		<key>3CF591F3BB92AD5E1EB691344990E904</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>4C9E99CC2B5F0FA4FC11C2E24D4EF986</key>
+		<key>432DD0D2496A24FB84E94C8FA3465EBC</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>67D5A223E67B0EF959BA0BB2E2598C26</key>
+		<key>4CF2FF2FBE150782DCF5A644F564BF10</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>74CD2F578138157E0B27CCEE08C069EF</key>
+		<key>4D3ED3D990616F70EE774C19FB708425</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>9B2B758E5A2FBC4951EB61B6FB6CE421</key>
+		<key>4FA02AB9C2738711CB921C2321718195</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>B1EA9EB50AFB32E24353EB0152115ACF</key>
+		<key>614C6025A2EB952EA98510673F956E47</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>D1EC2572C5166CE2498C72FAF128EABE</key>
+		<key>74EC76EF3E5319C45EB213EA68EA1228</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>7503653B2805D7C02DCBE7070DD4AD51</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>A0E1E918B091CE9824A524D1CE346E55</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>A9FE7AEA4C303F461069DD5BC2C29DFA</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>AA0631D4F4C41EA86F1D9CBB20376EFE</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>B46A30BE0A0153EA928C03B2E9AD580F</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>BB2C69E9D29C02ACCC03EBACFCCFC034</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>BFA57850AFF2D18629302FF567BD0405</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>C207C3ED90A795B7867BC5BFD2ABF408</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>D22A0235203322C734E302EB3F48751F</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>E2E6C736CF403D99CAA04265C426BC4A</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>E5F418CE39D2B807851979D11280F713</key>
 		<dict>
 			<key>primary</key>
 			<true/>

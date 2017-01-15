@@ -24,6 +24,9 @@
 #import "GoogleLogin.h"
 #import "Observer.h"
 
+#import "NXOAuth2.h"
+#import "Fitbit.h"
+
 @implementation AWAREDelegate{
     AWARECoreDataMigrationManager * migrationManager;
 }
@@ -39,6 +42,8 @@
 }
 
 ////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////
+
 ///////////////////////////////////////////////////////////////////////
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
@@ -678,6 +683,10 @@ void exceptionHandler(NSException *exception) {
                     [_sharedAWARECore.sharedAwareStudy setStudyInformationWithURL:studyURL];
                 }
             }
+        }else if([[url host] isEqualToString:@"com.aware.ios.oauth2"]){
+            
+            return [Fitbit handleURL:url sourceApplication:sourceApplication annotation:annotation];
+            
         }
         return YES;
     }else{

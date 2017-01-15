@@ -106,7 +106,7 @@ NSString* const SENSOR_PLUGIN_BLE_HEARTRATE   = @"plugin_ble_heartrate";
 NSString* const SENSOR_AWARE_DEBUG            = @"aware_debug";
 NSString* const SENSOR_PLUGIN_IOS_ESM         = @"plugin_ios_esm";
 NSString* const SENSOR_PLUGIN_BLE_HR          = @"plugin_ble_heartrate";
-
+NSString* const SENSOR_PLUGIN_FITBIT          = @"plugin_fitbit";
 
 NSString* const SENSOR_PLUGIN_MSBAND_SENSORS_CALORIES      = @"plugin_msband_sensors_calories";
 NSString* const SENSOR_PLUGIN_MSBAND_SENSORS_DEVICECONTACT = @"plugin_msband_sensors_devicecontact";
@@ -252,6 +252,7 @@ NSString * const ACTION_AWARE_WIFI_REQUEST_SCAN = @"ACTION_AWARE_WIFI_REQUEST_SC
 NSString * const ACTION_AWARE_GOOGLE_ACTIVITY_RECOGNITION = @"ACTION_AWARE_GOOGLE_ACTIVITY_RECOGNITION";
 NSString * const ACTION_AWARE_IOS_ACTIVITY_RECOGNITION = @"ACTION_AWARE_IOS_ACTIVITY_RECOGNITION";
 
+
 // upload progress
 NSString * const KEY_UPLOAD_PROGRESS_STR = @"KEY_UPLOAD_PROGRESS_STR";
 NSString * const KEY_UPLOAD_FIN = @"KEY_UPLOAD_FIN";
@@ -263,6 +264,7 @@ NSString * const ACTION_AWARE_PEDOMETER = @"ACTION_AWARE_PEDOMETER";
 
 NSString * const ACTION_AWARE_GOOGLE_LOGIN_REQUEST = @"ACTION_AWARE_GOOGLE_LOGIN_REQUEST";
 NSString * const ACTION_AWARE_GOOGLE_LOGIN_SUCCESS = @"ACTION_AWARE_GOOGLE_LOGIN_SUCCESS";
+
 
 @implementation AWAREKeys
 
