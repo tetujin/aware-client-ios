@@ -65,6 +65,8 @@
 #import "IOSESM.h"
 #import "Meal.h"
 #import "IOSActivityRecognition.h"
+#import "Contacts.h"
+#import "Fitbit.h"
 
 @interface AWARESensors : NSObject
 

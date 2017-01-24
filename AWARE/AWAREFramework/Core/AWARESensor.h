@@ -19,7 +19,8 @@
 typedef enum: NSInteger {
     AwareSettingTypeBool   = 0,
     AwareSettingTypeString = 1,
-    AwareSettingTypeNumber = 2
+    AwareSettingTypeNumber = 2,
+    AwareSettingTypeRadio  = 3
 } AwareSettingType;
 
 
@@ -28,10 +29,19 @@ typedef enum: NSInteger {
 - (BOOL) startSensorWithSettings:(NSArray *)settings;
 - (BOOL) startSensor;
 - (BOOL) stopSensor;
+////////////  remote control ///////////////////////////
+- (BOOL) refreshSensorWithSettings:(NSArray *) setting;
+- (BOOL) refreshSensor;
+////////////  quit action ////////////////
+- (BOOL) quitSensor;
+////////////  sync ////////////
 - (void) syncAwareDB;
+////////////  create ////////////
 - (void) createTable;
+////////////  event //////////
 - (void) changedBatteryState;
 - (void) calledBackgroundFetch;
+////////////  test  ////////////
 - (void) saveDummyData;
 
 - (NSString *) getSensorName;
@@ -54,6 +64,7 @@ typedef enum: NSInteger {
 - (void) addDefaultSettingWithBool:(NSNumber *)boolValue   key:(NSString *)key desc:(NSString *)desc;
 - (void) addDefaultSettingWithString:(NSString *)strValue key:(NSString *)key desc:(NSString *)desc;
 - (void) addDefaultSettingWithNumber:(NSNumber *)numberValue key:(NSString *)key desc:(NSString *)desc;
+- (void) addDefaultSettingWithRadio:(NSArray *)items key:(NSString *)key desc:(NSString *)desc;
 
 // set & get settings
 //- (void) setDefaultSettingWithString:(NSString *) value key:(NSString *) key;
@@ -92,6 +103,7 @@ typedef enum: NSInteger {
 
 - (NSString *) getDeviceId;
 - (double) getSensorSetting:(NSArray *)settings withKey:(NSString *)key;
+- (NSString *)getSettingAsStringFromSttings:(NSArray *)settings withKey:(NSString *)key;
 - (bool) isUploading;
 
 // create table
@@ -153,7 +165,6 @@ typedef enum: NSInteger {
 - (double) convertMotionSensorFrequecyFromAndroid:(double)frequency;
 - (void) sendLocalNotificationForMessage:(NSString *)message soundFlag:(BOOL)soundFlag;
 
-
 // url
 - (NSString *) getWebserviceUrl;
 - (NSString *) getInsertUrl:(NSString *)sensorName;
@@ -164,5 +175,8 @@ typedef enum: NSInteger {
 - (NSManagedObjectContext *) getSensorManagedObjectContext;
 
 - (BOOL) getStatus;
+
+
+
 
 @end

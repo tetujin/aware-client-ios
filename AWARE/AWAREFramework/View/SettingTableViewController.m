@@ -107,7 +107,12 @@
         awareSensor = [[BLEHeartRate alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
     }else if([_selectedRowKey isEqualToString:SENSOR_PLUGIN_PEDOMETER]){
         awareSensor = [[Pedometer alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
+    }else if([_selectedRowKey isEqualToString:SENSOR_PLUGIN_FITBIT]){
+        awareSensor = [[Fitbit alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
+    }else if([_selectedRowKey isEqualToString:SENSOR_PLUGIN_CONTACTS]){
+        awareSensor = [[Contacts alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
     }
+    
     
     if(awareSensor != nil){
         NSMutableArray * currentSetting  = [[NSMutableArray alloc] init];
@@ -212,6 +217,14 @@
         
         NSString * title = [dict objectForKey:KEY_CEL_TITLE];
         NSString * value = [dict objectForKey:KEY_CEL_SETTING_VALUE];
+        
+        // TODO //
+        NSUserDefaults * userDefaults = [NSUserDefaults standardUserDefaults];
+        if( [title isEqualToString:@"api_key_plugin_fitbit"]){
+            value = [userDefaults objectForKey:@"api_key_plugin_fitbit"];
+        }else if( [title isEqualToString:@"api_secret_plugin_fitbit"]){
+            value = [userDefaults objectForKey:@"api_secret_plugin_fitbit"];
+        }
         
         cell.textLabel.text = title;
         if(value !=nil){
@@ -334,6 +347,16 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
 
     [self refreshRows];
     // [self.tableView reloadData];
+    
+    
+    // NSLog(@"%@",selectedSettingKey);
+    NSUserDefaults * userDefaults = [NSUserDefaults standardUserDefaults];
+    if( [selectedSettingKey isEqualToString:@"api_key_plugin_fitbit"]){
+        [userDefaults setObject:stringValue forKey:@"api_key_plugin_fitbit"];
+    }else if( [selectedSettingKey isEqualToString:@"api_secret_plugin_fitbit"]){
+        [userDefaults setObject:stringValue forKey:@"api_secret_plugin_fitbit"];
+    }
+    [userDefaults synchronize];
 
 }
 

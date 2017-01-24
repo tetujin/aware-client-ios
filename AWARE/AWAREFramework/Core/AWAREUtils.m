@@ -491,5 +491,20 @@ This method provides a system uuid.
     }
 }
 
+
++ (NSString *)stringByAddingPercentEncoding:(NSString *)string{
+    return [AWAREUtils stringByAddingPercentEncoding:string unreserved:@""];
+}
+
++ (NSString *)stringByAddingPercentEncoding:(NSString *)string unreserved:(NSString*)unreserved{
+    // NSString *unreserved = @"-._~/?{}[]\"\':, ";
+    // NSString *unreserved = @"";
+    NSMutableCharacterSet *allowed = [NSMutableCharacterSet
+                                      alphanumericCharacterSet];
+    [allowed addCharactersInString:unreserved];
+    return [string stringByAddingPercentEncodingWithAllowedCharacters:allowed];
+}
+
+
 @end
 

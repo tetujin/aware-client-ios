@@ -274,9 +274,9 @@
                 }else if([pluginName isEqualToString:[NSString stringWithFormat:@"status_%@",SENSOR_HEALTH_KIT]]){
                     awareSensor = [[AWAREHealthKit alloc] initWithAwareStudy:awareStudy dbType:dbType];
                 }else if( [pluginName isEqualToString:[NSString stringWithFormat:@"status_%@",SENSOR_PLUGIN_FITBIT]] ){
-                    // awareSensor = [[Fitbit alloc] initWithAwareStudy:awareStudy dbType:dbType];
+                    awareSensor = [[Fitbit alloc] initWithAwareStudy:awareStudy dbType:dbType];
                 }else if([pluginName isEqualToString:[NSString stringWithFormat:@"status_%@", SENSOR_PLUGIN_CONTACTS]]){
-                    // awareSensor = [[Contacts alloc] initWithAwareStudy:awareStudy dbType:dbType];
+                    awareSensor = [[Contacts alloc] initWithAwareStudy:awareStudy dbType:dbType];
                 }
                 
                 if(awareSensor != nil){
@@ -423,6 +423,13 @@
     if(awareSensors == nil) return;
     for (AWARESensor* sensor in awareSensors) {
         [sensor stopSensor];
+    }
+}
+
+- (void) quitAllSensor {
+    if(awareSensors == nil) return;
+    for (AWARESensor* sensor in awareSensors) {
+        [sensor quitSensor];
     }
 }
 

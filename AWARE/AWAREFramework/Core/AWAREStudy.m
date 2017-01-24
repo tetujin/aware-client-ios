@@ -971,6 +971,11 @@ didCompleteWithError:(NSError *)error {
  * @return a result of a cleaning operation
  */
 - (BOOL) clearAllSetting {
+    
+    AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+    AWARECore * core = delegate.sharedAWARECore;
+    [core.sharedSensorManager quitAllSensor];
+    
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults removeObjectForKey:KEY_MQTT_SERVER];
     [userDefaults removeObjectForKey:KEY_MQTT_USERNAME];

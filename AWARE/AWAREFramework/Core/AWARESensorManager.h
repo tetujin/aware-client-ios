@@ -31,6 +31,7 @@
 - (BOOL) startAllSensors;
 - (BOOL) startAllSensorsWithStudy:(AWAREStudy *) study;
 - (BOOL) startAllSensorsWithStudy:(AWAREStudy *) study dbType:(AwareDBType)dbType;
+- (void) quitAllSensor;
 - (BOOL) createAllTables;
 
 // - (BOOL) clearDataFromLocalDB;

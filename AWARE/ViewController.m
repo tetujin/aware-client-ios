@@ -435,8 +435,8 @@
     [_sensors addObject:[self getCelContent:@"iOS ESM" desc:@"ESM plugin for iOS" image:@"ic_action_web_esm" key:SENSOR_PLUGIN_IOS_ESM]];
     
     // Fitbit
-    // [_sensors addObject:[self getCelContent:@"Fitbit" desc:@"Fitbit Plugin" image:@"ic_action_fitbit" key:SENSOR_PLUGIN_FITBIT]];
-    // [_sensors addObject:[self getCelContent:@"Contacts" desc:@"This plugin get your contacts" image:@"ic_action_contacts" key:SENSOR_PLUGIN_CONTACTS]];
+    [_sensors addObject:[self getCelContent:@"Fitbit" desc:@"Fitbit Plugin" image:@"ic_action_fitbit" key:SENSOR_PLUGIN_FITBIT]];
+    [_sensors addObject:[self getCelContent:@"Contacts" desc:@"This plugin get your contacts" image:@"ic_action_contacts" key:SENSOR_PLUGIN_CONTACTS]];
     
     // HealthKit
     // [_sensors addObject:[self getCelContent:@"Direction (iOS)" desc:@"Device's direction (0-360)" image:@"safari_copyrighted" key:SENSOR_DIRECTION]];
