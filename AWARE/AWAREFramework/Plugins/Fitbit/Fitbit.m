@@ -176,6 +176,8 @@
     NSArray * settings = [defaults objectForKey:@"aware.plugn.fitbit.settings"];
     
     if(settings != nil){
+        [self getProfile];
+        
         [fitbitDevice getDeviceInfo];
         
         // Get setting from settings variable
@@ -375,13 +377,21 @@
                 return;
             }
             
-            if(![values objectForKey:@"success"]){
-                [self refreshToken];
-            }else{
-                NSLog(@"%@", responseString);
-                [AWAREUtils sendLocalNotificationForMessage:responseString soundFlag:YES];
-            }
+                //{
+                //"errors":[{
+                //    "errorType":"expired_token",
+                //    "message":"Access token expired: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1Q1JSQ1QiLCJhdWQiOiIyMjg3VDciLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJyc29jIHJzZXQgcmFjdCBybG9jIHJ3ZWkgcmhyIHJudXQgcnBybyByc2xlIiwiZXhwIjoxNDg1Mjk4NDU2LCJpYXQiOjE0ODUyNjk2NTZ9.NTEcqo3wOFLAZ6jL-BcGhYrVENb8g3nps-LVpEv4UNQ. Visit https://dev.fitbit.com/docs/oauth2 for more information on the Fitbit Web API authorization process."}
+                //    ],
+                //"success":false
+                // }
             
+            if(![values objectForKey:@"user"]){
+                [self refreshToken];
+                [self saveDebugEventWithText:@"responseString" type:DebugTypeWarn label:[NSString stringWithFormat:@"fitbit plugin: refresh token %@", [NSDate new]]];
+            }else{
+                // NSLog(@"%@", responseString);
+                // [AWAREUtils sendLocalNotificationForMessage:responseString soundFlag:YES];
+            }
         }
     } @catch (NSException *exception) {
         
