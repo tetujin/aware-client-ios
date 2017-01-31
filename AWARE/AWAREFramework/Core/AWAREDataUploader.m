@@ -160,8 +160,10 @@
         sessionConfig.allowsCellularAccess = YES;
     }
     
+    NSString * percentEncodedValues = [AWAREUtils stringByAddingPercentEncoding:formatedSensorData unreserved:@""];
+    
     // set HTTP/POST body information
-    NSString* post = [NSString stringWithFormat:@"device_id=%@&data=%@", deviceId, formatedSensorData];
+    NSString* post = [NSString stringWithFormat:@"device_id=%@&data=%@", deviceId, percentEncodedValues];
     NSData* postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
     NSString* postLength = [NSString stringWithFormat:@"%ld", [postData length]];
     //    NSLog(@"Data Length: %@", postLength);

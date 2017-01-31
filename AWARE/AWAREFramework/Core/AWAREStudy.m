@@ -327,16 +327,17 @@ didCompleteWithError:(NSError *)error {
         }
     }
     
-    NSString * oldStudyId = [userDefaults objectForKey:KEY_STUDY_ID];
-    if(![oldStudyId isEqualToString:studyId]){
-        NSLog(@"Add new device ID to the AWARE server.");
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        NSString* url =  [userDefaults objectForKey:KEY_STUDY_QR_CODE];
-        NSString * uuid = [AWAREUtils getSystemUUID];
-        [self addNewDeviceToAwareServer:url withDeviceId:uuid];
-    }else{
-        NSLog(@"This device ID is already regited to the AWARE server.");
-    }
+    //NSString * oldStudyId = [userDefaults objectForKey:KEY_STUDY_ID];
+    //if(![oldStudyId isEqualToString:studyId]){
+    //}else{
+    //    NSLog(@"This device ID is already regited to the AWARE server.");
+    //}
+    
+    NSLog(@"Add new device ID to the AWARE server.");
+    NSString* url =  [userDefaults objectForKey:KEY_STUDY_QR_CODE];
+    NSString * uuid = [AWAREUtils getSystemUUID];
+    [self addNewDeviceToAwareServer:url withDeviceId:uuid];
+    
     
     // save the new configuration to the local storage
     [userDefaults setObject:mqttServer       forKey:KEY_MQTT_SERVER];
@@ -401,14 +402,6 @@ didCompleteWithError:(NSError *)error {
     NSString *model = [[UIDevice currentDevice] model]; //ok
     NSString *manufacturer = @"Apple";//ok
     
-    
-    //    [[UIDevice currentDevice] platformType]   // ex: UIDevice4GiPhone
-    //    [[UIDevice currentDevice] platformString] // ex: @"iPhone 4G"
-//    @property(nonatomic,readonly,strong) NSString    *name;              // e.g. "My iPhone"
-//    @property(nonatomic,readonly,strong) NSString    *model;             // e.g. @"iPhone", @"iPod touch"
-//    @property(nonatomic,readonly,strong) NSString    *localizedModel;    // localized version of model
-//    @property(nonatomic,readonly,strong) NSString    *systemName;        // e.g. @"iOS"
-//    @property(nonatomic,readonly,strong) NSString    *systemVersion;     // e.g. @"4.0"
     
     NSMutableDictionary *jsonQuery = [[NSMutableDictionary alloc] init];
     [jsonQuery setValue:uuid            forKey:@"device_id"];
@@ -475,6 +468,9 @@ didCompleteWithError:(NSError *)error {
     [[session dataTaskWithRequest: request  completionHandler: ^(NSData *data, NSURLResponse *response, NSError *error) {
         if (error != nil) {
             NSLog(@"Error: %@", error.debugDescription);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [AWAREUtils sendLocalNotificationForMessage:error.debugDescription soundFlag:YES];
+            });
         }
         if( data != nil ){
             NSLog(@"Success: %@", [[NSString alloc] initWithData: data  encoding: NSUTF8StringEncoding]);
@@ -502,7 +498,6 @@ didCompleteWithError:(NSError *)error {
     query = @"_id integer primary key autoincrement,"
     "timestamp real default 0,"
     "device_id text default '',"
-    
     "board text default '',"
     "brand text default '',"
     "device text default '',"
@@ -515,7 +510,7 @@ didCompleteWithError:(NSError *)error {
     "release text default '',"
     "release_type text default '',"
     "sdk text default ''," // version
-    "label text default '',"
+    "label text default '', "
     "UNIQUE (device_id)";
   
     NSString *post = [NSString stringWithFormat:@"device_id=%@&fields=%@", uuid, query];
@@ -543,6 +538,9 @@ didCompleteWithError:(NSError *)error {
         // Success
         if (error != nil) {
             NSLog(@"Error: %@", error.debugDescription);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [AWAREUtils sendLocalNotificationForMessage:error.debugDescription soundFlag:YES];
+            });
         }
         if( data != nil ){
             NSLog(@"Success: %@", [[NSString alloc] initWithData: data  encoding: NSUTF8StringEncoding]);
@@ -551,31 +549,7 @@ didCompleteWithError:(NSError *)error {
         [session invalidateAndCancel];
     }] resume];
     
-    // NSURLConnection * connection = [NSURLConnection connectionWithRequest:request delegate:self];
-    // [connection start];
-    
     return YES;
-    
-    /*
-    // NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-    // dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-    // NSError *error = nil;
-    // NSHTTPURLResponse *response = nil;
-    
-    NSData *resData = [NSURLConnection sendSynchronousRequest:request
-                                            returningResponse:&response error:&error];
-    NSString * resultDate = [[NSString alloc] initWithData:resData encoding:NSUTF8StringEncoding];
-    NSLog(@"==> %@", resultDate);
-    int responseCode = (int)[response statusCode];
-    if(responseCode == 200){
-        NSLog(@"UPLOADED SENSOR DATA TO A SERVER");
-        return YES;
-    }else{
-        NSLog(@"ERROR");
-        return NO;
-    }
-    return NO;
-     */
 }
 
 
@@ -732,11 +706,11 @@ didCompleteWithError:(NSError *)error {
  */
 - (NSArray *) getSensors {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    NSArray * studySettings = [userDefaults objectForKey:KEY_SENSORS];
-    NSArray * userSettings = [userDefaults objectForKey:KEY_USER_SENSORS];
+    // NSArray * studySettings = [userDefaults objectForKey:KEY_SENSORS];
+    // NSArray * userSettings = [userDefaults objectForKey:KEY_USER_SENSORS];
     
-    NSMutableArray * tempSettings  = [[NSMutableArray alloc] init];
-    NSMutableArray * currentSettings = [[NSMutableArray alloc] initWithArray:tempSettings];
+    // NSMutableArray * tempSettings  = [[NSMutableArray alloc] init];
+    // NSMutableArray * currentSettings = [[NSMutableArray alloc] initWithArray:tempSettings];
     /*
      Marge the study and user setting
      If the keys are duplicate, the study settings are overwrited by user settings.
@@ -1000,9 +974,6 @@ didCompleteWithError:(NSError *)error {
     mqttPort = 1883;
     mqttKeepAlive = 600;
     mqttQos = 2;
-    
-    
-    
     
     return YES;
 }

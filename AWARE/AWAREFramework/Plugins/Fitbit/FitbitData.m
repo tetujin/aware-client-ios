@@ -285,6 +285,12 @@
                 return;
             }
             
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if ([self isDebug]) {
+                    [self sendLocalNotificationForMessage:[NSString stringWithFormat:@"Fitbit plugin got %@ data", type] soundFlag:NO];
+                }
+            });
+            
             NSDate * now = [NSDate new];
             
             NSMutableDictionary * dict = [[NSMutableDictionary alloc] init];
@@ -369,7 +375,6 @@ didReceiveResponse:(NSURLResponse *)response
     // @"steps"@"calories"
     // @"heartrate"@"sleep"
     NSString * identifier = session.configuration.identifier;
-    // NSLog(@"[%@] URLSession:dataTask:didReceiveData",identifier);
     if([identifier isEqualToString:@"steps"]){
         [stepsResponse appendData:data];
     }else if([identifier isEqualToString:@"calories"]){

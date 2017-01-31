@@ -424,6 +424,11 @@ This method provides a system uuid.
                               @"iPhone7,2" :@"iPhone 6",        //
                               @"iPhone8,1" :@"iPhone 6s",   //
                               @"iPhone8,2" :@"iPhone 6s Plus",        //
+                              @"iPhone8,4" :@"iPhone SE",
+                              @"iPhone9,1" :@"iPhone 7",
+                              @"iPhone9,3" :@"iPhone 7",
+                              @"iPhone9,2" :@"iPhone 7 Plus",
+                              @"iPhone9,4" :@"iPhone 7 Plus",
                               @"iPad4,1"   :@"iPad Air",        // 5th Generation iPad (iPad Air) - Wifi
                               @"iPad4,2"   :@"iPad Air",        // 5th Generation iPad (iPad Air) - Cellular
                               @"iPad4,4"   :@"iPad Mini",       // (2nd Generation iPad Mini - Wifi)
@@ -504,6 +509,7 @@ This method provides a system uuid.
     [allowed addCharactersInString:unreserved];
     return [string stringByAddingPercentEncodingWithAllowedCharacters:allowed];
 }
+
 
 
 @end

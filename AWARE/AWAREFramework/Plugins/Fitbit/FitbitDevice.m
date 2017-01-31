@@ -129,6 +129,12 @@
                 return;
             }
             
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if ([self isDebug]) {
+                    [self sendLocalNotificationForMessage:@"Fitbit plugin got device data" soundFlag:NO];
+                }
+            });
+            
             if( devices != nil){
                 for (NSDictionary * device in devices) {
                     NSString * fitbitId = @"";

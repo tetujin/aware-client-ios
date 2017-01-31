@@ -469,7 +469,8 @@ NSString * const AWARE_PREFERENCES_PLUGIN_AMBIENT_NOISE_SILENCE_THRESHOLD = @"pl
       hasAudioReceived:(float **)buffer
         withBufferSize:(UInt32)bufferSize
   withNumberOfChannels:(UInt32)numberOfChannels{
-    __weak typeof (self) weakSelf = self;
+    // __weak typeof (self) weakSelf = self;
+    
     // Getting audio data as an array of float buffer arrays that can be fed into the
     // EZAudioPlot, EZAudioPlotGL, or whatever visualization you would like to do with
     // the microphone data.

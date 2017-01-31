@@ -150,16 +150,41 @@
     
     // stop previous schedule
     [self stopSchedules];
-    // remove old configuration
-    [helper removeEsmTexts];
+    
+    NSArray * scheduleESMs = [iOSESM getScheduledESMs];
+    if(scheduleESMs.count == 0){
+        // NSArray * storedBCESMs = [helper getEsmTexts];
+        // NSDictionary * dic = [[NSUserDefaults standardUserDefaults] dictionaryRepresentation];
+        // NSLog(@"defualts:%@", dic);
+        
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        NSData * lastESMJSONData = [defaults objectForKey:KEY_LATEST_ESM_JSON_DATA];
+        @try {
+            if( lastESMJSONData != nil ){
+                NSError * error = nil;
+                NSArray* oldVersionScheduleBCESMs = [NSJSONSerialization JSONObjectWithData:lastESMJSONData
+                                                                    options:NSJSONReadingAllowFragments
+                                                                      error:&error];
+                if(error != nil){
+                    NSString * errorMessage = [NSString stringWithFormat:@"[%@] error: %@", [self getSensorName], error.debugDescription];
+                    NSLog(@"%@",errorMessage);
+                    [AWAREUtils sendLocalNotificationForMessage:errorMessage soundFlag:NO];
+                }else{
+                    // remove old configuration
+                    [iOSESM setWebESMsWithArray:oldVersionScheduleBCESMs];
+                    [helper removeEsmTexts];
+                    // [defaults setObject:nil forKey:KEY_LATEST_ESM_JSON_DATA];
+                }
+            }
+        } @catch (NSException *exception) {
+            NSLog(@"[%@] %@", [self getSensorName], exception.debugDescription);
+        } @finally {
+            
+        }
+    }
+
     // start new esm via esms
     [iOSESM startSensorWithURL:CONFIG_URL tableName:@"esms"];
-    
-    // NSString * debugMessage = @"AWARE initializes ESM schedules with backup ESMs.";
-    // [self setBackupEsmsWithNotification:debugMessage];
-    // [self saveDebugEventWithText:debugMessage type:DebugTypeInfo label:@""];
-    // init config file
-    // [self getConfigFile:nil];
     
     [self performSelector:@selector(updateLatestValue:) withObject:nil afterDelay:3];
 
@@ -198,6 +223,7 @@
 - (BOOL)stopSensor {
     [esmManager stopAllESMSchedules];
     [self stopSchedules];
+
     return YES;
 }
 
@@ -224,6 +250,15 @@
     }
 }
 
+- (BOOL)quitSensor{
+    [self stopSensor];
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults removeObjectForKey:KEY_LATEST_ESM_JSON_DATA];
+    [defaults synchronize];
+    
+    return YES;
+}
 
 
 ///////////////////////////////////////////////////////////////

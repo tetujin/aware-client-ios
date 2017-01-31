@@ -245,17 +245,8 @@
     return NO;
 }
 
-
-- (BOOL)refreshSensor{
-    return YES;
-}
-
-- (BOOL)refreshSensorWithSettings:(NSArray *)setting{
-    return YES;
-}
-
 - (BOOL)quitSensor{
-    return YES;
+    return NO;
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -338,18 +329,6 @@
                                  key:(NSString *)key
                                 desc:(NSString *)desc{
     NSMutableDictionary * dict = [[NSMutableDictionary alloc] initWithObjects:@[[numberValue stringValue],
-                                                                                KEY_CEL_SETTING_TYPE_NUMBER,
-                                                                                key,
-                                                                                desc]
-                                                                      forKeys:@[KEY_CEL_SETTING_VALUE,
-                                                                                KEY_CEL_SETTING_TYPE,
-                                                                                KEY_CEL_TITLE,
-                                                                                KEY_CEL_DESC]];
-    [defaultSettings addObject:dict];
-}
-
-- (void) addDefaultSettingWithRadio:(NSArray *)items key:(NSString *)key desc:(NSString *)desc{
-    NSMutableDictionary * dict = [[NSMutableDictionary alloc] initWithObjects:@[items,
                                                                                 KEY_CEL_SETTING_TYPE_NUMBER,
                                                                                 key,
                                                                                 desc]
@@ -874,6 +853,7 @@
 }
 
 
+
 - (NSString *)getSettingAsStringFromSttings:(NSArray *)settings withKey:(NSString *)key{
     if (settings != nil) {
         for (NSDictionary * setting in settings) {
@@ -885,7 +865,6 @@
     }
     return @"";
 }
-
 
 
 /**

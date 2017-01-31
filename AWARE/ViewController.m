@@ -395,6 +395,7 @@
     [_sensors addObject:[self getCelContent:@"WiFi" desc:@"Wi-Fi sensing" image:@"ic_action_wifi" key:SENSOR_WIFI]];
     [_sensors addObject:[self getCelContent:@"BLE Heart Rate" desc:@"Collect heart rate data from an external heart rate sensor via BLE." image:@"ic_action_heartrate" key:SENSOR_PLUGIN_BLE_HR]];
     [_sensors addObject:[self getCelContent:@"HealthKit" desc:@"This plugin collects stored data in HealthKit App on iOS" image:@"ic_action_health_kit" key:SENSOR_HEALTH_KIT]];
+    
     // [_sensors addObject:[self getCelContent:@"AmbientNoise" desc:@"AmbientNoise sensor" image:@"" key:SENSOR_AMBIENT_NOISE]];
     // [_sensors addObject:[self getCelContent:@"Light" desc:@"Ambient Light (lux)" image:@"ic_action_light"]];
     // [_sensors addObject:[self getCelContent:@"Proximity" desc:@"" image:@"ic_action_proximity"]];
@@ -435,12 +436,12 @@
     [_sensors addObject:[self getCelContent:@"iOS ESM" desc:@"ESM plugin for iOS" image:@"ic_action_web_esm" key:SENSOR_PLUGIN_IOS_ESM]];
     
     // Fitbit
-    [_sensors addObject:[self getCelContent:@"Fitbit" desc:@"Fitbit Plugin" image:@"ic_action_fitbit" key:SENSOR_PLUGIN_FITBIT]];
-    [_sensors addObject:[self getCelContent:@"Contacts" desc:@"This plugin get your contacts" image:@"ic_action_contacts" key:SENSOR_PLUGIN_CONTACTS]];
+    // [_sensors addObject:[self getCelContent:@"Fitbit" desc:@"Fitbit Plugin" image:@"ic_action_fitbit" key:SENSOR_PLUGIN_FITBIT]];
+    // [_sensors addObject:[self getCelContent:@"Contacts" desc:@"This plugin get your contacts" image:@"ic_action_contacts" key:SENSOR_PLUGIN_CONTACTS]];
     
-    // HealthKit
-    // [_sensors addObject:[self getCelContent:@"Direction (iOS)" desc:@"Device's direction (0-360)" image:@"safari_copyrighted" key:SENSOR_DIRECTION]];
-    //    [_sensors addObject:[self getCelContent:@"Rotation (iOS)" desc:@"Orientation of the device" image:@"ic_action_rotation" key:SENSOR_ROTATION]];
+    
+    //  [_sensors addObject:[self getCelContent:@"Direction (iOS)" desc:@"Device's direction (0-360)" image:@"safari_copyrighted" key:SENSOR_DIRECTION]];
+    //  [_sensors addObject:[self getCelContent:@"Rotation (iOS)" desc:@"Orientation of the device" image:@"ic_action_rotation" key:SENSOR_ROTATION]];
     
     
     

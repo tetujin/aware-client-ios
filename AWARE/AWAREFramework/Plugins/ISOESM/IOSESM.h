@@ -33,6 +33,7 @@ extern NSString * const AWARE_PREFERENCES_PLUGIN_IOS_ESM_CONFIG_URL;
                           esmStatus:(NSNumber *) esmStatus;
 - (NSString *) convertNSArraytoJsonStr:(NSArray *)array;
 - (void) setNotificationSchedules;
+- (void) setWebESMsWithArray:(NSArray *)webESMArray;
 - (void) removeNotificationSchedules;
 - (void) refreshNotifications;
 

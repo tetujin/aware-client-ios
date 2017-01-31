@@ -133,6 +133,12 @@ NSString * const AWARE_PREFERENCES_PLUGIN_IOS_ESM_CONFIG_URL = @"plugin_ios_esm_
     return YES;
 }
 
+- (BOOL)quitSensor{
+    [self removeNotificationSchedulesFromSQLite];
+    [self removeNotificationSchedules];
+    return YES;
+}
+
 - (void)syncAwareDB{
     [self syncAwareDBInBackgroundWithSensorName:tableName];
 }
@@ -181,6 +187,7 @@ NSString * const AWARE_PREFERENCES_PLUGIN_IOS_ESM_CONFIG_URL = @"plugin_ios_esm_
 
 ///////////////////////////////////////////////////////////
 - (void) getESMConfigFileFromURL:(NSURL *)url{
+   
     NSMutableURLRequest *request = nil;
     __weak NSURLSession *session = nil;
     NSString *postLength = nil;
@@ -191,35 +198,123 @@ NSString * const AWARE_PREFERENCES_PLUGIN_IOS_ESM_CONFIG_URL = @"plugin_ios_esm_
     // Make a HTTP session id
     currentHttpSessionId = [NSString stringWithFormat:@"%@_%f", baseHttpSessionId, [NSDate new].timeIntervalSince1970];
     
-    
-    // Make a seesion config for HTTP/POST
-    sessionConfig = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:currentHttpSessionId];
-    sessionConfig.timeoutIntervalForRequest = 30.0;
-    sessionConfig.timeoutIntervalForResource = 30.0;
-    sessionConfig.HTTPMaximumConnectionsPerHost = 20;
-    sessionConfig.allowsCellularAccess = YES;
-    sessionConfig.discretionary = YES;
-    
-    request = [[NSMutableURLRequest alloc] init];
-    [request setURL:url];
-    [request setHTTPMethod:@"POST"];
-    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
-    
-    // set HTTP/POST body information
-    if([self isDebug]){
-        NSLog(@"--- [%@] This is background task ----", [self getSensorName] );
-    }
-    session = [NSURLSession sessionWithConfiguration:sessionConfig delegate:self delegateQueue:nil];
-    NSURLSessionDataTask* dataTask = [session dataTaskWithRequest:request];
-    
-    if( [awareStudy isNetworkReachable]){
+//    if([AWAREUtils isForeground]){
+//        
+//        request = [NSMutableURLRequest requestWithURL:url];
+//        [request setHTTPMethod:@"GET"];
+//        
+//        sessionConfig = [NSURLSessionConfiguration defaultSessionConfiguration];
+//        sessionConfig.timeoutIntervalForRequest = 60.0;
+//        sessionConfig.timeoutIntervalForResource = 60.0;
+//        sessionConfig.HTTPMaximumConnectionsPerHost = 60;
+//        sessionConfig.allowsCellularAccess = YES;
+//        // sessionConfig.discretionary = YES;
+//        session = [NSURLSession sessionWithConfiguration:sessionConfig delegate:self delegateQueue:Nil];
+//        
+//        
+//        [[session dataTaskWithRequest:request  completionHandler: ^(NSData *data, NSURLResponse *response, NSError *error) {
+//            [session finishTasksAndInvalidate];
+//            [session invalidateAndCancel];
+//            dispatch_async(dispatch_get_main_queue(), ^{
+//                NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
+//                if ([httpResponse statusCode] == 200) {
+//                    // [self sendLocalNotificationForMessage:@"Get a response as 200" soundFlag:YES];
+//                    [self saveRecievedESMsWithData:[data copy] response:response error:error];
+//                }else{
+//                    if([AWAREUtils isForeground]){
+//                        NSString * message = [NSString stringWithFormat:@"The response code is %d: %@", responseCode, error.debugDescription];
+//                        [self sendAlertMessageWithTitle:[NSString stringWithFormat:@"[%@] HTTP Connection Error", [self getSensorName]]
+//                                                message:message
+//                                           cancelButton:@"Close"];
+//                        [self saveDebugEventWithText:message type:DebugTypeWarn label:@"iOS ESM"];
+//                    }
+//                }
+//            });
+//        }] resume];
+//    }else{
+
+        // [self sendLocalNotificationForMessage:@"hello backgound" soundFlag:YES];
+
+        // Make a seesion config for HTTP/POST
+        sessionConfig = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:currentHttpSessionId];
+        sessionConfig.timeoutIntervalForRequest = 60.0;
+        sessionConfig.timeoutIntervalForResource = 60.0;
+        sessionConfig.HTTPMaximumConnectionsPerHost = 20;
+        sessionConfig.allowsCellularAccess = YES;
+        // sessionConfig.discretionary = YES;
+        
+        request = [[NSMutableURLRequest alloc] init];
+        [request setURL:url];
+        [request setHTTPMethod:@"POST"];
+        [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+        
+        // set HTTP/POST body information
+        if([self isDebug]){
+            NSLog(@"--- [%@] This is background task ----", [self getSensorName] );
+        }
+        session = [NSURLSession sessionWithConfiguration:sessionConfig delegate:self delegateQueue:nil];
+        NSURLSessionDataTask* dataTask = [session dataTaskWithRequest:request];
         [dataTask resume];
-    }else{
+//    }
+
+    if(![awareStudy isNetworkReachable]){
         if([AWAREUtils isForeground]){
             [self sendAlertMessageWithTitle:@"Network Connection Error on iOS ESM plugin" message:@"Network connection is failed" cancelButton:@"Close"];
         }
     }
+
 }
+
+
+
+- (void) saveRecievedESMsWithData:(NSData *)data
+                         response:(NSURLResponse *)response
+                            error:(NSError *)error {
+
+    if(data.length != 0){
+        
+        NSError *e = nil;
+        NSArray * esmArray = [NSJSONSerialization JSONObjectWithData:data
+                                                             options:NSJSONReadingAllowFragments
+                                                               error:&e];
+        if ( e != nil) {
+            NSLog(@"ERROR: %@", e.debugDescription);
+
+            if([AWAREUtils isForeground]){
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self sendAlertMessageWithTitle:@"Configuration Format Error of iOS ESM"
+                                            message:[NSString stringWithFormat:@"%@",e.debugDescription]
+                                       cancelButton:@"Close"];
+                });
+            }
+            return;
+        }
+        
+        if(esmArray == nil){
+            NSLog(@"ERROR: web esm array is null.");
+            if([AWAREUtils isForeground]){
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    // [AWAREUtils sendLocalNotificationForMessage:@"ERROR iOS ESM:\nESM list is empty." soundFlag:NO];
+                    [self sendAlertMessageWithTitle:@"Error iOS ESM" message:@"ESM list is empty." cancelButton:@"Close"];
+                });
+            }
+            return;
+        }
+        
+        NSString * jsonStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+        NSLog(@"%@", jsonStr);
+        
+        [self setWebESMsWithArray:esmArray];
+
+    }else{
+        if([AWAREUtils isForeground]){
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self sendAlertMessageWithTitle:@"Error iOS ESM" message:@"ESM data is empty" cancelButton:@"Close"];
+            });
+        }
+    }
+}
+
 
 
 - (void)URLSession:(NSURLSession *)session
@@ -236,7 +331,7 @@ didReceiveResponse:(NSURLResponse *)response
                 NSLog(@"[%@] Got Web ESM configuration file from server", [self getSensorName]);
             }
         }else{
-            
+            receiveData = [[NSMutableData alloc] init];
         }
         
         [session finishTasksAndInvalidate];
@@ -258,8 +353,6 @@ didReceiveResponse:(NSURLResponse *)response
         if(data != nil){
             NSLog(@"%@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
             [receiveData appendData:data];
-            // [session finishTasksAndInvalidate];
-            // [session invalidateAndCancel];
         }
     }else{
         [super URLSession:session dataTask:dataTask didReceiveData:data];
@@ -277,69 +370,21 @@ didCompleteWithError:(NSError *)error{
         if(responseCode != 200){
             [session finishTasksAndInvalidate];
             [session invalidateAndCancel];
-            if([AWAREUtils isForeground]){
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self sendAlertMessageWithTitle:@"HTTP Connection Error"
-                                            message:[NSString stringWithFormat:@"The response code is %d", responseCode]
-                                       cancelButton:@"Close"];
-                });
-            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                NSString * message = [NSString stringWithFormat:@"The response code is %d: %@", responseCode, error.debugDescription];
+                [self saveDebugEventWithText:message type:DebugTypeWarn label:@"iOS ESM"];
+            });
+            receiveData = [[NSMutableData alloc] init];
             return;
         }
         
-        NSString * r = [[NSString alloc] initWithData:receiveData encoding:NSUTF8StringEncoding];
-        NSLog(@"%@", r);
+        [self saveRecievedESMsWithData:[receiveData copy] response:nil error:error];
         
-        if(receiveData.length != 0){
-            
-            NSError *e = nil;
-            NSArray * esmArray = [NSJSONSerialization JSONObjectWithData:[r dataUsingEncoding:NSUTF8StringEncoding]
-                                                                    options:NSJSONReadingAllowFragments
-                                                                      error:&e];
-            if ( e != nil) {
-                NSLog(@"ERROR: %@", e.debugDescription);
-                [session finishTasksAndInvalidate];
-                [session invalidateAndCancel];
-                if([AWAREUtils isForeground]){
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                    // [AWAREUtils sendLocalNotificationForMessage:[NSString stringWithFormat:@"ERROR iOS ESM: \n%@",error.debugDescription] soundFlag:NO];
-                        [self sendAlertMessageWithTitle:@"Configuration Format Error of iOS ESM"
-                                                message:[NSString stringWithFormat:@"%@",e.debugDescription]
-                                           cancelButton:@"Close"];
-                    });
-                }
-                return;
-            }
-            
-            if(esmArray == nil){
-                NSLog(@"ERROR: web esm array is null.");
-                [session finishTasksAndInvalidate];
-                [session invalidateAndCancel];
-                if([AWAREUtils isForeground]){
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        // [AWAREUtils sendLocalNotificationForMessage:@"ERROR iOS ESM:\nESM list is empty." soundFlag:NO];
-                        [self sendAlertMessageWithTitle:@"Error iOS ESM" message:@"ESM list is empty." cancelButton:@"Close"];
-                    });
-                }
-                return;
-            }
-            
-            
-            
-            NSString * jsonStr = [[NSString alloc] initWithData:receiveData encoding:NSUTF8StringEncoding];
-            NSLog(@"%@", jsonStr);
-            
-            [self setWebESMsWithArray:esmArray];
-            receiveData = [[NSMutableData alloc] init];
-            [session finishTasksAndInvalidate];
-            [session invalidateAndCancel];
-        }else{
-            if([AWAREUtils isForeground]){
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self sendAlertMessageWithTitle:@"Error iOS ESM" message:@"ESM data is empty" cancelButton:@"Close"];
-                });
-            }
-        }
+        receiveData = [[NSMutableData alloc] init];
+        
+        [session finishTasksAndInvalidate];
+        [session invalidateAndCancel];
+        
     }else{
         [super URLSession:session task:task didCompleteWithError:error];
     }
@@ -364,6 +409,13 @@ didCompleteWithError:(NSError *)error{
         [super URLSession:session didBecomeInvalidWithError:error];
     }
 }
+
+//////////////////////////////////////////////////////////////
+
+
+
+
+//////////////////////////////////////////////////////////////
 
 
 - (BOOL) setWebESMsWithSchedule:(ESMSchedule *)esmSchedule{
@@ -414,8 +466,8 @@ didCompleteWithError:(NSError *)error{
             
             for (NSDictionary * schedule in webESMArray) {
                 NSArray * hours = [schedule objectForKey:@"hours"];
-                NSArray * weekdays = [schedule objectForKey:@"weekdays"];
-                NSArray * months = [schedule objectForKey:@"months"];
+                // NSArray * weekdays = [schedule objectForKey:@"weekdays"];
+                // NSArray * months = [schedule objectForKey:@"months"];
                 NSArray * esms = [schedule objectForKey:@"esms"];
                 
                 NSNumber * randomize_schedule = [schedule objectForKey:@"randomize"];
@@ -423,6 +475,8 @@ didCompleteWithError:(NSError *)error{
                 
                 NSString * startDateStr = [schedule objectForKey:@"start_date"];
                 NSString *   endDateStr = [schedule objectForKey:@"end_date"];
+                
+                
                 NSString * notificationTitle = [schedule objectForKey:@"notification_title"];
                 NSString * notificationBody = [schedule objectForKey:@"notification_body"];
                 NSString * scheduleId = [schedule objectForKey:@"schedule_id"];
@@ -437,6 +491,14 @@ didCompleteWithError:(NSError *)error{
                 
                 NSDate *startDate = [formatter dateFromString:startDateStr];
                 NSDate *endDate   = [formatter dateFromString:endDateStr];
+                
+                if(startDate == nil){
+                    startDate = [[NSDate alloc] initWithTimeIntervalSince1970:0];
+                }
+                
+                if(endDate == nil){
+                    endDate = [[NSDate alloc] initWithTimeIntervalSince1970:2147483647];
+                }
                 
                 if(expiration == nil) expiration = @0;
                 

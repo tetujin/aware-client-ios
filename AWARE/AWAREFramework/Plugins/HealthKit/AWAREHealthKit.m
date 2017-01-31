@@ -460,7 +460,7 @@
     
     NSSet * dataQuantityTypes    = [self getDataQuantityTypes];
     NSSet * dataCatogoryTypes    = [self getDataCategoryTypes];
-    NSSet * dataCorrelationTypes = [self getDataCorrelationTypes];
+    // NSSet * dataCorrelationTypes = [self getDataCorrelationTypes];
     NSSet * dataWorkoutTypes     = [self getDataWorkoutTypes];
     
     for (HKQuantityType *quantityType in dataQuantityTypes) {

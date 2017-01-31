@@ -31,7 +31,6 @@
 - (BOOL) startAllSensors;
 - (BOOL) startAllSensorsWithStudy:(AWAREStudy *) study;
 - (BOOL) startAllSensorsWithStudy:(AWAREStudy *) study dbType:(AwareDBType)dbType;
-- (void) quitAllSensor;
 - (BOOL) createAllTables;
 
 // - (BOOL) clearDataFromLocalDB;
@@ -39,6 +38,8 @@
 
 - (void) stopAndRemoveAllSensors;
 - (void) stopASensor:(NSString *) sensorName;
+
+- (void) quitAllSensor;
 
 - (void) resetAllMarkerPositionsInDB;
 

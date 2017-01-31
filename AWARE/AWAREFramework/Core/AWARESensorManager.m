@@ -52,19 +52,16 @@
 #import "Pedometer.h"
 #import "BLEHeartRate.h"
 #import "Memory.h"
-#import "AWAREHealthKit.h"
+// #import "AWAREHealthKit.h"
 #import "AmbientNoise.h"
 #import "WebESM.h"
 #import "IBeacon.h"
 #import "IOSESM.h"
-#import "AWAREHealthKit.h"
 
 #import "Observer.h"
 #import "Contacts.h"
-
 #import "Fitbit.h"
 
-// #import "Pedometer.h"
 
 @implementation AWARESensorManager{
     /** upload timer */
@@ -231,7 +228,7 @@
                 NSString *pluginName = [pluginSetting objectForKey:@"setting"];
                 NSLog(@"%@", pluginName);
                 if ([pluginName isEqualToString:[NSString stringWithFormat:@"status_%@",SENSOR_PLUGIN_GOOGLE_ACTIVITY_RECOGNITION]]){
-                    // NOTE: This sensor is not longer supported. We will move to iOS activity recognition plugin.
+                    // NOTE: This sensor is not longer supported. The sensor will move to iOS activity recognition plugin.
                     awareSensor = [[ActivityRecognition alloc] initWithAwareStudy:awareStudy dbType:dbType];
                     
                     // WIP: iOS Activity Recognition API
@@ -269,14 +266,10 @@
                     awareSensor = [[BLEHeartRate alloc] initWithAwareStudy:awareStudy dbType:dbType];
                 }else if([pluginName isEqualToString:[NSString stringWithFormat:@"status_%@",SENSOR_PLUGIN_IOS_ESM]]){
                     awareSensor = [[IOSESM alloc] initWithAwareStudy:awareStudy dbType:dbType];
-                }else if([pluginName isEqualToString:[NSString stringWithFormat:@"status_%@",SENSOR_PLUGIN_PEDOMETER]]){
-                    awareSensor = [[Pedometer alloc] initWithAwareStudy:awareStudy dbType:dbType];
-                }else if([pluginName isEqualToString:[NSString stringWithFormat:@"status_%@",SENSOR_HEALTH_KIT]]){
-                    awareSensor = [[AWAREHealthKit alloc] initWithAwareStudy:awareStudy dbType:dbType];
-                }else if( [pluginName isEqualToString:[NSString stringWithFormat:@"status_%@",SENSOR_PLUGIN_FITBIT]] ){
-                    awareSensor = [[Fitbit alloc] initWithAwareStudy:awareStudy dbType:dbType];
-                }else if([pluginName isEqualToString:[NSString stringWithFormat:@"status_%@", SENSOR_PLUGIN_CONTACTS]]){
-                    awareSensor = [[Contacts alloc] initWithAwareStudy:awareStudy dbType:dbType];
+//                }else if([pluginName isEqualToString:[NSString stringWithFormat:@"status_%@", SENSOR_PLUGIN_FITBIT]]){
+//                    awareSensor = [[Fitbit alloc] initWithAwareStudy:awareStudy dbType:dbType];
+//                }else if([pluginName isEqualToString:[NSString stringWithFormat:@"status_%@", SENSOR_PLUGIN_CONTACTS]]){
+//                    awareSensor = [[Contacts alloc] initWithAwareStudy:awareStudy dbType:dbType];
                 }
                 
                 if(awareSensor != nil){
@@ -328,7 +321,19 @@
     AWARESensor * debug = [[Debug alloc] initWithAwareStudy:awareStudy dbType:dbType];
     [debug startSensorWithSettings:nil];
     [self addNewSensor:debug];
-
+    
+    
+    AWARESensor * iOSESM = [[IOSESM alloc] initWithAwareStudy:study dbType:dbType];
+    AWARESensor * bcESM  = [[BalacnedCampusESMScheduler alloc] initWithAwareStudy:study dbType:dbType];
+    bool stateIOSESM = [self isExist:SENSOR_PLUGIN_IOS_ESM];
+    bool stateBCESM  = [self isExist:SENSOR_PLUGIN_CAMPUS];
+    if( stateIOSESM == NO && stateBCESM == NO  ){
+        [iOSESM quitSensor];
+        [bcESM quitSensor];
+    } else if( stateIOSESM == YES && stateBCESM == NO  ){
+        [bcESM quitSensor];
+    }
+    
     return YES;
 }
 
@@ -399,6 +404,22 @@
     [self unlock];
 }
 
+- (AWARESensor *) getSensorWithKey:(NSString *)sensorName {
+    for (AWARESensor* sensor in awareSensors) {
+        if([[sensor getSensorName] isEqualToString:sensorName]){
+            return sensor;
+        }
+    }
+    return nil;
+}
+
+- (void)quitAllSensor{
+    // TODO
+    for (AWARESensor* sensor in awareSensors) {
+        [sensor quitSensor];
+    }
+}
+
 /**
  * Stop a sensor with the sensor name.
  * You can find the sensor name (key) on AWAREKeys.h and .m.
@@ -423,13 +444,6 @@
     if(awareSensors == nil) return;
     for (AWARESensor* sensor in awareSensors) {
         [sensor stopSensor];
-    }
-}
-
-- (void) quitAllSensor {
-    if(awareSensors == nil) return;
-    for (AWARESensor* sensor in awareSensors) {
-        [sensor quitSensor];
     }
 }
 
