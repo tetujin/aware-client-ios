@@ -10,6 +10,8 @@
 #import <AddressBook/AddressBook.h>
 
 extern NSString * const KEY_PLUGIN_SETTING_CONTACTS_LAST_UPDATE_NSDATE;
+extern NSString * const KEY_PLUGIN_SETTING_CONTACTS_NEXT_UPDATE_DATE;
+extern NSString * const KEY_PLUGIN_SETTING_CONTACTS_UPDATE_FREQUENCY_DAY;
 
 @interface Contacts : AWARESensor<AWARESensorDelegate>
 

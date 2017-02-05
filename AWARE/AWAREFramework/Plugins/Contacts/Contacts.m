@@ -13,9 +13,11 @@
 @import Contacts;
 
 NSString * const KEY_PLUGIN_SETTING_CONTACTS_LAST_UPDATE_NSDATE = @"key_plugin_setting_contanct_last_update_date";
+NSString * const KEY_PLUGIN_SETTING_CONTACTS_NEXT_UPDATE_DATE = @"key_plugin_setting_contact_next_update_date";
+NSString * const KEY_PLUGIN_SETTING_CONTACTS_UPDATE_FREQUENCY_DAY = @"key_plugin_setting_contact_update_frequency_day";
 
 @implementation Contacts{
-    
+    NSTimer * timer;
 }
 
 - (instancetype) initWithAwareStudy:(AWAREStudy *)study
@@ -52,15 +54,46 @@ NSString * const KEY_PLUGIN_SETTING_CONTACTS_LAST_UPDATE_NSDATE = @"key_plugin_s
 /** start sensor */
 - (BOOL)startSensorWithSettings:(NSArray *)settings{
     
-    if([self getLastUpdateDate] == nil){
-        [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_CONTACT_REQUEST object:nil];
-    }
+//    if([self getLastUpdateDate] == nil){
+//        [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_CONTACT_REQUEST object:nil];
+//    }
+    
+    double frequencyDays = [self getSensorSetting:settings withKey:@"frequency_plugin_contacts"]; // days
+    if( frequencyDays > 0 ){
+        
+        if([self getLastUpdateDate] == nil){
+            [self getContacts];
+        }
+        
+        if([self getNextUpdateDate] == nil){
+            NSDate * nextUpdate = [[NSDate alloc] initWithTimeIntervalSinceNow:frequencyDays*60*60*24];
+            [self setNextUpdateDateWithDate:nextUpdate];
+            NSLog(@"%@", nextUpdate);
+        }
+        
+        [self setUpdateFreqnecyDay:@((int)frequencyDays)];
+        
+        // This timer check the necessity of updating contact list by each 6 hors
+        timer = [NSTimer scheduledTimerWithTimeInterval:60*60*6 // check update status per 6 hours
+                                                 target:self
+                                               selector:@selector(updateContacts)
+                                               userInfo:nil
+                                                repeats:YES];
+        [timer fire];
 
+    } else {
+        [self setUpdateFreqnecyDay:nil];
+    }
+    
     return YES;
 }
 
 /** step senspr */
 - (BOOL)stopSensor{
+    if(timer != nil){
+        [timer invalidate];
+        timer = nil;
+    }
     return YES;
 }
 
@@ -74,21 +107,21 @@ NSString * const KEY_PLUGIN_SETTING_CONTACTS_LAST_UPDATE_NSDATE = @"key_plugin_s
             [store requestAccessForEntityType:CNEntityTypeContacts
                             completionHandler:^(BOOL granted, NSError * _Nullable error) {
                                 if (granted) {
-                                    // 利用可能
+                                    // Available
                                     [self getContacts];
                                 } else {
-                                    // 拒否
+                                    // Reject
                                 }
                             }];
         }
             break;
             
         case CNAuthorizationStatusDenied:
-            // 拒否
+            // Reject
             break;
             
         case CNAuthorizationStatusAuthorized:
-            // 利用可能
+            // Available
             [self getContacts];
             break;
             
@@ -97,7 +130,31 @@ NSString * const KEY_PLUGIN_SETTING_CONTACTS_LAST_UPDATE_NSDATE = @"key_plugin_s
     }
 }
 
--(void)getContacts{
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+
+- (void) updateContacts {
+    NSDate * nextUpateDate = [self getNextUpdateDate];
+    if(nextUpateDate == nil){
+        [self getContacts];
+    }else{
+        NSDate * now = [NSDate new];
+        if(nextUpateDate.timeIntervalSince1970 > now.timeIntervalSince1970){
+            
+        }else{
+            [self getContacts];
+            NSNumber * frequencyDays = [self getUpdateFrequencyDay];
+            // [self setNextUpdateDateWithDate:]
+            if(frequencyDays != nil){
+                // Set Next Update
+                // [self setNextUpdateDateWithDate:[[NSDate alloc] initWithTimeIntervalSinceNow:60]];
+                [self setNextUpdateDateWithDate:[[NSDate alloc] initWithTimeIntervalSinceNow:frequencyDays.intValue*60*60*24]];
+            }
+        }
+    }
+}
+
+- (void) getContacts {
     CNContactStore *store = [CNContactStore new];
     NSError *error;
     CNContactFetchRequest *request = [[CNContactFetchRequest alloc] initWithKeysToFetch:@[CNContactGivenNameKey,
@@ -168,12 +225,15 @@ NSString * const KEY_PLUGIN_SETTING_CONTACTS_LAST_UPDATE_NSDATE = @"key_plugin_s
         // [self setBufferSize:0];
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Success!"
-                                                            message:[NSString stringWithFormat:@"Saved %ld contacts", people.count]
-                                                           delegate:nil
-                                                  cancelButtonTitle:@"Close"
-                                                  otherButtonTitles:nil];
-            [alert show];
+            
+            if([AWAREUtils isForeground]){
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Success!"
+                                                                message:[NSString stringWithFormat:@"Saved %ld contacts", people.count]
+                                                               delegate:nil
+                                                      cancelButtonTitle:@"Close"
+                                                      otherButtonTitles:nil];
+                [alert show];
+            }
             NSDate * now = [NSDate new];
             [self setLastUpdateDateWithDate:now];
             
@@ -187,6 +247,9 @@ NSString * const KEY_PLUGIN_SETTING_CONTACTS_LAST_UPDATE_NSDATE = @"key_plugin_s
         NSLog(@"%s %@",__func__, error);
     }
 }
+
+
+//////////////////////////////////////////////////////////////////
 
 - (NSDate *) getLastUpdateDate{
     NSUserDefaults * userDefaults = [NSUserDefaults standardUserDefaults];
@@ -205,6 +268,45 @@ NSString * const KEY_PLUGIN_SETTING_CONTACTS_LAST_UPDATE_NSDATE = @"key_plugin_s
 }
 
 ////////////////////////////////////////////////////////////
+
+- (NSDate *) getNextUpdateDate{
+    NSUserDefaults * userDefaults = [NSUserDefaults standardUserDefaults];
+    NSDate * date = [userDefaults objectForKey:KEY_PLUGIN_SETTING_CONTACTS_NEXT_UPDATE_DATE];
+    if(date != nil){
+        return date;
+    }else{
+        return nil;
+    }
+}
+
+- (void) setNextUpdateDateWithDate:(NSDate *)date{
+    NSUserDefaults * userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setObject:date forKey:KEY_PLUGIN_SETTING_CONTACTS_NEXT_UPDATE_DATE];
+    [userDefaults synchronize];
+}
+
+///////////////////////////////////////////////////////////////////
+
+- (NSNumber *) getUpdateFrequencyDay{
+    NSUserDefaults * userDefaults = [NSUserDefaults standardUserDefaults];
+    NSNumber * day = [userDefaults objectForKey:KEY_PLUGIN_SETTING_CONTACTS_UPDATE_FREQUENCY_DAY];
+    if(day != nil){
+        return day;
+    }else{
+        return nil;
+    }
+}
+
+- (void) setUpdateFreqnecyDay:(NSNumber *)day{
+    NSUserDefaults * userDefaults = [NSUserDefaults standardUserDefaults];
+    
+    if(day!=nil){
+        [userDefaults setObject:day forKey:KEY_PLUGIN_SETTING_CONTACTS_UPDATE_FREQUENCY_DAY];
+    }else{
+        [userDefaults removeObjectForKey:KEY_PLUGIN_SETTING_CONTACTS_UPDATE_FREQUENCY_DAY];
+    }
+    [userDefaults synchronize];
+}
 
 
 /////////////////////////////////////////////////////////////
