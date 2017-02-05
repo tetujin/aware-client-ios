@@ -261,6 +261,9 @@
 		16BDCD011D38646400B13BD4 /* MealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 16BDCD001D38646400B13BD4 /* MealViewController.m */; };
 		16C1FF7D1C617FB100C070AA /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16C1FF7C1C617FB100C070AA /* Accelerate.framework */; };
 		16C1FF7F1C617FC300C070AA /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16C1FF7E1C617FC300C070AA /* GLKit.framework */; };
+		16C21AB01E45A7D9001C88BC /* EntityContact+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 16C21AAD1E45A7D9001C88BC /* EntityContact+CoreDataClass.m */; };
+		16C21AB11E45A7D9001C88BC /* EntityContact+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 16C21AAF1E45A7D9001C88BC /* EntityContact+CoreDataProperties.m */; };
+		16C21AB41E45A81A001C88BC /* Contacts.m in Sources */ = {isa = PBXBuildFile; fileRef = 16C21AB31E45A81A001C88BC /* Contacts.m */; };
 		16D810241C06242500605DE2 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16D810231C06242500605DE2 /* CFNetwork.framework */; };
 		16D810261C06242F00605DE2 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16D810251C06242F00605DE2 /* Security.framework */; };
 		16D91B5E1CA9447A00A5FD4F /* MicrosoftBandKit_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16D91B5D1CA9447A00A5FD4F /* MicrosoftBandKit_iOS.framework */; };
@@ -283,7 +286,6 @@
 		16ECFC481D8F0C95005C3DA6 /* IOSActivityRecognition.m in Sources */ = {isa = PBXBuildFile; fileRef = 16ECFC471D8F0C95005C3DA6 /* IOSActivityRecognition.m */; };
 		16FD37561CF0B1F700EEB416 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 16FD37541CF0B1DE00EEB416 /* Settings.bundle */; };
 		203B6E54AD52B82C466D0569 /* libPods-AWARE.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 379F418CD10461E03A9A20DB /* libPods-AWARE.a */; };
-		52022F3E1E13B7EF00AB52AB /* Contacts.m in Sources */ = {isa = PBXBuildFile; fileRef = 52022F3D1E13B7EF00AB52AB /* Contacts.m */; };
 		52022F401E13B81200AB52AB /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52022F3F1E13B81200AB52AB /* AddressBook.framework */; };
 		5266C34301CF82F2CDD3CC16 /* libPods-AWAREUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BDCDEE4E14B822B3D731795 /* libPods-AWAREUITests.a */; };
 		52BBE03D1E13C6EE00F57906 /* ContactsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 52BBE03C1E13C6EE00F57906 /* ContactsViewController.m */; };
@@ -802,6 +804,12 @@
 		16BDCD001D38646400B13BD4 /* MealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MealViewController.m; path = Meal/MealViewController.m; sourceTree = "<group>"; };
 		16C1FF7C1C617FB100C070AA /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		16C1FF7E1C617FC300C070AA /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
+		16C21AAC1E45A7D9001C88BC /* EntityContact+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "EntityContact+CoreDataClass.h"; path = "Contacts/EntityContact+CoreDataClass.h"; sourceTree = "<group>"; };
+		16C21AAD1E45A7D9001C88BC /* EntityContact+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "EntityContact+CoreDataClass.m"; path = "Contacts/EntityContact+CoreDataClass.m"; sourceTree = "<group>"; };
+		16C21AAE1E45A7D9001C88BC /* EntityContact+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "EntityContact+CoreDataProperties.h"; path = "Contacts/EntityContact+CoreDataProperties.h"; sourceTree = "<group>"; };
+		16C21AAF1E45A7D9001C88BC /* EntityContact+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "EntityContact+CoreDataProperties.m"; path = "Contacts/EntityContact+CoreDataProperties.m"; sourceTree = "<group>"; };
+		16C21AB21E45A81A001C88BC /* Contacts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Contacts.h; path = Contacts/Contacts.h; sourceTree = "<group>"; };
+		16C21AB31E45A81A001C88BC /* Contacts.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Contacts.m; path = Contacts/Contacts.m; sourceTree = "<group>"; };
 		16C81FF41CD6B32D0013A87C /* AWARE_v2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = AWARE_v2.xcdatamodel; sourceTree = "<group>"; };
 		16D810231C06242500605DE2 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		16D810251C06242F00605DE2 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
@@ -840,8 +848,6 @@
 		1EB67F5CA2CB715737A0C978 /* Pods-AWAREUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AWAREUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-AWAREUITests/Pods-AWAREUITests.release.xcconfig"; sourceTree = "<group>"; };
 		379F418CD10461E03A9A20DB /* libPods-AWARE.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AWARE.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4BDCDEE4E14B822B3D731795 /* libPods-AWAREUITests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AWAREUITests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		52022F3C1E13B7EF00AB52AB /* Contacts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Contacts.h; sourceTree = "<group>"; };
-		52022F3D1E13B7EF00AB52AB /* Contacts.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Contacts.m; sourceTree = "<group>"; };
 		52022F3F1E13B81200AB52AB /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		52BBE03B1E13C6EE00F57906 /* ContactsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactsViewController.h; sourceTree = "<group>"; };
 		52BBE03C1E13C6EE00F57906 /* ContactsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactsViewController.m; sourceTree = "<group>"; };
@@ -1334,30 +1340,30 @@
 		169C87851D01382C00825761 /* Plugins */ = {
 			isa = PBXGroup;
 			children = (
-				52022F3B1E13B7D100AB52AB /* Contacts */,
 				169C87861D01382C00825761 /* ActivityRecognition */,
 				169C87891D01382C00825761 /* AmbientNoise */,
 				16A45CDC1D2392A1008A02B1 /* BalacnedCampusScheduler */,
 				169C878E1D01382C00825761 /* BLEHeartRate */,
+				52022F3B1E13B7D100AB52AB /* Contacts */,
 				169C87911D01382C00825761 /* DeviceUsage */,
+				163A824B1E2B3AE300987A1D /* Fitbit */,
 				169C87941D01382C00825761 /* FusedLocations */,
 				169C87971D01382C00825761 /* GoogleCalPull */,
 				169C879A1D01382C00825761 /* GoogleCalPush */,
 				169C879D1D01382C00825761 /* GoogleLogin */,
 				169C87A01D01382C00825761 /* HealthKit */,
+				16078FBB1DA36458000197E5 /* IOSESM */,
+				16ECFC491D8F0C9C005C3DA6 /* ISOActivityRecognition */,
 				169C87A31D01382C00825761 /* Labels */,
 				169C87A61D01382C00825761 /* Memory */,
+				16BDCD021D38876B00B13BD4 /* Meal */,
 				169C87A91D01382C00825761 /* MSBand */,
 				169C87AC1D01382C00825761 /* NTPTime */,
 				169C87AF1D01382C00825761 /* Observer */,
 				169C87B21D01382C00825761 /* OpenWeather */,
 				169C87B51D01382C00825761 /* PushNotification */,
 				169C87B81D01382C00825761 /* SensorTag */,
-				16078FBB1DA36458000197E5 /* IOSESM */,
 				16EC4F1C1D2EAA4F00524424 /* WebESM */,
-				16BDCD021D38876B00B13BD4 /* Meal */,
-				16ECFC491D8F0C9C005C3DA6 /* ISOActivityRecognition */,
-				163A824B1E2B3AE300987A1D /* Fitbit */,
 			);
 			path = Plugins;
 			sourceTree = "<group>";
@@ -2089,8 +2095,12 @@
 		52022F3B1E13B7D100AB52AB /* Contacts */ = {
 			isa = PBXGroup;
 			children = (
-				52022F3C1E13B7EF00AB52AB /* Contacts.h */,
-				52022F3D1E13B7EF00AB52AB /* Contacts.m */,
+				16C21AB21E45A81A001C88BC /* Contacts.h */,
+				16C21AB31E45A81A001C88BC /* Contacts.m */,
+				16C21AAC1E45A7D9001C88BC /* EntityContact+CoreDataClass.h */,
+				16C21AAD1E45A7D9001C88BC /* EntityContact+CoreDataClass.m */,
+				16C21AAE1E45A7D9001C88BC /* EntityContact+CoreDataProperties.h */,
+				16C21AAF1E45A7D9001C88BC /* EntityContact+CoreDataProperties.m */,
 			);
 			name = Contacts;
 			sourceTree = "<group>";
@@ -2488,6 +2498,7 @@
 				169C887C1D01382C00825761 /* AWAREHealthKit.m in Sources */,
 				16AB2BFE1E2B665800F05B72 /* EntityFitbitDevice+CoreDataProperties.m in Sources */,
 				160F0E901D03D64E00673343 /* EntityBarometer.m in Sources */,
+				16C21AB41E45A81A001C88BC /* Contacts.m in Sources */,
 				169C88331D01382C00825761 /* AWAREStudy.m in Sources */,
 				16A45CDF1D2392A1008A02B1 /* BalacnedCampusESMScheduler.m in Sources */,
 				169C88801D01382C00825761 /* NTPTime.m in Sources */,
@@ -2587,6 +2598,7 @@
 				169C88941D01382C00825761 /* Magnetometer.m in Sources */,
 				169C88841D01382C00825761 /* SensorTag.m in Sources */,
 				16BDCC981D35C11100B13BD4 /* BatteryDischarge.m in Sources */,
+				16C21AB11E45A7D9001C88BC /* EntityContact+CoreDataProperties.m in Sources */,
 				16B077841D1978FF009C070B /* EntityActivityRecognition+CoreDataProperties.m in Sources */,
 				1613E0D41D3E28D3000528F5 /* EntityESMSchedule+CoreDataProperties.m in Sources */,
 				16B078431D1F918B009C070B /* EntityMSBandDistance+CoreDataProperties.m in Sources */,
@@ -2615,7 +2627,6 @@
 				169C88381D01382C00825761 /* SSLManager.m in Sources */,
 				160F0EF71D042AB600673343 /* EntityNetwork+CoreDataProperties.m in Sources */,
 				169C88361D01382C00825761 /* LocalFileStorageHelper.m in Sources */,
-				52022F3E1E13B7EF00AB52AB /* Contacts.m in Sources */,
 				169C88971D01382C00825761 /* Pedometer.m in Sources */,
 				169C88761D01382C00825761 /* BLEHeartRate.m in Sources */,
 				16B077971D1A01A0009C070B /* EntityLocationVisit.m in Sources */,
@@ -2664,6 +2675,7 @@
 				16E586281E33A0DE0069C535 /* FitbitDevice.m in Sources */,
 				160F0F081D04756800673343 /* EntityBatteryDischarge.m in Sources */,
 				169C882B1D01382C00825761 /* AWARECoreDataManager.m in Sources */,
+				16C21AB01E45A7D9001C88BC /* EntityContact+CoreDataClass.m in Sources */,
 				169C883E1D01382C00825761 /* ESMStorageHelper.m in Sources */,
 				16B077911D1999B5009C070B /* EntityBLEHeartRate.m in Sources */,
 				16E225101E0A37DA000C239E /* AWAREHealthKitQuantity.m in Sources */,

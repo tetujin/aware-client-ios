@@ -689,6 +689,11 @@ void exceptionHandler(NSException *exception) {
             
         }
         return YES;
+    }else if([[url scheme] isEqualToString:@"fitbit"]){
+        if([[url host] isEqualToString:@"logincallback"]){
+            return [Fitbit handleURL:url sourceApplication:sourceApplication annotation:annotation];
+        }
+        return YES;
     }else{
         return [[GIDSignIn sharedInstance] handleURL:url
                                    sourceApplication:sourceApplication

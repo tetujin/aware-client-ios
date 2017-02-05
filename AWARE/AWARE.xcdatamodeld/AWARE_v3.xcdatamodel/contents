@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="11542" systemVersion="16A323" minimumToolsVersion="Xcode 7.3" sourceLanguage="Objective-C" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="11759" systemVersion="16D32" minimumToolsVersion="Xcode 7.3" sourceLanguage="Objective-C" userDefinedModelVersionIdentifier="">
     <entity name="EntityAccelerometer" representedClassName="EntityAccelerometer" syncable="YES">
         <attribute name="accuracy" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
@@ -107,6 +107,15 @@
         <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="trace" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="EntityContact" representedClassName="EntityContact" syncable="YES">
+        <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="emails" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="groups" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="phone_numbers" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="sync_date" optional="YES" attributeType="Double" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
     </entity>
     <entity name="EntityDebug" representedClassName="EntityDebug" syncable="YES">
         <attribute name="app_version" optional="YES" attributeType="String" syncable="YES"/>
@@ -477,6 +486,8 @@
         <element name="EntityESMAnswerBC" positionX="306" positionY="153" width="128" height="405"/>
         <element name="EntityESMHistory" positionX="297" positionY="144" width="128" height="135"/>
         <element name="EntityESMSchedule" positionX="97" positionY="582" width="146" height="210"/>
+        <element name="EntityFitbitData" positionX="297" positionY="144" width="128" height="120"/>
+        <element name="EntityFitbitDevice" positionX="306" positionY="153" width="128" height="150"/>
         <element name="EntityGravity" positionX="180" positionY="144" width="128" height="30"/>
         <element name="EntityGyroscope" positionX="189" positionY="153" width="128" height="150"/>
         <element name="EntityIOSActivityRecognition" positionX="297" positionY="153" width="128" height="210"/>
@@ -506,7 +517,6 @@
         <element name="EntityScreen" positionX="189" positionY="153" width="128" height="30"/>
         <element name="EntityTimezone" positionX="198" positionY="162" width="128" height="30"/>
         <element name="EntityWifi" positionX="207" positionY="171" width="128" height="30"/>
-        <element name="EntityFitbitData" positionX="297" positionY="144" width="128" height="120"/>
-        <element name="EntityFitbitDevice" positionX="306" positionY="153" width="128" height="150"/>
+        <element name="EntityContact" positionX="297" positionY="144" width="128" height="150"/>
     </elements>
 </model>

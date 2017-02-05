@@ -219,12 +219,12 @@
         NSString * value = [dict objectForKey:KEY_CEL_SETTING_VALUE];
         
         // TODO //
-        NSUserDefaults * userDefaults = [NSUserDefaults standardUserDefaults];
-        if( [title isEqualToString:@"api_key_plugin_fitbit"]){
-            value = [userDefaults objectForKey:@"api_key_plugin_fitbit"];
-        }else if( [title isEqualToString:@"api_secret_plugin_fitbit"]){
-            value = [userDefaults objectForKey:@"api_secret_plugin_fitbit"];
-        }
+//        NSUserDefaults * userDefaults = [NSUserDefaults standardUserDefaults];
+//        if( [title isEqualToString:@"api_key_plugin_fitbit"]){
+//            value = [userDefaults objectForKey:@"api_key_plugin_fitbit"];
+//        }else if( [title isEqualToString:@"api_secret_plugin_fitbit"]){
+//            value = [userDefaults objectForKey:@"api_secret_plugin_fitbit"];
+//        }
         
         cell.textLabel.text = title;
         if(value !=nil){
@@ -350,13 +350,13 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
     
     
     // NSLog(@"%@",selectedSettingKey);
-    NSUserDefaults * userDefaults = [NSUserDefaults standardUserDefaults];
-    if( [selectedSettingKey isEqualToString:@"api_key_plugin_fitbit"]){
-        [userDefaults setObject:stringValue forKey:@"api_key_plugin_fitbit"];
-    }else if( [selectedSettingKey isEqualToString:@"api_secret_plugin_fitbit"]){
-        [userDefaults setObject:stringValue forKey:@"api_secret_plugin_fitbit"];
-    }
-    [userDefaults synchronize];
+//    NSUserDefaults * userDefaults = [NSUserDefaults standardUserDefaults];
+//    if( [selectedSettingKey isEqualToString:@"api_key_plugin_fitbit"]){
+//        [userDefaults setObject:stringValue forKey:@"api_key_plugin_fitbit"];
+//    }else if( [selectedSettingKey isEqualToString:@"api_secret_plugin_fitbit"]){
+//        [userDefaults setObject:stringValue forKey:@"api_secret_plugin_fitbit"];
+//    }
+//    [userDefaults synchronize];
 
 }
 

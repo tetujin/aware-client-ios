@@ -39,7 +39,7 @@
         fitbitData = [[FitbitData alloc] initWithAwareStudy:study dbType:dbType];
         fitbitDevice = [[FitbitDevice alloc] initWithAwareStudy:study dbType:dbType];
         baseOAuth2URL = @"https://www.fitbit.com/oauth2/authorize";
-        redirectURI = @"aware-client://com.aware.ios.oauth2";
+        redirectURI = @"fitbit://logincallback";
         expiresIn = @( 1000L*60L*60L*24L); // 1day  //*365L ); // 1 Year
         
         profileData = [[NSMutableData alloc] init];
@@ -53,19 +53,19 @@
         
         [self setTypeAsPlugin];
         
-        NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
-        NSString * clientId = [defaults objectForKey:@"api_key_plugin_fitbit"];
-        NSString * apiSecret = [defaults objectForKey:@"api_secret_plugin_fitbit"];
-        if(clientId == nil) clientId = @"";
-        if(apiSecret == nil) apiSecret = @"";
+//        NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
+//        NSString * clientId = [defaults objectForKey:@"api_key_plugin_fitbit"];
+//        NSString * apiSecret = [defaults objectForKey:@"api_secret_plugin_fitbit"];
+//        if(clientId == nil) clientId = @"";
+//        if(apiSecret == nil) apiSecret = @"";
         
-        [self addDefaultSettingWithBool:@YES key:@"status_plugin_fitbit" desc:@"(boolean) activate/deactivate plugin"];
+        [self addDefaultSettingWithBool:@NO key:@"status_plugin_fitbit" desc:@"(boolean) activate/deactivate plugin"];
         [self addDefaultSettingWithString:@"metric" key:@"units_plugin_fitbit" desc:@"(String) one of metric/imperial"];
         [self addDefaultSettingWithNumber:@15 key:@"plugin_fitbit_frequency" desc:@"(integer) interval in which to check for new data on Fitbit. Fitbit has a hard-limit of 150 data checks, per hour, per device."];
         [self addDefaultSettingWithString:@"1min" key:@"fitbit_granularity" desc:@"(String) intraday granularity. One of 1d/15min/1min for daily summary, 15 minutes and 1 minute, respectively."];
         [self addDefaultSettingWithString:@"1min" key:@"fitbit_hr_granularity" desc:@"(String) intraday granularity. One of 1min/1sec for 1 minute, and 5 second interval respectively (setting is 1sec but returns every 5sec)."];
-        [self addDefaultSettingWithString:clientId key:@"api_key_plugin_fitbit" desc:@"(String) Fitbit Client Key"];
-        [self addDefaultSettingWithString:apiSecret key:@"api_secret_plugin_fitbit" desc:@"(String) Fitbit Client Secret"];
+        [self addDefaultSettingWithString:@"" key:@"api_key_plugin_fitbit" desc:@"(String) Fitbit Client Key"];
+        [self addDefaultSettingWithString:@"" key:@"api_secret_plugin_fitbit" desc:@"(String) Fitbit Client Secret"];
         
     }
     
@@ -100,14 +100,14 @@
 
 - (BOOL)startSensorWithSettings:(NSArray *)settings{
 
-    NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setObject:settings forKey:@"aware.plugn.fitbit.settings"];
+    // NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
+    // [defaults setObject:settings forKey:@"aware.plugn.fitbit.settings"];
     
-//    NSString * clientId = [self getSettingAsStringFromSttings:settings withKey:@"api_key_plugin_fitbit"];
-//    NSString * apiSecret = [self getSettingAsStringFromSttings:settings withKey:@"api_secret_plugin_fitbit"];
+    NSString * clientId = [self getSettingAsStringFromSttings:settings withKey:@"api_key_plugin_fitbit"];
+    NSString * apiSecret = [self getSettingAsStringFromSttings:settings withKey:@"api_secret_plugin_fitbit"];
     
-    NSString * clientId = [defaults objectForKey:@"api_key_plugin_fitbit"];
-    NSString * apiSecret = [defaults objectForKey:@"api_secret_plugin_fitbit"];
+//    NSString * clientId = [defaults objectForKey:@"api_key_plugin_fitbit"];
+//    NSString * apiSecret = [defaults objectForKey:@"api_secret_plugin_fitbit"];
     
     double intervalMin = [self getSensorSetting:settings withKey:@"plugin_fitbit_frequency"];
     if(intervalMin<0){
@@ -199,6 +199,7 @@
         if(hrDetailLevel == nil){
             hrDetailLevel = @"1min";
         }
+        
         
         double intervalMin = [self getSensorSetting:settings withKey:@"plugin_fitbit_frequency"];
         if(intervalMin<0){
@@ -308,7 +309,8 @@
 
     //[url appendFormat:@"?response_type=token&client_id=%@",clientId];
     [url appendFormat:@"?response_type=code&client_id=%@",clientId];
-    [url appendFormat:@"&redirect_uri=%@", [AWAREUtils stringByAddingPercentEncoding:@"aware-client://com.aware.ios.oauth2" unreserved:@"-."]];
+    // [url appendFormat:@"&redirect_uri=%@", [AWAREUtils stringByAddingPercentEncoding:@"aware-client://com.aware.ios.oauth2" unreserved:@"-."]];
+    [url appendFormat:@"&redirect_uri=%@", [AWAREUtils stringByAddingPercentEncoding:redirectURI unreserved:@"-."]];
     [url appendFormat:@"&scope=%@", [AWAREUtils stringByAddingPercentEncoding:@"activity heartrate location nutrition profile settings sleep social weight"]];
     [url appendFormat:@"&expires_in=%@", expiresIn.stringValue];
     
@@ -394,13 +396,31 @@
                 //"success":false
                 // }
             
-            if(![values objectForKey:@"user"]){
-                [self refreshToken];
-                [self saveDebugEventWithText:@"responseString" type:DebugTypeWarn label:[NSString stringWithFormat:@"fitbit plugin: refresh token %@", [NSDate new]]];
-            }else{
+            //if(![values objectForKey:@"user"]){
+            
+            NSArray * errors = [values objectForKey:@"errors"];
+            if(errors != nil){
+                for (NSDictionary * errorDict in errors) {
+                    NSString * errorType = [errorDict objectForKey:@"errorType"];
+                    if([errorType isEqualToString:@"invalid_token"]){
+                        // [Fitbit setFitbitClientId:clientId];
+                        // [Fitbit setFitbitApiSecret:apiSecret];
+                        [self loginWithOAuth2WithClientId:[Fitbit getFitbitClientId] apiSecret:[Fitbit getFitbitApiSecret]];
+                    }else if([errorType isEqualToString:@"expired_token"]){
+                        [self refreshToken];
+                        [self saveDebugEventWithText:@"responseString" type:DebugTypeWarn label:[NSString stringWithFormat:@"fitbit plugin: refresh token %@", [NSDate new]]];
+                    }
+                }
+            }
+                // invalid_token
+                // expired_token
+                // invalid_client
+                // invalid_request
+            
+            //}else{
                 // NSLog(@"%@", responseString);
                 // [AWAREUtils sendLocalNotificationForMessage:responseString soundFlag:YES];
-            }
+            //}
         }
     } @catch (NSException *exception) {
         
@@ -445,7 +465,7 @@
             NSMutableString * bodyStr = [[NSMutableString alloc] init];
             [bodyStr appendFormat:@"clientId=%@&",[Fitbit getFitbitClientId]];
             [bodyStr appendFormat:@"grant_type=authorization_code&"];
-            [bodyStr appendFormat:@"redirect_uri=%@&",[AWAREUtils stringByAddingPercentEncoding:@"aware-client://com.aware.ios.oauth2" unreserved:@"-."]];
+            [bodyStr appendFormat:@"redirect_uri=%@&",[AWAREUtils stringByAddingPercentEncoding:@"fitbit://logincallback" unreserved:@"-."]];
             [bodyStr appendFormat:@"code=%@",code];
 
             [request setHTTPBody: [bodyStr dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES] ];
