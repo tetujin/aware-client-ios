@@ -1659,6 +1659,8 @@
             answer.esm_trigger = esm.esm_trigger;
             answer.esm_expiration_threshold = esm.esm_expiration_threshold;
             answer.double_esm_user_answer_timestamp = unixtime;
+            answer.esm_user_answer = esmUserAnswer;
+            answer.esm_status = esmState;
             
             NSLog(@"-----------------");
             NSLog(@"%@", answer.esm_user_answer);
@@ -1669,6 +1671,7 @@
             NSLog(@"%@", answer.esm_expiration_threshold);
             NSLog(@"%@", answer.double_esm_user_answer_timestamp);
             NSLog(@"%@", answer.esm_status);
+            NSLog(@"%@", answer.esm_user_answer);
             NSLog(@"-----------------");
         }else{
             NSLog(@"Error at IOSESMViewController.m");
