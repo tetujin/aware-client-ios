@@ -12,6 +12,7 @@
 #import "AWARECore.h"
 #import "AWARECoreDataMigrationManager.h"
 
+
 // Sensors
 #import "Debug.h"
 #import "PushNotification.h"
@@ -23,6 +24,7 @@
 #import "GoogleCalPush.h"
 #import "GoogleLogin.h"
 #import "Observer.h"
+#import "EncryptedStore.h"
 
 #import "NXOAuth2.h"
 #import "Fitbit.h"
@@ -797,7 +799,24 @@ didDisconnectWithUser:(GIDGoogleUser *)user
         return _managedObjectContext;
     }
     
-    NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
+    //NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
+    NSPersistentStoreCoordinator *coordinator;
+    
+   
+    // USE_ENCRYPTED_STORE //
+    
+    [[NSFileManager defaultManager] createDirectoryAtURL:[[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject] withIntermediateDirectories:NO attributes:nil error:nil];
+    
+    NSURL *databaseURL = [[[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject] URLByAppendingPathComponent:[NSString stringWithFormat:@"AWARE.sqlite"]];
+    
+    int cache = 2345;
+    EncryptedStoreOptions options;
+    options.passphrase = "SOME_PASSWORD";
+    options.database_location = (char*)[[databaseURL description] UTF8String];
+    options.cache_size = &cache;
+    
+    coordinator = [EncryptedStore makeStoreWithStructOptions:&options managedObjectModel:[self managedObjectModel]];
+
     if (!coordinator) {
         return nil;
     }
