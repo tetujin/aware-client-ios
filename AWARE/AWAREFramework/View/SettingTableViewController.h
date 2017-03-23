@@ -16,5 +16,6 @@
 @property (nonatomic, strong) NSMutableArray *settingRows;
 
 - (IBAction)pushedActionButton:(id)sender;
+- (IBAction)pushedInfoButton:(id)sender;
 
 @end

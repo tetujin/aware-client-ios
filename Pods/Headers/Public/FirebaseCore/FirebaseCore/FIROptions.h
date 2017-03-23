@@ -1,1 +1,1 @@
-../../../../FirebaseCore/Frameworks/frameworks/FirebaseCore.framework/Headers/FIROptions.h
+../../../../FirebaseCore/Frameworks/FirebaseCore.framework/Headers/FIROptions.h

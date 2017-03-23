@@ -430,6 +430,27 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
     }];
 }
 
+- (IBAction)pushedInfoButton:(id)sender {
+
+    AppDelegate * appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    NSString * entityName = awareSensor.getEntityName;
+    
+    NSMutableString * message = [NSMutableString string];
+    if(entityName == nil){
+        [message appendString:@"Records: 0"];
+    }else{
+        int records = [appDelegate fetchNumberOfRecordsWithEntityName:entityName];
+        [message appendFormat:@"Records(%@): %d", entityName, records];
+    }
+    
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"SQLite Information"
+                                                    message:message
+                                                   delegate:self
+                                          cancelButtonTitle:@"Close"
+                                          otherButtonTitles:nil];
+    [alert show];
+}
+
 
 - (void)mailComposeController:(MFMailComposeViewController*)controller
           didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error{

@@ -158,6 +158,7 @@
                                              selector:@selector(moveToContacts:)
                                                  name:ACTION_AWARE_CONTACT_REQUEST
                                                object:nil];
+    
 }
 
 

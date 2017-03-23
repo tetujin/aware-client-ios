@@ -1,1 +1,1 @@
-../../../../FirebaseCore/Frameworks/frameworks/FirebaseCore.framework/Headers/FIRApp.h
+../../../../FirebaseCore/Frameworks/FirebaseCore.framework/Headers/FIRApp.h

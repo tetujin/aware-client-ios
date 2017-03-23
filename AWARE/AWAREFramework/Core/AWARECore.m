@@ -71,7 +71,8 @@
     }
     
     if([userDefaults integerForKey:SETTING_DB_TYPE] == AwareDBTypeUnknown){
-        [userDefaults setInteger:AwareDBTypeTextFile forKey:SETTING_DB_TYPE];
+        // [userDefaults setInteger:AwareDBTypeTextFile forKey:SETTING_DB_TYPE];
+        [userDefaults setInteger:AwareDBTypeCoreData forKey:SETTING_DB_TYPE];
     }
     
     double uploadInterval = [userDefaults doubleForKey:SETTING_SYNC_INT];

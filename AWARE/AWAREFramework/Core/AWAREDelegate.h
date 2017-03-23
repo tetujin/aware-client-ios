@@ -24,8 +24,10 @@
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
 - (void)saveContext;
+- (int) fetchNumberOfRecordsWithEntityName:(NSString *)entityName;
 
-- (void)setNotification:(UIApplication *)application;
+- (void) setNotification:(UIApplication *)application;
+
 
 // for migration
 //- (BOOL)isRequiredMigration;

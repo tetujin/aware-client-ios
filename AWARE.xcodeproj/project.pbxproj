@@ -267,6 +267,7 @@
 		16D810241C06242500605DE2 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16D810231C06242500605DE2 /* CFNetwork.framework */; };
 		16D810261C06242F00605DE2 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16D810251C06242F00605DE2 /* Security.framework */; };
 		16D91B5E1CA9447A00A5FD4F /* MicrosoftBandKit_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16D91B5D1CA9447A00A5FD4F /* MicrosoftBandKit_iOS.framework */; };
+		16DDB10B1E82C17A00B6CB8B /* libSQLCipher.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 16DDB10A1E82C17A00B6CB8B /* libSQLCipher.a */; };
 		16E155391C27C2AC00316321 /* EventKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16E155371C27C2AC00316321 /* EventKit.framework */; };
 		16E1553A1C27C2AC00316321 /* EventKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16E155381C27C2AC00316321 /* EventKitUI.framework */; };
 		16E225031E063CD1000C239E /* EntityESMAnswerBC+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 16E225001E063CD1000C239E /* EntityESMAnswerBC+CoreDataClass.m */; };
@@ -814,6 +815,7 @@
 		16D810231C06242500605DE2 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		16D810251C06242F00605DE2 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		16D91B5D1CA9447A00A5FD4F /* MicrosoftBandKit_iOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MicrosoftBandKit_iOS.framework; path = ThirdPatyFrameworks/MicrosoftBandKit_iOS.framework; sourceTree = "<group>"; };
+		16DDB10A1E82C17A00B6CB8B /* libSQLCipher.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSQLCipher.a; path = "../../../../../Library/Developer/Xcode/DerivedData/AWARE-evlxgvvrprnzwggplvxmzqjujmcn/Build/Products/Debug-iphoneos/SQLCipher/libSQLCipher.a"; sourceTree = "<group>"; };
 		16E155371C27C2AC00316321 /* EventKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKit.framework; path = System/Library/Frameworks/EventKit.framework; sourceTree = SDKROOT; };
 		16E155381C27C2AC00316321 /* EventKitUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKitUI.framework; path = System/Library/Frameworks/EventKitUI.framework; sourceTree = SDKROOT; };
 		16E224FF1E063CD1000C239E /* EntityESMAnswerBC+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EntityESMAnswerBC+CoreDataClass.h"; sourceTree = "<group>"; };
@@ -864,6 +866,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				16DDB10B1E82C17A00B6CB8B /* libSQLCipher.a in Frameworks */,
+				16D810261C06242F00605DE2 /* Security.framework in Frameworks */,
 				52022F401E13B81200AB52AB /* AddressBook.framework in Frameworks */,
 				1658700A1C986D4F008B99D2 /* QuartzCore.framework in Frameworks */,
 				165DECF61C83AD7D002C88CA /* ExternalAccessory.framework in Frameworks */,
@@ -880,7 +884,6 @@
 				16E1553A1C27C2AC00316321 /* EventKitUI.framework in Frameworks */,
 				16C1FF7F1C617FC300C070AA /* GLKit.framework in Frameworks */,
 				164DD66A1C1FC1F900ADA92B /* MapKit.framework in Frameworks */,
-				16D810261C06242F00605DE2 /* Security.framework in Frameworks */,
 				169A7B3D1BFFC9F900A7C06D /* SystemConfiguration.framework in Frameworks */,
 				16E225061E077E09000C239E /* HealthKit.framework in Frameworks */,
 				16D91B5E1CA9447A00A5FD4F /* MicrosoftBandKit_iOS.framework in Frameworks */,
@@ -2060,6 +2063,7 @@
 		2A3CA9F5620967BACB187EB7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				16DDB10A1E82C17A00B6CB8B /* libSQLCipher.a */,
 				52022F3F1E13B81200AB52AB /* AddressBook.framework */,
 				16E225051E077E09000C239E /* HealthKit.framework */,
 				160E1A001CD1D9C700D825BA /* libEZAudio.a */,
@@ -2206,7 +2210,7 @@
 								enabled = 1;
 							};
 							com.apple.DataProtection = {
-								enabled = 0;
+								enabled = 1;
 							};
 							com.apple.HealthKit = {
 								enabled = 1;

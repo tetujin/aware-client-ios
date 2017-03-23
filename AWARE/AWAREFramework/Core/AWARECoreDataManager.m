@@ -190,6 +190,7 @@
             [userDefaults setObject:[AWAREUtils getUnixTimestamp:timestamp] forKey:timeMarkerIdentifier];
             [userDefaults synchronize];
         } @catch (NSException *exception) {
+            
         }
     }else{
         NSLog(@"===============timestamp is nil============================");
@@ -499,7 +500,14 @@
             
             
             //Get NSManagedObject from managedObjectContext by using fetch setting
-            NSArray *results = [private executeFetchRequest:fetchRequest error:nil] ;
+            NSInteger count = [private countForFetchRequest:fetchRequest error:nil];
+            
+            NSError * e = nil;
+            NSArray *results = [private executeFetchRequest:fetchRequest error:&e];
+            
+            if(e != nil){
+                NSLog(@"%@", e.debugDescription);
+            }
             
             [self unlockDB];
             

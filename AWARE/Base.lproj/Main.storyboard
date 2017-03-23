@@ -164,16 +164,23 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" id="tCR-Zf-Ifh">
-                        <barButtonItem key="rightBarButtonItem" systemItem="action" id="6kH-dy-Iji">
-                            <connections>
-                                <action selector="pushedActionButton:" destination="0tU-Ir-X24" id="zY9-bh-uPE"/>
-                            </connections>
-                        </barButtonItem>
+                        <rightBarButtonItems>
+                            <barButtonItem systemItem="action" id="6kH-dy-Iji">
+                                <connections>
+                                    <action selector="pushedActionButton:" destination="0tU-Ir-X24" id="zY9-bh-uPE"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem image="info.png" id="NDG-Nm-Hvx">
+                                <connections>
+                                    <action selector="pushedInfoButton:" destination="0tU-Ir-X24" id="CEB-qc-nn6"/>
+                                </connections>
+                            </barButtonItem>
+                        </rightBarButtonItems>
                     </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dzs-lN-Pc2" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2508" y="755"/>
+            <point key="canvasLocation" x="2628" y="747"/>
         </scene>
         <!--Contacts View Controller-->
         <scene sceneID="mY7-Kv-hnT">
@@ -350,5 +357,6 @@
         <image name="QR_code_filled" width="32" height="32"/>
         <image name="esm_icon_menubar" width="32" height="32"/>
         <image name="ic_launcher_aware-web" width="512" height="512"/>
+        <image name="info.png" width="28" height="28"/>
     </resources>
 </document>

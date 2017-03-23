@@ -1,3 +1,11 @@
+# 2017-01-31 -- v1.0.9
+
+- Removed an error being mistakenly logged to the console.
+
+# 2016-07-06 -- v1.0.8
+
+- Don't store InstanceID plists in Documents folder.
+
 # 2016-06-19 -- v1.0.7
 
 - Fix remote-notifications warning on app submission.

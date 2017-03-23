@@ -286,7 +286,7 @@ NSString * const AWARE_PREFERENCES_MIN_GPS_ACCURACY = @"min_gps_accuracy";
 }
 
 
-- (void)insertNewEntit25yWithData:(NSDictionary *)data
+- (void)insertNewEntityWithData:(NSDictionary *)data
            managedObjectContext:(NSManagedObjectContext *)childContext
                      entityName:(NSString *)entity{
     

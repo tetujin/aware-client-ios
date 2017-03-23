@@ -4,6 +4,8 @@
 <dict>
 	<key>aps-environment</key>
 	<string>development</string>
+	<key>com.apple.developer.default-data-protection</key>
+	<string>NSFileProtectionComplete</string>
 	<key>com.apple.developer.healthkit</key>
 	<true/>
 	<key>com.apple.external-accessory.wireless-configuration</key>
