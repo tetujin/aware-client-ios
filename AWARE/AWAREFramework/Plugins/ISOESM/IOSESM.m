@@ -199,7 +199,6 @@ NSString * const AWARE_PREFERENCES_PLUGIN_IOS_ESM_CONFIG_URL = @"plugin_ios_esm_
     currentHttpSessionId = [NSString stringWithFormat:@"%@_%f", baseHttpSessionId, [NSDate new].timeIntervalSince1970];
     
 //    if([AWAREUtils isForeground]){
-//        
 //        request = [NSMutableURLRequest requestWithURL:url];
 //        [request setHTTPMethod:@"GET"];
 //        
@@ -210,7 +209,6 @@ NSString * const AWARE_PREFERENCES_PLUGIN_IOS_ESM_CONFIG_URL = @"plugin_ios_esm_
 //        sessionConfig.allowsCellularAccess = YES;
 //        // sessionConfig.discretionary = YES;
 //        session = [NSURLSession sessionWithConfiguration:sessionConfig delegate:self delegateQueue:Nil];
-//        
 //        
 //        [[session dataTaskWithRequest:request  completionHandler: ^(NSData *data, NSURLResponse *response, NSError *error) {
 //            [session finishTasksAndInvalidate];
@@ -231,38 +229,37 @@ NSString * const AWARE_PREFERENCES_PLUGIN_IOS_ESM_CONFIG_URL = @"plugin_ios_esm_
 //                }
 //            });
 //        }] resume];
-//    }else{
+//  }else{
 
-        // [self sendLocalNotificationForMessage:@"hello backgound" soundFlag:YES];
+    // [self sendLocalNotificationForMessage:@"hello backgound" soundFlag:YES];
 
-        // Make a seesion config for HTTP/POST
-        sessionConfig = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:currentHttpSessionId];
-        sessionConfig.timeoutIntervalForRequest = 60.0;
-        sessionConfig.timeoutIntervalForResource = 60.0;
-        sessionConfig.HTTPMaximumConnectionsPerHost = 20;
-        sessionConfig.allowsCellularAccess = YES;
-        // sessionConfig.discretionary = YES;
-        
-        request = [[NSMutableURLRequest alloc] init];
-        [request setURL:url];
-        [request setHTTPMethod:@"POST"];
-        [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
-        
-        // set HTTP/POST body information
-        if([self isDebug]){
-            NSLog(@"--- [%@] This is background task ----", [self getSensorName] );
-        }
-        session = [NSURLSession sessionWithConfiguration:sessionConfig delegate:self delegateQueue:nil];
-        NSURLSessionDataTask* dataTask = [session dataTaskWithRequest:request];
-        [dataTask resume];
-//    }
+    // Make a seesion config for HTTP/POST
+    sessionConfig = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:currentHttpSessionId];
+    sessionConfig.timeoutIntervalForRequest = 60.0;
+    sessionConfig.timeoutIntervalForResource = 60.0;
+    sessionConfig.HTTPMaximumConnectionsPerHost = 20;
+    sessionConfig.allowsCellularAccess = YES;
+    // sessionConfig.discretionary = YES;
+    
+    request = [[NSMutableURLRequest alloc] init];
+    [request setURL:url];
+    [request setHTTPMethod:@"POST"];
+    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+    
+    // set HTTP/POST body information
+    if([self isDebug]){
+        NSLog(@"--- [%@] This is background task ----", [self getSensorName] );
+    }
+    session = [NSURLSession sessionWithConfiguration:sessionConfig delegate:self delegateQueue:nil];
+    NSURLSessionDataTask* dataTask = [session dataTaskWithRequest:request];
+    [dataTask resume];
+//  }
 
     if(![awareStudy isNetworkReachable]){
         if([AWAREUtils isForeground]){
             [self sendAlertMessageWithTitle:@"Network Connection Error on iOS ESM plugin" message:@"Network connection is failed" cancelButton:@"Close"];
         }
     }
-
 }
 
 

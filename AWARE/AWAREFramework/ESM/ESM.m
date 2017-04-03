@@ -18,7 +18,7 @@
 #import "AWAREUtils.h"
 #import "WebESM.h"
 
-@implementation ESM{
+@implementation ESM {
     WebESM * webESM;
 }
 
