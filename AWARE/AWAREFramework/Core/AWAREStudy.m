@@ -401,10 +401,10 @@ didCompleteWithError:(NSError *)error {
 
 - (NSString *)getLatestStoredDataInAwareServerWithUrl:(NSString *)serverUrl deviceId:(NSString *)deviceId {
     // https://forums.developer.apple.com/thread/11519
-    
-    // https://api.awareframework.com/index.php/webservice/index/STUDYID/APIKEY/accelerometer/latest
-    NSString * url = [NSString stringWithFormat:@"%@/%@/latest", serverUrl, deviceId]; ///accelerometer/latest
+    // [NOTE] https://api.awareframework.com/index.php/webservice/index/STUDYID/APIKEY/aware_device/latest
+    NSString * url = [NSString stringWithFormat:@"%@/aware_device/latest", serverUrl]; ///aware_device/latest
     NSString *post = [NSString stringWithFormat:@"device_id=%@", deviceId];
+    NSLog(@"%@", url);
     NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
     NSString *postLength = [NSString stringWithFormat:@"%ld", [postData length]];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
