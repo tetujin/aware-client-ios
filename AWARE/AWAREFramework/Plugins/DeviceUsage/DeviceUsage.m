@@ -77,9 +77,11 @@ NSString* const AWARE_PREFERENCES_STATUS_DEVICE_USAGE = @"status_plugin_device_u
 
 
 - (void) registerAppforDetectDisplayStatus {
-//    int notify_token;
-    // notify_register_dispatch("com.apple.iokit.hid.displayStatus", &_notifyTokenForDidChangeDisplayStatus,dispatch_get_main_queue(), ^(int token) {
-    notify_register_dispatch("com.apple.springboard.lockstate", &_notifyTokenForDidChangeLockStatus,dispatch_get_main_queue(), ^(int token) {
+    
+    NSString * head = @"com.apple.iokit.hid.";
+    NSString * tail = @".displayStatus";
+    
+    notify_register_dispatch((char *)[head stringByAppendingString:tail].UTF8String, &_notifyTokenForDidChangeLockStatus,dispatch_get_main_queue(), ^(int token) {
         
         NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
         
