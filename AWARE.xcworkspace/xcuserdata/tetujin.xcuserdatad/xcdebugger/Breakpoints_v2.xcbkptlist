@@ -196,11 +196,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AWARE/AWAREFramework/Plugins/Fitbit/Fitbit.m"
-            timestampString = "507880037.49575"
+            timestampString = "515476932.765323"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "595"
-            endingLineNumber = "595"
+            startingLineNumber = "600"
+            endingLineNumber = "600"
             landmarkName = "-refreshToken"
             landmarkType = "7">
          </BreakpointContent>
@@ -314,22 +314,6 @@
             startingLineNumber = "404"
             endingLineNumber = "404"
             landmarkName = "-setRepetationCountAfterStartToSyncDB:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "AWARE/AWAREFramework/Core/AWAREStudy.m"
-            timestampString = "514513706.448472"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "628"
-            endingLineNumber = "628"
-            landmarkName = "-insertDeviceIdToAwareServerWithURL:deviceId:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

@@ -216,7 +216,7 @@ NSString * const AWARE_PREFERENCES_LIVE_MODE_IOS_ACTIVITY_RECOGNITION = @"status
                 dispatch_async(dispatch_get_main_queue(), ^{
                     if ([self isDebug]) {
                         NSInteger count = activities.count;
-                        NSString * message = [NSString stringWithFormat:@"Activity Recognition Sensor is called by a timer (%ld activites)" ,count];
+                        NSString * message = [NSString stringWithFormat:@"iOA Activity Recognition Sensor is called by a timer (%ld activites)" ,count];
                         [AWAREUtils sendLocalNotificationForMessage:message soundFlag:NO];
                         
                     }

@@ -132,6 +132,15 @@
                 NSString * key = [dict objectForKey:KEY_CEL_TITLE];
                 NSString * value = [self getPluginSettingWithKey:key];
                 NSMutableDictionary * mutDict = [[NSMutableDictionary alloc] initWithDictionary:dict];
+                
+                /// TODO ///
+                NSUserDefaults * userDefaults = [NSUserDefaults standardUserDefaults];
+                if( [key isEqualToString:@"api_key_plugin_fitbit"]){
+                    value = [userDefaults objectForKey:@"api_key_plugin_fitbit"];
+                }else if( [key isEqualToString:@"api_secret_plugin_fitbit"]){
+                    value = [userDefaults objectForKey:@"api_secret_plugin_fitbit"];
+                }
+                
                 if(value !=nil){
                     [mutDict setValue:value forKey:KEY_CEL_SETTING_VALUE];
                 }
@@ -219,12 +228,12 @@
         NSString * value = [dict objectForKey:KEY_CEL_SETTING_VALUE];
         
         // TODO //
-//        NSUserDefaults * userDefaults = [NSUserDefaults standardUserDefaults];
-//        if( [title isEqualToString:@"api_key_plugin_fitbit"]){
-//            value = [userDefaults objectForKey:@"api_key_plugin_fitbit"];
-//        }else if( [title isEqualToString:@"api_secret_plugin_fitbit"]){
-//            value = [userDefaults objectForKey:@"api_secret_plugin_fitbit"];
-//        }
+        NSUserDefaults * userDefaults = [NSUserDefaults standardUserDefaults];
+        if( [title isEqualToString:@"api_key_plugin_fitbit"]){
+            value = [userDefaults objectForKey:@"api_key_plugin_fitbit"];
+        }else if( [title isEqualToString:@"api_secret_plugin_fitbit"]){
+            value = [userDefaults objectForKey:@"api_secret_plugin_fitbit"];
+        }
         
         cell.textLabel.text = title;
         if(value !=nil){
@@ -276,6 +285,7 @@
         [alert textFieldAtIndex:0].text = value;
         alert.tag = 1;
     }else if ([type isEqualToString:KEY_CEL_SETTING_TYPE_STRING]) {
+        
         alert = [[UIAlertView alloc] initWithTitle:title
                                            message:desc
                                           delegate:self
@@ -344,19 +354,21 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
                 break;
         }
     }
-
-    [self refreshRows];
-    // [self.tableView reloadData];
-    
     
     // NSLog(@"%@",selectedSettingKey);
-//    NSUserDefaults * userDefaults = [NSUserDefaults standardUserDefaults];
-//    if( [selectedSettingKey isEqualToString:@"api_key_plugin_fitbit"]){
-//        [userDefaults setObject:stringValue forKey:@"api_key_plugin_fitbit"];
-//    }else if( [selectedSettingKey isEqualToString:@"api_secret_plugin_fitbit"]){
-//        [userDefaults setObject:stringValue forKey:@"api_secret_plugin_fitbit"];
-//    }
-//    [userDefaults synchronize];
+    NSUserDefaults * userDefaults = [NSUserDefaults standardUserDefaults];
+    if( [selectedSettingKey isEqualToString:@"api_key_plugin_fitbit"]){
+        [userDefaults setObject:stringValue forKey:@"api_key_plugin_fitbit"];
+    }else if( [selectedSettingKey isEqualToString:@"api_secret_plugin_fitbit"]){
+        [userDefaults setObject:stringValue forKey:@"api_secret_plugin_fitbit"];
+    }
+    [userDefaults synchronize];
+    
+    
+    ////////////////
+    
+    [self refreshRows];
+    // [self.tableView reloadData];
 
 }
 

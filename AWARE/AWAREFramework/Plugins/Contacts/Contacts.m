@@ -49,7 +49,7 @@ NSString * const KEY_PLUGIN_SETTING_CONTACTS_UPDATE_FREQUENCY_DAY = @"key_plugin
     [tcqMaker addColumn:@"sync_date"     type:TCQTypeReal default:@"0"];
     
     [super createTable:[tcqMaker getDefaudltTableCreateQuery]];
- }
+}
 
 /** start sensor */
 - (BOOL)startSensorWithSettings:(NSArray *)settings{

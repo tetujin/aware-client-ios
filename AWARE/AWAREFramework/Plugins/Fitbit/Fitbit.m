@@ -100,14 +100,16 @@
 
 - (BOOL)startSensorWithSettings:(NSArray *)settings{
 
-    // NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
+    NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
     // [defaults setObject:settings forKey:@"aware.plugn.fitbit.settings"];
     
     NSString * clientId = [self getSettingAsStringFromSttings:settings withKey:@"api_key_plugin_fitbit"];
     NSString * apiSecret = [self getSettingAsStringFromSttings:settings withKey:@"api_secret_plugin_fitbit"];
     
-//    NSString * clientId = [defaults objectForKey:@"api_key_plugin_fitbit"];
-//    NSString * apiSecret = [defaults objectForKey:@"api_secret_plugin_fitbit"];
+    if([clientId isEqualToString:@""] && [apiSecret isEqualToString:@""]){
+        clientId = [defaults objectForKey:@"api_key_plugin_fitbit"];
+        apiSecret = [defaults objectForKey:@"api_secret_plugin_fitbit"];
+    }
     
     double intervalMin = [self getSensorSetting:settings withKey:@"plugin_fitbit_frequency"];
     if(intervalMin<0){
@@ -118,8 +120,11 @@
     [Fitbit setFitbitApiSecret:apiSecret];
     
     if(![Fitbit getFitbitAccessToken] &&
-       ![clientId isEqualToString:@""] && ![apiSecret isEqualToString:@""]) {
-        [self loginWithOAuth2WithClientId:clientId apiSecret:apiSecret];
+       ![clientId isEqualToString:@""] &&
+       ![apiSecret isEqualToString:@""]) {
+        if( clientId != nil && apiSecret != nil){
+            [self loginWithOAuth2WithClientId:clientId apiSecret:apiSecret];
+        }
     }
     
     [[NSNotificationCenter defaultCenter] addObserver:self

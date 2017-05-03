@@ -63,7 +63,8 @@ NSString * const AWARE_PREFERENCES_FREQUENCY_GOOGLE_FUSED_LOCATION  = @"frequenc
 - (BOOL)startSensorWithSettings:(NSArray *)settings {
 
     // Get a sensing frequency for a location sensor
-    double interval = 0;
+//    double interval = 0;
+    double interval = 180;
     double frequency = [self getSensorSetting:settings withKey:@"frequency_google_fused_location"];
     if(frequency != -1){
         NSLog(@"Location sensing requency is %f ", frequency);
