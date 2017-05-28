@@ -88,6 +88,25 @@
     return [FitbitData getLastQueryDateWithKey:@"sleep"];
 }
 
+////////////////////////////////////////////////////
++ (void) setLastSyncSteps:(NSDate *)date{
+    [FitbitData setLastQueryDate:date withKey:@"steps"];
+}
+
++ (void) setLastSyncCalories:(NSDate *)date{
+    [FitbitData setLastQueryDate:date withKey:@"calories"];
+}
+
++ (void) setLastSyncHeartrate:(NSDate *)date{
+    [FitbitData setLastQueryDate:date withKey:@"heartrate"];
+}
+
++ (void) setLastSyncSleep:(NSDate *)date{
+    [FitbitData setLastQueryDate:date withKey:@"sleep"];
+}
+
+//////////////////////////////////////////////////
+
 - (void) getCaloriesWithStart:(NSDate*)start
                        end:(NSDate *)end
                     period:(NSString *)period
@@ -442,5 +461,10 @@ didReceiveResponse:(NSURLResponse *)response
     }
 }
 
+
++ (void) setLastQueryDate:(NSDate *)date withKey:(NSString *)key{
+    NSUserDefaults * userDefualts = [NSUserDefaults standardUserDefaults];
+    [userDefualts setObject:date forKey:[NSString stringWithFormat:@"fitbit.last.query.data.%@",key]];
+}
 
 @end

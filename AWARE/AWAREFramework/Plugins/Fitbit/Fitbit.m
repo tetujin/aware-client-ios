@@ -101,14 +101,16 @@
 - (BOOL)startSensorWithSettings:(NSArray *)settings{
 
     NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
-    // [defaults setObject:settings forKey:@"aware.plugn.fitbit.settings"];
+    [defaults setObject:settings forKey:@"aware.plugn.fitbit.settings"];
     
     NSString * clientId = [self getSettingAsStringFromSttings:settings withKey:@"api_key_plugin_fitbit"];
     NSString * apiSecret = [self getSettingAsStringFromSttings:settings withKey:@"api_secret_plugin_fitbit"];
     
     if([clientId isEqualToString:@""] && [apiSecret isEqualToString:@""]){
-        clientId = [defaults objectForKey:@"api_key_plugin_fitbit"];
-        apiSecret = [defaults objectForKey:@"api_secret_plugin_fitbit"];
+        // clientId = [defaults objectForKey:@"api_key_plugin_fitbit"];
+        // apiSecret = [defaults objectForKey:@"api_secret_plugin_fitbit"];
+        clientId = [Fitbit getFitbitClientId];
+        apiSecret = [Fitbit getFitbitApiSecret];
     }
     
     double intervalMin = [self getSensorSetting:settings withKey:@"plugin_fitbit_frequency"];
@@ -183,6 +185,7 @@
 
 
 - (void) getData:(id)sender{
+    
      NSDictionary * userInfo = [sender userInfo] ;
      NSString * type = [userInfo objectForKey:@"type"];
     
@@ -845,5 +848,16 @@ didReceiveResponse:(NSURLResponse *)response
 }
 /////////////////////////////////////////////////////////////////////////////////////
 
+
++ (void)clearAllSettings{
+    NSUserDefaults * userDefualt = [NSUserDefaults standardUserDefaults];
+    [userDefualt removeObjectForKey:@"fitbit.setting.access_token"];
+    [userDefualt removeObjectForKey:@"fitbit.setting.refresh_token"];
+    [userDefualt removeObjectForKey:@"fitbit.setting.user_id"];
+    [userDefualt removeObjectForKey:@"fitbit.setting.token_type"];
+    [userDefualt removeObjectForKey:@"fitbit.setting.client_id"];
+    [userDefualt removeObjectForKey:@"fitbit.setting.api_secret"];
+    [userDefualt synchronize];
+}
 
 @end

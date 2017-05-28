@@ -519,9 +519,17 @@ didCompleteWithError:(NSError *)error {
 }
 
 
+- (BOOL) insertDeviceIdToAwareServerWithURL:(NSString *)url
+                                   deviceId:(NSString *)uuid{
+    NSString *name = [self getDeviceName]; //[[UIDevice currentDevice] name];//ok
+    return [self insertDeviceIdToAwareServerWithURL:url
+                                           deviceId:uuid
+                                         deviceName:name];
+}
 
-
-- (BOOL) insertDeviceIdToAwareServerWithURL:(NSString *)url deviceId:(NSString *) uuid {
+- (BOOL) insertDeviceIdToAwareServerWithURL:(NSString *)url
+                                   deviceId:(NSString *)uuid
+                                 deviceName:(NSString *)deviceName{
     
     // preparing for insert device information
     NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
@@ -533,7 +541,7 @@ didCompleteWithError:(NSError *)error {
     NSString* release =  [NSString stringWithCString:systemInfo.release  encoding:NSUTF8StringEncoding]; // ok
     // NSString* systemName = [NSString stringWithCString:systemInfo.sysname encoding:NSUTF8StringEncoding];// ok
     NSString* version = [NSString stringWithCString:systemInfo.version encoding:NSUTF8StringEncoding];
-    NSString *name = [self getDeviceName]; //[[UIDevice currentDevice] name];//ok
+
     NSString *systemVersion = [[UIDevice currentDevice] systemVersion];//ok
     NSString *localizeModel = [[UIDevice currentDevice] localizedModel];//
     NSString *model = [[UIDevice currentDevice] model]; //ok
@@ -553,9 +561,9 @@ didCompleteWithError:(NSError *)error {
     [jsonQuery setValue:[AWAREUtils deviceName]    forKey:@"product"];
     [jsonQuery setValue:version         forKey:@"serial"];
     [jsonQuery setValue:release         forKey:@"release"];
-    [jsonQuery setValue:localizeModel        forKey:@"release_type"];
+    [jsonQuery setValue:localizeModel   forKey:@"release_type"];
     [jsonQuery setValue:systemVersion   forKey:@"sdk"];
-    [jsonQuery setValue:name            forKey:@"label"];
+    [jsonQuery setValue:deviceName      forKey:@"label"];
     
     NSMutableArray *a = [[NSMutableArray alloc] init];
     [a addObject:jsonQuery];
@@ -675,6 +683,17 @@ didCompleteWithError:(NSError *)error {
 ////////////////////////////////////////////////////////////////////////
 
 - (void) setDeviceName:(NSString *) deviceName {
+    
+//    NSString * previousDeviceName = [self getDeviceName];
+//    if(![previousDeviceName isEqualToString:deviceName]){
+//        // try to sync the device name with the aware server
+//        NSUserDefaults * userDefaults = [NSUserDefaults standardUserDefaults];
+//        NSString * url =  [userDefaults objectForKey:KEY_STUDY_QR_CODE];
+//        NSString * uuid = [AWAREUtils getSystemUUID];
+//        
+//        [self insertDeviceIdToAwareServerWithURL:url deviceId:uuid deviceName:deviceName];
+//    }
+    
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults setObject:deviceName forKey:KEY_AWARE_DEVICE_NAME];
     [userDefaults synchronize];

@@ -10,6 +10,10 @@
 
 @interface Fitbit : AWARESensor <AWARESensorDelegate, NSURLSessionDataDelegate, NSURLSessionTaskDelegate>
 
+- (void) loginWithOAuth2WithClientId:(NSString *)clientId apiSecret:(NSString *)apiSecret;
+- (void) refreshToken;
+- (void) getData:(id)sender;
+
 + (BOOL) handleURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation;
 + (void) setFitbitAccessToken:(NSString *)accessToken;
 + (void) setFitbitRefreshToken:(NSString *)refreshToken;
@@ -19,6 +23,7 @@
 + (NSString *) getFitbitRefreshToken;
 + (NSString *) getFitbitUserId;
 + (NSString *) getFitbitTokenType;
-- (void) refreshToken;
+
++ (void)clearAllSettings;
 
 @end

@@ -654,6 +654,8 @@
         [self performSegueWithIdentifier:@"esmView" sender:self];
     }else if([key isEqualToString:SENSOR_PLUGIN_GOOGLE_LOGIN]){
         [self performSegueWithIdentifier:@"googleLogin" sender:self];
+    }else if ([key isEqualToString:SENSOR_PLUGIN_FITBIT]) {
+        [self performSegueWithIdentifier:@"fitbitView" sender:self];
     // Google Calendar Journal Plugin
     }else if ([key isEqualToString:SENSOR_PLUGIN_GOOGLE_CAL_PUSH]) {
         GoogleCalPush *googlePush = [[GoogleCalPush alloc] init];

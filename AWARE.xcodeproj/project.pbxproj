@@ -277,6 +277,7 @@
 		16E225101E0A37DA000C239E /* AWAREHealthKitQuantity.m in Sources */ = {isa = PBXBuildFile; fileRef = 16E2250F1E0A37DA000C239E /* AWAREHealthKitQuantity.m */; };
 		16E586251E33A0C50069C535 /* FitbitData.m in Sources */ = {isa = PBXBuildFile; fileRef = 16E586241E33A0C50069C535 /* FitbitData.m */; };
 		16E586281E33A0DE0069C535 /* FitbitDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 16E586271E33A0DE0069C535 /* FitbitDevice.m */; };
+		16E6CB961EC931E6000FC58C /* FitbitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 16E6CB951EC931E6000FC58C /* FitbitViewController.m */; };
 		16E7AF961C3DF8A9005C9EDC /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16E7AF951C3DF8A9005C9EDC /* CoreData.framework */; };
 		16EC4F171D2E7D8200524424 /* EntityMSBandRRInterval+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 16EC4F141D2E7D8200524424 /* EntityMSBandRRInterval+CoreDataProperties.m */; };
 		16EC4F181D2E7D8200524424 /* EntityMSBandRRInterval.m in Sources */ = {isa = PBXBuildFile; fileRef = 16EC4F161D2E7D8200524424 /* EntityMSBandRRInterval.m */; };
@@ -831,6 +832,8 @@
 		16E586241E33A0C50069C535 /* FitbitData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FitbitData.m; path = Fitbit/FitbitData.m; sourceTree = "<group>"; };
 		16E586261E33A0DE0069C535 /* FitbitDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FitbitDevice.h; path = Fitbit/FitbitDevice.h; sourceTree = "<group>"; };
 		16E586271E33A0DE0069C535 /* FitbitDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FitbitDevice.m; path = Fitbit/FitbitDevice.m; sourceTree = "<group>"; };
+		16E6CB941EC931E6000FC58C /* FitbitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FitbitViewController.h; sourceTree = "<group>"; };
+		16E6CB951EC931E6000FC58C /* FitbitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FitbitViewController.m; sourceTree = "<group>"; };
 		16E7AF951C3DF8A9005C9EDC /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		16EC4F131D2E7D8200524424 /* EntityMSBandRRInterval+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EntityMSBandRRInterval+CoreDataProperties.h"; sourceTree = "<group>"; };
 		16EC4F141D2E7D8200524424 /* EntityMSBandRRInterval+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EntityMSBandRRInterval+CoreDataProperties.m"; sourceTree = "<group>"; };
@@ -1957,6 +1960,8 @@
 				169C88291D01382C00825761 /* WebViewController.m */,
 				1683920D1D9BDCE1006D6607 /* SettingTableViewController.h */,
 				1683920E1D9BDCE1006D6607 /* SettingTableViewController.m */,
+				16E6CB941EC931E6000FC58C /* FitbitViewController.h */,
+				16E6CB951EC931E6000FC58C /* FitbitViewController.m */,
 				166082CB1D93DC1A004D1858 /* IntroPage5.xib */,
 				52BBE03B1E13C6EE00F57906 /* ContactsViewController.h */,
 				52BBE03C1E13C6EE00F57906 /* ContactsViewController.m */,
@@ -2654,6 +2659,7 @@
 				1623CE6B1BFD1B2C00EFAD72 /* main.m in Sources */,
 				169C88871D01382C00825761 /* Barometer.m in Sources */,
 				163ADFC11D8F2C1900B15C8F /* EntityIOSActivityRecognition+CoreDataProperties.m in Sources */,
+				16E6CB961EC931E6000FC58C /* FitbitViewController.m in Sources */,
 				16B078441D1F918B009C070B /* EntityMSBandDistance.m in Sources */,
 				169C883C1D01382C00825761 /* ESMManager.m in Sources */,
 				169C88901D01382C00825761 /* Gravity.m in Sources */,

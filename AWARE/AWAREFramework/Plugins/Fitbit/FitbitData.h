@@ -40,4 +40,9 @@
 + (NSDate *) getLastSyncHeartrate;
 + (NSDate *) getLastSyncSleep;
 
++ (void) setLastSyncSteps:(NSDate *)date;
++ (void) setLastSyncCalories:(NSDate *)date;
++ (void) setLastSyncHeartrate:(NSDate *)date;
++ (void) setLastSyncSleep:(NSDate *)date;
+
 @end
