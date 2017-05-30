@@ -345,6 +345,10 @@ didReceiveResponse:(NSURLResponse *)response
    didReceiveData:(NSData *)data {
     
     NSLog(@"iOS ESM Plugin: Did received Data");
+    NSLog(@"%@", dataTask.currentRequest.URL);
+    
+    NSString * log = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    NSLog(@"%@",log);
     
     if([session.configuration.identifier isEqualToString:currentHttpSessionId]){
         if(data != nil){
@@ -361,6 +365,13 @@ didReceiveResponse:(NSURLResponse *)response
 didCompleteWithError:(NSError *)error{
     
     NSLog(@"iOS ESM Plugin: Did compleate");
+    
+    if(error != nil){
+        NSLog(@"Error: %@", error.debugDescription);
+        if([AWAREUtils isForeground]){
+            [self sendAlertMessageWithTitle:@"Error iOS ESM" message:error.debugDescription cancelButton:@"Close"];
+        }
+    }
     
     if([session.configuration.identifier isEqualToString:currentHttpSessionId]){
         
@@ -562,9 +573,16 @@ didCompleteWithError:(NSError *)error{
                     [self sendAlertMessageWithTitle:@"ERROR iOS ESM" message:e.debugDescription cancelButton:@"Close"];
                 }
             }else{
-                if([AWAREUtils isForeground]){
-                    [self sendAlertMessageWithTitle:@"ESM configuration is updated correctly!" message:e.debugDescription cancelButton:@"Close"];
+                NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                NSData * currentData = [NSJSONSerialization dataWithJSONObject:webESMArray options:0 error:nil];
+                NSData * previousData = [defaults objectForKey:@"previous.ios.esm.plugin.configuration.file"];
+                if(previousData != nil && ![currentData isEqual:previousData]){
+                    if([AWAREUtils isForeground]){
+                        NSString * encodedString = [[NSString alloc] initWithData:currentData encoding:NSUTF8StringEncoding];
+                        [self sendAlertMessageWithTitle:@"ESM configuration is updated correctly!" message:encodedString cancelButton:@"Close"];
+                    }
                 }
+                [defaults setObject:currentData forKey:@"previous.ios.esm.plugin.configuration.file"];
             }
             
             [self setNotificationSchedules];
