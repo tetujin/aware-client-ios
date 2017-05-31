@@ -308,12 +308,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AWARE/AWAREFramework/Core/AWAREStudy.m"
-            timestampString = "516208274.191474"
+            timestampString = "517925457.093987"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1221"
-            endingLineNumber = "1221"
-            landmarkName = "-isFirstAccess:withDeviceId:"
+            startingLineNumber = "574"
+            endingLineNumber = "574"
+            landmarkName = "-insertDeviceIdToAwareServerWithURL:deviceId:deviceName:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -324,12 +324,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AWARE/AWAREFramework/Core/AWAREStudy.m"
-            timestampString = "516208274.191474"
+            timestampString = "517925457.093987"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1231"
-            endingLineNumber = "1231"
-            landmarkName = "-isFirstAccess:withDeviceId:"
+            startingLineNumber = "578"
+            endingLineNumber = "578"
+            landmarkName = "-insertDeviceIdToAwareServerWithURL:deviceId:deviceName:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

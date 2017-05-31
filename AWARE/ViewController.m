@@ -18,17 +18,16 @@
 #import "AWARECore.h"
 
 // AWARE ESM
-#import "WebESM.h"
-#import "ESM.h"
-#import "ESMStorageHelper.h"
+#import "IOSESM.h"
 
+#import "Accelerometer.h"
 
 @implementation ViewController{
     AWAREStudy * awareStudy;
     AWARESensorManager * sensorManager;
-    WebESM *webESM;
     AWARECore * core;
     
+    IOSESM * iOSESM;
 }
 
 - (void)viewDidLoad
@@ -51,18 +50,19 @@
         [core activate];
     }
     [delegate setNotification:[UIApplication sharedApplication]];
-    
-    /// Start an update timer for list view. This timer refreshed the list view every 0.1 sec.
-    webESM = [[WebESM alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeCoreData];
+
+    ////////// A sample source code for setting aware server //////////////
+//    [awareStudy setStudyInformationWithURL:@"https://aware.ht.sfc.keio.ac.jp/index.php/webservice/index/[study_id]/[password]"];
+//    [awareStudy refreshStudy];
+    ///////////////////////////////////////////////////////////////////////
     
     // Set delegates for a navigation bar and table view
     if ([AWAREUtils getCurrentOSVersionAsFloat] >= 9.0) {
         [self.navigationController.navigationBar setDelegate:self];
     }
-
-    // For test
-    // [sensorManager performSelector:@selector(testSensing) withObject:nil afterDelay:10];
     
+    iOSESM = [[IOSESM alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeCoreData];
+
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(moveToGoogleLogin:)
                                                  name:ACTION_AWARE_GOOGLE_LOGIN_REQUEST
@@ -72,6 +72,13 @@
                                              selector:@selector(moveToContacts:)
                                                  name:ACTION_AWARE_CONTACT_REQUEST
                                                object:nil];
+
+    ////// sample source code for activating an accelerometer sensor //////
+//    Accelerometer * accSensor = [[Accelerometer alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeCoreData];
+//    [accSensor startSensorWithInterval:0.01 bufferSize:1000];
+//    [accSensor performSelector:@selector(syncAwareDB) withObject:nil afterDelay:5];
+//    [sensorManager addNewSensor:accSensor];
+    ////////////////////////////////////////////////////////////////////////
 }
 
 /**
@@ -83,8 +90,10 @@
 {
     NSLog(@"did become active notification");
     
-    if(![ESM isAppearedThisSection]){
-        [self pushedEsmButtonOnNavigationBar:nil];
+    NSArray * esms = [iOSESM getValidESMsWithDatetime:[NSDate new]];
+    if(esms != nil && esms.count != 0 && ![IOSESM isAppearedThisSection]){
+        [IOSESM setAppearedState:YES];
+        [self performSegueWithIdentifier:@"iOSEsmView" sender:self];
     }
     
     [core checkComplianceWithViewController:self];
@@ -96,23 +105,12 @@
     
     NSLog(@"pushed ESM button on navigation bar");
     
-    // For schedules ESMs
-    ESMStorageHelper * helper = [[ESMStorageHelper alloc] init];
-    NSArray * storedEsms = [helper getEsmTexts];
-    if(storedEsms != nil){
-        if (storedEsms.count > 0 ){
-            [IOSESM setAppearedState:YES];
-            [self performSegueWithIdentifier:@"esmView" sender:self];
-        }
-    }
-    
-    // For Web ESMs
-    NSArray * esms = [webESM getValidESMsWithDatetime:[NSDate new]];
+    NSArray * esms = [iOSESM getValidESMsWithDatetime:[NSDate new]];
     if(esms != nil && esms.count != 0 ){
         [IOSESM setAppearedState:YES];
         [self performSegueWithIdentifier:@"iOSEsmView" sender:self];
     }
-    
+
 }
 
 /**
@@ -137,6 +135,19 @@
 {
     [self.navigationController popToRootViewControllerAnimated:YES];
     return YES;
+}
+
+
+- (void) moveToGoogleLogin:(id)sender{
+    if([AWAREUtils isForeground]){
+        [self performSegueWithIdentifier:@"googleLogin" sender:self];
+    }
+}
+
+- (void) moveToContacts:(id)sender{
+    if([AWAREUtils isForeground]){
+        [self performSegueWithIdentifier:@"contacts" sender:self];
+    }
 }
 
 //////////////////////////////////////////////////////////////////////////
