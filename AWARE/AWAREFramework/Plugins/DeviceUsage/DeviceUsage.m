@@ -11,6 +11,8 @@
 #import "AppDelegate.h"
 #import "EntityDeviceUsage.h"
 
+NSString* const AWARE_PREFERENCES_STATUS_DEVICE_USAGE = @"status_plugin_device_usage";
+
 @implementation DeviceUsage {
     double lastTime;
     int _notifyTokenForDidChangeLockStatus;
@@ -23,6 +25,11 @@
                         dbEntityName:NSStringFromClass([EntityDeviceUsage class])
                               dbType:dbType];
     if (self) {
+        [self setCSVHeader:@[@"timestamp",@"device_id",@"elapsed_device_on",@"elapsed_device_off"]];
+    
+        [self setTypeAsPlugin];
+        
+        [self addDefaultSettingWithBool:@NO key:AWARE_PREFERENCES_STATUS_DEVICE_USAGE desc:@"true or false to activate or deactivate accelerometer sensor."];
     }
     return self;
 }
@@ -70,9 +77,11 @@
 
 
 - (void) registerAppforDetectDisplayStatus {
-//    int notify_token;
-    // notify_register_dispatch("com.apple.iokit.hid.displayStatus", &_notifyTokenForDidChangeDisplayStatus,dispatch_get_main_queue(), ^(int token) {
-    notify_register_dispatch("com.apple.springboard.lockstate", &_notifyTokenForDidChangeLockStatus,dispatch_get_main_queue(), ^(int token) {
+    
+    NSString * head = @"com.apple.iokit.hid.";
+    NSString * tail = @".displayStatus";
+    
+    notify_register_dispatch((char *)[head stringByAppendingString:tail].UTF8String, &_notifyTokenForDidChangeLockStatus,dispatch_get_main_queue(), ^(int token) {
         
         NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
         

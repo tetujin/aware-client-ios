@@ -11,6 +11,10 @@
 #import "AWARESensor.h"
 #import "AWAREKeys.h"
 
+extern NSString* const AWARE_PREFERENCES_STATUS_GYROSCOPE;
+extern NSString* const AWARE_PREFERENCES_FREQUENCY_GYROSCOPE;
+extern NSString* const AWARE_PREFERENCES_FREQUENCY_HZ_GYROSCOPE;
+
 @interface Gyroscope : AWARESensor <AWARESensorDelegate>
 
 - (BOOL) startSensor;

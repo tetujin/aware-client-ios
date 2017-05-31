@@ -53,4 +53,11 @@
 + (BOOL)validateEmailWithString:(NSString *)str;
 
 + (BOOL) checkURLFormat:(NSString *)urlStr;
+
++ (NSDictionary*) getDictionaryFromURLParameter:(NSURL *)url;
+
++ (NSString *)stringByAddingPercentEncoding:(NSString *)string;
++ (NSString *)stringByAddingPercentEncoding:(NSString *)string unreserved:(NSString*)unreserved;
+
+
 @end

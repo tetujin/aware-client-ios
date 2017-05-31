@@ -39,6 +39,12 @@
         encryptionUserId = NO;
         [self allowsCellularAccess];
         [self allowsDateUploadWithoutBatteryCharging];
+        
+        [self setCSVHeader:@[@"device_id",
+                             @"timestamp",
+                             KEY_GOOGLE_USER_ID,
+                             KEY_GOOGLE_NAME,
+                             KEY_GOOGLE_EMAIL]];
     }
     return self;
 }
@@ -51,37 +57,31 @@
     [tcqMaker addColumn:KEY_GOOGLE_USER_ID type:TCQTypeText default:@"''"];
     [tcqMaker addColumn:KEY_GOOGLE_NAME type:TCQTypeText default:@"''"];
     [tcqMaker addColumn:KEY_GOOGLE_EMAIL type:TCQTypeText default:@"''"];
-    
-    // [query appendFormat:@"%@ text default '',", KEY_GOOGLE_USER_ID];
-    // [query appendFormat:@"%@ text default ''", KEY_GOOGLE_EMAIL];
-    // [query appendFormat:@"%@ text default '',", KEY_GOOGLE_PHONENUMBER];
-    // [query appendFormat:@"%@ blob ", KEY_GOOGLE_BLOB_PICTURE];
-    // [query appendString:@"UNIQUE (timestamp,device_id)"];
-    
+
     [super createTable:[tcqMaker getDefaudltTableCreateQuery]];
 }
 
 - (BOOL)startSensorWithSettings:(NSArray *)settings{
     
-    encryptionName = [self getBoolFromSettings:settings withKey:@"encryption_name_sha1"];
-    encryptionEmail = [self getBoolFromSettings:settings withKey:@"encryption_email_sha1"];
-    encryptionUserId = [self getBoolFromSettings:settings withKey:@"encryption_user_id_sha1"];
-    
+//    encryptionName = [self getBoolFromSettings:settings withKey:@"encryption_name_sha1"];
+//    encryptionEmail = [self getBoolFromSettings:settings withKey:@"encryption_email_sha1"];
+//    encryptionUserId = [self getBoolFromSettings:settings withKey:@"encryption_user_id_sha1"];
+//    
+//    [defaults setBool:encryptionName    forKey:@"encryption_name_sha1"];
+//    [defaults setBool:encryptionEmail   forKey:@"encryption_email_sha1"];
+//    [defaults setBool:encryptionUserId  forKey:@"encryption_user_id_sha1"];
+//    
+
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setBool:encryptionName    forKey:@"encryption_name_sha1"];
-    [defaults setBool:encryptionEmail   forKey:@"encryption_email_sha1"];
-    [defaults setBool:encryptionUserId  forKey:@"encryption_user_id_sha1"];
-    
-    BOOL success = [self saveStoredGoogleAccount];
-    if(!success){
-        NSLog(@"[%@] Google account information is empty", [self getSensorName]);
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Google account is required!"
-                                                        message:@"Please login to Google account from Google Login row."
-                                                       delegate:nil
-                                              cancelButtonTitle:nil
-                                              otherButtonTitles:@"OK", nil];
-        [alert show];
+    NSString * userId = [defaults objectForKey:@"GOOGLE_ID"];
+    if(userId == nil){
+        [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_GOOGLE_LOGIN_REQUEST
+                                                            object:nil
+                                                          userInfo:nil];
+    }else{
+        [self performSelector:@selector(syncAwareDBInBackground) withObject:nil afterDelay:1];
     }
+    
     return YES;
 }
 
@@ -104,6 +104,31 @@
     [self saveStoredGoogleAccount];
 }
 
++ (void) deleteGoogleAccountFromLocalStorage {
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    [defaults removeObjectForKey:@"GOOGLE_ID"];
+    [defaults removeObjectForKey:@"GOOGLE_NAME"];
+    [defaults removeObjectForKey:@"GOOGLE_EMAIL"];
+    [defaults synchronize];
+}
+
++ (NSString *) getGoogleAccountId {
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSString * userId = [defaults objectForKey:@"GOOGLE_ID"];
+    return userId;
+}
+
++ (NSString *) getGoogleAccountName{
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSString * name = [defaults objectForKey:@"GOOGLE_NAME"];
+    return name;
+}
+
++ (NSString *) getGoogleAccountEmail{
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSString * email = [defaults objectForKey:@"GOOGLE_EMAIL"];
+    return email;
+}
 
 - (BOOL) saveStoredGoogleAccount {
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
@@ -174,6 +199,9 @@
     [dic setObject:email              forKey:KEY_GOOGLE_EMAIL];
     [self saveData:dic];
 }
+
+
+///////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////
 

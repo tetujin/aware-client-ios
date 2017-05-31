@@ -33,9 +33,15 @@
 - (BOOL) startAllSensorsWithStudy:(AWAREStudy *) study dbType:(AwareDBType)dbType;
 - (BOOL) createAllTables;
 
+// - (BOOL) clearDataFromLocalDB;
+- (void)removeAllFilesFromDocumentRoot;
+
 - (void) stopAndRemoveAllSensors;
 - (void) stopASensor:(NSString *) sensorName;
 
+- (void) quitAllSensor;
+
+- (void) resetAllMarkerPositionsInDB;
 
 // uploader in the foreground and background
 - (bool) syncAllSensorsWithDBInForeground;

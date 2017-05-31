@@ -14,6 +14,8 @@
 #import "EntityCall.h"
 #import "AppDelegate.h"
 
+NSString* const AWARE_PREFERENCES_STATUS_CALLS = @"status_calls";
+
 NSString* const KEY_CALLS_TIMESTAMP = @"timestamp";
 NSString* const KEY_CALLS_DEVICEID = @"device_id";
 NSString* const KEY_CALLS_CALL_TYPE = @"call_type";
@@ -30,6 +32,8 @@ NSString* const KEY_CALLS_TRACE = @"trace";
                         dbEntityName:NSStringFromClass([EntityCall class])
                               dbType:dbType];
     if (self) {
+        [self setCSVHeader:@[KEY_CALLS_TIMESTAMP, KEY_CALLS_DEVICEID, KEY_CALLS_CALL_TYPE, KEY_CALLS_CALL_DURATION, KEY_CALLS_TRACE]];
+        [self addDefaultSettingWithBool:@NO key:AWARE_PREFERENCES_STATUS_CALLS desc:@"true or false"];
     }
     return self;
 }

@@ -29,6 +29,10 @@
 #import "MSBandDeviceContact.h"
 #import "MSBandRRInterval.h"
 
+NSString * const AWARE_PREFERENCES_STATUS_MSBAND = @"status_plugin_msband_sensors";
+NSString * const AWARE_PREFERENCES_MSBAND_INTERVAL_TIME_MIN = @"active_time_interval_in_minute";
+NSString * const AWARE_PREFERENCES_MSBAND_ACTIVE_TIME_MIN   = @"active_time_in_minute";
+
 @implementation MSBand {
     
     double intervalMin;
@@ -63,7 +67,13 @@
     if (self) {
         
         intervalMin = 10;
-        activeMin = 1;
+        activeMin = 2;
+        
+        [self setTypeAsPlugin];
+        
+        [self addDefaultSettingWithBool:@NO key:AWARE_PREFERENCES_STATUS_MSBAND desc:@"true or false to activate or deactivate accelerometer sensor."];
+        [self addDefaultSettingWithNumber:@10 key:AWARE_PREFERENCES_MSBAND_INTERVAL_TIME_MIN desc:@"Interval between active time (in minutes, default: 10 minutes)"];
+        [self addDefaultSettingWithNumber:@2  key:AWARE_PREFERENCES_MSBAND_ACTIVE_TIME_MIN   desc:@"Active Time (in minute, default: 2 minutes)"];
         
         [MSBClientManager sharedManager].delegate = self;
         NSArray	*clients = [[MSBClientManager sharedManager] attachedClients];
@@ -71,8 +81,6 @@
         
         [[MSBClientManager sharedManager] connectClient:self.client];
         NSLog(@"%@",[NSString stringWithFormat:@"Please wait. Connecting to Band <%@>", self.client.name]);
-        
-        
         
         
         // ============================== GSR sensor ==============================

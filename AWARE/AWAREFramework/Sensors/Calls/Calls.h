@@ -15,6 +15,7 @@
 #import <CoreTelephony/CTTelephonyNetworkInfo.h>
 #import <AddressBookUI/AddressBookUI.h>
 
+extern NSString* const AWARE_PREFERENCES_STATUS_CALLS;
 
 extern NSString* const KEY_CALLS_TIMESTAMP;
 extern NSString* const KEY_CALLS_DEVICEID;

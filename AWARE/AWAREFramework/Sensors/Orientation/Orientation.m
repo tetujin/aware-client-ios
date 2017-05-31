@@ -8,6 +8,10 @@
 
 #import "Orientation.h"
 
+NSString * const AWARE_PREFERENCES_STATUS_ORIENTATION = @"status_orientation";
+NSString * const AWARE_PREFERENCES_FREQUENCY_ORIENTATION = @"frequency_orientation";
+NSString * const AWARE_PREFERENCES_FREQUENCY_HZ_ORIENTATION = @"frequency_hz_orientation";
+
 @implementation Orientation{
     NSString * KEY_ORIENTATION_TIMESTAMP;
     NSString * KEY_ORIENTATION_DEVICE_ID;
@@ -26,6 +30,10 @@
         KEY_ORIENTATION_DEVICE_ID = @"device_id";
         KEY_ORIENTATION_STATUS = @"orientation_status";
         KEY_ORIENTATION_LABEL = @"label";
+        [self setCSVHeader:@[KEY_ORIENTATION_TIMESTAMP,
+                             KEY_ORIENTATION_DEVICE_ID,
+                             KEY_ORIENTATION_STATUS,
+                             KEY_ORIENTATION_LABEL]];
     }
     return self;
 }
@@ -36,8 +44,8 @@
     [query appendString:[NSString stringWithFormat:@"%@ real default 0,", KEY_ORIENTATION_TIMESTAMP]];
     [query appendString:[NSString stringWithFormat:@"%@ text default '',", KEY_ORIENTATION_DEVICE_ID]];
     [query appendString:[NSString stringWithFormat:@"%@ integer default 0,", KEY_ORIENTATION_STATUS]];
-    [query appendString:[NSString stringWithFormat:@"%@ text default '',", KEY_ORIENTATION_LABEL]];
-    [query appendString:@"UNIQUE (timestamp,device_id)"];
+    [query appendString:[NSString stringWithFormat:@"%@ text default ''", KEY_ORIENTATION_LABEL]];
+    // [query appendString:@"UNIQUE (timestamp,device_id)"];
     [super createTable:query];
 }
 

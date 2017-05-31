@@ -25,6 +25,7 @@
                           bufferSize:buffer];
     if(self != nil){
         self.client = msbClient;
+        [self setCSVHeader:@[@"timestamp", @"device_id", @"uv"]];
     }
     return self;
 }
@@ -35,8 +36,8 @@
     NSString *query = @"_id integer primary key autoincrement,"
     "timestamp real default 0,"
     "device_id text default '',"
-    "uv text default '',"
-    "UNIQUE (timestamp,device_id)";
+    "uv text default ''";
+    // "UNIQUE (timestamp,device_id)";
     [self createTable:query];
 }
 
@@ -118,6 +119,16 @@
     
 }
 
+- (void)clientManager:(MSBClientManager *)clientManager clientDidConnect:(MSBClient *)client{
+    
+}
 
+- (void)clientManager:(MSBClientManager *)clientManager clientDidDisconnect:(MSBClient *)client{
+    
+}
+
+- (void)clientManager:(MSBClientManager *)clientManager client:(MSBClient *)client didFailToConnectWithError:(NSError *)error{
+    
+}
 
 @end

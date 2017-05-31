@@ -21,6 +21,7 @@
     self = [super initWithAwareStudy:study sensorName:name dbEntityName:entity dbType:dbType bufferSize:buffer];
     if( self != nil ){
         self.client = msbClient;
+        [self setCSVHeader:@[@"timestamp", @"device_id", @"rrinterval"]];
     }
     return self;
 }
@@ -29,8 +30,8 @@
     NSString * query = @"_id integer primary key autoincrement,"
     "timestamp real default 0,"
     "device_id text default '',"
-    "rrinterval double default 0,"
-    "UNIQUE (timestamp,device_id)";
+    "rrinterval double default 0";
+    // "UNIQUE (timestamp,device_id)";
     [self createTable:query];
 }
 
@@ -86,6 +87,22 @@
     entityRRInterval.timestamp = [data objectForKey:@"timestamp"];
     entityRRInterval.rrinterval =  [data objectForKey:@"rrinterval"];
     
+    
+}
+
+- (void)clientManager:(MSBClientManager *)clientManager clientDidConnect:(MSBClient *)client{
+    
+}
+
+- (void)clientManager:(MSBClientManager *)clientManager clientDidDisconnect:(MSBClient *)client{
+    
+}
+
+- (void)clientManager:(MSBClientManager *)clientManager client:(MSBClient *)client didFailToConnectWithError:(NSError *)error{
+    
+}
+
+- (void)requestHRUserConsent{
     
 }
 

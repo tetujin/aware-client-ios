@@ -48,6 +48,7 @@ PODS:
     - CocoaAsyncSocket (~> 7.4.1)
   - macros_blocks (0.0.1)
   - MQTTKit (0.1.0)
+  - NXOAuth2Client (1.2.8)
   - SCNetworkReachability (2.0.5):
     - SCNetworkReachability/Core (= 2.0.5)
   - SCNetworkReachability/Core (2.0.5):
@@ -62,6 +63,7 @@ DEPENDENCIES:
   - Google/SignIn
   - ios-ntp
   - MQTTKit
+  - NXOAuth2Client (~> 1.2.8)
   - SCNetworkReachability
   - SVProgressHUD
 
@@ -84,8 +86,11 @@ SPEC CHECKSUMS:
   ios-ntp: 5f2f4fecf0432169b358eb3b564f12b94157108f
   macros_blocks: da2106a0975514e16f3669f2f50a02efaff642cf
   MQTTKit: a4e6b8aa92db1aeae917d2b773fd72a7749937c4
+  NXOAuth2Client: 98c4d4c594edd2b289cfc34a8928653e1dab7adf
   SCNetworkReachability: 14026e754d9abb264c157131539e8e2c2131cb62
   SVProgressHUD: b0830714205bea1317ea1a2ebc71e5633af334d4
   TPCircularBuffer: 4960a919e667280f7f38963d771f45871b64fe62
 
-COCOAPODS: 0.39.0
+PODFILE CHECKSUM: 9f48f63dba8cdb183025608377ae66687e6a7664
+
+COCOAPODS: 1.1.1

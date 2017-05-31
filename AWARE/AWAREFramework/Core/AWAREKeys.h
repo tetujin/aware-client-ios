@@ -21,6 +21,28 @@ extern NSString* const KEY_UPLOAD_MARK;
 extern NSString* const KEY_SENSORS;
 extern NSString* const KEY_PLUGINS;
 extern NSString* const KEY_PLUGIN;
+extern NSString* const KEY_USER_SENSORS;
+extern NSString* const KEY_USER_PLUGINS;
+
+/**  Keys for contetns of a table view raw */
+/// A key for a title in a raw
+extern NSString* const KEY_CEL_TITLE;
+/// A key for a description in a raw
+extern NSString* const KEY_CEL_DESC;
+/// A key for a image in a raw
+extern NSString* const KEY_CEL_IMAGE;
+/// A key for a status in a raw
+extern NSString* const KEY_CEL_STATE;
+/// A key for a sensor_name in a raw
+extern NSString* const KEY_CEL_SENSOR_NAME;
+/// A key for a sensor setting type
+extern NSString* const KEY_CEL_SETTING_TYPE;
+/// A key for a sensor current setting
+extern NSString* const KEY_CEL_SETTING_VALUE;
+extern NSString* const KEY_CEL_SETTING_TYPE_NUMBER;
+extern NSString* const KEY_CEL_SETTING_TYPE_STRING;
+extern NSString* const KEY_CEL_SETTING_TYPE_BOOL;
+
 
 extern NSString* const KEY_STUDY_QR_CODE;
 
@@ -39,6 +61,9 @@ extern NSString *const SETTING_SYNC_WIFI_ONLY;
 extern NSString* const SETTING_SYNC_INT;
 extern NSString* const SETTING_SYNC_BATTERY_CHARGING_ONLY;
 extern NSString* const SETTING_FREQUENCY_CLEAN_OLD_DATA;
+extern NSString* const SETTING_AUTO_SYNC_STATE;
+extern NSString* const SETTING_CSV_EXPORT_STATE;
+extern NSString* const SETTING_DB_TYPE;
 
 
 extern NSString* const TABLE_INSER;
@@ -61,7 +86,6 @@ extern NSString* const SENSOR_ROTATION;
 extern NSString* const SENSOR_SCREEN;
 extern NSString* const SENSOR_TELEPHONY;
 extern NSString* const SENSOR_WIFI;
-extern NSString* const SENSOR_BLE_HEARTRATE;
 extern NSString* const SENSOR_GRAVITY;
 extern NSString* const SENSOR_LINEAR_ACCELEROMETER;
 extern NSString* const SENSOR_TIMEZONE;
@@ -70,6 +94,8 @@ extern NSString* const SENSOR_SCHEDULER;
 extern NSString* const SENSOR_CALLS;
 extern NSString* const SENSOR_LABELS;
 extern NSString* const SENSOR_ORIENTATION;
+extern NSString* const SENSOR_HEALTH_KIT;
+extern NSString* const SENSOR_IOS_ESM;
 
 extern NSString* const SENSOR_PLUGIN_GOOGLE_ACTIVITY_RECOGNITION;
 extern NSString* const SENSOR_IOS_ACTIVITY_RECOGNITION;
@@ -85,9 +111,11 @@ extern NSString* const SENSOR_PLUGIN_GOOGLE_LOGIN;
 extern NSString* const SENSOR_PLUGIN_CAMPUS;
 extern NSString* const SENSOR_PLUGIN_PEDOMETER;
 extern NSString* const SENSOR_PLUGIN_WEB_ESM;
-extern NSString* const SENSOR_PLUGIN_BLE_HEARTRATE;
+extern NSString* const SENSOR_PLUGIN_BLE_HR;
 extern NSString* const SENSOR_AWARE_DEBUG;
-
+extern NSString* const SENSOR_PLUGIN_IOS_ESM;
+extern NSString* const SENSOR_PLUGIN_FITBIT;
+extern NSString* const SENSOR_PLUGIN_CONTACTS;
 
 extern NSString* const SENSOR_PLUGIN_MSBAND_SENSORS_CALORIES;
 extern NSString* const SENSOR_PLUGIN_MSBAND_SENSORS_DEVICECONTACT;
@@ -106,6 +134,7 @@ extern NSString* const SENSOR_PLUGIN_MSBAND_SENSORS_RRINTERVAL;
 
 extern NSString* const SENSOR_PLUGIN_MSBAND_KEY_ACTIVE_TIME_INTERVAL_IN_MINUTE;
 extern NSString* const SENSOR_PLUGIN_MSBAND_KEY_ACTIVE_IN_MINUTE;
+
 
 
 
@@ -223,6 +252,11 @@ extern NSString * const ACTION_AWARE_DATA_UPLOAD_PROGRESS;
 
 
 extern NSString * const ACTION_AWARE_PEDOMETER;
+
+extern NSString * const ACTION_AWARE_GOOGLE_LOGIN_REQUEST;
+extern NSString * const ACTION_AWARE_GOOGLE_LOGIN_SUCCESS;
+
+extern NSString * const ACTION_AWARE_CONTACT_REQUEST;
 
 @interface AWAREKeys: NSObject
 

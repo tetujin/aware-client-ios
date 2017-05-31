@@ -39,12 +39,15 @@
 #import "EntityLinearAccelerometer.h"
 #import "AppDelegate.h"
 
+NSString* const AWARE_PREFERENCES_STATUS_LINEAR_ACCELEROMETER = @"status_linear_accelerometer";
+NSString* const AWARE_PREFERENCES_FREQUENCY_LINEAR_ACCELEROMETER = @"frequency_linear_accelerometer";
+NSString* const AWARE_PREFERENCES_FREQUENCY_HZ_LINEAR_ACCELEROMETER = @"frequency_hz_linear_accelerometer";
+
 @implementation LinearAccelerometer {
     CMMotionManager* motionManager;
     double defaultInterval;
     int dbWriteInterval;
 }
-
 
 - (instancetype)initWithAwareStudy:(AWAREStudy *)study dbType:(AwareDBType)dbType{
     self = [super initWithAwareStudy:study
@@ -55,6 +58,12 @@
         motionManager = [[CMMotionManager alloc] init];
         defaultInterval = 0.1f;
         dbWriteInterval = 30;
+
+        [self setCSVHeader:@[@"timestamp",@"device_id", @"double_values_0", @"double_values_1",@"double_values_2", @"accuracy",@"label"]];
+    
+        [self addDefaultSettingWithBool:@NO       key:AWARE_PREFERENCES_STATUS_LINEAR_ACCELEROMETER        desc:@"e.g., True or False"];
+        [self addDefaultSettingWithNumber:@200000 key:AWARE_PREFERENCES_FREQUENCY_LINEAR_ACCELEROMETER     desc:@"e.g., 200000 (normal), 60000 (UI), 20000 (game), 0 (fastest)."];
+        [self addDefaultSettingWithNumber:@0      key:AWARE_PREFERENCES_FREQUENCY_HZ_LINEAR_ACCELEROMETER desc:@"e.g., 1-100hz (default=0)"];
     }
     return self;
 }
@@ -81,6 +90,10 @@
         NSLog(@"Linear Accelerometer's frequency is %f !!", frequency);
         double iOSfrequency = [self convertMotionSensorFrequecyFromAndroid:frequency];
         interval = iOSfrequency;
+    }
+    double tempHz = [self getSensorSetting:settings withKey:AWARE_PREFERENCES_FREQUENCY_HZ_LINEAR_ACCELEROMETER];
+    if(tempHz > 0){
+        interval = 1.0f/tempHz;
     }
     int buffer = dbWriteInterval/interval;
     [self startSensorWithInterval:interval bufferSize:buffer];

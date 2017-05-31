@@ -10,6 +10,11 @@
 #import <CoreLocation/CoreLocation.h>
 #import "AWARESensor.h"
 
+extern NSString * const AWARE_PREFERENCES_STATUS_OPENWEATHER;
+extern NSString * const AWARE_PREFERENCES_OPENWEATHER_FREQUENCY;
+extern NSString * const AWARE_PREFERENCES_OPENWEATHER_API_KEY;
+
+
 @interface OpenWeather : AWARESensor <AWARESensorDelegate, NSURLSessionDataDelegate, NSURLSessionTaskDelegate>
 
 @end

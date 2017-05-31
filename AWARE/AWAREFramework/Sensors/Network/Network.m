@@ -11,6 +11,8 @@
 #import "EntityNetwork.h"
 #import "AppDelegate.h"
 
+NSString * const AWARE_PREFERENCES_STATUS_NETWORK_EVENTS = @"status_network";
+
 @implementation Network{
     SCNetworkReachability *reachability;
     NSTimer* sensingTimer;
@@ -28,6 +30,12 @@
         networkState= YES;
         networkType = @0;
         networkSubtype = @"";
+        [self setCSVHeader:@[@"timestamp",
+                             @"device_id",
+                             @"network_type",
+                             @"network_subtype",
+                             @"network_state"]];
+        [self addDefaultSettingWithBool:@NO key:AWARE_PREFERENCES_STATUS_NETWORK_EVENTS desc:@"True or False"];
     }
     return self;
 }

@@ -50,6 +50,8 @@
     NSString * syncProgress;
     
     NSMutableArray * bufferArray;
+    
+    NSString * tableName;
 }
 
 - (instancetype)initWithAwareStudy:(AWAREStudy *)study
@@ -59,6 +61,7 @@
     if(self != nil){
         awareStudy = study;
         sensorName = name;
+        tableName = name;
         entityName = entity;
         isUploading = NO;
         httpStartTimestamp = [[NSDate new] timeIntervalSince1970];
@@ -115,12 +118,19 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:dbSessionFinishNotification object:nil];
 }
 
+
 - (void)syncAwareDBInBackground{
+    [self syncAwareDBInBackgroundWithSensorName:sensorName];
+}
+
+- (void)syncAwareDBInBackgroundWithSensorName:(NSString *)name{
     
 //    if([sensorName isEqualToString:@"push_notification_device_tokens"]){
 //        NSLog(@"***");
 //    }
     
+    tableName = name;
+
     // check wifi state
     if(isUploading){
         NSString * message= [NSString stringWithFormat:@"[%@] Now sendsor data is uploading.", sensorName];
@@ -365,6 +375,12 @@
  */
 - (BOOL) setRepetationCountAfterStartToSyncDB:(NSNumber *) timestamp {
     @try {
+        
+        if (entityName == nil) {
+            NSLog(@"***** ERROR: Entity Name is nil! *****");
+            return NO;
+        }
+        
         if ([self isDBLock]) {
             [self dataSyncIsFinishedCorrectoly];
             return NO;
@@ -427,7 +443,8 @@
 - (void) uploadSensorDataInBackground {
     
     NSString *deviceId = [self getDeviceId];
-    NSString *url = [self getInsertUrl:sensorName];
+    // NSString *url = [self getInsertUrl:sensorName];
+    NSString *url = [self getInsertUrl:tableName];
     
     // Get sensor data from CoreData
     if(unixtimeOfUploadingData == nil){
@@ -463,23 +480,26 @@
         NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
         [private setParentContext:self.mainQueueManagedObjectContext];
         [private performBlock:^{
-             NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:entityName];
-             [fetchRequest setFetchLimit:[self getFetchLimit]];
-             [fetchRequest setEntity:[NSEntityDescription entityForName:entityName inManagedObjectContext:self.mainQueueManagedObjectContext]];
-             [fetchRequest setIncludesSubentities:NO];
-             [fetchRequest setResultType:NSDictionaryResultType];
-             [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"timestamp >= %@", unixtimeOfUploadingData]];
-            
-             //Set sort option
-             NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"timestamp" ascending:YES];
-             NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
-             [fetchRequest setSortDescriptors:sortDescriptors];
+            NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:entityName];
+            [fetchRequest setFetchLimit:[self getFetchLimit]];
+            [fetchRequest setEntity:[NSEntityDescription entityForName:entityName inManagedObjectContext:self.mainQueueManagedObjectContext]];
+            [fetchRequest setIncludesSubentities:NO];
+            [fetchRequest setResultType:NSDictionaryResultType];
+            if([[self getEntityName] isEqualToString:@"EntityESMAnswerBC"] ||
+               [[self getEntityName] isEqualToString:@"EntityESMAnswer"] ){
+                [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"double_esm_user_answer_timestamp >= %@", unixtimeOfUploadingData]];
+            }else{
+                [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"timestamp >= %@", unixtimeOfUploadingData]];
+            }
+            // NSLog(@"[%@] 1 --> %@", sensorName, unixtimeOfUploadingData);
+            //Set sort option
+            NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"timestamp" ascending:YES];
+            NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
+            [fetchRequest setSortDescriptors:sortDescriptors];
             
             
             //Get NSManagedObject from managedObjectContext by using fetch setting
             NSArray *results = [private executeFetchRequest:fetchRequest error:nil] ;
-            
-            
             
             [self unlockDB];
             
@@ -488,14 +508,25 @@
                     [self dataSyncIsFinishedCorrectoly];
                     [self broadcastDBSyncEventWithProgress:@100 isFinish:@YES isSuccess:@YES sensorName:sensorName];
                     return;
+                }else{
+                    if ([[self getEntityName] isEqualToString:@"EntityESMAnswerBC"]){
+//                        NSLog(@"[%@] %lu", sensorName, results.count);
+//                        for(NSObject * obj in results){
+//                            NSLog(@"%@",obj.debugDescription);
+//                        }
+                    }
                 }
                 
-                
-                
-                // Set timestamp
-                NSDictionary * lastDict = [results objectAtIndex:results.count-1];
+                // Save current timestamp as a maker
+                NSDictionary * lastDict = [results lastObject];//[results objectAtIndex:results.count-1];
                 unixtimeOfUploadingData = [lastDict objectForKey:@"timestamp"];
-                
+                if([[self getEntityName] isEqualToString:@"EntityESMAnswerBC"] ||
+                   [[self getEntityName] isEqualToString:@"EntityESMAnswer"] ){
+                    unixtimeOfUploadingData = [lastDict objectForKey:@"double_esm_user_answer_timestamp"];
+                }
+
+                // NSLog(@"[%@] 2 --> %@",sensorName, unixtimeOfUploadingData);
+
                 // Convert array to json data
                 NSError * error = nil;
                 NSData * jsonData = [NSJSONSerialization dataWithJSONObject:results options:0 error:&error];
@@ -515,9 +546,9 @@
                         double unxtime = [[NSDate new] timeIntervalSince1970];
                         syncDataQueryIdentifier = [NSString stringWithFormat:@"%@%f", baseSyncDataQueryIdentifier, unxtime];
                         sessionConfig = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:syncDataQueryIdentifier];
-                        sessionConfig.timeoutIntervalForRequest = 60 * 3;
-                        sessionConfig.HTTPMaximumConnectionsPerHost = 60 * 3;
-                        sessionConfig.timeoutIntervalForResource = 60 * 3;
+                        sessionConfig.timeoutIntervalForRequest = 60 * 5;
+                        sessionConfig.HTTPMaximumConnectionsPerHost = 60 * 5;
+                        sessionConfig.timeoutIntervalForResource = 60 * 5;
                         if([self isSyncWithOnlyWifi]){
                             sessionConfig.allowsCellularAccess = NO;
                         }else{
@@ -528,7 +559,18 @@
                         NSString* post = [NSString stringWithFormat:@"device_id=%@&data=", deviceId];
                         NSData* postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
                         NSMutableData * mutablePostData = [[NSMutableData alloc] initWithData:postData];
-                        [mutablePostData appendData:jsonData];
+                        
+                        // escape "&"s
+                        if([[self getEntityName] isEqualToString:@"EntityESMAnswerBC"] ||
+                           [[self getEntityName] isEqualToString:@"EntityESMAnswer"] ){
+                            
+                            NSString * jsonDataStr = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+                            // NSLog(@"%@", [self stringByAddingPercentEncodingForAWARE:jsonDataStr]);
+                            [mutablePostData appendData:[[self stringByAddingPercentEncodingForAWARE:jsonDataStr] dataUsingEncoding:NSUTF8StringEncoding]];
+                        }else{
+                            [mutablePostData appendData:jsonData];
+                        }
+                        
                         
                         NSString* postLength = [NSString stringWithFormat:@"%ld", [mutablePostData length]];
                         NSMutableURLRequest* request = [[NSMutableURLRequest alloc] init];
@@ -553,6 +595,9 @@
                             
                             NSLog(@"%@", [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding]);
                             
+                        } else if ([[self getEntityName] isEqualToString:@"EntityESMAnswerBC"]){
+                            
+                            NSLog(@"%@", [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding]);
                         }
                         
                         [dataTask resume];
@@ -575,6 +620,16 @@
     return NO;
 }
 
+
+
+- (NSString *)stringByAddingPercentEncodingForAWARE:(NSString *)string{
+    // NSString *unreserved = @"-._~/?{}[]\"\':, ";
+    NSString *unreserved = @"";
+    NSMutableCharacterSet *allowed = [NSMutableCharacterSet
+                                      alphanumericCharacterSet];
+    [allowed addCharactersInString:unreserved];
+    return [string stringByAddingPercentEncodingWithAllowedCharacters:allowed];
+}
 
 
 /////////////////////////////////////////////////
@@ -736,6 +791,7 @@ didBecomeStreamTask:(NSURLSessionStreamTask *)streamTask{
             
             // Set time mark
             [self setTimeMarkWithTimestamp: unixtimeOfUploadingData];
+            // NSLog(@"[%@] 3 --> %d", sensorName, unixtimeOfUploadingData.intValue);
             
             cleanOldDataType cleanType = [awareStudy getCleanOldDataType];
             NSDate * clearLimitDate = [NSDate new];
@@ -757,7 +813,8 @@ didBecomeStreamTask:(NSURLSessionStreamTask *)streamTask{
                     skip = NO;
                     break;
                 case cleanOldDataTypeAlways:
-                    clearLimitDate = [NSDate new];
+                    clearLimitDate = nil;
+                    ;
                     skip = NO;
                     break;
                 default:
@@ -770,13 +827,26 @@ didBecomeStreamTask:(NSURLSessionStreamTask *)streamTask{
                     [self lockDB];
                     NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:entityName];
                     NSNumber * timestamp = unixtimeOfUploadingData; // [self getTimeMark];
-                    NSNumber * limitTimestamp = [AWAREUtils getUnixTimestamp:clearLimitDate];
-                    [request setPredicate:[NSPredicate predicateWithFormat:@"(timestamp <= %@) AND (timestamp < %@)", timestamp, limitTimestamp]];
+                    
+                    NSNumber * limitTimestamp = unixtimeOfUploadingData;
+                    if(clearLimitDate != nil) limitTimestamp = [AWAREUtils getUnixTimestamp:clearLimitDate];
+                    // NSLog(@"%@", limitTimestamp);
+                    // NSLog(@"%@", clearLimitDate);
+                    
+                    if([[self getEntityName] isEqualToString:@"EntityESMAnswerBC"] ||
+                       [[self getEntityName] isEqualToString:@"EntityESMAnswer"] ){
+                        [request setPredicate:[NSPredicate predicateWithFormat:@"(double_esm_user_answer_timestamp <= %@) AND (double_esm_user_answer_timestamp <= %@)", timestamp, limitTimestamp]];
+                    }else{
+                        [request setPredicate:[NSPredicate predicateWithFormat:@"(timestamp <= %@) AND (timestamp <= %@)", timestamp, limitTimestamp]];
+                    }
+                    
                     NSBatchDeleteRequest *delete = [[NSBatchDeleteRequest alloc] initWithFetchRequest:request];
                     NSError *deleteError = nil;
                     [private executeRequest:delete error:&deleteError];
                     if (deleteError != nil) {
                         NSLog(@"%@", deleteError.description);
+                    }else{
+                        NSLog(@"[%@] Sucess to clear the data from DB (timestamp <= %@ && timestamp <= %@)", sensorName, timestamp, limitTimestamp);
                     }
                     [self unlockDB];
                 }
@@ -838,6 +908,12 @@ didCompleteWithError:(nullable NSError *)error;
     } else if ([session.configuration.identifier isEqualToString:createTableQueryIdentifier]){
         session = nil;
         task = nil;
+    } else {
+        session = nil;
+        task = nil;
+        [self dataSyncIsFinishedCorrectoly];
+        NSLog(@"--> SensorName: %@", sensorName);
+        [self broadcastDBSyncEventWithProgress:@(-1) isFinish:YES isSuccess:NO sensorName:sensorName];
     }
 }
 

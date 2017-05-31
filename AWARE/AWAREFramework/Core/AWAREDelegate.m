@@ -16,18 +16,21 @@
 #import "Debug.h"
 #import "PushNotification.h"
 #import "BalacnedCampusESMScheduler.h"
-#import "ESM.h"
+// #import "ESM.h"
+#import "IOSESM.h"
 #import "WebESM.h"
 #import "Labels.h"
 #import "GoogleCalPush.h"
 #import "GoogleLogin.h"
+#import "Observer.h"
+
+#import "NXOAuth2.h"
+#import "Fitbit.h"
 
 @implementation AWAREDelegate{
     AWARECoreDataMigrationManager * migrationManager;
 }
 
-////////////////////////////////////////////////
-//////
 /////////////////////////////////////////////////////
 
 @synthesize sharedAWARECore = _sharedAWARECore;
@@ -39,6 +42,8 @@
 }
 
 ////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////
+
 ///////////////////////////////////////////////////////////////////////
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
@@ -67,6 +72,8 @@
     
     return YES;
 }
+
+
 
 - (void) setNotification:(UIApplication *)application {
     // [application unregisterForRemoteNotifications];
@@ -116,7 +123,8 @@
     NSLog(@"Turn 'ON' the auto sleep mode on this app");
     [UIApplication sharedApplication].idleTimerDisabled = NO;
     
-    [ESM setAppearedState:NO];
+    //[ESM setAppearedState:NO];
+    [IOSESM setAppearedState:NO];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
@@ -258,14 +266,14 @@ handleEventsForBackgroundURLSession:(NSString *)identifier
         });
     }
     
-    
     token = [token stringByReplacingOccurrencesOfString:@"<" withString:@""];
     token = [token stringByReplacingOccurrencesOfString:@">" withString:@""];
     token = [token stringByReplacingOccurrencesOfString:@" " withString:@""];
         
     PushNotification * pushNotification = [[PushNotification alloc] initWithAwareStudy:_sharedAWARECore.sharedAwareStudy dbType:AwareDBTypeCoreData];
     [pushNotification savePushNotificationDeviceToken:token];
-    // [pushNotification syncAwareDBInForeground];
+    [pushNotification allowsCellularAccess];
+    [pushNotification allowsDateUploadWithoutBatteryCharging];
     [pushNotification performSelector:@selector(syncAwareDBInForeground) withObject:nil afterDelay:3];
     
     NSLog(@"deviceToken: %@", token);
@@ -344,39 +352,39 @@ forLocalNotification:(UILocalNotification *)notification
                    triggerTime:notification.fireDate
                   answeredTime:[NSDate new]];
     } else if ([identifier isEqualToString:@"edit_label_action"]){
-        NSString * inputText = [responseInfo objectForKey:UIUserNotificationActionResponseTypedTextKey];
-        ESM * esm = [[ESM alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
-        NSMutableDictionary *dic =  [AWAREEsmUtils getEsmFormatDictionary:(NSMutableDictionary *)notification.userInfo
-                                                             withTimesmap:[AWAREUtils getUnixTimestamp:notification.fireDate]
-                                                                  devieId:[awareStudy getDeviceId]];
-        //        [dic setObject:unixtime forKey:@"timestamp"];
-        [dic setObject:[AWAREUtils getUnixTimestamp:[NSDate new]] forKey:KEY_ESM_USER_ANSWER_TIMESTAMP];
-        [dic setObject:[awareStudy getDeviceId] forKey:@"device_id"];
-        [dic setObject:@2 forKey:KEY_ESM_STATUS];
-        [dic setObject:inputText forKey:KEY_ESM_USER_ANSWER];
-        [esm saveData:dic];
+//        NSString * inputText = [responseInfo objectForKey:UIUserNotificationActionResponseTypedTextKey];
+//        ESM * esm = [[ESM alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
+//        NSMutableDictionary *dic =  [AWAREEsmUtils getEsmFormatDictionary:(NSMutableDictionary *)notification.userInfo
+//                                                             withTimesmap:[AWAREUtils getUnixTimestamp:notification.fireDate]
+//                                                                  devieId:[awareStudy getDeviceId]];
+//        //        [dic setObject:unixtime forKey:@"timestamp"];
+//        [dic setObject:[AWAREUtils getUnixTimestamp:[NSDate new]] forKey:KEY_ESM_USER_ANSWER_TIMESTAMP];
+//        [dic setObject:[awareStudy getDeviceId] forKey:@"device_id"];
+//        [dic setObject:@2 forKey:KEY_ESM_STATUS];
+//        [dic setObject:inputText forKey:KEY_ESM_USER_ANSWER];
+//        [esm saveData:dic];
     } else if ([identifier isEqualToString:@"esm_answer_yes_action"]){
-        ESM * esm = [[ESM alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
-        NSMutableDictionary *dic =  [AWAREEsmUtils getEsmFormatDictionary:(NSMutableDictionary *)notification.userInfo
-                                                             withTimesmap:[AWAREUtils getUnixTimestamp:notification.fireDate]
-                                                                  devieId:[awareStudy getDeviceId]];
-        //        [dic setObject:unixtime forKey:@"timestamp"];
-        [dic setObject:[AWAREUtils getUnixTimestamp:[NSDate new]] forKey:KEY_ESM_USER_ANSWER_TIMESTAMP];
-        [dic setObject:[awareStudy getDeviceId] forKey:@"device_id"];
-        [dic setObject:@2 forKey:KEY_ESM_STATUS];
-        [dic setObject:@"YES" forKey:KEY_ESM_USER_ANSWER];
-        [esm saveData:dic];
+//        ESM * esm = [[ESM alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
+//        NSMutableDictionary *dic =  [AWAREEsmUtils getEsmFormatDictionary:(NSMutableDictionary *)notification.userInfo
+//                                                             withTimesmap:[AWAREUtils getUnixTimestamp:notification.fireDate]
+//                                                                  devieId:[awareStudy getDeviceId]];
+//        //        [dic setObject:unixtime forKey:@"timestamp"];
+//        [dic setObject:[AWAREUtils getUnixTimestamp:[NSDate new]] forKey:KEY_ESM_USER_ANSWER_TIMESTAMP];
+//        [dic setObject:[awareStudy getDeviceId] forKey:@"device_id"];
+//        [dic setObject:@2 forKey:KEY_ESM_STATUS];
+//        [dic setObject:@"YES" forKey:KEY_ESM_USER_ANSWER];
+//        [esm saveData:dic];
     } else if ([identifier isEqualToString:@"esm_answer_no_action"]){
-        ESM * esm = [[ESM alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
-        NSMutableDictionary *dic =  [AWAREEsmUtils getEsmFormatDictionary:(NSMutableDictionary *)notification.userInfo
-                                                             withTimesmap:[AWAREUtils getUnixTimestamp:notification.fireDate]
-                                                                  devieId:[awareStudy getDeviceId]];
-        //        [dic setObject:unixtime forKey:@"timestamp"];
-        [dic setObject:[AWAREUtils getUnixTimestamp:[NSDate new]] forKey:KEY_ESM_USER_ANSWER_TIMESTAMP];
-        [dic setObject:[awareStudy getDeviceId] forKey:@"device_id"];
-        [dic setObject:@2 forKey:KEY_ESM_STATUS];
-        [dic setObject:@"NO" forKey:KEY_ESM_USER_ANSWER];
-        [esm saveData:dic];
+//        ESM * esm = [[ESM alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
+//        NSMutableDictionary *dic =  [AWAREEsmUtils getEsmFormatDictionary:(NSMutableDictionary *)notification.userInfo
+//                                                             withTimesmap:[AWAREUtils getUnixTimestamp:notification.fireDate]
+//                                                                  devieId:[awareStudy getDeviceId]];
+//        //        [dic setObject:unixtime forKey:@"timestamp"];
+//        [dic setObject:[AWAREUtils getUnixTimestamp:[NSDate new]] forKey:KEY_ESM_USER_ANSWER_TIMESTAMP];
+//        [dic setObject:[awareStudy getDeviceId] forKey:@"device_id"];
+//        [dic setObject:@2 forKey:KEY_ESM_STATUS];
+//        [dic setObject:@"NO" forKey:KEY_ESM_USER_ANSWER];
+//        [esm saveData:dic];
     }
     
     
@@ -399,27 +407,124 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo
 fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
     NSLog(@"pushInfo in Background: %@", [userInfo description]);
     
-    NSString *awareCategory = [userInfo objectForKey:@"category"];
-    if([awareCategory isEqualToString:@"refresh"]){
-        [_sharedAWARECore.sharedAwareStudy refreshStudy];
-    }else if([awareCategory isEqualToString:@"upload"]){
-        [_sharedAWARECore.sharedSensorManager syncAllSensorsWithDBInForeground];
-    }else if ([awareCategory isEqualToString:@"web_esm"]){
-        NSString * trigger = [userInfo objectForKey:@"trigger"];
-        NSString * title = [userInfo objectForKey:@"title"];
-        NSNumber * firedTimestamp = [AWAREUtils getUnixTimestamp:[NSDate new]];
-        NSNumber * scheduledTimestamp = [userInfo objectForKey:@"schedule"];
-        if(firedTimestamp == nil) firedTimestamp = @0;
-        WebESM * webESM = [[WebESM alloc] initWithAwareStudy:_sharedAWARECore.sharedAwareStudy dbType:AwareDBTypeCoreData];
-        [webESM saveESMAnswerWithTimestamp:scheduledTimestamp
-                                  deviceId:[_sharedAWARECore.sharedAwareStudy getDeviceId]
-                                   esmJson:[webESM convertNSArraytoJsonStr:@[userInfo]]
-                                esmTrigger:trigger
-                    esmExpirationThreshold:@0
-                    esmUserAnswerTimestamp:firedTimestamp
-                             esmUserAnswer:title
-                                 esmStatus:@0];
+    NSDictionary * awareAps= [userInfo objectForKey:@"aware-aps"];
+    if(awareAps != nil){
+        Observer * observer = [[Observer alloc] initWithAwareStudy:_sharedAWARECore.sharedAwareStudy dbType:AwareDBTypeTextFile];
+        NSString *awareCategory = [awareAps objectForKey:@"category"];
+        /////////////// refresh /////////////////
+        if([awareCategory isEqualToString:@"refresh"]){
+            [_sharedAWARECore.sharedAwareStudy refreshStudy];
+            [observer sendSurvivalSignalWithCategory:awareCategory message:@"try"];
+        /////////////// forcibly upload /////////////////
+        }else if([awareCategory isEqualToString:@"upload"]){
+            [_sharedAWARECore.sharedSensorManager syncAllSensorsWithDBInForeground];
+            [observer sendSurvivalSignalWithCategory:awareCategory message:@"try"];
+        /////////////// compliance check /////////////////
+        }else if([awareCategory isEqualToString:@"compliance"]){
+            // [WIP] New function
+            [_sharedAWARECore checkCompliance];
+            [observer sendComplianceState];
+        /////////////// ping ///////////////////////
+        }else if([awareCategory isEqualToString:@"ping"]){
+            // [WIP] New function
+            [observer sendSurvivalSignalWithCategory:awareCategory message:@"ping"];
+            /////////////// ios_esm ///////////////////////
+        }else if ([awareCategory isEqualToString:@"ios_esm"]){
+            NSString * trigger = [userInfo objectForKey:@"trigger"];
+            NSString * title = [userInfo objectForKey:@"title"];
+            NSNumber * firedTimestamp = [AWAREUtils getUnixTimestamp:[NSDate new]];
+            NSNumber * scheduledTimestamp = [userInfo objectForKey:@"schedule"];
+            
+            if([trigger isEqual:[NSNull null]] || trigger == nil){
+                trigger = @"";
+            }
+            if([title  isEqual:[NSNull null]] || title == nil){
+                title = @"";
+            }
+            if([scheduledTimestamp isEqual:[NSNull null]] || scheduledTimestamp == nil){
+                scheduledTimestamp = [AWAREUtils getUnixTimestamp:[NSDate new]];
+            }
+            if(userInfo == NULL){
+                userInfo = [[NSDictionary alloc] init];
+            }
+            
+            IOSESM * iOSESM = [[IOSESM alloc] initWithAwareStudy:_sharedAWARECore.sharedAwareStudy dbType:AwareDBTypeCoreData];
+            [iOSESM saveESMAnswerWithTimestamp:scheduledTimestamp
+                                      deviceId:[_sharedAWARECore.sharedAwareStudy getDeviceId]
+                                       esmJson:[iOSESM convertNSArraytoJsonStr:@[userInfo]]
+                                    esmTrigger:trigger
+                        esmExpirationThreshold:@0
+                        esmUserAnswerTimestamp:firedTimestamp
+                                 esmUserAnswer:title
+                                     esmStatus:@0];
+            
+            // [WIP] New function
+            [observer sendSurvivalSignalWithCategory:awareCategory message:@"recived a notification for iOS EMS."];
+        /////////////// version check ///////////////////////
+        }else if([awareCategory isEqualToString:@"version"]){
+            NSString* version = [NSString stringWithFormat:@"%@",[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]];
+            NSString *build = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
+            if(build != nil){
+                version = [version stringByAppendingFormat:@"(%@)", build];
+            }
+            [observer sendSurvivalSignalWithCategory:awareCategory message:version];
+        /////////////// wifi ///////////////////////
+        }else if([awareCategory isEqualToString:@"only_wifi"]){
+            NSNumber * state = [awareAps objectForKey:@"value"];
+            if(state != nil){
+                if(state.intValue == 0){
+                    [_sharedAWARECore.sharedAwareStudy setDataUploadStateInWifi:NO];
+                }else{
+                    [_sharedAWARECore.sharedAwareStudy setDataUploadStateInWifi:YES];
+                }
+                [observer sendSurvivalSignalWithCategory:awareCategory message:state.stringValue];
+            }else{
+                [observer sendSurvivalSignalWithCategory:awareCategory message:@"-1"];
+            }
+        /////////////// battery ///////////////////////
+        }else if([awareCategory isEqualToString:@"only_battery"]){
+            NSNumber * state = [awareAps objectForKey:@"value"];
+            if(state != nil){
+                if(state.intValue == 0){
+                    [_sharedAWARECore.sharedAwareStudy setDataUploadStateWithOnlyBatterChargning:NO];
+                }else{
+                    [_sharedAWARECore.sharedAwareStudy setDataUploadStateWithOnlyBatterChargning:YES];
+                }
+                [observer sendSurvivalSignalWithCategory:awareCategory message:state.stringValue];
+            }else{
+                [observer sendSurvivalSignalWithCategory:awareCategory message:@"-1"];
+            }
+        /////////////// max upload length ///////////////////////
+        }else if([awareCategory isEqualToString:@"max_upload_length"]){
+            NSNumber * length = [awareAps objectForKey:@"value"];
+            if(length != nil){
+                [_sharedAWARECore.sharedAwareStudy setMaximumByteSizeForDataUpload:length.intValue];
+                [observer sendSurvivalSignalWithCategory:awareCategory message:length.stringValue];
+                [_sharedAWARECore.sharedSensorManager startAllSensors];
+            }else{
+                [observer sendSurvivalSignalWithCategory:awareCategory message:@"-1"];
+            }
+        ////////////// sync interval //////////////
+        }else if([awareCategory isEqualToString:@"sync_interval_min"]){
+            NSNumber * interval = [awareAps objectForKey:@"value"];
+            if(interval != nil){
+                [_sharedAWARECore.sharedAwareStudy setUploadIntervalWithMinutue:interval.intValue];
+                int uploadInterval = [_sharedAWARECore.sharedAwareStudy getUploadIntervalAsSecond];
+                [_sharedAWARECore.sharedSensorManager startUploadTimerWithInterval:uploadInterval];
+                [observer sendSurvivalSignalWithCategory:awareCategory message:interval.stringValue];
+            }else{
+                [observer sendSurvivalSignalWithCategory:awareCategory message:@"-1"];
+            }
+        }
+        
+        if (awareCategory == nil) {
+            awareCategory = @"unknown";
+        }
+        Debug * debugSensor = [[Debug alloc] initWithAwareStudy:[[AWAREStudy alloc] initWithReachability:YES] dbType:AwareDBTypeTextFile];
+        [debugSensor saveDebugEventWithText:@"[notification] received a push notification" type:DebugTypeInfo label:awareCategory];
+        
     }
+    
     completionHandler(UIBackgroundFetchResultNoData);
 }
 
@@ -562,14 +667,39 @@ void exceptionHandler(NSException *exception) {
 ////////////////////////////////////////////////////////////////////////////////
 //// For Google Login
 ///////////////////////////////////////////////////////////////////////////////
+
+
 - (BOOL)application:(UIApplication *)application
             openURL:(NSURL *)url
   sourceApplication:(NSString *)sourceApplication
          annotation:(id)annotation {
 
-    return [[GIDSignIn sharedInstance] handleURL:url
-                               sourceApplication:sourceApplication
-                                      annotation:annotation];
+    if([[url scheme] isEqualToString:@"aware-client"] || [[url scheme] isEqualToString:@"aware"]){
+        if([[url host] isEqualToString:@"com.aware.ios.study.settings"]){
+            NSDictionary *dict = [AWAREUtils getDictionaryFromURLParameter:url];
+            if (dict != nil) {
+                NSString * studyURL = [dict objectForKey:@"study_url"];
+                if(studyURL != nil){
+                    [_sharedAWARECore.sharedAwareStudy setStudyInformationWithURL:studyURL];
+                }
+            }
+        }else if([[url host] isEqualToString:@"com.aware.ios.oauth2"]){
+            
+            return [Fitbit handleURL:url sourceApplication:sourceApplication annotation:annotation];
+            
+        }
+        return YES;
+    }else if([[url scheme] isEqualToString:@"fitbit"]){
+        if([[url host] isEqualToString:@"logincallback"]){
+            return [Fitbit handleURL:url sourceApplication:sourceApplication annotation:annotation];
+        }
+        return YES;
+    }else{
+        return [[GIDSignIn sharedInstance] handleURL:url
+                                   sourceApplication:sourceApplication
+                                          annotation:annotation];
+    }
+    
 }
 
 - (void)signIn:(GIDSignIn *)signIn

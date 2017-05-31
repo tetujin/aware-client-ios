@@ -29,6 +29,8 @@
     int fetchLimit;
     int batchSize;
     int bufferSize;
+    
+    NSArray * csvHeader;
 }
 
 - (instancetype) initWithAwareStudy:(AWAREStudy *)study sensorName:(NSString *)name{
@@ -51,6 +53,15 @@
     return self;
 }
 
+/////////////////////////////////////////////////
+
+- (void) setCSVHeader:(NSArray *) headers {
+    csvHeader = headers;
+}
+
+- (NSArray *) getCSVHeader{
+    return csvHeader;
+}
 
 ////////////////////////////////////////////////////////////////
 /**
@@ -147,6 +158,7 @@
 }
 
 - (BOOL) syncAwareDBInForegroundWithSensorName:(NSString*) name{
+    [self syncAwareDBInBackgroundWithSensorName:name];
     return NO;
 }
 
@@ -155,6 +167,9 @@
     return NO;
 }
 
+- (NSData *)getCSVData{
+    return nil;
+}
 
 ////////////////////////////////////////////////////////////////////////
 - (NSString *) getSyncProgressAsText{

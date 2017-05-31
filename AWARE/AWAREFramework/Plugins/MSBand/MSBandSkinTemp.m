@@ -26,6 +26,7 @@
                           bufferSize:buffer];
     if(self != nil){
         self.client = msbClient;
+        [self setCSVHeader:@[@"timestamp", @"device_id", @"skintemp"]];
     }
     
     return self;
@@ -36,8 +37,8 @@
     NSString *query  = @"_id integer primary key autoincrement,"
     "timestamp real default 0,"
     "device_id text default '',"
-    "skintemp real default 0,"
-    "UNIQUE (timestamp,device_id)";
+    "skintemp real default 0";
+    // "UNIQUE (timestamp,device_id)";
     [super createTable:query];
 }
 
@@ -91,6 +92,18 @@
     entitySkinTemp.device_id = [data objectForKey:@"device_id"];
     entitySkinTemp.timestamp = [data objectForKey:@"timestamp"];
     entitySkinTemp.skintemp  = [data objectForKey:@"skintemp"];
+    
+}
+
+- (void)clientManager:(MSBClientManager *)clientManager clientDidConnect:(MSBClient *)client{
+    
+}
+
+- (void)clientManager:(MSBClientManager *)clientManager clientDidDisconnect:(MSBClient *)client{
+    
+}
+
+- (void)clientManager:(MSBClientManager *)clientManager client:(MSBClient *)client didFailToConnectWithError:(NSError *)error{
     
 }
 

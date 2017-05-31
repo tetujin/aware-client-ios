@@ -23,6 +23,8 @@
 - (void) unlockDB;
 - (BOOL) isDBLock;
 
+- (void) setCSVHeader:(NSArray *) headers;
+- (NSArray *) getCSVHeader;
 
 - (void) allowsCellularAccess;
 - (void) forbidCellularAccess;
@@ -79,6 +81,8 @@
                                  isFinish:(BOOL)finish
                                 isSuccess:(BOOL)success
                                sensorName:(NSString *)name;
+
+- (NSData *) getCSVData;
 
 @end
 

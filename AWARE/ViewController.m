@@ -62,6 +62,16 @@
 
     // For test
     // [sensorManager performSelector:@selector(testSensing) withObject:nil afterDelay:10];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(moveToGoogleLogin:)
+                                                 name:ACTION_AWARE_GOOGLE_LOGIN_REQUEST
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(moveToContacts:)
+                                                 name:ACTION_AWARE_CONTACT_REQUEST
+                                               object:nil];
 }
 
 /**
@@ -91,7 +101,7 @@
     NSArray * storedEsms = [helper getEsmTexts];
     if(storedEsms != nil){
         if (storedEsms.count > 0 ){
-            [ESM setAppearedState:YES];
+            [IOSESM setAppearedState:YES];
             [self performSegueWithIdentifier:@"esmView" sender:self];
         }
     }
@@ -99,8 +109,8 @@
     // For Web ESMs
     NSArray * esms = [webESM getValidESMsWithDatetime:[NSDate new]];
     if(esms != nil && esms.count != 0 ){
-        [ESM setAppearedState:YES];
-        [self performSegueWithIdentifier:@"webEsmView" sender:self];
+        [IOSESM setAppearedState:YES];
+        [self performSegueWithIdentifier:@"iOSEsmView" sender:self];
     }
     
 }

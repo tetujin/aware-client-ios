@@ -11,6 +11,9 @@
 #import "AWARESensor.h"
 #import "AWAREKeys.h"
 
+extern NSString* const AWARE_PREFERENCES_STATUS_ACCELEROMETER;
+extern NSString* const AWARE_PREFERENCES_FREQUENCY_ACCELEROMETER;
+extern NSString* const AWARE_PREFERENCES_FREQUENCY_HZ_ACCELEROMETER;
 
 @interface Accelerometer : AWARESensor <AWARESensorDelegate>
 

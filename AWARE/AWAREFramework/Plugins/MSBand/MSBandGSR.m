@@ -25,6 +25,7 @@
                           bufferSize:buffer];
     if(self != nil){
         self.client = msbClient;
+        [self setCSVHeader:@[@"timestamp", @"device_id", @"gsr"]];
     }
     
     return self;
@@ -34,8 +35,8 @@
     NSString *query = @"_id integer primary key autoincrement,"
     "timestamp real default 0,"
     "device_id text default '',"
-    "gsr integer default 0,"
-    "UNIQUE (timestamp,device_id)";
+    "gsr integer default 0";
+    // "UNIQUE (timestamp,device_id)";
     [super createTable:query];
     // [super createTable:query withTableName:SENSOR_PLUGIN_MSBAND_SENSORS_GSR];
 }

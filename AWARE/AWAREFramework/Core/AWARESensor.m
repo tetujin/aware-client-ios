@@ -78,7 +78,13 @@
     
     BOOL dataStoringState;
     
+    BOOL isTypeSensor;
+    
     NSDictionary * latestData;
+    
+    NSMutableArray * defaultSettings;
+    
+    NSString * sensorStatusKey;
 }
 
 @end
@@ -123,6 +129,10 @@
         
         sensorStatus = NO;
         
+        isTypeSensor = YES;
+        
+        defaultSettings = [[NSMutableArray alloc] init];
+        
         // Get debug state
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         debug = [userDefaults boolForKey:SETTING_DEBUG_STATE];
@@ -136,6 +146,8 @@
         
         // Save sensorName instance to awareSensorName
         awareSensorName = name;
+        
+        sensorStatusKey = [NSString stringWithFormat:@"status_%@",name];
         
         // Set db entity name
         dbEntityName = entity;
@@ -193,6 +205,15 @@
     return self;
 }
 
+- (void)setCSVHeader:(NSArray *)headers{
+    [super setCSVHeader:headers];
+    if (localStorage != nil) {
+        [localStorage setCSVHeader:headers];
+    }
+    [super setCSVHeader:headers];
+}
+
+/////////////////////////////////////////////////
 
 /**
  * DEFAULT:
@@ -224,7 +245,157 @@
     return NO;
 }
 
+- (BOOL)quitSensor{
+    return NO;
+}
 
+////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////
+
+- (void)setSensorStatusKey:(NSString *)key{
+    sensorStatusKey = key;
+}
+
+- (NSString *)getSensorStatusKey{
+    return sensorStatusKey;
+}
+
+
+/////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////
+
+- (void) setTypeAsPlugin{
+    isTypeSensor = NO;
+}
+
+- (void) setTypeAsSensor{
+    isTypeSensor = YES;
+}
+
+- (bool) isPlugin{
+    if (isTypeSensor == YES) {
+        return NO;
+    }else{
+        return YES;
+    }
+}
+
+- (bool) isSensor{
+    return isTypeSensor;
+}
+
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+
+- (NSArray * )getDefaultSettings{
+    return defaultSettings;
+}
+
+
+- (void) addDefaultSettingWithBool:(NSNumber *)boolValue
+                               key:(NSString *)key
+                              desc:(NSString *)desc{
+    NSString * boolString = @"false";
+    if ([boolValue isEqualToNumber:@1]) {
+        boolString = @"true";
+    }
+    NSMutableDictionary * dict = [[NSMutableDictionary alloc] initWithObjects:@[boolString,
+                                                                                KEY_CEL_SETTING_TYPE_BOOL,
+                                                                                key,
+                                                                                desc]
+                                                                      forKeys:@[KEY_CEL_SETTING_VALUE,
+                                                                                KEY_CEL_SETTING_TYPE,
+                                                                                KEY_CEL_TITLE,
+                                                                                KEY_CEL_DESC]];
+    [defaultSettings addObject:dict];
+}
+
+- (void) addDefaultSettingWithString:(NSString *)strValue
+                                 key:(NSString *)key
+                                desc:(NSString *)desc{
+    NSMutableDictionary * dict = [[NSMutableDictionary alloc] initWithObjects:@[strValue,
+                                                                                KEY_CEL_SETTING_TYPE_STRING,
+                                                                                key,
+                                                                                desc]
+                                                                      forKeys:@[KEY_CEL_SETTING_VALUE,
+                                                                                KEY_CEL_SETTING_TYPE,
+                                                                                KEY_CEL_TITLE,
+                                                                                KEY_CEL_DESC]];
+    [defaultSettings addObject:dict];
+    
+}
+
+- (void) addDefaultSettingWithNumber:(NSNumber *)numberValue
+                                 key:(NSString *)key
+                                desc:(NSString *)desc{
+    NSMutableDictionary * dict = [[NSMutableDictionary alloc] initWithObjects:@[[numberValue stringValue],
+                                                                                KEY_CEL_SETTING_TYPE_NUMBER,
+                                                                                key,
+                                                                                desc]
+                                                                      forKeys:@[KEY_CEL_SETTING_VALUE,
+                                                                                KEY_CEL_SETTING_TYPE,
+                                                                                KEY_CEL_TITLE,
+                                                                                KEY_CEL_DESC]];
+    [defaultSettings addObject:dict];
+}
+
+//- (NSString *) convertKeyToType:(AwareSettingType) type {
+//    NSString * typeStr = @"";
+//    switch (type) {
+//        case AwareSettingTypeBool:
+//            typeStr = KEY_CEL_SETTING_TYPE_BOOL;
+//            break;
+//        case AwareSettingTypeNumber:
+//            typeStr = KEY_CEL_SETTING_TYPE_NUMBER;
+//            break;
+//        case AwareSettingTypeString:
+//            typeStr = KEY_CEL_SETTING_TYPE_STRING;
+//            break;
+//        default:
+//            break;
+//    }
+//    return typeStr;
+//}
+
+//- (void) setDefaultSettingWithString:(NSString *) value
+//                                 key:(NSString *) key {
+//    if(value!=nil && key!=nil){
+//        NSDictionary * dict = [[NSDictionary alloc] initWithObjects:@[value] forKeys:@[key]];
+//        [self setDefaultSettings:dict];
+//    }
+//}
+//
+//- (void) setDefaultSettingWithNumber:(NSNumber *) value
+//                                 key:(NSString *) key {
+//    if(value!=nil && key!=nil){
+//        NSDictionary * dict = [[NSDictionary alloc] initWithObjects:@[value] forKeys:@[key]];
+//        [self setDefaultSettings:dict];
+//    }
+//}
+//
+//- (void) setDefaultSettings:(NSDictionary *) dict {
+//    NSUserDefaults * userDefauts = [NSUserDefaults standardUserDefaults];
+//    NSDictionary * defaultSettings = [userDefauts objectForKey:[self getKeyForDefaultSettings]];
+//    if(defaultSettings != nil){
+//        NSMutableDictionary * mutableDict = [[NSMutableDictionary alloc] initWithDictionary:defaultSettings];
+//        for (NSString * key in [dict allKeys]) {
+//            [mutableDict setObject:[dict objectForKey:key] forKey:key];
+//        }
+//        [userDefauts setObject:mutableDict forKey:[self getKeyForDefaultSettings]];
+//    }else{
+//        [userDefauts setObject:dict forKey:[self getKeyForDefaultSettings]];
+//    }
+//}
+//
+//- (NSDictionary *) getDefaultSettings{
+//    NSUserDefaults * userDefauts = [NSUserDefaults standardUserDefaults];
+//    NSDictionary * defaultSettings = [userDefauts objectForKey:[self getKeyForDefaultSettings]];
+//    return defaultSettings;
+//}
+//
+//- (NSString *) getKeyForDefaultSettings{
+//    return [NSString stringWithFormat:@"aware_sensor_default_settings_%@",[self getSensorName]];
+//}
 
 //////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////
@@ -237,7 +408,9 @@
 
 - (void) setLatestValue:(NSString *)valueStr{
     latestSensorValue = valueStr;
+    [NSString stringWithFormat:@""];
 }
+
 
 /**
  * Set buffer size of sensor data
@@ -288,6 +461,19 @@
     }else{
         return [super getFetchBatchSize];
     }
+}
+
+- (void) resetMarkerPosition{
+    if(localStorage != nil){
+        [localStorage resetMark];
+    }
+}
+
+- (int) getMarkerPosition{
+    if(localStorage != nil){
+        return [localStorage getMarker];
+    }
+    return 0;
 }
 
 //////////////////////////////////////////////////////////////////
@@ -471,7 +657,7 @@
 
 
 //////////////////////////////////////////
-////////////////////////////////////////
+////////////////////////////////////////s
 
 - (void) syncAwareDB {
     if(baseDataUploader != nil){
@@ -480,6 +666,15 @@
         [super syncAwareDBInBackground];
     }
 }
+
+- (void) syncAwareDBWithSensorName:(NSString *)name{
+    if(baseDataUploader != nil){
+        return [baseDataUploader syncAwareDBInBackgroundWithSensorName:name];
+    }else{
+        return [super syncAwareDBInBackgroundWithSensorName:name];
+    }
+}
+
 
 - (BOOL) syncAwareDBWithData:(NSDictionary *) dictionary{
     if(baseDataUploader != nil){
@@ -490,6 +685,16 @@
     // return NO;
 }
 
+////////////////////////////////////////
+///////////////////////////////////////
+
+- (NSData *) getCSVData {
+    if(baseDataUploader != nil){
+        return [baseDataUploader getCSVData];
+    }else{
+        return nil;//[super syncAwareDBWithData:dictionary];
+    }
+}
 
 //////////////////////////////////////////
 ////////////////////////////////////////
@@ -648,6 +853,20 @@
 }
 
 
+
+- (NSString *)getSettingAsStringFromSttings:(NSArray *)settings withKey:(NSString *)key{
+    if (settings != nil) {
+        for (NSDictionary * setting in settings) {
+            if ([[setting objectForKey:@"setting"] isEqualToString:key]) {
+                NSString * value = [setting objectForKey:@"value"];
+                return value;
+            }
+        }
+    }
+    return @"";
+}
+
+
 /**
  * Convert an iOS motion sensor frequency from an Androind frequency.
  *
@@ -655,6 +874,7 @@
  * @return  double  A sensing frequency for iOS
  */
 - (double) convertMotionSensorFrequecyFromAndroid:(double)frequency{
+    
     //  Android: Non-deterministic frequency in microseconds
     // (dependent of the hardware sensor capabilities and resources),
     // e.g., 200000 (normal), 60000 (UI), 20000 (game), 0 (fastest).
@@ -669,9 +889,19 @@
     // y2 = a * x2 + b;
     double a = (y1-y2)/(x1-x2);
     double b = y1 - x1*a;
-//    y =a * x + b;
-//    NSLog(@"%f", a *frequency + b);
+    // y =a * x + b;
     return a *frequency + b;
+    
+    
+    // e.g., 200000 (normal), 60000 (UI), 20000 (game), 0 (fastest).
+    // 180, 60, 20, 10 (= microsecond)
+//    double fq = 0.1;
+//    if ( frequency == 200000 ) {
+//    } else if ( frequency == 60000 ){
+//    } else if ( frequency == 20000 ){
+//    } else if ( frequency == 0 ){
+//    }
+//    return fq;
 }
 
 

@@ -48,6 +48,9 @@
 
 - (void) activate {
     [self deactivate];
+    
+    [UIDevice currentDevice].batteryMonitoringEnabled = YES;
+    
     /// Set defualt settings
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     if (![userDefaults boolForKey:@"aware_inited"]) {
@@ -57,7 +60,7 @@
         [userDefaults setDouble:60*15 forKey:SETTING_SYNC_INT];               // Default Value: 60*15 (sec)
         [userDefaults setBool:NO forKey:KEY_APP_TERMINATED];                  // Default Value: NO
         [userDefaults setInteger:0 forKey:KEY_UPLOAD_MARK];                   // Defualt Value: 0
-        [userDefaults setInteger:1000 * 100 forKey:KEY_MAX_DATA_SIZE];        // Defualt Value: 1000*100 (byte) (100 KB)
+        [userDefaults setInteger:1000 * 1000 forKey:KEY_MAX_DATA_SIZE];        // Defualt Value: 1000*1000 (byte) (1000 KB)
         [userDefaults setInteger:cleanOldDataTypeAlways forKey:SETTING_FREQUENCY_CLEAN_OLD_DATA];
         [userDefaults setBool:YES forKey:@"aware_inited"];
     }
@@ -66,7 +69,13 @@
         [userDefaults setInteger:10000 forKey:KEY_MAX_FETCH_SIZE_NORMAL_SENSOR];         // Defualt Value: 10000
         [userDefaults setBool:YES forKey:@"aware_inited_1.8.2"];
     }
+    
+    if([userDefaults integerForKey:SETTING_DB_TYPE] == AwareDBTypeUnknown){
+        [userDefaults setInteger:AwareDBTypeTextFile forKey:SETTING_DB_TYPE];
+    }
+    
     double uploadInterval = [userDefaults doubleForKey:SETTING_SYNC_INT];
+    
     
     /**
      * Start a location sensor for background sensing.
@@ -207,7 +216,12 @@
     bool appTerminated = [userDefaults boolForKey:KEY_APP_TERMINATED];
     if (appTerminated) {
         NSString * message = @"AWARE client iOS is rebooted";
-        [AWAREUtils sendLocalNotificationForMessage:message soundFlag:YES];
+        
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        bool debugMode = [userDefaults boolForKey:SETTING_DEBUG_STATE];
+        if(debugMode){
+            [AWAREUtils sendLocalNotificationForMessage:message soundFlag:YES];
+        }
         Debug * debugSensor = [[Debug alloc] initWithAwareStudy:_sharedAwareStudy dbType:AwareDBTypeCoreData];
         [debugSensor saveDebugEventWithText:message type:DebugTypeInfo label:@""];
         [userDefaults setBool:NO forKey:KEY_APP_TERMINATED];
@@ -259,7 +273,8 @@
 
 //////////////////////////////////////////////////////////////////
 
-- (void) checkLocationSensorWithViewController:(UIViewController *) viewController {
+- (bool) checkLocationSensorWithViewController:(UIViewController *) viewController {
+    bool state = NO;
     CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
     if (status == kCLAuthorizationStatusAuthorizedWhenInUse || status == kCLAuthorizationStatusDenied || status == kCLAuthorizationStatusRestricted) {
         
@@ -318,13 +333,17 @@
     }else{
         Debug * debugSensor = [[Debug alloc] initWithAwareStudy:_sharedAwareStudy dbType:AwareDBTypeTextFile];
         [debugSensor saveDebugEventWithText:@"[compliance] Location Services is enabled" type:DebugTypeInfo label:@""];
+        state = YES;
     }
     // status == kCLAuthorizationStatusAuthorizedAlways
+    return state;
 }
 
 ///////////////////////////////////////////////////////
 
-- (void) checkBackgroundAppRefreshWithViewController:(UIViewController *) viewController {
+- (bool) checkBackgroundAppRefreshWithViewController:(UIViewController *) viewController {
+    bool state = NO;
+    
     //    UIBackgroundRefreshStatusRestricted, //< unavailable on this system due to device configuration; the user cannot enable the feature
     //    UIBackgroundRefreshStatusDenied,     //< explicitly disabled by the user for this application
     //    UIBackgroundRefreshStatusAvailable   //< enabled for this application
@@ -367,10 +386,15 @@
     } else if(backgroundRefreshStatus == UIBackgroundRefreshStatusAvailable){
         Debug * debugSensor = [[Debug alloc] initWithAwareStudy:_sharedAwareStudy dbType:AwareDBTypeTextFile];
         [debugSensor saveDebugEventWithText:@"[compliance] Background App Refresh service is Allowed" type:DebugTypeInfo label:@""];
+        state = YES;
     }
+    return state;
 }
 
-- (void) checkNotificationSettingWithViewController:(UIViewController *) viewController {
+- (bool) checkNotificationSettingWithViewController:(UIViewController *) viewController {
+    
+    bool state = NO;
+    
     if ([AWAREUtils getCurrentOSVersionAsFloat] >= 8) {
         // NSString *title = @"Notification service is permitted.";
         // NSString *message = @"";
@@ -419,8 +443,10 @@
         }else{
             Debug * debugSensor = [[Debug alloc] initWithAwareStudy:_sharedAwareStudy dbType:AwareDBTypeTextFile];
             [debugSensor saveDebugEventWithText:@"[compliance] Notification Service is permitted" type:DebugTypeInfo label:@""];
+            state = YES;
         }
     }
+    return state;
 }
 
 ///////////////////////////////////////////////////////////////
@@ -458,7 +484,9 @@
 }
 
 
-- (void) checkLowPowerModeWithViewController:(UIViewController *) viewController {
+- (bool) checkLowPowerModeWithViewController:(UIViewController *) viewController {
+    
+    bool state = NO;
     
     if([AWAREUtils getCurrentOSVersionAsFloat] >= 9.0){
         
@@ -506,15 +534,15 @@
         }else{
             Debug * debugSensor = [[Debug alloc] initWithAwareStudy:_sharedAwareStudy dbType:AwareDBTypeTextFile];
             [debugSensor saveDebugEventWithText:@"[compliance] Low Power Mode is OFF" type:DebugTypeInfo label:@""];
+            state = YES;
         }
     }
-    
+    return state;
 }
 
 ///////////////////////////////////////////////////////////////
 
-- (void) checkWifiStateWithViewController:(UIViewController *) viewController {
-    
+- (bool) checkWifiStateWithViewController:(UIViewController *) viewController {
     if(![self isWiFiEnabled]){
         
         NSString * title = @"Please turn on WiFi!";
@@ -556,6 +584,8 @@
         Debug * debugSensor = [[Debug alloc] initWithAwareStudy:_sharedAwareStudy dbType:AwareDBTypeTextFile];
         [debugSensor saveDebugEventWithText:@"[compliance] WiFi is On" type:DebugTypeInfo label:@""];
     }
+    
+    return [self isWiFiEnabled];
 }
 
 
@@ -583,6 +613,8 @@
                              CFArrayGetValueAtIndex( CNCopySupportedInterfaces(), 0)
                              );
 }
+
+///////////////////////////////////////////////////////////////
 
 
 

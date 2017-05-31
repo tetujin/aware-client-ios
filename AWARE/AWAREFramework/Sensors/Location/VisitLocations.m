@@ -15,10 +15,27 @@
 
 
 - (instancetype)initWithAwareStudy:(AWAREStudy *)study dbType:(AwareDBType)dbType{
-    return [self initWithAwareStudy:study
+    
+    self = [self initWithAwareStudy:study
                          sensorName:@"locations_visit"
                        dbEntityName:NSStringFromClass([EntityLocationVisit class])
                              dbType:dbType];
+    if(self != nil){
+        [self setCSVHeader:@[@"timestamp",
+                             @"device_id",
+                             @"double_latitude",
+                             @"double_longitude",
+                             @"double_arrival",
+                             @"double_departure",
+                             @"address",
+                             @"name",
+                             @"provider",
+                             @"accuracy",
+                             @"label"
+                             ]];
+    }
+    
+    return self;
 }
 
 

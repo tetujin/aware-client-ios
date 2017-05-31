@@ -10,6 +10,9 @@
 #import "AppDelegate.h"
 #import "EntityBarometer.h"
 
+NSString* const AWARE_PREFERENCES_STATUS_BAROMETER    = @"status_barometer";
+NSString* const AWARE_PREFERENCES_FREQUENCY_BAROMETER = @"frequency_barometer";
+
 @implementation Barometer{
     CMAltimeter* altitude;
     double sensingInterval;
@@ -26,6 +29,10 @@
     if (self) {
         sensingInterval = 0.2f;
         dbWriteInterval = 30;
+        [self setCSVHeader:@[@"timestamp",@"device_id", @"double_values_0",@"accuracy",@"label"]];
+        [self addDefaultSettingWithBool:@NO       key:AWARE_PREFERENCES_STATUS_BAROMETER        desc:@"e.g., True or False"];
+        [self addDefaultSettingWithNumber:@200000 key:AWARE_PREFERENCES_FREQUENCY_BAROMETER     desc:@"Non-deterministic frequency in microseconds (dependent of the hardware sensor capabilities and resources). You can also use a SensorManager sensor delay constant."];
+        // [self addDefaultSettingWithNumber:@0      key:AWARE_PREFERENCES_FREQUENCY_HZ_BAROMETER  desc:@""];
     }
     return self;
 }
@@ -102,7 +109,7 @@
                                                  NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
                                                  [dict setObject:unixtime forKey:@"timestamp"];
                                                  [dict setObject:[self getDeviceId] forKey:@"device_id"];
-                                                 [dict setObject:[NSNumber numberWithDouble:pressureDouble*10.0f] forKey:@"double_values_0"];
+                                                 [dict setObject:@(pressureDouble*10.0f) forKey:@"double_values_0"];
                                                  [dict setObject:@3 forKey:@"accuracy"];
                                                  [dict setObject:@"" forKey:@"label"];
                                                  [self setLatestValue:[NSString stringWithFormat:@"%f", pressureDouble*10.0f]];

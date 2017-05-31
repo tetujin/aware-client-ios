@@ -279,12 +279,13 @@ This method provides a system uuid.
                             second:(int) second
                            nextDay:(BOOL)nextDay {
     NSCalendar *calendar = [NSCalendar currentCalendar];
-    NSDateComponents *dateComps = [calendar components:NSYearCalendarUnit |
-                                   NSMonthCalendarUnit  |
-                                   NSDayCalendarUnit    |
-                                   NSHourCalendarUnit   |
-                                   NSMinuteCalendarUnit |
-                                   NSSecondCalendarUnit fromDate:nsDate];
+    NSDateComponents *dateComps = [calendar components:NSCalendarUnitYear   |
+                                                       NSCalendarUnitMonth  |
+                                                       NSCalendarUnitDay    |
+                                                       NSCalendarUnitHour   |
+                                                       NSCalendarUnitMinute |
+                                                       NSCalendarUnitSecond
+                                              fromDate:nsDate];
     [dateComps setDay:dateComps.day];
     [dateComps setHour:hour];
     [dateComps setMinute:minute];
@@ -423,6 +424,11 @@ This method provides a system uuid.
                               @"iPhone7,2" :@"iPhone 6",        //
                               @"iPhone8,1" :@"iPhone 6s",   //
                               @"iPhone8,2" :@"iPhone 6s Plus",        //
+                              @"iPhone8,4" :@"iPhone SE",
+                              @"iPhone9,1" :@"iPhone 7",
+                              @"iPhone9,3" :@"iPhone 7",
+                              @"iPhone9,2" :@"iPhone 7 Plus",
+                              @"iPhone9,4" :@"iPhone 7 Plus",
                               @"iPad4,1"   :@"iPad Air",        // 5th Generation iPad (iPad Air) - Wifi
                               @"iPad4,2"   :@"iPad Air",        // 5th Generation iPad (iPad Air) - Cellular
                               @"iPad4,4"   :@"iPad Mini",       // (2nd Generation iPad Mini - Wifi)
@@ -466,6 +472,45 @@ This method provides a system uuid.
         return NO;
     }
 }
+
+
++ (NSDictionary*)getDictionaryFromURLParameter:(NSURL *)url{
+    
+    NSString * query = [url query];
+    
+    if (query){
+        NSMutableDictionary* result = [[NSMutableDictionary alloc] init];
+        NSArray* parameters = [query componentsSeparatedByString:@"&"];
+        for (NSString* parameter in parameters){
+            if (parameter.length > 0){
+                NSArray* elements = [parameter componentsSeparatedByString:@"="];
+                id key = [elements[0] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+                id value = (elements.count == 1 ? @YES : [elements[1] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding]);
+                [result setObject:value forKey:key];
+            }
+        }
+        return [result copy];
+    }
+    else{
+        return nil;
+    }
+}
+
+
++ (NSString *)stringByAddingPercentEncoding:(NSString *)string{
+    return [AWAREUtils stringByAddingPercentEncoding:string unreserved:@""];
+}
+
++ (NSString *)stringByAddingPercentEncoding:(NSString *)string unreserved:(NSString*)unreserved{
+    // NSString *unreserved = @"-._~/?{}[]\"\':, ";
+    // NSString *unreserved = @"";
+    NSMutableCharacterSet *allowed = [NSMutableCharacterSet
+                                      alphanumericCharacterSet];
+    [allowed addCharactersInString:unreserved];
+    return [string stringByAddingPercentEncodingWithAllowedCharacters:allowed];
+}
+
+
 
 @end
 

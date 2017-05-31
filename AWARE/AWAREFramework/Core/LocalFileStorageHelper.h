@@ -15,6 +15,9 @@
 
 // An array list for a buffer
 //@property (weak, nonatomic) NSMutableArray * bufferArray;
+- (void) setCSVHeader:(NSArray *) headers;
+
+- (NSData *) getCSVData;
 
 /// create file
 - (BOOL) createNewFile:(NSString*)fileName;
@@ -37,7 +40,7 @@
 
 // set and get mark
 - (void) setNextMark;
-- (void) restMark;
+- (void) resetMark;
 - (int)  getMarker;
 
 // set and get a losted text length

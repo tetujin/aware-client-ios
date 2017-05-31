@@ -15,6 +15,7 @@
 #import "SSLManager.h"
 #import "AWAREUtils.h"
 #import "PushNotification.h"
+#import "TCQMaker.h"
 
 @implementation AWAREStudy {
     NSString *mqttPassword;
@@ -35,6 +36,7 @@
     SCNetworkReachability * reachability;
     
     bool wifiReachable;
+    bool networkReachable;
     NSInteger networkState;
 }
 
@@ -78,12 +80,15 @@
                 switch (status){
                     case SCNetworkStatusReachableViaWiFi:
                         wifiReachable = YES;
+                        networkReachable = YES;
                         break;
                     case SCNetworkStatusReachableViaCellular:
                         wifiReachable = NO;
+                        networkReachable = YES;
                         break;
                     case SCNetworkStatusNotReachable:
                         wifiReachable = NO;
+                        networkReachable = NO;
                         break;
                 }
             }];
@@ -101,10 +106,10 @@
  * @return The result of download and set a study configuration
  */
 - (BOOL) setStudyInformationWithURL:(NSString*)url {
-//    if (url != nil) {
-//        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-//        [userDefaults setObject:url forKey:KEY_STUDY_QR_CODE];
-//    }
+    //    if (url != nil) {
+    //        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    //        [userDefaults setObject:url forKey:KEY_STUDY_QR_CODE];
+    //    }
     if(url != nil){
         [self setStudyURL:url];
         NSString * deviceId = [AWAREUtils getSystemUUID];
@@ -143,13 +148,13 @@
     [request setHTTPMethod:@"POST"];
     [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
     [request setHTTPBody:postData];
-
+    
     
     if ( [AWAREUtils isForeground] ) { /// If the application in the foreground
         // NSURLSession *session = [NSURLSession sharedSession];
         session = [NSURLSession sessionWithConfiguration:[NSURLSession sharedSession].configuration
-                                                              delegate:self
-                                                         delegateQueue:nil];
+                                                delegate:self
+                                           delegateQueue:nil];
         [[session dataTaskWithRequest: request  completionHandler: ^(NSData *data, NSURLResponse *response, NSError *error) {
             // Success
             if (response && ! error) {
@@ -160,7 +165,7 @@
                 }else{
                     NSLog(@"Error: Data is null");
                 }
-            // Error
+                // Error
             } else {
                 // NSLog(@"Error: %@", error);
                 NSLog(@"ERROR: %@ %ld", error.debugDescription , error.code);
@@ -224,7 +229,7 @@ didReceiveResponse:(NSURLResponse *)response
 -(void)URLSession:(NSURLSession *)session
          dataTask:(NSURLSessionDataTask *)dataTask
    didReceiveData:(NSData *)data {
-
+    
     [self setStudySettings:data];
     [session finishTasksAndInvalidate];
     [session invalidateAndCancel];
@@ -267,7 +272,6 @@ didCompleteWithError:(NSError *)error {
     id obj = [NSJSONSerialization JSONObjectWithData:resData options:NSJSONReadingMutableContainers error:nil];
     NSData *data = [NSJSONSerialization dataWithJSONObject:obj options:0 error:nil];
     NSString * studyConfiguration = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    
     
     // compare the latest configuration string with the previous configuration string.
     NSString * previousConfig = [self removeStudyStartTimeFromConfig:[self getStudyConfigurationAsText]];
@@ -323,36 +327,36 @@ didCompleteWithError:(NSError *)error {
         }
     }
     
-    NSString * oldStudyId = [userDefaults objectForKey:KEY_STUDY_ID];
-    if(![oldStudyId isEqualToString:studyId]){
-        NSLog(@"Add new device ID to the AWARE server.");
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        NSString* url =  [userDefaults objectForKey:KEY_STUDY_QR_CODE];
-        NSString * uuid = [AWAREUtils getSystemUUID];
-        [self addNewDeviceToAwareServer:url withDeviceId:uuid];
-    }else{
-        NSLog(@"This device ID is already regited to the AWARE server.");
-    }
+    NSLog(@"Add new device ID to the AWARE server.");
+    NSString* url =  [userDefaults objectForKey:KEY_STUDY_QR_CODE];
+    NSString * uuid = [AWAREUtils getSystemUUID];
+    [self addNewDeviceToAwareServer:url withDeviceId:uuid];
+    
     
     // save the new configuration to the local storage
-    [userDefaults setObject:mqttServer forKey:KEY_MQTT_SERVER];
-    [userDefaults setObject:mqttPassword forKey:KEY_MQTT_PASS];
-    [userDefaults setObject:mqttUsername forKey:KEY_MQTT_USERNAME];
-    [userDefaults setObject:[NSNumber numberWithInt:mqttPort] forKey:KEY_MQTT_PORT];
-    [userDefaults setObject:[NSNumber numberWithInt:mqttKeepAlive] forKey:KEY_MQTT_KEEP_ALIVE];
-    [userDefaults setObject:[NSNumber numberWithInt:mqttQos] forKey:KEY_MQTT_QOS];
-    [userDefaults setObject:studyId forKey:KEY_STUDY_ID];
+    [userDefaults setObject:mqttServer       forKey:KEY_MQTT_SERVER];
+    [userDefaults setObject:mqttPassword     forKey:KEY_MQTT_PASS];
+    [userDefaults setObject:mqttUsername     forKey:KEY_MQTT_USERNAME];
+    [userDefaults setObject:@(mqttPort)      forKey:KEY_MQTT_PORT];
+    [userDefaults setObject:@(mqttKeepAlive) forKey:KEY_MQTT_KEEP_ALIVE];
+    [userDefaults setObject:@(mqttQos)       forKey:KEY_MQTT_QOS];
+    [userDefaults setObject:studyId          forKey:KEY_STUDY_ID];
     [userDefaults setObject:webserviceServer forKey:KEY_WEBSERVICE_SERVER];
-    [userDefaults setObject:array forKey:KEY_SENSORS];
-    [userDefaults setObject:plugins forKey:KEY_PLUGINS];
     [userDefaults setDouble:frequencySyncDB*60 forKey:SETTING_SYNC_INT]; // save data as second
     [userDefaults setBool:webserviceWifiOnly forKey:SETTING_SYNC_WIFI_ONLY];
     [userDefaults setInteger:frequencyCleanOldData forKey:SETTING_FREQUENCY_CLEAN_OLD_DATA];
     [userDefaults synchronize];
-
+    
+    [userDefaults setObject:array            forKey:KEY_SENSORS];
+    [userDefaults setObject:plugins          forKey:KEY_PLUGINS];
+    
+    // change csv export mode
+    [userDefaults setBool:NO forKey:SETTING_CSV_EXPORT_STATE];
+    [userDefaults synchronize];
     
     // run in the main thread
     dispatch_async(dispatch_get_main_queue(), ^{
+        
         AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
         AWARECore * core = delegate.sharedAWARECore;
         [core.sharedSensorManager stopAndRemoveAllSensors];
@@ -363,42 +367,186 @@ didCompleteWithError:(NSError *)error {
     readingState = YES;
 }
 
-
+///////////////////////////////////////////////////////
 
 /**
  * This method sets downloaded study configurations.
  *
  * @param resData A response (study configurations) from the aware server
  */
-- (bool) addNewDeviceToAwareServer:(NSString *)url withDeviceId:(NSString *) uuid {
-    NSLog(@"Create an aware_device table on the aware server");
-    [self createTable:url withDeviceId:uuid];
+- (bool) addNewDeviceToAwareServer:(NSString *)url withDeviceId:(NSString *) deviceId {
+    
+    NSString * result = [self getLatestStoredDataInAwareServerWithUrl:url deviceId:deviceId];
+    
+    if([result isEqualToString:@"[]"] ){
+        NSLog(@"[AWARE STUDY] Your device_id (%@) is not stored.", deviceId);
+        
+        if([self createTableWithURL:url deviceId:deviceId]){
+            NSLog(@"[AWARE STUDY] A table create query to %@ is succeed.", url);
+            if([self insertDeviceIdToAwareServerWithURL:url deviceId:deviceId]){
+                NSLog(@"[AWARE STUDY] A device_id (%@) registration is succeed.", deviceId);
+            }else{
+                NSLog(@"[AWARE STUDY] A device_id (%@) registration is filaed.", deviceId);
+            }
+        }else{
+            NSLog(@"[AWARE STUDY] A table create query to %@ is failed.", url);
+        }
+    }else{
+        NSLog(@"[AWARE STUDY] Your device_id (%@) is already stored.", deviceId);
+    }
+    
+    return YES;
+}
+
+
+- (NSString *)getLatestStoredDataInAwareServerWithUrl:(NSString *)serverUrl deviceId:(NSString *)deviceId {
+    // https://forums.developer.apple.com/thread/11519
+    // [NOTE] https://api.awareframework.com/index.php/webservice/index/STUDYID/APIKEY/aware_device/latest
+    NSString * url = [NSString stringWithFormat:@"%@/aware_device/latest", serverUrl]; ///aware_device/latest
+    NSString *post = [NSString stringWithFormat:@"device_id=%@", deviceId];
+    NSLog(@"%@", url);
+    NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
+    NSString *postLength = [NSString stringWithFormat:@"%ld", [postData length]];
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+    [request setURL:[NSURL URLWithString:url]];
+    [request setHTTPMethod:@"POST"];
+    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+    [request setHTTPBody:postData];
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSession sharedSession].configuration
+                                                          delegate:self
+                                                     delegateQueue:nil];
+    dispatch_semaphore_t    sem;
+    __block NSData *        result;
+    result = nil;
+    sem = dispatch_semaphore_create(0);
+    [[session dataTaskWithRequest: request  completionHandler: ^(NSData *data, NSURLResponse *response, NSError *error) {
+        // Success
+        if (error != nil) {
+            NSLog(@"Error: %@", error.debugDescription);
+        }else{
+            NSLog(@"Success: %@", [[NSString alloc] initWithData: data  encoding: NSUTF8StringEncoding]);
+            result = data;
+        }
+        [session finishTasksAndInvalidate];
+        [session invalidateAndCancel];
+        dispatch_semaphore_signal(sem);
+    }] resume];
+    
+    dispatch_semaphore_wait(sem, DISPATCH_TIME_FOREVER);
+    
+    NSString * str = [[NSString alloc] initWithData:result encoding:NSUTF8StringEncoding];
+    
+    return str;
+}
+
+
+
+/**
+ * Create an aware_device table with an url and an uuid
+ * @param url An url for create aware_device table on aware database
+ * @param uuid An uuid for create aware_device table on aware database
+ * @return A result of creating a table of the aware_deivce table
+ */
+- (bool) createTableWithURL:(NSString *)url deviceId:(NSString *) uuid{
+    // preparing for insert device information
+    url = [NSString stringWithFormat:@"%@/aware_device/create_table", url];
+    NSString *query = [[NSString alloc] init];
+    query = @"_id integer primary key autoincrement,"
+    "timestamp real default 0,"
+    "device_id text default '',"
+    "board text default '',"
+    "brand text default '',"
+    "device text default '',"
+    "build_id text default '',"
+    "hardware text default '',"
+    "manufacturer text default '',"
+    "model text default '',"
+    "product text default '',"
+    "serial text default '',"
+    "release text default '',"
+    "release_type text default '',"
+    "sdk text default ''," // version
+    "label text default '', "
+    "UNIQUE (device_id)";
+    
+    NSString *post = [NSString stringWithFormat:@"device_id=%@&fields=%@", uuid, query];
+    NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+    NSString *postLength = [NSString stringWithFormat:@"%ld", [postData length]];
+    
+    NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
+    url = [NSString stringWithFormat:@"%@?%@", url, unixtime];
+    
+    NSURL * urlObj = [NSURL URLWithString:url];
+    if(urlObj == nil){
+        return NO;
+    }
+    [request setURL:urlObj];
+    [request setHTTPMethod:@"POST"];
+    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+    [request setHTTPBody:postData];
+    
+    
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSession sharedSession].configuration
+                                                          delegate:self
+                                                     delegateQueue:nil];
+    dispatch_semaphore_t    sem;
+    __block BOOL        result;
+    result = NO;
+    sem = dispatch_semaphore_create(0);
+    
+    [[session dataTaskWithRequest: request  completionHandler: ^(NSData *data, NSURLResponse *response, NSError *error) {
+        // Success
+        if (error != nil) {
+            NSLog(@"Error: %@", error.debugDescription);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [AWAREUtils sendLocalNotificationForMessage:error.debugDescription soundFlag:YES];
+            });
+        }
+        if( data != nil ){
+            NSLog(@"Success: %@", [[NSString alloc] initWithData: data  encoding: NSUTF8StringEncoding]);
+            result = YES;
+        }
+        [session finishTasksAndInvalidate];
+        [session invalidateAndCancel];
+        dispatch_semaphore_signal(sem);
+        
+    }] resume];
+    
+    dispatch_semaphore_wait(sem, DISPATCH_TIME_FOREVER);
+    
+    return result;
+}
+
+
+- (BOOL) insertDeviceIdToAwareServerWithURL:(NSString *)url
+                                   deviceId:(NSString *)uuid{
+    NSString *name = [self getDeviceName]; //[[UIDevice currentDevice] name];//ok
+    return [self insertDeviceIdToAwareServerWithURL:url
+                                           deviceId:uuid
+                                         deviceName:name];
+}
+
+- (BOOL) insertDeviceIdToAwareServerWithURL:(NSString *)url
+                                   deviceId:(NSString *)uuid
+                                 deviceName:(NSString *)deviceName{
     
     // preparing for insert device information
-    url = [NSString stringWithFormat:@"%@/aware_device/insert", url];
     NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
     struct utsname systemInfo;
     uname(&systemInfo);
     
     NSString* machine =  [NSString stringWithCString:systemInfo.machine  encoding:NSUTF8StringEncoding]; // ok
-    NSString* nodeName = [NSString stringWithCString:systemInfo.nodename encoding:NSUTF8StringEncoding]; // ok
+    // NSString* nodeName = [NSString stringWithCString:systemInfo.nodename encoding:NSUTF8StringEncoding]; // ok
     NSString* release =  [NSString stringWithCString:systemInfo.release  encoding:NSUTF8StringEncoding]; // ok
-    NSString* systemName = [NSString stringWithCString:systemInfo.sysname encoding:NSUTF8StringEncoding];// ok
+    // NSString* systemName = [NSString stringWithCString:systemInfo.sysname encoding:NSUTF8StringEncoding];// ok
     NSString* version = [NSString stringWithCString:systemInfo.version encoding:NSUTF8StringEncoding];
-    NSString *name = [self getDeviceName]; //[[UIDevice currentDevice] name];//ok
+
     NSString *systemVersion = [[UIDevice currentDevice] systemVersion];//ok
     NSString *localizeModel = [[UIDevice currentDevice] localizedModel];//
     NSString *model = [[UIDevice currentDevice] model]; //ok
     NSString *manufacturer = @"Apple";//ok
     
-    
-    //    [[UIDevice currentDevice] platformType]   // ex: UIDevice4GiPhone
-    //    [[UIDevice currentDevice] platformString] // ex: @"iPhone 4G"
-//    @property(nonatomic,readonly,strong) NSString    *name;              // e.g. "My iPhone"
-//    @property(nonatomic,readonly,strong) NSString    *model;             // e.g. @"iPhone", @"iPod touch"
-//    @property(nonatomic,readonly,strong) NSString    *localizedModel;    // localized version of model
-//    @property(nonatomic,readonly,strong) NSString    *systemName;        // e.g. @"iOS"
-//    @property(nonatomic,readonly,strong) NSString    *systemVersion;     // e.g. @"4.0"
     
     NSMutableDictionary *jsonQuery = [[NSMutableDictionary alloc] init];
     [jsonQuery setValue:uuid            forKey:@"device_id"];
@@ -413,9 +561,9 @@ didCompleteWithError:(NSError *)error {
     [jsonQuery setValue:[AWAREUtils deviceName]    forKey:@"product"];
     [jsonQuery setValue:version         forKey:@"serial"];
     [jsonQuery setValue:release         forKey:@"release"];
-    [jsonQuery setValue:localizeModel        forKey:@"release_type"];
+    [jsonQuery setValue:localizeModel   forKey:@"release_type"];
     [jsonQuery setValue:systemVersion   forKey:@"sdk"];
-    [jsonQuery setValue:name            forKey:@"label"];
+    [jsonQuery setValue:deviceName      forKey:@"label"];
     
     NSMutableArray *a = [[NSMutableArray alloc] init];
     [a addObject:jsonQuery];
@@ -446,75 +594,9 @@ didCompleteWithError:(NSError *)error {
     
     // NSURLSessionConfiguration *sessionConfig = nil;
     // _getSettingIdentifier = [NSString stringWithFormat:@"%@%@", _getSettingIdentifier, unixtime];
-    url = [NSString stringWithFormat:@"%@?%@", url, unixtime];
+    url = [NSString stringWithFormat:@"%@/aware_device/insert?%@", url,unixtime];
+    // url = [NSString stringWithFormat:@"%@?%@", url, unixtime];
     
-
-    NSURL * urlObj = [NSURL URLWithString:url];
-    if(urlObj == nil){
-        return NO;
-    }
-    [request setURL:urlObj];
-    [request setHTTPMethod:@"POST"];
-    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
-    [request setHTTPBody:postData];
-    
-    
-    NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSession sharedSession].configuration
-                                                          delegate:self
-                                                     delegateQueue:nil];
-    [[session dataTaskWithRequest: request  completionHandler: ^(NSData *data, NSURLResponse *response, NSError *error) {
-        if (error != nil) {
-            NSLog(@"Error: %@", error.debugDescription);
-        }
-        if( data != nil ){
-            NSLog(@"Success: %@", [[NSString alloc] initWithData: data  encoding: NSUTF8StringEncoding]);
-        }
-        [session finishTasksAndInvalidate];
-        [session invalidateAndCancel];
-        
-    }] resume];
-    
-     return true;
-}
-
-
-
-/**
- * Create an aware_device table with an url and an uuid
- * @param url An url for create aware_device table on aware database
- * @param uuid An uuid for create aware_device table on aware database
- * @return A result of creating a table of the aware_deivce table
- */
-- (bool) createTable:(NSString *)url withDeviceId:(NSString *) uuid{
-        // preparing for insert device information
-        url = [NSString stringWithFormat:@"%@/aware_device/create_table", url];
-    NSString *query = [[NSString alloc] init];
-    query = @"_id integer primary key autoincrement,"
-    "timestamp real default 0,"
-    "device_id text default '',"
-    
-    "board text default '',"
-    "brand text default '',"
-    "device text default '',"
-    "build_id text default '',"
-    "hardware text default '',"
-    "manufacturer text default '',"
-    "model text default '',"
-    "product text default '',"
-    "serial text default '',"
-    "release text default '',"
-    "release_type text default '',"
-    "sdk test default ''," // version
-    "label text default '',"
-    "UNIQUE (device_id)";
-  
-    NSString *post = [NSString stringWithFormat:@"device_id=%@&fields=%@", uuid, query];
-    NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
-    NSString *postLength = [NSString stringWithFormat:@"%ld", [postData length]];
-
-    NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
-    url = [NSString stringWithFormat:@"%@?%@", url, unixtime];
     
     NSURL * urlObj = [NSURL URLWithString:url];
     if(urlObj == nil){
@@ -529,50 +611,40 @@ didCompleteWithError:(NSError *)error {
     NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSession sharedSession].configuration
                                                           delegate:self
                                                      delegateQueue:nil];
+    
+    
+    dispatch_semaphore_t    sem;
+    __block BOOL         result;
+    result = NO;
+    sem = dispatch_semaphore_create(0);
+    
     [[session dataTaskWithRequest: request  completionHandler: ^(NSData *data, NSURLResponse *response, NSError *error) {
-        // Success
         if (error != nil) {
             NSLog(@"Error: %@", error.debugDescription);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [AWAREUtils sendLocalNotificationForMessage:error.debugDescription soundFlag:YES];
+            });
         }
         if( data != nil ){
             NSLog(@"Success: %@", [[NSString alloc] initWithData: data  encoding: NSUTF8StringEncoding]);
+            result = YES;
         }
         [session finishTasksAndInvalidate];
         [session invalidateAndCancel];
+        dispatch_semaphore_signal(sem);
     }] resume];
     
-    // NSURLConnection * connection = [NSURLConnection connectionWithRequest:request delegate:self];
-    // [connection start];
+    dispatch_semaphore_wait(sem, DISPATCH_TIME_FOREVER);
     
-    return YES;
-    
-    /*
-    // NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-    // dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-    // NSError *error = nil;
-    // NSHTTPURLResponse *response = nil;
-    
-    NSData *resData = [NSURLConnection sendSynchronousRequest:request
-                                            returningResponse:&response error:&error];
-    NSString * resultDate = [[NSString alloc] initWithData:resData encoding:NSUTF8StringEncoding];
-    NSLog(@"==> %@", resultDate);
-    int responseCode = (int)[response statusCode];
-    if(responseCode == 200){
-        NSLog(@"UPLOADED SENSOR DATA TO A SERVER");
-        return YES;
-    }else{
-        NSLog(@"ERROR");
-        return NO;
-    }
-    return NO;
-     */
+    return result;
 }
 
 
+
 /**
- * Refresh a study configuration. When the method is called, the method access to 
+ * Refresh a study configuration. When the method is called, the method access to
  * the aware sernver and download configurations from the server by using -setStudyInformationWithURL.
- * If this device does not join a study, this method can not refresh the study 
+ * If this device does not join a study, this method can not refresh the study
  * and return a NO (false) as a BOOL value.
  *
  * NOTE: The response of this method is not synchronized in the background!!
@@ -580,12 +652,16 @@ didCompleteWithError:(NSError *)error {
  * @return a refresh query is sent(YES) or not sent(NO) as a BOOL value
  */
 - (BOOL) refreshStudy {
-//    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-//    NSString *url = [userDefaults objectForKey:KEY_STUDY_QR_CODE];
     NSString * url = [self getStudyURL];
-    if (url != nil) {
+    if (![url isEqualToString:@""]) {
         [self setStudyInformationWithURL:url];
         return YES;
+    }else{
+        AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+        AWARECore * core = delegate.sharedAWARECore;
+        // [core.sharedSensorManager stopAndRemoveAllSensors];
+        [core.sharedSensorManager startAllSensorsWithStudy:self];
+        // [core.sharedSensorManager createAllTables];
     }
     return NO;
 }
@@ -607,6 +683,17 @@ didCompleteWithError:(NSError *)error {
 ////////////////////////////////////////////////////////////////////////
 
 - (void) setDeviceName:(NSString *) deviceName {
+    
+//    NSString * previousDeviceName = [self getDeviceName];
+//    if(![previousDeviceName isEqualToString:deviceName]){
+//        // try to sync the device name with the aware server
+//        NSUserDefaults * userDefaults = [NSUserDefaults standardUserDefaults];
+//        NSString * url =  [userDefaults objectForKey:KEY_STUDY_QR_CODE];
+//        NSString * uuid = [AWAREUtils getSystemUUID];
+//        
+//        [self insertDeviceIdToAwareServerWithURL:url deviceId:uuid deviceName:deviceName];
+//    }
+    
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults setObject:deviceName forKey:KEY_AWARE_DEVICE_NAME];
     [userDefaults synchronize];
@@ -651,7 +738,7 @@ didCompleteWithError:(NSError *)error {
 
 
 /**
- * Get an user name of MQTT. Actually, this value is same as a 
+ * Get an user name of MQTT. Actually, this value is same as a
  * device_id(c09e93dc-5067-4f9b-b639-9cbc232eb6f8) of this device.
  *
  * @return a device_id of this device
@@ -718,17 +805,213 @@ didCompleteWithError:(NSError *)error {
  */
 - (NSArray *) getSensors {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    return [userDefaults objectForKey:KEY_SENSORS];
+    // NSArray * studySettings = [userDefaults objectForKey:KEY_SENSORS];
+    // NSArray * userSettings = [userDefaults objectForKey:KEY_USER_SENSORS];
+    
+    // NSMutableArray * tempSettings  = [[NSMutableArray alloc] init];
+    // NSMutableArray * currentSettings = [[NSMutableArray alloc] initWithArray:tempSettings];
+    /*
+     Marge the study and user setting
+     If the keys are duplicate, the study settings are overwrited by user settings.
+     */
+    //    if(studySettings!=nil && userSettings!=nil){
+    //        // overwrite duplicate settings
+    //        for (NSDictionary * studySetting in studySettings) {
+    //            NSDictionary * tempSetting = [[NSDictionary alloc] initWithDictionary:studySetting];
+    //            NSString * studyKey   = [studySetting objectForKey:@"setting"];
+    //            for (NSDictionary * userSetting in userSettings) {
+    //                NSString * userKey = [userSetting objectForKey:@"setting"];
+    //                if( [studyKey isEqualToString:userKey] ) {
+    //                    tempSetting = [[NSDictionary alloc] initWithDictionary:userSetting];
+    //                }
+    //            }
+    //            [tempSettings addObject:tempSetting];
+    //        }
+    
+    //        tempSettings = [[NSMutableArray alloc] initWithArray:studySettings];
+    //
+    //        // add deficient settings
+    //        for (NSDictionary * userSetting in userSettings) {
+    //            NSString * userKey   = [userSetting objectForKey:@"setting"];
+    //            for (NSDictionary * tempSetting in tempSettings) {
+    //                NSString * tempKey   = [tempSetting objectForKey:@"setting"];
+    //                if (![tempKey isEqualToString:userKey]) {
+    //                    [currentSettings addObject:userSetting];
+    //                    break;
+    //                }
+    //            }
+    //        }
+    //
+    //        return currentSettings;
+    //    }else if(studySettings != nil){
+    //        return studySettings;
+    //    }else if(userSettings != nil){
+    //        return userSettings;
+    //    }
+    
+    NSArray * studySensors = [userDefaults objectForKey:KEY_SENSORS];
+    NSArray * userSensors  = [userDefaults objectForKey:KEY_USER_SENSORS];
+    
+    if(studySensors != nil){
+        return studySensors;
+    }else if(userSensors != nil){
+        return userSensors;
+    }else{
+        return nil;
+    }
 }
+
 
 /**
  * Get plugin settings from a local storage as a NSArray object
- * @return a plugin settings as a NSArray object
+ * @return plugin settings as a NSArray object
  */
 - (NSArray *) getPlugins{
+    
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    return [userDefaults objectForKey:KEY_PLUGINS];
+    
+    NSArray * studyPlugins = [userDefaults objectForKey:KEY_PLUGINS];
+    NSArray * userPlugins  = [userDefaults objectForKey:KEY_USER_PLUGINS];
+    
+    if(studyPlugins != nil){
+        return studyPlugins;
+    }else if(userPlugins != nil){
+        return userPlugins;
+    }else{
+        return nil;
+    }
 }
+
+
+/**
+ * Get user's sensor settings from a local storage as a NSArray object
+ * @return user's sensor settings as a NSArray object
+ */
+- (NSArray *) getUserSensors {
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    return [userDefaults objectForKey:KEY_USER_SENSORS];
+}
+
+/**
+ * Get user's plugin settings from a local storage as a NSArray object
+ * @return user's plugin settings as a NSArray object
+ */
+- (NSArray *) getUserPlugins{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    return [userDefaults objectForKey:KEY_USER_PLUGINS];
+}
+
+
+
+/**
+ * Get plugin settings using a key of a setting element
+ * @return Plugin settings as a NSArray
+ */
+- (NSArray *) getPluginSettingsWithKey:(NSString *) key {
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSArray * plugins = [userDefaults objectForKey:KEY_PLUGINS];
+    
+    if(plugins != nil){
+        for (NSDictionary * plugin in plugins) {
+            NSArray *pluginSettings = [plugin objectForKey:@"settings"];
+            for (NSDictionary* pluginSetting in pluginSettings) {
+                NSString * setting = [pluginSetting objectForKey:@"setting"];
+                if ([setting isEqualToString:key]){
+                    return pluginSettings;
+                }
+            }
+        }
+    }
+    
+    return nil;
+}
+
+
+////////////////////////////////////////////
+
+/**
+ * Get plugin settings using a key of a setting element
+ * @return Plugin settings as a NSArray
+ */
+- (NSArray *) getUserPluginSettingsWithKey:(NSString *) key {
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSArray * plugins = [userDefaults objectForKey:KEY_USER_PLUGINS];
+    
+    if(plugins != nil){
+        for (NSDictionary * plugin in plugins) {
+            NSArray *pluginSettings = [plugin objectForKey:@"settings"];
+            for (NSDictionary* pluginSetting in pluginSettings) {
+                NSString * setting = [pluginSetting objectForKey:@"setting"];
+                if ([setting isEqualToString:key]){
+                    return pluginSettings;
+                }
+            }
+        }
+    }
+    return nil;
+}
+
+/**
+ * Get plugin settings using a key of a setting element
+ * @return Plugin settings as a NSArray
+ */
+- (void) removeUserPluginWithKey:(NSString *) key {
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSArray * plugins = [userDefaults objectForKey:KEY_USER_PLUGINS];
+    
+    NSMutableArray * newPlugins = [[NSMutableArray alloc] init];
+    
+    if(plugins != nil){
+        for (NSDictionary * plugin in plugins) {
+            bool isKeyExist = false;
+            NSArray *pluginSettings = [plugin objectForKey:@"settings"];
+            for (NSDictionary* pluginSetting in pluginSettings) {
+                NSString * setting = [pluginSetting objectForKey:@"setting"];
+                if ([setting isEqualToString:key]){
+                    isKeyExist = true;
+                }
+            }
+            if(!isKeyExist){
+                [newPlugins addObject:plugin];
+            }
+        }
+    }
+    [userDefaults setObject:newPlugins forKey:KEY_USER_PLUGINS];
+}
+
+/**
+ * Get plugin settings using a key of a setting element
+ * @return Plugin settings as a NSArray
+ */
+- (void) removeUserPluginSettingWithKey:(NSString *) key {
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSArray * plugins = [userDefaults objectForKey:KEY_USER_PLUGINS];
+    
+    NSMutableArray * newPlugins = [[NSMutableArray alloc] init];
+    
+    if(plugins != nil){
+        for (NSDictionary * plugin in plugins) {
+            bool isKeyExist = false;
+            NSArray *pluginSettings = [plugin objectForKey:@"settings"];
+            for (NSDictionary* pluginSetting in pluginSettings) {
+                NSString * setting = [pluginSetting objectForKey:@"setting"];
+                if ([setting isEqualToString:key]){
+                    isKeyExist = true;
+                }
+            }
+            if(!isKeyExist){
+                [newPlugins addObject:plugin];
+            }
+        }
+    }
+    [userDefaults setObject:newPlugins forKey:KEY_USER_PLUGINS];
+}
+
+
 
 /**
  * Get a study configuration as text
@@ -761,6 +1044,11 @@ didCompleteWithError:(NSError *)error {
  * @return a result of a cleaning operation
  */
 - (BOOL) clearAllSetting {
+    
+    AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+    AWARECore * core = delegate.sharedAWARECore;
+    [core.sharedSensorManager quitAllSensor];
+    
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults removeObjectForKey:KEY_MQTT_SERVER];
     [userDefaults removeObjectForKey:KEY_MQTT_USERNAME];
@@ -772,6 +1060,8 @@ didCompleteWithError:(NSError *)error {
     [userDefaults removeObjectForKey:KEY_WEBSERVICE_SERVER];
     [userDefaults removeObjectForKey:KEY_SENSORS];
     [userDefaults removeObjectForKey:KEY_PLUGINS];
+    [userDefaults removeObjectForKey:KEY_USER_SENSORS];
+    [userDefaults removeObjectForKey:KEY_USER_PLUGINS];
     [userDefaults removeObjectForKey:KEY_STUDY_QR_CODE];
     [userDefaults removeObjectForKey:@"key_aware_study_configuration_json_text"];
     [userDefaults synchronize];
@@ -783,9 +1073,6 @@ didCompleteWithError:(NSError *)error {
     mqttPort = 1883;
     mqttKeepAlive = 600;
     mqttQos = 2;
-    
-    
-    
     
     return YES;
 }
@@ -803,12 +1090,79 @@ didCompleteWithError:(NSError *)error {
     webserviceServer = [userDefaults objectForKey:KEY_WEBSERVICE_SERVER];
 }
 
+
+
+
+
+/////////////////////////////////////////
+
+
+//- (BOOL) isSensorSettingWithKey:(NSString *)key{
+//    for (NSDictionary * dict in [self getSensors]) {
+//        if ([[dict objectForKey:@"setting"] isEqualToString:key]) {
+//            return YES;
+//        }
+//    }
+//    return NO;
+//}
+
+
+- (void) setUserSensorSettingWithString:(NSString *) str key:(NSString*)key{
+    NSArray * sensorSettings = [self getUserSensors];
+    NSMutableArray * currentSettings = [[NSMutableArray alloc] init];
+    for (NSDictionary * dict in sensorSettings) {
+        if ([[dict objectForKey:@"setting"] isEqualToString:key]) {
+        }else{
+            [currentSettings addObject:dict];
+        }
+    }
+    NSDictionary * setting = [[NSDictionary alloc] initWithObjects:@[key,str] forKeys:@[@"setting",@"value"]];
+    [currentSettings addObject:setting];
+    NSUserDefaults * userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setObject:currentSettings forKey:KEY_USER_SENSORS];
+}
+
+
+- (void) setUserPluginSettingWithString:(NSString *) str key:(NSString*)key statusKey:(NSString *)statusKey {
+    
+    NSArray * pluginSettings = [self getUserPluginSettingsWithKey:statusKey];
+    
+    if(pluginSettings != nil){
+        [self removeUserPluginWithKey:statusKey];
+    }
+    
+    NSMutableArray * currentSettings = [[NSMutableArray alloc] init];
+    
+    for (NSDictionary * dict in pluginSettings) {
+        if ([[dict objectForKey:@"setting"] isEqualToString:key]) {
+        }else{
+            [currentSettings addObject:dict];
+        }
+    }
+    NSDictionary * setting = [[NSDictionary alloc] initWithObjects:@[key,str] forKeys:@[@"setting",@"value"]];
+    [currentSettings addObject:setting];
+    
+    // "plugin","settings"->"setting","valu"
+    NSDictionary * newPlugin = [[NSDictionary alloc] initWithObjects:@[@"",currentSettings] forKeys:@[@"plugin",@"settings"]];
+    
+    NSMutableArray * plugins = [[NSMutableArray alloc] initWithArray:[self getUserPlugins]];
+    [plugins addObject:newPlugin];
+    
+    NSUserDefaults * userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setObject:plugins forKey:KEY_USER_PLUGINS];
+}
+
+/////////////////////////////////////////////////////////////
+
+
 /**
  * Get a Wi-Fi network reachable as a boolean
  * @return a Wi-Fi network reachable as a boolean
  */
 - (bool) isWifiReachable { return wifiReachable; }
 
+
+- (bool) isNetworkReachable { return networkReachable; }
 
 /**
  * Get a network condition as text
@@ -899,7 +1253,7 @@ didCompleteWithError:(NSError *)error {
     if (configStr == nil) return @"";
     NSError *error = nil;
     NSString* pattern = @"(\\{\"setting\":\"study_start\",\"value\":\"\\d{4,}\"\\},)";
-//    NSString* pattern = @"setting";
+    //    NSString* pattern = @"setting";
     NSRegularExpression* regex = [NSRegularExpression regularExpressionWithPattern:pattern options:0 error:&error];
     if (error == nil){
         NSArray *matches = [regex matchesInString:configStr options:0 range:NSMakeRange(0, configStr.length)];
@@ -988,5 +1342,119 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
     [challenge.sender continueWithoutCredentialForAuthenticationChallenge:challenge];
 }
 
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+
+- (void) setDebugState:(bool)state{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setBool:state forKey:SETTING_DEBUG_STATE];
+    [userDefaults synchronize];
+}
+
+- (void) setDataUploadStateInWifiAndMobileNetwork:(bool)state{
+    if(state){
+        state = NO;
+    }else{
+        state = YES;
+    }
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setBool:state forKey:SETTING_SYNC_WIFI_ONLY];
+    [userDefaults synchronize];
+}
+
+- (void) setDataUploadStateInWifi:(bool)state{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setBool:state forKey:SETTING_SYNC_WIFI_ONLY];
+    [userDefaults synchronize];
+}
+
+- (void) setDataUploadStateWithOnlyBatterChargning:(bool)state{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setBool:state forKey:SETTING_SYNC_BATTERY_CHARGING_ONLY];
+    [userDefaults synchronize];
+}
+
+- (void) setUploadIntervalWithMinutue:(int)min{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setObject:@((double)min*60.0f) forKey:SETTING_SYNC_INT];
+    [userDefaults synchronize];
+}
+
+
+- (void) setMaximumByteSizeForDataUpload:(NSInteger)size{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setObject:@(size) forKey:KEY_MAX_DATA_SIZE];
+    [userDefaults synchronize];
+    
+    AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+    AWARECore * core = delegate.sharedAWARECore;
+    if(core != nil){
+        [core.sharedSensorManager resetAllMarkerPositionsInDB];
+    }
+}
+
+- (void) setMaximumNumberOfRecordsForDataUpload:(NSInteger)number{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setObject:@(number) forKey:KEY_MAX_FETCH_SIZE_NORMAL_SENSOR];
+    [userDefaults synchronize];
+}
+
+- (void) setDBType:(AwareDBType)type{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setInteger:type forKey:SETTING_DB_TYPE];
+    [userDefaults synchronize];
+}
+
+- (void) setCleanOldDataType:(cleanOldDataType)type{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setInteger:type forKey:SETTING_FREQUENCY_CLEAN_OLD_DATA];
+    [userDefaults synchronize];
+}
+
+- (void) setCSVExport:(bool)state{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setBool:state forKey:SETTING_CSV_EXPORT_STATE];
+    [userDefaults synchronize];
+}
+
+//////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
+
+- (bool) getDebugState{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    return [userDefaults boolForKey:SETTING_DEBUG_STATE];
+}
+
+
+- (bool) getDataUploadStateInWifi{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    return [userDefaults boolForKey:SETTING_SYNC_WIFI_ONLY];
+}
+
+- (bool) getDataUploadStateWithOnlyBatterChargning{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    return [userDefaults boolForKey:SETTING_SYNC_BATTERY_CHARGING_ONLY];
+}
+
+- (int) getUploadIntervalAsSecond{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    return (int)[userDefaults integerForKey:SETTING_SYNC_INT];
+}
+
+- (NSInteger) getMaximumByteSizeForDataUpload{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    return [userDefaults integerForKey:KEY_MAX_DATA_SIZE];
+}
+
+- (AwareDBType) getDBType{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    return [userDefaults integerForKey:SETTING_DB_TYPE];
+}
+
+- (bool) getCSVExport{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    return [userDefaults boolForKey:SETTING_CSV_EXPORT_STATE];
+}
 
 @end

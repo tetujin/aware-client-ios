@@ -38,7 +38,12 @@
         isLock = NO;
         [self allowsDateUploadWithoutBatteryCharging];
         [self allowsCellularAccess];
-        
+        [self setCSVHeader:@[@"esm_json",
+                             @"esm_status",
+                             @"esm_expiration_threshold",
+                             @"double_esm_user_answer_timestamp",
+                             @"esm_user_answer",
+                             @"esm_trigger"]];
     }
     
     return self;
@@ -54,7 +59,7 @@
     [tcqMaker addColumn:@"esm_trigger"                      type:TCQTypeText    default:@"''"];
     NSString * query = [tcqMaker getTableCreateQueryWithUniques:nil];
     
-    [self createTable:query];
+    [self createTable:query withTableName:@"esms"];
 }
 
 - (BOOL)startSensorWithSettings:(NSArray *)settings{
@@ -79,6 +84,22 @@
     return YES;
 }
 
+///////////////////////////////////////////////////////////
+
+
+//- (void)syncAwareDB{
+//    [self syncAwareDBInBackgroundWithSensorName:@"esms"];
+//}
+//
+//
+//- (void) syncAwareDBInBackground{
+//    [self syncAwareDBInBackgroundWithSensorName:@"esms"];
+//}
+//
+//
+//- (void)syncAwareDBInBackgroundWithSensorName:(NSString *)name{
+//    [super syncAwareDBInBackgroundWithSensorName:name];
+//}
 
 ///////////////////////////////////////////////////////////
 - (void) getESMConfigFileFromURL:(NSURL *)url{
@@ -142,6 +163,8 @@ didReceiveResponse:(NSURLResponse *)response
          dataTask:(NSURLSessionDataTask *)dataTask
    didReceiveData:(NSData *)data {
     
+    NSLog(@"did received data");
+    
     if([session.configuration.identifier isEqualToString:currentHttpSessionId]){
         if(data != nil){
             NSLog(@"%@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
@@ -151,8 +174,8 @@ didReceiveResponse:(NSURLResponse *)response
             
             [receiveData appendData:data];
             
-            [session finishTasksAndInvalidate];
-            [session invalidateAndCancel];
+            // [session finishTasksAndInvalidate];
+            // [session invalidateAndCancel];
         }
     }else{
         [super URLSession:session dataTask:dataTask didReceiveData:data];
@@ -163,7 +186,11 @@ didReceiveResponse:(NSURLResponse *)response
               task:(NSURLSessionTask *)task
     didCompleteWithError:(NSError *)error{
     
+    NSLog(@"did compleate");
+    
     if([session.configuration.identifier isEqualToString:currentHttpSessionId]){
+        NSString * r = [[NSString alloc] initWithData:receiveData encoding:NSUTF8StringEncoding];
+        NSLog(@"%@", r);
         if(receiveData.length != 0){
             NSError *e = nil;
             NSArray * webESMArray = [NSJSONSerialization JSONObjectWithData:receiveData
@@ -212,9 +239,44 @@ didReceiveResponse:(NSURLResponse *)response
 }
 
 
+- (BOOL) setWebESMsWithSchedule:(ESMSchedule *)esmSchedule{
+    if(esmSchedule != nil){
+        NSMutableDictionary * dictSchedule = [[NSMutableDictionary alloc] init];
+        [dictSchedule setObject:esmSchedule.fireHours forKey:@"hours"];
+        [dictSchedule setObject:esmSchedule.scheduledESMs forKey:@"esms"];
+        [dictSchedule setObject:esmSchedule.randomizeSchedule  forKey:@"randomize_schedule"];
+        [dictSchedule setObject:@(esmSchedule.timeoutSecond) forKey:@"expiration"];
+        
+        [dictSchedule setObject:esmSchedule.title forKey:@"notification_title"];
+        [dictSchedule setObject:esmSchedule.body forKey:@"notification_body"];
+        [dictSchedule setObject:esmSchedule.identifier forKey:@"schedule_id"];
+        [dictSchedule setObject:esmSchedule.context forKey:@"context"];
+        
+        NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
+        [formatter setDateFormat:@"MM-dd-yyyy"];
+        if(esmSchedule.startDate != nil){
+            [dictSchedule setObject:[formatter stringFromDate:esmSchedule.startDate] forKey:@"start_date"];
+        }else{
+            [dictSchedule setObject:[formatter stringFromDate:[NSDate new]] forKey:@"start_date"];
+        }
+        [formatter setDateFormat:@"MM-dd-yyyy"];
+        if(esmSchedule.endDate != nil){
+            [dictSchedule setObject:[formatter stringFromDate:esmSchedule.endDate] forKey:@"end_date"];
+        }else{
+            [dictSchedule setObject:[formatter stringFromDate:[NSDate distantFuture]] forKey:@"end_date"];
+        }
+        
+        [self setWebESMsWithArray:@[dictSchedule]];
+        
+        return YES;
+    }else{
+        return NO;
+    }
+}
 
 
 - (void) setWebESMsWithArray:(NSArray *) webESMArray {
+    
     @try {
         dispatch_async( dispatch_get_main_queue() , ^{
             AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
@@ -265,11 +327,11 @@ didReceiveResponse:(NSURLResponse *)response
                         NSDictionary * esm = [esmDict objectForKey:@"esm"];
                         EntityESM * entityEsm = (EntityESM *) [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([EntityESM class])
                                                                                             inManagedObjectContext:context];
-                        entityEsm.esm_type = [esm objectForKey:@"esm_type"];
-                        entityEsm.esm_title = [esm objectForKey:@"esm_title"];
+                        entityEsm.esm_type   = [esm objectForKey:@"esm_type"];
+                        entityEsm.esm_title  = [esm objectForKey:@"esm_title"];
                         entityEsm.esm_submit = [esm objectForKey:@"esm_submit"];
                         entityEsm.esm_instructions = [esm objectForKey:@"esm_instructions"];
-                        entityEsm.esm_radios = [self convertNSArraytoJsonStr:[esm objectForKey:@"esm_radios"]];
+                        entityEsm.esm_radios     = [self convertNSArraytoJsonStr:[esm objectForKey:@"esm_radios"]];
                         entityEsm.esm_checkboxes = [self convertNSArraytoJsonStr:[esm objectForKey:@"esm_checkboxes"]];
                         entityEsm.esm_likert_max = [esm objectForKey:@"esm_likert_max"];
                         entityEsm.esm_likert_max_label = [esm objectForKey:@"esm_likert_max_label"];
@@ -277,8 +339,9 @@ didReceiveResponse:(NSURLResponse *)response
                         entityEsm.esm_likert_step = [esm objectForKey:@"esm_likert_step"];
                         entityEsm.esm_quick_answers = [self convertNSArraytoJsonStr:[esm objectForKey:@"esm_quick_answers"]];
                         entityEsm.esm_expiration_threshold = [esm objectForKey:@"esm_expiration_threshold"];
-                        entityEsm.esm_status = [esm objectForKey:@"esm_status"];
-                        entityEsm.esm_trigger = [esm objectForKey:@"esm_trigger"];
+                        // entityEsm.esm_status    = [esm objectForKey:@"esm_status"];
+                        entityEsm.esm_status = @0;
+                        entityEsm.esm_trigger   = [esm objectForKey:@"esm_trigger"];
                         entityEsm.esm_scale_min = [esm objectForKey:@"esm_scale_min"];
                         entityEsm.esm_scale_max = [esm objectForKey:@"esm_scale_max"];
                         entityEsm.esm_scale_start = [esm objectForKey:@"esm_scale_start"];

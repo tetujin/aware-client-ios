@@ -34,6 +34,7 @@
         KEY_LABELS_TYPE = @"type";
         KEY_LABELS_NOTIFICATION_BODY = @"notification_body";
         KEY_LABELS_ANSWERED_TIMESTAMP = @"answered_timestamp";
+        [self setCSVHeader:@[KEY_LABELS_TIMESTAMP, KEY_LABELS_DEVICE_ID, KEY_LABELS_LABEL, KEY_LABELS_TYPE, KEY_LABELS_NOTIFICATION_BODY, KEY_LABELS_ANSWERED_TIMESTAMP]];
     }
     return self;
 }

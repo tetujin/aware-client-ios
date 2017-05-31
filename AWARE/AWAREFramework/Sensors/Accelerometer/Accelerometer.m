@@ -12,6 +12,9 @@
 #import "EntityAccelerometer.h"
 #import "EntityAccelerometer+CoreDataProperties.h"
 
+NSString * const AWARE_PREFERENCES_STATUS_ACCELEROMETER    = @"status_accelerometer";
+NSString * const AWARE_PREFERENCES_FREQUENCY_ACCELEROMETER = @"frequency_accelerometer";
+NSString * const AWARE_PREFERENCES_FREQUENCY_HZ_ACCELEROMETER = @"frequency_hz_accelerometer";
 
 @implementation Accelerometer{
     CMMotionManager *manager;
@@ -19,6 +22,7 @@
     int dbWriteInterval; //second
     int currentBufferSize;
     NSMutableArray * bufferArray;
+    NSDictionary * defaultSettings;
 }
 
 - (instancetype)initWithAwareStudy:(AWAREStudy *)study dbType:(AwareDBType)dbType{
@@ -32,9 +36,13 @@
         dbWriteInterval = 30;
         bufferArray = [[NSMutableArray alloc] init];
         currentBufferSize = 0;
-        // tempManagedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+        [self setCSVHeader:@[@"timestamp",@"device_id",@"double_values_0",@"double_values_1",@"double_values_2",@"accuracy",@"label"]];
         
+        [self addDefaultSettingWithBool:@NO       key:AWARE_PREFERENCES_STATUS_ACCELEROMETER        desc:@"true or false to activate or deactivate accelerometer sensor."];
+        [self addDefaultSettingWithNumber:@200000 key:AWARE_PREFERENCES_FREQUENCY_ACCELEROMETER     desc:@"non-deterministic frequency in microseconds (dependent of the hardware sensor capabilities and resources), e.g., 200000 (normal), 60000 (UI), 20000 (game), 0 (fastest)."];
+        [self addDefaultSettingWithNumber:@0    key:AWARE_PREFERENCES_FREQUENCY_HZ_ACCELEROMETER desc:@"100-1Hz (defualt=0)"];
     }
+    
     return self;
 }
 
@@ -50,20 +58,22 @@
     [super createTable:query];
 }
 
-
 /**
  *
  */
 - (BOOL) startSensorWithSettings:(NSArray *)settings{
-    
-    double frequency = sensingInterval;//default value
+
+    double frequency = sensingInterval;
     if(settings != nil){
-        // Get a sensing frequency from settings
-        double tempFrequency = [self getSensorSetting:settings withKey:@"frequency_accelerometer"];
+        double tempFrequency = [self getSensorSetting:settings withKey:AWARE_PREFERENCES_FREQUENCY_ACCELEROMETER];
         if(tempFrequency != -1){
-            NSLog(@"Accelerometer's frequency is %f !!", tempFrequency);
             frequency = [self convertMotionSensorFrequecyFromAndroid:tempFrequency];
         }
+    }
+    
+    double tempHz = [self getSensorSetting:settings withKey:AWARE_PREFERENCES_FREQUENCY_HZ_ACCELEROMETER];
+    if(tempHz > 0){
+        frequency = 1.0f/tempHz;
     }
     
     int buffer = dbWriteInterval/frequency;
@@ -73,6 +83,8 @@
 
 
 - (BOOL) startSensor {
+    // NSDictionary * defaultSettings = [self getDefaultSettings];
+    // double frequency = [[defaultSettings objectForKey:AWARE_PREFERENCES_FREQUENCY_ACCELEROMETER] doubleValue];
     return [self startSensorWithInterval:sensingInterval];
 }
 
@@ -117,7 +129,7 @@
                                           [dict setObject:@(accelerometerData.acceleration.z) forKey:@"double_values_2"];
                                           [dict setObject:@3 forKey:@"accuracy"];
                                           [dict setObject:@"" forKey:@"label"];
-                                          
+                                          // NSLog(@"%f", accelerometerData.acceleration.x);
                                           [self setLatestValue:[NSString stringWithFormat:
                                                                 @"%f, %f, %f",
                                                                 accelerometerData.acceleration.x,
@@ -177,192 +189,15 @@
 ///////////////////////////////////////////////////
 
 - (BOOL) setInterval:(double)interval{
+    // [self setDefaultSettingWithNumber:@(interval) key:AWARE_PREFERENCES_FREQUENCY_ACCELEROMETER];
     sensingInterval = interval;
     return YES;
 }
 
 - (double) getInterval{
+    // NSDictionary * settings = [self getDefaultSettings];
+    // return [[settings objectForKey:AWARE_PREFERENCES_FREQUENCY_ACCELEROMETER] doubleValue];
     return sensingInterval;
 }
-
-- (BOOL)syncAwareDBInForeground{
-    return [super syncAwareDBInForeground];
-}
-
-
-
-// add current sensor data to the buffer array
-//                                              [bufferArray addObject:dict];
-//
-//                                              if (currentBufferSize > [self getBufferSize]) {
-//                                                  currentBufferSize = 0;
-//
-//                                                  // make parent and child context from background data save
-//                                                  AppDelegate * delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
-//                                                  NSManagedObjectContext* parentContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
-//                                                  [parentContext setPersistentStoreCoordinator:delegate.persistentStoreCoordinator];
-//
-//                                                  NSManagedObjectContext* childContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-//                                                  [childContext setParentContext:parentContext];
-//
-//                                                  // Copy the buffer and remove the buffer objects
-//                                                  NSArray * array = [bufferArray copy];
-//                                                  [bufferArray removeAllObjects];
-//
-//                                                  [childContext performBlock:^{
-//                                                      if(![self isDBLock]){
-//                                                          [self lockDB];
-//                                                          // Convert a NSDictionary to a SQLite Entity
-//                                                          for (NSDictionary * bufferedData in array) {
-//                                                              // insert new data
-//                                                              [self insertNewEntityWithData:bufferedData managedObjectContext:childContext entityName:[self getEntityName]];
-//                                                          }
-//                                                          NSError *error = nil;
-//                                                          if (![childContext save:&error]) {
-//                                                              // An error is occued
-//                                                              NSLog(@"Error saving context: %@\n%@", [error localizedDescription], [error userInfo]);
-//                                                              [bufferArray addObjectsFromArray:array];
-//                                                          }else{
-//                                                              // sucess to marge diff to the main context manager
-//                                                              [parentContext performBlock:^{
-//                                                                  if(![parentContext save:nil]){
-//                                                                      // An error is occued
-//                                                                      NSLog(@"Error saving context");
-//                                                                      [bufferArray addObjectsFromArray:array];
-//                                                                  }
-//                                                                  [self unlockDB];
-//                                                              }];
-//                                                          }
-//
-//                                                      }else{
-//                                                          NSLog(@"[%@] The DB is lock by the other thread", [self getEntityName]);
-//                                                          [bufferArray addObjectsFromArray:array];
-//                                                      }
-//                                                  }];
-//
-//                                              }else{
-//                                                  currentBufferSize++;
-//                                              }
-
-
-
-// The observer object is needed when unregistering
-//    NSObject * observer =
-//    [[NSNotificationCenter defaultCenter] addObserverForName:@"Accelerometer.ACTION_AWARE_ACCELEROMETER" object:nil queue:nil usingBlock:^(NSNotification *notif) {
-//
-//        if ([[notif name] isEqualToString:@"Accelerometer.ACTION_AWARE_ACCELEROMETER"]) {
-//            NSDictionary *userInfo = notif.userInfo;
-//            CMAccelerometerData *dataObject = [userInfo objectForKey:@"Accelerometer.EXTRA_DATA"];
-//            // Your response to the notification should be placed here
-//            NSLog(@"acc x %f", dataObject.acceleration.x);
-//        }
-//    }];
-
-
-
-
-
-//                                              NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-//                                              [dic setObject:[AWAREUtils getUnixTimestamp:[NSDate new]] forKey:@"timestamp"];
-//                                              [dic setObject:[self getDeviceId] forKey:@"device_id"];
-//                                              [dic setObject:[NSNumber numberWithDouble:accelerometerData.acceleration.x] forKey:@"double_values_0"];
-//                                              [dic setObject:[NSNumber numberWithDouble:accelerometerData.acceleration.y] forKey:@"double_values_1"];
-//                                              [dic setObject:[NSNumber numberWithDouble:accelerometerData.acceleration.z] forKey:@"double_values_2"];
-//                                              [dic setObject:@0 forKey:@"accuracy"];
-//                                              [dic setObject:@"" forKey:@"label"];
-//                                              [self setLatestValue:[NSString stringWithFormat:
-//                                                                    @"%f, %f, %f",
-//                                                                    accelerometerData.acceleration.x,
-//                                                                accelerometerData.acceleration.y,
-//                                                                accelerometerData.acceleration.z]];
-//                                            dispatch_async(dispatch_get_main_queue(), ^{
-//                                                NSDictionary *userInfo = [NSDictionary dictionaryWithObject:accelerometerData
-//                                                                                                     forKey:@"Accelerometer.EXTRA_DATA"];
-//
-//                                                [[NSNotificationCenter defaultCenter] postNotificationName:@"Accelerometer.ACTION_AWARE_ACCELEROMETER"
-//                                                                                                    object:nil
-//                                                                                                  userInfo:userInfo];
-////                                              [self saveData:dic];
-//                                                // You can also unregister notification types/names using
-//                                                [[NSNotificationCenter defaultCenter] removeObserver:self name:@"Accelerometer.ACTION_AWARE_ACCELEROMETER" object:nil];
-//
-//
-//                                            });
-
-
-
-
-
-//////////////////////////////////////////////////////
-//                                              AppDelegate * delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
-//                                              NSManagedObjectContext* parentContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
-//                                              [parentContext setPersistentStoreCoordinator:delegate.persistentStoreCoordinator];
-//
-//                                              NSManagedObjectContext* childContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-//                                              [childContext setParentContext:parentContext];
-//                                              [childContext performBlock:^{
-//                                                  EntityAccelerometer * acc = (EntityAccelerometer *)[NSEntityDescription
-//                                                                            insertNewObjectForEntityForName:[self getEntityName]
-//                                                                            inManagedObjectContext:childContext];
-//                                                                            //inManagedObjectContext:delegate.managedObjectContext];
-//
-//                                                  acc.device_id = [self getDeviceId];
-//
-//                                                  acc.timestamp = [AWAREUtils getUnixTimestamp:[NSDate new]];
-//                                                  acc.double_values_0 = @(accelerometerData.acceleration.x);
-//                                                  acc.double_values_1 = @(accelerometerData.acceleration.y);
-//                                                  acc.double_values_2 = @(accelerometerData.acceleration.z);
-//                                                  acc.accuracy = @0;
-//                                                  acc.label = @"";
-//
-//                                                  NSError *error = nil;
-//                                                    [self lockDB];
-//                                                    if (![childContext save:&error]) {
-//                                                        NSLog(@"Error saving context: %@\n%@", [error localizedDescription], [error userInfo]);
-//                                                        // abort();
-//                                                    }
-//                                                    [parentContext performBlock:^{
-//                                                        if(![parentContext save:nil]){
-//                                                        }else{
-//                                                            [bufferArray removeAllObjects];
-//                                                        }
-//                                                        [self unlockDB];
-//                                                        NSLog(@"[%@] Unlock DB", [self getEntityName]);
-//                                                        // NSLog(@"save");
-//                                                    }];
-//                                              }];
-
-//////////////////////////////////////////////////
-
-//                                                  EntityAccelerometer * acc = nil;
-//                                                  @autoreleasepool {
-//                                                      //AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
-//                                                      acc = (EntityAccelerometer *)[NSEntityDescription
-//                                                                                insertNewObjectForEntityForName:[self getEntityName]
-//                                                                                inManagedObjectContext:[self getSensorManagedObjectContext]];
-//                                                                                //inManagedObjectContext:delegate.managedObjectContext];
-//
-//                                                      acc.device_id = [self getDeviceId];
-//
-//                                                      acc.timestamp = [AWAREUtils getUnixTimestamp:[NSDate new]];
-//                                                      acc.double_values_0 = @(accelerometerData.acceleration.x);
-//                                                      acc.double_values_1 = @(accelerometerData.acceleration.y);
-//                                                      acc.double_values_2 = @(accelerometerData.acceleration.z);
-//                                                      acc.accuracy = @0;
-//                                                      acc.label = @"";
-//
-//                                                      [self setLatestValue:[NSString stringWithFormat:@"%f, %f, %f",
-//                                                                            accelerometerData.acceleration.x,
-//                                                                            accelerometerData.acceleration.y,
-//                                                                            accelerometerData.acceleration.z]];
-//
-//                                                      NSDictionary *userInfo = [NSDictionary dictionaryWithObject:acc
-//                                                                                                           forKey:EXTRA_DATA];
-//                                                      [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_ACCELEROMETER
-//                                                                                                          object:nil
-//                                                                                       userInfo:userInfo];
-//                                                      [self saveDataToDB];
-//                                                  }
-
 
 @end

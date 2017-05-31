@@ -9,6 +9,9 @@
 #import "proximity.h"
 #import "EntityProximity.h"
 
+NSString* const AWARE_PREFERENCES_STATUS_PROXIMITY = @"status_proximity";
+NSString* const AWARE_PREFERENCES_FREQUENCY_PROXIMITY = @"frequency_proximity";
+
 @implementation Proximity
 
 - (instancetype)initWithAwareStudy:(AWAREStudy *)study dbType:(AwareDBType)dbType{
@@ -18,6 +21,8 @@
                               dbType:dbType
                           bufferSize:0];
     if (self) {
+        [self setCSVHeader:@[@"timestamp",@"device_id",@"double_proximity",@"accuracy",@"label"]];
+        [self addDefaultSettingWithBool:@NO key:AWARE_PREFERENCES_STATUS_PROXIMITY desc:@" true or false to activate or deactivate sensor."];
     }
     return self;
 }

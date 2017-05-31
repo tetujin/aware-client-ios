@@ -10,6 +10,10 @@
 #import <CoreLocation/CoreLocation.h>
 #import "AWAREKeys.h"
 
+extern NSString * const AWARE_PREFERENCES_STATUS_LOCATION_GPS;
+extern NSString * const AWARE_PREFERENCES_FREQUENCY_GPS;
+extern NSString * const AWARE_PREFERENCES_MIN_GPS_ACCURACY;
+
 @interface Locations : AWARESensor <AWARESensorDelegate, CLLocationManagerDelegate>
 
 - (BOOL) startSensor;

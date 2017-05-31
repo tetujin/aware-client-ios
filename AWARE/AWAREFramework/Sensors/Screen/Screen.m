@@ -18,6 +18,8 @@
 #import "AppDelegate.h"
 #import "EntityScreen.h"
 
+NSString * const AWARE_PREFERENCES_STATUS_SCREEN  = @"status_screen";
+
 @implementation Screen {
     int _notifyTokenForDidChangeLockStatus;
     int _notifyTokenForDidChangeDisplayStatus;
@@ -29,7 +31,8 @@
                         dbEntityName:NSStringFromClass([EntityScreen class])
                               dbType:dbType];
     if (self) {
-        
+        [self setCSVHeader:@[@"timestamp",@"device_id",@"screen_status"]];
+        [self addDefaultSettingWithBool:@NO key:AWARE_PREFERENCES_STATUS_SCREEN desc:@"true or false to activate or deactivate sensor."];
     }
     return self;
 }
@@ -74,7 +77,10 @@
 
 
 -(void)registerAppforDetectLockState {
-    notify_register_dispatch("com.apple.springboard.lockstate", &_notifyTokenForDidChangeLockStatus,dispatch_get_main_queue(), ^(int token) {
+    NSString * head = @"com.apple.springboard";
+    NSString * tail = @".lockstate";
+    
+    notify_register_dispatch((char *)[head stringByAppendingString:tail].UTF8String, &_notifyTokenForDidChangeLockStatus,dispatch_get_main_queue(), ^(int token) {
         
         uint64_t state = UINT64_MAX;
         notify_get_state(token, &state);
@@ -103,7 +109,7 @@
             awareScreenState = 2;
         }
         
-        NSLog(@"com.apple.springboard.lockstate = %llu", state);
+        NSLog(@"lockstate = %llu", state);
 
         [self saveScreenEvent:awareScreenState];
         
@@ -122,7 +128,10 @@
 
 
 - (void) registerAppforDetectDisplayStatus {
-    notify_register_dispatch("com.apple.iokit.hid.displayStatus", &_notifyTokenForDidChangeDisplayStatus,dispatch_get_main_queue(), ^(int token) {
+    NSString * head = @"com.apple.iokit.hid.";
+    NSString * tail = @".displayStatus";
+    
+    notify_register_dispatch((char *)[head stringByAppendingString:tail].UTF8String, &_notifyTokenForDidChangeDisplayStatus,dispatch_get_main_queue(), ^(int token) {
         
         uint64_t state = UINT64_MAX;
         notify_get_state(token, &state);

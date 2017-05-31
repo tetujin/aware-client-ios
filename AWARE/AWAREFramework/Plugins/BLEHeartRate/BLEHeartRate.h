@@ -16,6 +16,15 @@
 #define POLARH7_HRM_BODY_LOCATION_CHARACTERISTIC_UUID @"2A38"
 #define POLARH7_HRM_MANUFACTURER_NAME_CHARACTERISTIC_UUID @"2A29"
 
+extern NSString* const AWARE_PREFERENCES_STATUS_BLE_HR;
+
+/** (default = 5) in minutes */
+extern NSString * const AWARE_PREFERENCES_PLUGIN_BLE_HR_INTERVAL_TIME_MIN;
+
+/** (default = 30) in seconds */
+extern NSString * const AWARE_PREFERENCES_PLUGIN_BLE_HR_ACTIVE_TIME_SEC;
+
+
 @interface BLEHeartRate : AWARESensor <AWARESensorDelegate, CBCentralManagerDelegate, CBPeripheralDelegate>
 
 @property (nonatomic, strong) CBCentralManager *myCentralManager;

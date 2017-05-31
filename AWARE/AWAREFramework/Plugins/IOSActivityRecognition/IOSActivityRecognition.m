@@ -10,6 +10,11 @@
 #import "AppDelegate.h"
 #import "EntityIOSActivityRecognition+CoreDataClass.h"
 
+
+NSString * const AWARE_PREFERENCES_STATUS_IOS_ACTIVITY_RECOGNITION    = @"status_plugin_ios_activity_recognition";
+NSString * const AWARE_PREFERENCES_FREQUENCY_IOS_ACTIVITY_RECOGNITION = @"frequency_plugin_ios_activity_recognition";
+NSString * const AWARE_PREFERENCES_LIVE_MODE_IOS_ACTIVITY_RECOGNITION = @"status_plugin_ios_activity_recognition_live";
+
 @implementation IOSActivityRecognition {
     CMMotionActivityManager *motionActivityManager;
     NSString * KEY_TIMESTAMP_OF_LAST_UPDATE;
@@ -46,13 +51,27 @@
                         dbEntityName:NSStringFromClass([EntityIOSActivityRecognition class])
                               dbType:dbType];
     
-    
     if (self) {
         motionActivityManager = [[CMMotionActivityManager alloc] init];
         KEY_TIMESTAMP_OF_LAST_UPDATE = @"key_sensor_ios_activity_recognition_last_update_timestamp";
         defaultInterval = 60*3; // 3 min
         sensingMode = IOSActivityRecognitionModeLive;
         confidenceFilter = CMMotionActivityConfidenceLow;
+        [self setCSVHeader:@[@"timestamp",
+                             @"device_id",
+                             ACTIVITIES,
+                             CONFIDENCE,
+                             ACTIVITY_NAME_STATIONARY,
+                             ACTIVITY_NAME_WALKING,
+                             ACTIVITY_NAME_RUNNING,
+                             ACTIVITY_NAME_AUTOMOTIVE,
+                             ACTIVITY_NAME_CYCLING,
+                             ACTIVITY_NAME_UNKNOWN,
+                             LABEL]];
+        [self setTypeAsPlugin];
+        [self addDefaultSettingWithBool:@NO    key:AWARE_PREFERENCES_STATUS_IOS_ACTIVITY_RECOGNITION    desc:@"activate/deactivate plugin"];
+        [self addDefaultSettingWithNumber:@180 key:AWARE_PREFERENCES_FREQUENCY_IOS_ACTIVITY_RECOGNITION desc:@"How frequently to detect user's activity (in seconds)"];
+        [self addDefaultSettingWithNumber:@0   key:AWARE_PREFERENCES_LIVE_MODE_IOS_ACTIVITY_RECOGNITION desc:@"0=Off, 1=On (default setting is '0')"];
     }
     return self;
 }
@@ -61,17 +80,7 @@
     
     // creata original table
     NSString *query = [[NSString alloc] init];
-    
-    /*
-    query = @"_id integer primary key autoincrement,"
-    "timestamp real default 0,"
-    "device_id text default '',"
-    "activity_name text default '',"
-    "activity_type text default '',"
-    "confidence int default 4,"
-    "activities text default ''";
-    */
-    
+
     // https://developer.apple.com/reference/coremotion/cmmotionactivity?language=objc
     TCQMaker * tcqMaker = [[TCQMaker alloc] init];
     [tcqMaker addColumn:ACTIVITIES               type:TCQTypeText    default:@"''"  ];   // e.g., stationary,cycling
@@ -95,13 +104,18 @@
     NSLog(@"Start Motion Activity Manager! ");
     
     
-    double frequency = [self getSensorSetting:settings withKey:@"frequency_plugin_google_activity_recognition"];
+    double frequency = [self getSensorSetting:settings withKey:@"frequency_plugin_ios_activity_recognition"];
     if (frequency < defaultInterval) {
         frequency = defaultInterval;
     }
     
-    //return [self startSensorWithConfidenceFilter:CMMotionActivityConfidenceLow mode:IOSActivityRecognitionModeHistory interval:frequency];
-    return [self startSensorWithConfidenceFilter:CMMotionActivityConfidenceLow mode:IOSActivityRecognitionModeLive interval:frequency];
+    int liveMode = [self getSensorSetting:settings withKey:@"status_plugin_ios_activity_recognition_live"];
+    
+    if(liveMode == 1){
+        return [self startSensorWithConfidenceFilter:CMMotionActivityConfidenceLow mode:IOSActivityRecognitionModeLive interval:frequency];
+    }else{
+        return [self startSensorWithConfidenceFilter:CMMotionActivityConfidenceLow mode:IOSActivityRecognitionModeHistory interval:frequency];
+    }
 }
 
 
@@ -202,7 +216,7 @@
                 dispatch_async(dispatch_get_main_queue(), ^{
                     if ([self isDebug]) {
                         NSInteger count = activities.count;
-                        NSString * message = [NSString stringWithFormat:@"Activity Recognition Sensor is called by a timer (%ld activites)" ,count];
+                        NSString * message = [NSString stringWithFormat:@"iOA Activity Recognition Sensor is called by a timer (%ld activites)" ,count];
                         [AWAREUtils sendLocalNotificationForMessage:message soundFlag:NO];
                         
                     }
@@ -314,7 +328,7 @@
     [dict setObject:@(motionActivity.unknown)    forKey:ACTIVITY_NAME_UNKNOWN];   // 0 or 1
     [dict setObject:@""                          forKey:LABEL];
     
-    [self setLatestValue:[NSString stringWithFormat:@"%@ (%@)", activities, motionConfidence]];
+    [self setLatestValue:[NSString stringWithFormat:@"%@ (%@)", activitiesStr, motionConfidence]];
     [self saveData:dict];
     [self setLatestData:dict];
     

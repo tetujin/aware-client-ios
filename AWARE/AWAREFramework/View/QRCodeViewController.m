@@ -194,7 +194,14 @@
     for (NSString * component in pathComponents) {
         apiKey = component;
     }
-    NSString * requestUrl = [NSString stringWithFormat:@"https://%@/index.php/webservice/client_get_study_info/%@", url.host, apiKey];
+    
+    // NSLog(@"%@", url.absoluteString);
+    // https://r2d2.hcii.cs.cmu.edu/aware/dashboard/
+    NSRange indexRange = [url.absoluteString rangeOfString:@"index.php"];
+    NSString * baseURL = [url.absoluteString substringWithRange:NSMakeRange(0, indexRange.location)];
+    
+    // baseURL
+    NSString * requestUrl = [NSString stringWithFormat:@"%@index.php/webservice/client_get_study_info/%@", baseURL , apiKey];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
     [request setURL:[NSURL URLWithString:requestUrl]];
     [request setHTTPMethod:@"GET"];
@@ -208,17 +215,19 @@
         dispatch_async(dispatch_get_main_queue(),^{
             // Success
             if (response && ! error) {
-                NSString *responseString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+                // NSString *responseString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
                 // NSLog(@"Success: %@", responseString);
                 NSDictionary  * studyInfo    = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
                 NSString * studyTitle        = [studyInfo objectForKey:@"study_name"];
                 NSString * studyDescription  = [studyInfo objectForKey:@"study_description"];
                 NSString * researcherFirst   = [studyInfo objectForKey:@"researcher_first"];
-                NSString * researcherLast    = [studyInfo objectForKey:@"researcher_first"];
+                NSString * researcherLast    = [studyInfo objectForKey:@"researcher_last"];
                 NSString * researcherContact = [studyInfo objectForKey:@"researcher_contact"];
                 
+                NSString * description = [NSString stringWithFormat:@"[Description]\n%@\n\n[Researcher]\n%@ %@\n[Contact]\n%@", studyDescription,researcherFirst, researcherLast, researcherContact];
+                
                 UIAlertView * alert = [[UIAlertView alloc] initWithTitle:studyTitle
-                                                                 message:studyDescription
+                                                                 message:description
                                                                 delegate:self
                                                        cancelButtonTitle:@"Cancel"
                                                        otherButtonTitles:@"Join", nil];
@@ -231,6 +240,13 @@
                     // Install CRT file for SSL: If the error code is -1202, this device needs .crt for SSL(secure) connection.
                     [self installSSLCertificationFile];
                     [self joinStudy];
+                } else if (error.code == -1009){
+                    UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Network Error"
+                                                                     message:@"Please connect the Internet. The operation couldn't be completed."
+                                                                    delegate:self
+                                                           cancelButtonTitle:@"Close"
+                                                           otherButtonTitles:nil];
+                    [alert show];
                 }
             }
             [session finishTasksAndInvalidate];

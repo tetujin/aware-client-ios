@@ -8,12 +8,16 @@
 
 #import "GoogleLoginViewController.h"
 #import "ViewController.h"
+#import "GoogleLogin.h"
+#import "AppDelegate.h"
 
 @interface GoogleLoginViewController ()
 
 @end
 
-@implementation GoogleLoginViewController
+@implementation GoogleLoginViewController{
+    GoogleLogin * googleLogin;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -21,12 +25,16 @@
     [GIDSignIn sharedInstance].uiDelegate = self;
     [[GIDSignIn sharedInstance] signInSilently];
     
-    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-//    [defaults objectForKey:@"GOOGLE_ID"];
-//    [defaults objectForKey:@"GOOGLE_NAME"];
-//    [defaults objectForKey:@"GOOGLE_ID_TOKEN"];
-    NSString *email = [defaults objectForKey:@"GOOGLE_EMAIL"];
-    _account.text = email;
+    AppDelegate * delegate = (AppDelegate *) [UIApplication sharedApplication].delegate;
+    
+    googleLogin = [[GoogleLogin alloc] initWithAwareStudy:delegate.sharedAWARECore.sharedAwareStudy dbType:AwareDBTypeTextFile];
+    
+    _account.text = [GoogleLogin getGoogleAccountEmail];
+    if([GoogleLogin getGoogleAccountEmail] == nil){
+        [self accountIsEmpty];
+    }else{
+        [self accountIsExist];
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -34,6 +42,19 @@
     // Dispose of any resources that can be recreated.
 }
 
+
+//////////////////////////
+- (void) accountIsExist{
+    NSString * message = @"Thank you for registering your Google Account.";
+    _messageLabel.text = message;
+}
+
+- (void) accountIsEmpty{
+    NSString * message = @"Google Login is required for this study. Please tap to Login to your account.";
+    _messageLabel.text = message;
+}
+
+/////////////////////////
 
 // Implement these methods only if the GIDSignInUIDelegate is not a subclass of
 // UIViewController.
@@ -47,40 +68,52 @@
 // Present a view that prompts the user to sign in with Google
 - (void)signIn:(GIDSignIn *)signIn presentViewController:(UIViewController *)viewController {
     [self presentViewController:viewController animated:YES completion:nil];
-    
-    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-    [defaults objectForKey:@"GOOGLE_ID"];
-    [defaults objectForKey:@"GOOGLE_NAME"];
-    [defaults objectForKey:@"GOOGLE_ID_TOKEN"];
-    
-    NSString *email = [defaults objectForKey:@"GOOGLE_EMAIL"];
-    _account.text = email;
+
+    _account.text = [GoogleLogin getGoogleAccountEmail];
 }
 
 // Dismiss the "Sign in with Google" view
 - (void)signIn:(GIDSignIn *)signIn
 dismissViewController:(UIViewController *)viewController {
     [self dismissViewControllerAnimated:YES completion:nil];
-//    [self.navigationController popToRootViewControllerAnimated:YES];
+    [self performSelector:@selector(showGoogleInfo) withObject:nil afterDelay:1];
+    
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSString * userId = [defaults objectForKey:@"GOOGLE_ID"];
+    if(userId == nil){
+        [self.navigationController popToRootViewControllerAnimated:YES];
+    }
+}
+
+- (void) showGoogleInfo{
+    _account.text = [GoogleLogin getGoogleAccountEmail];
+    if(_account.text != nil){
+        UIAlertView *av = [[UIAlertView alloc]initWithTitle:@"Login is successed"
+                                                    message:@"Google account information is stored to the local-storage."
+                                                   delegate:self
+                                          cancelButtonTitle:nil
+                                          otherButtonTitles:@"Close", nil];
+        [av show];
+        [self accountIsExist];
+    }else{
+        [self accountIsEmpty];
+    }
 }
 
 - (IBAction)didTapSignOut:(id)sender {
     [[GIDSignIn sharedInstance] signOut];
-    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-    [defaults removeObjectForKey:@"GOOGLE_ID"];
-    [defaults removeObjectForKey:@"GOOGLE_NAME"];
-    [defaults removeObjectForKey:@"GOOGLE_EMAIL"];
-    [defaults removeObjectForKey:@"GOOGLE_ID_TOKEN"];
-    [defaults removeObjectForKey:@"GOOGLE_PHONE"];
     
-    UIAlertView *av = [[UIAlertView alloc]initWithTitle:@"Success"
-                                                message:nil
+    [GoogleLogin deleteGoogleAccountFromLocalStorage];
+    
+    UIAlertView *av = [[UIAlertView alloc]initWithTitle:@"Logout is successed"
+                                                message:@"Logout from Google Account, and remove Google account information from local storage."
                                                delegate:self
                                       cancelButtonTitle:nil
-                                      otherButtonTitles:@"OK", nil];
+                                      otherButtonTitles:@"Close", nil];
     [av show];
     
     _account.text = @"";
+    [self accountIsEmpty];
 }
 
 /*

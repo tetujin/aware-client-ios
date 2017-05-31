@@ -17,10 +17,10 @@
 
 
 typedef enum: NSInteger {
-    AwareDBTypeCoreData = 0,
-    AwareDBTypeTextFile = 1
-} AwareDBType;
-
+    AwareSettingTypeBool   = 0,
+    AwareSettingTypeString = 1,
+    AwareSettingTypeNumber = 2
+} AwareSettingType;
 
 
 @protocol AWARESensorDelegate <NSObject>
@@ -28,6 +28,7 @@ typedef enum: NSInteger {
 - (BOOL) startSensorWithSettings:(NSArray *)settings;
 - (BOOL) startSensor;
 - (BOOL) stopSensor;
+- (BOOL) quitSensor;
 - (void) syncAwareDB;
 - (void) createTable;
 - (void) changedBatteryState;
@@ -49,6 +50,34 @@ typedef enum: NSInteger {
 - (instancetype) initWithAwareStudy:(AWAREStudy *) study sensorName:(NSString *)name dbEntityName:(NSString *)entity dbType:(AwareDBType)dbType;
 - (instancetype) initWithAwareStudy:(AWAREStudy *) study sensorName:(NSString *)name dbEntityName:(NSString *)entity dbType:(AwareDBType)dbType bufferSize:(int)buffer;
 
+- (NSArray *) getDefaultSettings;
+
+- (void) addDefaultSettingWithBool:(NSNumber *)boolValue   key:(NSString *)key desc:(NSString *)desc;
+- (void) addDefaultSettingWithString:(NSString *)strValue key:(NSString *)key desc:(NSString *)desc;
+- (void) addDefaultSettingWithNumber:(NSNumber *)numberValue key:(NSString *)key desc:(NSString *)desc;
+
+// set & get settings
+//- (void) setDefaultSettingWithString:(NSString *) value key:(NSString *) key;
+//- (void) setDefaultSettingWithNumber:(NSNumber *) value key:(NSString *) key;
+//- (void) setDefaultSettings:(NSDictionary *) dict;
+//- (NSDictionary *) getDefaultSettings;
+//- (NSString *) getKeyForDefaultSettings;
+
+- (void) setSensorStatusKey:(NSString *)key;
+- (NSString *) getSensorStatusKey;
+
+- (void) setTypeAsPlugin;
+- (void) setTypeAsSensor;
+- (bool) isPlugin;
+- (bool) isSensor;
+
+//+ (NSString *) sensorTitle;
+//+ (NSString *) sensorDescription;
+//+ (NSString *) sensorKey;
+//+ (NSString *) sensorIconName;
+//+ (NSString *) sensorDeveloper;
+//+ (NSString *) sensorDeveloperURL;
+
 // save debug events
 - (void) trackDebugEvents;
 - (bool) saveDebugEventWithText:(NSString *)eventText type:(NSInteger)type label:(NSString *)label;
@@ -64,6 +93,7 @@ typedef enum: NSInteger {
 
 - (NSString *) getDeviceId;
 - (double) getSensorSetting:(NSArray *)settings withKey:(NSString *)key;
+- (NSString *)getSettingAsStringFromSttings:(NSArray *)settings withKey:(NSString *)key;
 - (bool) isUploading;
 
 // create table
@@ -82,6 +112,9 @@ typedef enum: NSInteger {
 - (int) getFetchBatchSize;
 - (int) getBufferSize;
 
+- (void) resetMarkerPosition;
+- (int)  getMarkerPosition;
+
 - (void) setDataStoring:(BOOL)state;
 - (void) startDataStoring;
 - (void) stopDataStoring;
@@ -97,6 +130,7 @@ typedef enum: NSInteger {
 
 // sync data
 - (void) syncAwareDB;
+- (void) syncAwareDBWithSensorName:(NSString *)name;
 - (BOOL) syncAwareDBInForeground;
 - (BOOL) syncAwareDBWithData:(NSDictionary *) dictionary;
 
@@ -105,6 +139,8 @@ typedef enum: NSInteger {
 - (void) forbidCellularAccess;
 - (void) allowsDateUploadWithoutBatteryCharging;
 - (void) forbidDatauploadWithoutBatteryCharging;
+
+- (NSData *) getCSVData;
 
 // show progress of uploading
 - (NSString *) getSyncProgressAsText;

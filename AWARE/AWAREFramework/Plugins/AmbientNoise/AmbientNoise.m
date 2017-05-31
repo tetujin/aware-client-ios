@@ -13,6 +13,17 @@
 
 static vDSP_Length const FFTViewControllerFFTWindowSize = 4096;
 
+NSString * const AWARE_PREFERENCES_STATUS_PLUGIN_AMBIENT_NOISE = @"status_plugin_ambient_noise";
+
+/** How frequently do we sample the microphone (default = 5) in minutes */
+NSString * const AWARE_PREFERENCES_FREQUENCY_PLUGIN_AMBIENT_NOISE = @"frequency_plugin_ambient_noise";
+
+/** For how long we listen (default = 30) in seconds */
+NSString * const AWARE_PREFERENCES_PLUGIN_AMBIENT_NOISE_SAMPLE_SIZE = @"plugin_ambient_noise_sample_size";
+
+/** Silence threshold (default = 50) in dB */
+NSString * const AWARE_PREFERENCES_PLUGIN_AMBIENT_NOISE_SILENCE_THRESHOLD = @"plugin_ambient_noise_silence_threshold";
+
 @implementation AmbientNoise{
     NSString * KEY_AMBIENT_NOISE_TIMESTAMP;
     NSString * KEY_AMBIENT_NOISE_DEVICE_ID;
@@ -22,10 +33,6 @@ static vDSP_Length const FFTViewControllerFFTWindowSize = 4096;
     NSString * KEY_AMBIENT_NOISE_SILENT;
     NSString * KEY_AMBIENT_NOISE_SILENT_THRESHOLD;
     NSString * KEY_AMBIENT_NOISE_RAW;
-    
-    NSString * FREQUENCY_PLUGIN_AMBIENT_NOISE;
-    NSString * PLUGIN_AMBIENT_NOISE_SAMPLE_SIZE;
-    NSString * PLUGIN_AMBIENT_NOISE_SILENCE_THRESHOLD;
     
     NSTimer *timer;
     
@@ -66,20 +73,28 @@ static vDSP_Length const FFTViewControllerFFTWindowSize = 4096;
         KEY_AMBIENT_NOISE_SILENT_THRESHOLD = @"double_silent_threshold";
         KEY_AMBIENT_NOISE_RAW = @"blob_raw";
         
+        [self setCSVHeader:@[KEY_AMBIENT_NOISE_TIMESTAMP,
+                             KEY_AMBIENT_NOISE_DEVICE_ID,
+                             KEY_AMBIENT_NOISE_FREQUENCY,
+                             KEY_AMBIENT_NOISE_DECIDELS,
+                             KEY_AMBIENT_NOISE_RMS,
+                             KEY_AMBIENT_NOISE_SILENT,
+                             KEY_AMBIENT_NOISE_SILENT_THRESHOLD,
+                             KEY_AMBIENT_NOISE_RAW]];
         /**
          * How frequently do we sample the microphone (default = 5) in minutes
          */
-        FREQUENCY_PLUGIN_AMBIENT_NOISE = @"frequency_plugin_ambient_noise";
+        // FREQUENCY_PLUGIN_AMBIENT_NOISE = @"frequency_plugin_ambient_noise";
         
         /**
          * For how long we listen (default = 30) in seconds
          */
-        PLUGIN_AMBIENT_NOISE_SAMPLE_SIZE = @"plugin_ambient_noise_sample_size";
+        // PLUGIN_AMBIENT_NOISE_SAMPLE_SIZE = @"plugin_ambient_noise_sample_size";
         
         /**
          * Silence threshold (default = 50) in dB
          */
-        PLUGIN_AMBIENT_NOISE_SILENCE_THRESHOLD = @"plugin_ambient_noise_silence_threshold";
+        // PLUGIN_AMBIENT_NOISE_SILENCE_THRESHOLD = @"plugin_ambient_noise_silence_threshold";
         
         frequencyMin = 5;
         sampleSize = 30;
@@ -103,6 +118,13 @@ static vDSP_Length const FFTViewControllerFFTWindowSize = 4096;
 //        _resampleOutputBuffer.bufferPtr = (float*)malloc(_resampleOutputBuffer.bufferSize * sizeof(float));
         
         [self createRawAudioDataDirectory];
+        
+        [self setTypeAsPlugin];
+        
+        [self addDefaultSettingWithBool:@NO key:AWARE_PREFERENCES_STATUS_PLUGIN_AMBIENT_NOISE desc:@"activate/deactivate ambient noise plugin"];
+        [self addDefaultSettingWithNumber:@5 key:AWARE_PREFERENCES_FREQUENCY_PLUGIN_AMBIENT_NOISE desc:@"How frequently do we sample the microphone (default = 5) in minutes"];
+        [self addDefaultSettingWithNumber:@30 key:AWARE_PREFERENCES_PLUGIN_AMBIENT_NOISE_SAMPLE_SIZE desc:@"For how long we listen (default = 30) in seconds"];
+        [self addDefaultSettingWithNumber:@50 key:AWARE_PREFERENCES_PLUGIN_AMBIENT_NOISE_SILENCE_THRESHOLD desc:@"Silence threshold (default = 50) in dB"];
     }
     return self;
 }
@@ -137,17 +159,17 @@ static vDSP_Length const FFTViewControllerFFTWindowSize = 4096;
     NSLog(@"Start Ambient Noise Sensor!");
 //    [self setBufferSize:100];
     
-    frequencyMin = [self getSensorSetting:settings withKey:FREQUENCY_PLUGIN_AMBIENT_NOISE];
+    frequencyMin = [self getSensorSetting:settings withKey:AWARE_PREFERENCES_FREQUENCY_PLUGIN_AMBIENT_NOISE];
     if (frequencyMin <= 0) {
         frequencyMin = 5;
     }
     
-    sampleSize = [self getSensorSetting:settings withKey:PLUGIN_AMBIENT_NOISE_SAMPLE_SIZE];
+    sampleSize = [self getSensorSetting:settings withKey:AWARE_PREFERENCES_PLUGIN_AMBIENT_NOISE_SAMPLE_SIZE];
     if (sampleSize <= 0) {
         sampleSize = 30;
     }
     
-    silenceThreshold = [self getSensorSetting:settings withKey:PLUGIN_AMBIENT_NOISE_SILENCE_THRESHOLD];
+    silenceThreshold = [self getSensorSetting:settings withKey:AWARE_PREFERENCES_PLUGIN_AMBIENT_NOISE_SILENCE_THRESHOLD];
     if (silenceThreshold <= 0){
         silenceThreshold = 50;
     }
@@ -214,8 +236,11 @@ static vDSP_Length const FFTViewControllerFFTWindowSize = 4096;
     //
     AVAudioSession *session = [AVAudioSession sharedInstance];
     NSError *error;
-    [session setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionInterruptSpokenAudioAndMixWithOthers|
-     AVAudioSessionCategoryOptionDefaultToSpeaker | AVAudioSessionCategoryOptionAllowBluetooth error:&error];
+    [session setCategory:AVAudioSessionCategoryPlayAndRecord
+             withOptions:AVAudioSessionCategoryOptionInterruptSpokenAudioAndMixWithOthers |
+                         AVAudioSessionCategoryOptionDefaultToSpeaker |
+                         AVAudioSessionCategoryOptionAllowBluetooth
+                   error:&error];
     if (error) {
         NSLog(@"Error setting up audio session category: %@", error.localizedDescription);
     }
@@ -412,6 +437,7 @@ static vDSP_Length const FFTViewControllerFFTWindowSize = 4096;
     dispatch_async(dispatch_get_main_queue(), ^{
         // Update UI here
         NSLog(@"Changed input device: %@", device);
+        
     });
 }
 
@@ -443,7 +469,8 @@ static vDSP_Length const FFTViewControllerFFTWindowSize = 4096;
       hasAudioReceived:(float **)buffer
         withBufferSize:(UInt32)bufferSize
   withNumberOfChannels:(UInt32)numberOfChannels{
-    __weak typeof (self) weakSelf = self;
+    // __weak typeof (self) weakSelf = self;
+    
     // Getting audio data as an array of float buffer arrays that can be fed into the
     // EZAudioPlot, EZAudioPlotGL, or whatever visualization you would like to do with
     // the microphone data.

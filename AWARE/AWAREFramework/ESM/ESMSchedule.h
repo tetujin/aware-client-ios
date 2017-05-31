@@ -13,31 +13,54 @@
 @property (strong, nonatomic) NSString* identifier;
 @property (strong, nonatomic) NSMutableArray * scheduledESMs;
 @property (strong, nonatomic) NSMutableArray * fireDates;
+@property (strong, nonatomic) NSArray * fireHours;
 @property (nonatomic) NSCalendarUnit interval;
 @property (strong, nonatomic) NSString* title;
 @property (strong, nonatomic) NSString* body;
 @property (strong, nonatomic) NSString* category;
 @property (nonatomic) NSInteger icon;
 @property (nonatomic) NSInteger timeoutSecond;
+@property (strong, nonatomic) NSNumber *  randomizeSchedule;
+@property (strong, nonatomic) NSArray  *  context;
+@property (strong, nonatomic) NSNumber *  expiration;
+@property (strong, nonatomic) NSDate *  startDate;
+@property (strong, nonatomic) NSDate *  endDate;
 
 - (instancetype)initWithIdentifier:(NSString*)esmIdentifier;
+
 - (instancetype)initWithIdentifier:(NSString *)esmIdentifier
                      scheduledESMs:(NSMutableArray *) esms
-                         fireDates:(NSMutableArray *) dates
+                             fireHours:(NSArray *) hours
                              title:(NSString *) notificationTitle
                               body:(NSString *) notificationBody
                           interval:(NSCalendarUnit) interval
                           category:(NSString *) notificationCategory
                               icon:(NSInteger) iconNumber;
+
 - (instancetype)initWithIdentifier:(NSString *)esmIdentifier
                      scheduledESMs:(NSMutableArray *) esms
-                         fireDates:(NSMutableArray *) dates
+                             fireHours:(NSArray *) hours
                              title:(NSString *) notificationTitle
                               body:(NSString *) notificationBody
                           interval:(NSCalendarUnit) interval
                           category:(NSString *) notificationCategory
                               icon:(NSInteger) iconNumber
                            timeout:(NSInteger) second;
+
+
+- (instancetype)initWithIdentifier:(NSString *)esmIdentifier
+                     scheduledESMs:(NSMutableArray *) esms
+                             fireHours:(NSArray *) hours
+                             title:(NSString *) notificationTitle
+                              body:(NSString *) notificationBody
+                          interval:(NSCalendarUnit) interval
+                          category:(NSString *) notificationCategory
+                              icon:(NSInteger) iconNumber
+                           timeout:(NSInteger) second
+                 randomizeSchedule:(NSNumber *) randomizeSchedule
+                           context:(NSArray  *) context
+                         startDate:(NSDate *) start
+                           endDate:(NSDate *) end;
 
 // esms
 - (void) addESM:(NSDictionary *) esm;

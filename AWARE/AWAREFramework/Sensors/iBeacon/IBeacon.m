@@ -22,6 +22,7 @@
         // Initialize location manager and set ourselves as the delegate
 //        self.locationManager = [[CLLocationManager alloc] init];
 //        self.locationManager.delegate = self;
+        //[self setCSVHeader:@[@"timestamp",@"device_id"]];
     }
     return self;
 }

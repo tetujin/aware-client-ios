@@ -18,6 +18,10 @@
 #import "EntityGravity.h"
 #import "AppDelegate.h"
 
+NSString* const AWARE_PREFERENCES_STATUS_GRAVITY = @"status_gravity";
+NSString* const AWARE_PREFERENCES_FREQUENCY_GRAVITY = @"frequency_gravity";
+NSString* const AWARE_PREFERENCES_FREQUENCY_HZ_GRAVITY = @"frequency_hz_gravity";;
+
 @implementation Gravity {
     CMMotionManager* motionManager;
     double sensingInterval;
@@ -33,6 +37,11 @@
         motionManager = [[CMMotionManager alloc] init];
         sensingInterval = 0.1f;
         dbWriteInterval = 30;
+        [self setCSVHeader:@[@"timestamp",@"device_id", @"double_values_0", @"double_values_1",@"double_values_2", @"accuracy",@"label"]];
+        [self addDefaultSettingWithBool:@NO       key:AWARE_PREFERENCES_STATUS_GRAVITY        desc:@"e.g., true or false"];
+        [self addDefaultSettingWithNumber:@200000 key:AWARE_PREFERENCES_FREQUENCY_GRAVITY     desc:@"e.g., 200000 (normal), 60000 (UI), 20000 (game), 0 (fastest)."];
+        [self addDefaultSettingWithNumber:@0      key:AWARE_PREFERENCES_FREQUENCY_HZ_GRAVITY  desc:@"e.g., 100-1Hz(default=0)"];
+
     }
     return self;
 }
@@ -59,6 +68,12 @@
         double iOSfrequency = [self convertMotionSensorFrequecyFromAndroid:frequency];
         interval = iOSfrequency;
     }
+    
+    double tempHz = [self getSensorSetting:settings withKey:AWARE_PREFERENCES_FREQUENCY_HZ_GRAVITY];
+    if(tempHz > 0){
+       interval = 1.0f/tempHz;
+    }
+
     
     int buffer = dbWriteInterval/interval;
     

@@ -10,6 +10,9 @@
 #import "AWAREKeys.h"
 #import <CoreMotion/CoreMotion.h>
 
+extern NSString* const AWARE_PREFERENCES_STATUS_BAROMETER;
+extern NSString* const AWARE_PREFERENCES_FREQUENCY_BAROMETER;
+
 @interface Barometer : AWARESensor <AWARESensorDelegate>
 
 - (BOOL) startSensor;

@@ -18,8 +18,15 @@
 //                   name:(NSString* )name
 //                  email:(NSString *)email;
 
+
+
 - (void) setGoogleAccountWithUserId:(NSString *)userId
                                name:(NSString* )name
                               email:(NSString *)email;
+
++ (void) deleteGoogleAccountFromLocalStorage;
++ (NSString *) getGoogleAccountId;
++ (NSString *) getGoogleAccountName;
++ (NSString *) getGoogleAccountEmail;
 
 @end

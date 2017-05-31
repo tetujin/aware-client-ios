@@ -7,10 +7,16 @@
 //
 
 #import "AWARESensor.h"
-
+#import "ESMSchedule.h"
 
 @interface WebESM : AWARESensor <AWARESensorDelegate, NSURLSessionDataDelegate> //NSURLSessionTaskDelegate
 
+/////////////////////////////////////////////////////////
+
+- (BOOL) setWebESMsWithSchedule:(ESMSchedule *) esmSchedule;
+// - (void) setWebESMsWithArray:(NSArray *) webESMArray;
+
+/////////////////////////////////////////////////////////
 - (NSArray *) getValidESMsWithDatetime:(NSDate *) datetime;
 - (void) saveESMAnswerWithTimestamp:(NSNumber * )timestamp
                            deviceId:(NSString *) deviceId

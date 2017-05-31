@@ -16,6 +16,7 @@
 #import "SingleESMObject.h"
 #import "ESMStorageHelper.h"
 #import "AppDelegate.h"
+// #import "IOSESM.h"
 
 #import "PamSchema.h"
 #import "QuartzCore/CALayer.h"
@@ -964,7 +965,7 @@
     NSArray * elements = [uiElement objectForKey:KEY_ELEMENT];
     
     NSMutableArray * array = [[NSMutableArray alloc] initWithArray:elements];
-    NSNumber * unixtime = [AWAREUtils getUnixTimestamp:[NSDate new]];
+    NSNumber * unixtime = [AWAREUtils getUnixTimestamp:sender.date];
     [array setObject:unixtime atIndexedSubscript:0];
     
     [uiElement setObject:array forKey:KEY_ELEMENT];
@@ -1072,6 +1073,7 @@
     NSMutableArray * buttons = [elements objectForKey:KEY_ELEMENT];
     NSString *  selected = sender.titleLabel.text;
     for (UIButton * uiButton in buttons) {
+        
         uiButton.layer.borderWidth = 0;
         uiButton.selected = NO;
         if ([uiButton.titleLabel.text isEqualToString:selected]) {
@@ -1185,10 +1187,10 @@
     ESM *esm = [[ESM alloc] initWithAwareStudy:study
                                         dbType:AwareDBTypeTextFile];
     
-    NSNumber *NEW = @0;
+    // NSNumber *NEW = @0;
     NSNumber *DISMISSED = @1;
     NSNumber *ANSWERED = @2;
-    NSNumber *EXPIRED = @3;
+    // NSNumber *EXPIRED = @3;
     
 //    double timeStamp = [[NSDate date] timeIntervalSince1970] * 1000;
 //    NSNumber* unixtime = [NSNumber numberWithLong:timeStamp];
@@ -1616,6 +1618,7 @@
                                                                       type:@0
                                                                      title:@""
                                                               instructions:@""
+                                                                    submit:@""
                                                        expirationThreshold:@0
                                                                    trigger:@""];
     
