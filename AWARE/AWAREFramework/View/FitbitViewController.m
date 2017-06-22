@@ -38,7 +38,21 @@
 //    layer.cornerRadius = 2.0;
 //    button.layer.borderWidth = [UIColor BlackColor];
 //    button.borderWidth = 1.0;
+    
 }
+
+
+- (void)viewDidAppear:(BOOL)animated{
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(getData:)
+                                                 name:@"action.aware.plugin.fitbit.get.activity.debug"
+                                               object:nil];
+}
+
+- (void)viewDidDisappear:(BOOL)animated{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"action.aware.plugin.fitbit.get.activity.debug" object:nil];
+}
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -165,28 +179,49 @@
 
 - (IBAction)pushedApplyButton:(id)sender {
     
-    NSUserDefaults * userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults setObject:_apiKeyField.text forKey:@"fitbit.setting.client_id"];
-    [userDefaults setObject:_apiSecretField.text forKey:@"fitbit.setting.api_secret"];
-  
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Confirmation"
+                                                                            message:@"Do you update your current setting?"
+                                                                     preferredStyle:UIAlertControllerStyleAlert];
     
-    // NSDate * lastSyncStepData = [FitbitData getLastSyncSteps];
-    NSDate * date = _lastUpdateDatePicker.date;
+    [alertController addAction:[UIAlertAction actionWithTitle:@"YES"
+                                                        style:UIAlertActionStyleDestructive
+                                                      handler:^(UIAlertAction *action) {
+                                                          NSUserDefaults * userDefaults = [NSUserDefaults standardUserDefaults];
+                                                          [userDefaults setObject:_apiKeyField.text forKey:@"fitbit.setting.client_id"];
+                                                          [userDefaults setObject:_apiSecretField.text forKey:@"fitbit.setting.api_secret"];
+                                                          
+                                                          
+                                                          // NSDate * lastSyncStepData = [FitbitData getLastSyncSteps];
+                                                          NSDate * date = _lastUpdateDatePicker.date;
+                                                          
+                                                          [FitbitData setLastSyncSteps:date];
+                                                          [FitbitData setLastSyncSleep:date];
+                                                          [FitbitData setLastSyncCalories:date];
+                                                          [FitbitData setLastSyncHeartrate:date];
+
+                                                      }]];
     
-    [FitbitData setLastSyncSteps:date];
-    [FitbitData setLastSyncSleep:date];
-    [FitbitData setLastSyncCalories:date];
-    [FitbitData setLastSyncHeartrate:date];
+    [alertController addAction:[UIAlertAction actionWithTitle:@"NO"
+                                                        style:UIAlertActionStyleCancel
+                                                      handler:^(UIAlertAction *action) {
+                                                      }]];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
+    
 }
+
+
 
 - (IBAction)pushedInfoButton:(id)sender {
     NSUserDefaults * userDefaults = [NSUserDefaults standardUserDefaults];
     NSString * apiKey = [userDefaults objectForKey:@"fitbit.setting.client_id"];
     NSString * apiSecret = [userDefaults objectForKey:@"fitbit.setting.api_secret"];
+    NSString * code = [userDefaults objectForKey:@"fitbit.setting.code"];
     
-    NSString * message = [NSString stringWithFormat:@"API Key: %@\nAPI Secret: %@\nAccess Token: %@\nRefresh Token: %@\nUser ID: %@\nToken Type: %@",
+    NSString * message = [NSString stringWithFormat:@"API Key: %@\nAPI Secret: %@\nCode: %@\nAccess Token: %@\nRefresh Token: %@\nUser ID: %@\nToken Type: %@",
                           apiKey,
                           apiSecret,
+                          code,
                           [Fitbit getFitbitAccessToken],
                           [Fitbit getFitbitRefreshToken],
                           [Fitbit getFitbitUserId],
@@ -195,55 +230,142 @@
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Current Tokens"
                                                                              message:message
                                                                       preferredStyle:UIAlertControllerStyleAlert];
-    [self presentViewController:alertController animated:YES completion:nil];
     [alertController addAction:[UIAlertAction actionWithTitle:@"Close"
-                                                        style:UIAlertActionStyleDefault
+                                                        style:UIAlertActionStyleCancel
                                                       handler:^(UIAlertAction *action) {
                                                           
                                                       }]];
-//
-//    [alertController addAction:[UIAlertAction actionWithTitle:@"NO"
-//                                                        style:UIAlertActionStyleDefault
-//                                                      handler:^(UIAlertAction *action) {
-//                                                          
-//                                                      }]];
+    [self presentViewController:alertController animated:YES completion:nil];
+
     
 }
 
 - (IBAction)pushedClearSettingButton:(id)sender {
-    [Fitbit clearAllSettings];
-    [self showAllSetting];
+    
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Warning"
+                                                                             message:@"Do you clear your current setting?"
+                                                                      preferredStyle:UIAlertControllerStyleAlert];
+    
+    [alertController addAction:[UIAlertAction actionWithTitle:@"YES"
+                                                        style:UIAlertActionStyleDestructive
+                                                      handler:^(UIAlertAction *action) {
+                                                          [Fitbit clearAllSettings];
+                                                          [self showAllSetting];
+                                                      }]];
+    
+    [alertController addAction:[UIAlertAction actionWithTitle:@"NO"
+                                                        style:UIAlertActionStyleCancel
+                                                      handler:^(UIAlertAction *action) {
+                                                      }]];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
+    
 }
 
 - (IBAction)pushedRefreshTokenButton:(id)sender {
-    [fitbit refreshToken];
-    [self showAllSetting];
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Confirmation"
+                                                                             message:@"Do you refresh your access token?"
+                                                                      preferredStyle:UIAlertControllerStyleAlert];
+    
+    [alertController addAction:[UIAlertAction actionWithTitle:@"YES"
+                                                        style:UIAlertActionStyleDefault
+                                                      handler:^(UIAlertAction *action) {
+                                                          [fitbit refreshToken];
+                                                          [self showAllSetting];
+                                                      }]];
+    
+    [alertController addAction:[UIAlertAction actionWithTitle:@"NO"
+                                                        style:UIAlertActionStyleCancel
+                                                      handler:^(UIAlertAction *action) {
+                                                      }]];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
+    
+
 }
 
 - (IBAction)pushedLoginButton:(id)sender {
-    NSUserDefaults * userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults setObject:_apiKeyField.text forKey:@"fitbit.setting.client_id"];
-    [userDefaults setObject:_apiSecretField.text forKey:@"fitbit.setting.api_secret"];
     
-    [fitbit loginWithOAuth2WithClientId:_apiKeyField.text apiSecret:_apiSecretField.text];
-    [self showAllSetting];
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Confirmation"
+                                                                             message:@"Do you login to Fitbit with current setting?"
+                                                                      preferredStyle:UIAlertControllerStyleAlert];
+    
+    [alertController addAction:[UIAlertAction actionWithTitle:@"YES"
+                                                        style:UIAlertActionStyleDefault
+                                                      handler:^(UIAlertAction *action) {
+                                                          dispatch_async(dispatch_get_main_queue(), ^{
+                                                              // [self presentViewController:alertController animated:YES completion:nil];
+                                                              NSUserDefaults * userDefaults = [NSUserDefaults standardUserDefaults];
+                                                              [userDefaults setObject:_apiKeyField.text forKey:@"fitbit.setting.client_id"];
+                                                              [userDefaults setObject:_apiSecretField.text forKey:@"fitbit.setting.api_secret"];
+                                                              
+                                                              [fitbit loginWithOAuth2WithClientId:_apiKeyField.text apiSecret:_apiSecretField.text];
+                                                              [self showAllSetting];
+                                                          });
+                                                      }]];
+    
+    [alertController addAction:[UIAlertAction actionWithTitle:@"NO"
+                                                        style:UIAlertActionStyleCancel
+                                                      handler:^(UIAlertAction *action) {
+                                                      }]];
+    [self presentViewController:alertController animated:YES completion:nil];
 }
 
 - (IBAction)pushedGetLatestDataButton:(id)sender {
-    NSDictionary * settings = [[NSDictionary alloc] initWithObjects:@[@"all"] forKeys:@[@"type"]];
-    NSTimer * timer = [[NSTimer alloc] initWithFireDate:[NSDate new]
-                                               interval:1 target:fitbit
-                                               selector:@selector(getData:)
-                                               userInfo:settings
-                                                repeats:NO];
-    [timer fire];
-    [self performSelector:@selector(showAllSetting) withObject:nil afterDelay:3];
-    // [self showAllSetting];
-    // [fitbit getData:timer];
+    
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Confirmation"
+                                                                             message:@"Do you access Fitbit server to get the latest data? The response will be shown on alerts."
+                                                                      preferredStyle:UIAlertControllerStyleAlert];
+    
+    [alertController addAction:[UIAlertAction actionWithTitle:@"YES"
+                                                        style:UIAlertActionStyleDefault
+                                                      handler:^(UIAlertAction *action) {
+                                                          NSDate * date = _lastUpdateDatePicker.date;
+                                                          [FitbitData setLastSyncSteps:date];
+                                                          [FitbitData setLastSyncSleep:date];
+                                                          [FitbitData setLastSyncCalories:date];
+                                                          [FitbitData setLastSyncHeartrate:date];
+                                                          
+                                                          NSDictionary * settings = [[NSDictionary alloc] initWithObjects:@[@"all"] forKeys:@[@"type"]];
+                                                          NSTimer * timer = [[NSTimer alloc] initWithFireDate:[NSDate new]
+                                                                                                     interval:1 target:fitbit
+                                                                                                     selector:@selector(getData:)
+                                                                                                     userInfo:settings
+                                                                                                      repeats:NO];
+                                                          [timer fire];
+                                                          [self performSelector:@selector(showAllSetting) withObject:nil afterDelay:3];
+                                                      }]];
+    
+    [alertController addAction:[UIAlertAction actionWithTitle:@"NO"
+                                                        style:UIAlertActionStyleCancel
+                                                      handler:^(UIAlertAction *action) {
+                                                      }]];
+    [self presentViewController:alertController animated:YES completion:nil];
 }
 
 - (IBAction)pushedRefreshButton:(id)sender {
     [awareStudy refreshStudy];
+}
+
+- (IBAction)pushedGetTokensButton:(id)sender {
+    [fitbit downloadTokensFromFitbitServer];
+}
+
+
+- (void) getData:(id)sender{
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSDictionary * userInfo = [sender userInfo];
+        NSString * data = [userInfo objectForKey:@"debug"];
+        NSString * type = [userInfo objectForKey:@"type"];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:type
+                                                        message:data
+                                                       delegate:self
+                                              cancelButtonTitle:@"Close"
+                                              otherButtonTitles:nil];
+        [alert show];
+        
+    });
 }
 
 @end

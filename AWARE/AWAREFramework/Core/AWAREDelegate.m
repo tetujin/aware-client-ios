@@ -685,13 +685,21 @@ void exceptionHandler(NSException *exception) {
             }
         }else if([[url host] isEqualToString:@"com.aware.ios.oauth2"]){
             
-            return [Fitbit handleURL:url sourceApplication:sourceApplication annotation:annotation];
+            // return [Fitbit handleURL:url sourceApplication:sourceApplication annotation:annotation];
             
         }
         return YES;
     }else if([[url scheme] isEqualToString:@"fitbit"]){
         if([[url host] isEqualToString:@"logincallback"]){
-            return [Fitbit handleURL:url sourceApplication:sourceApplication annotation:annotation];
+            NSLog(@"Get a login call back");
+            dispatch_async(dispatch_get_main_queue(), ^{
+                // [Fitbit handleURL:url sourceApplication:sourceApplication annotation:annotation];
+                Fitbit * fitbit = [[Fitbit alloc] initWithAwareStudy:_sharedAWARECore.sharedAwareStudy dbType:AwareDBTypeTextFile];
+                [fitbit handleURL:url sourceApplication:sourceApplication annotation:annotation];
+            });
+            return YES;
+        }else{
+            NSLog(@"This is not a Get a login call back");
         }
         return YES;
     }else{

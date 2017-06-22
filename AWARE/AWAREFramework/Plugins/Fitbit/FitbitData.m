@@ -251,7 +251,7 @@
     // identificationForFitbitData = [NSString stringWithFormat:@"%@%f", identificationForFitbitData, [[NSDate new] timeIntervalSince1970]];
     identificationForFitbitData = type;
     
-    if ([AWAREUtils isBackground]) {
+    //if ([AWAREUtils isBackground]) {
         sessionConfig = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:identificationForFitbitData];
         sessionConfig.timeoutIntervalForRequest = 180.0;
         sessionConfig.timeoutIntervalForResource = 60.0;
@@ -262,21 +262,21 @@
         session = [NSURLSession sessionWithConfiguration:sessionConfig delegate:self delegateQueue:Nil];
         NSURLSessionDataTask* dataTask = [session dataTaskWithRequest:request];
         [dataTask resume];
-    }else{
-        sessionConfig = [NSURLSessionConfiguration defaultSessionConfiguration];
-        sessionConfig.timeoutIntervalForRequest = 180.0;
-        sessionConfig.timeoutIntervalForResource = 60.0;
-        sessionConfig.HTTPMaximumConnectionsPerHost = 60;
-        sessionConfig.allowsCellularAccess = YES;
-        sessionConfig.allowsCellularAccess = YES;
-        sessionConfig.discretionary = YES;
-        session = [NSURLSession sessionWithConfiguration:sessionConfig delegate:self delegateQueue:Nil];
-        [[session dataTaskWithRequest:request  completionHandler: ^(NSData *data, NSURLResponse *response, NSError *error) {
-            [session finishTasksAndInvalidate];
-            [session invalidateAndCancel];
-            [self saveData:data response:response error:error type:type];
-        }] resume];
-    }
+//    }else{
+//        sessionConfig = [NSURLSessionConfiguration defaultSessionConfiguration];
+//        sessionConfig.timeoutIntervalForRequest = 180.0;
+//        sessionConfig.timeoutIntervalForResource = 60.0;
+//        sessionConfig.HTTPMaximumConnectionsPerHost = 60;
+//        sessionConfig.allowsCellularAccess = YES;
+//        sessionConfig.allowsCellularAccess = YES;
+//        sessionConfig.discretionary = YES;
+//        session = [NSURLSession sessionWithConfiguration:sessionConfig delegate:self delegateQueue:Nil];
+//        [[session dataTaskWithRequest:request  completionHandler: ^(NSData *data, NSURLResponse *response, NSError *error) {
+//            [session finishTasksAndInvalidate];
+//            [session invalidateAndCancel];
+//            [self saveData:data response:response error:error type:type];
+//        }] resume];
+//    }
     
     return YES;
 }
@@ -334,13 +334,22 @@
             [[NSNotificationCenter defaultCenter] postNotificationName:[NSString stringWithFormat:@"action.aware.plugin.fitbit.get.activity.%@",type]
                                                                 object:nil
                                                               userInfo:userInfo];
+            NSLog(@"%@",[NSString stringWithFormat:@"action.aware.plugin.fitbit.get.activity.%@",type]);
             
             [self saveData:dict];
         }
     } @catch (NSException *exception) {
         
     } @finally {
-        
+        NSDictionary * debugMsg = @{@"debug":@"no response", @"type":type};
+        if([responseString isEqualToString:@""]){
+            debugMsg = @{@"debug":@"no response", @"type":type};
+        }else if(responseString != nil){
+            debugMsg = @{@"debug":responseString, @"type":type};
+        }
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"action.aware.plugin.fitbit.get.activity.debug"
+                                                            object:nil
+                                                          userInfo:debugMsg];
     }
 }
 

@@ -264,6 +264,7 @@
 		16C21AB01E45A7D9001C88BC /* EntityContact+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 16C21AAD1E45A7D9001C88BC /* EntityContact+CoreDataClass.m */; };
 		16C21AB11E45A7D9001C88BC /* EntityContact+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 16C21AAF1E45A7D9001C88BC /* EntityContact+CoreDataProperties.m */; };
 		16C21AB41E45A81A001C88BC /* Contacts.m in Sources */ = {isa = PBXBuildFile; fileRef = 16C21AB31E45A81A001C88BC /* Contacts.m */; };
+		16CAAD2C1EF9839F0051EB4D /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16CAAD2B1EF9839F0051EB4D /* HealthKit.framework */; };
 		16D810241C06242500605DE2 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16D810231C06242500605DE2 /* CFNetwork.framework */; };
 		16D810261C06242F00605DE2 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16D810251C06242F00605DE2 /* Security.framework */; };
 		16D91B5E1CA9447A00A5FD4F /* MicrosoftBandKit_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16D91B5D1CA9447A00A5FD4F /* MicrosoftBandKit_iOS.framework */; };
@@ -271,7 +272,6 @@
 		16E1553A1C27C2AC00316321 /* EventKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16E155381C27C2AC00316321 /* EventKitUI.framework */; };
 		16E225031E063CD1000C239E /* EntityESMAnswerBC+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 16E225001E063CD1000C239E /* EntityESMAnswerBC+CoreDataClass.m */; };
 		16E225041E063CD1000C239E /* EntityESMAnswerBC+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 16E225021E063CD1000C239E /* EntityESMAnswerBC+CoreDataProperties.m */; };
-		16E225061E077E09000C239E /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16E225051E077E09000C239E /* HealthKit.framework */; };
 		16E2250A1E0A378C000C239E /* AWAREHealthKitWorkout.m in Sources */ = {isa = PBXBuildFile; fileRef = 16E225091E0A378C000C239E /* AWAREHealthKitWorkout.m */; };
 		16E2250D1E0A37BB000C239E /* AWAREHealthKitCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 16E2250C1E0A37BB000C239E /* AWAREHealthKitCategory.m */; };
 		16E225101E0A37DA000C239E /* AWAREHealthKitQuantity.m in Sources */ = {isa = PBXBuildFile; fileRef = 16E2250F1E0A37DA000C239E /* AWAREHealthKitQuantity.m */; };
@@ -812,6 +812,7 @@
 		16C21AB21E45A81A001C88BC /* Contacts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Contacts.h; path = Contacts/Contacts.h; sourceTree = "<group>"; };
 		16C21AB31E45A81A001C88BC /* Contacts.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Contacts.m; path = Contacts/Contacts.m; sourceTree = "<group>"; };
 		16C81FF41CD6B32D0013A87C /* AWARE_v2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = AWARE_v2.xcdatamodel; sourceTree = "<group>"; };
+		16CAAD2B1EF9839F0051EB4D /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
 		16D810231C06242500605DE2 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		16D810251C06242F00605DE2 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		16D91B5D1CA9447A00A5FD4F /* MicrosoftBandKit_iOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MicrosoftBandKit_iOS.framework; path = ThirdPatyFrameworks/MicrosoftBandKit_iOS.framework; sourceTree = "<group>"; };
@@ -821,7 +822,6 @@
 		16E225001E063CD1000C239E /* EntityESMAnswerBC+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EntityESMAnswerBC+CoreDataClass.m"; sourceTree = "<group>"; };
 		16E225011E063CD1000C239E /* EntityESMAnswerBC+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EntityESMAnswerBC+CoreDataProperties.h"; sourceTree = "<group>"; };
 		16E225021E063CD1000C239E /* EntityESMAnswerBC+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EntityESMAnswerBC+CoreDataProperties.m"; sourceTree = "<group>"; };
-		16E225051E077E09000C239E /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
 		16E225081E0A378C000C239E /* AWAREHealthKitWorkout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AWAREHealthKitWorkout.h; sourceTree = "<group>"; };
 		16E225091E0A378C000C239E /* AWAREHealthKitWorkout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AWAREHealthKitWorkout.m; sourceTree = "<group>"; };
 		16E2250B1E0A37BB000C239E /* AWAREHealthKitCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AWAREHealthKitCategory.h; sourceTree = "<group>"; };
@@ -885,7 +885,7 @@
 				164DD66A1C1FC1F900ADA92B /* MapKit.framework in Frameworks */,
 				16D810261C06242F00605DE2 /* Security.framework in Frameworks */,
 				169A7B3D1BFFC9F900A7C06D /* SystemConfiguration.framework in Frameworks */,
-				16E225061E077E09000C239E /* HealthKit.framework in Frameworks */,
+				16CAAD2C1EF9839F0051EB4D /* HealthKit.framework in Frameworks */,
 				16D91B5E1CA9447A00A5FD4F /* MicrosoftBandKit_iOS.framework in Frameworks */,
 				203B6E54AD52B82C466D0569 /* libPods-AWARE.a in Frameworks */,
 			);
@@ -1356,7 +1356,7 @@
 				169C879D1D01382C00825761 /* GoogleLogin */,
 				169C87A01D01382C00825761 /* HealthKit */,
 				16078FBB1DA36458000197E5 /* IOSESM */,
-				16ECFC491D8F0C9C005C3DA6 /* ISOActivityRecognition */,
+				16ECFC491D8F0C9C005C3DA6 /* IOSActivityRecognition */,
 				169C87A31D01382C00825761 /* Labels */,
 				169C87A61D01382C00825761 /* Memory */,
 				16BDCD021D38876B00B13BD4 /* Meal */,
@@ -2049,7 +2049,7 @@
 			name = WebESM;
 			sourceTree = "<group>";
 		};
-		16ECFC491D8F0C9C005C3DA6 /* ISOActivityRecognition */ = {
+		16ECFC491D8F0C9C005C3DA6 /* IOSActivityRecognition */ = {
 			isa = PBXGroup;
 			children = (
 				16ECFC461D8F0C95005C3DA6 /* IOSActivityRecognition.h */,
@@ -2059,14 +2059,14 @@
 				163ADFBE1D8F2C1900B15C8F /* EntityIOSActivityRecognition+CoreDataProperties.h */,
 				163ADFBF1D8F2C1900B15C8F /* EntityIOSActivityRecognition+CoreDataProperties.m */,
 			);
-			name = ISOActivityRecognition;
+			name = IOSActivityRecognition;
 			sourceTree = "<group>";
 		};
 		2A3CA9F5620967BACB187EB7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				16CAAD2B1EF9839F0051EB4D /* HealthKit.framework */,
 				52022F3F1E13B81200AB52AB /* AddressBook.framework */,
-				16E225051E077E09000C239E /* HealthKit.framework */,
 				160E1A001CD1D9C700D825BA /* libEZAudio.a */,
 				169C85761D0127D700825761 /* BluetoothManager.framework */,
 				16D91B5D1CA9447A00A5FD4F /* MicrosoftBandKit_iOS.framework */,
@@ -2848,7 +2848,7 @@
 					"$(PROJECT_DIR)/ThirdPatyFrameworks",
 				);
 				INFOPLIST_FILE = AWARE/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2886,7 +2886,7 @@
 					"$(PROJECT_DIR)/ThirdPatyFrameworks",
 				);
 				INFOPLIST_FILE = AWARE/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",

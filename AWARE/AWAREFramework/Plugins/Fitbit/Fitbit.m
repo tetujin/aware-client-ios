@@ -21,9 +21,11 @@
     
     NSMutableData * profileData;
     NSMutableData * refreshTokenData;
+    NSMutableData * tokens;
     
     NSString * identificationForFitbitProfile;
     NSString * identificationForFitbitRefreshToken;
+    NSString * identificationForFitbitTokens;
     
     NSDateFormatter * hourFormat;
 }
@@ -44,9 +46,11 @@
         
         profileData = [[NSMutableData alloc] init];
         refreshTokenData = [[NSMutableData alloc] init];
+        tokens = [[NSMutableData alloc] init];
         
         identificationForFitbitProfile = @"action.aware.plugin.fitbit.api.get.profile";
         identificationForFitbitRefreshToken = @"action.aware.plugin.fitbit.api.get.refresh_token";
+        identificationForFitbitTokens = @"action.aware.plugin.fitbit.api.get.tokens";
         
         hourFormat = [[NSDateFormatter alloc] init];
         [hourFormat setDateFormat:@"yyyy-MM-dd HH"];
@@ -322,7 +326,7 @@
     [url appendFormat:@"&scope=%@", [AWAREUtils stringByAddingPercentEncoding:@"activity heartrate location nutrition profile settings sleep social weight"]];
     [url appendFormat:@"&expires_in=%@", expiresIn.stringValue];
     
-    NSLog(@"%@", url);
+    // NSLog(@"%@", url);
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
 }
 
@@ -348,10 +352,12 @@
     if(token == nil) return;
     if(userId == nil) return;
     
+    profileData = [[NSMutableData alloc] init];
+    
     __weak NSURLSession *session = nil;
     NSURLSessionConfiguration *sessionConfig = nil;
 
-    if ([AWAREUtils isBackground]) {
+//    if ([AWAREUtils isBackground]) {
         sessionConfig = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:identificationForFitbitProfile];
         sessionConfig.timeoutIntervalForRequest = 180.0;
         sessionConfig.timeoutIntervalForResource = 60.0;
@@ -362,21 +368,21 @@
         session = [NSURLSession sessionWithConfiguration:sessionConfig delegate:self delegateQueue:Nil];
         NSURLSessionDataTask* dataTask = [session dataTaskWithRequest:request];
         [dataTask resume];
-    }else{
-        sessionConfig = [NSURLSessionConfiguration defaultSessionConfiguration];
-        sessionConfig.timeoutIntervalForRequest = 180.0;
-        sessionConfig.timeoutIntervalForResource = 60.0;
-        sessionConfig.HTTPMaximumConnectionsPerHost = 60;
-        sessionConfig.allowsCellularAccess = YES;
-        sessionConfig.allowsCellularAccess = YES;
-        sessionConfig.discretionary = YES;
-        session = [NSURLSession sessionWithConfiguration:sessionConfig delegate:self delegateQueue:Nil];
-        [[session dataTaskWithRequest:request  completionHandler: ^(NSData *data, NSURLResponse *response, NSError *error) {
-            [session finishTasksAndInvalidate];
-            [session invalidateAndCancel];
-            [self saveProfileWithData:data NSURLResponse:response NSError:error];
-        }] resume];
-    }
+//    }else{
+//        sessionConfig = [NSURLSessionConfiguration defaultSessionConfiguration];
+//        sessionConfig.timeoutIntervalForRequest = 180.0;
+//        sessionConfig.timeoutIntervalForResource = 60.0;
+//        sessionConfig.HTTPMaximumConnectionsPerHost = 60;
+//        sessionConfig.allowsCellularAccess = YES;
+//        sessionConfig.allowsCellularAccess = YES;
+//        sessionConfig.discretionary = YES;
+//        session = [NSURLSession sessionWithConfiguration:sessionConfig delegate:self delegateQueue:Nil];
+//        [[session dataTaskWithRequest:request  completionHandler: ^(NSData *data, NSURLResponse *response, NSError *error) {
+//            [session finishTasksAndInvalidate];
+//            [session invalidateAndCancel];
+//            [self saveProfileWithData:data NSURLResponse:response NSError:error];
+//        }] resume];
+//    }
 }
 
 
@@ -441,112 +447,108 @@
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-+ (BOOL) handleURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation{
+- (void) downloadTokensFromFitbitServer {
+    NSUserDefaults * userDefaults =[NSUserDefaults standardUserDefaults];
+    NSString * code = [userDefaults objectForKey:@"fitbit.setting.code"];
+    
+    if(code!= nil){
+        // Set URL
+        NSURL*	url = [NSURL URLWithString:[NSString stringWithFormat:@"https://api.fitbit.com/oauth2/token"]];
+        NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:url];
+        // Create NSData object
+        NSString * baseAuth = [NSString stringWithFormat:@"%@:%@",[Fitbit getFitbitClientId],[Fitbit getFitbitApiSecret]];
+        NSData *nsdata = [baseAuth dataUsingEncoding:NSUTF8StringEncoding];
+        // Get NSString from NSData object in Base64
+        NSString *base64Encoded = [nsdata base64EncodedStringWithOptions:0];
+        // NSLog(@"%@",base64Encoded);
+        [request setValue:[NSString stringWithFormat:@"Basic %@", base64Encoded] forHTTPHeaderField:@"Authorization"];
+        [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+        NSMutableString * bodyStr = [[NSMutableString alloc] init];
+        [bodyStr appendFormat:@"clientId=%@&",[Fitbit getFitbitClientId]];
+        [bodyStr appendFormat:@"grant_type=authorization_code&"];
+        [bodyStr appendFormat:@"redirect_uri=%@&",[AWAREUtils stringByAddingPercentEncoding:@"fitbit://logincallback" unreserved:@"-."]];
+        [bodyStr appendFormat:@"code=%@",code];
+        
+        
+        
+        [request setHTTPBody: [bodyStr dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES] ];
+        [request setHTTPMethod:@"POST"];
+        
+        __weak NSURLSession *session = nil;
+        NSURLSessionConfiguration *sessionConfig = nil;
+        
+        tokens = [[NSMutableData alloc] init];
+        
+        // if ([AWAREUtils isBackground]) {
+            sessionConfig = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:identificationForFitbitTokens];
+            sessionConfig.timeoutIntervalForRequest = 180.0;
+            sessionConfig.timeoutIntervalForResource = 60.0;
+            sessionConfig.HTTPMaximumConnectionsPerHost = 60;
+            sessionConfig.allowsCellularAccess = YES;
+            sessionConfig.allowsCellularAccess = YES;
+            sessionConfig.discretionary = YES;
+            session = [NSURLSession sessionWithConfiguration:sessionConfig delegate:self delegateQueue:Nil];
+            NSURLSessionDataTask* dataTask = [session dataTaskWithRequest:request];
+            [dataTask resume];
+//        }else{
+//            sessionConfig = [NSURLSessionConfiguration defaultSessionConfiguration];
+//            sessionConfig.timeoutIntervalForRequest = 180.0;
+//            sessionConfig.timeoutIntervalForResource = 60.0;
+//            sessionConfig.HTTPMaximumConnectionsPerHost = 60;
+//            sessionConfig.allowsCellularAccess = YES;
+//            sessionConfig.allowsCellularAccess = YES;
+//            sessionConfig.discretionary = YES;
+//            session = [NSURLSession sessionWithConfiguration:sessionConfig delegate:self delegateQueue:Nil];
+//            [[session dataTaskWithRequest:request  completionHandler: ^(NSData *data, NSURLResponse *response, NSError *error) {
+//                if(error != nil){
+//                    NSLog(@"Fitbit Login Error: %@", error.debugDescription);
+//                }else{
+//                    NSLog(@"Fitbit Login Sucess:");
+//                    [self saveTokens:data response:response error:error];
+//                }
+//                [session finishTasksAndInvalidate];
+//                [session invalidateAndCancel];
+//            }] resume];
+//        }
+        
+    }else{
+        UIAlertView *av = [[UIAlertView alloc]initWithTitle:@"Fitbit Login Error"
+                                                    message:@"The Fitbit code is Null."
+                                                   delegate:self
+                                          cancelButtonTitle:@"Close"
+                                          otherButtonTitles:nil];
+        [av show];
+        NSLog(@"Fitbit Login Error: The Fitbit code is Null");
+    }
+}
+
+- (BOOL) handleURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation{
     
     // aware-client://com.aware.ios.oauth2?code=35c0ec0d9b3873b270f0c1787ac33472e58176ec,_=_
     ////////////  Authorization Code Flow ////////////
-    
     // NSString * userId = [Fitbit getFitbitUserId];
     // NSString * token = [Fitbit getFitbitAccessToken];
     
     NSArray *components = [url.absoluteString componentsSeparatedByString:@"?"];
     if(components!=nil && components.count > 1){
-        NSLog(@"org: %@", [components objectAtIndex:1]);
         NSMutableString * code = [NSMutableString stringWithString:[components objectAtIndex:1]];
         [code deleteCharactersInRange:NSMakeRange(code.length-4, 4)];
         [code deleteCharactersInRange:NSMakeRange(0, 5)];
-        if(code!= nil){
-            
-            NSLog(@"code: %@", code);
-            
-            // Set URL
-            NSURL*	url = [NSURL URLWithString:[NSString stringWithFormat:@"https://api.fitbit.com/oauth2/token"]];
-            NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:url];
-            // Create NSData object
-            NSString * baseAuth = [NSString stringWithFormat:@"%@:%@",[Fitbit getFitbitClientId],[Fitbit getFitbitApiSecret]];
-            NSData *nsdata = [baseAuth dataUsingEncoding:NSUTF8StringEncoding];
-            // Get NSString from NSData object in Base64
-            NSString *base64Encoded = [nsdata base64EncodedStringWithOptions:0];
-            NSLog(@"%@",base64Encoded);
-            [request setValue:[NSString stringWithFormat:@"Basic %@", base64Encoded] forHTTPHeaderField:@"Authorization"];
-            [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-            NSMutableString * bodyStr = [[NSMutableString alloc] init];
-            [bodyStr appendFormat:@"clientId=%@&",[Fitbit getFitbitClientId]];
-            [bodyStr appendFormat:@"grant_type=authorization_code&"];
-            [bodyStr appendFormat:@"redirect_uri=%@&",[AWAREUtils stringByAddingPercentEncoding:@"fitbit://logincallback" unreserved:@"-."]];
-            [bodyStr appendFormat:@"code=%@",code];
-
-            [request setHTTPBody: [bodyStr dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES] ];
-            [request setHTTPMethod:@"POST"];
-            
-            __weak NSURLSession *session = nil;
-            NSURLSessionConfiguration *sessionConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
-            sessionConfiguration.allowsCellularAccess = YES;
-            session = [NSURLSession sessionWithConfiguration:sessionConfiguration delegate:self delegateQueue:Nil];
-            
-            [[session dataTaskWithRequest:request  completionHandler: ^(NSData *data, NSURLResponse *response, NSError *error) {
-                [session finishTasksAndInvalidate];
-                [session invalidateAndCancel];
-                
-                dispatch_async(dispatch_get_main_queue(), ^{
-
-                    NSString *responseString = [[NSString alloc] initWithData: data  encoding: NSUTF8StringEncoding];
-                    NSLog(@"Success: %@", responseString);
-                    
-                    if(responseString != nil){
-                        NSData *jsonData = [responseString dataUsingEncoding:NSUTF8StringEncoding];
-                        
-                        NSError *error = nil;
-                        NSDictionary *values = [NSJSONSerialization JSONObjectWithData:jsonData
-                                                                                   options:NSJSONReadingAllowFragments error:&error];
-                        if (error != nil) {
-                            NSLog(@"failed to parse JSON: %@", error.debugDescription);
-                            return;
-                        }
-                        
-                        if(values == nil){
-                            return;
-                        }
-                        
-                        
-                        if(![values objectForKey:@"access_token"]){
-                            // NSLog(@"%@", responseString);
-                            
-                            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error Message from Fitbit Plugin"
-                                                                            message:responseString
-                                                                           delegate:self
-                                                                  cancelButtonTitle:@"Close"
-                                                                  otherButtonTitles:nil];
-                            [alert show];
-                            return;
-                        }else{
-                            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Success"
-                                                                            message:@"Fitbit Plugin obtained an access token, refresh token, and user_id from Fitbit API."
-                                                                           delegate:self
-                                                                  cancelButtonTitle:@"Close"
-                                                                  otherButtonTitles:nil];
-                            [alert show];
-                        }
-                        
-                        
-                        if([values objectForKey:@"access_token"] != nil){
-                            [Fitbit setFitbitAccessToken:[values objectForKey:@"access_token"]];
-                        }
-                        if([values objectForKey:@"user_id"] != nil){
-                            [Fitbit setFitbitUserId:[values objectForKey:@"user_id"]];
-                        }
-                        if([values objectForKey:@"refresh_token"] != nil){
-                            [Fitbit setFitbitRefreshToken:[values objectForKey:@"refresh_token"]];
-                        }
-                        if([values objectForKey:@"token_type"] != nil){
-                            [Fitbit setFitbitTokenType:[values objectForKey:@"token_type"]];
-                        }
-                        
-                    }
-                    
-                });
-            }] resume];
+        // Save the code
+        if(code != nil){
+            NSUserDefaults * userDefaults =[NSUserDefaults standardUserDefaults];
+            [userDefaults setObject:code forKey:@"fitbit.setting.code"];
+            [userDefaults synchronize];
+            [self downloadTokensFromFitbitServer];
         }
+    }else{
+        UIAlertView *av = [[UIAlertView alloc]initWithTitle:@"Fitbit Login Error"
+                                                    message:url.absoluteString
+                                                   delegate:self
+                                          cancelButtonTitle:@"Close"
+                                          otherButtonTitles:nil];
+        [av show];
+        NSLog(@"Fitbit Login Error: %@", url.absoluteString);
     }
     
     
@@ -577,7 +579,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-- (void) refreshToken{
+- (void) refreshToken {
 
     if([Fitbit getFitbitClientId] == nil) return;
     if([Fitbit getFitbitApiSecret] == nil) return;
@@ -606,9 +608,11 @@
     sessionConfiguration.allowsCellularAccess = YES;
     session = [NSURLSession sessionWithConfiguration:sessionConfiguration delegate:self delegateQueue:Nil];
     
+    refreshTokenData = [[NSMutableData alloc] init];
+    
     NSURLSessionConfiguration *sessionConfig = nil;
     
-     if ([AWAREUtils isBackground]) {
+//     if ([AWAREUtils isBackground]) {
         sessionConfig = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:identificationForFitbitRefreshToken];
         sessionConfig.timeoutIntervalForRequest = 180.0;
         sessionConfig.timeoutIntervalForResource = 60.0;
@@ -619,21 +623,21 @@
         session = [NSURLSession sessionWithConfiguration:sessionConfig delegate:self delegateQueue:Nil];
         NSURLSessionDataTask* dataTask = [session dataTaskWithRequest:request];
         [dataTask resume];
-    }else{
-        sessionConfig = [NSURLSessionConfiguration defaultSessionConfiguration];
-        sessionConfig.timeoutIntervalForRequest = 180.0;
-        sessionConfig.timeoutIntervalForResource = 60.0;
-        sessionConfig.HTTPMaximumConnectionsPerHost = 60;
-        sessionConfig.allowsCellularAccess = YES;
-        sessionConfig.allowsCellularAccess = YES;
-        sessionConfig.discretionary = YES;
-        session = [NSURLSession sessionWithConfiguration:sessionConfig delegate:self delegateQueue:Nil];
-        [[session dataTaskWithRequest:request  completionHandler: ^(NSData *data, NSURLResponse *response, NSError *error) {
-            [session finishTasksAndInvalidate];
-            [session invalidateAndCancel];
-            [self saveRefreshToken:data response:response error:error];
-        }] resume];
-    }
+//    }else{
+//        sessionConfig = [NSURLSessionConfiguration defaultSessionConfiguration];
+//        sessionConfig.timeoutIntervalForRequest = 180.0;
+//        sessionConfig.timeoutIntervalForResource = 60.0;
+//        sessionConfig.HTTPMaximumConnectionsPerHost = 60;
+//        sessionConfig.allowsCellularAccess = YES;
+//        sessionConfig.allowsCellularAccess = YES;
+//        sessionConfig.discretionary = YES;
+//        session = [NSURLSession sessionWithConfiguration:sessionConfig delegate:self delegateQueue:Nil];
+//        [[session dataTaskWithRequest:request  completionHandler: ^(NSData *data, NSURLResponse *response, NSError *error) {
+//            [session finishTasksAndInvalidate];
+//            [session invalidateAndCancel];
+//            [self saveRefreshToken:data response:response error:error];
+//        }] resume];
+//    }
 }
 
 
@@ -701,11 +705,24 @@
                 if([values objectForKey:@"token_type"] != nil){
                     [Fitbit setFitbitTokenType:[values objectForKey:@"token_type"]];
                 }
+            }else{
+                UIAlertView *av = [[UIAlertView alloc]initWithTitle:@"Fitbit Login Error"
+                                                            message:@"No access token and user_id"
+                                                           delegate:self
+                                                  cancelButtonTitle:@"Close"
+                                                  otherButtonTitles:nil];
+                [av show];
             }
         });
         
     } @catch (NSException *exception) {
         NSLog(@"%@",exception.debugDescription);
+        UIAlertView *av = [[UIAlertView alloc]initWithTitle:@"Error"
+                                                    message:exception.debugDescription
+                                                   delegate:self
+                                          cancelButtonTitle:@"Close"
+                                          otherButtonTitles:nil];
+        [av show];
     } @finally {
         
     }
@@ -718,21 +735,13 @@
 didReceiveResponse:(NSURLResponse *)response
  completionHandler:(void (^)(NSURLSessionResponseDisposition disposition))completionHandler {
     
-    NSString * identifier = session.configuration.identifier;
+    // NSString * identifier = session.configuration.identifier;
     // NSLog(@"[%@] session:dataTask:didReceiveResponse:completionHandler:",identifier);
     
     NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
     int responseCode = (int)[httpResponse statusCode];
     if (responseCode == 200) {
         NSLog(@"[%d] Success",responseCode);
-    }else{
-        // clear
-        NSLog(@"[%d] %@", responseCode, response.debugDescription);
-        if([identifier isEqualToString:identificationForFitbitProfile]){
-            profileData = [[NSMutableData alloc] init];
-        }else if([identifier isEqualToString:identificationForFitbitRefreshToken]){
-            refreshTokenData = [[NSMutableData alloc] init];
-        }
     }
     [super URLSession:session dataTask:dataTask didReceiveResponse:response completionHandler:completionHandler];
 }
@@ -746,6 +755,8 @@ didReceiveResponse:(NSURLResponse *)response
         [profileData appendData:data];
     }else if([identifier isEqualToString:identificationForFitbitRefreshToken]){
         [refreshTokenData appendData:data];
+    }else if([identifier isEqualToString:identificationForFitbitTokens]){
+        [tokens appendData:data];
     }
     [super URLSession:session dataTask:dataTask didReceiveData:data];
 }
@@ -762,13 +773,97 @@ didReceiveResponse:(NSURLResponse *)response
         data = [refreshTokenData copy];
         [self saveRefreshToken:data response:nil error:error];
         refreshTokenData = [[NSMutableData alloc] init];
+    }else if([identifier isEqualToString:identificationForFitbitTokens]) {
+        data = [tokens copy];
+        [self saveTokens:data response:nil error:error];
+        tokens = [[NSMutableData alloc] init];
     }
     
     [super URLSession:session task:task didCompleteWithError:error];
 }
 
 
-
+- (void) saveTokens:(NSData *) data response:(NSURLResponse*)response error:(NSError *)error{
+    NSLog(@"A Fitbit login query is called !!");
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        NSString *responseString = [[NSString alloc] initWithData: data  encoding: NSUTF8StringEncoding];
+        NSLog(@"Success: %@", responseString);
+        
+        if(responseString != nil){
+            NSData *jsonData = [responseString dataUsingEncoding:NSUTF8StringEncoding];
+            
+            NSError *error = nil;
+            NSDictionary *values = [NSJSONSerialization JSONObjectWithData:jsonData
+                                                                   options:NSJSONReadingAllowFragments error:&error];
+            if (error != nil) {
+                NSLog(@"failed to parse JSON: %@", error.debugDescription);
+                UIAlertView *av = [[UIAlertView alloc]initWithTitle:@"Fitbit Login Error"
+                                                            message:[NSString stringWithFormat:@"failed to parse JSON: %@",error.debugDescription]
+                                                           delegate:self
+                                                  cancelButtonTitle:@"Close"
+                                                  otherButtonTitles:nil];
+                [av show];
+                return;
+            }
+            
+            if(values == nil){
+                UIAlertView *av = [[UIAlertView alloc]initWithTitle:@"Fitbit Login Error"
+                                                            message:@"The value is null..."
+                                                           delegate:self
+                                                  cancelButtonTitle:@"Close"
+                                                  otherButtonTitles:nil];
+                [av show];
+                return;
+            }
+            
+            
+            if(![values objectForKey:@"access_token"]){
+                // NSLog(@"%@", responseString);
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error Message from Fitbit Plugin"
+                                                                message:responseString
+                                                               delegate:self
+                                                      cancelButtonTitle:@"Close"
+                                                      otherButtonTitles:nil];
+                [alert show];
+                NSLog(@"Fitbit Login Error: %@", responseString);
+                return;
+            }else{
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Success"
+                                                                message:@"Fitbit Plugin obtained an access token, refresh token, and user_id from Fitbit API."
+                                                               delegate:self
+                                                      cancelButtonTitle:@"Close"
+                                                      otherButtonTitles:nil];
+                [alert show];
+            }
+            
+            
+            if([values objectForKey:@"access_token"] != nil){
+                [Fitbit setFitbitAccessToken:[values objectForKey:@"access_token"]];
+            }
+            if([values objectForKey:@"user_id"] != nil){
+                [Fitbit setFitbitUserId:[values objectForKey:@"user_id"]];
+            }
+            if([values objectForKey:@"refresh_token"] != nil){
+                [Fitbit setFitbitRefreshToken:[values objectForKey:@"refresh_token"]];
+            }
+            if([values objectForKey:@"token_type"] != nil){
+                [Fitbit setFitbitTokenType:[values objectForKey:@"token_type"]];
+            }
+            
+        }else{
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Fitbit Login Error"
+                                                            message:@"The response from Fitbit server is Null."
+                                                           delegate:self
+                                                  cancelButtonTitle:@"Close"
+                                                  otherButtonTitles:nil];
+            [alert show];
+            NSLog(@"Fitbit Login Error: %@", @"The response from Fitbit server is Null");
+        }
+        
+    });
+}
 
 //////////////////////////////////////////////////////////////////////////////
 
