@@ -265,6 +265,11 @@
 		16C21AB11E45A7D9001C88BC /* EntityContact+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 16C21AAF1E45A7D9001C88BC /* EntityContact+CoreDataProperties.m */; };
 		16C21AB41E45A81A001C88BC /* Contacts.m in Sources */ = {isa = PBXBuildFile; fileRef = 16C21AB31E45A81A001C88BC /* Contacts.m */; };
 		16CAAD2C1EF9839F0051EB4D /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16CAAD2B1EF9839F0051EB4D /* HealthKit.framework */; };
+		16CAAD341EFC94280051EB4D /* NotificationCenter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16228A3B1C22DAE20081C839 /* NotificationCenter.framework */; };
+		16CAAD381EFC94280051EB4D /* TodayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 16CAAD371EFC94280051EB4D /* TodayViewController.m */; };
+		16CAAD3B1EFC94280051EB4D /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 16CAAD391EFC94280051EB4D /* MainInterface.storyboard */; };
+		16CAAD3F1EFC94280051EB4D /* widget-esm.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 16CAAD331EFC94280051EB4D /* widget-esm.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		16CAAD441EFCAD060051EB4D /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 16CAAD431EFCAD060051EB4D /* Media.xcassets */; };
 		16D810241C06242500605DE2 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16D810231C06242500605DE2 /* CFNetwork.framework */; };
 		16D810261C06242F00605DE2 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16D810251C06242F00605DE2 /* Security.framework */; };
 		16D91B5E1CA9447A00A5FD4F /* MicrosoftBandKit_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16D91B5D1CA9447A00A5FD4F /* MicrosoftBandKit_iOS.framework */; };
@@ -308,6 +313,13 @@
 			remoteGlobalIDString = 1623CE651BFD1B2C00EFAD72;
 			remoteInfo = AWARE;
 		};
+		16CAAD3D1EFC94280051EB4D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1623CE5E1BFD1B2C00EFAD72 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 16CAAD321EFC94280051EB4D;
+			remoteInfo = "widget-esm";
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -317,6 +329,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
+				16CAAD3F1EFC94280051EB4D /* widget-esm.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -813,6 +826,12 @@
 		16C21AB31E45A81A001C88BC /* Contacts.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Contacts.m; path = Contacts/Contacts.m; sourceTree = "<group>"; };
 		16C81FF41CD6B32D0013A87C /* AWARE_v2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = AWARE_v2.xcdatamodel; sourceTree = "<group>"; };
 		16CAAD2B1EF9839F0051EB4D /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
+		16CAAD331EFC94280051EB4D /* widget-esm.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "widget-esm.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		16CAAD361EFC94280051EB4D /* TodayViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TodayViewController.h; sourceTree = "<group>"; };
+		16CAAD371EFC94280051EB4D /* TodayViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TodayViewController.m; sourceTree = "<group>"; };
+		16CAAD3A1EFC94280051EB4D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
+		16CAAD3C1EFC94280051EB4D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		16CAAD431EFCAD060051EB4D /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
 		16D810231C06242500605DE2 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		16D810251C06242F00605DE2 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		16D91B5D1CA9447A00A5FD4F /* MicrosoftBandKit_iOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MicrosoftBandKit_iOS.framework; path = ThirdPatyFrameworks/MicrosoftBandKit_iOS.framework; sourceTree = "<group>"; };
@@ -907,6 +926,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		16CAAD301EFC94280051EB4D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				16CAAD341EFC94280051EB4D /* NotificationCenter.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -953,6 +980,7 @@
 				1623CE681BFD1B2C00EFAD72 /* AWARE */,
 				1623CE851BFD1B2C00EFAD72 /* AWARETests */,
 				1623CE901BFD1B2C00EFAD72 /* AWAREUITests */,
+				16CAAD351EFC94280051EB4D /* widget-esm */,
 				1623CE671BFD1B2C00EFAD72 /* Products */,
 				2A3CA9F5620967BACB187EB7 /* Frameworks */,
 				D9FFFA3D323B573A8AA96D3B /* Pods */,
@@ -966,6 +994,7 @@
 				1623CE661BFD1B2C00EFAD72 /* AWARE.app */,
 				1623CE821BFD1B2C00EFAD72 /* AWARETests.xctest */,
 				1623CE8D1BFD1B2C00EFAD72 /* AWAREUITests.xctest */,
+				16CAAD331EFC94280051EB4D /* widget-esm.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -2040,6 +2069,18 @@
 			name = Meal;
 			sourceTree = "<group>";
 		};
+		16CAAD351EFC94280051EB4D /* widget-esm */ = {
+			isa = PBXGroup;
+			children = (
+				16CAAD361EFC94280051EB4D /* TodayViewController.h */,
+				16CAAD371EFC94280051EB4D /* TodayViewController.m */,
+				16CAAD391EFC94280051EB4D /* MainInterface.storyboard */,
+				16CAAD431EFCAD060051EB4D /* Media.xcassets */,
+				16CAAD3C1EFC94280051EB4D /* Info.plist */,
+			);
+			path = "widget-esm";
+			sourceTree = "<group>";
+		};
 		16EC4F1C1D2EAA4F00524424 /* WebESM */ = {
 			isa = PBXGroup;
 			children = (
@@ -2141,6 +2182,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				16CAAD3E1EFC94280051EB4D /* PBXTargetDependency */,
 			);
 			name = AWARE;
 			productName = AWARE;
@@ -2188,6 +2230,23 @@
 			productName = AWAREUITests;
 			productReference = 1623CE8D1BFD1B2C00EFAD72 /* AWAREUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		16CAAD321EFC94280051EB4D /* widget-esm */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 16CAAD421EFC94280051EB4D /* Build configuration list for PBXNativeTarget "widget-esm" */;
+			buildPhases = (
+				16CAAD2F1EFC94280051EB4D /* Sources */,
+				16CAAD301EFC94280051EB4D /* Frameworks */,
+				16CAAD311EFC94280051EB4D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "widget-esm";
+			productName = "widget-esm";
+			productReference = 16CAAD331EFC94280051EB4D /* widget-esm.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -2244,6 +2303,11 @@
 						CreatedOnToolsVersion = 7.1;
 						TestTargetID = 1623CE651BFD1B2C00EFAD72;
 					};
+					16CAAD321EFC94280051EB4D = {
+						CreatedOnToolsVersion = 8.3.3;
+						DevelopmentTeam = FH352PYMNC;
+						ProvisioningStyle = Automatic;
+					};
 				};
 			};
 			buildConfigurationList = 1623CE611BFD1B2C00EFAD72 /* Build configuration list for PBXProject "AWARE" */;
@@ -2262,6 +2326,7 @@
 				1623CE651BFD1B2C00EFAD72 /* AWARE */,
 				1623CE811BFD1B2C00EFAD72 /* AWARETests */,
 				1623CE8C1BFD1B2C00EFAD72 /* AWAREUITests */,
+				16CAAD321EFC94280051EB4D /* widget-esm */,
 			);
 		};
 /* End PBXProject section */
@@ -2341,6 +2406,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				165A8B711C03B90500898C6C /* GoogleService-Info.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		16CAAD311EFC94280051EB4D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				16CAAD441EFCAD060051EB4D /* Media.xcassets in Resources */,
+				16CAAD3B1EFC94280051EB4D /* MainInterface.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2711,6 +2785,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		16CAAD2F1EFC94280051EB4D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				16CAAD381EFC94280051EB4D /* TodayViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -2723,6 +2805,11 @@
 			isa = PBXTargetDependency;
 			target = 1623CE651BFD1B2C00EFAD72 /* AWARE */;
 			targetProxy = 1623CE8E1BFD1B2C00EFAD72 /* PBXContainerItemProxy */;
+		};
+		16CAAD3E1EFC94280051EB4D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 16CAAD321EFC94280051EB4D /* widget-esm */;
+			targetProxy = 16CAAD3D1EFC94280051EB4D /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -2741,6 +2828,14 @@
 				1623CE7B1BFD1B2C00EFAD72 /* Base */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		16CAAD391EFC94280051EB4D /* MainInterface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				16CAAD3A1EFC94280051EB4D /* Base */,
+			);
+			name = MainInterface.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -2955,6 +3050,47 @@
 			};
 			name = Release;
 		};
+		16CAAD401EFC94280051EB4D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = FH352PYMNC;
+				INFOPLIST_FILE = "widget-esm/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "jp.ac.keio.sfc.ht.tetujin.AWARE.widget-esm";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		16CAAD411EFC94280051EB4D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = FH352PYMNC;
+				INFOPLIST_FILE = "widget-esm/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "jp.ac.keio.sfc.ht.tetujin.AWARE.widget-esm";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -2993,6 +3129,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		16CAAD421EFC94280051EB4D /* Build configuration list for PBXNativeTarget "widget-esm" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				16CAAD401EFC94280051EB4D /* Debug */,
+				16CAAD411EFC94280051EB4D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 
