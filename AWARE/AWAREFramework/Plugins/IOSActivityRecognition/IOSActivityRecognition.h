@@ -12,7 +12,8 @@
 
 typedef enum: NSInteger {
     IOSActivityRecognitionModeLive = 0,
-    IOSActivityRecognitionModeHistory = 1
+    IOSActivityRecognitionModeHistory = 1,
+    IOSActivityRecognitionModeDisposable = 2
 } IOSActivityRecognitionMode;
 
 extern NSString * const AWARE_PREFERENCES_STATUS_IOS_ACTIVITY_RECOGNITION;
@@ -25,6 +26,7 @@ extern NSString * const AWARE_PREFERENCES_LIVE_MODE_IOS_ACTIVITY_RECOGNITION;
 - (BOOL) startSensorWithHistoryMode:(CMMotionActivityConfidence)filterLevel interval:(double) interval;
 - (BOOL) startSensorWithConfidenceFilter:(CMMotionActivityConfidence) filterLevel
                                     mode:(IOSActivityRecognitionMode)mode
-                                interval:(double) interval;
+                                interval:(double) interval
+                         disposableLimit:(int)limit;
 
 @end

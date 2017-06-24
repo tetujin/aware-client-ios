@@ -30,5 +30,6 @@
 - (IBAction)pushedLoginButton:(id)sender;
 - (IBAction)pushedGetLatestDataButton:(id)sender;
 - (IBAction)pushedRefreshButton:(id)sender;
+- (IBAction)pushedGetTokensButton:(id)sender;
 
 @end

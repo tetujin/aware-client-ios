@@ -13,8 +13,9 @@
 - (void) loginWithOAuth2WithClientId:(NSString *)clientId apiSecret:(NSString *)apiSecret;
 - (void) refreshToken;
 - (void) getData:(id)sender;
+- (void) downloadTokensFromFitbitServer;
+- (BOOL) handleURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation;
 
-+ (BOOL) handleURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation;
 + (void) setFitbitAccessToken:(NSString *)accessToken;
 + (void) setFitbitRefreshToken:(NSString *)refreshToken;
 + (void) setFitbitUserId:(NSString *)userId;

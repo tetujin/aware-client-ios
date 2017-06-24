@@ -1,3 +1,18 @@
+# 2017-03-31 -- v1.0.10
+
+- Improvements to token-fetching logic
+- Fixed some warnings in Instance ID
+- Improved error messages if Instance ID couldn't be initialized properly
+- Improvements to console logging
+
+# 2017-01-31 -- v1.0.9
+
+- Removed an error being mistakenly logged to the console.
+
+# 2016-07-06 -- v1.0.8
+
+- Don't store InstanceID plists in Documents folder.
+
 # 2016-06-19 -- v1.0.7
 
 - Fix remote-notifications warning on app submission.

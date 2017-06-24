@@ -270,7 +270,14 @@ didCompleteWithError:(NSError *)error {
 - (void) setStudySettings:(NSData *) resData {
     NSArray *mqttArray = [NSJSONSerialization JSONObjectWithData:resData options:NSJSONReadingMutableContainers error:nil];
     id obj = [NSJSONSerialization JSONObjectWithData:resData options:NSJSONReadingMutableContainers error:nil];
-    NSData *data = [NSJSONSerialization dataWithJSONObject:obj options:0 error:nil];
+    NSError * e = nil;
+    NSData *data = nil;
+    if(obj != nil){
+        data = [NSJSONSerialization dataWithJSONObject:obj options:0 error:&e];
+        if(e != nil){
+            NSLog(@"Error: %@", e.debugDescription);
+        }
+    }
     NSString * studyConfiguration = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     
     // compare the latest configuration string with the previous configuration string.

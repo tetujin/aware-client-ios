@@ -1725,8 +1725,6 @@
                     [iOSESM syncAwareDB];
                     [iOSESM refreshNotifications];
                 }
-                
-                
             }
         }
     } else {

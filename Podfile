@@ -1,5 +1,5 @@
 # Uncomment this line to define a global platform for your project
-# platform :ios, '8.0'
+# platform :ios, '10.0'
 # Uncomment this line if you're using Swift
 # use_frameworks!
 
@@ -14,22 +14,17 @@ pod 'EZAudio'
 pod 'SVProgressHUD'
 pod 'EAIntroView', '~> 2.9.0'
 pod 'NXOAuth2Client', '~> 1.2.8'
-#pod 'RNGridMenu', '~> 0.1.2'
-#pod 'Google/CloudMessaging'
-#pod 'Google-API-Client'
-#pod 'Podfile'
-#pod 'ResearchKit'
 end
 
 target 'AWARETests' do
-pod 'MQTTKit' 
-pod 'SCNetworkReachability'
-pod 'Google/SignIn'
-pod 'DeployGateSDK'
-pod 'ios-ntp'
-pod 'EZAudio'
-pod 'SVProgressHUD'
-pod 'EAIntroView', '~> 2.9.0'
+#pod 'MQTTKit' 
+#pod 'SCNetworkReachability'
+#pod 'Google/SignIn'
+#pod 'DeployGateSDK'
+#pod 'ios-ntp'
+#pod 'EZAudio'
+#pod 'SVProgressHUD'
+#pod 'EAIntroView', '~> 2.9.0'
 
 end
 
