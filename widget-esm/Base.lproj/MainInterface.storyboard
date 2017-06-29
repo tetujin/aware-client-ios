@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="M4Y-Lb-cyx">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="M4Y-Lb-cyx">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -18,44 +19,70 @@
                         <viewControllerLayoutGuide type="bottom" id="FKl-LY-JtV"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" simulatedAppContext="notificationCenter" id="S3S-Oj-5AN">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="500"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="80"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oC5-Gm-GSO">
-                                <rect key="frame" x="128" y="17" width="64" height="64"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" image="ic_action_upload"/>
+                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pnv-cD-hv1">
+                                <rect key="frame" x="91" y="10" width="60" height="60"/>
+                                <state key="normal" image="shortcut_upload"/>
+                                <connections>
+                                    <action selector="pushedDataUploadButton:" destination="M4Y-Lb-cyx" eventType="touchUpInside" id="gKC-qY-0J8"/>
+                                </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9ct-qX-7FB">
-                                <rect key="frame" x="37" y="17" width="64" height="64"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" image="ic_action_esm"/>
+                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rvm-6a-hsI">
+                                <rect key="frame" x="171" y="10" width="60" height="60"/>
+                                <state key="normal" image="shortcut_refresh"/>
+                                <connections>
+                                    <action selector="pushedStudyRefreshButton:" destination="M4Y-Lb-cyx" eventType="touchUpInside" id="RW8-vT-Gf8"/>
+                                </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kwJ-0r-E0Z">
-                                <rect key="frame" x="219" y="17" width="64" height="64"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" image="ic_action_refresh"/>
+                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="woI-uA-Gc2">
+                                <rect key="frame" x="244" y="12" width="60" height="60"/>
+                                <state key="normal" image="shortcut_open"/>
+                                <connections>
+                                    <action selector="pushedOpenAWAREButton:" destination="M4Y-Lb-cyx" eventType="touchUpInside" id="uQU-Ht-OIs"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5o5-ot-Jzd">
+                                <rect key="frame" x="16" y="10" width="60" height="60"/>
+                                <state key="normal" image="shortcut_esm"/>
+                                <connections>
+                                    <action selector="pushedESMButton:" destination="M4Y-Lb-cyx" eventType="touchUpInside" id="G4U-mp-Tp0"/>
+                                </connections>
                             </button>
                         </subviews>
+                        <constraints>
+                            <constraint firstItem="woI-uA-Gc2" firstAttribute="leading" secondItem="rvm-6a-hsI" secondAttribute="trailing" constant="16" id="1yM-gs-URx"/>
+                            <constraint firstAttribute="trailing" secondItem="woI-uA-Gc2" secondAttribute="trailing" id="FKV-R5-mUE"/>
+                            <constraint firstItem="pnv-cD-hv1" firstAttribute="leading" secondItem="5o5-ot-Jzd" secondAttribute="trailing" constant="16" id="Q6c-9E-OEV"/>
+                            <constraint firstItem="5o5-ot-Jzd" firstAttribute="top" secondItem="Ft6-oW-KC0" secondAttribute="bottom" constant="10" id="S4k-tg-zr4"/>
+                            <constraint firstItem="rvm-6a-hsI" firstAttribute="leading" secondItem="pnv-cD-hv1" secondAttribute="trailing" constant="16" id="Wop-Ir-AJe"/>
+                            <constraint firstItem="woI-uA-Gc2" firstAttribute="trailing" secondItem="S3S-Oj-5AN" secondAttribute="trailingMargin" constant="5" id="YAU-EB-vdy"/>
+                            <constraint firstItem="pnv-cD-hv1" firstAttribute="top" secondItem="Ft6-oW-KC0" secondAttribute="bottom" constant="10" id="cIW-Ma-RhW"/>
+                            <constraint firstItem="woI-uA-Gc2" firstAttribute="top" secondItem="Ft6-oW-KC0" secondAttribute="bottom" constant="10" id="igm-Ga-pOi"/>
+                            <constraint firstItem="5o5-ot-Jzd" firstAttribute="leading" secondItem="S3S-Oj-5AN" secondAttribute="leadingMargin" id="nPe-1G-PqX"/>
+                            <constraint firstItem="rvm-6a-hsI" firstAttribute="top" secondItem="Ft6-oW-KC0" secondAttribute="bottom" constant="10" id="qPH-Jg-wzN"/>
+                        </constraints>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <nil key="simulatedStatusBarMetrics"/>
                     <nil key="simulatedTopBarMetrics"/>
                     <nil key="simulatedBottomBarMetrics"/>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-                    <size key="freeformSize" width="320" height="500"/>
+                    <size key="freeformSize" width="320" height="80"/>
                     <connections>
                         <outlet property="mainView" destination="S3S-Oj-5AN" id="4HK-cB-Z9x"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vXp-U4-Rya" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="41.600000000000001" y="-27.886056971514247"/>
+            <point key="canvasLocation" x="4.7999999999999998" y="-147.52623688155924"/>
         </scene>
     </scenes>
     <resources>
-        <image name="ic_action_esm" width="50" height="50"/>
-        <image name="ic_action_refresh" width="96" height="96"/>
-        <image name="ic_action_upload" width="100" height="100"/>
+        <image name="shortcut_esm" width="71" height="71"/>
+        <image name="shortcut_open" width="71" height="71"/>
+        <image name="shortcut_refresh" width="72" height="71"/>
+        <image name="shortcut_upload" width="71" height="71"/>
     </resources>
 </document>

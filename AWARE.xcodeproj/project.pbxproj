@@ -980,9 +980,9 @@
 				1623CE681BFD1B2C00EFAD72 /* AWARE */,
 				1623CE851BFD1B2C00EFAD72 /* AWARETests */,
 				1623CE901BFD1B2C00EFAD72 /* AWAREUITests */,
-				16CAAD351EFC94280051EB4D /* widget-esm */,
-				1623CE671BFD1B2C00EFAD72 /* Products */,
+				16CAAD351EFC94280051EB4D /* AWAREWidget */,
 				2A3CA9F5620967BACB187EB7 /* Frameworks */,
+				1623CE671BFD1B2C00EFAD72 /* Products */,
 				D9FFFA3D323B573A8AA96D3B /* Pods */,
 			);
 			sourceTree = "<group>";
@@ -2069,7 +2069,7 @@
 			name = Meal;
 			sourceTree = "<group>";
 		};
-		16CAAD351EFC94280051EB4D /* widget-esm */ = {
+		16CAAD351EFC94280051EB4D /* AWAREWidget */ = {
 			isa = PBXGroup;
 			children = (
 				16CAAD361EFC94280051EB4D /* TodayViewController.h */,
@@ -2078,6 +2078,7 @@
 				16CAAD431EFCAD060051EB4D /* Media.xcassets */,
 				16CAAD3C1EFC94280051EB4D /* Info.plist */,
 			);
+			name = AWAREWidget;
 			path = "widget-esm";
 			sourceTree = "<group>";
 		};
@@ -3065,7 +3066,7 @@
 				INFOPLIST_FILE = "widget-esm/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "jp.ac.keio.sfc.ht.tetujin.AWARE.widget-esm";
+				PRODUCT_BUNDLE_IDENTIFIER = jp.ac.keio.sfc.ht.tetujin.AWARE.widget.shortcut;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
@@ -3085,7 +3086,7 @@
 				INFOPLIST_FILE = "widget-esm/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "jp.ac.keio.sfc.ht.tetujin.AWARE.widget-esm";
+				PRODUCT_BUNDLE_IDENTIFIER = jp.ac.keio.sfc.ht.tetujin.AWARE.widget.shortcut;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
@@ -3137,6 +3138,7 @@
 				16CAAD411EFC94280051EB4D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 

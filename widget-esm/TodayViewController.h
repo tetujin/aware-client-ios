@@ -9,9 +9,12 @@
 #import <UIKit/UIKit.h>
 
 @interface TodayViewController : UIViewController
-@property (weak, nonatomic) IBOutlet UISlider *slider;
+
 @property (strong, nonatomic) IBOutlet UIView *mainView;
-- (IBAction)ChangedSlider:(id)sender;
-- (IBAction)pushedFirstButton:(id)sender;
+
+- (IBAction)pushedESMButton:(id)sender;
+- (IBAction)pushedDataUploadButton:(id)sender;
+- (IBAction)pushedStudyRefreshButton:(id)sender;
+- (IBAction)pushedOpenAWAREButton:(id)sender;
 
 @end

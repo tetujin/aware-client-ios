@@ -37,12 +37,29 @@
     completionHandler(NCUpdateResultNewData);
 }
 
-- (IBAction)ChangedSlider:(id)sender {
-    UISlider * slider = (UISlider*)sender;
-    NSLog(@"%f",slider.value);
+- (UIEdgeInsets)widgetMarginInsetsForProposedMarginInsets:(UIEdgeInsets)defaultMarginInsets
+{
+    return UIEdgeInsetsZero;
 }
 
-- (IBAction)pushedFirstButton:(id)sender {
-    NSLog(@"%f",_slider.value);
+- (IBAction)pushedESMButton:(id)sender {
+    [self openHostApp];
+}
+
+- (IBAction)pushedDataUploadButton:(id)sender {
+    [self openHostApp];
+}
+
+- (IBAction)pushedStudyRefreshButton:(id)sender {
+    [self openHostApp];
+}
+
+- (IBAction)pushedOpenAWAREButton:(id)sender {
+    [self openHostApp];
+}
+
+- (void) openHostApp {
+    NSString *urlStr = @"aware-client://";
+    [[self extensionContext] openURL:[NSURL URLWithString:urlStr] completionHandler:nil];
 }
 @end
