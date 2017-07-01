@@ -253,13 +253,21 @@
         
         EntityESMSchedule * esmSchedule = esmSchedules[currentESMScheduleNumber];
         NSLog(@"[interface: %@]", esmSchedule.interface);
+        NSSet * childEsms = esmSchedule.esms;
+        // NSNumber * interface = schedule.interface;
+        NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"esm_number" ascending:YES];
+        NSArray *sortDescriptors = [NSArray arrayWithObjects:sort,nil];
+        NSArray *sortedEsms = [childEsms sortedArrayUsingDescriptors:sortDescriptors];
+        
         if([esmSchedule.interface isEqualToNumber:@1]){
             // self.navigationItem.title = esmSchedule.schedule_id;
-            for (EntityESM * esm in esmSchedule.esms) {
+            int tag = 0;
+            for (EntityESM * esm in sortedEsms) {
                 // "interface is 1 (multiple esm)"
                 EntityESM * loopESM = esm;
                 // The loop is broken if this element 's interface is 0.
-                [self setEsm:loopESM withButton:NO];
+                [self setEsm:loopESM withTag:tag button:NO];
+                tag++;
             }
             // Submit button be shown if the element is the last one.
             [self setSubmitButton];
@@ -268,12 +276,7 @@
                                          currentESMScheduleNumber+1,
                                          esmSchedules.count];
         }else{
-            // esmSchedule.esms
-            NSSet * childEsms = esmSchedule.esms;
-            NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"esm_number" ascending:YES];
-            NSArray *sortDescriptors = [NSArray arrayWithObjects:sort,nil];
-            NSArray *sortedEsms = [childEsms sortedArrayUsingDescriptors:sortDescriptors];
-            [self setEsm:sortedEsms[currentESMNumber] withButton:YES];
+            [self setEsm:sortedEsms[currentESMNumber] withTag:0 button:YES];
             self.navigationItem.title = [NSString stringWithFormat:@"%@(%d/%ld) - %d/%ld",
                                          esmSchedule.schedule_id,
                                          currentESMNumber+1,
@@ -290,9 +293,8 @@
     }
 }
 
-- (void) setEsm:(EntityESM *) esm withButton:(bool)buttonState{
+- (void) setEsm:(EntityESM *)esm withTag:(int)tag button:(bool)buttonState{
     // Set ESM Elements
-    int tag = 0;
     NSLog(@"====== Hello ESM !! =======");
     NSLog(@"Interface Type: %@",esm.interface);
     
@@ -803,6 +805,7 @@
 
 - (void) pushedLikertButton:(UIButton *) sender {
     NSNumber * tag = [NSNumber numberWithInteger:sender.tag];
+    // NSLog(@"selected item: %@",tag);
     int selectedX = sender.frame.origin.x;
     for (NSDictionary * dic in uiElements) {
         NSNumber *tagOfElement = [dic objectForKey:KEY_TAG];
