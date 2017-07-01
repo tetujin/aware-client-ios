@@ -179,7 +179,7 @@
         }
     }
     
-    NSArray * esms = [iOSESM getValidESMsWithDatetime:[NSDate new]];
+    NSArray * esms = [iOSESM getValidESMSchedulesWithDatetime:[NSDate new]];
     if(esms != nil && esms.count != 0 && ![IOSESM isAppearedThisSection]){
         [IOSESM setAppearedState:YES];
         [self performSegueWithIdentifier:@"iOSEsmView" sender:self];
@@ -552,7 +552,7 @@
         }
     }
     
-    NSArray * esms = [iOSESM getValidESMsWithDatetime:[NSDate new]];
+    NSArray * esms = [iOSESM getValidESMSchedulesWithDatetime:[NSDate new]];
     if(esms != nil && esms.count != 0 ){
         [IOSESM setAppearedState:YES];
         [self performSegueWithIdentifier:@"iOSEsmView" sender:self];

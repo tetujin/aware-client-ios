@@ -171,7 +171,7 @@
                     [AWAREUtils sendLocalNotificationForMessage:errorMessage soundFlag:NO];
                 }else{
                     // remove old configuration
-                    [iOSESM setWebESMsWithArray:oldVersionScheduleBCESMs];
+                    [iOSESM setScheduledESMs:oldVersionScheduleBCESMs];
                     [helper removeEsmTexts];
                     // [defaults setObject:nil forKey:KEY_LATEST_ESM_JSON_DATA];
                 }

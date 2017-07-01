@@ -99,6 +99,37 @@
                            context:(NSArray  *) context
                          startDate:(NSDate *)start
                            endDate:(NSDate *)end{
+    return [self initWithIdentifier:esmIdentifier
+                      scheduledESMs:esms
+                          fireHours:hours
+                              title:notificationTitle
+                               body:notificationBody
+                           interval:interval
+                           category:notificationCategory
+                               icon:iconNumber
+                            timeout:second
+                  randomizeSchedule:randomizeSchedule
+                            context:context
+                          startDate:start
+                            endDate:end
+                           interface:@0];
+}
+
+- (instancetype) initWithIdentifier:(NSString *)esmIdentifier
+                      scheduledESMs:(NSMutableArray *)esms
+                          fireHours:(NSArray *)hours
+                              title:(NSString *)notificationTitle
+                               body:(NSString *)notificationBody
+                           interval:(NSCalendarUnit)interval
+                           category:(NSString *)notificationCategory
+                               icon:(NSInteger)iconNumber
+                            timeout:(NSInteger)second
+                  randomizeSchedule:(NSNumber *)randomizeSchedule
+                            context:(NSArray *)context
+                          startDate:(NSDate *)start
+                            endDate:(NSDate *)end
+                          interface:(NSNumber *)interface{
+
     self = [super init];
     if (self != nil) {
         helper = [[ESMStorageHelper alloc] init];
@@ -140,6 +171,12 @@
             _endDate = end;
         }else{
             _endDate = [NSDate distantFuture];
+        }
+        
+        if(interface != nil){
+            _interface = interface;
+        }else{
+            _interface = @0;
         }
     }
     return self;
