@@ -326,7 +326,7 @@
  * @param dic NSDictionary for ESM Object which needs <i>esm_type, esm_title, esm_instructions, esm_submit, esm_expiration_threshold, and esm_trigger.</i>
  * @param tag An tag for identification of the ESM element
  */
-- (void) addFreeTextElement:(EntityESM *) esm withTag:(int) tag
+- (void) addFreeTextElement:(EntityESM *)esm withTag:(int) tag
 {
     [self addCommonContents:esm];
     
@@ -337,10 +337,8 @@
     [freeTextViews addObject:textView];
     [textView setDelegate:self];
     
-    
     // @"esm_na"
-    BOOL naState = [self getNaStateFromDict:esm];
-    if (naState) {
+    if (esm.esm_na.boolValue) {
         //for N/A option
         UIButton * naCheckBox = [[UIButton alloc] initWithFrame:CGRectMake(mainContentRect.origin.x,
                                                                            totalHight + textView.frame.size.height,
@@ -648,9 +646,7 @@
                                                                   totalHight,
                                                                   mainContentRect.size.width-120,
                                                                   60)];
-    // Get "NA" state. The key for the NA state is "esm_na", also value is 0(FALSE) or 1(TURE).
-    BOOL naState = [self getNaStateFromDict:esm];
-    
+
     
     // Add  min/max/slider value
     UILabel *minLabel = [[UILabel alloc] initWithFrame:CGRectMake(mainContentRect.origin.x,
@@ -671,8 +667,9 @@
     
     [_mainScrollView addSubview:minLabel];
     [_mainScrollView addSubview:maxLabel];
-    
-    if(naState){ // NA is true
+
+    // Check "NA" state.
+    if(esm.esm_na.boolValue){ // NA is true
         // Add labels
         for (int i=0; i<[max intValue]+1; i++) {
             int anOptionWidth = ratingView.frame.size.width / ([max intValue] + 1); // "1" is a space for N/A label
@@ -936,7 +933,6 @@
     
     
     // NA
-    BOOL naState = [self getNaStateFromDict:esm];
     UIButton * naCheckBox = [[UIButton alloc] initWithFrame:CGRectMake(mainContentRect.origin.x,
                                                                        totalHight+valueLabelH+mainContentH+spaceH,
                                                                        30, naH)];
@@ -955,7 +951,7 @@
     [_mainScrollView addSubview:slider];
     [_mainScrollView addSubview:maxLabel];
     [_mainScrollView addSubview:minLabel];
-    if(naState){
+    if(esm.esm_na.boolValue){
         [_mainScrollView addSubview:naCheckBox];
         [_mainScrollView addSubview:label];
     }
@@ -967,9 +963,9 @@
     NSMutableDictionary * uiElement = [[NSMutableDictionary alloc] init];
     //    [elements addObject:slider];
     [elements addObject:valueLabel]; // for detect
-    if(naState)[elements addObject:naCheckBox];
+    if(esm.esm_na.boolValue)[elements addObject:naCheckBox];
     [labels addObject:maxLabel];
-    if(naState)[labels addObject:label];
+    if(esm.esm_na.boolValue)[labels addObject:label];
     [uiElement setObject:[NSNumber numberWithInt:tag] forKey:KEY_TAG];
     [uiElement setObject:@6 forKey:KEY_TYPE];
     [uiElement setObject:elements forKey:KEY_ELEMENT];
@@ -1062,7 +1058,6 @@
     
     
     // NA
-    BOOL naState = [self getNaStateFromDict:esm];
     UIButton * naCheckBox = [[UIButton alloc] initWithFrame:CGRectMake(mainContentRect.origin.x,
                                                                        totalHight+datePickerHight+10,
                                                                        30, 30)];
@@ -1081,8 +1076,8 @@
     
     
     [_mainScrollView addSubview:datePicker];
-    if(naState)[_mainScrollView addSubview:naCheckBox];
-    if(naState)[_mainScrollView addSubview:label];
+    if(esm.esm_na.boolValue)[_mainScrollView addSubview:naCheckBox];
+    if(esm.esm_na.boolValue)[_mainScrollView addSubview:label];
     [self setContentSizeWithAdditionalHeight:datePickerHight + 10 + 30];
     
     
@@ -1090,7 +1085,7 @@
     NSMutableArray * labels = [[NSMutableArray alloc] init];
     NSNumber * datetime = [[NSNumber alloc] initWithInt:0];
     [elements addObject:datetime];
-    if(naState)[elements addObject:naCheckBox];
+    if(esm.esm_na.boolValue)[elements addObject:naCheckBox];
     
     NSMutableDictionary * uiElement = [[NSMutableDictionary alloc] init];
     [uiElement setObject:[NSNumber numberWithInt:tag] forKey:KEY_TAG];
@@ -1974,18 +1969,15 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (BOOL) getNaStateFromDict:(EntityESM *)esm{
-    
-//    bool isExist = [dict.allKeys containsObject:@"esm_na"];
+//- (BOOL) state:(EntityESM *)esm{
 //    BOOL isExist = esm.esm_na;
 //    if (isExist) {
-//        return isExist;
-//    }else{
 //        return YES;
+//    }else{
+//        return NO;
 //    }
-    
-    return YES;
-}
+//}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
