@@ -22,46 +22,47 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="80"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pnv-cD-hv1">
-                                <rect key="frame" x="91" y="10" width="60" height="60"/>
-                                <state key="normal" image="shortcut_upload"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fRT-zD-gJ1">
+                                <rect key="frame" x="16" y="1" width="78" height="78"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="78" id="jdc-mg-xW1"/>
+                                    <constraint firstAttribute="height" constant="78" id="tu7-g8-3zF"/>
+                                </constraints>
+                                <state key="normal" title="Button" image="shortcut_esm"/>
                                 <connections>
-                                    <action selector="pushedDataUploadButton:" destination="M4Y-Lb-cyx" eventType="touchUpInside" id="gKC-qY-0J8"/>
+                                    <action selector="pushedESMButton:" destination="M4Y-Lb-cyx" eventType="touchUpInside" id="yrD-xk-HMw"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rvm-6a-hsI">
-                                <rect key="frame" x="171" y="10" width="60" height="60"/>
-                                <state key="normal" image="shortcut_refresh"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hho-oe-n3Q">
+                                <rect key="frame" x="121" y="1" width="78" height="78"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="78" id="DAj-5T-0X0"/>
+                                    <constraint firstAttribute="width" constant="78" id="FMU-wI-4Jz"/>
+                                </constraints>
+                                <state key="normal" title="Button" image="shortcut_open"/>
                                 <connections>
-                                    <action selector="pushedStudyRefreshButton:" destination="M4Y-Lb-cyx" eventType="touchUpInside" id="RW8-vT-Gf8"/>
+                                    <action selector="pushedOpenAWAREButton:" destination="M4Y-Lb-cyx" eventType="touchUpInside" id="bLH-8y-ck1"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="woI-uA-Gc2">
-                                <rect key="frame" x="244" y="12" width="60" height="60"/>
-                                <state key="normal" image="shortcut_open"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="auJ-jJ-LrW">
+                                <rect key="frame" x="226" y="1" width="78" height="78"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="78" id="Da1-rE-Oge"/>
+                                    <constraint firstAttribute="height" constant="78" id="uBH-hP-SuY"/>
+                                </constraints>
+                                <state key="normal" title="Button" image="shortcut_upload"/>
                                 <connections>
-                                    <action selector="pushedOpenAWAREButton:" destination="M4Y-Lb-cyx" eventType="touchUpInside" id="uQU-Ht-OIs"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5o5-ot-Jzd">
-                                <rect key="frame" x="16" y="10" width="60" height="60"/>
-                                <state key="normal" image="shortcut_esm"/>
-                                <connections>
-                                    <action selector="pushedESMButton:" destination="M4Y-Lb-cyx" eventType="touchUpInside" id="G4U-mp-Tp0"/>
+                                    <action selector="pushedDataUploadButton:" destination="M4Y-Lb-cyx" eventType="touchUpInside" id="NNF-Zy-dV3"/>
                                 </connections>
                             </button>
                         </subviews>
                         <constraints>
-                            <constraint firstItem="woI-uA-Gc2" firstAttribute="leading" secondItem="rvm-6a-hsI" secondAttribute="trailing" constant="16" id="1yM-gs-URx"/>
-                            <constraint firstAttribute="trailing" secondItem="woI-uA-Gc2" secondAttribute="trailing" id="FKV-R5-mUE"/>
-                            <constraint firstItem="pnv-cD-hv1" firstAttribute="leading" secondItem="5o5-ot-Jzd" secondAttribute="trailing" constant="16" id="Q6c-9E-OEV"/>
-                            <constraint firstItem="5o5-ot-Jzd" firstAttribute="top" secondItem="Ft6-oW-KC0" secondAttribute="bottom" constant="10" id="S4k-tg-zr4"/>
-                            <constraint firstItem="rvm-6a-hsI" firstAttribute="leading" secondItem="pnv-cD-hv1" secondAttribute="trailing" constant="16" id="Wop-Ir-AJe"/>
-                            <constraint firstItem="woI-uA-Gc2" firstAttribute="trailing" secondItem="S3S-Oj-5AN" secondAttribute="trailingMargin" constant="5" id="YAU-EB-vdy"/>
-                            <constraint firstItem="pnv-cD-hv1" firstAttribute="top" secondItem="Ft6-oW-KC0" secondAttribute="bottom" constant="10" id="cIW-Ma-RhW"/>
-                            <constraint firstItem="woI-uA-Gc2" firstAttribute="top" secondItem="Ft6-oW-KC0" secondAttribute="bottom" constant="10" id="igm-Ga-pOi"/>
-                            <constraint firstItem="5o5-ot-Jzd" firstAttribute="leading" secondItem="S3S-Oj-5AN" secondAttribute="leadingMargin" id="nPe-1G-PqX"/>
-                            <constraint firstItem="rvm-6a-hsI" firstAttribute="top" secondItem="Ft6-oW-KC0" secondAttribute="bottom" constant="10" id="qPH-Jg-wzN"/>
+                            <constraint firstItem="auJ-jJ-LrW" firstAttribute="centerY" secondItem="S3S-Oj-5AN" secondAttribute="centerY" id="G22-3T-AeD"/>
+                            <constraint firstItem="auJ-jJ-LrW" firstAttribute="trailing" secondItem="S3S-Oj-5AN" secondAttribute="trailingMargin" id="HAM-tW-JSf"/>
+                            <constraint firstItem="fRT-zD-gJ1" firstAttribute="centerY" secondItem="S3S-Oj-5AN" secondAttribute="centerY" id="JPP-Pb-wib"/>
+                            <constraint firstItem="hho-oe-n3Q" firstAttribute="centerX" secondItem="S3S-Oj-5AN" secondAttribute="centerX" id="MPp-yv-O7I"/>
+                            <constraint firstItem="fRT-zD-gJ1" firstAttribute="leading" secondItem="S3S-Oj-5AN" secondAttribute="leadingMargin" id="lxk-FL-519"/>
+                            <constraint firstItem="hho-oe-n3Q" firstAttribute="centerY" secondItem="S3S-Oj-5AN" secondAttribute="centerY" id="vxz-MB-EHK"/>
                         </constraints>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout"/>
@@ -80,9 +81,8 @@
         </scene>
     </scenes>
     <resources>
-        <image name="shortcut_esm" width="71" height="71"/>
-        <image name="shortcut_open" width="71" height="71"/>
-        <image name="shortcut_refresh" width="72" height="71"/>
-        <image name="shortcut_upload" width="71" height="71"/>
+        <image name="shortcut_esm" width="103" height="103"/>
+        <image name="shortcut_open" width="102" height="103"/>
+        <image name="shortcut_upload" width="102" height="103"/>
     </resources>
 </document>
