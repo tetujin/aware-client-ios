@@ -25,6 +25,7 @@
 @property (strong, nonatomic) NSNumber *  expiration;
 @property (strong, nonatomic) NSDate *  startDate;
 @property (strong, nonatomic) NSDate *  endDate;
+@property (strong, nonatomic) NSNumber * interface;
 
 - (instancetype)initWithIdentifier:(NSString*)esmIdentifier;
 
@@ -61,6 +62,21 @@
                            context:(NSArray  *) context
                          startDate:(NSDate *) start
                            endDate:(NSDate *) end;
+
+- (instancetype)initWithIdentifier:(NSString *)esmIdentifier
+                     scheduledESMs:(NSMutableArray *) esms
+                         fireHours:(NSArray *) hours
+                             title:(NSString *) notificationTitle
+                              body:(NSString *) notificationBody
+                          interval:(NSCalendarUnit) interval
+                          category:(NSString *) notificationCategory
+                              icon:(NSInteger) iconNumber
+                           timeout:(NSInteger) second
+                 randomizeSchedule:(NSNumber *) randomizeSchedule
+                           context:(NSArray  *) context
+                         startDate:(NSDate *) start
+                           endDate:(NSDate *) end
+                         interface:(NSNumber *)interface;
 
 // esms
 - (void) addESM:(NSDictionary *) esm;

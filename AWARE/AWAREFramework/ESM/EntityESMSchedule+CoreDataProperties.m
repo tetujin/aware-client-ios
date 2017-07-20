@@ -16,6 +16,7 @@
 @dynamic end_date;
 @dynamic expiration_threshold;
 @dynamic fire_hour;
+@dynamic interface;
 @dynamic noitification_body;
 @dynamic notification_title;
 @dynamic randomize_schedule;

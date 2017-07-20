@@ -68,8 +68,9 @@
     // WebESM * webESM;
     IOSESM * iOSESM;
     BalacnedCampusESMScheduler * bcESM;
-    NSArray * esms;
+    NSArray * esmSchedules;
     int currentESMNumber;
+    int currentESMScheduleNumber;
     
     NSObject * observer;
 }
@@ -144,6 +145,7 @@
     [bcESM allowsDateUploadWithoutBatteryCharging];
     
     currentESMNumber = 0;
+    currentESMScheduleNumber = 0;
     
     [_mainScrollView setBackgroundColor:[UIColor whiteColor]];
     
@@ -171,6 +173,7 @@
                                 [alertController addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
                                     esmNumber = 0;
                                     currentESMNumber = 0;
+                                    currentESMScheduleNumber = 0;
                                     [self.navigationController popToRootViewControllerAnimated:YES];
                                 }]];
                                 [self presentViewController:alertController animated:YES completion:nil];
@@ -245,11 +248,42 @@
     
     // Get ESM using an ESMStorageHelper
     // esms = [webESM getValidESMsWithDatetime:[NSDate new]];
-    esms = [iOSESM getValidESMsWithDatetime:[NSDate new]];
-    if(esms != nil && esms.count > currentESMNumber){
-        // set title bar
-        self.navigationItem.title = [NSString stringWithFormat:@"%d/%ld", currentESMNumber+1, esms.count];
-        [self setEsm:esms[currentESMNumber]];
+    esmSchedules = [iOSESM getValidESMSchedulesWithDatetime:[NSDate new]];
+    if(esmSchedules != nil && esmSchedules.count > currentESMScheduleNumber){
+        
+        EntityESMSchedule * esmSchedule = esmSchedules[currentESMScheduleNumber];
+        NSLog(@"[interface: %@]", esmSchedule.interface);
+        NSSet * childEsms = esmSchedule.esms;
+        // NSNumber * interface = schedule.interface;
+        NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"esm_number" ascending:YES];
+        NSArray *sortDescriptors = [NSArray arrayWithObjects:sort,nil];
+        NSArray *sortedEsms = [childEsms sortedArrayUsingDescriptors:sortDescriptors];
+        
+        if([esmSchedule.interface isEqualToNumber:@1]){
+            // self.navigationItem.title = esmSchedule.schedule_id;
+            int tag = 0;
+            for (EntityESM * esm in sortedEsms) {
+                // "interface is 1 (multiple esm)"
+                EntityESM * loopESM = esm;
+                // The loop is broken if this element 's interface is 0.
+                [self setEsm:loopESM withTag:tag button:NO];
+                tag++;
+            }
+            // Submit button be shown if the element is the last one.
+            [self setSubmitButton];
+            self.navigationItem.title = [NSString stringWithFormat:@"%@ - %d/%ld",
+                                         esmSchedule.schedule_id,
+                                         currentESMScheduleNumber+1,
+                                         esmSchedules.count];
+        }else{
+            [self setEsm:sortedEsms[currentESMNumber] withTag:0 button:YES];
+            self.navigationItem.title = [NSString stringWithFormat:@"%@(%d/%ld) - %d/%ld",
+                                         esmSchedule.schedule_id,
+                                         currentESMNumber+1,
+                                         sortedEsms.count,
+                                         currentESMScheduleNumber+1,
+                                         esmSchedules.count];
+        }
     }
 }
 
@@ -259,10 +293,11 @@
     }
 }
 
-- (void) setEsm:(EntityESM *) esm {
+- (void) setEsm:(EntityESM *)esm withTag:(int)tag button:(bool)buttonState{
     // Set ESM Elements
-    int tag = 0;
     NSLog(@"====== Hello ESM !! =======");
+    NSLog(@"Interface Type: %@",esm.interface);
+    
     //NSDictionary * dic = [oneEsmObject objectForKey:@"esm"];
     //The ESM type (1-free text, 2-radio, 3-checkbox, 4-likert, 5-quick, 6-scale)
     NSNumber* type = esm.esm_type; //[dic objectForKey:KEY_ESM_TYPE];
@@ -309,10 +344,20 @@
     }
     [self addNullElement];
     [self addLineElement];
-    // tag++;
 
+    
+    if (buttonState) {
+        [self addNullElement];
+        [self addSubmitButtonWithText:esm.esm_submit];
+        [self addNullElement];
+        [self addCancelButtonWithText:@"Cancel"];
+        [self addNullElement];
+    }
+}
+
+- (void) setSubmitButton {
     [self addNullElement];
-    [self addSubmitButtonWithText:esm.esm_submit];
+    [self addSubmitButtonWithText:@"Submit"];
     [self addNullElement];
     [self addCancelButtonWithText:@"Cancel"];
     [self addNullElement];
@@ -757,6 +802,7 @@
 
 - (void) pushedLikertButton:(UIButton *) sender {
     NSNumber * tag = [NSNumber numberWithInteger:sender.tag];
+    // NSLog(@"selected item: %@",tag);
     int selectedX = sender.frame.origin.x;
     for (NSDictionary * dic in uiElements) {
         NSNumber *tagOfElement = [dic objectForKey:KEY_TAG];
@@ -1683,21 +1729,49 @@
         [delegate.managedObjectContext reset];
         
         iOSESM = [[IOSESM alloc] initWithAwareStudy:study dbType:AwareDBTypeCoreData];
-        esms = [iOSESM getValidESMsWithDatetime:[NSDate new]];
+        esmSchedules = [iOSESM getValidESMSchedulesWithDatetime:[NSDate new]];
         
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"AWARE can not save your answer" message:@"Please push submit button again." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [alert show];
     }
     
     if ( result ) {
-        currentESMNumber++;
-        if (currentESMNumber < esms.count){
-            [self viewDidAppear:NO];
-            return;
+        //////  interface = 1   ////////////
+        EntityESMSchedule * schedule = esmSchedules[currentESMScheduleNumber];
+        bool isDone = NO;
+        if([schedule.interface isEqualToNumber:@1]){
+            currentESMScheduleNumber++;
+            if (currentESMScheduleNumber < esmSchedules.count){
+                [self viewDidAppear:NO];
+                return;
+            }else{
+                isDone = YES;
+            }
+        /////  interface = 0 //////////
         }else{
+            currentESMNumber++;
+            if (currentESMNumber < schedule.esms.count){
+                [self viewDidAppear:NO];
+                return;
+            }else{
+                currentESMScheduleNumber++;
+                if (currentESMScheduleNumber < esmSchedules.count){
+                    currentESMNumber = 0;
+                    [self viewDidAppear:NO];
+                    return;
+                }else{
+                    isDone = YES;
+                }
+            }
+        }
+        
+        ///////////////////////
+        
+        if(isDone){
             if([study getStudyId] == nil){
                 esmNumber = 0;
                 currentESMNumber = 0;
+                currentESMScheduleNumber = 0;
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Thank you for your answer!"
                                                                 message:nil delegate:nil cancelButtonTitle:@"Close" otherButtonTitles:nil];
                 [alert show];
@@ -1764,7 +1838,8 @@
             answer.esm_type = esm.esm_type;
             if(answer.esm_type == nil) answer.esm_type = @1;
             answer.esm_trigger = esm.esm_trigger;
-            if(answer.esm_trigger == nil) answer.esm_trigger = @"";
+            if(answer.esm_trigger ==
+               nil) answer.esm_trigger = @"";
             ////////////////////////////////////////////
             answer.esm_title = esm.esm_title;
             if(answer.esm_title == nil) answer.esm_title = @"";
@@ -1834,15 +1909,69 @@
     context.mergePolicy = originalMergePolicy;
     
     if(!error){
-        currentESMNumber--;
-        if(currentESMNumber < 0)currentESMNumber = 0;
-        if ( currentESMNumber < esms.count ) {
-            [self viewDidAppear:NO];
-            return ;
-        } else {
-            [self.navigationController popToRootViewControllerAnimated:YES];
-            currentESMNumber = 0;
+        
+        //////  interface = 1   ////////////
+        EntityESMSchedule * schedule = esmSchedules[currentESMScheduleNumber];
+        if([schedule.interface isEqualToNumber:@1]){
+            if(currentESMScheduleNumber > 0){
+                currentESMScheduleNumber--;
+            }else{
+                currentESMScheduleNumber = 0;
+            }
+            if (currentESMScheduleNumber < esmSchedules.count){
+                [self viewDidAppear:NO];
+                return;
+            }else{
+                EntityESMSchedule * previousESMSchedule = esmSchedules[currentESMScheduleNumber];
+                if( [previousESMSchedule.interface isEqualToNumber:@0] ){
+                    if(previousESMSchedule.esms.count > 0){
+                        currentESMNumber = (int)previousESMSchedule.esms.count - 1;
+                    }else{
+                        currentESMNumber = 0;
+                    }
+                }else{
+                    currentESMNumber = 0;
+                }
+                // isDone = YES;
+            }
+        /////  interface = 0 //////////
+        }else{
+            currentESMNumber--;
+            if (currentESMNumber >= 0 ){
+                [self viewDidAppear:NO];
+                return;
+            }else{
+                // currentESMNumber = 0;
+                if (currentESMScheduleNumber > 0){
+                    currentESMScheduleNumber--;
+                    EntityESMSchedule * previousESMSchedule = esmSchedules[currentESMScheduleNumber];
+                    if( [previousESMSchedule.interface isEqualToNumber:@0] ){
+                        if(previousESMSchedule.esms.count > 0){
+                            currentESMNumber = (int)previousESMSchedule.esms.count - 1;
+                        }else{
+                            currentESMNumber = 0;
+                        }
+                    }else{
+                        currentESMNumber = 0;
+                    }
+                    [self viewDidAppear:NO];
+                    return;
+                }else{
+                    NSLog(@"This ESM is the first ESM.");
+                }
+            }
         }
+///////////////////// backup ///////////////////
+//        currentESMNumber--;
+//        if(currentESMNumber < 0)currentESMNumber = 0;
+//        if ( currentESMNumber < esmSchedules.count ) {
+//            [self viewDidAppear:NO];
+//            return ;
+//        } else {
+//            [self.navigationController popToRootViewControllerAnimated:YES];
+//            currentESMNumber = 0;
+//        }
+        
     }else{
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"AWARE could not save your answer"
                                                         message:@"Please push submit button again."
@@ -1851,7 +1980,7 @@
                                               otherButtonTitles:nil];
         [alert show];
         [delegate.managedObjectContext reset];
-        esms = [iOSESM getValidESMsWithDatetime:[NSDate new]];
+        esmSchedules = [iOSESM getValidESMSchedulesWithDatetime:[NSDate new]];
     }
 }
 
