@@ -16,6 +16,16 @@ Nothing is more stressful than to interrupt a mobile phone user at the most unfo
 ## Author
 AWARE Framework client for iOS is developed by [Yuuki Nishiyama](https://www.ht.sfc.keio.ac.jp/~tetujin/) (Tokuda Laboratory, SFC, Keio University). Also, [AWARE framework](http://www.awareframework.com/) and [AWARE Framework client](https://github.com/denzilferreira/aware-client) (for Android) were created by [Denzil Ferreira](http://www.denzilferreira.com/) (Community Imaging Group, University of Oulu) and his group originally.
 
+## Contributions
+Help is welcome! If you do not know what to do, just pick one item and send me a pull request.
+- [ ] Develop Library Version (.framework)
+- [ ] Support Cocoapods
+- [ ] Support Swift
+- [ ] Wirte test cases 
+- [ ] Plugin Update: Keyboard
+- [ ] Plugin Update: Event-based ESM (for iOS ESM)
+- [x] Plugin Update: Multiple-ESM Interface (for iOS ESM)
+
 ## Libraries
 AWARE Framework Client for iOS uses following external libraries via [CocoaPod](https://cocoapods.org/).
 - [MQTTKit](https://github.com/jmesnil/MQTTKit)
