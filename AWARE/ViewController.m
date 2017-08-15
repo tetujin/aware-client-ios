@@ -179,6 +179,7 @@
         }
     }
     
+    /*
     NSArray * esms = [iOSESM getValidESMSchedulesWithDatetime:[NSDate new]];
     if(esms != nil && esms.count != 0 && ![IOSESM isAppearedThisSection]){
         [IOSESM setAppearedState:YES];
@@ -188,7 +189,17 @@
     AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
     AWARECore * core = delegate.sharedAWARECore;
     [core checkComplianceWithViewController:self];
-
+     */
+    
+    NSArray * esms = [iOSESM getValidESMSchedulesWithDatetime:[NSDate new]];
+    if(esms != nil && esms.count != 0 && ![IOSESM isAppearedThisSection]){
+        [IOSESM setAppearedState:YES];
+        [self performSegueWithIdentifier:@"iOSEsmScrollView" sender:self];
+    }
+    
+    AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+    AWARECore * core = delegate.sharedAWARECore;
+    [core checkComplianceWithViewController:self];
 }
 
 
@@ -552,10 +563,18 @@
         }
     }
     
+    /*
     NSArray * esms = [iOSESM getValidESMSchedulesWithDatetime:[NSDate new]];
     if(esms != nil && esms.count != 0 ){
         [IOSESM setAppearedState:YES];
         [self performSegueWithIdentifier:@"iOSEsmView" sender:self];
+    }
+     */
+    
+    NSArray * esms = [iOSESM getValidESMSchedulesWithDatetime:[NSDate new]];
+    if(esms != nil && esms.count != 0 ){
+        [IOSESM setAppearedState:YES];
+        [self performSegueWithIdentifier:@"iOSEsmScrollView" sender:self];
     }
     
 }

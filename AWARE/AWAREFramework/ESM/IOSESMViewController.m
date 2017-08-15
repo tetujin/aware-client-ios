@@ -18,7 +18,7 @@
 // #import "WebESM.h"
 #import "IOSESM.h"
 #import "EntityESMHistory.h"
-#import "EntityESM.h"
+#import "EntityESM+CoreDataClass.h"
 
 #import "PamSchema.h"
 #import "QuartzCore/CALayer.h"

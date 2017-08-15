@@ -7,7 +7,7 @@
 //
 
 #import "EntityESMSchedule.h"
-#import "EntityESM.h"
+#import "EntityESM+CoreDataClass.h"
 
 @implementation EntityESMSchedule
 

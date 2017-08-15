@@ -10,7 +10,7 @@
 #import "WebESM.h"
 #import "TCQMaker.h"
 #import "AppDelegate.h"
-#import "EntityESM.h"
+#import "EntityESM+CoreDataClass.h"
 #import "EntityESMSchedule.h"
 #import "SingleESMObject.h"
 #import "EntityESMHistory.h"
@@ -555,10 +555,16 @@ didCompleteWithError:(NSError *)error{
                         entityEsm.esm_scale_min_label = [esm objectForKey:@"esm_scale_min_label"];
                         entityEsm.esm_scale_step = [esm objectForKey:@"esm_scale_step"];
                         entityEsm.esm_json = [self convertNSArraytoJsonStr:@[esm]];
-                        entityEsm.esm_na = @([[esm objectForKey:@"esm_na"] boolValue]);
                         entityEsm.esm_number = @(number);
+                        // for date&time picker
+                        entityEsm.esm_start_time = [esm objectForKey:@"esm_start_time"];
+                        entityEsm.esm_start_date = [esm objectForKey:@"esm_start_date"];
+                        entityEsm.esm_time_format = [esm objectForKey:@"esm_time_format"];
+                        entityEsm.esm_minute_step = [esm objectForKey:@"esm_minute_step"];
+                        // for web ESM url
                         entityEsm.esm_url = [esm objectForKey:@"esm_url"];
-                        
+                        // for na
+                        entityEsm.esm_na = @([[esm objectForKey:@"esm_na"] boolValue]);
                         // entityEsm.esm_schedule = entityESMSchedule;
                         
                         [entityESMSchedule addEsmsObject:entityEsm];

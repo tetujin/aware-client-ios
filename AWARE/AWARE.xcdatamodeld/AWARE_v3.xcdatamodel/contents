@@ -147,6 +147,7 @@
         <attribute name="esm_likert_max_label" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="esm_likert_min_label" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="esm_likert_step" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="esm_minute_step" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="esm_na" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="esm_number" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="esm_quick_answers" optional="YES" attributeType="String" syncable="YES"/>
@@ -157,8 +158,11 @@
         <attribute name="esm_scale_min_label" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="esm_scale_start" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="esm_scale_step" optional="YES" attributeType="Double" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="esm_start_date" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="esm_start_time" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="esm_status" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="esm_submit" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="esm_time_format" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="esm_title" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="esm_trigger" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="esm_type" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
@@ -483,7 +487,7 @@
         <element name="EntityContact" positionX="297" positionY="144" width="128" height="150"/>
         <element name="EntityDebug" positionX="234" positionY="198" width="128" height="30"/>
         <element name="EntityDeviceUsage" positionX="234" positionY="198" width="128" height="30"/>
-        <element name="EntityESM" positionX="549" positionY="396" width="128" height="480"/>
+        <element name="EntityESM" positionX="549" positionY="396" width="128" height="540"/>
         <element name="EntityESMAnswer" positionX="448" positionY="297" width="128" height="165"/>
         <element name="EntityESMAnswerBC" positionX="306" positionY="153" width="128" height="405"/>
         <element name="EntityESMHistory" positionX="297" positionY="144" width="128" height="135"/>

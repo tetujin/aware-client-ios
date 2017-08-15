@@ -1,0 +1,260 @@
+//
+//  ESMClockTimePickerView.m
+//  AWARE
+//
+//  Created by Yuuki Nishiyama on 2017/08/14.
+//  Copyright © 2017 Yuuki NISHIYAMA. All rights reserved.
+//
+
+#import "ESMClockTimePickerView.h"
+#import "ESMClockLineView.h"
+
+@implementation ESMClockTimePickerView{
+    UIView * headerView;
+    // UIView * timeView;
+    UIButton * hourBtn;
+    UIButton * minBtn;
+    UIView *baseClockView;
+    NSMutableArray * buttons;
+    UIButton * amBtn;
+    UIButton * pmBtn;
+    ESMClockLineView * lineView;
+    
+    UIColor * clockBackgroundColor;
+    UIColor * clockCyanColor;
+    UIColor * clockUnselectedObjColor;
+    
+    int mode;
+}
+
+/*
+// Only override drawRect: if you perform custom drawing.
+// An empty implementation adversely affects performance during animation.
+- (void)drawRect:(CGRect)rect {
+    // Drawing code
+}
+*/
+
+- (instancetype)initWithFrame:(CGRect)frame esm:(EntityESM *)esm{
+    self = [super initWithFrame:frame esm:esm];
+    
+    if(self != nil){
+        [self addClockTimePickerElement:esm withFrame:frame];
+    }
+    return self;
+}
+
+
+- (void) addClockTimePickerElement:(EntityESM *)esm withFrame:(CGRect) frame {
+    int clockWidth = self.mainView.frame.size.width - 100; // 40 is a buffer (right:20 + left:20)
+    int blankSpace = 10;
+    
+    clockBackgroundColor = [UIColor colorWithRed:238.f/255.f green:238.f/255.f blue:238.f/255.f alpha:1.0];
+    clockCyanColor = [UIColor colorWithRed:52.f/255.f green:181.f/255.f blue:230.f/255.f alpha:1.0];
+    clockUnselectedObjColor = [UIColor colorWithRed:190.f/255.f green:232.f/255.f blue:246.f/255.f alpha:1.0];
+    
+    //////// header view ///////////
+    headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 80)];
+    headerView.backgroundColor = clockCyanColor;
+    [self.mainView addSubview:headerView];
+
+    ////////////////////
+    UIButton * colonLabel = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 15, headerView.frame.size.height/4 * 3)];
+    colonLabel.center = CGPointMake(headerView.frame.size.width/2, headerView.frame.size.height/2-5);
+    [colonLabel setTitle:@":" forState:UIControlStateNormal];
+    [colonLabel setTitleColor:clockUnselectedObjColor forState:UIControlStateNormal];
+    colonLabel.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:50];
+    [headerView addSubview:colonLabel];
+    
+    //////////////////
+    mode = 0;
+    hourBtn = [[UIButton alloc] initWithFrame:CGRectMake(colonLabel.frame.origin.x - headerView.frame.size.width/2/2,
+                                                         colonLabel.frame.origin.y + 5,
+                                                         headerView.frame.size.width/2/2,
+                                                         headerView.frame.size.height/4 * 3)];
+    [hourBtn setTitle:@"12" forState:UIControlStateNormal];
+    [hourBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    hourBtn.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:50];
+    hourBtn.titleLabel.textAlignment = NSTextAlignmentRight;
+    hourBtn.tag = 0;
+    [hourBtn addTarget:self action:@selector(pushedHourMinButton:) forControlEvents:UIControlEventTouchDown];
+    [headerView addSubview:hourBtn];
+    
+    //////////////////
+    minBtn  = [[UIButton alloc] initWithFrame:CGRectMake(colonLabel.frame.origin.x+colonLabel.frame.size.width,
+                                                         colonLabel.frame.origin.y + 5,
+                                                         headerView.frame.size.width/2/2,
+                                                         headerView.frame.size.height/4 * 3)];
+    [minBtn setTitle:@"00" forState:UIControlStateNormal];
+    [minBtn setTitleColor:clockUnselectedObjColor forState:UIControlStateNormal];
+    minBtn.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:50];
+    minBtn.titleLabel.textAlignment = NSTextAlignmentLeft;
+    minBtn.tag = 1;
+    [minBtn addTarget:self action:@selector(pushedHourMinButton:) forControlEvents:UIControlEventTouchDown];
+    [headerView addSubview:minBtn];
+    
+    ///////////////////////////////////
+    // [headerView addSubview:timeView];
+    
+    ///// AM button
+    amBtn = [[UIButton alloc] initWithFrame:CGRectMake(minBtn.frame.origin.x + minBtn.frame.size.width,
+                                                      minBtn.frame.origin.y,
+                                                      40,
+                                                      minBtn.frame.size.height/2)];
+    [amBtn setTitle:@"AM" forState:UIControlStateNormal];
+    [amBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    amBtn.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:20];
+    [amBtn addTarget:self action:@selector(selectedAMPMbutton:) forControlEvents:UIControlEventTouchDown];
+    [headerView addSubview:amBtn];
+    
+    ///// PM button
+    pmBtn = [[UIButton alloc] initWithFrame:CGRectMake(minBtn.frame.origin.x + minBtn.frame.size.width,
+                                                      minBtn.frame.origin.y + minBtn.frame.size.height - minBtn.frame.size.height/2,
+                                                      40,
+                                                      minBtn.frame.size.height/2)];
+    [pmBtn setTitle:@"PM" forState:UIControlStateNormal];
+    [pmBtn setTitleColor:clockUnselectedObjColor forState:UIControlStateNormal];
+    pmBtn.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:20];
+    [pmBtn addTarget:self action:@selector(selectedAMPMbutton:) forControlEvents:UIControlEventTouchDown];
+    [headerView addSubview:pmBtn];
+    
+    //////// clock view ///////////
+    baseClockView = [[UIView alloc] initWithFrame:CGRectMake(50,
+                                                             headerView.frame.size.height + blankSpace,
+                                                             clockWidth,
+                                                             clockWidth)];
+    baseClockView.layer.cornerRadius = clockWidth / 2.0;
+    baseClockView.clipsToBounds = YES;
+    baseClockView.backgroundColor = clockBackgroundColor;
+    
+    lineView = [[ESMClockLineView alloc] initWithFrame:CGRectMake(0, 0,
+                                                                 clockWidth,
+                                                                 clockWidth)
+                                                point1:CGPointMake(clockWidth/2, clockWidth/2)
+                                                point2:CGPointMake(clockWidth/2, 10)];
+    [baseClockView addSubview:lineView];
+ 
+    ////////// adding a small center circle
+    UIView * centerCircle = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, 10)];
+    centerCircle.backgroundColor = clockCyanColor;
+    centerCircle.layer.cornerRadius = 10 / 2.0;
+    centerCircle.center = CGPointMake(baseClockView.frame.size.width/2,
+                                      baseClockView.frame.size.height/2);
+    [baseClockView addSubview:centerCircle];
+    
+    //////// 12 angles ///////////
+    int n;
+    float x,y,k;
+    float radius;
+    n=12;
+    radius = baseClockView.frame.size.width/2 - 30;
+    int pointNumber = 3;
+    buttons = [[NSMutableArray alloc] init];
+    for(k=0;k<2*M_PI;k+=2*M_PI/n){
+        x = radius * cos(k) + (baseClockView.frame.size.width/2);
+        y = radius * sin(k) + (baseClockView.frame.size.width/2);
+        // NSLog(@"[%d] k=%6.2f, x=%4.2f, y=%4.2f\n", pointNumber,k/M_PI*180,x,y);
+        UIButton * button = [[UIButton alloc] initWithFrame:CGRectMake(x, y, 40, 40)];
+        button.center = CGPointMake(x, y);
+        [button setTitleColor:[UIColor darkTextColor] forState:UIControlStateNormal];
+        [button setTitle:[[NSString alloc] initWithFormat:@"%d",pointNumber]  forState:UIControlStateNormal];
+        button.titleLabel.textAlignment = NSTextAlignmentCenter;
+        button.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:20];
+        [baseClockView addSubview:button];
+        ////////// set an event to each button
+        [button addTarget:self action:@selector(selectedNumber:) forControlEvents:UIControlEventTouchDown];
+        ////////// set a tag to each button
+        button.tag = pointNumber;
+        //////////
+        button.layer.cornerRadius = button.frame.size.width / 2.0;
+        button.clipsToBounds = YES;
+        /////////
+        pointNumber++;
+        if(n<pointNumber){
+            pointNumber = 1;
+            button.backgroundColor = clockCyanColor;
+            [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        }
+        [buttons addObject:button];
+    }
+    
+    [self.mainView addSubview:baseClockView];
+    
+    ///////////////
+    self.mainView.frame = CGRectMake(self.mainView.frame.origin.x,
+                                     self.mainView.frame.origin.y,
+                                     self.mainView.frame.size.width,
+                                     headerView.frame.size.height + blankSpace + baseClockView.frame.size.height);
+    [self refreshSizeOfRootView];
+}
+
+
+- (void) selectedNumber:(UIButton *)button{
+    
+    for (UIButton * btn in buttons) {
+        if(btn.tag != button.tag){
+            btn.backgroundColor = [UIColor clearColor];
+            [btn setTitleColor:[UIColor darkTextColor] forState:UIControlStateNormal];
+        }
+    }
+    [lineView setLineFrom:CGPointMake(lineView.frame.size.width/2,lineView.frame.size.height/2)
+                       to:button.center];
+    button.backgroundColor = clockCyanColor;
+    [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    if (mode == 0) {
+        if (button.tag < 10) {
+            [hourBtn setTitle:[NSString stringWithFormat:@"0%ld",button.tag] forState:UIControlStateNormal];
+        }else{
+            [hourBtn setTitle:[NSString stringWithFormat:@"%ld",button.tag] forState:UIControlStateNormal];
+        }
+    } else if ( mode == 1){
+        if (button.tag < 10){
+            [minBtn  setTitle:[NSString stringWithFormat:@"0%ld",button.tag] forState:UIControlStateNormal];
+        }else{
+            [minBtn  setTitle:[NSString stringWithFormat:@"%ld",button.tag] forState:UIControlStateNormal];
+        }
+    }
+    AudioServicesPlaySystemSound(1104);
+}
+
+- (void) selectedAMPMbutton:(UIButton *)button{
+    AudioServicesPlaySystemSound(1104);
+    if([button.titleLabel.text isEqualToString:@"AM"]){
+        [amBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [pmBtn setTitleColor:clockUnselectedObjColor forState:UIControlStateNormal];
+    }else{
+        [amBtn setTitleColor:clockUnselectedObjColor forState:UIControlStateNormal];
+        [pmBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    }
+}
+
+
+- (void) pushedHourMinButton:(UIButton *) button {
+    AudioServicesPlaySystemSound(1104);
+    mode = (int)button.tag; // 0=hour, 1=min
+    if(button.tag == 0){
+        [hourBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [minBtn  setTitleColor:clockUnselectedObjColor forState:UIControlStateNormal];
+        NSArray * hours = @[@"3",@"4",@"5",@"6",@"7",@"8",@"9",@"10",@"11",@"12",@"1",@"2",@"3"];
+        for (int i=0; i<hours.count; i++) {
+            NSString * label = [hours objectAtIndex:i];
+            UIButton * btn = [buttons objectAtIndex:i];
+            [btn setTitle:label forState:UIControlStateNormal];
+            btn.tag = label.intValue;
+        }
+    }else if(button.tag == 1){
+        [hourBtn setTitleColor:clockUnselectedObjColor forState:UIControlStateNormal];
+        [minBtn  setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        NSArray * mins = @[@"15",@"20",@"25",@"30",@"35",@"40",@"45",@"50",@"55",@"0",@"5",@"10",@"15"];
+        for (int i=0; i<mins.count; i++) {
+            NSString * label = [mins objectAtIndex:i];
+            UIButton * btn = [buttons objectAtIndex:i];
+            [btn setTitle:label forState:UIControlStateNormal];
+            btn.tag = label.intValue;
+        }
+    }else{
+        
+    }
+}
+
+@end
