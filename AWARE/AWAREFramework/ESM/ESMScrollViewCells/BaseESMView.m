@@ -11,8 +11,6 @@
 
 @implementation BaseESMView{
     bool naState;
-    // int totalHeight;
-    // EntityESM * esmEntity;
     
     int x;
     int y;
@@ -20,6 +18,7 @@
     int h;
 
     int WIDTH_BASE_VIEW;
+    int SIDE_SPACE;
     int HEIGHT_TITLE;
     int HEIGHT_INSTRUCTION;
     int HEIGHT_MAIN_CONTENT;
@@ -56,8 +55,9 @@
         // x = frame.origin.x;
         // y = frame.origin.y;
         WIDTH_BASE_VIEW = frame.size.width;
+        SIDE_SPACE = 10;
         HEIGHT_TITLE = 80;
-        HEIGHT_INSTRUCTION = 40;
+        HEIGHT_INSTRUCTION = 60;
         HEIGHT_MAIN_CONTENT = 100;
         HEIGHT_BUTTON = 60;
         HEIGHT_SPACE = 5;
@@ -71,21 +71,35 @@
 
 - (UIView *) generateESMView {
     // set-up title
-    _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, WIDTH_BASE_VIEW, HEIGHT_TITLE)];
-    _titleLabel.text       = _esmEntity.esm_title;
-    _titleLabel.adjustsFontSizeToFitWidth = YES;
-    _titleLabel.font = [_titleLabel.font fontWithSize:25];
-    _titleLabel.numberOfLines = 5;
-    [self addSubview:_titleLabel];
-    [self extendHeightOfBaseView:HEIGHT_TITLE];
+    if([_esmEntity.esm_title isEqualToString:@""] || _esmEntity.esm_title == nil){
+        _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, WIDTH_BASE_VIEW, 10)];
+        [self addSubview:_titleLabel];
+        [self extendHeightOfBaseView:10];
+    }else{
+        _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(SIDE_SPACE, 0, WIDTH_BASE_VIEW-(SIDE_SPACE*2), HEIGHT_TITLE)];
+        _titleLabel.text       = _esmEntity.esm_title;
+        _titleLabel.adjustsFontSizeToFitWidth = YES;
+        _titleLabel.font = [_titleLabel.font fontWithSize:25];
+        _titleLabel.numberOfLines = 5;
+        [self addSubview:_titleLabel];
+        [self extendHeightOfBaseView:HEIGHT_TITLE];
+    }
     
     // set-up instraction
-    _instructionLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, [self getBaseViewHeight], WIDTH_BASE_VIEW, HEIGHT_INSTRUCTION)];
-    _instructionLabel.text = _esmEntity.esm_instructions;
-    _instructionLabel.adjustsFontSizeToFitWidth = YES;
-    _instructionLabel.numberOfLines = 5;
-    [self addSubview:_instructionLabel];
-    [self extendHeightOfBaseView:HEIGHT_INSTRUCTION];
+    if([_esmEntity.esm_instructions isEqualToString:@""] || _esmEntity.esm_instructions == nil ){
+        _instructionLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, [self getBaseViewHeight], WIDTH_BASE_VIEW, 10)];
+        [self addSubview:_instructionLabel];
+        [self extendHeightOfBaseView:10];
+    }else{
+        _instructionLabel = [[UILabel alloc] initWithFrame:CGRectMake(SIDE_SPACE, [self getBaseViewHeight], WIDTH_BASE_VIEW-(SIDE_SPACE*2), HEIGHT_INSTRUCTION)];
+        _instructionLabel.text = _esmEntity.esm_instructions;
+        _instructionLabel.adjustsFontSizeToFitWidth = YES;
+        _instructionLabel.font = [_titleLabel.font fontWithSize:20];
+        [_instructionLabel setTextColor:[UIColor darkTextColor]];
+        _instructionLabel.numberOfLines = 5;
+        [self addSubview:_instructionLabel];
+        [self extendHeightOfBaseView:HEIGHT_INSTRUCTION];
+    }
     
     // set-up main-content
     _mainView = [[UIView alloc] initWithFrame:CGRectMake(0, [self getBaseViewHeight], WIDTH_BASE_VIEW, HEIGHT_MAIN_CONTENT)];
@@ -109,7 +123,7 @@
     [self addSubview:_naView];
     
     // line view
-    _splitLineView = [[UIView alloc] initWithFrame:CGRectMake(0, [self getBaseViewHeight],WIDTH_BASE_VIEW, HEIGHT_LINE)];
+    _splitLineView = [[UIView alloc] initWithFrame:CGRectMake( 0, [self getBaseViewHeight], WIDTH_BASE_VIEW, HEIGHT_LINE)];
     [_splitLineView setBackgroundColor:[UIColor lightGrayColor]];
     [self extendHeightOfBaseView:HEIGHT_LINE];
     [self addSubview:_splitLineView];
@@ -159,28 +173,6 @@
                                  childView.frame.size.height);
 }
 
-//- (instancetype)initWithCoder:(NSCoder *)aDecoder{
-//
-//    self = [super initWithCoder:aDecoder];
-//    if(self != nil){
-//        // [self commonInit];
-//    }
-//    return self;
-//}
-//- (void) commonInit{
-//    // NSString *className = NSStringFromClass([self class]);
-//    // UIView * view = [[NSBundle mainBundle] loadNibNamed:className owner:self options:0].firstObject;
-//    
-//    // view.frame = self.bounds;
-//    // [self addSubview:view];
-//
-//    //////////////////////////////
-//    // [[NSBundle mainBundle] loadNibNamed:NSStringFromClass([self class]) owner:self options:nil];
-//    [[NSBundle mainBundle] loadNibNamed:@"BaseESMView" owner:self options:nil];
-//    [self addSubview:self.contentView];
-//}
-
-
 
 - (IBAction)pushedNAButton:(id)sender {
     UIImage *img = nil;
@@ -216,13 +208,18 @@
     self.naView.hidden = YES;
 }
 
+- (NSNumber *)getESMState{
+    // A status of the ESM (0-new, 1-dismissed, 2-answered, 3-expired) -> Defualt is zero(0).
+    return @1;
+}
+
 - (NSString *)getUserAnswer{
     return @"";
 }
 
-- (NSString *)getUserAnswerWithJSONString{
-    return @"";
-}
+//- (NSString *)getUserAnswerWithJSONString{
+//    return @"";
+//}
 
 
 //////////////////////////////////////////

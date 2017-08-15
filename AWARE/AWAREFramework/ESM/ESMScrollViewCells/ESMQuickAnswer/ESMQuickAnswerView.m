@@ -70,6 +70,7 @@
 
 - (void) pushedQuickAnswerButtons:(UIButton *) button  {
     // int tag = (int)button.tag;
+    AudioServicesPlaySystemSound(1105);
     for (UIButton * b in buttons) {
         b.selected = NO;
         b.layer.borderWidth = 0;
@@ -81,6 +82,24 @@
     }
 }
 
+- (NSString *)getUserAnswer{
+    if([self isNA]) return @"NA";
+    NSString * seletedLabel = @"";
+    for (UIButton * b in buttons) {
+        if(b.selected){
+            seletedLabel = b.titleLabel.text;
+        }
+    }
+    return seletedLabel;
+}
 
+- (NSNumber  *)getESMState{
+    if([self isNA]) return @2;
+    if (![[self getUserAnswer] isEqualToString:@""]) {
+        return @2;
+    }else{
+        return @1;
+    }
+}
 
 @end

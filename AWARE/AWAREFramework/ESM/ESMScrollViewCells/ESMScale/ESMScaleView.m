@@ -11,7 +11,6 @@
 
 @implementation ESMScaleView {
     UISlider *slider;
-    UITextField *valueLabel;
     UILabel *minLabel;
     UILabel *maxLabel;
 }
@@ -51,13 +50,13 @@
 
     // Add a value label
     // UILabel *valueLabel = [[UILabel alloc] initWithFrame:CGRectMake(mainContentRect.origin.x+60, totalHight, mainContentRect.size.width-120, valueLabelH)];
-    valueLabel = [[UITextField alloc] initWithFrame:CGRectMake(60,
+    _valueLabel = [[UITextField alloc] initWithFrame:CGRectMake(60,
                                                                 0,
                                                                 self.mainView.frame.size.width-120,
                                                                valueLabelH)];
-    [valueLabel setKeyboardType:UIKeyboardTypeNumbersAndPunctuation];
-    [valueLabel addTarget:self action:@selector(changeTextFieldValue:) forControlEvents:UIControlEventEditingDidEndOnExit];
-    [valueLabel addTarget:self action:@selector(touchDownTextFiledValue:) forControlEvents:UIControlEventEditingDidBegin];
+    [_valueLabel setKeyboardType:UIKeyboardTypeNumbersAndPunctuation];
+    [_valueLabel addTarget:self action:@selector(changeTextFieldValue:) forControlEvents:UIControlEventEditingDidEndOnExit];
+    [_valueLabel addTarget:self action:@selector(touchDownTextFiledValue:) forControlEvents:UIControlEventEditingDidBegin];
     // valueLabel.tag = tag;
     
     // Add  min/max/slider value
@@ -87,17 +86,17 @@
     float value = esm.esm_scale_start.floatValue;
     slider.value = value;
     
-    valueLabel.text = @"---";
+    _valueLabel.text = @"---";
     minLabel.text = esm.esm_scale_min_label; // [dic objectForKey:KEY_ESM_SCALE_MIN_LABEL];
     maxLabel.text = esm.esm_scale_max_label; // [dic objectForKey:KEY_ESM_SCALE_MAX_LABEL];
     
-    valueLabel.textAlignment = NSTextAlignmentCenter;
+    _valueLabel.textAlignment = NSTextAlignmentCenter;
     minLabel.textAlignment = NSTextAlignmentCenter;
     maxLabel.textAlignment = NSTextAlignmentCenter;
     
     [slider addTarget:self action:@selector(sliderChanged:) forControlEvents:UIControlEventValueChanged];
 
-    [self.mainView addSubview:valueLabel];
+    [self.mainView addSubview:_valueLabel];
     [self.mainView addSubview:maxLabel];
     [self.mainView addSubview:minLabel];
     [self.mainView addSubview:slider];
@@ -123,10 +122,13 @@
         double tempValue = value*10;
         int intValue = tempValue/10;
         [sender setValue:intValue];
-        [valueLabel setText:[NSString stringWithFormat:@"%0.1f", value]];
+        [_valueLabel setText:[NSString stringWithFormat:@"%0.1f", value]];
     }else{
+        if(![_valueLabel.text isEqualToString:[NSString stringWithFormat:@"%d",(int)value]]){
+            AudioServicesPlaySystemSound(1105);
+        }
         [sender setValue:(int)value];
-        [valueLabel setText:[NSString stringWithFormat:@"%0.1f", value]];
+        [_valueLabel setText:[NSString stringWithFormat:@"%d", (int)value]];
     }
     
 }
@@ -157,5 +159,25 @@
 }
 
 
+- (NSString *)getUserAnswer{
+    if ([self isNA]) return @"NA";
+    if ([_valueLabel.text isEqualToString:@"---"] ||
+        [_valueLabel.text isEqualToString:@"--"]  ||
+        [_valueLabel.text isEqualToString:@"-"] ) {
+        return @"";
+    }else{
+        return _valueLabel.text;
+    }
+}
+
+- (NSNumber *)getESMState{
+    if ([self isNA]) return @2;
+    
+    if (![[self getUserAnswer] isEqualToString:@""]) {
+        return @2;
+    }else{
+        return @1;
+    }
+}
 
 @end

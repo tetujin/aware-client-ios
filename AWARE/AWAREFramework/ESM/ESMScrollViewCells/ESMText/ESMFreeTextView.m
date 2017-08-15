@@ -27,7 +27,6 @@
     if(self != nil){
         [self addFreeTextElement:esm withFrame:frame];
     }
-    
     return self;
 }
 
@@ -54,6 +53,27 @@
 }
 
 
+//////////////////////////
+
+- (NSNumber *)getESMState{
+    if(![_freeTextView.text isEqualToString:@""]){
+        if ([self isNA]) {
+            return @2;
+        }else{
+            return @1;
+        }
+    }else{
+        return @2;
+    }
+}
+
+- (NSString *)getUserAnswer{
+    if([self isNA]){
+        return @"NA";
+    }else{
+        return _freeTextView.text;
+    }
+}
 
 
 @end

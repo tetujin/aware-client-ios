@@ -792,7 +792,8 @@ didCompleteWithError:(NSError *)error{
     // OR (expiration=0)
     [req setPredicate:[NSPredicate predicateWithFormat:@"(start_date <= %@) AND (end_date >= %@) OR (expiration_threshold=0)", datetime, datetime]];
     NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:@"start_date" ascending:NO];
-    [req setSortDescriptors:[NSArray arrayWithObject:sort]];
+    NSSortDescriptor *sortBySID = [[NSSortDescriptor alloc] initWithKey:@"schedule_id" ascending:NO];
+    [req setSortDescriptors:@[sort,sortBySID]];
     
     NSFetchedResultsController *fetchedResultsController
     = [[NSFetchedResultsController alloc] initWithFetchRequest:req

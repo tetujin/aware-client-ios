@@ -51,19 +51,20 @@ typedef enum: NSInteger {
 
 - (instancetype)initWithFrame:(CGRect)frame esm:(EntityESM *)esm;
 
-- (void) setElements;
+// - (void) setElements;
 - (IBAction)pushedNAButton:(id)sender;
 - (int) getESMType;
 - (BOOL) isNA;
 - (CGFloat) getViewHeight;
 - (void) showNAView;
 - (void) hideNAView;
-- (int) getHeight;
+// - (int) getHeight;
 - (UIView *) generateESMView;
 - (void) refreshSizeOfRootView;
 
+- (NSNumber *) getESMState;
 - (NSString *) getUserAnswer;
-- (NSString *) getUserAnswerWithJSONString;
+// - (NSString *) getUserAnswerWithJSONString;
 
 //////////////////////////////
 - (NSArray *) convertJsonStringToArray:(NSString *) jsonString;

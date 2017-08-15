@@ -10,4 +10,6 @@
 
 @interface ESMScaleView : BaseESMView
 
+@property (nonatomic) IBOutlet UITextField *valueLabel;
+
 @end

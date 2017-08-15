@@ -72,6 +72,26 @@
 				<string>fitbit</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>study_url</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>aware</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>stop_url</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>aware-420</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>86</string>

@@ -11,6 +11,7 @@
 
 @implementation ESMDateTimePickerView{
     UIDatePicker * dateTimePicker;
+    NSString * userAnswer;
 }
 
 /*
@@ -36,7 +37,7 @@
 //    dateTimePicker.datePickerMode = UIDatePickerModeTime;
 - (instancetype)initWithFrame:(CGRect)frame esm:(EntityESM *)esm uiMode:(UIDatePickerMode)mode{
     self = [super initWithFrame:frame esm:esm];
-    
+    userAnswer = @"";
     if(self != nil){
         [self addTimePickerElement:esm withFrame:frame uiMode:mode];
     }
@@ -102,10 +103,25 @@
 
 
 - (void) changedDatePickerValue:(UIDatePicker * ) sender {
-    NSNumber * unixtime = [AWAREUtils getUnixTimestamp:sender.date];
-    NSLog(@"%@", unixtime);
+    if (dateTimePicker.datePickerMode == UIDatePickerModeDateAndTime) {
+        userAnswer = [dateTimePicker date].debugDescription;
+    } else if (dateTimePicker.datePickerMode == UIDatePickerModeDate){
+        userAnswer = [dateTimePicker date].debugDescription;
+    } else if (dateTimePicker.datePickerMode == UIDatePickerModeTime){
+        userAnswer = [dateTimePicker date].debugDescription;
+    } else{
+        userAnswer = [AWAREUtils getUnixTimestamp:sender.date].stringValue;
+    }
 }
 
+- (NSString *) getUserAnswer {
+    if ([self isNA]) return @"NA";
+    return userAnswer;
+}
 
+- (NSNumber  *)getESMState{
+    if ([userAnswer isEqualToString:@""]) return @1;
+    return @2;
+}
 
 @end

@@ -18,12 +18,17 @@
     NSMutableArray * buttons;
     UIButton * amBtn;
     UIButton * pmBtn;
+    bool amState;
     ESMClockLineView * lineView;
     
     UIColor * clockBackgroundColor;
     UIColor * clockCyanColor;
     UIColor * clockUnselectedObjColor;
     
+    NSArray * amHours;
+    NSArray * pmHours;
+    NSArray * mins;
+
     int mode;
 }
 
@@ -38,6 +43,10 @@
 - (instancetype)initWithFrame:(CGRect)frame esm:(EntityESM *)esm{
     self = [super initWithFrame:frame esm:esm];
     
+    amHours = @[@"3",@"4",@"5",@"6",@"7",@"8",@"9",@"10",@"11",@"12",@"1",@"2",@"3"];
+    pmHours = @[@"15",@"16",@"17",@"18",@"19",@"20",@"21",@"22",@"23",@"0",@"13",@"14",@"15"];
+    mins = @[@"15",@"20",@"25",@"30",@"35",@"40",@"45",@"50",@"55",@"0",@"5",@"10",@"15"];
+    [self isAM];
     if(self != nil){
         [self addClockTimePickerElement:esm withFrame:frame];
     }
@@ -73,7 +82,6 @@
                                                          headerView.frame.size.width/2/2,
                                                          headerView.frame.size.height/4 * 3)];
     [hourBtn setTitle:@"12" forState:UIControlStateNormal];
-    [hourBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     hourBtn.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:50];
     hourBtn.titleLabel.textAlignment = NSTextAlignmentRight;
     hourBtn.tag = 0;
@@ -102,7 +110,6 @@
                                                       40,
                                                       minBtn.frame.size.height/2)];
     [amBtn setTitle:@"AM" forState:UIControlStateNormal];
-    [amBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     amBtn.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:20];
     [amBtn addTarget:self action:@selector(selectedAMPMbutton:) forControlEvents:UIControlEventTouchDown];
     [headerView addSubview:amBtn];
@@ -113,10 +120,19 @@
                                                       40,
                                                       minBtn.frame.size.height/2)];
     [pmBtn setTitle:@"PM" forState:UIControlStateNormal];
-    [pmBtn setTitleColor:clockUnselectedObjColor forState:UIControlStateNormal];
     pmBtn.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:20];
     [pmBtn addTarget:self action:@selector(selectedAMPMbutton:) forControlEvents:UIControlEventTouchDown];
     [headerView addSubview:pmBtn];
+    
+    if([self isAM]){
+        [amBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [pmBtn setTitleColor:clockUnselectedObjColor forState:UIControlStateNormal];
+        amState = YES;
+    }else{
+        [amBtn setTitleColor:clockUnselectedObjColor forState:UIControlStateNormal];
+        [pmBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        amState = NO;
+    }
     
     //////// clock view ///////////
     baseClockView = [[UIView alloc] initWithFrame:CGRectMake(50,
@@ -201,12 +217,17 @@
                        to:button.center];
     button.backgroundColor = clockCyanColor;
     [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    
+    AudioServicesPlaySystemSound(1104);
+
     if (mode == 0) {
         if (button.tag < 10) {
             [hourBtn setTitle:[NSString stringWithFormat:@"0%ld",button.tag] forState:UIControlStateNormal];
         }else{
             [hourBtn setTitle:[NSString stringWithFormat:@"%ld",button.tag] forState:UIControlStateNormal];
         }
+        [self pushedHourMinButton:minBtn];
+        [self moveSelectorToOriginalPosition];
     } else if ( mode == 1){
         if (button.tag < 10){
             [minBtn  setTitle:[NSString stringWithFormat:@"0%ld",button.tag] forState:UIControlStateNormal];
@@ -214,7 +235,7 @@
             [minBtn  setTitle:[NSString stringWithFormat:@"%ld",button.tag] forState:UIControlStateNormal];
         }
     }
-    AudioServicesPlaySystemSound(1104);
+
 }
 
 - (void) selectedAMPMbutton:(UIButton *)button{
@@ -222,9 +243,11 @@
     if([button.titleLabel.text isEqualToString:@"AM"]){
         [amBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [pmBtn setTitleColor:clockUnselectedObjColor forState:UIControlStateNormal];
+        amState = YES;
     }else{
         [amBtn setTitleColor:clockUnselectedObjColor forState:UIControlStateNormal];
         [pmBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        amState = NO;
     }
 }
 
@@ -235,17 +258,16 @@
     if(button.tag == 0){
         [hourBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [minBtn  setTitleColor:clockUnselectedObjColor forState:UIControlStateNormal];
-        NSArray * hours = @[@"3",@"4",@"5",@"6",@"7",@"8",@"9",@"10",@"11",@"12",@"1",@"2",@"3"];
-        for (int i=0; i<hours.count; i++) {
-            NSString * label = [hours objectAtIndex:i];
+        for (int i=0; i<amHours.count; i++) {
+            NSString * label = [amHours objectAtIndex:i];
             UIButton * btn = [buttons objectAtIndex:i];
             [btn setTitle:label forState:UIControlStateNormal];
             btn.tag = label.intValue;
         }
+        [self moveSelectorToOriginalPosition];
     }else if(button.tag == 1){
         [hourBtn setTitleColor:clockUnselectedObjColor forState:UIControlStateNormal];
         [minBtn  setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        NSArray * mins = @[@"15",@"20",@"25",@"30",@"35",@"40",@"45",@"50",@"55",@"0",@"5",@"10",@"15"];
         for (int i=0; i<mins.count; i++) {
             NSString * label = [mins objectAtIndex:i];
             UIButton * btn = [buttons objectAtIndex:i];
@@ -254,6 +276,70 @@
         }
     }else{
         
+    }
+
+}
+
+
+- (void) moveSelectorToOriginalPosition{
+    /////////// move the selector to 12 or 00 number //////////////////
+    UIButton * topBtn = [buttons objectAtIndex:9];
+    for (UIButton * btn in buttons) {
+        if(btn.tag != topBtn.tag){
+            btn.backgroundColor = [UIColor clearColor];
+            [btn setTitleColor:[UIColor darkTextColor] forState:UIControlStateNormal];
+        }
+    }
+    [lineView setLineFrom:CGPointMake(lineView.frame.size.width/2,lineView.frame.size.height/2)
+                       to:topBtn.center];
+    topBtn.backgroundColor = clockCyanColor;
+    [topBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    /////////////////////////////
+}
+
+- (bool) is24h {
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setLocale:[NSLocale currentLocale]];
+    [formatter setDateStyle:NSDateFormatterNoStyle];
+    [formatter setTimeStyle:NSDateFormatterShortStyle];
+    NSString *dateString = [formatter stringFromDate:[NSDate date]];
+    NSRange amRange = [dateString rangeOfString:[formatter AMSymbol]];
+    NSRange pmRange = [dateString rangeOfString:[formatter PMSymbol]];
+    BOOL is24h = (amRange.location == NSNotFound && pmRange.location == NSNotFound);
+    //NSLog(@"%@\n",(is24h ? @"YES" : @"NO"));
+    return is24h;
+}
+
+
+- (BOOL) isAM {
+    NSDate *nowdate = [NSDate new]; //[[NSDate alloc] initWithTimeIntervalSinceNow:60*60*4];
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"HH"];
+    [formatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"US"]];
+    NSString *dateString = [formatter stringFromDate:nowdate];
+    NSLog(@"%@",dateString);
+    if( dateString.intValue >= 12 ){ // pm
+        return NO;
+    }else{
+        return YES;
+    }
+}
+
+- (BOOL) isPM {
+    return ![self isAM];
+}
+
+- (NSNumber *)getESMState{
+    return @2;
+}
+
+- (NSString *)getUserAnswer{
+    NSString * hour = hourBtn.titleLabel.text;
+    NSString * min  = minBtn.titleLabel.text;
+    if (amState) {
+        return [NSString stringWithFormat:@"%@:%@(%@)",hour,min,@"AM"];
+    }else{
+        return [NSString stringWithFormat:@"%@:%@(%@)",hour,min,@"PM"];
     }
 }
 

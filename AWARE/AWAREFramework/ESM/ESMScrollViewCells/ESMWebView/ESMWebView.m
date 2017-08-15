@@ -66,5 +66,9 @@
     
 }
 
+- (NSNumber *)getESMState{
+    return @2;
+}
+
 
 @end

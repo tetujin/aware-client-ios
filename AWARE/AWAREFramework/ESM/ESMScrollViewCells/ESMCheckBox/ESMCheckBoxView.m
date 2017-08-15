@@ -151,4 +151,41 @@
 }
 
 
+- (NSString *)getUserAnswer{
+    if ([self isNA]) return @"NA";
+    
+    bool isDismiss = YES;
+    NSMutableArray * selectedOps = [[NSMutableArray alloc] init];
+    for (UIButton * btn in options) {
+        if(btn.isSelected){
+            NSString * selectedLabel = [[labels objectAtIndex:btn.tag] text];
+            // NSLog(@"%@",selectedLabel);
+            [selectedOps addObject:selectedLabel];
+            isDismiss = NO;
+        }
+    }
+    /////////////////////////////////
+    if (!isDismiss) {
+        // if([NSJSONSerialization isValidJSONObject:selectedOps]){
+        NSError *error = nil;
+        NSData *data = [NSJSONSerialization dataWithJSONObject:selectedOps options:0 error:&error];
+        NSString *jsonStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+        // NSLog(@"%@", jsonStr);
+        return jsonStr;
+        // }
+    }else{
+        return @"";
+    }
+}
+
+
+- (NSNumber *)getESMState{
+    if ([self isNA]) return @2;
+    if(![[self getUserAnswer] isEqualToString:@""]){
+        return @2;
+    }else{
+        return @1;
+    }
+}
+
 @end

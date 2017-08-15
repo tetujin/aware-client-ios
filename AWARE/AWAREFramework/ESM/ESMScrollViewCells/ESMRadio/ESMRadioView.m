@@ -11,6 +11,7 @@
 @implementation ESMRadioView{
     NSMutableArray *options;
     NSMutableArray *labels;
+    NSString * selectedLabelName;
 }
 
 /*
@@ -23,7 +24,7 @@
 
 - (instancetype)initWithFrame:(CGRect)frame esm:(EntityESM *)esm{
     self = [super initWithFrame:frame esm:esm];
-    
+    selectedLabelName = @"";
     if(self != nil){
         [self addRadioElement:esm withFrame:frame];
     }
@@ -72,7 +73,7 @@
         totalHeight += objHeight + verticalMargin; // "10px" is buffer.
         
         [options addObject:s];
-        [labels addObject:label];
+        [labels addObject:labelText];
     }
     
 //    totalHeight
@@ -92,7 +93,23 @@
     }
     [[options objectAtIndex:sender.tag] setImage:[UIImage imageNamed:@"selected_circle"] forState:UIControlStateNormal];
     AudioServicesPlaySystemSound(1104);
+    selectedLabelName = [labels objectAtIndex:sender.tag];
 }
 
+//////////////////////////////////
+- (NSNumber  *)getESMState{
+    if ([self isNA]) return @2;
+    if(![[self getUserAnswer] isEqualToString:@""]){
+        return @2;
+    }else{
+        return @1;
+    }
+}
+
+- (NSString *)getUserAnswer{
+    if([self isNA]) return @"NA";
+    /////////////////////////////////
+    return selectedLabelName;
+}
 
 @end

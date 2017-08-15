@@ -98,6 +98,32 @@
 }
 
 
+- (NSString *)getUserAnswer{
+    if ([self isNA]) return @"NA";
+    int pamNumber = 0;
+    for (UIButton * uiButton in buttons) {
+        if (uiButton.selected) {
+            pamNumber = [uiButton.titleLabel.text intValue];
+            break;
+        }
+    }
+    //////////////////////////
+    if(pamNumber >= 1 && pamNumber <= 16){ // answered
+        NSString * emotionStr = [PamSchema getEmotionString:pamNumber];
+        return emotionStr;
+    } else {// errored
+        return @"";
+    }
+}
+
+- (NSNumber  *)getESMState{
+    if ([self isNA]) return @2;
+    if (![[self getUserAnswer] isEqualToString:@""]) {
+        return @2;
+    }else{
+        return @1;
+    }
+}
 
 
 @end

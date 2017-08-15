@@ -61,6 +61,9 @@
                                                                   60,
                                                                   ratingView.frame.size.height/2)];
     
+    minLabel.numberOfLines = 3;
+    maxLabel.numberOfLines = 3;
+    
     minLabel.adjustsFontSizeToFitWidth = YES;
     maxLabel.adjustsFontSizeToFitWidth = YES;
     
@@ -69,6 +72,9 @@
     
     minLabel.textAlignment = NSTextAlignmentCenter;
     maxLabel.textAlignment = NSTextAlignmentCenter;
+    
+    [minLabel setBackgroundColor:[UIColor blueColor]];
+    [maxLabel setBackgroundColor:[UIColor blueColor]];
     
     [self.mainView addSubview:minLabel];
     [self.mainView addSubview:maxLabel];
@@ -149,5 +155,13 @@
     }
 }
 
+- (NSNumber  *)getESMState{
+    if ([self isNA]) return @2;
+    if (![[self getUserAnswer] isEqualToString:@""]) {
+        return @2;
+    }else{
+        return @1;
+    }
+}
 
 @end
