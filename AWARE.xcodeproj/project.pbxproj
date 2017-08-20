@@ -277,12 +277,16 @@
 		16CB66BC1F3EE822001EE743 /* ESMQuickAnswerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 16CB66BB1F3EE822001EE743 /* ESMQuickAnswerView.m */; };
 		16CB66BF1F3F5DE4001EE743 /* ESMScaleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 16CB66BE1F3F5DE4001EE743 /* ESMScaleView.m */; };
 		16CB66C21F404CDD001EE743 /* ESMDateTimePickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 16CB66C11F404CDD001EE743 /* ESMDateTimePickerView.m */; };
-		16CB66C71F41892F001EE743 /* EntityESM+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 16CB66C41F41892F001EE743 /* EntityESM+CoreDataClass.m */; };
-		16CB66C81F41892F001EE743 /* EntityESM+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 16CB66C61F41892F001EE743 /* EntityESM+CoreDataProperties.m */; };
 		16CB66CB1F4197CA001EE743 /* ESMWebView.m in Sources */ = {isa = PBXBuildFile; fileRef = 16CB66CA1F4197CA001EE743 /* ESMWebView.m */; };
 		16CB66CE1F41AF89001EE743 /* ESMPAMView.m in Sources */ = {isa = PBXBuildFile; fileRef = 16CB66CD1F41AF89001EE743 /* ESMPAMView.m */; };
 		16CB66D11F41B5A8001EE743 /* ESMClockTimePickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 16CB66D01F41B5A8001EE743 /* ESMClockTimePickerView.m */; };
 		16CB66D41F41E054001EE743 /* ESMClockLineView.m in Sources */ = {isa = PBXBuildFile; fileRef = 16CB66D31F41E054001EE743 /* ESMClockLineView.m */; };
+		16CB66D81F4389F9001EE743 /* ESMNumberView.m in Sources */ = {isa = PBXBuildFile; fileRef = 16CB66D71F4389F8001EE743 /* ESMNumberView.m */; };
+		16CB66E01F445A65001EE743 /* EntityESM+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 16CB66DD1F445A65001EE743 /* EntityESM+CoreDataClass.m */; };
+		16CB66E11F445A65001EE743 /* EntityESM+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 16CB66DF1F445A65001EE743 /* EntityESM+CoreDataProperties.m */; };
+		16CB66E41F452F69001EE743 /* ESMPictureView.m in Sources */ = {isa = PBXBuildFile; fileRef = 16CB66E31F452F68001EE743 /* ESMPictureView.m */; };
+		16CB66E71F45B6B1001EE743 /* ESMVideoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 16CB66E61F45B6B1001EE743 /* ESMVideoView.m */; };
+		16CB66EA1F45C096001EE743 /* ESMAudioView.m in Sources */ = {isa = PBXBuildFile; fileRef = 16CB66E91F45C096001EE743 /* ESMAudioView.m */; };
 		16D810241C06242500605DE2 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16D810231C06242500605DE2 /* CFNetwork.framework */; };
 		16D810261C06242F00605DE2 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16D810251C06242F00605DE2 /* Security.framework */; };
 		16D91B5E1CA9447A00A5FD4F /* MicrosoftBandKit_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16D91B5D1CA9447A00A5FD4F /* MicrosoftBandKit_iOS.framework */; };
@@ -859,10 +863,6 @@
 		16CB66BE1F3F5DE4001EE743 /* ESMScaleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ESMScaleView.m; path = ESMScrollViewCells/ESMScale/ESMScaleView.m; sourceTree = "<group>"; };
 		16CB66C01F404CDC001EE743 /* ESMDateTimePickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ESMDateTimePickerView.h; path = ESMScrollViewCells/ESMDateTimePicker/ESMDateTimePickerView.h; sourceTree = "<group>"; };
 		16CB66C11F404CDD001EE743 /* ESMDateTimePickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ESMDateTimePickerView.m; path = ESMScrollViewCells/ESMDateTimePicker/ESMDateTimePickerView.m; sourceTree = "<group>"; };
-		16CB66C31F41892F001EE743 /* EntityESM+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EntityESM+CoreDataClass.h"; sourceTree = "<group>"; };
-		16CB66C41F41892F001EE743 /* EntityESM+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EntityESM+CoreDataClass.m"; sourceTree = "<group>"; };
-		16CB66C51F41892F001EE743 /* EntityESM+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EntityESM+CoreDataProperties.h"; sourceTree = "<group>"; };
-		16CB66C61F41892F001EE743 /* EntityESM+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EntityESM+CoreDataProperties.m"; sourceTree = "<group>"; };
 		16CB66C91F4197CA001EE743 /* ESMWebView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ESMWebView.h; path = ESMScrollViewCells/ESMWebView/ESMWebView.h; sourceTree = "<group>"; };
 		16CB66CA1F4197CA001EE743 /* ESMWebView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ESMWebView.m; path = ESMScrollViewCells/ESMWebView/ESMWebView.m; sourceTree = "<group>"; };
 		16CB66CC1F41AF89001EE743 /* ESMPAMView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ESMPAMView.h; path = ESMScrollViewCells/ESMPAM/ESMPAMView.h; sourceTree = "<group>"; };
@@ -871,6 +871,18 @@
 		16CB66D01F41B5A8001EE743 /* ESMClockTimePickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ESMClockTimePickerView.m; path = ESMScrollViewCells/ESMClockTimePicker/ESMClockTimePickerView.m; sourceTree = "<group>"; };
 		16CB66D21F41E054001EE743 /* ESMClockLineView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ESMClockLineView.h; path = ESMScrollViewCells/ESMClockTimePicker/ClockLineView/ESMClockLineView.h; sourceTree = "<group>"; };
 		16CB66D31F41E054001EE743 /* ESMClockLineView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ESMClockLineView.m; path = ESMScrollViewCells/ESMClockTimePicker/ClockLineView/ESMClockLineView.m; sourceTree = "<group>"; };
+		16CB66D61F4389F8001EE743 /* ESMNumberView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ESMNumberView.h; path = ESMScrollViewCells/ESMNumber/ESMNumberView.h; sourceTree = "<group>"; };
+		16CB66D71F4389F8001EE743 /* ESMNumberView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ESMNumberView.m; path = ESMScrollViewCells/ESMNumber/ESMNumberView.m; sourceTree = "<group>"; };
+		16CB66DC1F445A65001EE743 /* EntityESM+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "EntityESM+CoreDataClass.h"; path = "../../../EntityESM+CoreDataClass.h"; sourceTree = "<group>"; };
+		16CB66DD1F445A65001EE743 /* EntityESM+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "EntityESM+CoreDataClass.m"; path = "../../../EntityESM+CoreDataClass.m"; sourceTree = "<group>"; };
+		16CB66DE1F445A65001EE743 /* EntityESM+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "EntityESM+CoreDataProperties.h"; path = "../../../EntityESM+CoreDataProperties.h"; sourceTree = "<group>"; };
+		16CB66DF1F445A65001EE743 /* EntityESM+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "EntityESM+CoreDataProperties.m"; path = "../../../EntityESM+CoreDataProperties.m"; sourceTree = "<group>"; };
+		16CB66E21F452F68001EE743 /* ESMPictureView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ESMPictureView.h; path = ESMScrollViewCells/ESMPicture/ESMPictureView.h; sourceTree = "<group>"; };
+		16CB66E31F452F68001EE743 /* ESMPictureView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ESMPictureView.m; path = ESMScrollViewCells/ESMPicture/ESMPictureView.m; sourceTree = "<group>"; };
+		16CB66E51F45B6B1001EE743 /* ESMVideoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ESMVideoView.h; path = ESMScrollViewCells/ESMVideo/ESMVideoView.h; sourceTree = "<group>"; };
+		16CB66E61F45B6B1001EE743 /* ESMVideoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ESMVideoView.m; path = ESMScrollViewCells/ESMVideo/ESMVideoView.m; sourceTree = "<group>"; };
+		16CB66E81F45C096001EE743 /* ESMAudioView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ESMAudioView.h; path = ESMScrollViewCells/ESMAudio/ESMAudioView.h; sourceTree = "<group>"; };
+		16CB66E91F45C096001EE743 /* ESMAudioView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ESMAudioView.m; path = ESMScrollViewCells/ESMAudio/ESMAudioView.m; sourceTree = "<group>"; };
 		16D810231C06242500605DE2 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		16D810251C06242F00605DE2 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		16D91B5D1CA9447A00A5FD4F /* MicrosoftBandKit_iOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MicrosoftBandKit_iOS.framework; path = ThirdPatyFrameworks/MicrosoftBandKit_iOS.framework; sourceTree = "<group>"; };
@@ -1019,10 +1031,10 @@
 				1613E0C71D3D33B0000528F5 /* EntityESMHistory+CoreDataProperties.m */,
 				1613E0C81D3D33B0000528F5 /* EntityESMHistory.h */,
 				1613E0C91D3D33B0000528F5 /* EntityESMHistory.m */,
-				16CB66C31F41892F001EE743 /* EntityESM+CoreDataClass.h */,
-				16CB66C41F41892F001EE743 /* EntityESM+CoreDataClass.m */,
-				16CB66C51F41892F001EE743 /* EntityESM+CoreDataProperties.h */,
-				16CB66C61F41892F001EE743 /* EntityESM+CoreDataProperties.m */,
+				16CB66DC1F445A65001EE743 /* EntityESM+CoreDataClass.h */,
+				16CB66DD1F445A65001EE743 /* EntityESM+CoreDataClass.m */,
+				16CB66DE1F445A65001EE743 /* EntityESM+CoreDataProperties.h */,
+				16CB66DF1F445A65001EE743 /* EntityESM+CoreDataProperties.m */,
 			);
 			name = ESMEntity;
 			sourceTree = "<group>";
@@ -2147,10 +2159,18 @@
 				16CB66C11F404CDD001EE743 /* ESMDateTimePickerView.m */,
 				16CB66CC1F41AF89001EE743 /* ESMPAMView.h */,
 				16CB66CD1F41AF89001EE743 /* ESMPAMView.m */,
+				16CB66D61F4389F8001EE743 /* ESMNumberView.h */,
+				16CB66D71F4389F8001EE743 /* ESMNumberView.m */,
 				16CB66C91F4197CA001EE743 /* ESMWebView.h */,
 				16CB66CA1F4197CA001EE743 /* ESMWebView.m */,
 				16CB66CF1F41B5A8001EE743 /* ESMClockTimePickerView.h */,
 				16CB66D01F41B5A8001EE743 /* ESMClockTimePickerView.m */,
+				16CB66E21F452F68001EE743 /* ESMPictureView.h */,
+				16CB66E31F452F68001EE743 /* ESMPictureView.m */,
+				16CB66E81F45C096001EE743 /* ESMAudioView.h */,
+				16CB66E91F45C096001EE743 /* ESMAudioView.m */,
+				16CB66E51F45B6B1001EE743 /* ESMVideoView.h */,
+				16CB66E61F45B6B1001EE743 /* ESMVideoView.m */,
 				16CB66D51F41E059001EE743 /* ClockLineView */,
 				169C873C1D01382C00825761 /* PAM */,
 			);
@@ -2362,7 +2382,7 @@
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
-								enabled = 0;
+								enabled = 1;
 							};
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -2720,6 +2740,7 @@
 				168AEA9F1D3EFFF000D02EA4 /* EntityProximity.m in Sources */,
 				169C88981D01382C00825761 /* Processor.m in Sources */,
 				160F0EDE1D041DDE00673343 /* EntityLocation+CoreDataProperties.m in Sources */,
+				16CB66E71F45B6B1001EE743 /* ESMVideoView.m in Sources */,
 				163ADFC01D8F2C1900B15C8F /* EntityIOSActivityRecognition+CoreDataClass.m in Sources */,
 				16CB66C21F404CDD001EE743 /* ESMDateTimePickerView.m in Sources */,
 				16B077A31D1A429E009C070B /* EntityDeviceUsage+CoreDataProperties.m in Sources */,
@@ -2754,9 +2775,9 @@
 				160F0F071D04756800673343 /* EntityBatteryDischarge+CoreDataProperties.m in Sources */,
 				16B0776D1D192663009C070B /* EntityRotation.m in Sources */,
 				16B077721D19288A009C070B /* EntityScreen+CoreDataProperties.m in Sources */,
+				16CB66E11F445A65001EE743 /* EntityESM+CoreDataProperties.m in Sources */,
 				169C88851D01382C00825761 /* Accelerometer.m in Sources */,
 				1613E0D51D3E28D3000528F5 /* EntityESMSchedule.m in Sources */,
-				16CB66C71F41892F001EE743 /* EntityESM+CoreDataClass.m in Sources */,
 				16EC4F211D2FA1F000524424 /* EntityAmbientNoise+CoreDataProperties.m in Sources */,
 				161F720D1D3B71D400309650 /* EntityESMAnswer.m in Sources */,
 				16EC4F221D2FA1F000524424 /* EntityAmbientNoise.m in Sources */,
@@ -2767,6 +2788,7 @@
 				169C889F1D01382C00825761 /* GoogleLoginViewController.m in Sources */,
 				160F0EF81D042AB600673343 /* EntityNetwork.m in Sources */,
 				16E225031E063CD1000C239E /* EntityESMAnswerBC+CoreDataClass.m in Sources */,
+				16CB66EA1F45C096001EE743 /* ESMAudioView.m in Sources */,
 				1648FE931DAB2E87001D870A /* AWARESensors.m in Sources */,
 				160F0F091D04756800673343 /* EntityBattery+CoreDataProperties.m in Sources */,
 				160F0F0A1D04756800673343 /* EntityBattery.m in Sources */,
@@ -2774,6 +2796,7 @@
 				16B077A41D1A429E009C070B /* EntityDeviceUsage.m in Sources */,
 				16BDCC951D35B80E00B13BD4 /* BatteryCharge.m in Sources */,
 				160F0EC61D040B7F00673343 /* EntityDebug+CoreDataProperties.m in Sources */,
+				16CB66E41F452F69001EE743 /* ESMPictureView.m in Sources */,
 				169C889D1D01382C00825761 /* Timezone.m in Sources */,
 				160F0ED81D041B5D00673343 /* EntityLinearAccelerometer+CoreDataProperties.m in Sources */,
 				160F0F061D04756800673343 /* EntityBatteryCharge.m in Sources */,
@@ -2804,6 +2827,7 @@
 				16CB66CE1F41AF89001EE743 /* ESMPAMView.m in Sources */,
 				1683ABCE1D347A5F001543D9 /* AWAREDebugMessageLogger.m in Sources */,
 				16BDCCB61D366E3800B13BD4 /* MSBandRRInterval.m in Sources */,
+				16CB66D81F4389F9001EE743 /* ESMNumberView.m in Sources */,
 				169C889E1D01382C00825761 /* Wifi.m in Sources */,
 				16B078381D1F918B009C070B /* EntityMSBandUV.m in Sources */,
 				16CB66D41F41E054001EE743 /* ESMClockLineView.m in Sources */,
@@ -2815,6 +2839,7 @@
 				160F0EF71D042AB600673343 /* EntityNetwork+CoreDataProperties.m in Sources */,
 				169C88361D01382C00825761 /* LocalFileStorageHelper.m in Sources */,
 				169C88971D01382C00825761 /* Pedometer.m in Sources */,
+				16CB66E01F445A65001EE743 /* EntityESM+CoreDataClass.m in Sources */,
 				169C88761D01382C00825761 /* BLEHeartRate.m in Sources */,
 				16B077971D1A01A0009C070B /* EntityLocationVisit.m in Sources */,
 				169C889C1D01382C00825761 /* Screen.m in Sources */,
@@ -2823,7 +2848,6 @@
 				169C88741D01382C00825761 /* AmbientNoise.m in Sources */,
 				160F0ECD1D04132600673343 /* EntityGravity.m in Sources */,
 				16ECFC481D8F0C95005C3DA6 /* IOSActivityRecognition.m in Sources */,
-				16CB66C81F41892F001EE743 /* EntityESM+CoreDataProperties.m in Sources */,
 				169C88721D01382C00825761 /* AWAREMqtt.m in Sources */,
 				169C882D1D01382C00825761 /* AWAREDelegate.m in Sources */,
 				160F0EC01D0404A400673343 /* EntityCall+CoreDataProperties.m in Sources */,

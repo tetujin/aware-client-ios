@@ -2,7 +2,7 @@
 //  EntityESM+CoreDataProperties.m
 //  
 //
-//  Created by Yuuki Nishiyama on 2017/08/14.
+//  Created by Yuuki Nishiyama on 2017/08/16.
 //
 //
 
@@ -45,7 +45,9 @@
 @dynamic esm_start_date;
 @dynamic esm_start_time;
 @dynamic esm_minute_step;
-@dynamic esm_schedule;
 @dynamic esm_time_format;
+@dynamic esm_flows;
+@dynamic temp;
+@dynamic esm_schedule;
 
 @end

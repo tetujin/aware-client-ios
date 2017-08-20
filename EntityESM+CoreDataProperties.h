@@ -2,7 +2,7 @@
 //  EntityESM+CoreDataProperties.h
 //  
 //
-//  Created by Yuuki Nishiyama on 2017/08/14.
+//  Created by Yuuki Nishiyama on 2017/08/16.
 //
 //
 
@@ -46,7 +46,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, copy) NSString *esm_start_date;
 @property (nullable, nonatomic, copy) NSString *esm_start_time;
 @property (nullable, nonatomic, copy) NSNumber *esm_minute_step;
-@property (nullable, nonatomic, copy) NSNumber *esm_time_format;
+@property (nullable, nonatomic, copy) NSString *esm_time_format;
+@property (nullable, nonatomic, copy) NSString *esm_flows;
+@property (nullable, nonatomic, copy) NSNumber *temp;
 @property (nullable, nonatomic, retain) EntityESMSchedule *esm_schedule;
 
 @end

@@ -28,6 +28,9 @@
     NSArray * amHours;
     NSArray * pmHours;
     NSArray * mins;
+    
+    int tx;
+    int ty;
 
     int mode;
 }
@@ -46,13 +49,16 @@
     amHours = @[@"3",@"4",@"5",@"6",@"7",@"8",@"9",@"10",@"11",@"12",@"1",@"2",@"3"];
     pmHours = @[@"15",@"16",@"17",@"18",@"19",@"20",@"21",@"22",@"23",@"0",@"13",@"14",@"15"];
     mins = @[@"15",@"20",@"25",@"30",@"35",@"40",@"45",@"50",@"55",@"0",@"5",@"10",@"15"];
+    self.userInteractionEnabled = true;
+    
     [self isAM];
     if(self != nil){
+        tx = 0;
+        ty = 0;
         [self addClockTimePickerElement:esm withFrame:frame];
     }
     return self;
 }
-
 
 - (void) addClockTimePickerElement:(EntityESM *)esm withFrame:(CGRect) frame {
     int clockWidth = self.mainView.frame.size.width - 100; // 40 is a buffer (right:20 + left:20)
@@ -205,6 +211,21 @@
 }
 
 
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
+//    CGPoint location = [[touches anyObject] locationInView:self];
+//    tx = location.x;
+//    ty = location.y;    
+//    for (UIButton * btn in buttons) {
+//        btn.backgroundColor = [UIColor clearColor];
+//        [btn setTitleColor:[UIColor darkTextColor] forState:UIControlStateNormal];
+//    }
+//    [lineView setLineFrom:CGPointMake(lineView.frame.size.width/2,lineView.frame.size.height/2)
+//                       to:location];
+}
+
+
+
+
 - (void) selectedNumber:(UIButton *)button{
     
     for (UIButton * btn in buttons) {
@@ -281,7 +302,7 @@
 }
 
 
-- (void) moveSelectorToOriginalPosition{
+- (void) moveSelectorToOriginalPosition {
     /////////// move the selector to 12 or 00 number //////////////////
     UIButton * topBtn = [buttons objectAtIndex:9];
     for (UIButton * btn in buttons) {

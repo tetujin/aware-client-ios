@@ -2,7 +2,7 @@
 //  EntityESM+CoreDataClass.m
 //  
 //
-//  Created by Yuuki Nishiyama on 2017/08/14.
+//  Created by Yuuki Nishiyama on 2017/08/16.
 //
 //
 

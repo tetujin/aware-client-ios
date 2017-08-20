@@ -1,35 +1,24 @@
 //
-//  ESMFreeTextView.m
+//  ESMNumberView.m
 //  AWARE
 //
-//  Created by Yuuki Nishiyama on 2017/08/11.
+//  Created by Yuuki Nishiyama on 2017/08/15.
 //  Copyright © 2017 Yuuki NISHIYAMA. All rights reserved.
 //
 
-#import "ESMFreeTextView.h"
+#import "ESMNumberView.h"
 
-@implementation ESMFreeTextView {
-    
-}
-
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
-}
-*/
+@implementation ESMNumberView
 
 
 - (instancetype)initWithFrame:(CGRect)frame esm:(EntityESM *)esm{
     self = [super initWithFrame:frame esm:esm];
-    
+
     if(self != nil){
         [self addFreeTextElement:esm withFrame:frame];
     }
     return self;
 }
-
 
 
 /**
@@ -41,25 +30,31 @@
 - (void) addFreeTextElement:(EntityESM *)esm withFrame:(CGRect)frame {
     
     _freeTextView = [[UITextView alloc] initWithFrame:CGRectMake(10,
-                                                                         10,
-                                                                         self.mainView.frame.size.width - 20,
-                                                                         self.mainView.frame.size.height )];
+                                                                 10,
+                                                                 self.mainView.frame.size.width - 20,
+                                                                 43 )];
     _freeTextView.layer.borderWidth = 2.0f;
     _freeTextView.layer.cornerRadius = 3.0f;
     _freeTextView.layer.borderColor = [UIColor grayColor].CGColor;
     _freeTextView.selectable = YES;
+    _freeTextView.keyboardType = UIKeyboardTypeNumberPad;
     _freeTextView.textAlignment = NSTextAlignmentCenter;
     _freeTextView.delegate = self;
-    [_freeTextView setFont:[UIFont systemFontOfSize:18]];
+    [_freeTextView setFont:[UIFont systemFontOfSize:23]];
     [self.mainView addSubview:_freeTextView];
     
     self.mainView.frame = CGRectMake(self.mainView.frame.origin.x,
                                      self.mainView.frame.origin.y,
                                      self.mainView.frame.size.width,
-                                     _freeTextView.frame.size.height + 10);
+                                     _freeTextView.frame.size.height + 10 + 30);
     [self refreshSizeOfRootView];
 }
 
+
+////////////////
+- (void)textViewDidChange:(UITextView *)textView{
+    [_freeTextView.font fontWithSize:25];
+}
 
 //////////////////////////
 

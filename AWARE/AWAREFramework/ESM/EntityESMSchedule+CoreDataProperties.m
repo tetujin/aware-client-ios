@@ -25,5 +25,6 @@
 @dynamic start_date;
 @dynamic context;
 @dynamic esms;
+@dynamic temporary;
 
 @end

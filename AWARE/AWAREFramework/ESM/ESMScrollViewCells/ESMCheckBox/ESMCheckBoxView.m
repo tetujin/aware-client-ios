@@ -86,14 +86,15 @@
 
 
 - (void) pushedCheckBox:(UIButton *) sender {
-    NSLog(@"button pushed!");
+    // NSLog(@"button pushed!");
     
-    AudioServicesPlaySystemSound(1104);
     
     if ([sender isSelected]) {
+        AudioServicesPlaySystemSound(1104);
         [sender setImage:[UIImage imageNamed:@"unchecked_box"] forState:UIControlStateNormal];
         [sender setSelected:NO];
     } else {
+        AudioServicesPlaySystemSound(1105);
         [sender setImage:[UIImage imageNamed:@"checked_box"] forState:UIControlStateSelected];
         [sender setSelected:YES];
     }
@@ -130,7 +131,7 @@
 
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
-    NSLog(@"%@",[alertView textFieldAtIndex:0].text);
+    // NSLog(@"%@",[alertView textFieldAtIndex:0].text);
     NSInteger tag = alertView.tag;
     NSString * inputText = [alertView textFieldAtIndex:0].text;
     

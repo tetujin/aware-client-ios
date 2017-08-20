@@ -141,6 +141,7 @@
         <attribute name="double_esm_user_answer_timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="esm_checkboxes" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="esm_expiration_threshold" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="esm_flows" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="esm_instructions" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="esm_json" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="esm_likert_max" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
@@ -227,6 +228,7 @@
         <attribute name="randomize_schedule" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="schedule_id" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="start_date" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="temporary" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
         <relationship name="esms" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="EntityESM" inverseName="esm_schedule" inverseEntity="EntityESM" syncable="YES"/>
     </entity>
     <entity name="EntityFitbitData" representedClassName="EntityFitbitData" syncable="YES">
@@ -487,11 +489,11 @@
         <element name="EntityContact" positionX="297" positionY="144" width="128" height="150"/>
         <element name="EntityDebug" positionX="234" positionY="198" width="128" height="30"/>
         <element name="EntityDeviceUsage" positionX="234" positionY="198" width="128" height="30"/>
-        <element name="EntityESM" positionX="549" positionY="396" width="128" height="540"/>
+        <element name="EntityESM" positionX="549" positionY="396" width="128" height="555"/>
         <element name="EntityESMAnswer" positionX="448" positionY="297" width="128" height="165"/>
         <element name="EntityESMAnswerBC" positionX="306" positionY="153" width="128" height="405"/>
         <element name="EntityESMHistory" positionX="297" positionY="144" width="128" height="135"/>
-        <element name="EntityESMSchedule" positionX="97" positionY="582" width="146" height="225"/>
+        <element name="EntityESMSchedule" positionX="97" positionY="582" width="146" height="240"/>
         <element name="EntityFitbitData" positionX="297" positionY="144" width="128" height="120"/>
         <element name="EntityFitbitDevice" positionX="306" positionY="153" width="128" height="150"/>
         <element name="EntityGravity" positionX="180" positionY="144" width="128" height="30"/>

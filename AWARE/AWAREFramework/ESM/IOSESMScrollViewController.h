@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "BaseESMView.h"
 
-@interface IOSESMScrollViewController:UIViewController <UIScrollViewDelegate, UITextViewDelegate, UIGestureRecognizerDelegate, UITextFieldDelegate, UIAlertViewDelegate>
+@interface IOSESMScrollViewController:UIViewController <UIImagePickerControllerDelegate, UIScrollViewDelegate, UITextViewDelegate, UIGestureRecognizerDelegate, UITextFieldDelegate, UIAlertViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UIScrollView *mainScrollView;
 @property(nonatomic, strong) UITapGestureRecognizer *singleTap;

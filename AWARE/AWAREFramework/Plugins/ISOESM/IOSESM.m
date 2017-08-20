@@ -565,6 +565,7 @@ didCompleteWithError:(NSError *)error{
                         entityEsm.esm_url = [esm objectForKey:@"esm_url"];
                         // for na
                         entityEsm.esm_na = @([[esm objectForKey:@"esm_na"] boolValue]);
+                        entityEsm.esm_flows = [self convertNSArraytoJsonStr:[esm objectForKey:@"esm_flows"]];
                         // entityEsm.esm_schedule = entityESMSchedule;
                         
                         [entityESMSchedule addEsmsObject:entityEsm];

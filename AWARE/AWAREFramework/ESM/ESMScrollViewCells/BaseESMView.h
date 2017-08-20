@@ -11,6 +11,7 @@
 
 #import <UIKit/UIKit.h>
 #import "EntityESM+CoreDataClass.h"
+#import "AWAREKeys.h"
 #import <AudioToolbox/AudioServices.h>
 
 typedef enum: NSInteger {
@@ -39,7 +40,7 @@ typedef enum: NSInteger {
 
 @property (strong, nonatomic) IBOutlet UIView *contentView;
 
-@property (weak, nonatomic) EntityESM * esmEntity;
+@property (nonatomic) IBOutlet EntityESM * esmEntity;
 
 @property (nonatomic) IBOutlet UILabel *titleLabel;
 @property (nonatomic) IBOutlet UILabel *instructionLabel;

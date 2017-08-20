@@ -26,6 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) NSString *schedule_id;
 @property (nullable, nonatomic, retain) NSDate *start_date;
 @property (nullable, nonatomic, retain) NSString *context;
+@property (nullable, nonatomic, retain) NSNumber *temporary;
 @property (nullable, nonatomic, retain) NSSet<EntityESM *> *esms;
 
 @end
