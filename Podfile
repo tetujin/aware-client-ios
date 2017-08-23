@@ -3,7 +3,6 @@
 # Uncomment this line if you're using Swift
 # use_frameworks!
 
-
 target 'AWARE' do
 pod 'MQTTKit' 
 pod 'SCNetworkReachability'
@@ -14,6 +13,8 @@ pod 'EZAudio'
 pod 'SVProgressHUD'
 pod 'EAIntroView', '~> 2.9.0'
 pod 'NXOAuth2Client', '~> 1.2.8'
+pod "EstimoteSDK"
+# pod 'Charts'
 end
 
 target 'AWARETests' do

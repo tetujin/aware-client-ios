@@ -43,7 +43,7 @@
 #import "Contacts.h"
 
 // Library
-#import <SVProgressHUD.h>
+#import "SVProgressHUD.h"
 
 #import <QuartzCore/QuartzCore.h>
 

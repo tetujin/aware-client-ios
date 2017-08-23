@@ -291,39 +291,6 @@
 }
 
 
-//- (void) selectedNumber:(UIButton *)button{
-//
-//    for (UIButton * btn in buttons) {
-//        if(btn.tag != button.tag){
-//            btn.backgroundColor = [UIColor clearColor];
-//            [btn setTitleColor:[UIColor darkTextColor] forState:UIControlStateNormal];
-//        }
-//    }
-//    [lineView setLineFrom:CGPointMake(lineView.frame.size.width/2,lineView.frame.size.height/2)
-//                       to:button.center];
-//    button.backgroundColor = clockCyanColor;
-//    [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-//    
-//    AudioServicesPlaySystemSound(1104);
-//
-//    if (mode == 0) {
-//        if (button.tag < 10) {
-//            [hourBtn setTitle:[NSString stringWithFormat:@"0%ld",button.tag] forState:UIControlStateNormal];
-//        }else{
-//            [hourBtn setTitle:[NSString stringWithFormat:@"%ld",button.tag] forState:UIControlStateNormal];
-//        }
-//        [self pushedHourMinButton:minBtn];
-//        [self moveSelectorToOriginalPosition];
-//    } else if ( mode == 1){
-//        if (button.tag < 10){
-//            [minBtn  setTitle:[NSString stringWithFormat:@"0%ld",button.tag] forState:UIControlStateNormal];
-//        }else{
-//            [minBtn  setTitle:[NSString stringWithFormat:@"%ld",button.tag] forState:UIControlStateNormal];
-//        }
-//    }
-//
-//}
-
 - (void) selectedAMPMbutton:(UIButton *)button{
     AudioServicesPlaySystemSound(1104);
     if([button.titleLabel.text isEqualToString:@"AM"]){

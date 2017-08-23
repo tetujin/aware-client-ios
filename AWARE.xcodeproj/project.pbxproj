@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		139EAF25241289F879587B37 /* libPods-AWARETests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 72AF187AD07DD1A25001BEB3 /* libPods-AWARETests.a */; };
 		16078FBA1DA36452000197E5 /* IOSESM.m in Sources */ = {isa = PBXBuildFile; fileRef = 16078FB91DA36452000197E5 /* IOSESM.m */; };
 		160EE9BF1C050B9000015688 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 160EE9BE1C050B9000015688 /* CoreBluetooth.framework */; };
 		160F0E891D03D60500673343 /* EntityAccelerometer+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 160F0E861D03D60500673343 /* EntityAccelerometer+CoreDataProperties.m */; };
@@ -288,6 +289,8 @@
 		16CB66E41F452F69001EE743 /* ESMPictureView.m in Sources */ = {isa = PBXBuildFile; fileRef = 16CB66E31F452F68001EE743 /* ESMPictureView.m */; };
 		16CB66E71F45B6B1001EE743 /* ESMVideoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 16CB66E61F45B6B1001EE743 /* ESMVideoView.m */; };
 		16CB66EA1F45C096001EE743 /* ESMAudioView.m in Sources */ = {isa = PBXBuildFile; fileRef = 16CB66E91F45C096001EE743 /* ESMAudioView.m */; };
+		16CE5FEF1F4D68A8000E177F /* DataVisualizationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 16CE5FEE1F4D68A8000E177F /* DataVisualizationViewController.m */; };
+		16CE5FF21F4DB2E7000E177F /* Estimote.m in Sources */ = {isa = PBXBuildFile; fileRef = 16CE5FF11F4DB2E7000E177F /* Estimote.m */; };
 		16D810241C06242500605DE2 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16D810231C06242500605DE2 /* CFNetwork.framework */; };
 		16D810261C06242F00605DE2 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16D810251C06242F00605DE2 /* Security.framework */; };
 		16D91B5E1CA9447A00A5FD4F /* MicrosoftBandKit_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16D91B5D1CA9447A00A5FD4F /* MicrosoftBandKit_iOS.framework */; };
@@ -309,11 +312,10 @@
 		16EC4F221D2FA1F000524424 /* EntityAmbientNoise.m in Sources */ = {isa = PBXBuildFile; fileRef = 16EC4F201D2FA1F000524424 /* EntityAmbientNoise.m */; };
 		16ECFC481D8F0C95005C3DA6 /* IOSActivityRecognition.m in Sources */ = {isa = PBXBuildFile; fileRef = 16ECFC471D8F0C95005C3DA6 /* IOSActivityRecognition.m */; };
 		16FD37561CF0B1F700EEB416 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 16FD37541CF0B1DE00EEB416 /* Settings.bundle */; };
-		203B6E54AD52B82C466D0569 /* libPods-AWARE.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 379F418CD10461E03A9A20DB /* libPods-AWARE.a */; };
+		33DD1EAB0B6DC89A0BE94442 /* libPods-AWAREUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F2C7B48DB0AFA845366B8320 /* libPods-AWAREUITests.a */; };
 		52022F401E13B81200AB52AB /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52022F3F1E13B81200AB52AB /* AddressBook.framework */; };
-		5266C34301CF82F2CDD3CC16 /* libPods-AWAREUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BDCDEE4E14B822B3D731795 /* libPods-AWAREUITests.a */; };
 		52BBE03D1E13C6EE00F57906 /* ContactsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 52BBE03C1E13C6EE00F57906 /* ContactsViewController.m */; };
-		78DBB6F63C0F1CF54633738A /* libPods-AWARETests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9076E54A4185775AE17EC4C /* libPods-AWARETests.a */; };
+		8EEA355C71944920BDD1D33A /* libPods-AWARE.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FDD502C633ED8DBE54DF24B7 /* libPods-AWARE.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -886,6 +888,10 @@
 		16CB66E61F45B6B1001EE743 /* ESMVideoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ESMVideoView.m; path = ESMScrollViewCells/ESMVideo/ESMVideoView.m; sourceTree = "<group>"; };
 		16CB66E81F45C096001EE743 /* ESMAudioView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ESMAudioView.h; path = ESMScrollViewCells/ESMAudio/ESMAudioView.h; sourceTree = "<group>"; };
 		16CB66E91F45C096001EE743 /* ESMAudioView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ESMAudioView.m; path = ESMScrollViewCells/ESMAudio/ESMAudioView.m; sourceTree = "<group>"; };
+		16CE5FED1F4D68A8000E177F /* DataVisualizationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataVisualizationViewController.h; sourceTree = "<group>"; };
+		16CE5FEE1F4D68A8000E177F /* DataVisualizationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataVisualizationViewController.m; sourceTree = "<group>"; };
+		16CE5FF01F4DB2E7000E177F /* Estimote.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Estimote.h; path = Estimote/Estimote.h; sourceTree = "<group>"; };
+		16CE5FF11F4DB2E7000E177F /* Estimote.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Estimote.m; path = Estimote/Estimote.m; sourceTree = "<group>"; };
 		16D810231C06242500605DE2 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		16D810251C06242F00605DE2 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		16D91B5D1CA9447A00A5FD4F /* MicrosoftBandKit_iOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MicrosoftBandKit_iOS.framework; path = ThirdPatyFrameworks/MicrosoftBandKit_iOS.framework; sourceTree = "<group>"; };
@@ -922,17 +928,17 @@
 		16ECFC471D8F0C95005C3DA6 /* IOSActivityRecognition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IOSActivityRecognition.m; path = IOSActivityRecognition/IOSActivityRecognition.m; sourceTree = "<group>"; };
 		16FD37541CF0B1DE00EEB416 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		1EB67F5CA2CB715737A0C978 /* Pods-AWAREUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AWAREUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-AWAREUITests/Pods-AWAREUITests.release.xcconfig"; sourceTree = "<group>"; };
-		379F418CD10461E03A9A20DB /* libPods-AWARE.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AWARE.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		4BDCDEE4E14B822B3D731795 /* libPods-AWAREUITests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AWAREUITests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		52022F3F1E13B81200AB52AB /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		52BBE03B1E13C6EE00F57906 /* ContactsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactsViewController.h; sourceTree = "<group>"; };
 		52BBE03C1E13C6EE00F57906 /* ContactsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactsViewController.m; sourceTree = "<group>"; };
 		5729A1F1B1B1EB372A04B8FE /* Pods-AWARE.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AWARE.release.xcconfig"; path = "Pods/Target Support Files/Pods-AWARE/Pods-AWARE.release.xcconfig"; sourceTree = "<group>"; };
-		A9076E54A4185775AE17EC4C /* libPods-AWARETests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AWARETests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		72AF187AD07DD1A25001BEB3 /* libPods-AWARETests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AWARETests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B2348D8C3EC4DD151389123D /* Pods-AWARETests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AWARETests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AWARETests/Pods-AWARETests.debug.xcconfig"; sourceTree = "<group>"; };
 		BB3C9E647E3179D4792AC216 /* Pods-AWARE.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AWARE.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AWARE/Pods-AWARE.debug.xcconfig"; sourceTree = "<group>"; };
 		C7C1B55E50B527FF2845B141 /* Pods-AWARETests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AWARETests.release.xcconfig"; path = "Pods/Target Support Files/Pods-AWARETests/Pods-AWARETests.release.xcconfig"; sourceTree = "<group>"; };
 		E739C3CFD99F685A8A452056 /* Pods-AWAREUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AWAREUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AWAREUITests/Pods-AWAREUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		F2C7B48DB0AFA845366B8320 /* libPods-AWAREUITests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AWAREUITests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		FDD502C633ED8DBE54DF24B7 /* libPods-AWARE.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AWARE.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -960,7 +966,7 @@
 				169A7B3D1BFFC9F900A7C06D /* SystemConfiguration.framework in Frameworks */,
 				16CAAD2C1EF9839F0051EB4D /* HealthKit.framework in Frameworks */,
 				16D91B5E1CA9447A00A5FD4F /* MicrosoftBandKit_iOS.framework in Frameworks */,
-				203B6E54AD52B82C466D0569 /* libPods-AWARE.a in Frameworks */,
+				8EEA355C71944920BDD1D33A /* libPods-AWARE.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -968,7 +974,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				78DBB6F63C0F1CF54633738A /* libPods-AWARETests.a in Frameworks */,
+				139EAF25241289F879587B37 /* libPods-AWARETests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -976,7 +982,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5266C34301CF82F2CDD3CC16 /* libPods-AWAREUITests.a in Frameworks */,
+				33DD1EAB0B6DC89A0BE94442 /* libPods-AWAREUITests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1450,6 +1456,7 @@
 				169C878E1D01382C00825761 /* BLEHeartRate */,
 				52022F3B1E13B7D100AB52AB /* Contacts */,
 				169C87911D01382C00825761 /* DeviceUsage */,
+				16CE5FF31F4DB30A000E177F /* Estimote */,
 				163A824B1E2B3AE300987A1D /* Fitbit */,
 				169C87941D01382C00825761 /* FusedLocations */,
 				169C87971D01382C00825761 /* GoogleCalPull */,
@@ -2068,6 +2075,8 @@
 				166082CB1D93DC1A004D1858 /* IntroPage5.xib */,
 				52BBE03B1E13C6EE00F57906 /* ContactsViewController.h */,
 				52BBE03C1E13C6EE00F57906 /* ContactsViewController.m */,
+				16CE5FED1F4D68A8000E177F /* DataVisualizationViewController.h */,
+				16CE5FEE1F4D68A8000E177F /* DataVisualizationViewController.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -2204,6 +2213,15 @@
 			name = ClockLineView;
 			sourceTree = "<group>";
 		};
+		16CE5FF31F4DB30A000E177F /* Estimote */ = {
+			isa = PBXGroup;
+			children = (
+				16CE5FF01F4DB2E7000E177F /* Estimote.h */,
+				16CE5FF11F4DB2E7000E177F /* Estimote.m */,
+			);
+			name = Estimote;
+			sourceTree = "<group>";
+		};
 		16EC4F1C1D2EAA4F00524424 /* WebESM */ = {
 			isa = PBXGroup;
 			children = (
@@ -2254,9 +2272,9 @@
 				1623CEB81BFE319100EFAD72 /* CoreMotion.framework */,
 				1623CEB01BFD40FB00EFAD72 /* AVFoundation.framework */,
 				16228A3B1C22DAE20081C839 /* NotificationCenter.framework */,
-				379F418CD10461E03A9A20DB /* libPods-AWARE.a */,
-				A9076E54A4185775AE17EC4C /* libPods-AWARETests.a */,
-				4BDCDEE4E14B822B3D731795 /* libPods-AWAREUITests.a */,
+				FDD502C633ED8DBE54DF24B7 /* libPods-AWARE.a */,
+				72AF187AD07DD1A25001BEB3 /* libPods-AWARETests.a */,
+				F2C7B48DB0AFA845366B8320 /* libPods-AWAREUITests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -2556,7 +2574,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		3A5F74C4EC8B50F3B7A012A5 /* [CP] Embed Pods Frameworks */ = {
@@ -2586,7 +2604,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		7D8DCB944F805035ED6F5FC6 /* [CP] Copy Pods Resources */ = {
@@ -2646,7 +2664,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		F81D864F422FBE4518F1BE3B /* [CP] Copy Pods Resources */ = {
@@ -2841,6 +2859,7 @@
 				1613E0CA1D3D33B0000528F5 /* EntityESMHistory+CoreDataProperties.m in Sources */,
 				160F0F051D04756800673343 /* EntityBatteryCharge+CoreDataProperties.m in Sources */,
 				16BDCCA11D3609CE00B13BD4 /* MSBandGSR.m in Sources */,
+				16CE5FEF1F4D68A8000E177F /* DataVisualizationViewController.m in Sources */,
 				169C88381D01382C00825761 /* SSLManager.m in Sources */,
 				160F0EF71D042AB600673343 /* EntityNetwork+CoreDataProperties.m in Sources */,
 				169C88361D01382C00825761 /* LocalFileStorageHelper.m in Sources */,
@@ -2855,6 +2874,7 @@
 				160F0ECD1D04132600673343 /* EntityGravity.m in Sources */,
 				16ECFC481D8F0C95005C3DA6 /* IOSActivityRecognition.m in Sources */,
 				169C88721D01382C00825761 /* AWAREMqtt.m in Sources */,
+				16CE5FF21F4DB2E7000E177F /* Estimote.m in Sources */,
 				169C882D1D01382C00825761 /* AWAREDelegate.m in Sources */,
 				160F0EC01D0404A400673343 /* EntityCall+CoreDataProperties.m in Sources */,
 				16654EA21D027DC600280051 /* AWAREUploader.m in Sources */,

@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <MQTTKit/MQTTKit.h>
 #import <CoreLocation/CoreLocation.h>
-#import <SVProgressHUD.h>
+#import "SVProgressHUD.h"
 
 #import "EAIntroView.h"
 #import "AWARESensorManager.h"

@@ -231,6 +231,18 @@
         <attribute name="temporary" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
         <relationship name="esms" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="EntityESM" inverseName="esm_schedule" inverseEntity="EntityESM" syncable="YES"/>
     </entity>
+    <entity name="EntityEstimoteTelemetry" syncable="YES">
+        <attribute name="ambient_light" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="estimote_appearance" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="estimote_battery" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="estimote_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="is_moving" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="magnetometer" optional="YES" attributeType="Double" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="pressure" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="temperature" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
+    </entity>
     <entity name="EntityFitbitData" representedClassName="EntityFitbitData" syncable="YES">
         <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="fitbit_data" optional="YES" attributeType="String" syncable="YES"/>
@@ -525,5 +537,6 @@
         <element name="EntityScreen" positionX="189" positionY="153" width="128" height="30"/>
         <element name="EntityTimezone" positionX="198" positionY="162" width="128" height="30"/>
         <element name="EntityWifi" positionX="207" positionY="171" width="128" height="30"/>
+        <element name="EntityEstimoteTelemetry" positionX="297" positionY="144" width="128" height="195"/>
     </elements>
 </model>
