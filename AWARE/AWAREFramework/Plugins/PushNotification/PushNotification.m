@@ -117,4 +117,10 @@
     return [super syncAwareDBInForeground];
 }
 
+- (NSString *) getPushNotificationToken {
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSString * deviceToken = [defaults objectForKey:KEY_APNS_TOKEN];
+    return deviceToken;
+}
+
 @end

@@ -262,18 +262,37 @@
     [self checkComplianceWithViewController:nil];
 }
 
-- (void) checkComplianceWithViewController:(UIViewController *)viewController {
-    [self checkLocationSensorWithViewController:viewController];
-    [self checkBackgroundAppRefreshWithViewController:viewController];
-    [self checkStorageUsageWithViewController:viewController];
-    [self checkWifiStateWithViewController:viewController];
-    [self checkLowPowerModeWithViewController:viewController];
-    [self checkNotificationSettingWithViewController:viewController];
+- (void) checkComplianceWithViewController:(UIViewController *)viewController{
+    [self checkComplianceWithViewController:viewController showDetail:NO];
+}
+
+- (void) checkComplianceWithViewController:(UIViewController *)viewController showDetail:(BOOL)detail{
+    if(![self checkLocationSensorWithViewController:viewController showDetail:detail]) return;
+    if(![self checkBackgroundAppRefreshWithViewController:viewController showDetail:detail]) return;
+    if(![self checkStorageUsageWithViewController:viewController showDetail:detail]) return;
+    if(![self checkWifiStateWithViewController:viewController showDetail:detail]) return;
+    if(![self checkLowPowerModeWithViewController:viewController showDetail:detail]) return;
+    if(![self checkNotificationSettingWithViewController:viewController showDetail:detail]) return;
+    
+    if (viewController!=nil && detail) {
+        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Your settings are correct"
+                                                                       message:@"Thank you for your copperation."
+                                                                preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction * cancelAction = [UIAlertAction actionWithTitle:@"Close"
+                                                                style:UIAlertActionStyleCancel
+                                                              handler:^(UIAlertAction * _Nonnull action) {
+                                                                  
+                                                              }];
+        [alert addAction:cancelAction];
+        if (detail) {
+            [viewController presentViewController:alert animated:YES completion:nil];
+        }
+    }
 }
 
 //////////////////////////////////////////////////////////////////
 
-- (bool) checkLocationSensorWithViewController:(UIViewController *) viewController {
+- (bool) checkLocationSensorWithViewController:(UIViewController *) viewController showDetail:(BOOL)detail{
     bool state = NO;
     CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
     if (status == kCLAuthorizationStatusAuthorizedWhenInUse || status == kCLAuthorizationStatusDenied || status == kCLAuthorizationStatusRestricted) {
@@ -306,7 +325,9 @@
                                                                   }];
             [alert addAction:defaultAction];
             [alert addAction:cancelAction];
-            // [viewController presentViewController:alert animated:YES completion:nil];
+            if (detail) {
+                [viewController presentViewController:alert animated:YES completion:nil];
+            }
         }else{
             /*
             [AWAREUtils sendLocalNotificationForMessage:message
@@ -341,7 +362,7 @@
 
 ///////////////////////////////////////////////////////
 
-- (bool) checkBackgroundAppRefreshWithViewController:(UIViewController *) viewController {
+- (bool) checkBackgroundAppRefreshWithViewController:(UIViewController *) viewController  showDetail:(BOOL)detail{
     bool state = NO;
     
     //    UIBackgroundRefreshStatusRestricted, //< unavailable on this system due to device configuration; the user cannot enable the feature
@@ -373,7 +394,9 @@
                                             
             [alert addAction:cancelAction];
             [alert addAction:defaultAction];
-            // [viewController presentViewController:alert animated:YES completion:nil];
+            if(detail){
+                 [viewController presentViewController:alert animated:YES completion:nil];
+            }
         }else{
             // [AWAREUtils sendLocalNotificationForMessage:@"Please allow the 'Background App Refresh' service in the Settings->General." soundFlag:NO];
         }
@@ -391,7 +414,7 @@
     return state;
 }
 
-- (bool) checkNotificationSettingWithViewController:(UIViewController *) viewController {
+- (bool) checkNotificationSettingWithViewController:(UIViewController *) viewController  showDetail:(BOOL)detail{
     
     bool state = NO;
     
@@ -429,7 +452,9 @@
                                                                       }];
                 [alert addAction:defaultAction];
                 [alert addAction:cancelAction];
-                // [viewController presentViewController:alert animated:YES completion:nil];
+                if(detail){
+                     [viewController presentViewController:alert animated:YES completion:nil];
+                }
             }else{
                 // [AWAREUtils sendLocalNotificationForMessage:@"Please allow the 'Notification' service in the Settings.app->Notification->Allow Notifications." soundFlag:NO];
             }
@@ -451,7 +476,8 @@
 
 ///////////////////////////////////////////////////////////////
 
-- (void) checkStorageUsageWithViewController:(UIViewController *) viewController{
+- (bool) checkStorageUsageWithViewController:(UIViewController *) viewController  showDetail:(BOOL)detail{
+    bool state = YES;
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES);
     NSDictionary *dictionary = [[NSFileManager defaultManager] attributesOfFileSystemForPath:[paths lastObject] error:nil];
     if (dictionary) {
@@ -461,30 +487,32 @@
         NSLog(@"Used: %.3f", total-free);
         NSLog(@"Space: %.3f", free);
         NSLog(@"Total: %.3f", total);
-        // float percentage = free/total * 100.0f;
+        float percentage = free/total * 100.0f;
         NSString * event = [NSString stringWithFormat:@"[compliance] TOTAL:%.3fGB, USED:%.3fGB, FREE:%.3fGB", total, total-free, free];
         Debug * debugSensor = [[Debug alloc] initWithAwareStudy:_sharedAwareStudy dbType:AwareDBTypeTextFile];
         [debugSensor saveDebugEventWithText:event type:DebugTypeInfo label:@""];
         [debugSensor syncAwareDBInBackground];
-//        if(percentage < 5){ // %
-//            NSString * title = @"Please upload stored data manually!";
-//            NSString * message = [NSString stringWithFormat:@"You are using  %.3f GB ", free];
-//            if([AWAREUtils isForeground]){
-//                UIAlertView * alert = [[UIAlertView alloc] initWithTitle:title
-//                                                                 message:message
-//                                                                delegate:self
-//                                                       cancelButtonTitle:nil
-//                                                       otherButtonTitles:@"ON", nil];
-//                [alert show];
-//            }else{
-//                [AWAREUtils sendLocalNotificationForMessage:message soundFlag:NO];
-//            }
-//        }
+        if(percentage < 5 && detail){ // %
+            state = NO;
+            NSString * title = @"Please upload stored data manually!";
+            NSString * message = [NSString stringWithFormat:@"You are using  %.3f GB ", free];
+            if([AWAREUtils isForeground]){
+                UIAlertView * alert = [[UIAlertView alloc] initWithTitle:title
+                                                                 message:message
+                                                                delegate:self
+                                                       cancelButtonTitle:nil
+                                                       otherButtonTitles:@"ON", nil];
+                [alert show];
+            }else{
+                [AWAREUtils sendLocalNotificationForMessage:message soundFlag:NO];
+            }
+        }
     }
+    return state;
 }
 
 
-- (bool) checkLowPowerModeWithViewController:(UIViewController *) viewController {
+- (bool) checkLowPowerModeWithViewController:(UIViewController *) viewController showDetail:(BOOL)detail{
     
     bool state = NO;
     
@@ -518,8 +546,9 @@
                                                                       }];
                 [alert addAction:defaultAction];
                 [alert addAction:cancelAction];
-                // [viewController presentViewController:alert animated:YES completion:nil];
-
+                if(detail){
+                    [viewController presentViewController:alert animated:YES completion:nil];
+                }
             }else{
                 // [AWAREUtils sendLocalNotificationForMessage:title soundFlag:NO];
 
@@ -542,7 +571,7 @@
 
 ///////////////////////////////////////////////////////////////
 
-- (bool) checkWifiStateWithViewController:(UIViewController *) viewController {
+- (bool) checkWifiStateWithViewController:(UIViewController *) viewController  showDetail:(BOOL)detail{
     if(![self isWiFiEnabled]){
         
         NSString * title = @"Please turn on WiFi!";
@@ -569,7 +598,9 @@
                                                                   }];
             [alert addAction:defaultAction];
             [alert addAction:cancelAction];
-            // [viewController presentViewController:alert animated:YES completion:nil];
+            if(detail){
+                [viewController presentViewController:alert animated:YES completion:nil];
+            }
         }else{
             // [AWAREUtils sendLocalNotificationForMessage:@"Please turn on WiFi! AWARE client needs WiFi for data uploading." soundFlag:NO];
         }

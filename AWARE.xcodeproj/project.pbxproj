@@ -39,6 +39,7 @@
 		1613E0CB1D3D33B0000528F5 /* EntityESMHistory.m in Sources */ = {isa = PBXBuildFile; fileRef = 1613E0C91D3D33B0000528F5 /* EntityESMHistory.m */; };
 		1613E0CE1D3E16B8000528F5 /* IBeacon.m in Sources */ = {isa = PBXBuildFile; fileRef = 1613E0CD1D3E16B8000528F5 /* IBeacon.m */; };
 		1613E0D51D3E28D3000528F5 /* EntityESMSchedule.m in Sources */ = {isa = PBXBuildFile; fileRef = 1613E0D31D3E28D3000528F5 /* EntityESMSchedule.m */; };
+		161DD2D21F4A251C000D22A1 /* AppSettingTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 161DD2D11F4A251C000D22A1 /* AppSettingTableViewController.m */; };
 		161F71FB1D3B261300309650 /* IOSESMViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 161F71FA1D3B261300309650 /* IOSESMViewController.m */; };
 		161F720C1D3B71D400309650 /* EntityESMAnswer+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 161F72091D3B71D400309650 /* EntityESMAnswer+CoreDataProperties.m */; };
 		161F720D1D3B71D400309650 /* EntityESMAnswer.m in Sources */ = {isa = PBXBuildFile; fileRef = 161F720B1D3B71D400309650 /* EntityESMAnswer.m */; };
@@ -419,6 +420,8 @@
 		1613E0CD1D3E16B8000528F5 /* IBeacon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IBeacon.m; path = iBeacon/IBeacon.m; sourceTree = "<group>"; };
 		1613E0D21D3E28D3000528F5 /* EntityESMSchedule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EntityESMSchedule.h; sourceTree = "<group>"; };
 		1613E0D31D3E28D3000528F5 /* EntityESMSchedule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EntityESMSchedule.m; sourceTree = "<group>"; };
+		161DD2D01F4A251C000D22A1 /* AppSettingTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppSettingTableViewController.h; sourceTree = "<group>"; };
+		161DD2D11F4A251C000D22A1 /* AppSettingTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppSettingTableViewController.m; sourceTree = "<group>"; };
 		161F71F91D3B261300309650 /* IOSESMViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IOSESMViewController.h; sourceTree = "<group>"; };
 		161F71FA1D3B261300309650 /* IOSESMViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IOSESMViewController.m; sourceTree = "<group>"; };
 		161F72081D3B71D400309650 /* EntityESMAnswer+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EntityESMAnswer+CoreDataProperties.h"; sourceTree = "<group>"; };
@@ -2060,6 +2063,8 @@
 				1683920E1D9BDCE1006D6607 /* SettingTableViewController.m */,
 				16E6CB941EC931E6000FC58C /* FitbitViewController.h */,
 				16E6CB951EC931E6000FC58C /* FitbitViewController.m */,
+				161DD2D01F4A251C000D22A1 /* AppSettingTableViewController.h */,
+				161DD2D11F4A251C000D22A1 /* AppSettingTableViewController.m */,
 				166082CB1D93DC1A004D1858 /* IntroPage5.xib */,
 				52BBE03B1E13C6EE00F57906 /* ContactsViewController.h */,
 				52BBE03C1E13C6EE00F57906 /* ContactsViewController.m */,
@@ -2702,6 +2707,7 @@
 				16AB2BFD1E2B665800F05B72 /* EntityFitbitDevice+CoreDataClass.m in Sources */,
 				16B0780F1D1F2487009C070B /* EntityLabel+CoreDataProperties.m in Sources */,
 				16C907A01F3303B8005D357C /* ESMLikertScaleView.m in Sources */,
+				161DD2D21F4A251C000D22A1 /* AppSettingTableViewController.m in Sources */,
 				160F0EC71D040B7F00673343 /* EntityDebug.m in Sources */,
 				169C88341D01382C00825761 /* AWAREUtils.m in Sources */,
 				169C88821D01382C00825761 /* OpenWeather.m in Sources */,

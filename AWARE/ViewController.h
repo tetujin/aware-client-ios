@@ -20,6 +20,7 @@
 - (IBAction)pushedStudyRefreshButton:(id)sender;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *refreshButton;
 - (IBAction)pushedEsmButtonOnNavigationBar:(id)sender;
+- (IBAction)pushedUploadButton:(id)sender;
 
 @property (nonatomic,strong) NSMutableArray *sensors;
 @property MQTTClient *client;

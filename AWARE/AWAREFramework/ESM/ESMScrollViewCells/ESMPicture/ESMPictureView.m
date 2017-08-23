@@ -59,8 +59,8 @@
         AVCaptureSession *captureSession = [[AVCaptureSession alloc] init];
         [captureSession addInput:videoInput];
         [captureSession beginConfiguration];
-        captureSession.sessionPreset = AVCaptureSessionPresetPhoto;
-        // captureSession.sessionPreset = AVCaptureSessionPresetLow;
+        //captureSession.sessionPreset = AVCaptureSessionPresetPhoto;
+        captureSession.sessionPreset = AVCaptureSessionPreset640x480;
         [captureSession commitConfiguration];
         
         int previewHeight = (self.mainView.frame.size.width-(widthSpace*2))/3 * 4;
@@ -82,7 +82,6 @@
         [imageView setHidden:YES];
         [imageView setNeedsDisplay];
         [self.mainView addSubview:imageView];
-        
         
         //////////////////
         shutterBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 60, 60)];
@@ -168,7 +167,8 @@
         
         // Create NSData object
         if(imageView.image != nil){
-            NSString * base64Encoded = [UIImagePNGRepresentation(imageView.image) base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+            NSString * base64Encoded = [UIImagePNGRepresentation(imageView.image) base64EncodedStringWithOptions:0];
+            // SString *base64Encoded = [musicData base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
             return base64Encoded;
         }else{
             return @"";

@@ -24,12 +24,11 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="95"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Jlv-Hb-QNm" id="9JS-s5-0aB">
-                                    <rect key="frame" x="0.0" y="0.0" width="308" height="94.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="308" height="95"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                                 <connections>
                                     <segue destination="0tU-Ir-X24" kind="push" identifier="settingView" id="Y07-lc-Fbb"/>
-                                    <segue destination="uIW-jY-0rI" kind="show" identifier="webView" trigger="accessoryAction" id="tDV-et-JRW"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -39,11 +38,18 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="AWARE" id="tQb-LZ-vWa">
-                        <barButtonItem key="leftBarButtonItem" image="esm_icon_menubar" id="dLq-Iu-AXX">
-                            <connections>
-                                <action selector="pushedEsmButtonOnNavigationBar:" destination="68D-Qb-jCP" id="qDy-Bd-Cmg"/>
-                            </connections>
-                        </barButtonItem>
+                        <leftBarButtonItems>
+                            <barButtonItem image="esm_icon_menubar" id="dLq-Iu-AXX">
+                                <connections>
+                                    <action selector="pushedEsmButtonOnNavigationBar:" destination="68D-Qb-jCP" id="qDy-Bd-Cmg"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem image="aware_upload_icon_mini" id="2gj-dK-raw">
+                                <connections>
+                                    <action selector="pushedUploadButton:" destination="68D-Qb-jCP" id="Kb6-vS-Sd3"/>
+                                </connections>
+                            </barButtonItem>
+                        </leftBarButtonItems>
                         <rightBarButtonItems>
                             <barButtonItem image="QR_code_filled" id="BRn-rr-Hag">
                                 <connections>
@@ -64,6 +70,7 @@
                         <segue destination="ZN0-uA-Adf" kind="push" identifier="contacts" id="xvm-oW-D4M"/>
                         <segue destination="cZ4-uU-z1C" kind="push" identifier="fitbitView" id="aTM-Tt-P3A"/>
                         <segue destination="cpN-Wu-zZm" kind="push" identifier="iOSEsmScrollView" id="2Vf-ep-gvr"/>
+                        <segue destination="CDv-XI-aUf" kind="push" identifier="AppSettingView" id="Ihu-IP-aQL"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eTN-Zo-OWZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -172,7 +179,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Mlj-S0-tac" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3358" y="375"/>
+            <point key="canvasLocation" x="4497" y="1155"/>
         </scene>
         <!--Setting Table View Controller-->
         <scene sceneID="b4y-5c-QwK">
@@ -187,7 +194,7 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="8np-8w-s12" id="Do0-n6-4i6">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>
@@ -208,6 +215,38 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dzs-lN-Pc2" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2508" y="755"/>
+        </scene>
+        <!--App Setting Table View Controller-->
+        <scene sceneID="TvG-Cu-7Wy">
+            <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="z4g-fI-vv2" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tableViewController id="CDv-XI-aUf" customClass="AppSettingTableViewController" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="H9t-aU-z2l">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="hrR-ZM-Fx6">
+                                <rect key="frame" x="0.0" y="28" width="375" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="hrR-ZM-Fx6" id="f8h-jc-4TN">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="CDv-XI-aUf" id="pgt-pl-4RP"/>
+                            <outlet property="delegate" destination="CDv-XI-aUf" id="gVc-Pz-XfW"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" id="Fi5-5M-miJ"/>
+                    <connections>
+                        <segue destination="uIW-jY-0rI" kind="push" identifier="webView" id="49f-jT-afh"/>
+                    </connections>
+                </tableViewController>
+            </objects>
+            <point key="canvasLocation" x="3654" y="1369"/>
         </scene>
         <!--Contacts View Controller-->
         <scene sceneID="mY7-Kv-hnT">
@@ -550,7 +589,7 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="deG-VO-c8c" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="XAc-JU-T8j">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="XAc-JU-T8j">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -566,6 +605,7 @@
     </scenes>
     <resources>
         <image name="QR_code_filled" width="32" height="32"/>
+        <image name="aware_upload_icon_mini" width="49" height="50"/>
         <image name="esm_icon_menubar" width="32" height="32"/>
         <image name="ic_action_fitbit" width="48" height="48"/>
         <image name="ic_launcher_aware-web" width="512" height="512"/>

@@ -155,7 +155,12 @@
                                                 point1:CGPointMake(clockWidth/2, clockWidth/2)
                                                 point2:CGPointMake(clockWidth/2, 10)];
     [baseClockView addSubview:lineView];
- 
+    //The setup code (in viewDidLoad in your view controller)
+    UIPanGestureRecognizer *singleFingerTap =
+    [[UIPanGestureRecognizer alloc] initWithTarget:self
+                                            action:@selector(dragging:)];
+    [lineView addGestureRecognizer:singleFingerTap];
+    
     ////////// adding a small center circle
     UIView * centerCircle = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, 10)];
     centerCircle.backgroundColor = clockCyanColor;
@@ -184,7 +189,11 @@
         button.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:20];
         [baseClockView addSubview:button];
         ////////// set an event to each button
-        [button addTarget:self action:@selector(selectedNumber:) forControlEvents:UIControlEventTouchDown];
+        // [button addTarget:self action:@selector(selectedNumber:) forControlEvents:UIControlEventTouchDown];
+        UIPanGestureRecognizer *panGestureTap =
+        [[UIPanGestureRecognizer alloc] initWithTarget:self
+                                                action:@selector(numDragging:)];
+        [button addGestureRecognizer:panGestureTap];
         ////////// set a tag to each button
         button.tag = pointNumber;
         //////////
@@ -210,54 +219,110 @@
     [self refreshSizeOfRootView];
 }
 
+- (void) numDragging:(UIPanGestureRecognizer *)gesture {
+    CGPoint newCoord = [gesture locationInView:gesture.view.superview];
+    [self draggingLineTo:newCoord gesture:gesture];
+}
 
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
-//    CGPoint location = [[touches anyObject] locationInView:self];
-//    tx = location.x;
-//    ty = location.y;    
+- (void) dragging:(UIPanGestureRecognizer *)gesture {
+    CGPoint newCoord = [gesture locationInView:gesture.view];
+    [self draggingLineTo:newCoord gesture:gesture];
+}
+
+- (void) draggingLineTo:(CGPoint)point gesture:(UIPanGestureRecognizer *)gesture{
+    bool isNoSelectedBtn = YES;
+    NSInteger previousSelectedBtn = 0;
+    for (UIButton * button in buttons) {
+        if ([button.backgroundColor isEqual:clockCyanColor]) {
+            previousSelectedBtn = button.tag;
+        }
+    }
+    
+    for (UIButton * button in buttons) {
+        if(CGRectContainsPoint(button.frame, point)){
+            [lineView setLineFrom:CGPointMake(lineView.frame.size.width/2,lineView.frame.size.height/2)
+                               to:button.center];
+            if (![button.backgroundColor isEqual:clockCyanColor]) {
+                AudioServicesPlaySystemSound(1104);
+            }
+            button.backgroundColor = clockCyanColor;
+            [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+            
+            
+            if (mode == 0) {
+                if (button.tag < 10) {
+                    [hourBtn setTitle:[NSString stringWithFormat:@"0%ld",button.tag] forState:UIControlStateNormal];
+                }else{
+                    [hourBtn setTitle:[NSString stringWithFormat:@"%ld",button.tag] forState:UIControlStateNormal];
+                }
+            } else if ( mode == 1){
+                if (button.tag < 10){
+                    [minBtn  setTitle:[NSString stringWithFormat:@"0%ld",button.tag] forState:UIControlStateNormal];
+                }else{
+                    [minBtn  setTitle:[NSString stringWithFormat:@"%ld",button.tag] forState:UIControlStateNormal];
+                }
+            }
+            isNoSelectedBtn = NO;
+        }else{
+            button.backgroundColor = [UIColor clearColor];
+            [button setTitleColor:[UIColor darkTextColor] forState:UIControlStateNormal];
+        }
+    }
+    
+    ///////////////////////////
+    if(isNoSelectedBtn){
+        for (UIButton *button in buttons) {
+            if (button.tag == previousSelectedBtn) {
+                button.backgroundColor = clockCyanColor;
+                [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+            }
+        }
+    }
+    
+    ///////////////////////////
+    //check its state
+    if(gesture.state==UIGestureRecognizerStateBegan){
+    }else if(gesture.state==UIGestureRecognizerStateEnded){
+        if(mode == 0){
+            [self pushedHourMinButton:minBtn];
+            [self moveSelectorToOriginalPosition];
+        }
+    }
+}
+
+
+//- (void) selectedNumber:(UIButton *)button{
+//
 //    for (UIButton * btn in buttons) {
-//        btn.backgroundColor = [UIColor clearColor];
-//        [btn setTitleColor:[UIColor darkTextColor] forState:UIControlStateNormal];
+//        if(btn.tag != button.tag){
+//            btn.backgroundColor = [UIColor clearColor];
+//            [btn setTitleColor:[UIColor darkTextColor] forState:UIControlStateNormal];
+//        }
 //    }
 //    [lineView setLineFrom:CGPointMake(lineView.frame.size.width/2,lineView.frame.size.height/2)
-//                       to:location];
-}
-
-
-
-
-- (void) selectedNumber:(UIButton *)button{
-    
-    for (UIButton * btn in buttons) {
-        if(btn.tag != button.tag){
-            btn.backgroundColor = [UIColor clearColor];
-            [btn setTitleColor:[UIColor darkTextColor] forState:UIControlStateNormal];
-        }
-    }
-    [lineView setLineFrom:CGPointMake(lineView.frame.size.width/2,lineView.frame.size.height/2)
-                       to:button.center];
-    button.backgroundColor = clockCyanColor;
-    [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    
-    AudioServicesPlaySystemSound(1104);
-
-    if (mode == 0) {
-        if (button.tag < 10) {
-            [hourBtn setTitle:[NSString stringWithFormat:@"0%ld",button.tag] forState:UIControlStateNormal];
-        }else{
-            [hourBtn setTitle:[NSString stringWithFormat:@"%ld",button.tag] forState:UIControlStateNormal];
-        }
-        [self pushedHourMinButton:minBtn];
-        [self moveSelectorToOriginalPosition];
-    } else if ( mode == 1){
-        if (button.tag < 10){
-            [minBtn  setTitle:[NSString stringWithFormat:@"0%ld",button.tag] forState:UIControlStateNormal];
-        }else{
-            [minBtn  setTitle:[NSString stringWithFormat:@"%ld",button.tag] forState:UIControlStateNormal];
-        }
-    }
-
-}
+//                       to:button.center];
+//    button.backgroundColor = clockCyanColor;
+//    [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+//    
+//    AudioServicesPlaySystemSound(1104);
+//
+//    if (mode == 0) {
+//        if (button.tag < 10) {
+//            [hourBtn setTitle:[NSString stringWithFormat:@"0%ld",button.tag] forState:UIControlStateNormal];
+//        }else{
+//            [hourBtn setTitle:[NSString stringWithFormat:@"%ld",button.tag] forState:UIControlStateNormal];
+//        }
+//        [self pushedHourMinButton:minBtn];
+//        [self moveSelectorToOriginalPosition];
+//    } else if ( mode == 1){
+//        if (button.tag < 10){
+//            [minBtn  setTitle:[NSString stringWithFormat:@"0%ld",button.tag] forState:UIControlStateNormal];
+//        }else{
+//            [minBtn  setTitle:[NSString stringWithFormat:@"%ld",button.tag] forState:UIControlStateNormal];
+//        }
+//    }
+//
+//}
 
 - (void) selectedAMPMbutton:(UIButton *)button{
     AudioServicesPlaySystemSound(1104);
@@ -276,6 +341,7 @@
 - (void) pushedHourMinButton:(UIButton *) button {
     AudioServicesPlaySystemSound(1104);
     mode = (int)button.tag; // 0=hour, 1=min
+    
     if(button.tag == 0){
         [hourBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [minBtn  setTitleColor:clockUnselectedObjColor forState:UIControlStateNormal];
