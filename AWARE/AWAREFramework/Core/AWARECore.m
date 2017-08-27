@@ -69,9 +69,14 @@
         [userDefaults setInteger:10000 forKey:KEY_MAX_FETCH_SIZE_NORMAL_SENSOR];         // Defualt Value: 10000
         [userDefaults setBool:YES forKey:@"aware_inited_1.8.2"];
     }
+    if (![userDefaults boolForKey:@"aware_inited_2.0"]) {
+        [userDefaults setBool:YES forKey:@"aware_inited_2.0"];
+        [userDefaults setInteger:cleanOldDataTypeWeekly forKey:SETTING_FREQUENCY_CLEAN_OLD_DATA];
+        
+    }
     
     if([userDefaults integerForKey:SETTING_DB_TYPE] == AwareDBTypeUnknown){
-        [userDefaults setInteger:AwareDBTypeTextFile forKey:SETTING_DB_TYPE];
+        [userDefaults setInteger:AwareDBTypeCoreData forKey:SETTING_DB_TYPE];
     }
     
     double uploadInterval = [userDefaults doubleForKey:SETTING_SYNC_INT];

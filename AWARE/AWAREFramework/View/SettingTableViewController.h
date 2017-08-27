@@ -14,6 +14,7 @@
 @property (nonatomic, strong) NSString *selectedRowKey;
 
 @property (nonatomic, strong) NSMutableArray *settingRows;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *showDataButton;
 
 - (IBAction)pushedActionButton:(id)sender;
 

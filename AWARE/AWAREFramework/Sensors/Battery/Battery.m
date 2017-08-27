@@ -179,9 +179,9 @@
 
 - (void)batteryLevelChanged:(NSNotification *)notification {
     
-    if (previousBatteryLevel == [UIDevice currentDevice].batteryLevel*100) {
-        return;
-    }
+//    if (previousBatteryLevel == [UIDevice currentDevice].batteryLevel*100) {
+//        return;
+//    }
     
     // 0 unknown, 1 unplegged, 2 charging, 3 full
     // NSLog(@"battery status: %d",state);

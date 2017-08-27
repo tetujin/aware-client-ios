@@ -180,15 +180,6 @@
     AWARECore * core = delegate.sharedAWARECore;
     [core checkComplianceWithViewController:self];
     
-    
-//    ESMStorageHelper * helper = [[ESMStorageHelper alloc] init];
-//    NSArray * storedEsms = [helper getEsmTexts];
-//    if(storedEsms != nil){
-//        if (storedEsms.count > 0 && ![IOSESM isAppearedThisSection]) {
-//            [IOSESM setAppearedState:YES];
-//            [self performSegueWithIdentifier:@"esmView" sender:self];
-//        }
-//    }
     /*
      NSArray * esms = [iOSESM getValidESMSchedulesWithDatetime:[NSDate new]];
      if(esms != nil && esms.count != 0 && ![IOSESM isAppearedThisSection]){

@@ -66,8 +66,36 @@
 		165A8B701C03B90500898C6C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 165A8B6E1C03B90500898C6C /* GoogleService-Info.plist */; };
 		165A8B711C03B90500898C6C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 165A8B6E1C03B90500898C6C /* GoogleService-Info.plist */; };
 		165DECF61C83AD7D002C88CA /* ExternalAccessory.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 165DECF51C83AD7D002C88CA /* ExternalAccessory.framework */; };
+		16606B191F4E4FC200EF6C4D /* PNBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 16606AF81F4E4FC100EF6C4D /* PNBar.m */; };
+		16606B1A1F4E4FC200EF6C4D /* PNBarChart.m in Sources */ = {isa = PBXBuildFile; fileRef = 16606AFA1F4E4FC100EF6C4D /* PNBarChart.m */; };
+		16606B1B1F4E4FC200EF6C4D /* PNChartLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 16606AFE1F4E4FC100EF6C4D /* PNChartLabel.m */; };
+		16606B1C1F4E4FC200EF6C4D /* PNCircleChart.m in Sources */ = {isa = PBXBuildFile; fileRef = 16606B001F4E4FC100EF6C4D /* PNCircleChart.m */; };
+		16606B1D1F4E4FC200EF6C4D /* PNColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 16606B021F4E4FC100EF6C4D /* PNColor.m */; };
+		16606B1E1F4E4FC200EF6C4D /* PNGenericChart.m in Sources */ = {isa = PBXBuildFile; fileRef = 16606B041F4E4FC100EF6C4D /* PNGenericChart.m */; };
+		16606B1F1F4E4FC200EF6C4D /* PNLineChart.m in Sources */ = {isa = PBXBuildFile; fileRef = 16606B061F4E4FC100EF6C4D /* PNLineChart.m */; };
+		16606B201F4E4FC200EF6C4D /* PNLineChartData.m in Sources */ = {isa = PBXBuildFile; fileRef = 16606B081F4E4FC100EF6C4D /* PNLineChartData.m */; };
+		16606B211F4E4FC200EF6C4D /* PNLineChartDataItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 16606B0A1F4E4FC100EF6C4D /* PNLineChartDataItem.m */; };
+		16606B221F4E4FC200EF6C4D /* PNPieChart.m in Sources */ = {isa = PBXBuildFile; fileRef = 16606B0C1F4E4FC100EF6C4D /* PNPieChart.m */; };
+		16606B231F4E4FC200EF6C4D /* PNPieChartDataItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 16606B0E1F4E4FC100EF6C4D /* PNPieChartDataItem.m */; };
+		16606B241F4E4FC200EF6C4D /* PNRadarChart.m in Sources */ = {isa = PBXBuildFile; fileRef = 16606B101F4E4FC100EF6C4D /* PNRadarChart.m */; };
+		16606B251F4E4FC200EF6C4D /* PNRadarChartDataItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 16606B121F4E4FC100EF6C4D /* PNRadarChartDataItem.m */; };
+		16606B261F4E4FC200EF6C4D /* PNScatterChart.m in Sources */ = {isa = PBXBuildFile; fileRef = 16606B141F4E4FC200EF6C4D /* PNScatterChart.m */; };
+		16606B271F4E4FC200EF6C4D /* PNScatterChartData.m in Sources */ = {isa = PBXBuildFile; fileRef = 16606B161F4E4FC200EF6C4D /* PNScatterChartData.m */; };
+		16606B281F4E4FC200EF6C4D /* PNScatterChartDataItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 16606B181F4E4FC200EF6C4D /* PNScatterChartDataItem.m */; };
 		166082CC1D93DC1A004D1858 /* IntroPage5.xib in Resources */ = {isa = PBXBuildFile; fileRef = 166082CB1D93DC1A004D1858 /* IntroPage5.xib */; };
 		16654EA21D027DC600280051 /* AWAREUploader.m in Sources */ = {isa = PBXBuildFile; fileRef = 16654EA11D027DC600280051 /* AWAREUploader.m */; };
+		167F149D1F4EFB7B00EA6323 /* EntityEstimoteMotion+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 167F148E1F4EFB7B00EA6323 /* EntityEstimoteMotion+CoreDataClass.m */; };
+		167F149E1F4EFB7B00EA6323 /* EntityEstimoteMotion+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 167F14901F4EFB7B00EA6323 /* EntityEstimoteMotion+CoreDataProperties.m */; };
+		167F149F1F4EFB7B00EA6323 /* EntityEstimoteTemperature+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 167F14921F4EFB7B00EA6323 /* EntityEstimoteTemperature+CoreDataClass.m */; };
+		167F14A01F4EFB7B00EA6323 /* EntityEstimoteTemperature+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 167F14941F4EFB7B00EA6323 /* EntityEstimoteTemperature+CoreDataProperties.m */; };
+		167F14A11F4EFB7B00EA6323 /* EntityEstimoteAmbientLight+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 167F14961F4EFB7B00EA6323 /* EntityEstimoteAmbientLight+CoreDataClass.m */; };
+		167F14A21F4EFB7B00EA6323 /* EntityEstimoteAmbientLight+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 167F14981F4EFB7B00EA6323 /* EntityEstimoteAmbientLight+CoreDataProperties.m */; };
+		167F14A31F4EFB7B00EA6323 /* EntityEstimoteAirpressure+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 167F149A1F4EFB7B00EA6323 /* EntityEstimoteAirpressure+CoreDataClass.m */; };
+		167F14A41F4EFB7B00EA6323 /* EntityEstimoteAirpressure+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 167F149C1F4EFB7B00EA6323 /* EntityEstimoteAirpressure+CoreDataProperties.m */; };
+		167F14A81F4EFC7000EA6323 /* EstimoteAirpressure.m in Sources */ = {isa = PBXBuildFile; fileRef = 167F14A71F4EFC7000EA6323 /* EstimoteAirpressure.m */; };
+		167F14AB1F4EFCB400EA6323 /* EstimoteTemperature.m in Sources */ = {isa = PBXBuildFile; fileRef = 167F14AA1F4EFCB400EA6323 /* EstimoteTemperature.m */; };
+		167F14AE1F4EFCD000EA6323 /* EstimoteMotion.m in Sources */ = {isa = PBXBuildFile; fileRef = 167F14AD1F4EFCCF00EA6323 /* EstimoteMotion.m */; };
+		167F14B11F4EFCEB00EA6323 /* EstimoteAmbientLight.m in Sources */ = {isa = PBXBuildFile; fileRef = 167F14B01F4EFCEB00EA6323 /* EstimoteAmbientLight.m */; };
 		1683920F1D9BDCE1006D6607 /* SettingTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1683920E1D9BDCE1006D6607 /* SettingTableViewController.m */; };
 		1683ABCE1D347A5F001543D9 /* AWAREDebugMessageLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 1683ABCD1D347A5F001543D9 /* AWAREDebugMessageLogger.m */; };
 		168683031C07C43600CB4266 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 168683021C07C43600CB4266 /* AudioToolbox.framework */; };
@@ -466,11 +494,67 @@
 		165A8B6E1C03B90500898C6C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
 		165DECF51C83AD7D002C88CA /* ExternalAccessory.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ExternalAccessory.framework; path = System/Library/Frameworks/ExternalAccessory.framework; sourceTree = SDKROOT; };
 		165DECF71C83AD7D002C88CA /* AWARE.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = AWARE.entitlements; sourceTree = "<group>"; };
+		16606AF71F4E4FC100EF6C4D /* PNBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PNBar.h; sourceTree = "<group>"; };
+		16606AF81F4E4FC100EF6C4D /* PNBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PNBar.m; sourceTree = "<group>"; };
+		16606AF91F4E4FC100EF6C4D /* PNBarChart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PNBarChart.h; sourceTree = "<group>"; };
+		16606AFA1F4E4FC100EF6C4D /* PNBarChart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PNBarChart.m; sourceTree = "<group>"; };
+		16606AFB1F4E4FC100EF6C4D /* PNChart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PNChart.h; sourceTree = "<group>"; };
+		16606AFC1F4E4FC100EF6C4D /* PNChartDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PNChartDelegate.h; sourceTree = "<group>"; };
+		16606AFD1F4E4FC100EF6C4D /* PNChartLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PNChartLabel.h; sourceTree = "<group>"; };
+		16606AFE1F4E4FC100EF6C4D /* PNChartLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PNChartLabel.m; sourceTree = "<group>"; };
+		16606AFF1F4E4FC100EF6C4D /* PNCircleChart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PNCircleChart.h; sourceTree = "<group>"; };
+		16606B001F4E4FC100EF6C4D /* PNCircleChart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PNCircleChart.m; sourceTree = "<group>"; };
+		16606B011F4E4FC100EF6C4D /* PNColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PNColor.h; sourceTree = "<group>"; };
+		16606B021F4E4FC100EF6C4D /* PNColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PNColor.m; sourceTree = "<group>"; };
+		16606B031F4E4FC100EF6C4D /* PNGenericChart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PNGenericChart.h; sourceTree = "<group>"; };
+		16606B041F4E4FC100EF6C4D /* PNGenericChart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PNGenericChart.m; sourceTree = "<group>"; };
+		16606B051F4E4FC100EF6C4D /* PNLineChart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PNLineChart.h; sourceTree = "<group>"; };
+		16606B061F4E4FC100EF6C4D /* PNLineChart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PNLineChart.m; sourceTree = "<group>"; };
+		16606B071F4E4FC100EF6C4D /* PNLineChartData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PNLineChartData.h; sourceTree = "<group>"; };
+		16606B081F4E4FC100EF6C4D /* PNLineChartData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PNLineChartData.m; sourceTree = "<group>"; };
+		16606B091F4E4FC100EF6C4D /* PNLineChartDataItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PNLineChartDataItem.h; sourceTree = "<group>"; };
+		16606B0A1F4E4FC100EF6C4D /* PNLineChartDataItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PNLineChartDataItem.m; sourceTree = "<group>"; };
+		16606B0B1F4E4FC100EF6C4D /* PNPieChart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PNPieChart.h; sourceTree = "<group>"; };
+		16606B0C1F4E4FC100EF6C4D /* PNPieChart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PNPieChart.m; sourceTree = "<group>"; };
+		16606B0D1F4E4FC100EF6C4D /* PNPieChartDataItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PNPieChartDataItem.h; sourceTree = "<group>"; };
+		16606B0E1F4E4FC100EF6C4D /* PNPieChartDataItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PNPieChartDataItem.m; sourceTree = "<group>"; };
+		16606B0F1F4E4FC100EF6C4D /* PNRadarChart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PNRadarChart.h; sourceTree = "<group>"; };
+		16606B101F4E4FC100EF6C4D /* PNRadarChart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PNRadarChart.m; sourceTree = "<group>"; };
+		16606B111F4E4FC100EF6C4D /* PNRadarChartDataItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PNRadarChartDataItem.h; sourceTree = "<group>"; };
+		16606B121F4E4FC100EF6C4D /* PNRadarChartDataItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PNRadarChartDataItem.m; sourceTree = "<group>"; };
+		16606B131F4E4FC200EF6C4D /* PNScatterChart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PNScatterChart.h; sourceTree = "<group>"; };
+		16606B141F4E4FC200EF6C4D /* PNScatterChart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PNScatterChart.m; sourceTree = "<group>"; };
+		16606B151F4E4FC200EF6C4D /* PNScatterChartData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PNScatterChartData.h; sourceTree = "<group>"; };
+		16606B161F4E4FC200EF6C4D /* PNScatterChartData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PNScatterChartData.m; sourceTree = "<group>"; };
+		16606B171F4E4FC200EF6C4D /* PNScatterChartDataItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PNScatterChartDataItem.h; sourceTree = "<group>"; };
+		16606B181F4E4FC200EF6C4D /* PNScatterChartDataItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PNScatterChartDataItem.m; sourceTree = "<group>"; };
 		166082CB1D93DC1A004D1858 /* IntroPage5.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = IntroPage5.xib; sourceTree = "<group>"; };
 		16654EA01D027DC600280051 /* AWAREUploader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AWAREUploader.h; sourceTree = "<group>"; };
 		16654EA11D027DC600280051 /* AWAREUploader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AWAREUploader.m; sourceTree = "<group>"; };
-		167B37C41D4370FA00A99C64 /* AWARECoreDataMigrationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AWARECoreDataMigrationManager.h; sourceTree = "<group>"; };
-		167B37C51D4370FA00A99C64 /* AWARECoreDataMigrationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AWARECoreDataMigrationManager.m; sourceTree = "<group>"; };
+		167F148D1F4EFB7B00EA6323 /* EntityEstimoteMotion+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "EntityEstimoteMotion+CoreDataClass.h"; path = "Estimote/EntityEstimoteMotion+CoreDataClass.h"; sourceTree = "<group>"; };
+		167F148E1F4EFB7B00EA6323 /* EntityEstimoteMotion+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "EntityEstimoteMotion+CoreDataClass.m"; path = "Estimote/EntityEstimoteMotion+CoreDataClass.m"; sourceTree = "<group>"; };
+		167F148F1F4EFB7B00EA6323 /* EntityEstimoteMotion+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "EntityEstimoteMotion+CoreDataProperties.h"; path = "Estimote/EntityEstimoteMotion+CoreDataProperties.h"; sourceTree = "<group>"; };
+		167F14901F4EFB7B00EA6323 /* EntityEstimoteMotion+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "EntityEstimoteMotion+CoreDataProperties.m"; path = "Estimote/EntityEstimoteMotion+CoreDataProperties.m"; sourceTree = "<group>"; };
+		167F14911F4EFB7B00EA6323 /* EntityEstimoteTemperature+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "EntityEstimoteTemperature+CoreDataClass.h"; path = "Estimote/EntityEstimoteTemperature+CoreDataClass.h"; sourceTree = "<group>"; };
+		167F14921F4EFB7B00EA6323 /* EntityEstimoteTemperature+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "EntityEstimoteTemperature+CoreDataClass.m"; path = "Estimote/EntityEstimoteTemperature+CoreDataClass.m"; sourceTree = "<group>"; };
+		167F14931F4EFB7B00EA6323 /* EntityEstimoteTemperature+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "EntityEstimoteTemperature+CoreDataProperties.h"; path = "Estimote/EntityEstimoteTemperature+CoreDataProperties.h"; sourceTree = "<group>"; };
+		167F14941F4EFB7B00EA6323 /* EntityEstimoteTemperature+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "EntityEstimoteTemperature+CoreDataProperties.m"; path = "Estimote/EntityEstimoteTemperature+CoreDataProperties.m"; sourceTree = "<group>"; };
+		167F14951F4EFB7B00EA6323 /* EntityEstimoteAmbientLight+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "EntityEstimoteAmbientLight+CoreDataClass.h"; path = "Estimote/EntityEstimoteAmbientLight+CoreDataClass.h"; sourceTree = "<group>"; };
+		167F14961F4EFB7B00EA6323 /* EntityEstimoteAmbientLight+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "EntityEstimoteAmbientLight+CoreDataClass.m"; path = "Estimote/EntityEstimoteAmbientLight+CoreDataClass.m"; sourceTree = "<group>"; };
+		167F14971F4EFB7B00EA6323 /* EntityEstimoteAmbientLight+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "EntityEstimoteAmbientLight+CoreDataProperties.h"; path = "Estimote/EntityEstimoteAmbientLight+CoreDataProperties.h"; sourceTree = "<group>"; };
+		167F14981F4EFB7B00EA6323 /* EntityEstimoteAmbientLight+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "EntityEstimoteAmbientLight+CoreDataProperties.m"; path = "Estimote/EntityEstimoteAmbientLight+CoreDataProperties.m"; sourceTree = "<group>"; };
+		167F14991F4EFB7B00EA6323 /* EntityEstimoteAirpressure+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "EntityEstimoteAirpressure+CoreDataClass.h"; path = "Estimote/EntityEstimoteAirpressure+CoreDataClass.h"; sourceTree = "<group>"; };
+		167F149A1F4EFB7B00EA6323 /* EntityEstimoteAirpressure+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "EntityEstimoteAirpressure+CoreDataClass.m"; path = "Estimote/EntityEstimoteAirpressure+CoreDataClass.m"; sourceTree = "<group>"; };
+		167F149B1F4EFB7B00EA6323 /* EntityEstimoteAirpressure+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "EntityEstimoteAirpressure+CoreDataProperties.h"; path = "Estimote/EntityEstimoteAirpressure+CoreDataProperties.h"; sourceTree = "<group>"; };
+		167F149C1F4EFB7B00EA6323 /* EntityEstimoteAirpressure+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "EntityEstimoteAirpressure+CoreDataProperties.m"; path = "Estimote/EntityEstimoteAirpressure+CoreDataProperties.m"; sourceTree = "<group>"; };
+		167F14A61F4EFC7000EA6323 /* EstimoteAirpressure.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EstimoteAirpressure.h; path = Estimote/EstimoteAirpressure.h; sourceTree = "<group>"; };
+		167F14A71F4EFC7000EA6323 /* EstimoteAirpressure.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EstimoteAirpressure.m; path = Estimote/EstimoteAirpressure.m; sourceTree = "<group>"; };
+		167F14A91F4EFCB400EA6323 /* EstimoteTemperature.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EstimoteTemperature.h; path = Estimote/EstimoteTemperature.h; sourceTree = "<group>"; };
+		167F14AA1F4EFCB400EA6323 /* EstimoteTemperature.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EstimoteTemperature.m; path = Estimote/EstimoteTemperature.m; sourceTree = "<group>"; };
+		167F14AC1F4EFCCF00EA6323 /* EstimoteMotion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EstimoteMotion.h; path = Estimote/EstimoteMotion.h; sourceTree = "<group>"; };
+		167F14AD1F4EFCCF00EA6323 /* EstimoteMotion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EstimoteMotion.m; path = Estimote/EstimoteMotion.m; sourceTree = "<group>"; };
+		167F14AF1F4EFCEB00EA6323 /* EstimoteAmbientLight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EstimoteAmbientLight.h; path = Estimote/EstimoteAmbientLight.h; sourceTree = "<group>"; };
+		167F14B01F4EFCEB00EA6323 /* EstimoteAmbientLight.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EstimoteAmbientLight.m; path = Estimote/EstimoteAmbientLight.m; sourceTree = "<group>"; };
 		1683920D1D9BDCE1006D6607 /* SettingTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingTableViewController.h; sourceTree = "<group>"; };
 		1683920E1D9BDCE1006D6607 /* SettingTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingTableViewController.m; sourceTree = "<group>"; };
 		1683ABCC1D347A5F001543D9 /* AWAREDebugMessageLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AWAREDebugMessageLogger.h; sourceTree = "<group>"; };
@@ -1178,6 +1262,70 @@
 			name = Fitbit;
 			sourceTree = "<group>";
 		};
+		16606AF61F4E4FC100EF6C4D /* PNChart */ = {
+			isa = PBXGroup;
+			children = (
+				16606AF71F4E4FC100EF6C4D /* PNBar.h */,
+				16606AF81F4E4FC100EF6C4D /* PNBar.m */,
+				16606AF91F4E4FC100EF6C4D /* PNBarChart.h */,
+				16606AFA1F4E4FC100EF6C4D /* PNBarChart.m */,
+				16606AFB1F4E4FC100EF6C4D /* PNChart.h */,
+				16606AFC1F4E4FC100EF6C4D /* PNChartDelegate.h */,
+				16606AFD1F4E4FC100EF6C4D /* PNChartLabel.h */,
+				16606AFE1F4E4FC100EF6C4D /* PNChartLabel.m */,
+				16606AFF1F4E4FC100EF6C4D /* PNCircleChart.h */,
+				16606B001F4E4FC100EF6C4D /* PNCircleChart.m */,
+				16606B011F4E4FC100EF6C4D /* PNColor.h */,
+				16606B021F4E4FC100EF6C4D /* PNColor.m */,
+				16606B031F4E4FC100EF6C4D /* PNGenericChart.h */,
+				16606B041F4E4FC100EF6C4D /* PNGenericChart.m */,
+				16606B051F4E4FC100EF6C4D /* PNLineChart.h */,
+				16606B061F4E4FC100EF6C4D /* PNLineChart.m */,
+				16606B071F4E4FC100EF6C4D /* PNLineChartData.h */,
+				16606B081F4E4FC100EF6C4D /* PNLineChartData.m */,
+				16606B091F4E4FC100EF6C4D /* PNLineChartDataItem.h */,
+				16606B0A1F4E4FC100EF6C4D /* PNLineChartDataItem.m */,
+				16606B0B1F4E4FC100EF6C4D /* PNPieChart.h */,
+				16606B0C1F4E4FC100EF6C4D /* PNPieChart.m */,
+				16606B0D1F4E4FC100EF6C4D /* PNPieChartDataItem.h */,
+				16606B0E1F4E4FC100EF6C4D /* PNPieChartDataItem.m */,
+				16606B0F1F4E4FC100EF6C4D /* PNRadarChart.h */,
+				16606B101F4E4FC100EF6C4D /* PNRadarChart.m */,
+				16606B111F4E4FC100EF6C4D /* PNRadarChartDataItem.h */,
+				16606B121F4E4FC100EF6C4D /* PNRadarChartDataItem.m */,
+				16606B131F4E4FC200EF6C4D /* PNScatterChart.h */,
+				16606B141F4E4FC200EF6C4D /* PNScatterChart.m */,
+				16606B151F4E4FC200EF6C4D /* PNScatterChartData.h */,
+				16606B161F4E4FC200EF6C4D /* PNScatterChartData.m */,
+				16606B171F4E4FC200EF6C4D /* PNScatterChartDataItem.h */,
+				16606B181F4E4FC200EF6C4D /* PNScatterChartDataItem.m */,
+			);
+			path = PNChart;
+			sourceTree = "<group>";
+		};
+		167F14A51F4EFC3200EA6323 /* EntityEstimote */ = {
+			isa = PBXGroup;
+			children = (
+				167F148D1F4EFB7B00EA6323 /* EntityEstimoteMotion+CoreDataClass.h */,
+				167F148E1F4EFB7B00EA6323 /* EntityEstimoteMotion+CoreDataClass.m */,
+				167F148F1F4EFB7B00EA6323 /* EntityEstimoteMotion+CoreDataProperties.h */,
+				167F14901F4EFB7B00EA6323 /* EntityEstimoteMotion+CoreDataProperties.m */,
+				167F14911F4EFB7B00EA6323 /* EntityEstimoteTemperature+CoreDataClass.h */,
+				167F14921F4EFB7B00EA6323 /* EntityEstimoteTemperature+CoreDataClass.m */,
+				167F14931F4EFB7B00EA6323 /* EntityEstimoteTemperature+CoreDataProperties.h */,
+				167F14941F4EFB7B00EA6323 /* EntityEstimoteTemperature+CoreDataProperties.m */,
+				167F14951F4EFB7B00EA6323 /* EntityEstimoteAmbientLight+CoreDataClass.h */,
+				167F14961F4EFB7B00EA6323 /* EntityEstimoteAmbientLight+CoreDataClass.m */,
+				167F14971F4EFB7B00EA6323 /* EntityEstimoteAmbientLight+CoreDataProperties.h */,
+				167F14981F4EFB7B00EA6323 /* EntityEstimoteAmbientLight+CoreDataProperties.m */,
+				167F14991F4EFB7B00EA6323 /* EntityEstimoteAirpressure+CoreDataClass.h */,
+				167F149A1F4EFB7B00EA6323 /* EntityEstimoteAirpressure+CoreDataClass.m */,
+				167F149B1F4EFB7B00EA6323 /* EntityEstimoteAirpressure+CoreDataProperties.h */,
+				167F149C1F4EFB7B00EA6323 /* EntityEstimoteAirpressure+CoreDataProperties.m */,
+			);
+			name = EntityEstimote;
+			sourceTree = "<group>";
+		};
 		169C870D1D01382C00825761 /* AWAREFramework */ = {
 			isa = PBXGroup;
 			children = (
@@ -1196,42 +1344,25 @@
 			children = (
 				169C870F1D01382C00825761 /* AWARECore.h */,
 				169C87101D01382C00825761 /* AWARECore.m */,
-				169C87111D01382C00825761 /* AWARECoreDataManager.h */,
-				169C87121D01382C00825761 /* AWARECoreDataManager.m */,
-				169C87131D01382C00825761 /* AWAREDataUploader.h */,
-				169C87141D01382C00825761 /* AWAREDataUploader.m */,
-				16654EA01D027DC600280051 /* AWAREUploader.h */,
-				16654EA11D027DC600280051 /* AWAREUploader.m */,
 				169C87151D01382C00825761 /* AWAREDelegate.h */,
 				169C87161D01382C00825761 /* AWAREDelegate.m */,
-				167B37C41D4370FA00A99C64 /* AWARECoreDataMigrationManager.h */,
-				167B37C51D4370FA00A99C64 /* AWARECoreDataMigrationManager.m */,
-				169C87171D01382C00825761 /* AWAREKeys.h */,
-				169C87181D01382C00825761 /* AWAREKeys.m */,
+				169C87211D01382C00825761 /* AWAREStudy.h */,
+				169C87221D01382C00825761 /* AWAREStudy.m */,
+				169C871F1D01382C00825761 /* AWARESensorManager.h */,
+				169C87201D01382C00825761 /* AWARESensorManager.m */,
+				16654EA01D027DC600280051 /* AWAREUploader.h */,
+				16654EA11D027DC600280051 /* AWAREUploader.m */,
 				169C87191D01382C00825761 /* AWAREPlugin.h */,
 				169C871A1D01382C00825761 /* AWAREPlugin.m */,
-				169C871B1D01382C00825761 /* AWARESchedule.h */,
-				169C871C1D01382C00825761 /* AWARESchedule.m */,
 				169C871D1D01382C00825761 /* AWARESensor.h */,
 				169C871E1D01382C00825761 /* AWARESensor.m */,
 				1648FE911DAB2E87001D870A /* AWARESensors.h */,
 				1648FE921DAB2E87001D870A /* AWARESensors.m */,
-				169C871F1D01382C00825761 /* AWARESensorManager.h */,
-				169C87201D01382C00825761 /* AWARESensorManager.m */,
-				169C87211D01382C00825761 /* AWAREStudy.h */,
-				169C87221D01382C00825761 /* AWAREStudy.m */,
-				169C87231D01382C00825761 /* AWAREUtils.h */,
-				169C87241D01382C00825761 /* AWAREUtils.m */,
-				169C87271D01382C00825761 /* LocalFileStorageHelper.h */,
-				169C87281D01382C00825761 /* LocalFileStorageHelper.m */,
-				169C87291D01382C00825761 /* Reachability.h */,
-				169C872A1D01382C00825761 /* Reachability.m */,
-				169C872B1D01382C00825761 /* SSLManager.h */,
-				169C872C1D01382C00825761 /* SSLManager.m */,
-				169C88AB1D0142C300825761 /* TCQMaker.h */,
-				169C88AC1D0142C300825761 /* TCQMaker.m */,
-				1683ABCC1D347A5F001543D9 /* AWAREDebugMessageLogger.h */,
-				1683ABCD1D347A5F001543D9 /* AWAREDebugMessageLogger.m */,
+				169C871B1D01382C00825761 /* AWARESchedule.h */,
+				169C871C1D01382C00825761 /* AWARESchedule.m */,
+				16AE13401F50696700263C14 /* CoreDataStorage */,
+				16AE133E1F5068C200263C14 /* TextFileStorage */,
+				16AE133F1F5068DC00263C14 /* Utilites */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -2077,6 +2208,7 @@
 				52BBE03C1E13C6EE00F57906 /* ContactsViewController.m */,
 				16CE5FED1F4D68A8000E177F /* DataVisualizationViewController.h */,
 				16CE5FEE1F4D68A8000E177F /* DataVisualizationViewController.m */,
+				16606AF61F4E4FC100EF6C4D /* PNChart */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -2092,6 +2224,45 @@
 				16E225021E063CD1000C239E /* EntityESMAnswerBC+CoreDataProperties.m */,
 			);
 			path = BalacnedCampusScheduler;
+			sourceTree = "<group>";
+		};
+		16AE133E1F5068C200263C14 /* TextFileStorage */ = {
+			isa = PBXGroup;
+			children = (
+				169C87131D01382C00825761 /* AWAREDataUploader.h */,
+				169C87141D01382C00825761 /* AWAREDataUploader.m */,
+				169C87271D01382C00825761 /* LocalFileStorageHelper.h */,
+				169C87281D01382C00825761 /* LocalFileStorageHelper.m */,
+			);
+			name = TextFileStorage;
+			sourceTree = "<group>";
+		};
+		16AE133F1F5068DC00263C14 /* Utilites */ = {
+			isa = PBXGroup;
+			children = (
+				169C87171D01382C00825761 /* AWAREKeys.h */,
+				169C87181D01382C00825761 /* AWAREKeys.m */,
+				169C87231D01382C00825761 /* AWAREUtils.h */,
+				169C87241D01382C00825761 /* AWAREUtils.m */,
+				1683ABCC1D347A5F001543D9 /* AWAREDebugMessageLogger.h */,
+				1683ABCD1D347A5F001543D9 /* AWAREDebugMessageLogger.m */,
+				169C87291D01382C00825761 /* Reachability.h */,
+				169C872A1D01382C00825761 /* Reachability.m */,
+				169C872B1D01382C00825761 /* SSLManager.h */,
+				169C872C1D01382C00825761 /* SSLManager.m */,
+				169C88AB1D0142C300825761 /* TCQMaker.h */,
+				169C88AC1D0142C300825761 /* TCQMaker.m */,
+			);
+			name = Utilites;
+			sourceTree = "<group>";
+		};
+		16AE13401F50696700263C14 /* CoreDataStorage */ = {
+			isa = PBXGroup;
+			children = (
+				169C87111D01382C00825761 /* AWARECoreDataManager.h */,
+				169C87121D01382C00825761 /* AWARECoreDataManager.m */,
+			);
+			name = CoreDataStorage;
 			sourceTree = "<group>";
 		};
 		16B078471D1F9192009C070B /* Entities */ = {
@@ -2218,6 +2389,15 @@
 			children = (
 				16CE5FF01F4DB2E7000E177F /* Estimote.h */,
 				16CE5FF11F4DB2E7000E177F /* Estimote.m */,
+				167F14A61F4EFC7000EA6323 /* EstimoteAirpressure.h */,
+				167F14A71F4EFC7000EA6323 /* EstimoteAirpressure.m */,
+				167F14A91F4EFCB400EA6323 /* EstimoteTemperature.h */,
+				167F14AA1F4EFCB400EA6323 /* EstimoteTemperature.m */,
+				167F14AC1F4EFCCF00EA6323 /* EstimoteMotion.h */,
+				167F14AD1F4EFCCF00EA6323 /* EstimoteMotion.m */,
+				167F14AF1F4EFCEB00EA6323 /* EstimoteAmbientLight.h */,
+				167F14B01F4EFCEB00EA6323 /* EstimoteAmbientLight.m */,
+				167F14A51F4EFC3200EA6323 /* EntityEstimote */,
 			);
 			name = Estimote;
 			sourceTree = "<group>";
@@ -2711,7 +2891,9 @@
 				16B0783F1D1F918B009C070B /* EntityMSBandCalorie+CoreDataProperties.m in Sources */,
 				16BDCD011D38646400B13BD4 /* MealViewController.m in Sources */,
 				16B077BC1D1A54BF009C070B /* EntityPushNotification.m in Sources */,
+				16606B281F4E4FC200EF6C4D /* PNScatterChartDataItem.m in Sources */,
 				169C88751D01382C00825761 /* AudioAnalysis.m in Sources */,
+				167F14A41F4EFB7B00EA6323 /* EntityEstimoteAirpressure+CoreDataProperties.m in Sources */,
 				169C88781D01382C00825761 /* FusedLocations.m in Sources */,
 				16B0783C1D1F918B009C070B /* EntityMSBandPedometer.m in Sources */,
 				169C887C1D01382C00825761 /* AWAREHealthKit.m in Sources */,
@@ -2719,6 +2901,7 @@
 				16C907A31F34263E005D357C /* ESMRadioView.m in Sources */,
 				160F0E901D03D64E00673343 /* EntityBarometer.m in Sources */,
 				16C21AB41E45A81A001C88BC /* Contacts.m in Sources */,
+				167F14A11F4EFB7B00EA6323 /* EntityEstimoteAmbientLight+CoreDataClass.m in Sources */,
 				169C88331D01382C00825761 /* AWAREStudy.m in Sources */,
 				16A45CDF1D2392A1008A02B1 /* BalacnedCampusESMScheduler.m in Sources */,
 				169C88801D01382C00825761 /* NTPTime.m in Sources */,
@@ -2726,6 +2909,7 @@
 				16B0780F1D1F2487009C070B /* EntityLabel+CoreDataProperties.m in Sources */,
 				16C907A01F3303B8005D357C /* ESMLikertScaleView.m in Sources */,
 				161DD2D21F4A251C000D22A1 /* AppSettingTableViewController.m in Sources */,
+				167F14A31F4EFB7B00EA6323 /* EntityEstimoteAirpressure+CoreDataClass.m in Sources */,
 				160F0EC71D040B7F00673343 /* EntityDebug.m in Sources */,
 				169C88341D01382C00825761 /* AWAREUtils.m in Sources */,
 				169C88821D01382C00825761 /* OpenWeather.m in Sources */,
@@ -2760,6 +2944,7 @@
 				169C88831D01382C00825761 /* PushNotification.m in Sources */,
 				16BDCC9B1D35C81800B13BD4 /* VisitLocations.m in Sources */,
 				16B078361D1F918B009C070B /* EntityMSBandGSR.m in Sources */,
+				167F149F1F4EFB7B00EA6323 /* EntityEstimoteTemperature+CoreDataClass.m in Sources */,
 				16B077C11D1A55FC009C070B /* EntityMemory+CoreDataProperties.m in Sources */,
 				168AEA9F1D3EFFF000D02EA4 /* EntityProximity.m in Sources */,
 				169C88981D01382C00825761 /* Processor.m in Sources */,
@@ -2769,11 +2954,14 @@
 				16CB66C21F404CDD001EE743 /* ESMDateTimePickerView.m in Sources */,
 				16B077A31D1A429E009C070B /* EntityDeviceUsage+CoreDataProperties.m in Sources */,
 				169C88951D01382C00825761 /* Network.m in Sources */,
+				16606B211F4E4FC200EF6C4D /* PNLineChartDataItem.m in Sources */,
 				16B077731D19288A009C070B /* EntityScreen.m in Sources */,
 				169C88921D01382C00825761 /* LinearAccelerometer.m in Sources */,
 				169C882E1D01382C00825761 /* AWAREKeys.m in Sources */,
 				16491EBC1F053E190054FAE4 /* EntityESMSchedule+CoreDataProperties.m in Sources */,
 				16B077C81D1A57DD009C070B /* EntityNTPTime.m in Sources */,
+				16606B221F4E4FC200EF6C4D /* PNPieChart.m in Sources */,
+				167F149E1F4EFB7B00EA6323 /* EntityEstimoteMotion+CoreDataProperties.m in Sources */,
 				169C882C1D01382C00825761 /* AWAREDataUploader.m in Sources */,
 				169C88A01D01382C00825761 /* QRCodeViewController.m in Sources */,
 				16EC4F1B1D2EAA3600524424 /* WebESM.m in Sources */,
@@ -2790,6 +2978,7 @@
 				16AB2BFB1E2B665800F05B72 /* EntityFitbitData+CoreDataClass.m in Sources */,
 				169C887D1D01382C00825761 /* Labels.m in Sources */,
 				169C88711D01382C00825761 /* SingleESMObject.m in Sources */,
+				16606B251F4E4FC200EF6C4D /* PNRadarChartDataItem.m in Sources */,
 				16B0777F1D192D72009C070B /* EntityWifi.m in Sources */,
 				169C88991D01382C00825761 /* Proximity.m in Sources */,
 				169C85731D007EDC00825761 /* ViewController.m in Sources */,
@@ -2798,6 +2987,7 @@
 				169C887E1D01382C00825761 /* Memory.m in Sources */,
 				160F0F071D04756800673343 /* EntityBatteryDischarge+CoreDataProperties.m in Sources */,
 				16B0776D1D192663009C070B /* EntityRotation.m in Sources */,
+				167F14A81F4EFC7000EA6323 /* EstimoteAirpressure.m in Sources */,
 				16B077721D19288A009C070B /* EntityScreen+CoreDataProperties.m in Sources */,
 				16CB66E11F445A65001EE743 /* EntityESM+CoreDataProperties.m in Sources */,
 				169C88851D01382C00825761 /* Accelerometer.m in Sources */,
@@ -2819,6 +3009,7 @@
 				16BDCCA41D36159500B13BD4 /* MSBandCalorie.m in Sources */,
 				16B077A41D1A429E009C070B /* EntityDeviceUsage.m in Sources */,
 				16BDCC951D35B80E00B13BD4 /* BatteryCharge.m in Sources */,
+				167F14A01F4EFB7B00EA6323 /* EntityEstimoteTemperature+CoreDataProperties.m in Sources */,
 				160F0EC61D040B7F00673343 /* EntityDebug+CoreDataProperties.m in Sources */,
 				16CB66E41F452F69001EE743 /* ESMPictureView.m in Sources */,
 				169C889D1D01382C00825761 /* Timezone.m in Sources */,
@@ -2828,18 +3019,23 @@
 				169C88941D01382C00825761 /* Magnetometer.m in Sources */,
 				169C88841D01382C00825761 /* SensorTag.m in Sources */,
 				16BDCC981D35C11100B13BD4 /* BatteryDischarge.m in Sources */,
+				16606B271F4E4FC200EF6C4D /* PNScatterChartData.m in Sources */,
 				16C21AB11E45A7D9001C88BC /* EntityContact+CoreDataProperties.m in Sources */,
 				16B077841D1978FF009C070B /* EntityActivityRecognition+CoreDataProperties.m in Sources */,
 				16B078431D1F918B009C070B /* EntityMSBandDistance+CoreDataProperties.m in Sources */,
 				16CB66BC1F3EE822001EE743 /* ESMQuickAnswerView.m in Sources */,
+				16606B261F4E4FC200EF6C4D /* PNScatterChart.m in Sources */,
 				169C883D1D01382C00825761 /* ESMSchedule.m in Sources */,
 				16EC4F181D2E7D8200524424 /* EntityMSBandRRInterval.m in Sources */,
 				16CB66CB1F4197CA001EE743 /* ESMWebView.m in Sources */,
 				16B077791D192C30009C070B /* EntityTimezone.m in Sources */,
 				169C88811D01382C00825761 /* Observer.m in Sources */,
+				16606B1D1F4E4FC200EF6C4D /* PNColor.m in Sources */,
 				169C88311D01382C00825761 /* AWARESensor.m in Sources */,
 				16E2250A1E0A378C000C239E /* AWAREHealthKitWorkout.m in Sources */,
+				16606B241F4E4FC200EF6C4D /* PNRadarChart.m in Sources */,
 				160F0EB41D03E2EC00673343 /* EntityBluetooth+CoreDataProperties.m in Sources */,
+				167F149D1F4EFB7B00EA6323 /* EntityEstimoteMotion+CoreDataClass.m in Sources */,
 				16B0777E1D192D72009C070B /* EntityWifi+CoreDataProperties.m in Sources */,
 				169C88891D01382C00825761 /* Bluetooth.m in Sources */,
 				16CB66D11F41B5A8001EE743 /* ESMClockTimePickerView.m in Sources */,
@@ -2847,12 +3043,15 @@
 				169C888F1D01382C00825761 /* Debug.m in Sources */,
 				160F0ECC1D04132600673343 /* EntityGravity+CoreDataProperties.m in Sources */,
 				16B078101D1F2487009C070B /* EntityLabel.m in Sources */,
+				167F14AE1F4EFCD000EA6323 /* EstimoteMotion.m in Sources */,
+				167F14AB1F4EFCB400EA6323 /* EstimoteTemperature.m in Sources */,
 				169C883B1D01382C00825761 /* ESM.m in Sources */,
 				16CB66CE1F41AF89001EE743 /* ESMPAMView.m in Sources */,
 				1683ABCE1D347A5F001543D9 /* AWAREDebugMessageLogger.m in Sources */,
 				16BDCCB61D366E3800B13BD4 /* MSBandRRInterval.m in Sources */,
 				16CB66D81F4389F9001EE743 /* ESMNumberView.m in Sources */,
 				169C889E1D01382C00825761 /* Wifi.m in Sources */,
+				16606B191F4E4FC200EF6C4D /* PNBar.m in Sources */,
 				16B078381D1F918B009C070B /* EntityMSBandUV.m in Sources */,
 				16CB66D41F41E054001EE743 /* ESMClockLineView.m in Sources */,
 				16C0B9581F2F4321003A1E49 /* BaseESMView.m in Sources */,
@@ -2864,6 +3063,7 @@
 				160F0EF71D042AB600673343 /* EntityNetwork+CoreDataProperties.m in Sources */,
 				169C88361D01382C00825761 /* LocalFileStorageHelper.m in Sources */,
 				169C88971D01382C00825761 /* Pedometer.m in Sources */,
+				16606B201F4E4FC200EF6C4D /* PNLineChartData.m in Sources */,
 				16CB66E01F445A65001EE743 /* EntityESM+CoreDataClass.m in Sources */,
 				169C88761D01382C00825761 /* BLEHeartRate.m in Sources */,
 				16B077971D1A01A0009C070B /* EntityLocationVisit.m in Sources */,
@@ -2892,14 +3092,19 @@
 				160F0E8A1D03D60500673343 /* EntityAccelerometer.m in Sources */,
 				1623CE6B1BFD1B2C00EFAD72 /* main.m in Sources */,
 				169C88871D01382C00825761 /* Barometer.m in Sources */,
+				16606B1B1F4E4FC200EF6C4D /* PNChartLabel.m in Sources */,
 				163ADFC11D8F2C1900B15C8F /* EntityIOSActivityRecognition+CoreDataProperties.m in Sources */,
 				16E6CB961EC931E6000FC58C /* FitbitViewController.m in Sources */,
+				16606B1E1F4E4FC200EF6C4D /* PNGenericChart.m in Sources */,
+				167F14A21F4EFB7B00EA6323 /* EntityEstimoteAmbientLight+CoreDataProperties.m in Sources */,
 				16B078441D1F918B009C070B /* EntityMSBandDistance.m in Sources */,
+				16606B231F4E4FC200EF6C4D /* PNPieChartDataItem.m in Sources */,
 				169C883C1D01382C00825761 /* ESMManager.m in Sources */,
 				169C88901D01382C00825761 /* Gravity.m in Sources */,
 				16B078351D1F918B009C070B /* EntityMSBandGSR+CoreDataProperties.m in Sources */,
 				16CB66B61F3E3D1F001EE743 /* ESMFreeTextView.m in Sources */,
 				16BDCCFE1D38637900B13BD4 /* Meal.m in Sources */,
+				16606B1F1F4E4FC200EF6C4D /* PNLineChart.m in Sources */,
 				161F720C1D3B71D400309650 /* EntityESMAnswer+CoreDataProperties.m in Sources */,
 				16B077901D1999B5009C070B /* EntityBLEHeartRate+CoreDataProperties.m in Sources */,
 				169C88791D01382C00825761 /* GoogleCalPull.m in Sources */,
@@ -2908,6 +3113,8 @@
 				169C88931D01382C00825761 /* Locations.m in Sources */,
 				16B078391D1F918B009C070B /* EntityMSBandBatteryGauge+CoreDataProperties.m in Sources */,
 				16B0783E1D1F918B009C070B /* EntityMSBandDeviceContact.m in Sources */,
+				16606B1A1F4E4FC200EF6C4D /* PNBarChart.m in Sources */,
+				16606B1C1F4E4FC200EF6C4D /* PNCircleChart.m in Sources */,
 				168AEA921D3EE84100D02EA4 /* EntityGyroscope+CoreDataProperties.m in Sources */,
 				16BDCCB01D36661800B13BD4 /* MSBandPedometer.m in Sources */,
 				160F0EB51D03E2EC00673343 /* EntityBluetooth.m in Sources */,
@@ -2924,6 +3131,7 @@
 				169C887B1D01382C00825761 /* GoogleLogin.m in Sources */,
 				16BDCCAA1D362AA500B13BD4 /* MSBandDistance.m in Sources */,
 				169C887A1D01382C00825761 /* GoogleCalPush.m in Sources */,
+				167F14B11F4EFCEB00EA6323 /* EstimoteAmbientLight.m in Sources */,
 				16E2250D1E0A37BB000C239E /* AWAREHealthKitCategory.m in Sources */,
 				16B077D31D1A5F51009C070B /* EntityOpenWeather+CoreDataProperties.m in Sources */,
 				168AEA981D3EFEC300D02EA4 /* EntityProcessor+CoreDataProperties.m in Sources */,

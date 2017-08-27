@@ -14,6 +14,7 @@
 #import "EntityESM+CoreDataClass.h"
 #import "IOSESM.h"
 #import "EntityESMAnswer.h"
+#import "EntityESMHistory.h"
 
 #import "BaseESMView.h"
 #import "ESMFreeTextView.h"
@@ -748,6 +749,35 @@
         }
     }
     return @"[]";
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////////
+
+- (void) saveESMHistoryWithScheduleId:(NSString *)scheduleId
+                     originalFireDate:(NSNumber *)originalFireDate
+                            randomize:(NSNumber *)randomize
+                             fireDate:(NSNumber *)fireDate
+                  expirationThreshold:(NSNumber *)expirationThreshold
+
+{
+    AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+    // the status of the ESM (0-new, 1-dismissed, 2-answered, 3-expired) -> Defualt is zero(0).
+    NSManagedObjectContext * context = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
+    context.persistentStoreCoordinator = delegate.persistentStoreCoordinator;
+    
+    EntityESMHistory * history = (EntityESMHistory *)[NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([EntityESMHistory class])
+                                                                                   inManagedObjectContext:context];
+    history.schedule_id = scheduleId;//x
+    history.original_fire_date = originalFireDate;//x
+    history.randomize = randomize; //x
+    history.fire_date = fireDate;
+    history.expiration_threshold = expirationThreshold;
+    
+    NSError * error = nil;
+    if(![context save:&error]){
+        NSLog(@"%@", error.debugDescription);
+    }
 }
 
 

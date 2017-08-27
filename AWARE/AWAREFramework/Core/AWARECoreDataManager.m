@@ -37,7 +37,9 @@
     // BOOL isSyncWithWifiOnly;
     int errorPosts;
     
-    NSNumber * unixtimeOfUploadingData;
+    NSNumber * previousUploadingProcessFinishUnixTime; // unixtimeOfUploadingData;
+    // NSNumber *  currentUploadingProcessStartUnixTime;
+    NSNumber * tempLastUnixTimestamp;
     
     int currentRepetitionCounts; // current repetition count
     int repetitionTime;          // max repetition count
@@ -94,12 +96,14 @@
         
         bufferArray = [[NSMutableArray alloc] init];
         
-        NSNumber * timestamp = [userDefaults objectForKey:timeMarkerIdentifier];
-        if(timestamp == 0){
-            //NSLog(@"timestamp == 0");
-            [self setTimeMark:[NSDate new]];
+        previousUploadingProcessFinishUnixTime = [self getTimeMark];
+        
+        if([previousUploadingProcessFinishUnixTime isEqualToNumber:@0]){
+            NSDate * now = [NSDate new];
+            [self setTimeMark:now];
+            // NSLog(@"[%@] %@ <-- set new date", sensorName, now);
         }else{
-            //NSLog(@"timestamp == %@", timestamp);
+            // NSLog(@"[%@] %@ <-- a previous time exist", sensorName, [NSDate dateWithTimeIntervalSince1970:[self getTimeMark].longLongValue/1000]);
         }
     }
     return self;
@@ -157,14 +161,17 @@
         }
     }
     
+    // reset the 'currentUploadingProcessStartUnixTime'
+    // currentUploadingProcessStartUnixTime = [AWAREUtils getUnixTimestamp:[NSDate new]];
+    
     // Get repititon time from CoreData in background.
     if([NSThread isMainThread]){
         // Make addtional thread
         [[[NSOperationQueue alloc] init] addOperationWithBlock:^{
-            [self  setRepetationCountAfterStartToSyncDB:[self getTimeMark]];
+            [self setRepetationCountAfterStartToSyncDB:[self getTimeMark]];
         }];
     }else{
-        [self  setRepetationCountAfterStartToSyncDB:[self getTimeMark]];
+        [self setRepetationCountAfterStartToSyncDB:[self getTimeMark]];
     }
     
     isUploading = YES;
@@ -184,39 +191,27 @@
 //////////////////////////////////////////////////
 
 - (void) setTimeMark:(NSDate *) timestamp {
-    if(timestamp != nil){
-        @try {
-            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-            [userDefaults setObject:[AWAREUtils getUnixTimestamp:timestamp] forKey:timeMarkerIdentifier];
-            [userDefaults synchronize];
-        } @catch (NSException *exception) {
-        }
-    }else{
-        NSLog(@"===============timestamp is nil============================");
+    NSNumber * unixtimestamp = @0;
+    if (timestamp != nil) {
+        unixtimestamp = @([timestamp timeIntervalSince1970]);
     }
+    [self setTimeMarkWithTimestamp:unixtimestamp];
 }
 
 - (void) setTimeMarkWithTimestamp:(NSNumber *)timestamp  {
-    if(timestamp != nil){
-//        NSLog(@"[%@]", [self getEntityName]);
-//        NSLog(@"nil? %@", timestamp);
-        @try {
-            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-            [userDefaults setObject:timestamp forKey:timeMarkerIdentifier];
-            [userDefaults synchronize];
-        }@catch(NSException *exception){
-            
-        }
-    }else{
-        NSLog(@"===============timestamp is nil============================");
+    if(timestamp == nil){
+        NSLog(@"===============[%@] timestamp is nil============================", sensorName);
+        timestamp = @0;
     }
-    
+    NSLog(@"[time_mark:%@] %@", sensorName, [NSDate dateWithTimeIntervalSince1970:timestamp.longLongValue/1000].debugDescription);
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setObject:timestamp forKey:timeMarkerIdentifier];
+    [userDefaults synchronize];
 }
 
 
 - (NSNumber *) getTimeMark {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults synchronize];
     NSNumber * timestamp = [userDefaults objectForKey:timeMarkerIdentifier];
     if(timestamp != nil){
         return timestamp;
@@ -373,7 +368,7 @@
  * start sync db with timestamp
  * @discussion Please call this method in the background
  */
-- (BOOL) setRepetationCountAfterStartToSyncDB:(NSNumber *) timestamp {
+- (BOOL) setRepetationCountAfterStartToSyncDB:(NSNumber *) startTimestamp {
     @try {
         
         if (entityName == nil) {
@@ -391,10 +386,14 @@
         NSFetchRequest* request = [[NSFetchRequest alloc] init];
         NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
         [private setParentContext:self.mainQueueManagedObjectContext];
+        NSString * entity = [entityName copy];
+        // NSLog(@"Entity Name: %@", entity);
         [private performBlock:^{
-            [request setEntity:[NSEntityDescription entityForName:entityName inManagedObjectContext:self.mainQueueManagedObjectContext]];
+            // NSLog(@"Entity Name: %@", entity);
+            NSLog(@"start time is ... %@",startTimestamp);
+            [request setEntity:[NSEntityDescription entityForName:entity inManagedObjectContext:self.mainQueueManagedObjectContext]];
             [request setIncludesSubentities:NO];
-            [request setPredicate:[NSPredicate predicateWithFormat:@"timestamp >= %@", timestamp]];
+            [request setPredicate:[NSPredicate predicateWithFormat:@"timestamp >= %@", startTimestamp]];
 
             NSError* error = nil;
             // Get count of category
@@ -443,14 +442,15 @@
 - (void) uploadSensorDataInBackground {
     
     NSString *deviceId = [self getDeviceId];
-    // NSString *url = [self getInsertUrl:sensorName];
     NSString *url = [self getInsertUrl:tableName];
     
     // Get sensor data from CoreData
-    if(unixtimeOfUploadingData == nil){
-        unixtimeOfUploadingData = [self getTimeMark];
-    }
-
+    // if(unixtimeOfUploadingData == nil){
+    previousUploadingProcessFinishUnixTime = [self getTimeMark];
+    // }
+    NSLog(@"[%@] marker   end: %@", sensorName, [NSDate dateWithTimeIntervalSince1970:previousUploadingProcessFinishUnixTime.longLongValue/1000]);
+    // NSLog(@"[%@] marker start: %@", sensorName, [NSDate dateWithTimeIntervalSince1970:currentUploadingProcessStartUnixTime.longLongValue/1000]);
+    
     // check battery condition
     if ([self isSyncWithOnlyBatteryCharging]) {
         NSInteger batteryState = [UIDevice currentDevice].batteryState;
@@ -477,19 +477,22 @@
     currentRepetitionCounts++;
     
     @try {
+        NSLog(@"[pretime:%@] %@", sensorName, previousUploadingProcessFinishUnixTime);
+        
         NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
         [private setParentContext:self.mainQueueManagedObjectContext];
         [private performBlock:^{
             NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:entityName];
-            [fetchRequest setFetchLimit:[self getFetchLimit]];
+            [fetchRequest setFetchLimit:[self getFetchLimit]]; // <-- set a fetch limit for this query
             [fetchRequest setEntity:[NSEntityDescription entityForName:entityName inManagedObjectContext:self.mainQueueManagedObjectContext]];
             [fetchRequest setIncludesSubentities:NO];
             [fetchRequest setResultType:NSDictionaryResultType];
             if([[self getEntityName] isEqualToString:@"EntityESMAnswerBC"] ||
                [[self getEntityName] isEqualToString:@"EntityESMAnswer"] ){
-                [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"double_esm_user_answer_timestamp >= %@", unixtimeOfUploadingData]];
+                [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"double_esm_user_answer_timestamp >= %@",
+                                            previousUploadingProcessFinishUnixTime]];
             }else{
-                [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"timestamp >= %@", unixtimeOfUploadingData]];
+                [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"timestamp >= %@", previousUploadingProcessFinishUnixTime]];
             }
             // NSLog(@"[%@] 1 --> %@", sensorName, unixtimeOfUploadingData);
             //Set sort option
@@ -509,20 +512,17 @@
                     [self broadcastDBSyncEventWithProgress:@100 isFinish:@YES isSuccess:@YES sensorName:sensorName];
                     return;
                 }else{
-                    if ([[self getEntityName] isEqualToString:@"EntityESMAnswerBC"]){
-//                        NSLog(@"[%@] %lu", sensorName, results.count);
-//                        for(NSObject * obj in results){
-//                            NSLog(@"%@",obj.debugDescription);
-//                        }
-                    }
                 }
                 
                 // Save current timestamp as a maker
                 NSDictionary * lastDict = [results lastObject];//[results objectAtIndex:results.count-1];
-                unixtimeOfUploadingData = [lastDict objectForKey:@"timestamp"];
+                tempLastUnixTimestamp = [lastDict objectForKey:@"timestamp"];
                 if([[self getEntityName] isEqualToString:@"EntityESMAnswerBC"] ||
                    [[self getEntityName] isEqualToString:@"EntityESMAnswer"] ){
-                    unixtimeOfUploadingData = [lastDict objectForKey:@"double_esm_user_answer_timestamp"];
+                    tempLastUnixTimestamp = [lastDict objectForKey:@"double_esm_user_answer_timestamp"];
+                }
+                if (tempLastUnixTimestamp == nil) {
+                    tempLastUnixTimestamp = @0;
                 }
 
                 // NSLog(@"[%@] 2 --> %@",sensorName, unixtimeOfUploadingData);
@@ -787,14 +787,14 @@ didBecomeStreamTask:(NSURLSessionStreamTask *)streamTask{
         [request setEntity:[NSEntityDescription entityForName:entityName inManagedObjectContext:self.mainQueueManagedObjectContext]];
         [request setIncludesSubentities:NO];
         
+        // Set TimeMark
+        [self setTimeMarkWithTimestamp: tempLastUnixTimestamp];
+        NSLog(@"[setTimeMaker:%@] %@", sensorName, [NSDate dateWithTimeIntervalSince1970:tempLastUnixTimestamp.longLongValue/1000]);
+
         [private performBlock:^{
             
-            // Set time mark
-            [self setTimeMarkWithTimestamp: unixtimeOfUploadingData];
-            // NSLog(@"[%@] 3 --> %d", sensorName, unixtimeOfUploadingData.intValue);
-            
             cleanOldDataType cleanType = [awareStudy getCleanOldDataType];
-            NSDate * clearLimitDate = [NSDate new];
+            NSDate * clearLimitDate = nil;
             bool skip = YES;
             switch (cleanType) {
                 case cleanOldDataTypeNever:
@@ -821,23 +821,24 @@ didBecomeStreamTask:(NSURLSessionStreamTask *)streamTask{
                     skip = YES;
                     break;
             }
+            
             if(!skip){
                 /** ========== Delete uploaded data ============= */
                 if(![self isDBLock]){
                     [self lockDB];
                     NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:entityName];
-                    NSNumber * timestamp = unixtimeOfUploadingData; // [self getTimeMark];
-                    
-                    NSNumber * limitTimestamp = unixtimeOfUploadingData;
-                    if(clearLimitDate != nil) limitTimestamp = [AWAREUtils getUnixTimestamp:clearLimitDate];
-                    // NSLog(@"%@", limitTimestamp);
-                    // NSLog(@"%@", clearLimitDate);
+                    NSNumber * limitTimestamp = @0;
+                    if(clearLimitDate == nil){
+                        limitTimestamp = tempLastUnixTimestamp;
+                    }else{
+                        limitTimestamp = @([clearLimitDate timeIntervalSince1970]);
+                    }
                     
                     if([[self getEntityName] isEqualToString:@"EntityESMAnswerBC"] ||
                        [[self getEntityName] isEqualToString:@"EntityESMAnswer"] ){
-                        [request setPredicate:[NSPredicate predicateWithFormat:@"(double_esm_user_answer_timestamp <= %@) AND (double_esm_user_answer_timestamp <= %@)", timestamp, limitTimestamp]];
+                        [request setPredicate:[NSPredicate predicateWithFormat:@"(double_esm_user_answer_timestamp <= %@)", limitTimestamp]];
                     }else{
-                        [request setPredicate:[NSPredicate predicateWithFormat:@"(timestamp <= %@) AND (timestamp <= %@)", timestamp, limitTimestamp]];
+                        [request setPredicate:[NSPredicate predicateWithFormat:@"(timestamp <= %@)", limitTimestamp]];
                     }
                     
                     NSBatchDeleteRequest *delete = [[NSBatchDeleteRequest alloc] initWithFetchRequest:request];
@@ -846,7 +847,7 @@ didBecomeStreamTask:(NSURLSessionStreamTask *)streamTask{
                     if (deleteError != nil) {
                         NSLog(@"%@", deleteError.description);
                     }else{
-                        NSLog(@"[%@] Sucess to clear the data from DB (timestamp <= %@ && timestamp <= %@)", sensorName, timestamp, limitTimestamp);
+                        NSLog(@"[%@] Sucess to clear the data from DB (timestamp <= %@ )", sensorName, [NSDate dateWithTimeIntervalSince1970:limitTimestamp.longLongValue/1000]);
                     }
                     [self unlockDB];
                 }

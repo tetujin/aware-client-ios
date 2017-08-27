@@ -7,7 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+#import "PNChart.h"
 
-@interface DataVisualizationViewController : UIViewController
+@interface DataVisualizationViewController : UIViewController <PNChartDelegate>
+
+@property NSManagedObjectContext *mainQueueManagedObjectContext;
+
+@property PNLineChart * lineChart;
+@property PNScatterChart * scatterChart;
 
 @end

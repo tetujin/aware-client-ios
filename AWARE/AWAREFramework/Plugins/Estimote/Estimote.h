@@ -7,6 +7,7 @@
 //
 
 #import "AWARESensor.h"
+#import "AWAREPlugin.h"
 #import <EstimoteSDK/EstimoteSDK.h>
 
 @interface Estimote : AWARESensor <AWARESensorDelegate, ESTDeviceManagerDelegate, ESTBeaconManagerDelegate>

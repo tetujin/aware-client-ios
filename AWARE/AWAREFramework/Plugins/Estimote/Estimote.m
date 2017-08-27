@@ -7,6 +7,10 @@
 //
 
 #import "Estimote.h"
+#import "EstimoteMotion.h"
+#import "EstimoteAirpressure.h"
+#import "EstimoteTemperature.h"
+#import "EstimoteAmbientLight.h"
 
 @implementation Estimote{
     ESTTelemetryNotificationTemperature  * tempNotif;
@@ -15,37 +19,67 @@
     ESTTelemetryNotificationAmbientLight * ambientLightNotif;
     ESTTelemetryNotificationMagnetometer * magNotif;
     ESTTelemetryNotificationSystemStatus * systemNotif;
+    EstimoteMotion      * sensorMotion;
+    EstimoteAirpressure * sensorAirPressure;
+    EstimoteTemperature * sensorTemperature;
+    EstimoteAmbientLight* sensorAmbientLight;
+    AWAREStudy * awareStudy;
+    NSMutableArray * sensors;
 }
 
 - (instancetype)initWithAwareStudy:(AWAREStudy *)study dbType:(AwareDBType)dbType{
     
-    // self = [super initWithAwareStudy:study dbType:AwareDBTypeCoreData];
     self = [super initWithAwareStudy:study
-                          sensorName:@""
-                        dbEntityName:@""
+                          sensorName:@"estimote"
+                        dbEntityName:@"estimote"
                               dbType:AwareDBTypeCoreData];
     if(self != nil){
+        awareStudy = study;
+        sensorMotion = [[EstimoteMotion alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeCoreData];
+        sensorAirPressure = [[EstimoteAirpressure alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeCoreData];
+        sensorTemperature = [[EstimoteTemperature alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeCoreData];
+        sensorAmbientLight = [[EstimoteAmbientLight alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeCoreData];
         
+        sensors = [[NSMutableArray alloc] init];
+        [sensors addObject:sensorMotion];
+        [sensors addObject:sensorAirPressure];
+        [sensors addObject:sensorTemperature];
+        [sensors addObject:sensorAmbientLight];
     }
     return self;
 }
 
-- (void)createTable {
-    TCQMaker * maker = [[TCQMaker alloc] init];
-    [maker addColumn:@"estimote_id" type:TCQTypeText default:@""];
-    [maker addColumn:@"estimote_appearance" type:TCQTypeText default:@""];
-    [maker addColumn:@"estimote_battery" type:TCQTypeReal default:@"0"];
-    [maker addColumn:@"temperature" type:TCQTypeReal default:@"0"];
-    [maker addColumn:@"ambient_light" type:TCQTypeReal default:@"0"];
-    [maker addColumn:@"magnetometer" type:TCQTypeReal default:@"0"];
-    [maker addColumn:@"pressure" type:TCQTypeReal default:@"0"];
-    [maker addColumn:@"is_moving" type:TCQTypeText default:@""];
-    
-    // [super createTable:[maker getDefaudltTableCreateQuery]];
+- (void)createTable{
+    if (sensors != nil) {
+        for (AWARESensor * sensor in sensors) {
+            [sensor createTable];
+        }
+    }
 }
 
-- (BOOL)startSensorWithSettings:(NSArray *)settings{
+- (void)syncAwareDB{
+    [self syncAwareDBInBackground];
+}
+
+- (void)syncAwareDBInBackground {
+    if (sensors != nil) {
+        for (AWARESensor * sensor in sensors) {
+            [sensor syncAwareDB];
+        }
+    }
+    NSMutableDictionary * userInfo = [[NSMutableDictionary alloc] init];
+    [userInfo setObject:@100 forKey:@"KEY_UPLOAD_PROGRESS_STR"];
+    [userInfo setObject:@YES forKey:@"KEY_UPLOAD_FIN"];
+    [userInfo setObject:@YES forKey:@"KEY_UPLOAD_SUCCESS"];
+    [userInfo setObject:[self getSensorName] forKey:@"KEY_UPLOAD_SENSOR_NAME"];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"ACTION_AWARE_DATA_UPLOAD_PROGRESS"
+                                                        object:nil
+                                                      userInfo:userInfo];
     
+}
+
+
+- (BOOL)startSensorWithSettings:(NSArray *)settings{
     
     self.beaconManager = [ESTBeaconManager new];
     self.beaconManager.delegate = self;
@@ -57,81 +91,82 @@
     // add this below:
     [self.beaconManager startMonitoringForRegion:[[CLBeaconRegion alloc]
                                                   initWithProximityUUID:[[NSUUID alloc]
-                                                                         initWithUUIDString:@"B9407F30-F5F8-466E-AFF9-25556B57FE6D"]
-                                                  major:1 minor:47072 identifier:@"monitored region"]];
-    
+                                                                         initWithUUIDString:@"25C422DB-07E9-7283-4B5F-85F2827B33AD"]
+                                                  identifier:@"hello"]];
     
     _deviceManager = [ESTDeviceManager new];
-    ESTDeviceFilterLocationBeacon *be = [[ESTDeviceFilterLocationBeacon alloc] initWithIdentifier:@"de396be57fbbdd39539a41fad4e1ce2c"];
-    [_deviceManager startDeviceDiscoveryWithFilter:be];
+    ESTDeviceFilterLocationBeacon *be = [[ESTDeviceFilterLocationBeacon alloc] initWithIdentifier:@"25C422DB-07E9-7283-4B5F-85F2827B33AD"];
+     [_deviceManager startDeviceDiscoveryWithFilter:be];
     _deviceManager.delegate = self;
     
     /// tempterature sensor ///
     tempNotif = [[ESTTelemetryNotificationTemperature alloc] initWithNotificationBlock:^(ESTTelemetryInfoTemperature * _Nonnull temperature) {
-        if(temperature != nil){
-            NSLog(@"[temp] %@",temperature.debugDescription);
-        }
+        [sensorTemperature saveDataWithEstimoteAirpressure:temperature];
     }];
     [_deviceManager registerForTelemetryNotification:tempNotif];
     
     /// motion sensor ///
     motionNotif = [[ESTTelemetryNotificationMotion alloc] initWithNotificationBlock:^(ESTTelemetryInfoMotion * _Nonnull motion) {
-            NSLog(@"[motion] %@", motion.debugDescription);
+        [sensorMotion saveDataWithEstimoteMotion:motion];
     }];
     [_deviceManager registerForTelemetryNotification:motionNotif];
     
     /// air pressure //
     presureNotif = [[ESTTelemetryNotificationPressure alloc] initWithNotificationBlock:^(ESTTelemetryInfoPressure * _Nonnull pressure) {
-        NSLog(@"[air pressure] %@", pressure.debugDescription);
+        [sensorAirPressure saveDataWithEstimoteAirpressure:pressure];
     }];
     [_deviceManager registerForTelemetryNotification:presureNotif];
     
     ///
     ambientLightNotif = [[ESTTelemetryNotificationAmbientLight alloc] initWithNotificationBlock:^(ESTTelemetryInfoAmbientLight * _Nonnull ambientLight) {
-        NSLog(@"[ambient light] %@", ambientLight.debugDescription);
+        [sensorAmbientLight saveDataWithEstimoteAmbientLight:ambientLight];
     }];
     [_deviceManager registerForTelemetryNotification:ambientLightNotif];
     
-    ///
-    magNotif = [[ESTTelemetryNotificationMagnetometer alloc] initWithNotificationBlock:^(ESTTelemetryInfoMagnetometer * _Nonnull magnetometer) {
-        NSLog(@"[mag] %@", magnetometer.debugDescription);
-    }];
-    [_deviceManager registerForTelemetryNotification:magNotif];
-    
-    systemNotif = [[ESTTelemetryNotificationSystemStatus alloc] initWithNotificationBlock:^(ESTTelemetryInfoSystemStatus * _Nonnull systemStatus) {
-        NSLog(@"[system] %@", systemStatus.batteryVoltageInMillivolts);
-    }];
-    [_deviceManager registerForTelemetryNotification:systemNotif];
     
     return YES;
 }
 
 - (BOOL)stopSensor{
-    [_deviceManager unregisterForTelemetryNotification:tempNotif];
-    [_deviceManager unregisterForTelemetryNotification:motionNotif];
-    [_deviceManager unregisterForTelemetryNotification:presureNotif];
-    [_deviceManager unregisterForTelemetryNotification:ambientLightNotif];
-    [_deviceManager unregisterForTelemetryNotification:magNotif];
-    [_deviceManager unregisterForTelemetryNotification:systemNotif];
+    if(tempNotif!=nil)[_deviceManager unregisterForTelemetryNotification:tempNotif];
+    if(motionNotif!=nil)[_deviceManager unregisterForTelemetryNotification:motionNotif];
+    if(presureNotif!=nil)[_deviceManager unregisterForTelemetryNotification:presureNotif];
+    if(ambientLightNotif!=nil)[_deviceManager unregisterForTelemetryNotification:ambientLightNotif];
+    // [_deviceManager unregisterForTelemetryNotification:magNotif];
     return YES;
 }
 
-
 - (void)deviceManager:(ESTDeviceManager *)manager
    didDiscoverDevices:(NSArray<ESTDevice *> *)devices{
-    
+    if (devices !=nil) {
+        for (ESTDevice * device in devices) {
+            NSLog(@"[Estimote device] %@\t%@\t%ld",device.identifier, device.peripheralIdentifier, device.rssi);
+        }
+    }
 }
 
 - (void)deviceManagerDidFailDiscovery:(ESTDeviceManager *)manager{
     
 }
 
+
 //////////////////////////////////////////////
 -(void)beaconManager:(id)manager didEnterRegion:(CLBeaconRegion *)region{
     NSLog(@"%@",region.debugDescription);
+    region.major;
+    region.minor;
+    region.identifier;
+    region.proximityUUID;
+    // message
+    // [AWAREUtils sendLocalNotificationForMessage:@"didEnterRegion" soundFlag:YES];
     
 }
 
+- (void)beaconManager:(id)manager didExitRegion:(CLBeaconRegion *)region{
+    NSLog(@"%@",region.debugDescription);
+    // message
+    // [AWAREUtils sendLocalNotificationForMessage:@"didExitRegion" soundFlag:YES];
+}
 
 - (void)beaconManager:(id)manager didRangeBeacons:(nonnull NSArray<CLBeacon *> *)beacons inRegion:(nonnull CLBeaconRegion *)region{
     
@@ -153,6 +188,7 @@
                 break;
         }
     }
+    
 }
 
 @end
