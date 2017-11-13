@@ -29,7 +29,7 @@ NSString * const AWARE_PREFERENCES_FREQUENCY_HZ_ACCELEROMETER = @"frequency_hz_a
     self = [super initWithAwareStudy:study
                           sensorName:@"accelerometer"
                         dbEntityName:NSStringFromClass([EntityAccelerometer class])
-                              dbType:dbType];
+                              dbType:AwareDBTypeTextFile];
     if (self) {
         manager = [[CMMotionManager alloc] init];
         sensingInterval = 0.1f;

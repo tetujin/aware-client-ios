@@ -32,7 +32,8 @@ NSString* const AWARE_PREFERENCES_FREQUENCY_HZ_GRAVITY = @"frequency_hz_gravity"
     self = [super initWithAwareStudy:study
                           sensorName:SENSOR_GRAVITY
                         dbEntityName:NSStringFromClass([EntityGravity class])
-                              dbType:dbType];
+                              dbType:AwareDBTypeTextFile];
+            //dbType:dbType];
     if (self) {
         motionManager = [[CMMotionManager alloc] init];
         sensingInterval = 0.1f;

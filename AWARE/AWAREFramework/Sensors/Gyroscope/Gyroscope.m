@@ -25,7 +25,8 @@ NSString* const AWARE_PREFERENCES_FREQUENCY_HZ_GYROSCOPE = @"frequency_hz_gyrosc
     self = [super initWithAwareStudy:study
                           sensorName:SENSOR_GYROSCOPE
                         dbEntityName:NSStringFromClass([EntityGyroscope class])
-                              dbType:dbType];
+                              dbType:AwareDBTypeTextFile];
+                        //dbType:dbType];
     if (self) {
         gyroManager = [[CMMotionManager alloc] init];
         defaultInterval = 0.1f;

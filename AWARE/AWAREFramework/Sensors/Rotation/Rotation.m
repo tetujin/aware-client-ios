@@ -32,7 +32,8 @@ NSString* const AWARE_PREFERENCES_FREQUENCY_HZ_ROTATION = @"frequency_hz_rotatio
     self = [super initWithAwareStudy:study
                           sensorName:SENSOR_ROTATION
                         dbEntityName:NSStringFromClass([EntityRotation class])
-                              dbType:dbType];
+                              dbType:AwareDBTypeTextFile];
+            // dbType:dbType];
     if (self) {
         motionManager = [[CMMotionManager alloc] init];
         defaultInterval = 0.1f;

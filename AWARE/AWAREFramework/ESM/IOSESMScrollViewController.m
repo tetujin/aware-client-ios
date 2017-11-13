@@ -56,6 +56,7 @@
     NSObject * observer;
     NSObject * quickBtnObserver;
     
+    NSString * appIntegration;
 }
 @end
 
@@ -105,12 +106,48 @@
                             
                             if( uploadFin == YES && uploadSuccess == YES ){
                                 [SVProgressHUD dismiss];
-                                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Submission is succeeded!" message:@"Thank you for your submission." preferredStyle:UIAlertControllerStyleAlert];
                                 
+                                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Submission is succeeded!" message:@"Thank you for your submission." preferredStyle:UIAlertControllerStyleAlert];
                                 [alertController addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
                                     esmNumber = 0;
                                     currentESMNumber = 0;
                                     currentESMScheduleNumber = 0;
+                                    
+                                    NSLog(@"[App Integration] %@", appIntegration);
+                                    
+                                    ////////////////////////////////////////////////
+                                    // AppIntegration
+                                    if (appIntegration != nil) {
+                                        NSURL *url = [NSURL URLWithString:appIntegration];
+                                        ////////  a valid url scheme /////////
+                                        // if ([[UIApplication sharedApplication] canOpenURL:url]) {
+                                            
+                                            @try {
+                                                [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:^(BOOL success) {
+                                                    if (success) {
+                                                        NSLog(@"App Integration is succeeded.");
+                                                    }else{
+                                                        NSLog(@"App Integratioin is failed.");
+                                                    }
+                                                }];
+                                            } @catch (NSException *exception) {
+                                                NSLog(@"%@", exception.debugDescription);
+                                            }
+                                            
+                                        /////// an invalied url scheme //////////
+                                        //}else{
+//                                            if(![appIntegration isEqualToString:@""]){
+//                                                NSLog(@"%@ is an invalied url scheme.", appIntegration);
+//                                                UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"App Integration Error"
+//                                                                                                 message:[NSString stringWithFormat:@"%@ is an invalid url scheme.",appIntegration]
+//                                                                                                delegate:nil
+//                                                                                       cancelButtonTitle:@"close"
+//                                                                                       otherButtonTitles:nil];
+//                                                [alert show];
+//                                            }
+//                                        }
+                                    }
+                                    appIntegration = nil;
                                     [self.navigationController popToRootViewControllerAnimated:YES];
                                 }]];
                                 [self presentViewController:alertController animated:YES completion:nil];
@@ -285,6 +322,8 @@
         esmView = [[ESMRadioView alloc] initWithFrame:CGRectMake(0, totalHight, self.view.frame.size.width, 100) esm:esm];
     } else if(esmType == 3){
         esmView = [[ESMCheckBoxView alloc] initWithFrame:CGRectMake(0, totalHight, self.view.frame.size.width, 100) esm:esm];
+    } else if(esmType == 4){
+        esmView = [[ESMLikertScaleView alloc] initWithFrame:CGRectMake(0, totalHight, self.view.frame.size.width, 100) esm:esm];
     } else if(esmType == 5){
         esmView = [[ESMQuickAnswerView alloc] initWithFrame:CGRectMake(0, totalHight, self.view.frame.size.width, 100) esm:esm];
     } else if(esmType == 6){
@@ -423,7 +462,6 @@
     NSMergePolicy *originalMergePolicy = context.mergePolicy;
     context.mergePolicy = NSOverwriteMergePolicy;
     
-    
     ///////////////
     // nextESMs = [[NSMutableArray alloc] init];
     [self removeTempESMsFromDB];
@@ -479,6 +517,9 @@
             entityESMSchedule.schedule_id = [esm.schedule_id copy];
             entityESMSchedule.context = [esm.context copy];
             entityESMSchedule.interface = [esm.interface copy];
+            
+            // NSLog(@"[esm_app_integration] %@", [esmView.esmEntity.esm_app_integration copy]);
+            appIntegration = esm.esm_app_integration;
             
             if (esm.esm_flows != nil) {
                 bool isFlows = [self addNextESMs:esm withAnswer:answer context:context tempSchedule:entityESMSchedule];
@@ -645,6 +686,7 @@
                     // for na
                     entityEsm.esm_na = @([[esmDict objectForKey:@"esm_na"] boolValue]);
                     entityEsm.esm_flows = [self convertNSArraytoJsonStr:[esmDict objectForKey:@"esm_flows"]];
+                    entityEsm.esm_app_integration = [esmDict objectForKey:@"esm_app_integration"];
                     
                     [entityESMSchedule addEsmsObject:entityEsm];
                     

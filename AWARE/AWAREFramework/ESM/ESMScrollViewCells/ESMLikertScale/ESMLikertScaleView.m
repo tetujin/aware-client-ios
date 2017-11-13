@@ -52,11 +52,11 @@
                                                                   60)];
     
     // Add  min/max/slider value
-    UILabel *minLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,
+    UILabel *minLabel = [[UILabel alloc] initWithFrame:CGRectMake(10,
                                                                   ratingView.frame.size.height/2,
                                                                   60,
                                                                   ratingView.frame.size.height/2)];
-    UILabel *maxLabel = [[UILabel alloc] initWithFrame:CGRectMake(minLabel.frame.size.width + ratingView.frame.size.width - 30,
+    UILabel *maxLabel = [[UILabel alloc] initWithFrame:CGRectMake(minLabel.frame.size.width + ratingView.frame.size.width-10,
                                                                   ratingView.frame.size.height/2,
                                                                   60,
                                                                   ratingView.frame.size.height/2)];
@@ -73,8 +73,11 @@
     minLabel.textAlignment = NSTextAlignmentCenter;
     maxLabel.textAlignment = NSTextAlignmentCenter;
     
-    [minLabel setBackgroundColor:[UIColor blueColor]];
-    [maxLabel setBackgroundColor:[UIColor blueColor]];
+//    minLabel.textAlignment = NSTextAlignmentLeft;
+//    maxLabel.textAlignment = NSTextAlignmentRight;
+    
+//    [minLabel setBackgroundColor:[UIColor blueColor]];
+//    [maxLabel setBackgroundColor:[UIColor blueColor]];
     
     [self.mainView addSubview:minLabel];
     [self.mainView addSubview:maxLabel];
@@ -88,16 +91,19 @@
         int y = 0;//mainY;
         int w = ratingView.frame.size.height/2; //30
         int h = ratingView.frame.size.height/2; //30
-        UILabel *numbers = [[UILabel alloc] initWithFrame:CGRectMake(x,y,w,h)];
-        numbers.text = [NSString stringWithFormat:@"%d", i+1];
-        [ratingView addSubview:numbers];
+        UILabel *number = [[UILabel alloc] initWithFrame:CGRectMake(x,y,w,h)];
+        number.text = [NSString stringWithFormat:@"%d", i+1];
+        number.textAlignment = NSTextAlignmentCenter;
+        [ratingView addSubview:number];
+        // [number setBackgroundColor:[UIColor redColor]];
     }
     
     // Add options
     for (int i=0; i<[max intValue] ; i++) {
         int anOptionWidth = ratingView.frame.size.width / [max intValue];
         int addX = i * anOptionWidth;
-        int x = addX;
+        // int x = addX;
+        int x = addX + (anOptionWidth/4);
         int y = 0 + ratingView.frame.size.height/2;
         int w = ratingView.frame.size.height/2; //30
         int h = ratingView.frame.size.height/2; //30
@@ -107,6 +113,7 @@
         [option addTarget:self action:@selector(pushedLikertButton:) forControlEvents:UIControlEventTouchUpInside];
         [option setImage:[UIImage imageNamed:@"unselected_circle"] forState:UIControlStateNormal];
         option.selected = NO;
+        // [option setBackgroundColor:[UIColor redColor]];
         [ratingView addSubview:option];
         [options addObject:option];
     }

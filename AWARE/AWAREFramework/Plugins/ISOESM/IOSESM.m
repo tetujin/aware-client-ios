@@ -566,6 +566,8 @@ didCompleteWithError:(NSError *)error{
                         // for na
                         entityEsm.esm_na = @([[esm objectForKey:@"esm_na"] boolValue]);
                         entityEsm.esm_flows = [self convertNSArraytoJsonStr:[esm objectForKey:@"esm_flows"]];
+                        // NSLog(@"[%d][integration] %@",number, [esm objectForKey:@"esm_app_integration"]);
+                        entityEsm.esm_app_integration = [esm objectForKey:@"esm_app_integration"];
                         // entityEsm.esm_schedule = entityESMSchedule;
                         
                         [entityESMSchedule addEsmsObject:entityEsm];

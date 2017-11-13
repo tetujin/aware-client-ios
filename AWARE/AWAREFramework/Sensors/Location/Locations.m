@@ -88,7 +88,7 @@ NSString * const AWARE_PREFERENCES_MIN_GPS_ACCURACY = @"min_gps_accuracy";
         minAccuracy = defaultAccuracy;
     }
     
-    [self startSensorWithInterval:0 accuracy:minAccuracy];
+    [self startSensorWithInterval:interval accuracy:minAccuracy];
     
     return YES;
 }
@@ -195,7 +195,8 @@ NSString * const AWARE_PREFERENCES_MIN_GPS_ACCURACY = @"min_gps_accuracy";
         // locationManager.activityType = CLActivityTypeFitness;
         
         // Start Monitoring
-        [locationManager startMonitoringSignificantLocationChanges];
+        // [locationManager startMonitoringSignificantLocationChanges];
+        
         // [locationManager startUpdatingLocation];
         // [locationManager startUpdatingHeading];
         // [_locationManager startMonitoringVisits];

@@ -53,7 +53,8 @@ NSString* const AWARE_PREFERENCES_FREQUENCY_HZ_LINEAR_ACCELEROMETER = @"frequenc
     self = [super initWithAwareStudy:study
                           sensorName:SENSOR_LINEAR_ACCELEROMETER
                         dbEntityName:NSStringFromClass([EntityLinearAccelerometer class])
-                              dbType:dbType];
+                              dbType:AwareDBTypeTextFile];
+        // dbType:dbType];
     if (self) {
         motionManager = [[CMMotionManager alloc] init];
         defaultInterval = 0.1f;

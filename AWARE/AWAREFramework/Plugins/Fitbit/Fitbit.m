@@ -70,7 +70,6 @@
         [self addDefaultSettingWithString:@"1min" key:@"fitbit_hr_granularity" desc:@"(String) intraday granularity. One of 1min/1sec for 1 minute, and 5 second interval respectively (setting is 1sec but returns every 5sec)."];
         [self addDefaultSettingWithString:@"" key:@"api_key_plugin_fitbit" desc:@"(String) Fitbit Client Key"];
         [self addDefaultSettingWithString:@"" key:@"api_secret_plugin_fitbit" desc:@"(String) Fitbit Client Secret"];
-        
     }
     
     return self;
@@ -203,12 +202,12 @@
         
         // Get setting from settings variable
         NSString * activityDetailLevel = [self getSettingAsStringFromSttings:settings withKey:@"fitbit_granularity"]; //1d/15min/1min
-        if(activityDetailLevel == nil){
+        if([activityDetailLevel isEqualToString:@""] || activityDetailLevel == nil ){
             activityDetailLevel = @"1d";
         }
         
         NSString * hrDetailLevel = [self getSettingAsStringFromSttings:settings withKey:@"fitbit_hr_granularity"];//1min/1sec
-        if(hrDetailLevel == nil){
+        if( [hrDetailLevel isEqualToString:@""] || hrDetailLevel == nil){
             hrDetailLevel = @"1min";
         }
         

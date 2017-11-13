@@ -72,7 +72,6 @@
     if (![userDefaults boolForKey:@"aware_inited_2.0"]) {
         [userDefaults setBool:YES forKey:@"aware_inited_2.0"];
         [userDefaults setInteger:cleanOldDataTypeWeekly forKey:SETTING_FREQUENCY_CLEAN_OLD_DATA];
-        
     }
     
     if([userDefaults integerForKey:SETTING_DB_TYPE] == AwareDBTypeUnknown){

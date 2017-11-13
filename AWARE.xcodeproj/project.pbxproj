@@ -105,6 +105,8 @@
 		168AEA991D3EFEC300D02EA4 /* EntityProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 168AEA971D3EFEC300D02EA4 /* EntityProcessor.m */; };
 		168AEA9E1D3EFFF000D02EA4 /* EntityProximity+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 168AEA9B1D3EFFF000D02EA4 /* EntityProximity+CoreDataProperties.m */; };
 		168AEA9F1D3EFFF000D02EA4 /* EntityProximity.m in Sources */ = {isa = PBXBuildFile; fileRef = 168AEA9D1D3EFFF000D02EA4 /* EntityProximity.m */; };
+		1698DF081F769258001F8AC4 /* EntityESM+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 1698DF051F769258001F8AC4 /* EntityESM+CoreDataClass.m */; };
+		1698DF091F769258001F8AC4 /* EntityESM+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 1698DF071F769258001F8AC4 /* EntityESM+CoreDataProperties.m */; };
 		169A7B321BFF282800A7C06D /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 169A7B311BFF282800A7C06D /* CoreLocation.framework */; };
 		169A7B3D1BFFC9F900A7C06D /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 169A7B3C1BFFC9F900A7C06D /* SystemConfiguration.framework */; };
 		169C85731D007EDC00825761 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 169C85721D007EDC00825761 /* ViewController.m */; };
@@ -296,7 +298,6 @@
 		16C21AB41E45A81A001C88BC /* Contacts.m in Sources */ = {isa = PBXBuildFile; fileRef = 16C21AB31E45A81A001C88BC /* Contacts.m */; };
 		16C907A01F3303B8005D357C /* ESMLikertScaleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 16C9079F1F3303B8005D357C /* ESMLikertScaleView.m */; };
 		16C907A31F34263E005D357C /* ESMRadioView.m in Sources */ = {isa = PBXBuildFile; fileRef = 16C907A21F34263E005D357C /* ESMRadioView.m */; };
-		16CAAD2C1EF9839F0051EB4D /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16CAAD2B1EF9839F0051EB4D /* HealthKit.framework */; };
 		16CAAD341EFC94280051EB4D /* NotificationCenter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16228A3B1C22DAE20081C839 /* NotificationCenter.framework */; };
 		16CAAD381EFC94280051EB4D /* TodayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 16CAAD371EFC94280051EB4D /* TodayViewController.m */; };
 		16CAAD3B1EFC94280051EB4D /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 16CAAD391EFC94280051EB4D /* MainInterface.storyboard */; };
@@ -312,8 +313,6 @@
 		16CB66D11F41B5A8001EE743 /* ESMClockTimePickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 16CB66D01F41B5A8001EE743 /* ESMClockTimePickerView.m */; };
 		16CB66D41F41E054001EE743 /* ESMClockLineView.m in Sources */ = {isa = PBXBuildFile; fileRef = 16CB66D31F41E054001EE743 /* ESMClockLineView.m */; };
 		16CB66D81F4389F9001EE743 /* ESMNumberView.m in Sources */ = {isa = PBXBuildFile; fileRef = 16CB66D71F4389F8001EE743 /* ESMNumberView.m */; };
-		16CB66E01F445A65001EE743 /* EntityESM+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 16CB66DD1F445A65001EE743 /* EntityESM+CoreDataClass.m */; };
-		16CB66E11F445A65001EE743 /* EntityESM+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 16CB66DF1F445A65001EE743 /* EntityESM+CoreDataProperties.m */; };
 		16CB66E41F452F69001EE743 /* ESMPictureView.m in Sources */ = {isa = PBXBuildFile; fileRef = 16CB66E31F452F68001EE743 /* ESMPictureView.m */; };
 		16CB66E71F45B6B1001EE743 /* ESMVideoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 16CB66E61F45B6B1001EE743 /* ESMVideoView.m */; };
 		16CB66EA1F45C096001EE743 /* ESMAudioView.m in Sources */ = {isa = PBXBuildFile; fileRef = 16CB66E91F45C096001EE743 /* ESMAudioView.m */; };
@@ -572,6 +571,10 @@
 		168AEA9B1D3EFFF000D02EA4 /* EntityProximity+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EntityProximity+CoreDataProperties.m"; sourceTree = "<group>"; };
 		168AEA9C1D3EFFF000D02EA4 /* EntityProximity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EntityProximity.h; sourceTree = "<group>"; };
 		168AEA9D1D3EFFF000D02EA4 /* EntityProximity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EntityProximity.m; sourceTree = "<group>"; };
+		1698DF041F769258001F8AC4 /* EntityESM+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EntityESM+CoreDataClass.h"; sourceTree = "<group>"; };
+		1698DF051F769258001F8AC4 /* EntityESM+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EntityESM+CoreDataClass.m"; sourceTree = "<group>"; };
+		1698DF061F769258001F8AC4 /* EntityESM+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EntityESM+CoreDataProperties.h"; sourceTree = "<group>"; };
+		1698DF071F769258001F8AC4 /* EntityESM+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EntityESM+CoreDataProperties.m"; sourceTree = "<group>"; };
 		169A7B311BFF282800A7C06D /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		169A7B3C1BFFC9F900A7C06D /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		169C85721D007EDC00825761 /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
@@ -935,7 +938,6 @@
 		16C9079F1F3303B8005D357C /* ESMLikertScaleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ESMLikertScaleView.m; path = ESMScrollViewCells/ESMLikertScale/ESMLikertScaleView.m; sourceTree = "<group>"; };
 		16C907A11F34263E005D357C /* ESMRadioView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ESMRadioView.h; path = ESMScrollViewCells/ESMRadio/ESMRadioView.h; sourceTree = "<group>"; };
 		16C907A21F34263E005D357C /* ESMRadioView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ESMRadioView.m; path = ESMScrollViewCells/ESMRadio/ESMRadioView.m; sourceTree = "<group>"; };
-		16CAAD2B1EF9839F0051EB4D /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
 		16CAAD331EFC94280051EB4D /* widget-esm.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "widget-esm.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		16CAAD361EFC94280051EB4D /* TodayViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TodayViewController.h; sourceTree = "<group>"; };
 		16CAAD371EFC94280051EB4D /* TodayViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TodayViewController.m; sourceTree = "<group>"; };
@@ -962,10 +964,6 @@
 		16CB66D31F41E054001EE743 /* ESMClockLineView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ESMClockLineView.m; path = ESMScrollViewCells/ESMClockTimePicker/ClockLineView/ESMClockLineView.m; sourceTree = "<group>"; };
 		16CB66D61F4389F8001EE743 /* ESMNumberView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ESMNumberView.h; path = ESMScrollViewCells/ESMNumber/ESMNumberView.h; sourceTree = "<group>"; };
 		16CB66D71F4389F8001EE743 /* ESMNumberView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ESMNumberView.m; path = ESMScrollViewCells/ESMNumber/ESMNumberView.m; sourceTree = "<group>"; };
-		16CB66DC1F445A65001EE743 /* EntityESM+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "EntityESM+CoreDataClass.h"; path = "../../../EntityESM+CoreDataClass.h"; sourceTree = "<group>"; };
-		16CB66DD1F445A65001EE743 /* EntityESM+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "EntityESM+CoreDataClass.m"; path = "../../../EntityESM+CoreDataClass.m"; sourceTree = "<group>"; };
-		16CB66DE1F445A65001EE743 /* EntityESM+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "EntityESM+CoreDataProperties.h"; path = "../../../EntityESM+CoreDataProperties.h"; sourceTree = "<group>"; };
-		16CB66DF1F445A65001EE743 /* EntityESM+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "EntityESM+CoreDataProperties.m"; path = "../../../EntityESM+CoreDataProperties.m"; sourceTree = "<group>"; };
 		16CB66E21F452F68001EE743 /* ESMPictureView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ESMPictureView.h; path = ESMScrollViewCells/ESMPicture/ESMPictureView.h; sourceTree = "<group>"; };
 		16CB66E31F452F68001EE743 /* ESMPictureView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ESMPictureView.m; path = ESMScrollViewCells/ESMPicture/ESMPictureView.m; sourceTree = "<group>"; };
 		16CB66E51F45B6B1001EE743 /* ESMVideoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ESMVideoView.h; path = ESMScrollViewCells/ESMVideo/ESMVideoView.h; sourceTree = "<group>"; };
@@ -1048,7 +1046,6 @@
 				164DD66A1C1FC1F900ADA92B /* MapKit.framework in Frameworks */,
 				16D810261C06242F00605DE2 /* Security.framework in Frameworks */,
 				169A7B3D1BFFC9F900A7C06D /* SystemConfiguration.framework in Frameworks */,
-				16CAAD2C1EF9839F0051EB4D /* HealthKit.framework in Frameworks */,
 				16D91B5E1CA9447A00A5FD4F /* MicrosoftBandKit_iOS.framework in Frameworks */,
 				8EEA355C71944920BDD1D33A /* libPods-AWARE.a in Frameworks */,
 			);
@@ -1124,10 +1121,10 @@
 				1613E0C71D3D33B0000528F5 /* EntityESMHistory+CoreDataProperties.m */,
 				1613E0C81D3D33B0000528F5 /* EntityESMHistory.h */,
 				1613E0C91D3D33B0000528F5 /* EntityESMHistory.m */,
-				16CB66DC1F445A65001EE743 /* EntityESM+CoreDataClass.h */,
-				16CB66DD1F445A65001EE743 /* EntityESM+CoreDataClass.m */,
-				16CB66DE1F445A65001EE743 /* EntityESM+CoreDataProperties.h */,
-				16CB66DF1F445A65001EE743 /* EntityESM+CoreDataProperties.m */,
+				1698DF041F769258001F8AC4 /* EntityESM+CoreDataClass.h */,
+				1698DF051F769258001F8AC4 /* EntityESM+CoreDataClass.m */,
+				1698DF061F769258001F8AC4 /* EntityESM+CoreDataProperties.h */,
+				1698DF071F769258001F8AC4 /* EntityESM+CoreDataProperties.m */,
 			);
 			name = ESMEntity;
 			sourceTree = "<group>";
@@ -2427,7 +2424,6 @@
 		2A3CA9F5620967BACB187EB7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				16CAAD2B1EF9839F0051EB4D /* HealthKit.framework */,
 				52022F3F1E13B81200AB52AB /* AddressBook.framework */,
 				160E1A001CD1D9C700D825BA /* libEZAudio.a */,
 				169C85761D0127D700825761 /* BluetoothManager.framework */,
@@ -2594,7 +2590,7 @@
 								enabled = 0;
 							};
 							com.apple.HealthKit = {
-								enabled = 1;
+								enabled = 0;
 							};
 							com.apple.InterAppAudio = {
 								enabled = 0;
@@ -2989,7 +2985,6 @@
 				16B0776D1D192663009C070B /* EntityRotation.m in Sources */,
 				167F14A81F4EFC7000EA6323 /* EstimoteAirpressure.m in Sources */,
 				16B077721D19288A009C070B /* EntityScreen+CoreDataProperties.m in Sources */,
-				16CB66E11F445A65001EE743 /* EntityESM+CoreDataProperties.m in Sources */,
 				169C88851D01382C00825761 /* Accelerometer.m in Sources */,
 				1613E0D51D3E28D3000528F5 /* EntityESMSchedule.m in Sources */,
 				16EC4F211D2FA1F000524424 /* EntityAmbientNoise+CoreDataProperties.m in Sources */,
@@ -3037,6 +3032,7 @@
 				160F0EB41D03E2EC00673343 /* EntityBluetooth+CoreDataProperties.m in Sources */,
 				167F149D1F4EFB7B00EA6323 /* EntityEstimoteMotion+CoreDataClass.m in Sources */,
 				16B0777E1D192D72009C070B /* EntityWifi+CoreDataProperties.m in Sources */,
+				1698DF081F769258001F8AC4 /* EntityESM+CoreDataClass.m in Sources */,
 				169C88891D01382C00825761 /* Bluetooth.m in Sources */,
 				16CB66D11F41B5A8001EE743 /* ESMClockTimePickerView.m in Sources */,
 				169C88731D01382C00825761 /* ActivityRecognition.m in Sources */,
@@ -3064,7 +3060,6 @@
 				169C88361D01382C00825761 /* LocalFileStorageHelper.m in Sources */,
 				169C88971D01382C00825761 /* Pedometer.m in Sources */,
 				16606B201F4E4FC200EF6C4D /* PNLineChartData.m in Sources */,
-				16CB66E01F445A65001EE743 /* EntityESM+CoreDataClass.m in Sources */,
 				169C88761D01382C00825761 /* BLEHeartRate.m in Sources */,
 				16B077971D1A01A0009C070B /* EntityLocationVisit.m in Sources */,
 				169C889C1D01382C00825761 /* Screen.m in Sources */,
@@ -3093,6 +3088,7 @@
 				1623CE6B1BFD1B2C00EFAD72 /* main.m in Sources */,
 				169C88871D01382C00825761 /* Barometer.m in Sources */,
 				16606B1B1F4E4FC200EF6C4D /* PNChartLabel.m in Sources */,
+				1698DF091F769258001F8AC4 /* EntityESM+CoreDataProperties.m in Sources */,
 				163ADFC11D8F2C1900B15C8F /* EntityIOSActivityRecognition+CoreDataProperties.m in Sources */,
 				16E6CB961EC931E6000FC58C /* FitbitViewController.m in Sources */,
 				16606B1E1F4E4FC200EF6C4D /* PNGenericChart.m in Sources */,
@@ -3246,7 +3242,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -3284,7 +3280,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -3312,7 +3308,7 @@
 					"$(PROJECT_DIR)/ThirdPatyFrameworks",
 				);
 				INFOPLIST_FILE = AWARE/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3350,7 +3346,7 @@
 					"$(PROJECT_DIR)/ThirdPatyFrameworks",
 				);
 				INFOPLIST_FILE = AWARE/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3432,7 +3428,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = FH352PYMNC;
 				INFOPLIST_FILE = "widget-esm/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = jp.ac.keio.sfc.ht.tetujin.AWARE.widget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -3452,7 +3448,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = FH352PYMNC;
 				INFOPLIST_FILE = "widget-esm/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = jp.ac.keio.sfc.ht.tetujin.AWARE.widget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
