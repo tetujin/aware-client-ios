@@ -668,12 +668,12 @@ didCompleteWithError:(NSError *)error{
         NSNumber * randomize = schedule.randomize_schedule;
         if(randomize == nil) randomize = @0;
         
-        NSNumber * fireHour = schedule.fire_hour;
+        NSNumber * fireHour   = schedule.fire_hour;
         NSNumber * expiration = schedule.expiration_threshold;
-        NSDate * fireDate = [AWAREUtils getTargetNSDate:[NSDate new] hour:[fireHour intValue] nextDay:YES];
-        NSDate * originalFireDate = [AWAREUtils getTargetNSDate:[NSDate new] hour:[fireHour intValue] nextDay:YES];
+        NSDate   * fireDate   = [AWAREUtils getTargetNSDate:[NSDate new] hour:[fireHour intValue] nextDay:YES];
+        NSDate   * originalFireDate = [AWAREUtils getTargetNSDate:[NSDate new] hour:[fireHour intValue] nextDay:YES];
         NSString * scheduleId = schedule.schedule_id;
-        NSNumber * interface = schedule.interface;
+        NSNumber * interface  = schedule.interface;
         
         if(![randomize isEqualToNumber:@0]){
             // Make a andom date
@@ -720,7 +720,11 @@ didCompleteWithError:(NSError *)error{
         NSDictionary * userInfo = [[NSDictionary alloc] initWithObjects:@[originalFireDate, randomize, scheduleId,expiration,fireDate,interface]
                                                                 forKeys:@[@"original_fire_date", @"randomize",
                                                                           @"schedule_id", @"expiration_threshold",@"fire_date",@"interface"]];
-        if(![fireHour isEqualToNumber:@-1]){
+        
+        // if([fireHour isEqualToNumber:@-1] || [fireHour isEqualToNumber:@0]){
+        if([fireHour isEqualToNumber:@-1]){
+            
+        }else{ // If the value is 1-24
             // [TEST]
             // fireDate = [AWAREUtils getTargetNSDate:[NSDate new] hour:11 minute:30 second:0 nextDay:YES];
             [AWAREUtils sendLocalNotificationForMessage:schedule.noitification_body

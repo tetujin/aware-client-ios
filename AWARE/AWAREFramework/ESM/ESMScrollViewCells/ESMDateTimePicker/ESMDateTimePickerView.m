@@ -12,6 +12,7 @@
 @implementation ESMDateTimePickerView{
     UIDatePicker * dateTimePicker;
     NSString * userAnswer;
+    int version;
 }
 
 /*
@@ -27,7 +28,7 @@
     self = [super initWithFrame:frame esm:esm];
     
     if(self != nil){
-        [self addTimePickerElement:esm withFrame:frame uiMode:UIDatePickerModeDateAndTime];
+        [self addTimePickerElement:esm withFrame:frame uiMode:UIDatePickerModeDateAndTime version:1];
     }
     return self;
 }
@@ -35,11 +36,12 @@
 //    dateTimePicker.datePickerMode = UIDatePickerModeDateAndTime;
 //    dateTimePicker.datePickerMode = UIDatePickerModeDate;
 //    dateTimePicker.datePickerMode = UIDatePickerModeTime;
-- (instancetype)initWithFrame:(CGRect)frame esm:(EntityESM *)esm uiMode:(UIDatePickerMode)mode{
+- (instancetype)initWithFrame:(CGRect)frame esm:(EntityESM *)esm uiMode:(UIDatePickerMode)mode version:(int)ver{
     self = [super initWithFrame:frame esm:esm];
     userAnswer = @"";
     if(self != nil){
-        [self addTimePickerElement:esm withFrame:frame uiMode:mode];
+        // version = v;
+        [self addTimePickerElement:esm withFrame:frame uiMode:mode version:ver];
     }
     return self;
 }
@@ -51,7 +53,8 @@
 * @param dic NSDictionary for ESM Object which needs <i>esm_type, esm_title, esm_instructions, esm_submit, esm_expiration_threshold, and esm_trigger.</i>
 * @param tag An tag for identification of the ESM element
 */
-- (void) addTimePickerElement:(EntityESM *)esm withFrame:(CGRect) frame uiMode:(UIDatePickerMode) mode{
+- (void) addTimePickerElement:(EntityESM *)esm withFrame:(CGRect) frame uiMode:(UIDatePickerMode) mode version:(int)ver{
+    version = ver;
     dateTimePicker = [[UIDatePicker alloc] initWithFrame:CGRectMake(40,
                                                                     0,
                                                                     self.mainView.frame.size.width-80,
@@ -76,7 +79,7 @@
         NSDate *time = [formatter dateFromString:startTimeStr];
         if(startDateStr != nil){
             // incule start date
-            [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+            [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss Z"];
             NSDate *datetime = [formatter dateFromString:[NSString stringWithFormat:@"%@ %@",startDateStr,startTimeStr]];
             dateTimePicker.date = datetime;
         }else{
@@ -103,16 +106,35 @@
 
 
 - (void) changedDatePickerValue:(UIDatePicker * ) sender {
-    if (dateTimePicker.datePickerMode == UIDatePickerModeDateAndTime) {
-        userAnswer = [dateTimePicker date].debugDescription;
-    } else if (dateTimePicker.datePickerMode == UIDatePickerModeDate){
-        userAnswer = [dateTimePicker date].debugDescription;
-    } else if (dateTimePicker.datePickerMode == UIDatePickerModeTime){
-        userAnswer = [dateTimePicker date].debugDescription;
-    } else{
+    NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
+    [formatter setTimeZone:[NSTimeZone localTimeZone]];
+    NSDate * date = dateTimePicker.date;
+    
+    if(version == 0){
+        userAnswer = [AWAREUtils getUnixTimestamp:sender.date].stringValue;
+    }else if(version == 1){
+        if (dateTimePicker.datePickerMode == UIDatePickerModeDateAndTime) {
+            [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss Z"];
+            userAnswer = [formatter stringFromDate:date];
+            //userAnswer = [dateTimePicker date].debugDescription;
+        } else if (dateTimePicker.datePickerMode == UIDatePickerModeDate){
+            [formatter setDateFormat:@"yyyy-MM-dd Z"];
+            userAnswer = [formatter stringFromDate:date];
+            //userAnswer = [dateTimePicker date].debugDescription;
+        } else if (dateTimePicker.datePickerMode == UIDatePickerModeTime){
+            [formatter setDateFormat:@"HH:mm:ss Z"];
+            userAnswer = [formatter stringFromDate:date];
+            //userAnswer = [dateTimePicker date].debugDescription;
+        } else{
+            // [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss Z"];
+            userAnswer = [AWAREUtils getUnixTimestamp:sender.date].stringValue;
+        }
+    }else{
         userAnswer = [AWAREUtils getUnixTimestamp:sender.date].stringValue;
     }
+     // NSLog(@"%@",userAnswer);
 }
+
 
 - (NSString *) getUserAnswer {
     if ([self isNA]) return @"NA";

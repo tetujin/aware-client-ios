@@ -10,6 +10,6 @@
 
 @interface ESMDateTimePickerView : BaseESMView
 
-- (instancetype)initWithFrame:(CGRect)frame esm:(EntityESM *)esm uiMode:(UIDatePickerMode) mode;
+- (instancetype)initWithFrame:(CGRect)frame esm:(EntityESM *)esm uiMode:(UIDatePickerMode) mode version:(int)ver;
 
 @end

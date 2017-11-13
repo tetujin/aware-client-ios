@@ -330,7 +330,9 @@
         esmView = [[ESMScaleView alloc] initWithFrame:CGRectMake(0, totalHight, self.view.frame.size.width, 100) esm:esm];
         [sliderViews addObject:esmView];
     } else if(esmType == 7){
-        esmView = [[ESMDateTimePickerView alloc] initWithFrame:CGRectMake(0, totalHight, self.view.frame.size.width, 100) esm:esm uiMode:UIDatePickerModeDateAndTime];
+        esmView = [[ESMDateTimePickerView alloc] initWithFrame:CGRectMake(0, totalHight, self.view.frame.size.width, 100)
+                                                           esm:esm uiMode:UIDatePickerModeDateAndTime
+                                                       version:1];
     } else if(esmType == 8){
         esmView = [[ESMPAMView alloc] initWithFrame:CGRectMake(0, totalHight, self.view.frame.size.width, 100) esm:esm];
     } else if(esmType == 9){
@@ -339,9 +341,14 @@
     } else if(esmType == 10){
         esmView = [[ESMWebView alloc] initWithFrame:CGRectMake(0, totalHight, self.view.frame.size.width, 100) esm:esm];
     } else if(esmType == 11){
-        esmView = [[ESMDateTimePickerView alloc] initWithFrame:CGRectMake(0, totalHight, self.view.frame.size.width, 100) esm:esm uiMode:UIDatePickerModeDate];
+        esmView = [[ESMDateTimePickerView alloc] initWithFrame:CGRectMake(0, totalHight, self.view.frame.size.width, 100)
+                                                           esm:esm uiMode:UIDatePickerModeDate
+                                                       version:1];
     } else if(esmType == 12){
-        esmView = [[ESMDateTimePickerView alloc] initWithFrame:CGRectMake(0, totalHight, self.view.frame.size.width, 100) esm:esm uiMode:UIDatePickerModeTime];
+        esmView = [[ESMDateTimePickerView alloc] initWithFrame:CGRectMake(0, totalHight, self.view.frame.size.width, 100)
+                                                           esm:esm
+                                                        uiMode:UIDatePickerModeTime
+                                                       version:1];
     } else if(esmType == 13){
         esmView = [[ESMClockTimePickerView alloc] initWithFrame:CGRectMake(0, totalHight, self.view.frame.size.width, 100) esm:esm];
     } else if(esmType == 14){ // picture
