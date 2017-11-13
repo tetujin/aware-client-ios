@@ -249,6 +249,7 @@ extern NSString * const KEY_UPLOAD_FIN;
 extern NSString * const KEY_UPLOAD_SENSOR_NAME;
 extern NSString * const KEY_UPLOAD_SUCCESS;
 extern NSString * const ACTION_AWARE_DATA_UPLOAD_PROGRESS;
+extern NSString * const ACTION_AWARE_PUSHED_QUICK_ANSWER_BUTTON;
 
 
 extern NSString * const ACTION_AWARE_PEDOMETER;

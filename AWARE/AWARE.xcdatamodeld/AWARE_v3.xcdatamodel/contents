@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="11759" systemVersion="16D32" minimumToolsVersion="Xcode 7.3" sourceLanguage="Objective-C" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="12141" systemVersion="16F73" minimumToolsVersion="Xcode 7.3" sourceLanguage="Objective-C" userDefinedModelVersionIdentifier="">
     <entity name="EntityAccelerometer" representedClassName="EntityAccelerometer" syncable="YES">
         <attribute name="accuracy" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
@@ -139,14 +139,17 @@
     <entity name="EntityESM" representedClassName="EntityESM" parentEntity="EntityESMSchedule" syncable="YES">
         <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="double_esm_user_answer_timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="esm_app_integration" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="esm_checkboxes" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="esm_expiration_threshold" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="esm_flows" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="esm_instructions" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="esm_json" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="esm_likert_max" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="esm_likert_max_label" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="esm_likert_min_label" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="esm_likert_step" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="esm_minute_step" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="esm_na" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="esm_number" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="esm_quick_answers" optional="YES" attributeType="String" syncable="YES"/>
@@ -157,8 +160,11 @@
         <attribute name="esm_scale_min_label" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="esm_scale_start" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="esm_scale_step" optional="YES" attributeType="Double" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="esm_start_date" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="esm_start_time" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="esm_status" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="esm_submit" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="esm_time_format" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="esm_title" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="esm_trigger" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="esm_type" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
@@ -216,13 +222,44 @@
         <attribute name="end_date" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="expiration_threshold" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="fire_hour" optional="YES" attributeType="Integer 16" minValueString="-1" maxValueString="23" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="interface" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="noitification_body" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="notification_title" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="randomize_esm" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="randomize_schedule" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="schedule_id" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="start_date" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="temporary" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
         <relationship name="esms" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="EntityESM" inverseName="esm_schedule" inverseEntity="EntityESM" syncable="YES"/>
+    </entity>
+    <entity name="EntityEstimoteAirpressure" representedClassName="EntityEstimoteAirpressure" syncable="YES">
+        <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="estimote_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="pressure" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
+    </entity>
+    <entity name="EntityEstimoteAmbientLight" representedClassName="EntityEstimoteAmbientLight" syncable="YES">
+        <attribute name="ambient_light" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="estimote_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
+    </entity>
+    <entity name="EntityEstimoteMotion" representedClassName="EntityEstimoteMotion" syncable="YES">
+        <attribute name="acceleration_x" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="acceleration_y" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="acceleration_z" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="current_motion_state_duration_in_seconds" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="estimote_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="motion_state" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="previous_motion_state_duration_in_seconds" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
+    </entity>
+    <entity name="EntityEstimoteTemperature" representedClassName="EntityEstimoteTemperature" syncable="YES">
+        <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="estimote_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="temperature" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
     </entity>
     <entity name="EntityFitbitData" representedClassName="EntityFitbitData" syncable="YES">
         <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
@@ -257,6 +294,18 @@
         <attribute name="double_values_2" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="label" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
+    </entity>
+    <entity name="EntityIBeacon" syncable="YES">
+        <attribute name="accuracy" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="device_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="identifier" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="label" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="major" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="minro" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="proximity" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="rssi" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="uuid" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <entity name="EntityIOSActivityRecognition" representedClassName="EntityIOSActivityRecognition" syncable="YES">
         <attribute name="activities" optional="YES" attributeType="String" syncable="YES"/>
@@ -479,17 +528,23 @@
         <element name="EntityBLEHeartRate" positionX="216" positionY="180" width="128" height="30"/>
         <element name="EntityBluetooth" positionX="216" positionY="180" width="128" height="30"/>
         <element name="EntityCall" positionX="225" positionY="189" width="128" height="30"/>
+        <element name="EntityContact" positionX="297" positionY="144" width="128" height="150"/>
         <element name="EntityDebug" positionX="234" positionY="198" width="128" height="30"/>
         <element name="EntityDeviceUsage" positionX="234" positionY="198" width="128" height="30"/>
-        <element name="EntityESM" positionX="549" positionY="396" width="128" height="480"/>
+        <element name="EntityESM" positionX="549" positionY="396" width="128" height="570"/>
         <element name="EntityESMAnswer" positionX="448" positionY="297" width="128" height="165"/>
         <element name="EntityESMAnswerBC" positionX="306" positionY="153" width="128" height="405"/>
         <element name="EntityESMHistory" positionX="297" positionY="144" width="128" height="135"/>
-        <element name="EntityESMSchedule" positionX="97" positionY="582" width="146" height="210"/>
+        <element name="EntityESMSchedule" positionX="97" positionY="582" width="146" height="240"/>
+        <element name="EntityEstimoteAirpressure" positionX="297" positionY="144" width="128" height="105"/>
+        <element name="EntityEstimoteAmbientLight" positionX="315" positionY="162" width="128" height="105"/>
+        <element name="EntityEstimoteMotion" positionX="342" positionY="189" width="128" height="180"/>
+        <element name="EntityEstimoteTemperature" positionX="297" positionY="144" width="128" height="105"/>
         <element name="EntityFitbitData" positionX="297" positionY="144" width="128" height="120"/>
         <element name="EntityFitbitDevice" positionX="306" positionY="153" width="128" height="150"/>
         <element name="EntityGravity" positionX="180" positionY="144" width="128" height="30"/>
         <element name="EntityGyroscope" positionX="189" positionY="153" width="128" height="150"/>
+        <element name="EntityIBeacon" positionX="315" positionY="162" width="128" height="195"/>
         <element name="EntityIOSActivityRecognition" positionX="297" positionY="153" width="128" height="210"/>
         <element name="EntityLabel" positionX="225" positionY="189" width="128" height="30"/>
         <element name="EntityLinearAccelerometer" positionX="198" positionY="162" width="128" height="30"/>
@@ -517,6 +572,5 @@
         <element name="EntityScreen" positionX="189" positionY="153" width="128" height="30"/>
         <element name="EntityTimezone" positionX="198" positionY="162" width="128" height="30"/>
         <element name="EntityWifi" positionX="207" positionY="171" width="128" height="30"/>
-        <element name="EntityContact" positionX="297" positionY="144" width="128" height="150"/>
     </elements>
 </model>

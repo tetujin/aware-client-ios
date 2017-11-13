@@ -6,7 +6,7 @@
 //  Copyright © 2015 Yuuki NISHIYAMA. All rights reserved.
 //
 
-#import <SCNetworkReachability.h>
+#import "SCNetworkReachability.h"
 #import "AppDelegate.h"
 #import "AWAREStudy.h"
 #import "AWAREKeys.h"
@@ -127,6 +127,7 @@
  * @return The result of download and set a study configuration
  */
 - (bool) setStudyInformation:(NSString *)url withDeviceId:(NSString *) uuid {
+    
     // __weak NSURLSession *session = nil;
     NSURLSession *session = nil;
     // Set session configuration
@@ -1463,5 +1464,9 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     return [userDefaults boolForKey:SETTING_CSV_EXPORT_STATE];
 }
+
+//- (void)connectionDidFinishDownloading:(nonnull NSURLConnection *)connection destinationURL:(nonnull NSURL *)destinationURL {
+//    <#code#>
+//}
 
 @end

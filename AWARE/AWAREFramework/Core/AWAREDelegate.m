@@ -10,7 +10,6 @@
 #import "AWAREKeys.h"
 #import "AWAREEsmUtils.h"
 #import "AWARECore.h"
-#import "AWARECoreDataMigrationManager.h"
 
 // Sensors
 #import "Debug.h"
@@ -28,7 +27,7 @@
 #import "Fitbit.h"
 
 @implementation AWAREDelegate{
-    AWARECoreDataMigrationManager * migrationManager;
+    // AWARECoreDataMigrationManager * migrationManager;
 }
 
 /////////////////////////////////////////////////////

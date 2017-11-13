@@ -34,6 +34,7 @@
     selectedSettingKey = @"";
     
     self.title = _selectedRowKey;
+    [self.showDataButton setEnabled:NO];
     
     AppDelegate * delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     awareStudy = delegate.sharedAWARECore.sharedAwareStudy;
@@ -54,6 +55,7 @@
         awareSensor = [[Barometer alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
     }else if([_selectedRowKey isEqualToString:SENSOR_BATTERY]){
         awareSensor = [[Battery alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
+        [self.showDataButton setEnabled:YES];
     }else if([_selectedRowKey isEqualToString:SENSOR_BLUETOOTH]){
         awareSensor = [[Bluetooth alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
     }else if([_selectedRowKey isEqualToString:SENSOR_CALLS]){
@@ -112,7 +114,6 @@
     }else if([_selectedRowKey isEqualToString:SENSOR_PLUGIN_CONTACTS]){
         awareSensor = [[Contacts alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
     }
-    
     
     if(awareSensor != nil){
         NSMutableArray * currentSetting  = [[NSMutableArray alloc] init];

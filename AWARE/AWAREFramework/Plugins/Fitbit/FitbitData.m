@@ -283,13 +283,19 @@
 
 
 - (void) saveData:(NSData *)data response:(NSURLResponse *)response error:(NSError *)error type:(NSString *)type{
-    NSString *responseString = [[NSString alloc] initWithData:data  encoding: NSUTF8StringEncoding];
-    NSLog(@"Success: %@", responseString);
-    
+
     @try {
-        
-        if(responseString != nil){
-            NSData *jsonData = [responseString dataUsingEncoding:NSUTF8StringEncoding];
+        if(error != nil){
+            // NSString *errorStr = [[NSString alloc] initWithData:data  encoding: NSUTF8StringEncoding];
+            NSLog(@"%@",error.debugDescription);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if ([self isDebug]) {
+                    [self sendLocalNotificationForMessage:[NSString stringWithFormat:@"[%@]%@",type,error.debugDescription] soundFlag:NO];
+                }
+            });
+            return;
+        }else if(data != nil){
+            NSData *jsonData = data; // [responseString dataUsingEncoding:NSUTF8StringEncoding];
             
             NSError *error = nil;
             NSDictionary *activities = [NSJSONSerialization JSONObjectWithData:jsonData
@@ -306,12 +312,15 @@
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 if ([self isDebug]) {
-                    [self sendLocalNotificationForMessage:[NSString stringWithFormat:@"Fitbit plugin got %@ data", type] soundFlag:NO];
+                    [self sendLocalNotificationForMessage:[NSString stringWithFormat:@"Fitbit plugin got %@ data (%ld bytes)", type, data.length] soundFlag:NO];
                 }
             });
             
-            NSDate * now = [NSDate new];
+            NSString *responseString = [[NSString alloc] initWithData:data  encoding: NSUTF8StringEncoding];
+            NSLog(@"Success: %@", responseString);
             
+            NSDate * now = [NSDate new];
+        
             NSMutableDictionary * dict = [[NSMutableDictionary alloc] init];
             [dict setObject:[AWAREUtils getUnixTimestamp:now] forKey:@"timestamp"]; //timestamp
             [dict setObject:[self getDeviceId] forKey:@"device_id"];  //    device_id
@@ -337,19 +346,20 @@
             NSLog(@"%@",[NSString stringWithFormat:@"action.aware.plugin.fitbit.get.activity.%@",type]);
             
             [self saveData:dict];
+        }else{
+            
+//            NSDictionary * debugMsg = @{@"debug":@"no response", @"type":type};
+//            if([responseString isEqualToString:@""]){
+//                debugMsg = @{@"debug":@"no response", @"type":type};
+//            }else if(responseString != nil){
+//                debugMsg = @{@"debug":responseString, @"type":type};
+//            }
+//            [[NSNotificationCenter defaultCenter] postNotificationName:@"action.aware.plugin.fitbit.get.activity.debug"
+//                                                                object:nil
+//                                                              userInfo:debugMsg];
         }
     } @catch (NSException *exception) {
-        
     } @finally {
-        NSDictionary * debugMsg = @{@"debug":@"no response", @"type":type};
-        if([responseString isEqualToString:@""]){
-            debugMsg = @{@"debug":@"no response", @"type":type};
-        }else if(responseString != nil){
-            debugMsg = @{@"debug":responseString, @"type":type};
-        }
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"action.aware.plugin.fitbit.get.activity.debug"
-                                                            object:nil
-                                                          userInfo:debugMsg];
     }
 }
 
@@ -417,7 +427,14 @@ didReceiveResponse:(NSURLResponse *)response
 
 
 -(void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error{
+
     NSString * identifier = session.configuration.identifier;
+    
+    if (self.isDebug && error != nil) {
+        [self sendLocalNotificationForMessage:error.debugDescription soundFlag:NO];
+        [self saveDebugEventWithText:[NSString stringWithFormat:@"[%@] Error:%@ ",identifier,error.debugDescription] type:DebugTypeInfo label:identifier];
+    }
+    
     // NSLog(@"[%@]URLSession:task:didCompleteWithError",identifier);
     NSData * data = nil;
     if([identifier isEqualToString:@"steps"]){
@@ -429,11 +446,14 @@ didReceiveResponse:(NSURLResponse *)response
     }else if([identifier isEqualToString:@"sleep"]){
         data = sleepResponse;
     }
+    ////////////////////////////////////////////////////
+    
     if(data != nil){
         ////// save data ///////
         [self saveData:data response:nil error:error type:identifier];
     }else{
         NSLog(@"data is nil @ FitbitData plugin");
+        [self saveDebugEventWithText:[NSString stringWithFormat:@"[%@] data is nil",identifier] type:DebugTypeInfo label:identifier];
     }
     
     // clear

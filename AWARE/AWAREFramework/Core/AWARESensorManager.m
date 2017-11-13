@@ -61,6 +61,7 @@
 #import "Observer.h"
 #import "Contacts.h"
 #import "Fitbit.h"
+#import "Estimote.h"
 
 
 @implementation AWARESensorManager{
@@ -229,9 +230,9 @@
                 NSLog(@"%@", pluginName);
                 if ([pluginName isEqualToString:[NSString stringWithFormat:@"status_%@",SENSOR_PLUGIN_GOOGLE_ACTIVITY_RECOGNITION]]){
                     // NOTE: This sensor is not longer supported. The sensor will move to iOS activity recognition plugin.
-                    awareSensor = [[ActivityRecognition alloc] initWithAwareStudy:awareStudy dbType:dbType];
+                    // awareSensor = [[ActivityRecognition alloc] initWithAwareStudy:awareStudy dbType:dbType];
                     
-                    // WIP: iOS Activity Recognition API
+                    // iOS Activity Recognition API
                     NSString * pluginState = [pluginSetting objectForKey:@"value"];
                     if ([pluginState isEqualToString:@"true"]) {
                         AWARESensor * iosActivityRecognition = [[IOSActivityRecognition alloc] initWithAwareStudy:awareStudy dbType:dbType];
@@ -316,6 +317,11 @@
 //    [iBeacon startSensorWithSettings:nil];
 //    [self addNewSensor:iBeacon];
     
+    
+//    Estimote * estimote = [[Estimote alloc] initWithAwareStudy:awareStudy dbType:dbType];
+//    [estimote startSensorWithSettings:nil];
+//    [self addNewSensor:estimote];
+    
     /**
      * Debug Sensor
      * NOTE: don't remove this sensor. This sensor collects debug messages.
@@ -326,14 +332,9 @@
     
     
     AWARESensor * iOSESM = [[IOSESM alloc] initWithAwareStudy:study dbType:dbType];
-    AWARESensor * bcESM  = [[BalacnedCampusESMScheduler alloc] initWithAwareStudy:study dbType:dbType];
     bool stateIOSESM = [self isExist:SENSOR_PLUGIN_IOS_ESM];
-    bool stateBCESM  = [self isExist:SENSOR_PLUGIN_CAMPUS];
-    if( stateIOSESM == NO && stateBCESM == NO  ){
+    if( stateIOSESM == NO){
         [iOSESM quitSensor];
-        [bcESM quitSensor];
-    } else if( stateIOSESM == YES && stateBCESM == NO  ){
-        [bcESM quitSensor];
     }
     
     return YES;
@@ -572,7 +573,7 @@
                                            
                                            // stop
                                            if(isFinish == YES && isSuccess == NO){
-                                               AudioServicesPlayAlertSound(1324);
+                                               AudioServicesPlayAlertSound(1010);
                                                if([AWAREUtils isBackground]){
                                                    [AWAREUtils sendLocalNotificationForMessage:@"[Manual Upload] Failed to upload sensor data. Please try uploading again." soundFlag:YES];
                                                }else{
@@ -672,7 +673,8 @@
             }
         } else {
 //            [SVProgressHUD showErrorWithStatus:@"Failed to upload sensor data. Please try upload again."];
-            AudioServicesPlayAlertSound(1324);
+            // AudioServicesPlayAlertSound(1324);
+            AudioServicesPlayAlertSound(1010);
             if([AWAREUtils isBackground]){
                 [AWAREUtils sendLocalNotificationForMessage:@"[Manual Upload] Failed to upload sensor data. Please try uploading again." soundFlag:YES];
             }else{

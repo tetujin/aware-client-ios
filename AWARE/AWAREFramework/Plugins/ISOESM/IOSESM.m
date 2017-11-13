@@ -10,7 +10,7 @@
 #import "WebESM.h"
 #import "TCQMaker.h"
 #import "AppDelegate.h"
-#import "EntityESM.h"
+#import "EntityESM+CoreDataClass.h"
 #import "EntityESMSchedule.h"
 #import "SingleESMObject.h"
 #import "EntityESMHistory.h"
@@ -301,7 +301,7 @@ NSString * const AWARE_PREFERENCES_PLUGIN_IOS_ESM_CONFIG_URL = @"plugin_ios_esm_
         NSString * jsonStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
         NSLog(@"%@", jsonStr);
         
-        [self setWebESMsWithArray:esmArray];
+        [self setScheduledESMs:esmArray];
 
     }else{
         if([AWAREUtils isForeground]){
@@ -426,13 +426,14 @@ didCompleteWithError:(NSError *)error{
 //////////////////////////////////////////////////////////////
 
 
-- (BOOL) setWebESMsWithSchedule:(ESMSchedule *)esmSchedule{
+- (BOOL) setScheduledESM:(ESMSchedule *)esmSchedule{
     if(esmSchedule != nil){
         NSMutableDictionary * dictSchedule = [[NSMutableDictionary alloc] init];
         [dictSchedule setObject:esmSchedule.fireHours forKey:@"hours"];
         [dictSchedule setObject:esmSchedule.scheduledESMs forKey:@"esms"];
         [dictSchedule setObject:esmSchedule.randomizeSchedule  forKey:@"randomize"];
         [dictSchedule setObject:@(esmSchedule.timeoutSecond) forKey:@"expiration"];
+        
         
         [dictSchedule setObject:esmSchedule.title forKey:@"notification_title"];
         [dictSchedule setObject:esmSchedule.body forKey:@"notification_body"];
@@ -453,7 +454,7 @@ didCompleteWithError:(NSError *)error{
             [dictSchedule setObject:[formatter stringFromDate:[NSDate distantFuture]] forKey:@"end_date"];
         }
         
-        [self setWebESMsWithArray:@[dictSchedule]];
+        [self setScheduledESMs:@[dictSchedule]];
         
         return YES;
     }else{
@@ -462,7 +463,7 @@ didCompleteWithError:(NSError *)error{
 }
 
 
-- (void) setWebESMsWithArray:(NSArray *) webESMArray {
+- (void) setScheduledESMs:(NSArray *) ESMArray {
     
     @try {
         dispatch_async( dispatch_get_main_queue() , ^{
@@ -472,7 +473,7 @@ didCompleteWithError:(NSError *)error{
             
             int number = 0;
             
-            for (NSDictionary * schedule in webESMArray) {
+            for (NSDictionary * schedule in ESMArray) {
                 NSArray * hours = [schedule objectForKey:@"hours"];
                 // NSArray * weekdays = [schedule objectForKey:@"weekdays"];
                 // NSArray * months = [schedule objectForKey:@"months"];
@@ -510,18 +511,23 @@ didCompleteWithError:(NSError *)error{
                 
                 if(expiration == nil) expiration = @0;
                 
+                NSNumber * interface = [schedule objectForKey:@"interface"];
+                if(interface == nil) interface = @0;
+                // NSLog(@"interface: %@", interface);
+                
                 for (NSNumber * hour in hours) {
-                    EntityESMSchedule * entityWebESM = (EntityESMSchedule *) [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([EntityESMSchedule class])
+                    EntityESMSchedule * entityESMSchedule = (EntityESMSchedule *) [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([EntityESMSchedule class])
                                                                                                            inManagedObjectContext:context];
-                    entityWebESM.fire_hour = hour;
-                    entityWebESM.expiration_threshold = expiration;
-                    entityWebESM.start_date = startDate;
-                    entityWebESM.end_date = endDate;
-                    entityWebESM.notification_title = notificationTitle;
-                    entityWebESM.noitification_body = notificationBody;
-                    entityWebESM.randomize_schedule = randomize_schedule;
-                    entityWebESM.schedule_id = scheduleId;
-                    entityWebESM.context = eventContext;
+                    entityESMSchedule.fire_hour = hour;
+                    entityESMSchedule.expiration_threshold = expiration;
+                    entityESMSchedule.start_date = startDate;
+                    entityESMSchedule.end_date = endDate;
+                    entityESMSchedule.notification_title = notificationTitle;
+                    entityESMSchedule.noitification_body = notificationBody;
+                    entityESMSchedule.randomize_schedule = randomize_schedule;
+                    entityESMSchedule.schedule_id = scheduleId;
+                    entityESMSchedule.context = eventContext;
+                    entityESMSchedule.interface = interface;
                     
                     for (NSDictionary * esmDict in esms) {
                         NSDictionary * esm = [esmDict objectForKey:@"esm"];
@@ -549,11 +555,22 @@ didCompleteWithError:(NSError *)error{
                         entityEsm.esm_scale_min_label = [esm objectForKey:@"esm_scale_min_label"];
                         entityEsm.esm_scale_step = [esm objectForKey:@"esm_scale_step"];
                         entityEsm.esm_json = [self convertNSArraytoJsonStr:@[esm]];
-                        entityEsm.esm_na = @([[esm objectForKey:@"esm_na"] boolValue]);
                         entityEsm.esm_number = @(number);
+                        // for date&time picker
+                        entityEsm.esm_start_time = [esm objectForKey:@"esm_start_time"];
+                        entityEsm.esm_start_date = [esm objectForKey:@"esm_start_date"];
+                        entityEsm.esm_time_format = [esm objectForKey:@"esm_time_format"];
+                        entityEsm.esm_minute_step = [esm objectForKey:@"esm_minute_step"];
+                        // for web ESM url
                         entityEsm.esm_url = [esm objectForKey:@"esm_url"];
+                        // for na
+                        entityEsm.esm_na = @([[esm objectForKey:@"esm_na"] boolValue]);
+                        entityEsm.esm_flows = [self convertNSArraytoJsonStr:[esm objectForKey:@"esm_flows"]];
+                        // NSLog(@"[%d][integration] %@",number, [esm objectForKey:@"esm_app_integration"]);
+                        entityEsm.esm_app_integration = [esm objectForKey:@"esm_app_integration"];
+                        // entityEsm.esm_schedule = entityESMSchedule;
                         
-                        [entityWebESM addEsmsObject:entityEsm];
+                        [entityESMSchedule addEsmsObject:entityEsm];
                         
                         number ++;
                     }
@@ -564,7 +581,6 @@ didCompleteWithError:(NSError *)error{
             [self removeNotificationSchedulesFromSQLite];
             [self removeNotificationSchedules];
             
-            
             // save new ESMs
             NSError * e = nil;
             if(![context save:&e]){
@@ -574,7 +590,7 @@ didCompleteWithError:(NSError *)error{
                 }
             }else{
                 NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-                NSData * currentData = [NSJSONSerialization dataWithJSONObject:webESMArray options:0 error:nil];
+                NSData * currentData = [NSJSONSerialization dataWithJSONObject:ESMArray options:0 error:nil];
                 NSData * previousData = [defaults objectForKey:@"previous.ios.esm.plugin.configuration.file"];
                 if(previousData != nil && ![currentData isEqual:previousData]){
                     if([AWAREUtils isForeground]){
@@ -652,11 +668,12 @@ didCompleteWithError:(NSError *)error{
         NSNumber * randomize = schedule.randomize_schedule;
         if(randomize == nil) randomize = @0;
         
-        NSNumber * fireHour = schedule.fire_hour;
+        NSNumber * fireHour   = schedule.fire_hour;
         NSNumber * expiration = schedule.expiration_threshold;
-        NSDate * fireDate = [AWAREUtils getTargetNSDate:[NSDate new] hour:[fireHour intValue] nextDay:YES];
-        NSDate * originalFireDate = [AWAREUtils getTargetNSDate:[NSDate new] hour:[fireHour intValue] nextDay:YES];
+        NSDate   * fireDate   = [AWAREUtils getTargetNSDate:[NSDate new] hour:[fireHour intValue] nextDay:YES];
+        NSDate   * originalFireDate = [AWAREUtils getTargetNSDate:[NSDate new] hour:[fireHour intValue] nextDay:YES];
         NSString * scheduleId = schedule.schedule_id;
+        NSNumber * interface  = schedule.interface;
         
         if(![randomize isEqualToNumber:@0]){
             // Make a andom date
@@ -676,7 +693,7 @@ didCompleteWithError:(NSError *)error{
            && expirationTime.timeIntervalSince1970 >= now.timeIntervalSince1970){
             isInTime = YES;
         }
-        NSLog(@"%@ %@ %@ -> %d", inspirationTime, now, expirationTime, isInTime);
+        NSLog(@"[BASE_TIME:%@]\n[CURRENT_TIME:%@]\n[EXPIRATION_TIME:%@][IN_TIME:%d]", inspirationTime, now, expirationTime, isInTime);
         // Check an answering condition
         if(isInTime){
             
@@ -694,15 +711,20 @@ didCompleteWithError:(NSError *)error{
 //                    [fireDate dateByAddingTimeInterval:60*60*24];
 //                }
 //            }
+            
         }
         
         // NSLog(@"[%@] Fire Date: %@", scheduleId, [AWAREUtils getTargetNSDate:[NSDate new] hour:[fireHour intValue] nextDay:YES]);
         // NSLog(@"[%@] Fire Date: %@ (%@)", scheduleId, fireDate, [AWAREUtils getTargetNSDate:[NSDate new] hour:[fireHour intValue] nextDay:YES]);
         
-        NSDictionary * userInfo = [[NSDictionary alloc] initWithObjects:@[originalFireDate, randomize, scheduleId,expiration,fireDate]
+        NSDictionary * userInfo = [[NSDictionary alloc] initWithObjects:@[originalFireDate, randomize, scheduleId,expiration,fireDate,interface]
                                                                 forKeys:@[@"original_fire_date", @"randomize",
-                                                                          @"schedule_id", @"expiration_threshold",@"fire_date"]];
-        if(![fireHour isEqualToNumber:@-1]){
+                                                                          @"schedule_id", @"expiration_threshold",@"fire_date",@"interface"]];
+        
+        // if([fireHour isEqualToNumber:@-1] || [fireHour isEqualToNumber:@0]){
+        if([fireHour isEqualToNumber:@-1]){
+            
+        }else{ // If the value is 1-24
             // [TEST]
             // fireDate = [AWAREUtils getTargetNSDate:[NSDate new] hour:11 minute:30 second:0 nextDay:YES];
             [AWAREUtils sendLocalNotificationForMessage:schedule.noitification_body
@@ -727,7 +749,7 @@ didCompleteWithError:(NSError *)error{
 
     
     
-    [self getValidESMsWithDatetime:[NSDate new]];
+    [self getValidESMSchedulesWithDatetime:[NSDate new]];
     
     // [self setLatestValue:[NSString stringWithFormat:@"You have %ld scheduled notification(s)", results.count]];
     // });
@@ -753,142 +775,32 @@ didCompleteWithError:(NSError *)error{
     }
 }
 
-- (NSArray *) getValidESMsWithDatetime:(NSDate *) datetime {
+- (NSArray *) getValidESMSchedulesWithDatetime:(NSDate *) datetime {
     
     NSMutableArray * esmSchedules = [[NSMutableArray alloc] init];
-    
-    
-    ///////////////////////////////////////////////////////
-    // Get notification schedules
-    
-    NSArray * notifications = [UIApplication sharedApplication].scheduledLocalNotifications;
-    
-    NSMutableArray * validSchedules = [[NSMutableArray alloc] init];
     AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
-    for (UILocalNotification * notification in notifications) {
-        if([notification.category isEqualToString:categoryIOSESM]) {
-            //@"fire_date",@"randomize",@"schedule_id"
-            NSDictionary * userInfo = notification.userInfo;
-            // NSDate * fireDate = notification.fireDate;
-            // NSDate * fireDate = [notification.fireDate dateByAddingTimeInterval:-1*randomize];
-            //NSNumber * randomize = [userInfo objectForKey:@"randomize"];
-            NSNumber * expiration = [userInfo objectForKey:@"expiration_threshold"];
-            NSString * scheduleId = [userInfo objectForKey:@"schedule_id"];
-            NSDate * fireDate = [userInfo objectForKey:@"original_fire_date"];
-            if(fireDate == nil) fireDate = notification.fireDate;
-            NSNumber * randomize = [userInfo objectForKey:@"randomize"];
-            if(randomize == nil) randomize = 0;
-            
-            
-            // check expiration
-            NSDate * expirationTime = [fireDate dateByAddingTimeInterval:expiration.integerValue * 60];
-
-            if(randomize > 0){
-                // expirationTime = [fireDate dateByAddingTimeInterval:expiration.integerValue * 60 + randomize.integerValue*60];
-                fireDate = [fireDate dateByAddingTimeInterval:-1*randomize.integerValue * 60];
-            }
-            
-            if(fireDate.timeIntervalSince1970 > datetime.timeIntervalSince1970){
-                // expire_time = [current_time] - [24hours] - [randomized_time];
-                expirationTime = [expirationTime dateByAddingTimeInterval:-1*(60*60*24)];
-                fireDate       = [fireDate dateByAddingTimeInterval:-1*(60*60*24)];
-            }
-            
-            NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-            [dateFormat setDateFormat:@"dd HH:mm"];
-            [NSTimeZone resetSystemTimeZone];
-            
-            NSLog( @"Now = %@ [valid duration = (%@ <---> %@)]",
-                  [dateFormat stringFromDate:datetime],
-                  [dateFormat stringFromDate:fireDate],
-                  [dateFormat stringFromDate:expirationTime]
-                  );
-            NSLog(@"Expiration ---> %ld",expiration.integerValue);
-            NSLog(@"Randomize  ---> %ld",randomize.integerValue);
-            if( expiration.integerValue == 0 || (datetime.timeIntervalSince1970 >= fireDate.timeIntervalSince1970 && datetime.timeIntervalSince1970 <= expirationTime.timeIntervalSince1970))
-            {
-                bool isNew = YES;
-                for (UILocalNotification * notif in validSchedules ) {
-                    NSString * sId = [notif.userInfo objectForKey:@"schedule_id"];
-                    if([sId isEqualToString:scheduleId]){
-                        isNew = NO;
-                        break;
-                    }
-                }
-                if(isNew){
-                    [validSchedules addObject:notification];
-                }
-            }
-        }
-    }
     
     
-    
-    for (UILocalNotification * notif  in validSchedules) {
-        NSString * scheduleId = [notif.userInfo objectForKey:@"schedule_id"];
-        NSDate * fireDate = notif.fireDate;
-        // NSLog(@"===> %@", [AWAREUtils getUnixTimestamp:fireDate]);
-        
-        NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:NSStringFromClass([EntityESMSchedule class])];
-        [fetchRequest setEntity:[NSEntityDescription entityForName:NSStringFromClass([EntityESMSchedule class])
-                                            inManagedObjectContext:delegate.managedObjectContext]];
-        [fetchRequest setFetchLimit:1];
-        [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"(start_date <= %@) AND (end_date >= %@) AND (schedule_id=%@)", datetime, datetime, scheduleId]];
-        
-        
-        
-        NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:@"start_date" ascending:NO];
-        [fetchRequest setSortDescriptors:[NSArray arrayWithObject:sort]];
-        
-        NSFetchedResultsController *fetchedResultsController
-        = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
-                                              managedObjectContext:delegate.managedObjectContext
-                                                sectionNameKeyPath:nil
-                                                         cacheName:nil];
-        
-        NSError *error = nil;
-        if (![fetchedResultsController performFetch:&error]) {
-            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-        }
-        
-        NSArray *results = [fetchedResultsController fetchedObjects];
-        
-        for (EntityESMSchedule * schedule in results) {
-            
-            NSSet * childEsms = schedule.esms;
-            NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"esm_number" ascending:YES];
-            NSArray *sortDescriptors = [NSArray arrayWithObjects:sort,nil];
-            NSArray *sortedEsms = [childEsms sortedArrayUsingDescriptors:sortDescriptors];
-            for (EntityESM * esm in sortedEsms) {
-                
-                esm.timestamp = [AWAREUtils getUnixTimestamp:fireDate];
-                [esmSchedules addObject:esm];
-                NSDate * time = fireDate;
-                NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-                [dateFormat setDateFormat:@"MM/dd/yyyy HH:mm"];
-                [NSTimeZone resetSystemTimeZone];
-                NSString *date = [dateFormat stringFromDate:time];
-                
-                [dateFormat setTimeZone:[NSTimeZone systemTimeZone]];
-                NSLog(@"[timestamp:%@][type:%@][trigger:%@][fire:%@] %@",
-                      esm.esm_number, esm.esm_type,
-                      esm.esm_trigger, date, esm.esm_title );
-            }
-        }
-    }
-    
+    // NSNumber * interface = @0;
+    // NSArray * notifications = [UIApplication sharedApplication].scheduledLocalNotifications;
+    // NSLog(@"Registered Notifications: %ld", notifications.count);
+    // NSMutableArray * validSchedules = [[NSMutableArray alloc] init];
     
     
     /////////////////////////////////////////////////////////
     // get fixed esm schedules
-    NSFetchRequest *req = [[NSFetchRequest alloc] initWithEntityName:NSStringFromClass([EntityESMSchedule class])];
+//    NSFetchRequest *req = [[NSFetchRequest alloc] initWithEntityName:NSStringFromClass([EntityESMSchedule class])];
+    NSFetchRequest *req = [[NSFetchRequest alloc] init];
     [req setEntity:[NSEntityDescription entityForName:NSStringFromClass([EntityESMSchedule class])
                                inManagedObjectContext:delegate.managedObjectContext]];
-    [req setFetchLimit:1];
-    [req setPredicate:[NSPredicate predicateWithFormat:@"(start_date <= %@) AND (end_date >= %@) AND (fire_hour=-1)", datetime, datetime]];
+    // [req setFetchLimit:1];
     
+    //[req setPredicate:[NSPredicate predicateWithFormat:@"(start_date <= %@) AND (end_date >= %@) AND (fire_hour=-1)", datetime, datetime]];
+    // OR (expiration=0)
+    [req setPredicate:[NSPredicate predicateWithFormat:@"(start_date <= %@) AND (end_date >= %@) OR (expiration_threshold=0)", datetime, datetime]];
     NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:@"start_date" ascending:NO];
-    [req setSortDescriptors:[NSArray arrayWithObject:sort]];
+    NSSortDescriptor *sortBySID = [[NSSortDescriptor alloc] initWithKey:@"schedule_id" ascending:NO];
+    [req setSortDescriptors:@[sort,sortBySID]];
     
     NSFetchedResultsController *fetchedResultsController
     = [[NSFetchedResultsController alloc] initWithFetchRequest:req
@@ -902,32 +814,244 @@ didCompleteWithError:(NSError *)error{
     }
     
     NSArray *results = [fetchedResultsController fetchedObjects];
+    if(results != nil){
+        NSLog(@"Stored ESM Schedules are %ld", results.count);
+    }else{
+        NSLog(@"Stored ESM Schedule is Null.");
+    }
     
     for (EntityESMSchedule * schedule in results) {
-        
         NSSet * childEsms = schedule.esms;
+        // NSNumber * interface = schedule.interface;
         NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"esm_number" ascending:YES];
         NSArray *sortDescriptors = [NSArray arrayWithObjects:sort,nil];
         NSArray *sortedEsms = [childEsms sortedArrayUsingDescriptors:sortDescriptors];
-        for (EntityESM * esm in sortedEsms) {
-            
-            esm.timestamp = [AWAREUtils getUnixTimestamp:datetime];
-            [esmSchedules addObject:esm];
-            NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-            [dateFormat setDateFormat:@"MM/dd/yyyy HH:mm"];
-            [NSTimeZone resetSystemTimeZone];
-            NSString *date = [dateFormat stringFromDate:datetime];
-            
-            [dateFormat setTimeZone:[NSTimeZone systemTimeZone]];
-            NSLog(@"[timestamp:%@][type:%@][trigger:%@][fire:%@] %@",
-                  esm.esm_number, esm.esm_type,
-                  esm.esm_trigger, date, esm.esm_title );
+        // NSLog(@"[child esms:%ld]",childEsms.count);
+        /**
+         * Check validation of the schedule by 'expiration' and 'randomization' element
+         */
+        NSString * scheduleId = schedule.schedule_id;
+
+        NSNumber * randomize = schedule.randomize_schedule;
+        if(randomize == nil) randomize = @0;
+        NSNumber * expiration = schedule.expiration_threshold;
+        if(expiration == nil) expiration = @0;
+        int validRange = 60*(randomize.intValue + expiration.intValue); // min
+        
+        NSNumber * fireHour = schedule.fire_hour;
+        NSDate * targetDateToday       = [AWAREUtils getTargetNSDate:[NSDate new] hour:[fireHour intValue] nextDay:NO];
+        NSDate * targetDateNextday     = [AWAREUtils getTargetNSDate:[NSDate new] hour:[fireHour intValue] nextDay:YES];
+        NSDate * validStartDateToday   = [targetDateToday   dateByAddingTimeInterval:-1 * validRange];
+        NSDate * validEndDateToday     = [targetDateToday   dateByAddingTimeInterval:validRange];
+        NSDate * validStartDateNextday = [targetDateNextday dateByAddingTimeInterval:-1 * validRange];
+        NSDate * validEndDateNextday   = [targetDateNextday dateByAddingTimeInterval:validRange];
+        NSDate * now = [NSDate date];
+        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+        [dateFormat setDateFormat:@"MM/dd/yyyy HH:mm"];
+        [NSTimeZone resetSystemTimeZone];
+        // NSString *date = [dateFormat stringFromDate:time];
+        
+        bool isValidESM = NO;
+        if(scheduleId == nil){
+            isValidESM = NO;
+            // NSLog(@"invalid condition: schedule_id is null");
+        }else if([expiration isEqualToNumber:@0]){
+            //NSLog(@"-----");
+            //NSLog(@"vaild condition  : expiration is '0' : %@",scheduleId);
+            //NSLog(@"-----");
+            isValidESM = YES;
+        }else if ( ((now.timeIntervalSince1970 >= validStartDateToday.timeIntervalSince1970) && (now.timeIntervalSince1970 <= validEndDateToday.timeIntervalSince1970 )) ||
+                   ((now.timeIntervalSince1970 >= validStartDateNextday.timeIntervalSince1970) && (now.timeIntervalSince1970 <= validEndDateNextday.timeIntervalSince1970)) ){
+//            NSLog(@"-----");
+//            NSLog(@"vaild condition  : [%@ <-- (%@) --> %@] : %@",
+//                  [dateFormat stringFromDate:validStartDateToday],
+//                  [dateFormat stringFromDate:now],
+//                  [dateFormat stringFromDate:validEndDateToday],
+//                  scheduleId);
+//            NSLog(@"vaild condition  : [%@ <-- (%@) --> %@] : %@",
+//                  [dateFormat stringFromDate:validStartDateNextday],
+//                  [dateFormat stringFromDate:now],
+//                  [dateFormat stringFromDate:validEndDateNextday],
+//                  scheduleId);
+//            NSLog(@"-----");
+            isValidESM = YES;
+        }else{
+//            NSLog(@"-----");
+//            NSLog(@"invaild condition: [%@ <-- (%@) --> %@] : %@",
+//                  [dateFormat stringFromDate:validStartDateToday],
+//                  [dateFormat stringFromDate:now],
+//                  [dateFormat stringFromDate:validEndDateToday],
+//                  scheduleId);
+//            NSLog(@"invaild condition: [%@ <-- (%@) --> %@] : %@",
+//                  [dateFormat stringFromDate:validStartDateNextday],
+//                  [dateFormat stringFromDate:now],
+//                  [dateFormat stringFromDate:validEndDateNextday],
+//                  scheduleId);
+//            NSLog(@"-----");
+            // NSLog(@"invalid condition: unkown");
+        }
+        
+        if(isValidESM){
+            for (EntityESM * esm in sortedEsms) {
+                esm.timestamp = [AWAREUtils getUnixTimestamp:datetime];
+                // esm.interface = interface;
+                // debug
+//                NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+//                [dateFormat setDateFormat:@"MM/dd/yyyy HH:mm"];
+//                [NSTimeZone resetSystemTimeZone];
+//                NSString *date = [dateFormat stringFromDate:datetime];
+//                
+//                [dateFormat setTimeZone:[NSTimeZone systemTimeZone]];
+//                NSLog(@"[timestamp:%@][type:%@][trigger:%@][fire:%@][interface:%@] %@",
+//                      esm.esm_number, esm.esm_type,
+//                      esm.esm_trigger, date, esm.interface, esm.esm_title );
+            }
+            bool hasScheduleId = NO;
+            for (EntityESMSchedule * storedSchedule in esmSchedules) {
+                if([storedSchedule.schedule_id isEqualToString:scheduleId]){
+                    // NSLog(@"%@ is already exist!", scheduleId);
+                    hasScheduleId = YES;
+                    break;
+                }
+            }
+            if(!hasScheduleId && scheduleId != nil){
+                [esmSchedules addObject:schedule];
+                NSLog(@"[id:%@][randomize:%@][expiration:%@]",scheduleId,randomize,expiration);
+            }
         }
     }
     
+    NSLog(@"esm schedule: %ld", esmSchedules.count);
+    
+    return esmSchedules;
+
+    
+    ///////////////////////////////////////////////////////
+    // Get notification schedules
+    // NSNumber * interface = @0;
+//    NSArray * notifications = [UIApplication sharedApplication].scheduledLocalNotifications;
+//    NSLog(@"Registered Notifications: %ld", notifications.count);
+//    
+//    NSMutableArray * validSchedules = [[NSMutableArray alloc] init];
+//    AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+//    for (UILocalNotification * notification in notifications) {
+//        if([notification.category isEqualToString:categoryIOSESM]) {
+//            //@"fire_date",@"randomize",@"schedule_id"
+//            NSDictionary * userInfo = notification.userInfo;
+//            // NSDate * fireDate = notification.fireDate;
+//            // NSDate * fireDate = [notification.fireDate dateByAddingTimeInterval:-1*randomize];
+//            //NSNumber * randomize = [userInfo objectForKey:@"randomize"];
+//            NSNumber * expiration = [userInfo objectForKey:@"expiration_threshold"];
+//            NSString * scheduleId = [userInfo objectForKey:@"schedule_id"];
+//            NSDate * fireDate = [userInfo objectForKey:@"original_fire_date"];
+//            if(fireDate == nil) fireDate = notification.fireDate;
+//            NSNumber * randomize = [userInfo objectForKey:@"randomize"];
+//            if(randomize == nil) randomize = 0;
+//            
+//            // check expiration
+//            NSDate * expirationTime = [fireDate dateByAddingTimeInterval:expiration.integerValue * 60];
+//
+//            if(randomize > 0){
+//                // expirationTime = [fireDate dateByAddingTimeInterval:expiration.integerValue * 60 + randomize.integerValue*60];
+//                fireDate = [fireDate dateByAddingTimeInterval:-1*randomize.integerValue * 60];
+//            }
+//            
+//            if(fireDate.timeIntervalSince1970 > datetime.timeIntervalSince1970){
+//                // expire_time = [current_time] - [24hours] - [randomized_time];
+//                expirationTime = [expirationTime dateByAddingTimeInterval:-1*(60*60*24)];
+//                fireDate       = [fireDate dateByAddingTimeInterval:-1*(60*60*24)];
+//            }
+//            
+//            NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+//            [dateFormat setDateFormat:@"dd HH:mm"];
+//            [NSTimeZone resetSystemTimeZone];
+//            
+//            NSLog( @"Now = %@ [valid duration = (%@ <---> %@)]",
+//                  [dateFormat stringFromDate:datetime],
+//                  [dateFormat stringFromDate:fireDate],
+//                  [dateFormat stringFromDate:expirationTime]
+//                  );
+//            NSLog(@"Expiration ---> %ld",expiration.integerValue);
+//            NSLog(@"Randomize  ---> %ld",randomize.integerValue);
+//            if( expiration.integerValue == 0 || (datetime.timeIntervalSince1970 >= fireDate.timeIntervalSince1970 && datetime.timeIntervalSince1970 <= expirationTime.timeIntervalSince1970))
+//            {
+//                bool isNew = YES;
+//                for (UILocalNotification * notif in validSchedules ) {
+//                    NSString * sId = [notif.userInfo objectForKey:@"schedule_id"];
+//                    if([sId isEqualToString:scheduleId]){
+//                        isNew = NO;
+//                        break;
+//                    }
+//                }
+//                if(isNew){
+//                    [validSchedules addObject:notification];
+//                }
+//            }
+//        }
+//    }
+//    
+//    
+//    
+//    for (UILocalNotification * notif  in validSchedules) {
+//        NSString * scheduleId = [notif.userInfo objectForKey:@"schedule_id"];
+//        NSDate * fireDate = notif.fireDate;
+//        // NSNumber * expiration = [notif.userInfo objectForKey:@"expiration_threshold"];
+//        NSNumber * interface = [notif.userInfo objectForKey:@"interface"];
+//        // NSLog(@"===> %@", [AWAREUtils getUnixTimestamp:fireDate]);
+//        
+//        NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:NSStringFromClass([EntityESMSchedule class])];
+//        [fetchRequest setEntity:[NSEntityDescription entityForName:NSStringFromClass([EntityESMSchedule class])
+//                                            inManagedObjectContext:delegate.managedObjectContext]];
+//        // [fetchRequest setFetchLimit:1]; // comment out this line for getting multiple esm from SQLite
+//        [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"(start_date <= %@) AND (end_date >= %@) AND (schedule_id=%@)", datetime, datetime, scheduleId]];
+//        
+//        NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:@"start_date" ascending:NO];
+//        [fetchRequest setSortDescriptors:[NSArray arrayWithObject:sort]];
+//        
+//        NSFetchedResultsController *fetchedResultsController
+//        = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
+//                                              managedObjectContext:delegate.managedObjectContext
+//                                                sectionNameKeyPath:nil
+//                                                         cacheName:nil];
+//        
+//        NSError *error = nil;
+//        if (![fetchedResultsController performFetch:&error]) {
+//            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+//        }
+//        
+//        NSArray *results = [fetchedResultsController fetchedObjects];
+//        
+//        for (EntityESMSchedule * schedule in results) {
+//            
+//            NSSet * childEsms = schedule.esms;
+//            NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"esm_number" ascending:YES];
+//            NSArray *sortDescriptors = [NSArray arrayWithObjects:sort,nil];
+//            NSArray *sortedEsms = [childEsms sortedArrayUsingDescriptors:sortDescriptors];
+//            for (EntityESM * esm in sortedEsms) {
+//                
+//                esm.timestamp = [AWAREUtils getUnixTimestamp:fireDate];
+//                esm.interface = interface;
+//                
+//                [esmSchedules addObject:esm];
+//                NSDate * time = fireDate;
+//                NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+//                [dateFormat setDateFormat:@"MM/dd/yyyy HH:mm"];
+//                [NSTimeZone resetSystemTimeZone];
+//                NSString *date = [dateFormat stringFromDate:time];
+//                
+//                [dateFormat setTimeZone:[NSTimeZone systemTimeZone]];
+//                NSLog(@"[timestamp:%@][type:%@][trigger:%@][fire:%@][interface:%@] %@",
+//                      esm.esm_number, esm.esm_type,
+//                      esm.esm_trigger, date, esm.interface, esm.esm_title );
+//            }
+//        }
+//    }
+    
+    
+    
     ////////////////////////////////////////////
     // return
-    return esmSchedules;
+//    return esmSchedules;
 }
 
 

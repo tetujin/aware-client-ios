@@ -9,7 +9,7 @@
 #import "WebESM.h"
 #import "TCQMaker.h"
 #import "AppDelegate.h"
-#import "EntityESM.h"
+#import "EntityESM+CoreDataClass.h"
 #import "EntityESMSchedule.h"
 #import "SingleESMObject.h"
 #import "EntityESMHistory.h"

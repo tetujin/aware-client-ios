@@ -21,7 +21,7 @@
 - (BOOL) stopAndRemoveAllSensors;
 @end
 
-@interface AWAREPlugin : AWARESensor <AWAREPluginDelegate, UIAlertViewDelegate> //[TODO] I want to remove AWARESensor. This is bad part..
+@interface AWAREPlugin : AWARESensor <AWAREPluginDelegate, UIAlertViewDelegate> 
 
 @property (strong, nonatomic) IBOutlet NSString* pluginName;
 @property (strong, nonatomic) IBOutlet NSString* deviceId;

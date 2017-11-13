@@ -18,6 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) NSDate *end_date;
 @property (nullable, nonatomic, retain) NSNumber *expiration_threshold;
 @property (nullable, nonatomic, retain) NSNumber *fire_hour;
+@property (nullable, nonatomic, retain) NSNumber *interface;
 @property (nullable, nonatomic, retain) NSString *noitification_body;
 @property (nullable, nonatomic, retain) NSString *notification_title;
 @property (nullable, nonatomic, retain) NSNumber *randomize_schedule;
@@ -25,6 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) NSString *schedule_id;
 @property (nullable, nonatomic, retain) NSDate *start_date;
 @property (nullable, nonatomic, retain) NSString *context;
+@property (nullable, nonatomic, retain) NSNumber *temporary;
 @property (nullable, nonatomic, retain) NSSet<EntityESM *> *esms;
 
 @end

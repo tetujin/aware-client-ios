@@ -188,7 +188,8 @@
             NSRange deleteRangeTail = NSMakeRange(lines.length-1, 1);
             [lines deleteCharactersInRange:deleteRangeTail];
             // append "," to the tail of object
-            [lines appendFormat:@","];
+            // [lines appendFormat:@","];
+            [lines appendFormat:@",\n"];
             //        NSLog(@"%@", jsonstr);
             
         }

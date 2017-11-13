@@ -24,7 +24,8 @@ NSString* const AWARE_PREFERENCES_FREQUENCY_HZ_MAGNETOMETER = @"frequency_hz_mag
     self = [super initWithAwareStudy:study
                           sensorName:SENSOR_MAGNETOMETER
                         dbEntityName:NSStringFromClass([EntityMagnetometer class])
-                              dbType:dbType];
+                              dbType:AwareDBTypeTextFile];
+            // dbType:dbType];
     if (self) {
         manager = [[CMMotionManager alloc] init];
         defaultInterval = 0.1f;

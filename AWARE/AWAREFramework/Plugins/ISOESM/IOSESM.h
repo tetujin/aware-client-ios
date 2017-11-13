@@ -15,13 +15,14 @@ extern NSString * const AWARE_PREFERENCES_STATUS_PLUGIN_IOS_ESM;
 extern NSString * const AWARE_PREFERENCES_PLUGIN_IOS_ESM_TABLE_NAME;
 extern NSString * const AWARE_PREFERENCES_PLUGIN_IOS_ESM_CONFIG_URL;
 
-- (BOOL) setWebESMsWithSchedule:(ESMSchedule *) esmSchedule;
+// - (BOOL) setWebESMsWithSchedule:(ESMSchedule *) esmSchedule;
+- (BOOL) setScheduledESM:(ESMSchedule *)esmSchedule;
 // - (void) setWebESMsWithArray:(NSArray *) webESMArray;
 
 - (BOOL) startSensorWithURL:(NSString *)urlStr tableName:(NSString *)table;
 
 /////////////////////////////////////////////////////////
-- (NSArray *) getValidESMsWithDatetime:(NSDate *) datetime;
+- (NSArray *) getValidESMSchedulesWithDatetime:(NSDate *) datetime;
 - (NSArray *) getScheduledESMs;
 - (void) saveESMAnswerWithTimestamp:(NSNumber * )timestamp
                            deviceId:(NSString *) deviceId
@@ -33,7 +34,8 @@ extern NSString * const AWARE_PREFERENCES_PLUGIN_IOS_ESM_CONFIG_URL;
                           esmStatus:(NSNumber *) esmStatus;
 - (NSString *) convertNSArraytoJsonStr:(NSArray *)array;
 - (void) setNotificationSchedules;
-- (void) setWebESMsWithArray:(NSArray *)webESMArray;
+- (void) setScheduledESMs:(NSArray *)ESMArray;
+
 - (void) removeNotificationSchedules;
 - (void) refreshNotifications;
 

@@ -47,7 +47,7 @@
         [self setTypeAsPlugin];
         
         KEY_DEVICE_ID = @"device_id";
-        KEY_TIMESTAMP =@"timestamp";
+        KEY_TIMESTAMP = @"timestamp";
         KEY_END_TIMESTAMP   = @"end_timestamp";
         KEY_FREQUENCY_SECOND = @"frequency_second";
         KEY_NUMBER_OF_STEPS = @"number_of_steps";
