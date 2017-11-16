@@ -198,9 +198,9 @@
         _sharedLocationManager.allowsBackgroundLocationUpdates = YES;
     }
     
-    if ([_sharedLocationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
-        [_sharedLocationManager requestAlwaysAuthorization];
-    }
+//    if ([_sharedLocationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
+//        [_sharedLocationManager requestAlwaysAuthorization];
+//    }
     
     switch ([CLLocationManager authorizationStatus]) {
         case kCLAuthorizationStatusDenied:
