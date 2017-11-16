@@ -15,7 +15,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.11.1</string>
+	<string>1.11.2</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
@@ -94,7 +94,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>98</string>
+	<string>100</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -184,6 +184,8 @@
 	<string>To collect your daily activities, AWARE needs an access to HealthKit.</string>
 	<key>NSHealthUpdateUsageDescription</key>
 	<string>To store your daily activities, AWARE needs an access to HealthKit.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>To track your daily activity, AWARE needs an access to your location.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<true/>
 	<key>NSLocationUsageDescription</key>
