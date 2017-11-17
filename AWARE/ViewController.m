@@ -335,7 +335,7 @@
     // NTPTime
     [_sensors addObject:[self getCelContent:@"NTPTime" desc:@"Measure device's clock drift from an NTP server." image:@"ic_action_ntptime" key:SENSOR_PLUGIN_NTPTIME]];
     [_sensors addObject:[self getCelContent:@"BLE Heart Rate" desc:@"Collect heart rate data from an external heart rate sensor via BLE." image:@"ic_action_heartrate" key:SENSOR_PLUGIN_BLE_HR]];
-    [_sensors addObject:[self getCelContent:@"HealthKit" desc:@"This plugin collects stored data in HealthKit App on iOS" image:@"ic_action_health_kit" key:SENSOR_HEALTH_KIT]];
+    // [_sensors addObject:[self getCelContent:@"HealthKit" desc:@"This plugin collects stored data in HealthKit App on iOS" image:@"ic_action_health_kit" key:SENSOR_HEALTH_KIT]];
      // Microsoft Band
     [_sensors addObject:[self getCelContent:@"Microsoft Band" desc:@"Wearable sensor data (such as Heart Rate, UV, and Skin Temperature) from Microsoft Band." image:@"ic_action_msband" key:SENSOR_PLUGIN_MSBAND]];
         // Fitbit
