@@ -687,7 +687,7 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
     // basic
     EAIntroPage *page1 = [EAIntroPage page];
     page1.title = @"About AWARE";
-    page1.desc = @"AWARE Client iOS is a sensing framework dedicated to an instrument, infer, log and share mobile context information, for smartphone users and researchers. AWARE captures hardware-, software-, and human-based data.";
+    page1.desc = @"AWARE Client is a sensing framework dedicated to an instrument, infer, log and share mobile context information, for smartphone users and researchers. AWARE captures hardware-, software-, and human-based data.\n\n For instance, ";
     page1.titlePositionY = 350;
     page1.descPositionY = 300;
     page1.titleColor = [UIColor darkGrayColor];
@@ -722,7 +722,7 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
     
     EAIntroPage *page4 = [EAIntroPage page];
     page4.title = @"How to Use AWARE Client";
-    page4.desc = @"1.Set a study on AWARE Dashboard and make a QRcode for the study\n2.Read the QRcode by AWARE client's QRcode reader\n3.Install SSL certificiation file and push a 'Refresh button'\n3.AWARE client start sensing and uploading your contexts in the background\n4.You can quit the study by 'Quit Study' button";
+    page4.desc = @"1.Set a study on AWARE Dashboard and make a QRcode for the study\n2.Read the QRcode by AWARE client's QRcode reader\n3. Please permit to access required APIs if the study required it.\n4.AWARE client start sensing and uploading your contexts in the background\n5.You can quit the study by 'Quit Study' button";
     page4.titlePositionY = 350;
     page4.descPositionY = 300;
     page4.titleColor = [UIColor darkGrayColor];

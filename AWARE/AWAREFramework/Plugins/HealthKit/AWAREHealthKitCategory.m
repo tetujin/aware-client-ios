@@ -60,45 +60,45 @@
 }
 
 - (void)saveCategoryData:(NSArray *)data{
-    for(HKCategorySample *sample in data)
-    {
-        // NSLog(@"%@", sample.debugDescription);
-//        NSLog(@"%@", sample.startDate);
-//        NSLog(@"%@", sample.endDate);
-//        NSLog(@"%@", sample.sampleType);
-//        NSLog(@"%@", sample.categoryType.identifier);
-//        NSLog(@"%ld", sample.value);
-        
-        NSMutableDictionary * dict = [[NSMutableDictionary alloc] init];
-        [dict setObject:[AWAREUtils getUnixTimestamp:sample.startDate] forKey:KEY_TIMESTAMP];
-        [dict setObject:[AWAREUtils getUnixTimestamp:sample.endDate] forKey:KEY_END];
-        [dict setObject:[self getDeviceId] forKey:KEY_DEVICE_ID];
-        if(sample.sampleType != nil){
-            [dict setObject:sample.categoryType.identifier forKey:KEY_DATA_TYPE];
-        }else{
-            [dict setObject:@"" forKey:KEY_DATA_TYPE];
-        }
-        [dict setObject:@(sample.value) forKey:KEY_VALUE];
-        // [dict setObject:unit forKey:KEY_UNIT];
-        if(sample.device == nil){
-            [dict setObject:@"unknown" forKey:KEY_DEVICE];
-        }else{
-            [dict setObject:sample.device.model forKey:KEY_DEVICE];
-        }
-        [dict setObject:@"" forKey:KEY_LABLE];
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self saveData:dict];
-            [self setLatestData:dict];
-            NSString * message = [NSString stringWithFormat:@"[date:%@][type:%@][value:%ld]",
-                                  sample.startDate,
-                                  sample.categoryType,
-                                  sample.value];
-            NSLog(@"%@", message);
-            // [AWAREUtils sendLocalNotificationForMessage:message soundFlag:YES];
-            [self setLatestValue:message];
-        });
-    }
+//    for(HKCategorySample *sample in data)
+//    {
+//        // NSLog(@"%@", sample.debugDescription);
+////        NSLog(@"%@", sample.startDate);
+////        NSLog(@"%@", sample.endDate);
+////        NSLog(@"%@", sample.sampleType);
+////        NSLog(@"%@", sample.categoryType.identifier);
+////        NSLog(@"%ld", sample.value);
+//
+//        NSMutableDictionary * dict = [[NSMutableDictionary alloc] init];
+//        [dict setObject:[AWAREUtils getUnixTimestamp:sample.startDate] forKey:KEY_TIMESTAMP];
+//        [dict setObject:[AWAREUtils getUnixTimestamp:sample.endDate] forKey:KEY_END];
+//        [dict setObject:[self getDeviceId] forKey:KEY_DEVICE_ID];
+//        if(sample.sampleType != nil){
+//            [dict setObject:sample.categoryType.identifier forKey:KEY_DATA_TYPE];
+//        }else{
+//            [dict setObject:@"" forKey:KEY_DATA_TYPE];
+//        }
+//        [dict setObject:@(sample.value) forKey:KEY_VALUE];
+//        // [dict setObject:unit forKey:KEY_UNIT];
+//        if(sample.device == nil){
+//            [dict setObject:@"unknown" forKey:KEY_DEVICE];
+//        }else{
+//            [dict setObject:sample.device.model forKey:KEY_DEVICE];
+//        }
+//        [dict setObject:@"" forKey:KEY_LABLE];
+//
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            [self saveData:dict];
+//            [self setLatestData:dict];
+//            NSString * message = [NSString stringWithFormat:@"[date:%@][type:%@][value:%ld]",
+//                                  sample.startDate,
+//                                  sample.categoryType,
+//                                  sample.value];
+//            NSLog(@"%@", message);
+//            // [AWAREUtils sendLocalNotificationForMessage:message soundFlag:YES];
+//            [self setLatestValue:message];
+//        });
+//    }
 }
 
 @end
