@@ -32,6 +32,7 @@
     // (0 = never, 1 = weekly, 2 = monthly, 3 = daily, 4 = always)
     cleanOldDataType frequencyCleanOldData;
     bool webserviceWifiOnly;
+    AwareUIMode uiMode;
     
     SCNetworkReachability * reachability;
     
@@ -61,6 +62,7 @@
         // (0 = never, 1 = weekly, 2 = monthly, 3 = daily, 4 = always)
         frequencyCleanOldData = cleanOldDataTypeAlways;
         webserviceWifiOnly = NO;
+        uiMode = AwareUIModeNormal;
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         NSString* tempUserName = [userDefaults objectForKey:KEY_MQTT_USERNAME];
         if(tempUserName != nil){
@@ -301,11 +303,12 @@ didCompleteWithError:(NSError *)error {
     frequencyCleanOldData = [userDefaults integerForKey:SETTING_FREQUENCY_CLEAN_OLD_DATA];
     
     NSLog(@"GET Study Information");
-    NSArray * array = [[mqttArray objectAtIndex:0] objectForKey:@"sensors"];
+    NSArray * sensors = [[mqttArray objectAtIndex:0] objectForKey:@"sensors"];
     NSArray * plugins = [[mqttArray objectAtIndex:0] objectForKey:KEY_PLUGINS];
-    for (int i=0; i<[array count]; i++) {
-        NSDictionary *settingElement = [array objectAtIndex:i];
+    for (int i=0; i<[sensors count]; i++) {
+        NSDictionary *settingElement = [sensors objectAtIndex:i];
         NSString *setting = [settingElement objectForKey:@"setting"];
+        NSLog(@"%@",setting);
         NSString *value = [settingElement objectForKey:@"value"];
         if([setting isEqualToString:@"mqtt_password"]){
             mqttPassword = value;
@@ -353,9 +356,10 @@ didCompleteWithError:(NSError *)error {
     [userDefaults setDouble:frequencySyncDB*60 forKey:SETTING_SYNC_INT]; // save data as second
     [userDefaults setBool:webserviceWifiOnly forKey:SETTING_SYNC_WIFI_ONLY];
     [userDefaults setInteger:frequencyCleanOldData forKey:SETTING_FREQUENCY_CLEAN_OLD_DATA];
+    [userDefaults setInteger:uiMode forKey:SETTING_UI_MODE];
     [userDefaults synchronize];
     
-    [userDefaults setObject:array            forKey:KEY_SENSORS];
+    [userDefaults setObject:sensors            forKey:KEY_SENSORS];
     [userDefaults setObject:plugins          forKey:KEY_PLUGINS];
     
     // change csv export mode
@@ -1426,6 +1430,12 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
     [userDefaults synchronize];
 }
 
+- (void)setUIMode:(AwareUIMode)mode{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setInteger:mode forKey:SETTING_UI_MODE];
+    [userDefaults synchronize];
+}
+
 //////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////
 
@@ -1465,6 +1475,12 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
     return [userDefaults boolForKey:SETTING_CSV_EXPORT_STATE];
 }
 
+
+- (AwareUIMode) getUIMode{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    AwareUIMode uiMode = (AwareUIMode)[userDefaults integerForKey:SETTING_UI_MODE];
+    return uiMode;
+}
 //- (void)connectionDidFinishDownloading:(nonnull NSURLConnection *)connection destinationURL:(nonnull NSURL *)destinationURL {
 //    <#code#>
 //}

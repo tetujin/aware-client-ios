@@ -8,9 +8,16 @@
 
 #import "DataVisualizationViewController.h"
 #import "AppDelegate.h"
+
 #import "EntityAccelerometer.h"
 #import "EntityBattery.h"
+#import "EntityLocation.h"
+#import "EntityWifi.h"
+#import "EntityActivityRecognition.h"
+
 #import "AWAREUtils.h"
+#import "AWAREUtils.h"
+#import <SVProgressHUD.h>
 
 @interface DataVisualizationViewController ()
 
@@ -21,13 +28,43 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    
+}
+
+- (void)viewDidAppear:(BOOL)animated{
     NSDate * now = [NSDate new];
     NSNumber * start = [AWAREUtils getUnixTimestamp:[AWAREUtils getTargetNSDate:now hour:0 nextDay:NO]];
     NSNumber * end = [AWAREUtils getUnixTimestamp:[AWAREUtils getTargetNSDate:now hour:0 nextDay:YES]];
     
-    AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+    if(_sensor == nil){
+        UILabel * label = [[UILabel alloc] initWithFrame:CGRectMake(0, 135, SCREEN_WIDTH, 200)];
+        label.text = @"The selected sensor is null.";
+        [self.view addSubview:label];
+        return;
+    }
     
+    // battery
+    // locations
+    // google_fused_location
+    
+    if([[_sensor getSensorName] isEqualToString:@"battery"]){
+        [self showBatteryDataWithStart:start end:end];
+    }else if([[_sensor getSensorName] isEqualToString:@"locations"]||
+             [[_sensor getSensorName] isEqualToString:@"google_fused_location"]){
+        [self showLocationDataOnMapWithStart:start end:end];
+    }else{
+        [self showRawDataWithStart:start end:end];
+    }
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+
+- (void) showBatteryDataWithStart:(NSNumber *)start end:(NSNumber *)end{
+    AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     [fetchRequest setEntity:[NSEntityDescription entityForName:NSStringFromClass([EntityBattery class])
                                         inManagedObjectContext:delegate.managedObjectContext]];
@@ -35,34 +72,29 @@
     NSError *error = nil;
     NSArray *results = [delegate.managedObjectContext executeFetchRequest:fetchRequest error:&error] ;
 
-    NSMutableArray *xArray = [[NSMutableArray alloc] init];
+    /////////////////////// battery //////////////////////////////
+    NSMutableArray * xArray = [[NSMutableArray alloc] init];
     NSMutableArray * yArray = [[NSMutableArray alloc] init];
-    NSMutableArray *labelArray = [[NSMutableArray alloc] init];
+    NSMutableArray * labelArray = [[NSMutableArray alloc] init];
     if(results.count > 0){
         for (int i=0; i<results.count; i++) {
             EntityBattery * battery = (EntityBattery*)results[i];
-            NSLog(@"[battery level:%d] %@",i,battery.battery_level);
-            [yArray addObject:battery.battery_level];
-            [xArray addObject:battery.timestamp];
-            [labelArray addObject:[NSDate dateWithTimeIntervalSince1970:battery.timestamp.longLongValue].debugDescription];
+            if(battery != nil &&
+               (battery.battery_level.floatValue >= 0 && battery.battery_level.floatValue <= 100 &&
+                battery.timestamp >= start && battery.timestamp <= end)){
+                NSLog(@"[battery level:%@] %@",battery.timestamp,battery.battery_level);
+                [yArray addObject:battery.battery_level];
+                [xArray addObject:battery.timestamp];
+                [labelArray addObject:[NSDate dateWithTimeIntervalSince1970:battery.timestamp.longLongValue].debugDescription];
+            }
         }
-        //Max
-//        NSExpression *maxExpression = [NSExpression expressionForFunction:@"max:" arguments:@[[NSExpression expressionForConstantValue:yArray]]];
-//        id maxValue = [maxExpression expressionValueWithObject:nil context:nil];
-//        NSLog(@"Max:%f", [maxValue floatValue]);
-//        
-//        //Min
-//        NSExpression *minExpression = [NSExpression expressionForFunction:@"min:" arguments:@[[NSExpression expressionForConstantValue:yArray]]];
-//        id minValue = [minExpression expressionValueWithObject:nil context:nil];
-//        NSLog(@"Min:%f", [minValue floatValue]);
         
         /////////////////////////////////////////
         self.scatterChart = [[PNScatterChart alloc] initWithFrame:CGRectMake(0, 135, SCREEN_WIDTH, 200)];
         self.scatterChart.yLabelFormat = @"%f.1";
         [self.scatterChart setAxisXWithMinimumValue:start.integerValue andMaxValue:end.integerValue toTicks:6];
         [self.scatterChart setAxisYWithMinimumValue:0 andMaxValue:100 toTicks:5];
-        
-        
+
         NSArray *data01Array = @[xArray,yArray];
         PNScatterChartData *data01 = [PNScatterChartData new];
         data01.strokeColor = PNGreen;
@@ -72,19 +104,19 @@
         data01.inflexionPointStyle = PNScatterChartPointStyleCircle;
         __block NSMutableArray *XAr1 = [NSMutableArray arrayWithArray:data01Array[0]];
         __block NSMutableArray *YAr1 = [NSMutableArray arrayWithArray:data01Array[1]];
-        
+
         data01.getData = ^(NSUInteger index) {
-            CGFloat xValue;
-            xValue = [XAr1[index] floatValue];
+            CGFloat xValue = [XAr1[index] floatValue];
             CGFloat yValue = [YAr1[index] floatValue];
+            NSLog(@"%f",yValue);
             return [PNScatterChartDataItem dataItemWithX:xValue AndWithY:yValue];
         };
-        
+
         [self.scatterChart setAxisXLabel:labelArray];
-        
+
         [self.scatterChart setup];
         self.scatterChart.chartData = @[data01];
-        
+
         /***
          this is for drawing line to compare
          CGPoint start = CGPointMake(20, 35);
@@ -99,13 +131,101 @@
         label.text = @"The data is empty.";
         [self.view addSubview:label];
     }
-
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+
+- (void) showLocationDataOnMapWithStart:(NSNumber *)start end:(NSNumber *)end{
+    // init MapView
+    // NSLog(@"%@",self.view.frame);
+    _mapView = [[MKMapView alloc] initWithFrame:self.view.frame];
+    _mapView.delegate = self;
+    [self.view addSubview:_mapView];
+    
+    // get data
+    AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+    
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    [fetchRequest setEntity:[NSEntityDescription entityForName:NSStringFromClass([EntityLocation class])
+                                        inManagedObjectContext:delegate.managedObjectContext]];
+    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"(timestamp <= %@) AND (timestamp >= %@)", end, start]];
+    NSError *error = nil;
+    NSArray *results = [delegate.managedObjectContext executeFetchRequest:fetchRequest error:&error] ;
+    
+    /////////////////////// locations //////////////////////////////
+    
+    if(results.count > 0){
+        for (EntityLocation* location in results) {
+            if (location != nil) {
+                MKPointAnnotation *annotation = [[MKPointAnnotation alloc] init];
+                double latitude = location.double_latitude.doubleValue;
+                double longitude = location.double_longitude.doubleValue;
+                annotation.coordinate = CLLocationCoordinate2DMake(latitude, longitude);
+                [_mapView addAnnotation:annotation];
+            }
+        }
+    }else{
+        UILabel * label = [[UILabel alloc] initWithFrame:CGRectMake(0, 135, SCREEN_WIDTH, 200)];
+        label.text = @"The data is empty.";
+        [self.view addSubview:label];
+    }
 }
+
+
+- (void) showRawDataWithStart:(NSNumber *)start end:end {
+    
+    _textView = [[UITextView alloc] initWithFrame:self.view.frame];
+    [self.view addSubview:_textView];
+
+    // [SVProgressHUD show]
+    [SVProgressHUD showWithStatus:@"Downloading"];
+    
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        NSCalendar *userCalendar = [NSCalendar currentCalendar];
+        NSUInteger flag = NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay|NSCalendarUnitHour|NSCalendarUnitMinute|NSCalendarUnitSecond;
+        
+        // get data
+        AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+        
+        NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+        [fetchRequest setEntity:[NSEntityDescription entityForName:[_sensor getEntityName]
+                                            inManagedObjectContext:delegate.managedObjectContext]];
+        [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"(timestamp <= %@) AND (timestamp >= %@)", end, start]];
+        NSError *error = nil;
+        NSArray *results = [delegate.managedObjectContext executeFetchRequest:fetchRequest error:&error] ;
+        
+        /////////////////////// locations //////////////////////////////
+        if(results.count > 0){
+            if ([[_sensor getSensorName] isEqualToString:@"wifi"]) {
+                for (EntityWifi * wifi in results) {
+                    if (wifi != nil) {
+                        NSDate * date = [NSDate dateWithTimeIntervalSince1970:wifi.timestamp.doubleValue/1000];
+                        NSDateComponents *c = [userCalendar components:flag fromDate:date];
+                        NSString *dateStr = [NSString stringWithFormat:@"%ld/%ld/%ld %ld:%ld:%ld", (long)[c year], (long)[c month], [c day], [c hour], [c minute], [c second]];
+                        [_textView setText:[_textView.text stringByAppendingFormat:@"%@: %@\n",dateStr,wifi.ssid]];
+                    }
+                }
+            }else if ([[_sensor getSensorName] isEqualToString:@"plugin_ios_activity_recognition"]) {
+                for (EntityActivityRecognition * activity in results) {
+                    if (activity != nil) {
+                        NSDate * date = [NSDate dateWithTimeIntervalSince1970:activity.timestamp.doubleValue/1000];
+                        NSDateComponents *c = [userCalendar components:flag fromDate:date];
+                        NSString *dateStr = [NSString stringWithFormat:@"%ld/%ld/%ld %ld:%ld:%ld", (long)[c year], (long)[c month], [c day], [c hour], [c minute], [c second]];
+                        [_textView setText:[_textView.text stringByAppendingFormat:@"%@: %@\n",dateStr,activity.activities]];
+                    }
+                }
+            }
+        }else{
+            UILabel * label = [[UILabel alloc] initWithFrame:CGRectMake(0, 135, SCREEN_WIDTH, 200)];
+            label.text = @"The data is empty.";
+            [self.view addSubview:label];
+        }
+        
+        [SVProgressHUD dismiss];
+    });
+}
+
 
 /*
 #pragma mark - Navigation

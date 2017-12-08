@@ -213,7 +213,8 @@
                             </barButtonItem>
                             <barButtonItem image="aware_eye" id="eEV-nf-zFJ">
                                 <connections>
-                                    <segue destination="gAs-25-cfx" kind="push" id="wCu-lN-hrG"/>
+                                    <action selector="pushedShowDataButton:" destination="0tU-Ir-X24" id="mIM-5o-g0b"/>
+                                    <segue destination="gAs-25-cfx" kind="push" identifier="visualizeDataVC" id="Uvm-dZ-oE6"/>
                                 </connections>
                             </barButtonItem>
                         </rightBarButtonItems>
@@ -243,7 +244,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="QAZ-I9-NDP" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4364" y="641"/>
+            <point key="canvasLocation" x="4238" y="434"/>
         </scene>
         <!--App Setting Table View Controller-->
         <scene sceneID="TvG-Cu-7Wy">

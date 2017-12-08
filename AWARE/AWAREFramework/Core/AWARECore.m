@@ -62,6 +62,7 @@
         [userDefaults setInteger:0 forKey:KEY_UPLOAD_MARK];                   // Defualt Value: 0
         [userDefaults setInteger:1000 * 1000 forKey:KEY_MAX_DATA_SIZE];        // Defualt Value: 1000*1000 (byte) (1000 KB)
         [userDefaults setInteger:cleanOldDataTypeAlways forKey:SETTING_FREQUENCY_CLEAN_OLD_DATA];
+        [userDefaults setInteger:AwareUIModeNormal forKey:SETTING_UI_MODE];
         [userDefaults setBool:YES forKey:@"aware_inited"];
     }
     if (![userDefaults boolForKey:@"aware_inited_1.8.2"]) {

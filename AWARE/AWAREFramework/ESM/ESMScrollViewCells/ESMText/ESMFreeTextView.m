@@ -64,7 +64,7 @@
 //////////////////////////
 
 - (NSNumber *)getESMState{
-    if(![_freeTextView.text isEqualToString:@""]){
+    if([_freeTextView.text isEqualToString:@""]){
         if ([self isNA]) {
             return @2;
         }else{

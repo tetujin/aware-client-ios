@@ -11,6 +11,7 @@
 #import "AWARESensors.h"
 #import "AppDelegate.h"
 #import "AWAREStudy.h"
+#import "DataVisualizationViewController.h"
 
 @interface SettingTableViewController (){
     AWAREStudy * awareStudy;
@@ -68,6 +69,7 @@
         awareSensor = [[LinearAccelerometer alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
     }else if([_selectedRowKey isEqualToString:SENSOR_LOCATIONS]){
         awareSensor = [[Locations alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
+        [self.showDataButton setEnabled:YES];
     }else if([_selectedRowKey isEqualToString:SENSOR_MAGNETOMETER]){
         awareSensor = [[Magnetometer alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
     }else if([_selectedRowKey isEqualToString:SENSOR_NETWORK]){
@@ -86,13 +88,16 @@
         awareSensor = [[Timezone alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
     }else if([_selectedRowKey isEqualToString:SENSOR_WIFI]){
         awareSensor = [[Wifi alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
+        [self.showDataButton setEnabled:YES];
     }else if([_selectedRowKey isEqualToString:SENSOR_HEALTH_KIT]){
         awareSensor = [[AWAREHealthKit alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
         ///// plugins
     }else if([_selectedRowKey isEqualToString:SENSOR_IOS_ACTIVITY_RECOGNITION]){
         awareSensor = [[IOSActivityRecognition alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
+        [self.showDataButton setEnabled:YES];
     }else if([_selectedRowKey isEqualToString:SENSOR_GOOGLE_FUSED_LOCATION]){
         awareSensor = [[FusedLocations alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
+        [self.showDataButton setEnabled:YES];
     }else if([_selectedRowKey isEqualToString:SENSOR_AMBIENT_NOISE]){
         awareSensor = [[AmbientNoise alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
     }else if([_selectedRowKey isEqualToString:SENSOR_PLUGIN_MSBAND]){
@@ -148,7 +153,6 @@
                 [currentSetting addObject:mutDict];
             }
         }
-        
         _settingRows = [[NSMutableArray alloc] initWithArray:currentSetting];
     }
     
@@ -409,15 +413,19 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
 }
 */
 
-/*
+
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+//     Get the new view controller using [segue destinationViewController].
+//     Pass the selected object to the new view controller.
+    if([segue.identifier isEqualToString:@"visualizeDataVC"]){
+        DataVisualizationViewController * dataVVC = [segue destinationViewController];
+        dataVVC.sensor = awareSensor;
+    }
 }
-*/
+
 
 - (IBAction)pushedActionButton:(id)sender {
     
@@ -442,7 +450,6 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
         
     }];
 }
-
 
 - (void)mailComposeController:(MFMailComposeViewController*)controller
           didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error{

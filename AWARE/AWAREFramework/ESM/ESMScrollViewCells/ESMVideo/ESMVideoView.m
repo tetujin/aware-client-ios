@@ -234,6 +234,16 @@ didFinishRecordingToOutputFileAtURL:(NSURL *)outputFileURL
     return @"answered";
 }
 
+    
+- (NSNumber *)getESMState{
+    if(shutterBtn.tag == 2){
+        return @2;
+    }else{
+        return @1;
+    }
+}
+
+    
 - (void)video:(NSString*)videoPath didFinishSavingWithError:(NSError*)error contextInfo:(void*)contextInfo {
     if (error){
 //        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Photo/Video Saving Failed"  delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles: nil, nil];

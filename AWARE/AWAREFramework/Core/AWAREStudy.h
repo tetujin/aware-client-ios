@@ -35,6 +35,12 @@ typedef enum: NSInteger {
     AwareDBTypeCoreData = 2
 } AwareDBType;
 
+typedef enum: NSInteger{
+    AwareUIModeNormal = 0,
+    AwareUIModeHideAll = 1,
+    AwareUIModeHideSettings = 2
+} AwareUIMode;
+
 @interface AWAREStudy : NSObject <NSURLSessionDataDelegate, NSURLSessionDelegate, NSURLSessionTaskDelegate, NSURLConnectionDelegate, NSURLConnectionDataDelegate, NSURLConnectionDownloadDelegate>
 
 @property (strong, nonatomic) NSString* getSettingIdentifier;
@@ -96,6 +102,7 @@ typedef enum: NSInteger {
 - (void) setDBType:(AwareDBType)type;
 - (void) setCleanOldDataType:(cleanOldDataType)type;
 - (void) setCSVExport:(bool)state;
+- (void) setUIMode:(AwareUIMode) mode;
 
 /////////////////////////////////////
 - (bool) getDebugState;
@@ -107,6 +114,6 @@ typedef enum: NSInteger {
 - (AwareDBType) getDBType;
 - (cleanOldDataType) getCleanOldDataType;
 - (bool) getCSVExport;
-
+- (AwareUIMode) getUIMode;
 
 @end

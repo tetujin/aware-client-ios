@@ -55,6 +55,7 @@ NSString* const SETTING_FREQUENCY_CLEAN_OLD_DATA   = @"setting_frequency_clean_o
 NSString* const SETTING_AUTO_SYNC_STATE  = @"setting_auto_sync_state";
 NSString* const SETTING_CSV_EXPORT_STATE = @"setting_csv_export_state";
 NSString* const SETTING_DB_TYPE          = @"setting_db_type";
+NSString* const SETTING_UI_MODE          = @"setting_ui_mode";
 
 NSString* const TABLE_INSERT = @"insert";
 NSString* const TABLE_LATEST = @"latest";
@@ -106,6 +107,7 @@ NSString* const SENSOR_PLUGIN_BLE_HEARTRATE   = @"plugin_ble_heartrate";
 NSString* const SENSOR_AWARE_DEBUG            = @"aware_debug";
 NSString* const SENSOR_PLUGIN_IOS_ESM         = @"plugin_ios_esm";
 NSString* const SENSOR_PLUGIN_CONTACTS        = @"plugin_contacts";
+NSString* const SENSOR_BASIC_SETTINGS         = @"plugin_basic_settings";
 
 NSString* const SENSOR_PLUGIN_BLE_HR          = @"plugin_ble_heartrate";
 NSString* const SENSOR_PLUGIN_FITBIT          = @"plugin_fitbit";
@@ -267,8 +269,9 @@ NSString * const ACTION_AWARE_PEDOMETER = @"ACTION_AWARE_PEDOMETER";
 NSString * const ACTION_AWARE_GOOGLE_LOGIN_REQUEST = @"ACTION_AWARE_GOOGLE_LOGIN_REQUEST";
 NSString * const ACTION_AWARE_GOOGLE_LOGIN_SUCCESS = @"ACTION_AWARE_GOOGLE_LOGIN_SUCCESS";
 
-
 NSString * const ACTION_AWARE_CONTACT_REQUEST = @"ACTION_AWARE_CONTACT_REQUEST";
+
+NSString * const ACTION_AWARE_SETTING_UI_UPDATE_REQUEST = @"ACTION_AWARE_SETTING_UI_UPDATE_REQUEST";
 
 @implementation AWAREKeys
 

@@ -34,7 +34,7 @@
 }
 
 - (IBAction)uploadContacts:(id)sender {
-    [contacts checkStatus];
+    [contacts updateContacts];
     [self performSelector:@selector(updateLastUpdateDate) withObject:nil afterDelay:3];
     [self performSelector:@selector(backToRootView:) withObject:nil afterDelay:1];
 }
