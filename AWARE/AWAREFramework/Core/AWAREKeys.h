@@ -64,6 +64,7 @@ extern NSString* const SETTING_FREQUENCY_CLEAN_OLD_DATA;
 extern NSString* const SETTING_AUTO_SYNC_STATE;
 extern NSString* const SETTING_CSV_EXPORT_STATE;
 extern NSString* const SETTING_DB_TYPE;
+extern NSString* const SETTING_UI_MODE;
 
 
 extern NSString* const TABLE_INSER;
@@ -116,6 +117,7 @@ extern NSString* const SENSOR_AWARE_DEBUG;
 extern NSString* const SENSOR_PLUGIN_IOS_ESM;
 extern NSString* const SENSOR_PLUGIN_FITBIT;
 extern NSString* const SENSOR_PLUGIN_CONTACTS;
+extern NSString* const SENSOR_BASIC_SETTINGS;
 
 extern NSString* const SENSOR_PLUGIN_MSBAND_SENSORS_CALORIES;
 extern NSString* const SENSOR_PLUGIN_MSBAND_SENSORS_DEVICECONTACT;
@@ -258,6 +260,8 @@ extern NSString * const ACTION_AWARE_GOOGLE_LOGIN_REQUEST;
 extern NSString * const ACTION_AWARE_GOOGLE_LOGIN_SUCCESS;
 
 extern NSString * const ACTION_AWARE_CONTACT_REQUEST;
+
+extern NSString * const ACTION_AWARE_SETTING_UI_UPDATE_REQUEST;
 
 @interface AWAREKeys: NSObject
 

@@ -61,6 +61,7 @@
 		1648FE931DAB2E87001D870A /* AWARESensors.m in Sources */ = {isa = PBXBuildFile; fileRef = 1648FE921DAB2E87001D870A /* AWARESensors.m */; };
 		16491EBC1F053E190054FAE4 /* EntityESMSchedule+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 16491EBB1F053E190054FAE4 /* EntityESMSchedule+CoreDataProperties.m */; };
 		164DD66A1C1FC1F900ADA92B /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 164DD6691C1FC1F900ADA92B /* MapKit.framework */; };
+		16539D3F1FD8DA9D00479353 /* BasicSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 16539D3E1FD8DA9D00479353 /* BasicSettings.m */; };
 		1658700A1C986D4F008B99D2 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 165870091C986D4F008B99D2 /* QuartzCore.framework */; };
 		165A8B6F1C03B90500898C6C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 165A8B6E1C03B90500898C6C /* GoogleService-Info.plist */; };
 		165A8B701C03B90500898C6C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 165A8B6E1C03B90500898C6C /* GoogleService-Info.plist */; };
@@ -489,6 +490,8 @@
 		16491EBA1F053E190054FAE4 /* EntityESMSchedule+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EntityESMSchedule+CoreDataProperties.h"; sourceTree = "<group>"; };
 		16491EBB1F053E190054FAE4 /* EntityESMSchedule+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EntityESMSchedule+CoreDataProperties.m"; sourceTree = "<group>"; };
 		164DD6691C1FC1F900ADA92B /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		16539D3D1FD8DA9D00479353 /* BasicSettings.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = BasicSettings.h; path = BasicSettings/BasicSettings.h; sourceTree = "<group>"; };
+		16539D3E1FD8DA9D00479353 /* BasicSettings.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = BasicSettings.m; path = BasicSettings/BasicSettings.m; sourceTree = "<group>"; };
 		165870091C986D4F008B99D2 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		165A8B6E1C03B90500898C6C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
 		165DECF51C83AD7D002C88CA /* ExternalAccessory.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ExternalAccessory.framework; path = System/Library/Frameworks/ExternalAccessory.framework; sourceTree = SDKROOT; };
@@ -1259,6 +1262,15 @@
 			name = Fitbit;
 			sourceTree = "<group>";
 		};
+		16539D3C1FD8D95000479353 /* BasicSettings */ = {
+			isa = PBXGroup;
+			children = (
+				16539D3D1FD8DA9D00479353 /* BasicSettings.h */,
+				16539D3E1FD8DA9D00479353 /* BasicSettings.m */,
+			);
+			name = BasicSettings;
+			sourceTree = "<group>";
+		};
 		16606AF61F4E4FC100EF6C4D /* PNChart */ = {
 			isa = PBXGroup;
 			children = (
@@ -1603,6 +1615,7 @@
 				169C87B51D01382C00825761 /* PushNotification */,
 				169C87B81D01382C00825761 /* SensorTag */,
 				16EC4F1C1D2EAA4F00524424 /* WebESM */,
+				16539D3C1FD8D95000479353 /* BasicSettings */,
 			);
 			path = Plugins;
 			sourceTree = "<group>";
@@ -2901,6 +2914,7 @@
 				169C88331D01382C00825761 /* AWAREStudy.m in Sources */,
 				16A45CDF1D2392A1008A02B1 /* BalacnedCampusESMScheduler.m in Sources */,
 				169C88801D01382C00825761 /* NTPTime.m in Sources */,
+				16539D3F1FD8DA9D00479353 /* BasicSettings.m in Sources */,
 				16AB2BFD1E2B665800F05B72 /* EntityFitbitDevice+CoreDataClass.m in Sources */,
 				16B0780F1D1F2487009C070B /* EntityLabel+CoreDataProperties.m in Sources */,
 				16C907A01F3303B8005D357C /* ESMLikertScaleView.m in Sources */,

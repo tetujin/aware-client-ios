@@ -23,4 +23,6 @@
 
 @property MQTTClient *client;
 
+- (void) connectMqttServer;
+
 @end

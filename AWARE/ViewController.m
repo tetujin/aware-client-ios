@@ -81,6 +81,8 @@
     UIView *rootView;
     
     NSString * selectedRow;
+    UIView * overlayView;
+    UILabel * deviceIdLabel;
 }
 
 - (void)viewDidLoad {
@@ -128,6 +130,7 @@
      */
     debugSensor = [[Debug alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
     
+    [self initContentsOnOverlayVie];
     [self initContentsOnTableView];
     
     /// Set delegates for a navigation bar and table view
@@ -157,6 +160,11 @@
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(moveToContacts:)
                                                  name:ACTION_AWARE_CONTACT_REQUEST
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(viewDidAppear:)
+                                                 name:ACTION_AWARE_SETTING_UI_UPDATE_REQUEST
                                                object:nil];
 }
 
@@ -193,6 +201,22 @@
      */
 }
 
+- (void)viewDidAppear:(BOOL)animated{
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+    NSLog(@"%ld",[awareStudy getUIMode]);
+        if([awareStudy getUIMode] == AwareUIModeHideAll){
+            [overlayView setHidden:NO];
+            [self.tableView setScrollEnabled:NO];
+        }else{
+            [overlayView setHidden:YES];
+            [self.tableView setScrollEnabled:YES];
+        }
+    });
+    
+}
+
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     NSLog(@" Hello ESM view !");
@@ -218,6 +242,23 @@
     // Dispose of any resources that can be recreated.
 }
 
+
+- (void) initContentsOnOverlayVie{
+    overlayView = [[UIView alloc] initWithFrame:self.view.frame];
+    [overlayView setBackgroundColor:[UIColor whiteColor]];
+    [self.view addSubview:overlayView];
+    
+    // self.view.frame
+    CGRect rect = CGRectMake(0, 100, self.view.frame.size.width, 200);
+    deviceIdLabel = [[UILabel alloc] initWithFrame:rect];
+    // deviceIdLabel.backgroundColor = [UIColor blueColor];
+    deviceIdLabel.textAlignment = NSTextAlignmentCenter;
+    deviceIdLabel.numberOfLines = 9;
+    deviceIdLabel.text = [NSString stringWithFormat:@"Study ID:\n%@\n\nDevice ID:\n%@\n\nDevice Name:\n%@",
+                          [awareStudy getStudyId],[awareStudy getDeviceId],[awareStudy getDeviceName]];
+    [overlayView addSubview:deviceIdLabel];
+    
+}
 
 /**
  When a study is refreshed (e.g., pushed refresh button, changed settings,
@@ -257,7 +298,11 @@
     [_sensors addObject:[self getCelContent:@"Study URL" desc:studyURL image:@"" key:@"STUDY_CELL_VIEW_STUDY_URL"]];
     [_sensors addObject:[self getCelContent:@"Study Number" desc:awareStudyId image:@"" key:@"STUDY_CELL_VIEW"]];
     [_sensors addObject:[self getCelContent:@"Server" desc:mqttServerName image:@"" key:@"STUDY_CELL_VIEW"]];
-    [_sensors addObject:[self getCelContent:@"Advanced Settings" desc:@"" image:@"" key:@"ADVANCED_SETTINGS"]];
+    if([awareStudy getUIMode] == AwareUIModeHideSettings){
+        
+    }else{
+        [_sensors addObject:[self getCelContent:@"Advanced Settings" desc:@"" image:@"" key:@"ADVANCED_SETTINGS"]];
+    }
     [_sensors addObject:[self getCelContent:@"Device ID" desc:deviceId image:@"" key:@"STUDY_CELL_VIEW"]];
     [_sensors addObject:[self getCelContent:@"Device Name" desc:awareDeviceName image:@"" key:KEY_AWARE_DEVICE_NAME]];
     [_sensors addObject:[self getCelContent:@"Google Account" desc:accountInfo image:@"" key:SENSOR_PLUGIN_GOOGLE_LOGIN]];
@@ -433,6 +478,7 @@
     [self performSelector:@selector(initContentsOnTableView) withObject:0 afterDelay:3];
     // [self.tableView performSelector:@selector(reloadData) withObject:nil afterDelay:3.1];
     [self performSelector:@selector(refreshButtonEnableYes) withObject:0 afterDelay:10];
+    [self performSelector:@selector(viewDidAppear:) withObject:0 afterDelay:10];
 }
 
 - (void) refreshButtonEnableYes {

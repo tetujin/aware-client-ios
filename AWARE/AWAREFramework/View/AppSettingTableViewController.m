@@ -88,8 +88,8 @@
     
     webViewURL = [NSURL URLWithString:@"http://www.awareframework.com"];
     
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    uploadInterval = [awareStudy getUploadIntervalAsSecond];
+    //NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    //uploadInterval = [awareStudy getUploadIntervalAsSecond];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
     
@@ -107,8 +107,9 @@
     
     _settings = [[NSMutableArray alloc] init];
     
+    //dispatch_async(dispatch_get_main_queue(), ^{
     [self initContentsOnTableView];
-
+    //});
 }
 
 
@@ -166,7 +167,7 @@
     if([awareStudy getDBType] == AwareDBTypeTextFile){
         dbTypeStr = @"Light Weight (Text File)";
     }else if([awareStudy getDBType] == AwareDBTypeCoreData){
-        dbTypeStr = @"SQLite (Beta Version)";
+        dbTypeStr = @"SQLite";
     }else{
         dbTypeStr = @"Unknown";
     }
@@ -181,7 +182,7 @@
     
     /////////////  Upload Interval (min)  ///////////////
     // NSString *syncInterval = [NSString stringWithFormat:@"%d",(int)[userDefaults doubleForKey:SETTING_SYNC_INT]/60];
-    NSString *syncInterval = [NSString stringWithFormat:@"%d",(int)[awareStudy getUploadIntervalAsSecond]/60];
+    NSString *syncInterval = [NSString stringWithFormat:@"%d",[awareStudy getUploadIntervalAsSecond]/60];
     
     // if ([userDefaults boolForKey:SETTING_SYNC_WIFI_ONLY]) {
     ////////// Upload State (WiFi)

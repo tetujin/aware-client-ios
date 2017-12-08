@@ -62,6 +62,7 @@
 #import "Contacts.h"
 #import "Fitbit.h"
 #import "Estimote.h"
+#import "BasicSettings.h"
 
 
 @implementation AWARESensorManager{
@@ -273,6 +274,8 @@
                     awareSensor = [[Contacts alloc] initWithAwareStudy:awareStudy dbType:dbType];
                 }else if([pluginName isEqualToString:[NSString stringWithFormat:@"status_%@", SENSOR_PLUGIN_PEDOMETER]]){
                     awareSensor = [[Pedometer alloc] initWithAwareStudy:awareStudy dbType:dbType];
+                }else if([pluginName isEqualToString:[NSString stringWithFormat:@"status_%@", SENSOR_BASIC_SETTINGS]]){
+                    awareSensor = [[BasicSettings alloc] initWithAwareStudy:awareStudy dbType:dbType];
                 }
                 
                 if(awareSensor != nil){

@@ -17,5 +17,6 @@
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *showDataButton;
 
 - (IBAction)pushedActionButton:(id)sender;
+- (IBAction)pushedShowDataButton:(id)sender;
 
 @end
