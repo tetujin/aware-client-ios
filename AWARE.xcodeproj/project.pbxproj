@@ -58,6 +58,14 @@
 		163A824A1E2B3AC800987A1D /* Fitbit.m in Sources */ = {isa = PBXBuildFile; fileRef = 163A82491E2B3AC800987A1D /* Fitbit.m */; };
 		163ADFC01D8F2C1900B15C8F /* EntityIOSActivityRecognition+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 163ADFBD1D8F2C1900B15C8F /* EntityIOSActivityRecognition+CoreDataClass.m */; };
 		163ADFC11D8F2C1900B15C8F /* EntityIOSActivityRecognition+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 163ADFBF1D8F2C1900B15C8F /* EntityIOSActivityRecognition+CoreDataProperties.m */; };
+		164872FB1FE14D63002CB809 /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 164872F91FE14D63002CB809 /* Interface.storyboard */; };
+		164872FD1FE14D63002CB809 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 164872FC1FE14D63002CB809 /* Assets.xcassets */; };
+		164873041FE14D63002CB809 /* AWAREWatch Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 164873031FE14D63002CB809 /* AWAREWatch Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		164873091FE14D63002CB809 /* InterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 164873081FE14D63002CB809 /* InterfaceController.swift */; };
+		1648730B1FE14D63002CB809 /* ExtensionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1648730A1FE14D63002CB809 /* ExtensionDelegate.swift */; };
+		1648730D1FE14D63002CB809 /* NotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1648730C1FE14D63002CB809 /* NotificationController.swift */; };
+		1648730F1FE14D63002CB809 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1648730E1FE14D63002CB809 /* Assets.xcassets */; };
+		164873141FE14D64002CB809 /* AWAREWatch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 164872F71FE14D63002CB809 /* AWAREWatch.app */; };
 		1648FE931DAB2E87001D870A /* AWARESensors.m in Sources */ = {isa = PBXBuildFile; fileRef = 1648FE921DAB2E87001D870A /* AWARESensors.m */; };
 		16491EBC1F053E190054FAE4 /* EntityESMSchedule+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 16491EBB1F053E190054FAE4 /* EntityESMSchedule+CoreDataProperties.m */; };
 		164DD66A1C1FC1F900ADA92B /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 164DD6691C1FC1F900ADA92B /* MapKit.framework */; };
@@ -97,6 +105,7 @@
 		167F14AB1F4EFCB400EA6323 /* EstimoteTemperature.m in Sources */ = {isa = PBXBuildFile; fileRef = 167F14AA1F4EFCB400EA6323 /* EstimoteTemperature.m */; };
 		167F14AE1F4EFCD000EA6323 /* EstimoteMotion.m in Sources */ = {isa = PBXBuildFile; fileRef = 167F14AD1F4EFCCF00EA6323 /* EstimoteMotion.m */; };
 		167F14B11F4EFCEB00EA6323 /* EstimoteAmbientLight.m in Sources */ = {isa = PBXBuildFile; fileRef = 167F14B01F4EFCEB00EA6323 /* EstimoteAmbientLight.m */; };
+		16813C561FE3727D009D4AA5 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16813C551FE3727D009D4AA5 /* HealthKit.framework */; };
 		1683920F1D9BDCE1006D6607 /* SettingTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1683920E1D9BDCE1006D6607 /* SettingTableViewController.m */; };
 		1683ABCE1D347A5F001543D9 /* AWAREDebugMessageLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 1683ABCD1D347A5F001543D9 /* AWAREDebugMessageLogger.m */; };
 		168683031C07C43600CB4266 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 168683021C07C43600CB4266 /* AudioToolbox.framework */; };
@@ -361,6 +370,20 @@
 			remoteGlobalIDString = 1623CE651BFD1B2C00EFAD72;
 			remoteInfo = AWARE;
 		};
+		164873051FE14D63002CB809 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1623CE5E1BFD1B2C00EFAD72 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 164873021FE14D63002CB809;
+			remoteInfo = "AWAREWatch Extension";
+		};
+		164873121FE14D64002CB809 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1623CE5E1BFD1B2C00EFAD72 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 164872F61FE14D63002CB809;
+			remoteInfo = AWAREWatch;
+		};
 		16CAAD3D1EFC94280051EB4D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 1623CE5E1BFD1B2C00EFAD72 /* Project object */;
@@ -380,6 +403,28 @@
 				16CAAD3F1EFC94280051EB4D /* widget-esm.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1648731A1FE14D64002CB809 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				164873041FE14D63002CB809 /* AWAREWatch Extension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1648731C1FE14D64002CB809 /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				164873141FE14D64002CB809 /* AWAREWatch.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -485,6 +530,19 @@
 		163ADFBD1D8F2C1900B15C8F /* EntityIOSActivityRecognition+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "EntityIOSActivityRecognition+CoreDataClass.m"; path = "IOSActivityRecognition/EntityIOSActivityRecognition+CoreDataClass.m"; sourceTree = "<group>"; };
 		163ADFBE1D8F2C1900B15C8F /* EntityIOSActivityRecognition+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "EntityIOSActivityRecognition+CoreDataProperties.h"; path = "IOSActivityRecognition/EntityIOSActivityRecognition+CoreDataProperties.h"; sourceTree = "<group>"; };
 		163ADFBF1D8F2C1900B15C8F /* EntityIOSActivityRecognition+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "EntityIOSActivityRecognition+CoreDataProperties.m"; path = "IOSActivityRecognition/EntityIOSActivityRecognition+CoreDataProperties.m"; sourceTree = "<group>"; };
+		164872F71FE14D63002CB809 /* AWAREWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AWAREWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		164872FA1FE14D63002CB809 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
+		164872FC1FE14D63002CB809 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		164872FE1FE14D63002CB809 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		164873031FE14D63002CB809 /* AWAREWatch Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "AWAREWatch Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		164873081FE14D63002CB809 /* InterfaceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterfaceController.swift; sourceTree = "<group>"; };
+		1648730A1FE14D63002CB809 /* ExtensionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionDelegate.swift; sourceTree = "<group>"; };
+		1648730C1FE14D63002CB809 /* NotificationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationController.swift; sourceTree = "<group>"; };
+		1648730E1FE14D63002CB809 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		164873101FE14D64002CB809 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		164873111FE14D64002CB809 /* PushNotificationPayload.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = PushNotificationPayload.apns; sourceTree = "<group>"; };
+		1648731D1FE33A80002CB809 /* AWAREWatch.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AWAREWatch.entitlements; sourceTree = "<group>"; };
+		1648731E1FE33A8E002CB809 /* AWAREWatch Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "AWAREWatch Extension.entitlements"; sourceTree = "<group>"; };
 		1648FE911DAB2E87001D870A /* AWARESensors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AWARESensors.h; sourceTree = "<group>"; };
 		1648FE921DAB2E87001D870A /* AWARESensors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AWARESensors.m; sourceTree = "<group>"; };
 		16491EBA1F053E190054FAE4 /* EntityESMSchedule+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EntityESMSchedule+CoreDataProperties.h"; sourceTree = "<group>"; };
@@ -557,6 +615,7 @@
 		167F14AD1F4EFCCF00EA6323 /* EstimoteMotion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EstimoteMotion.m; path = Estimote/EstimoteMotion.m; sourceTree = "<group>"; };
 		167F14AF1F4EFCEB00EA6323 /* EstimoteAmbientLight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EstimoteAmbientLight.h; path = Estimote/EstimoteAmbientLight.h; sourceTree = "<group>"; };
 		167F14B01F4EFCEB00EA6323 /* EstimoteAmbientLight.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EstimoteAmbientLight.m; path = Estimote/EstimoteAmbientLight.m; sourceTree = "<group>"; };
+		16813C551FE3727D009D4AA5 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = Platforms/WatchOS.platform/Developer/SDKs/WatchOS4.2.sdk/System/Library/Frameworks/HealthKit.framework; sourceTree = DEVELOPER_DIR; };
 		1683920D1D9BDCE1006D6607 /* SettingTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingTableViewController.h; sourceTree = "<group>"; };
 		1683920E1D9BDCE1006D6607 /* SettingTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingTableViewController.m; sourceTree = "<group>"; };
 		1683ABCC1D347A5F001543D9 /* AWAREDebugMessageLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AWAREDebugMessageLogger.h; sourceTree = "<group>"; };
@@ -1070,11 +1129,26 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		164873001FE14D63002CB809 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				16813C561FE3727D009D4AA5 /* HealthKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		16CAAD301EFC94280051EB4D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				16CAAD341EFC94280051EB4D /* NotificationCenter.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		38831E399D6C17B862AC48D9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1176,6 +1250,8 @@
 				1623CE851BFD1B2C00EFAD72 /* AWARETests */,
 				1623CE901BFD1B2C00EFAD72 /* AWAREUITests */,
 				16CAAD351EFC94280051EB4D /* AWAREWidget */,
+				164872F81FE14D63002CB809 /* AWAREWatch */,
+				164873071FE14D63002CB809 /* AWAREWatch Extension */,
 				2A3CA9F5620967BACB187EB7 /* Frameworks */,
 				1623CE671BFD1B2C00EFAD72 /* Products */,
 				D9FFFA3D323B573A8AA96D3B /* Pods */,
@@ -1190,6 +1266,8 @@
 				1623CE821BFD1B2C00EFAD72 /* AWARETests.xctest */,
 				1623CE8D1BFD1B2C00EFAD72 /* AWAREUITests.xctest */,
 				16CAAD331EFC94280051EB4D /* widget-esm.appex */,
+				164872F71FE14D63002CB809 /* AWAREWatch.app */,
+				164873031FE14D63002CB809 /* AWAREWatch Extension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1260,6 +1338,31 @@
 				16AB2BFA1E2B665800F05B72 /* EntityFitbitDevice+CoreDataProperties.m */,
 			);
 			name = Fitbit;
+			sourceTree = "<group>";
+		};
+		164872F81FE14D63002CB809 /* AWAREWatch */ = {
+			isa = PBXGroup;
+			children = (
+				1648731D1FE33A80002CB809 /* AWAREWatch.entitlements */,
+				164872F91FE14D63002CB809 /* Interface.storyboard */,
+				164872FC1FE14D63002CB809 /* Assets.xcassets */,
+				164872FE1FE14D63002CB809 /* Info.plist */,
+			);
+			path = AWAREWatch;
+			sourceTree = "<group>";
+		};
+		164873071FE14D63002CB809 /* AWAREWatch Extension */ = {
+			isa = PBXGroup;
+			children = (
+				1648731E1FE33A8E002CB809 /* AWAREWatch Extension.entitlements */,
+				164873081FE14D63002CB809 /* InterfaceController.swift */,
+				1648730A1FE14D63002CB809 /* ExtensionDelegate.swift */,
+				1648730C1FE14D63002CB809 /* NotificationController.swift */,
+				1648730E1FE14D63002CB809 /* Assets.xcassets */,
+				164873101FE14D64002CB809 /* Info.plist */,
+				164873111FE14D64002CB809 /* PushNotificationPayload.apns */,
+			);
+			path = "AWAREWatch Extension";
 			sourceTree = "<group>";
 		};
 		16539D3C1FD8D95000479353 /* BasicSettings */ = {
@@ -2437,6 +2540,7 @@
 		2A3CA9F5620967BACB187EB7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				16813C551FE3727D009D4AA5 /* HealthKit.framework */,
 				52022F3F1E13B81200AB52AB /* AddressBook.framework */,
 				160E1A001CD1D9C700D825BA /* libEZAudio.a */,
 				169C85761D0127D700825761 /* BluetoothManager.framework */,
@@ -2508,11 +2612,13 @@
 				16228A4B1C22DAE20081C839 /* Embed App Extensions */,
 				9A2380402923A6D74997BF8A /* [CP] Embed Pods Frameworks */,
 				F81D864F422FBE4518F1BE3B /* [CP] Copy Pods Resources */,
+				1648731C1FE14D64002CB809 /* Embed Watch Content */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				16CAAD3E1EFC94280051EB4D /* PBXTargetDependency */,
+				164873131FE14D64002CB809 /* PBXTargetDependency */,
 			);
 			name = AWARE;
 			productName = AWARE;
@@ -2561,6 +2667,41 @@
 			productReference = 1623CE8D1BFD1B2C00EFAD72 /* AWAREUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
+		164872F61FE14D63002CB809 /* AWAREWatch */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1648731B1FE14D64002CB809 /* Build configuration list for PBXNativeTarget "AWAREWatch" */;
+			buildPhases = (
+				164872F51FE14D63002CB809 /* Resources */,
+				1648731A1FE14D64002CB809 /* Embed App Extensions */,
+				38831E399D6C17B862AC48D9 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				164873061FE14D63002CB809 /* PBXTargetDependency */,
+			);
+			name = AWAREWatch;
+			productName = AWAREWatch;
+			productReference = 164872F71FE14D63002CB809 /* AWAREWatch.app */;
+			productType = "com.apple.product-type.application.watchapp2";
+		};
+		164873021FE14D63002CB809 /* AWAREWatch Extension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 164873191FE14D64002CB809 /* Build configuration list for PBXNativeTarget "AWAREWatch Extension" */;
+			buildPhases = (
+				164872FF1FE14D63002CB809 /* Sources */,
+				164873001FE14D63002CB809 /* Frameworks */,
+				164873011FE14D63002CB809 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "AWAREWatch Extension";
+			productName = "AWAREWatch Extension";
+			productReference = 164873031FE14D63002CB809 /* AWAREWatch Extension.appex */;
+			productType = "com.apple.product-type.watchkit2-extension";
+		};
 		16CAAD321EFC94280051EB4D /* widget-esm */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 16CAAD421EFC94280051EB4D /* Build configuration list for PBXNativeTarget "widget-esm" */;
@@ -2584,7 +2725,7 @@
 		1623CE5E1BFD1B2C00EFAD72 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0730;
+				LastSwiftUpdateCheck = 0920;
 				LastUpgradeCheck = 0710;
 				ORGANIZATIONNAME = "Yuuki NISHIYAMA";
 				TargetAttributes = {
@@ -2633,6 +2774,29 @@
 						CreatedOnToolsVersion = 7.1;
 						TestTargetID = 1623CE651BFD1B2C00EFAD72;
 					};
+					164872F61FE14D63002CB809 = {
+						CreatedOnToolsVersion = 9.2;
+						DevelopmentTeam = FH352PYMNC;
+						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
+						};
+					};
+					164873021FE14D63002CB809 = {
+						CreatedOnToolsVersion = 9.2;
+						DevelopmentTeam = FH352PYMNC;
+						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
+							com.apple.HealthKit.watchos = {
+								enabled = 1;
+							};
+						};
+					};
 					16CAAD321EFC94280051EB4D = {
 						CreatedOnToolsVersion = 8.3.3;
 						DevelopmentTeam = FH352PYMNC;
@@ -2657,6 +2821,8 @@
 				1623CE811BFD1B2C00EFAD72 /* AWARETests */,
 				1623CE8C1BFD1B2C00EFAD72 /* AWAREUITests */,
 				16CAAD321EFC94280051EB4D /* widget-esm */,
+				164872F61FE14D63002CB809 /* AWAREWatch */,
+				164873021FE14D63002CB809 /* AWAREWatch Extension */,
 			);
 		};
 /* End PBXProject section */
@@ -2739,6 +2905,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		164872F51FE14D63002CB809 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				164872FD1FE14D63002CB809 /* Assets.xcassets in Resources */,
+				164872FB1FE14D63002CB809 /* Interface.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		164873011FE14D63002CB809 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1648730F1FE14D63002CB809 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		16CAAD311EFC94280051EB4D /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -2757,13 +2940,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-AWAREUITests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		3A5F74C4EC8B50F3B7A012A5 /* [CP] Embed Pods Frameworks */ = {
@@ -2787,13 +2973,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-AWARE-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		7D8DCB944F805035ED6F5FC6 /* [CP] Copy Pods Resources */ = {
@@ -2847,13 +3036,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-AWARETests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		F81D864F422FBE4518F1BE3B /* [CP] Copy Pods Resources */ = {
@@ -2862,9 +3054,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-AWARE/Pods-AWARE-resources.sh",
+				"${PODS_ROOT}/DeployGateSDK/DeployGateSDK1.0.7.embeddedframework/DeployGateSDK.framework/Versions/A/Resources/en.lproj",
+				"${PODS_ROOT}/DeployGateSDK/DeployGateSDK1.0.7.embeddedframework/DeployGateSDK.framework/Versions/A/Resources/ja.lproj",
+				"${PODS_ROOT}/GTMOAuth2/Source/Touch/GTMOAuth2ViewTouch.xib",
+				"${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle",
+				"${PODS_ROOT}/SVProgressHUD/SVProgressHUD/SVProgressHUD.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -3164,6 +3363,16 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		164872FF1FE14D63002CB809 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1648730D1FE14D63002CB809 /* NotificationController.swift in Sources */,
+				1648730B1FE14D63002CB809 /* ExtensionDelegate.swift in Sources */,
+				164873091FE14D63002CB809 /* InterfaceController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		16CAAD2F1EFC94280051EB4D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -3184,6 +3393,16 @@
 			isa = PBXTargetDependency;
 			target = 1623CE651BFD1B2C00EFAD72 /* AWARE */;
 			targetProxy = 1623CE8E1BFD1B2C00EFAD72 /* PBXContainerItemProxy */;
+		};
+		164873061FE14D63002CB809 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 164873021FE14D63002CB809 /* AWAREWatch Extension */;
+			targetProxy = 164873051FE14D63002CB809 /* PBXContainerItemProxy */;
+		};
+		164873131FE14D64002CB809 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 164872F61FE14D63002CB809 /* AWAREWatch */;
+			targetProxy = 164873121FE14D64002CB809 /* PBXContainerItemProxy */;
 		};
 		16CAAD3E1EFC94280051EB4D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -3207,6 +3426,14 @@
 				1623CE7B1BFD1B2C00EFAD72 /* Base */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		164872F91FE14D63002CB809 /* Interface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				164872FA1FE14D63002CB809 /* Base */,
+			);
+			name = Interface.storyboard;
 			sourceTree = "<group>";
 		};
 		16CAAD391EFC94280051EB4D /* MainInterface.storyboard */ = {
@@ -3429,6 +3656,152 @@
 			};
 			name = Release;
 		};
+		164873151FE14D64002CB809 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = AWAREWatch/AWAREWatch.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = FH352PYMNC;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				IBSC_MODULE = AWAREWatch_Extension;
+				INFOPLIST_FILE = AWAREWatch/Info.plist;
+				PRODUCT_BUNDLE_IDENTIFIER = jp.ac.keio.sfc.ht.tetujin.AWARE.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 4.2;
+			};
+			name = Debug;
+		};
+		164873161FE14D64002CB809 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = AWAREWatch/AWAREWatch.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = FH352PYMNC;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				IBSC_MODULE = AWAREWatch_Extension;
+				INFOPLIST_FILE = AWAREWatch/Info.plist;
+				PRODUCT_BUNDLE_IDENTIFIER = jp.ac.keio.sfc.ht.tetujin.AWARE.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 4.2;
+			};
+			name = Release;
+		};
+		164873171FE14D64002CB809 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = "AWAREWatch Extension/AWAREWatch Extension.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = FH352PYMNC;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = "AWAREWatch Extension/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = jp.ac.keio.sfc.ht.tetujin.AWARE.watchkitapp.watchkitextension;
+				PRODUCT_NAME = "${TARGET_NAME}";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 4.2;
+			};
+			name = Debug;
+		};
+		164873181FE14D64002CB809 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = "AWAREWatch Extension/AWAREWatch Extension.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = FH352PYMNC;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = "AWAREWatch Extension/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = jp.ac.keio.sfc.ht.tetujin.AWARE.watchkitapp.watchkitextension;
+				PRODUCT_NAME = "${TARGET_NAME}";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 4.2;
+			};
+			name = Release;
+		};
 		16CAAD401EFC94280051EB4D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -3505,6 +3878,24 @@
 			buildConfigurations = (
 				1623CE9D1BFD1B2C00EFAD72 /* Debug */,
 				1623CE9E1BFD1B2C00EFAD72 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		164873191FE14D64002CB809 /* Build configuration list for PBXNativeTarget "AWAREWatch Extension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				164873171FE14D64002CB809 /* Debug */,
+				164873181FE14D64002CB809 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1648731B1FE14D64002CB809 /* Build configuration list for PBXNativeTarget "AWAREWatch" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				164873151FE14D64002CB809 /* Debug */,
+				164873161FE14D64002CB809 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
