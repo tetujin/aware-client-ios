@@ -21,6 +21,7 @@ class InterfaceController: WKInterfaceController, HKWorkoutSessionDelegate{
     let motionManager = CMMotionManager()
     let healthStore = HKHealthStore()
     let interfaceDevice = WKInterfaceDevice()
+    let awareFM = AWAREFileManager()
     
     var motionTimer: Timer!
     var session: HKWorkoutSession!
@@ -32,6 +33,8 @@ class InterfaceController: WKInterfaceController, HKWorkoutSessionDelegate{
     var bcTimer: Timer!
     var bcInterval:Double!
     
+    // var localFileURL:NSURL!
+    
     override func awake(withContext context: Any?) {
         super.awake(withContext: context)
         isRunning = false
@@ -39,6 +42,13 @@ class InterfaceController: WKInterfaceController, HKWorkoutSessionDelegate{
         waitSec = 30
         runSec = 5
         bcInterval = 1
+
+        // Save to sharedContainer
+        ////////// write //////////
+        self.awareFM.showData()
+        
+        //////////////////////
+        
         // https://developer.apple.com/documentation/watchkit/wkinterfacedevice
         self.interfaceDevice.isBatteryMonitoringEnabled = true //UIDeviceBatteryStateDidChangeNotification
         // NotificationCenter.default.addObserver(self, selector: "batteryStateDidChange:", name:Battery, object: nil)
@@ -118,8 +128,10 @@ class InterfaceController: WKInterfaceController, HKWorkoutSessionDelegate{
                                              repeats: false)
             // self.dutyTimer.fire()
             isRunning = false
+            awareFM.closeFile()
         }else{
             print("resume")
+            awareFM.openFile()
             startDeviceMotion()
             self.dutyTimer = Timer.scheduledTimer(timeInterval: runSec,
                                              target: self,
@@ -204,6 +216,7 @@ class InterfaceController: WKInterfaceController, HKWorkoutSessionDelegate{
                                     let gyrop = data.attitude.pitch
                                     let gyroy = data.attitude.yaw
                                     print("\(timestamp), \(accx), \(accy), \(accz), \(gyror), \(gyrop), \(gyroy)")
+                                    self.awareFM.writeData(data: "\(timestamp), \(accx), \(accy), \(accz)")
                                     // print("gyro:"+String(gyrox)+","+String(gyroy)+","+String(gyroz))
                                     // Use the gyroscope data in your app.
                                 }

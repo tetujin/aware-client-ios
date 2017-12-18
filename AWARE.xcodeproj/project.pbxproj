@@ -285,6 +285,7 @@
 		16B078441D1F918B009C070B /* EntityMSBandDistance.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B078301D1F918B009C070B /* EntityMSBandDistance.m */; };
 		16B078451D1F918B009C070B /* EntityMSBandHR+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B078321D1F918B009C070B /* EntityMSBandHR+CoreDataProperties.m */; };
 		16B078461D1F918B009C070B /* EntityMSBandHR.m in Sources */ = {isa = PBXBuildFile; fileRef = 16B078341D1F918B009C070B /* EntityMSBandHR.m */; };
+		16B726481FE78FEC00A99F78 /* AWAREFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16B726471FE78FEC00A99F78 /* AWAREFileManager.swift */; };
 		16BDCC951D35B80E00B13BD4 /* BatteryCharge.m in Sources */ = {isa = PBXBuildFile; fileRef = 16BDCC941D35B80E00B13BD4 /* BatteryCharge.m */; };
 		16BDCC981D35C11100B13BD4 /* BatteryDischarge.m in Sources */ = {isa = PBXBuildFile; fileRef = 16BDCC971D35C11100B13BD4 /* BatteryDischarge.m */; };
 		16BDCC9B1D35C81800B13BD4 /* VisitLocations.m in Sources */ = {isa = PBXBuildFile; fileRef = 16BDCC9A1D35C81800B13BD4 /* VisitLocations.m */; };
@@ -955,6 +956,7 @@
 		16B078331D1F918B009C070B /* EntityMSBandHR.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EntityMSBandHR.h; sourceTree = "<group>"; };
 		16B078341D1F918B009C070B /* EntityMSBandHR.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EntityMSBandHR.m; sourceTree = "<group>"; };
 		16B709411D44C366007E5FFB /* AWARE_v3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = AWARE_v3.xcdatamodel; sourceTree = "<group>"; };
+		16B726471FE78FEC00A99F78 /* AWAREFileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AWAREFileManager.swift; sourceTree = "<group>"; };
 		16BDCC931D35B80E00B13BD4 /* BatteryCharge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BatteryCharge.h; sourceTree = "<group>"; };
 		16BDCC941D35B80E00B13BD4 /* BatteryCharge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BatteryCharge.m; sourceTree = "<group>"; };
 		16BDCC961D35C11100B13BD4 /* BatteryDischarge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BatteryDischarge.h; sourceTree = "<group>"; };
@@ -1358,6 +1360,7 @@
 				164873081FE14D63002CB809 /* InterfaceController.swift */,
 				1648730A1FE14D63002CB809 /* ExtensionDelegate.swift */,
 				1648730C1FE14D63002CB809 /* NotificationController.swift */,
+				16B726471FE78FEC00A99F78 /* AWAREFileManager.swift */,
 				1648730E1FE14D63002CB809 /* Assets.xcassets */,
 				164873101FE14D64002CB809 /* Info.plist */,
 				164873111FE14D64002CB809 /* PushNotificationPayload.apns */,
@@ -3367,6 +3370,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				16B726481FE78FEC00A99F78 /* AWAREFileManager.swift in Sources */,
 				1648730D1FE14D63002CB809 /* NotificationController.swift in Sources */,
 				1648730B1FE14D63002CB809 /* ExtensionDelegate.swift in Sources */,
 				164873091FE14D63002CB809 /* InterfaceController.swift in Sources */,
