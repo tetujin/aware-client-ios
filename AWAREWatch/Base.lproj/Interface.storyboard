@@ -19,6 +19,11 @@
                                 <action selector="changedSwitchButton:" destination="AgC-eL-Hgc" id="2RI-LY-7MF"/>
                             </connections>
                         </switch>
+                        <button width="1" alignment="left" title="Button" id="PPd-BH-ujx">
+                            <connections>
+                                <action selector="pushedLocalNotificationButton" destination="AgC-eL-Hgc" id="iuV-rQ-jKk"/>
+                            </connections>
+                        </button>
                     </items>
                     <connections>
                         <outlet property="stateControlBtn" destination="BMO-Hf-L7V" id="hya-aG-XpM"/>
@@ -32,7 +37,7 @@
             <objects>
                 <notificationController id="YCC-NB-fut">
                     <items>
-                        <label width="79" height="20" alignment="left" text="Alert Label" id="IdU-wH-bcW"/>
+                        <label width="136" height="63" alignment="left" text="Please select a label!" numberOfLines="2" id="IdU-wH-bcW"/>
                     </items>
                     <notificationCategory key="notificationCategory" identifier="myCategory" id="JfB-70-Muf"/>
                     <connections>

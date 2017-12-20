@@ -58,6 +58,7 @@ class InterfaceController: WKInterfaceController, HKWorkoutSessionDelegate{
                                               selector: #selector(checkBatteryState),
                                               userInfo: nil,
                                               repeats: true)
+        // self.sendNotification()
     }
     
     override func willActivate() {
@@ -89,11 +90,9 @@ class InterfaceController: WKInterfaceController, HKWorkoutSessionDelegate{
         
     }
     
-    ////////////////////////////
-//    func batteryStateDidChange(notification: Notification){
-//        // The stage did change: plugged, unplugged, full charge...
-//    }
-
+    @IBAction func pushedLocalNotificationButton() {
+        sendNotification()
+    }
     
     ///////////////////////
     
@@ -175,17 +174,38 @@ class InterfaceController: WKInterfaceController, HKWorkoutSessionDelegate{
     
     func workoutSession(_ workoutSession: HKWorkoutSession, didFailWithError error: Error) {
         print("error")
-        // stopDutyCycle()
-        // stopWorkoutSession()
-        // self.stateControlBtn.setOn(false)
     }
     
+    func sendNotification (){
+        // UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+        // UNUserNotificationCenter.current().removeAllDeliveredNotifications()
+
+        let content = UNMutableNotificationContent()
+        content.title = NSString.localizedUserNotificationString(forKey: "AWARE", arguments: nil)
+        content.body = NSString.localizedUserNotificationString(forKey:  "Please select what are you doing?", arguments: nil)
+        content.sound = UNNotificationSound.default()
+
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 0.5, repeats: false)
+        let request = UNNotificationRequest(identifier: String(NSDate().timeIntervalSince1970), content: content, trigger: trigger)
+
+        let center = UNUserNotificationCenter.current()
+        center.add(request) { (error : Error?) in
+            if error != nil {
+                print("\(error.debugDescription)")
+            }
+        }
+        print("set a notification")
+    }
     
     func startDeviceMotion() {
         if motionManager.isDeviceMotionAvailable {
             self.motionManager.deviceMotionUpdateInterval = hz
             self.motionManager.startDeviceMotionUpdates()
             
+            DispatchQueue.main.async {
+                self.sendNotification()
+            }
+
             // Configure a timer to fetch the accelerometer data.
             self.motionTimer = Timer(fire: Date(), interval: hz,
                                repeats: true, block: { (timer) in
@@ -197,28 +217,26 @@ class InterfaceController: WKInterfaceController, HKWorkoutSessionDelegate{
                                     let accy = data.userAcceleration.y
                                     let accz = data.userAcceleration.z
                                     // grav
-                                    let gravx = data.gravity.x
-                                    let gravy = data.gravity.y
-                                    let gravz = data.gravity.z
+                                    // let gravx = data.gravity.x
+                                    // let gravy = data.gravity.y
+                                    // let gravz = data.gravity.z
                                     // gyro
                                     // let gyrox = data.rotationRate.x
                                     // let gyroy = data.rotationRate.y
                                     // let gyroz = data.rotationRate.z
                                     // mag
-                                    let magx = data.magneticField.field.x
-                                    let magy = data.magneticField.field.y
-                                    let magz = data.magneticField.field.z
-                                    let magQuality = data.magneticField.accuracy
+//                                    let magx = data.magneticField.field.x
+//                                    let magy = data.magneticField.field.y
+//                                    let magz = data.magneticField.field.z
+//                                    let magQuality = data.magneticField.accuracy
                                     // heading
                                     // let heading = data.heading
                                     //
                                     let gyror = data.attitude.roll
                                     let gyrop = data.attitude.pitch
                                     let gyroy = data.attitude.yaw
-                                    print("\(timestamp), \(accx), \(accy), \(accz), \(gyror), \(gyrop), \(gyroy)")
-                                    self.awareFM.writeData(data: "\(timestamp), \(accx), \(accy), \(accz)")
-                                    // print("gyro:"+String(gyrox)+","+String(gyroy)+","+String(gyroz))
-                                    // Use the gyroscope data in your app.
+                                    print("\(timestamp), \(accx), \(accy), \(accz)")
+                                    self.awareFM.writeData(data: "\(timestamp), \(accx), \(accy), \(accz), \(gyror), \(gyrop), \(gyroy)")
                                 }
             })
             
@@ -237,10 +255,7 @@ class InterfaceController: WKInterfaceController, HKWorkoutSessionDelegate{
             motionManager.stopDeviceMotionUpdates()
             self.motionTimer.invalidate()
         }
-        
     }
-    
-    
 }
 
 

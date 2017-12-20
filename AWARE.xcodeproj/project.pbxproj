@@ -2798,6 +2798,9 @@
 							com.apple.HealthKit.watchos = {
 								enabled = 1;
 							};
+							com.apple.Push = {
+								enabled = 1;
+							};
 						};
 					};
 					16CAAD321EFC94280051EB4D = {

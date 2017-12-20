@@ -24,12 +24,11 @@ class AWAREFileManager: NSObject {
     
     func openFile(){
         do {
-            if FileManager.default.fileExists(atPath: localFileURL.absoluteString) {
-                
+            let fileManager = FileManager.default
+            if fileManager.fileExists(atPath: localFileURL.path) {
                 self.fileHandle = try FileHandle(forWritingTo: localFileURL)
                 print("file exist")
             }else{
-                
                 try "".write(to: localFileURL, atomically: true, encoding: String.Encoding.utf8)
                 self.fileHandle = try FileHandle(forWritingTo: localFileURL)
                 print("file not exist")
@@ -45,17 +44,12 @@ class AWAREFileManager: NSObject {
     }
     
     func writeData(data:String){
-        do {
-            let stringToWrite = data + "\n"
-            fileHandle.seekToEndOfFile()
-            fileHandle.write(stringToWrite.data(using: String.Encoding.utf8)!)
-        } catch{
-            print("error at write data!")
-        }
+        let stringToWrite = data + "\n"
+        fileHandle.seekToEndOfFile()
+        fileHandle.write(stringToWrite.data(using: String.Encoding.utf8)!)
     }
     
     func showData(){
-        ////////// show ////////
         do {
             let text = try String( contentsOf: localFileURL, encoding: String.Encoding.utf8 )
             print( text )
