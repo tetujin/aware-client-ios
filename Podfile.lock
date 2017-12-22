@@ -10,55 +10,67 @@ PODS:
   - EAIntroView (2.9.0):
     - EARestrictedScrollView (~> 1.1.0)
   - EARestrictedScrollView (1.1.0)
+  - EstimoteSDK (4.27.0)
   - EZAudio (1.1.5):
     - EZAudio/Full (= 1.1.5)
   - EZAudio/Core (1.1.5)
   - EZAudio/Full (1.1.5):
     - EZAudio/Core
     - TPCircularBuffer (= 1.1)
-  - FirebaseAnalytics (3.2.1):
+  - FirebaseAnalytics (3.9.0):
+    - FirebaseCore (~> 3.6)
     - FirebaseInstanceID (~> 1.0)
-    - GoogleInterchangeUtilities (~> 1.2)
-    - GoogleSymbolUtilities (~> 1.1)
-    - GoogleUtilities (~> 1.3)
-  - FirebaseInstanceID (1.0.7)
-  - Google/Core (3.0.3):
+    - GoogleToolboxForMac/NSData+zlib (~> 2.1)
+  - FirebaseCore (3.6.0):
+    - GoogleToolboxForMac/NSData+zlib (~> 2.1)
+  - FirebaseInstanceID (1.0.10):
+    - FirebaseCore (~> 3.6)
+  - Google/Core (3.1.0):
     - FirebaseAnalytics (~> 3.2)
-  - Google/SignIn (3.0.3):
+  - Google/SignIn (3.1.0):
     - Google/Core
     - GoogleSignIn (~> 4.0)
-  - GoogleAppUtilities (1.1.1):
-    - GoogleSymbolUtilities (~> 1.0)
-  - GoogleAuthUtilities (2.0.1):
-    - GoogleNetworkingUtilities (~> 1.0)
-    - GoogleSymbolUtilities (~> 1.0)
-  - GoogleInterchangeUtilities (1.2.1):
-    - GoogleSymbolUtilities (~> 1.0)
-  - GoogleNetworkingUtilities (1.2.1):
-    - GoogleSymbolUtilities (~> 1.0)
-  - GoogleSignIn (4.0.0):
-    - GoogleAppUtilities (~> 1.1)
-    - GoogleAuthUtilities (~> 2.0)
-    - GoogleNetworkingUtilities (~> 1.2)
-    - GoogleUtilities (~> 1.3)
-  - GoogleSymbolUtilities (1.1.1)
-  - GoogleUtilities (1.3.1):
-    - GoogleSymbolUtilities (~> 1.0)
+  - GoogleSignIn (4.1.1):
+    - GoogleToolboxForMac/NSDictionary+URLArguments (~> 2.1)
+    - GoogleToolboxForMac/NSString+URLArguments (~> 2.1)
+    - GTMOAuth2 (~> 1.0)
+    - GTMSessionFetcher/Core (~> 1.1)
+  - GoogleToolboxForMac/DebugUtils (2.1.3):
+    - GoogleToolboxForMac/Defines (= 2.1.3)
+  - GoogleToolboxForMac/Defines (2.1.3)
+  - GoogleToolboxForMac/NSData+zlib (2.1.3):
+    - GoogleToolboxForMac/Defines (= 2.1.3)
+  - GoogleToolboxForMac/NSDictionary+URLArguments (2.1.3):
+    - GoogleToolboxForMac/DebugUtils (= 2.1.3)
+    - GoogleToolboxForMac/Defines (= 2.1.3)
+    - GoogleToolboxForMac/NSString+URLArguments (= 2.1.3)
+  - GoogleToolboxForMac/NSString+URLArguments (2.1.3)
+  - GTMOAuth2 (1.1.6):
+    - GTMSessionFetcher (~> 1.1)
+  - GTMSessionFetcher (1.1.12):
+    - GTMSessionFetcher/Full (= 1.1.12)
+  - GTMSessionFetcher/Core (1.1.12)
+  - GTMSessionFetcher/Full (1.1.12):
+    - GTMSessionFetcher/Core (= 1.1.12)
   - ios-ntp (1.1.1):
     - CocoaAsyncSocket (~> 7.4.1)
-  - macros_blocks (0.0.1)
+  - macros_blocks (0.0.4):
+    - macros_blocks/core (= 0.0.4)
+  - macros_blocks/core (0.0.4)
   - MQTTKit (0.1.0)
   - NXOAuth2Client (1.2.8)
-  - SCNetworkReachability (2.0.5):
-    - SCNetworkReachability/Core (= 2.0.5)
-  - SCNetworkReachability/Core (2.0.5):
-    - macros_blocks (= 0.0.1)
-  - SVProgressHUD (2.0.3)
+  - SCNetworkReachability (2.0.6):
+    - SCNetworkReachability/Core (= 2.0.6)
+  - SCNetworkReachability/Core (2.0.6):
+    - macros_blocks (~> 0.0.1)
+  - SVProgressHUD (2.2.2)
   - TPCircularBuffer (1.1)
+  - UICountingLabel (1.4.1)
 
 DEPENDENCIES:
   - DeployGateSDK
   - EAIntroView (~> 2.9.0)
+  - EstimoteSDK
   - EZAudio
   - Google/SignIn
   - ios-ntp
@@ -66,31 +78,32 @@ DEPENDENCIES:
   - NXOAuth2Client (~> 1.2.8)
   - SCNetworkReachability
   - SVProgressHUD
+  - UICountingLabel
 
 SPEC CHECKSUMS:
   CocoaAsyncSocket: a18c75dca4b08723628a0bacca6e94803d90be91
   DeployGateSDK: df3d5838db7e35c05a711c35a3bdeef3c2b016ba
   EAIntroView: 76f68cc56242f2e25359419e6ecc2344ee7e1756
   EARestrictedScrollView: b0c2a3f92fb2610bb44d71c5e4893777c89e45ef
+  EstimoteSDK: 61935c7fbcb9fe93b97b0360351aef66fb1c338d
   EZAudio: 3b1cb4b6d7ebca68f0c2478576d75940aad4aa99
-  FirebaseAnalytics: 0fd6532cb2c3d03cd5cf26ad295ccb091efd3104
-  FirebaseInstanceID: a9d923f3d0b6fbf9fac89310860357aaadc34be5
-  Google: 813c467362eabc11385f5a5cc9ad0cb651a58f4e
-  GoogleAppUtilities: f1730f91f67767b453c289577040dd3f425ffdc7
-  GoogleAuthUtilities: d7a19615cd7627688afcf181737f1011ee8b5a23
-  GoogleInterchangeUtilities: def8415a862effc67d549d5b5b0b9c7a2f97d4de
-  GoogleNetworkingUtilities: 3e83269048cfb498dc7ec83ab36813360965c74f
-  GoogleSignIn: 09036ed61f8e75f1424100d63f7719480b2428c3
-  GoogleSymbolUtilities: 33117db1b5f290c6fbf259585e4885b4c84b98d7
-  GoogleUtilities: 56c5ac05b7aa5dc417a1bb85221a9516e04d7032
+  FirebaseAnalytics: e5fe8486efc01bec33f6bf82e2fa9fce4b124052
+  FirebaseCore: 9691ee2ade70c098d7cf92440f4303f16d83ca75
+  FirebaseInstanceID: b9eedd6846fb5e1f0f7279e1deaa7a7e4cf8392e
+  Google: 98da4b1a60ed0beb80a290387a28333406a1eb90
+  GoogleSignIn: 3fdaa34a2ba04dbd7a25d7db39aecb0da98d5bdc
+  GoogleToolboxForMac: 2501e2ad72a52eb3dfe7bd9aee7dad11b858bd20
+  GTMOAuth2: c77fe325e4acd453837e72d91e3b5f13116857b2
+  GTMSessionFetcher: ebaa1f79a5366922c1735f1566901f50beba23b7
   ios-ntp: 5f2f4fecf0432169b358eb3b564f12b94157108f
-  macros_blocks: da2106a0975514e16f3669f2f50a02efaff642cf
+  macros_blocks: cf3ff5810b798f462def9f1e3999817dc45cf2df
   MQTTKit: a4e6b8aa92db1aeae917d2b773fd72a7749937c4
   NXOAuth2Client: 98c4d4c594edd2b289cfc34a8928653e1dab7adf
-  SCNetworkReachability: 14026e754d9abb264c157131539e8e2c2131cb62
-  SVProgressHUD: b0830714205bea1317ea1a2ebc71e5633af334d4
+  SCNetworkReachability: dbb0150b1a7a4579e148420132da19e718b955ce
+  SVProgressHUD: 59b2d3dabacbd051576d21d32293ca7228dc18b0
   TPCircularBuffer: 4960a919e667280f7f38963d771f45871b64fe62
+  UICountingLabel: faf890b505d96312e324a86718f031fafffb0ccb
 
-PODFILE CHECKSUM: 9f48f63dba8cdb183025608377ae66687e6a7664
+PODFILE CHECKSUM: bc1054103acd8ea8f29d8028a93a1ec9797a6a8c
 
-COCOAPODS: 1.1.1
+COCOAPODS: 1.3.1
