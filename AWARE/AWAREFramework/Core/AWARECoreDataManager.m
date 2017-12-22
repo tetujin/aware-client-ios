@@ -503,6 +503,7 @@
             
             //Get NSManagedObject from managedObjectContext by using fetch setting
             NSArray *results = [private executeFetchRequest:fetchRequest error:nil] ;
+            // NSLog(@"%@",results.debugDescription); //TODO
             
             [self unlockDB];
             
@@ -512,6 +513,7 @@
                     [self broadcastDBSyncEventWithProgress:@100 isFinish:@YES isSuccess:@YES sensorName:sensorName];
                     return;
                 }else{
+                    
                 }
                 
                 // Save current timestamp as a maker
@@ -520,6 +522,8 @@
                 if([[self getEntityName] isEqualToString:@"EntityESMAnswerBC"] ||
                    [[self getEntityName] isEqualToString:@"EntityESMAnswer"] ){
                     tempLastUnixTimestamp = [lastDict objectForKey:@"double_esm_user_answer_timestamp"];
+                //}else if([[self getEntityName] isEqualToString:@"EntityAmbientNoise"]){
+                    // NSLog(@"===EntityAmibentNoize==="); // TODO
                 }
                 if (tempLastUnixTimestamp == nil) {
                     tempLastUnixTimestamp = @0;
@@ -530,6 +534,7 @@
                 // Convert array to json data
                 NSError * error = nil;
                 NSData * jsonData = [NSJSONSerialization dataWithJSONObject:results options:0 error:&error];
+                // NSLog(@"--> %@", [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding]); // TODO
                 
                 if (error == nil && jsonData != nil) {
                     // Set HTTP/POST session on main thread
@@ -602,6 +607,8 @@
                         
                         [dataTask resume];
                     });
+                }else{
+                    NSLog(@"[Error] %@: %@", [self getEntityName], error.debugDescription);
                 }
             }
         }];

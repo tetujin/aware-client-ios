@@ -9,7 +9,7 @@
 #import "AmbientNoise.h"
 #import "AudioAnalysis.h"
 #import "AppDelegate.h"
-#import "EntityAmbientNoise.h"
+#import "EntityAmbientNoise+CoreDataClass.h"
 
 static vDSP_Length const FFTViewControllerFFTWindowSize = 4096;
 
@@ -391,7 +391,7 @@ NSString * const AWARE_PREFERENCES_PLUGIN_AMBIENT_NOISE_SILENCE_THRESHOLD = @"pl
     ambientNoise.timestamp = [data objectForKey:@"timestamp"];
     ambientNoise.double_frequency = [data objectForKey:KEY_AMBIENT_NOISE_FREQUENCY];
     ambientNoise.double_decibels = [data objectForKey:KEY_AMBIENT_NOISE_DECIDELS];
-    ambientNoise.double_RMS = [data objectForKey:KEY_AMBIENT_NOISE_RMS];
+    ambientNoise.double_rms = [data objectForKey:KEY_AMBIENT_NOISE_RMS];
     ambientNoise.is_silent = [data objectForKey:KEY_AMBIENT_NOISE_SILENT];
     ambientNoise.double_silent_threshold = [data objectForKey:KEY_AMBIENT_NOISE_SILENT_THRESHOLD];
     ambientNoise.raw = [data objectForKey:KEY_AMBIENT_NOISE_RAW];
@@ -504,14 +504,19 @@ NSString * const AWARE_PREFERENCES_PLUGIN_AMBIENT_NOISE_SILENCE_THRESHOLD = @"pl
     if (lastdb == INFINITY || lastdb == -INFINITY || isnan(lastdb)) {
         lastdb = 0.0;
     }
-    db =   ((1.0 - tiny)*lastdb) + tiny*currentdb;
-    lastdb = db;
-    
-    dispatch_async(dispatch_get_main_queue(),^{
-        // Visualize this data brah, buffer[0] = left channel, buffer[1] = right channel
-//        [weakSelf.audioPlot updateBuffer:buffer[0] withBufferSize:bufferSize];
-        [self setLatestValue:[NSString stringWithFormat:@"dB:%f, RMS:%f, Frequency:%f", db, rms, maxFrequency]];
-    });
+    float tempdb = ((1.0 - tiny)*lastdb) + tiny*currentdb;
+    if (tempdb == INFINITY && tempdb == -INFINITY) {
+        NSLog(@"[error] decibel value is INFINITY");
+    }else{
+        db = tempdb;
+        lastdb = tempdb;
+        
+        dispatch_async(dispatch_get_main_queue(),^{
+            // Visualize this data brah, buffer[0] = left channel, buffer[1] = right channel
+            //        [weakSelf.audioPlot updateBuffer:buffer[0] withBufferSize:bufferSize];
+            [self setLatestValue:[NSString stringWithFormat:@"dB:%f, RMS:%f, Frequency:%f", db, rms, maxFrequency]];
+        });
+    }
 }
 
 //------------------------------------------------------------------------------

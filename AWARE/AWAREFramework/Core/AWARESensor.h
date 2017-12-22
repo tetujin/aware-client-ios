@@ -22,6 +22,8 @@ typedef enum: NSInteger {
     AwareSettingTypeNumber = 2
 } AwareSettingType;
 
+extern double const MOTION_SENSOR_DEFAULT_SENSING_INTERVAL_SECOND;
+extern int    const MOTION_SENSOR_DEFAULT_DB_WRITE_INTERVAL_SECOND;
 
 @protocol AWARESensorDelegate <NSObject>
 
@@ -152,7 +154,7 @@ typedef enum: NSInteger {
 - (BOOL) isDBLock;
 
 // Utils
-- (double) convertMotionSensorFrequecyFromAndroid:(double)frequency;
+- (double) convertMotionSensorFrequecyFromAndroid:(double)intervalMicroSecond;
 - (void) sendLocalNotificationForMessage:(NSString *)message soundFlag:(BOOL)soundFlag;
 
 

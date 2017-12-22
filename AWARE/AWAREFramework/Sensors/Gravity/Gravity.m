@@ -36,8 +36,8 @@ NSString* const AWARE_PREFERENCES_FREQUENCY_HZ_GRAVITY = @"frequency_hz_gravity"
             //dbType:dbType];
     if (self) {
         motionManager = [[CMMotionManager alloc] init];
-        sensingInterval = 0.1f;
-        dbWriteInterval = 30;
+        sensingInterval = MOTION_SENSOR_DEFAULT_SENSING_INTERVAL_SECOND;
+        dbWriteInterval = MOTION_SENSOR_DEFAULT_DB_WRITE_INTERVAL_SECOND;
         [self setCSVHeader:@[@"timestamp",@"device_id", @"double_values_0", @"double_values_1",@"double_values_2", @"accuracy",@"label"]];
         [self addDefaultSettingWithBool:@NO       key:AWARE_PREFERENCES_STATUS_GRAVITY        desc:@"e.g., true or false"];
         [self addDefaultSettingWithNumber:@200000 key:AWARE_PREFERENCES_FREQUENCY_GRAVITY     desc:@"e.g., 200000 (normal), 60000 (UI), 20000 (game), 0 (fastest)."];
