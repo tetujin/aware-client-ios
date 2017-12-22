@@ -1,1 +1,0 @@
-../../../../EstimoteSDK/EstimoteSDK/EstimoteSDK.framework/Versions/A/Headers/ESTMonitoringV2Manager.h
