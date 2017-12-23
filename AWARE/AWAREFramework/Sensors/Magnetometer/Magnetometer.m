@@ -28,8 +28,8 @@ NSString* const AWARE_PREFERENCES_FREQUENCY_HZ_MAGNETOMETER = @"frequency_hz_mag
             // dbType:dbType];
     if (self) {
         manager = [[CMMotionManager alloc] init];
-        defaultInterval = 0.1f;
-        dbWriteInterval = 30;
+        defaultInterval = MOTION_SENSOR_DEFAULT_SENSING_INTERVAL_SECOND;
+        dbWriteInterval = MOTION_SENSOR_DEFAULT_DB_WRITE_INTERVAL_SECOND;
         [self setCSVHeader:@[@"timestamp",@"device_id", @"double_values_0", @"double_values_1",@"double_values_2", @"accuracy",@"label"]];
     
         [self addDefaultSettingWithBool:@NO       key:AWARE_PREFERENCES_STATUS_MAGNETOMETER        desc:@"e.g., True or False"];

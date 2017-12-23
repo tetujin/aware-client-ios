@@ -1,25 +1,26 @@
 //
 //  EntityAmbientNoise+CoreDataProperties.m
-//  AWARE
+//  
 //
-//  Created by Yuuki Nishiyama on 7/8/16.
-//  Copyright © 2016 Yuuki NISHIYAMA. All rights reserved.
+//  Created by Yuuki Nishiyama on 2017/12/22.
 //
-//  Choose "Create NSManagedObject Subclass…" from the Core Data editor menu
-//  to delete and recreate this implementation file for your updated model.
 //
 
 #import "EntityAmbientNoise+CoreDataProperties.h"
 
 @implementation EntityAmbientNoise (CoreDataProperties)
 
++ (NSFetchRequest<EntityAmbientNoise *> *)fetchRequest {
+	return [[NSFetchRequest alloc] initWithEntityName:@"EntityAmbientNoise"];
+}
+
 @dynamic device_id;
 @dynamic double_decibels;
 @dynamic double_frequency;
-@dynamic double_RMS;
+@dynamic double_rms;
+@dynamic double_silent_threshold;
 @dynamic is_silent;
 @dynamic raw;
-@dynamic double_silent_threshold;
 @dynamic timestamp;
 
 @end

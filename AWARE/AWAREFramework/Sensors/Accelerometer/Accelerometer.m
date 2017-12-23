@@ -23,6 +23,8 @@ NSString * const AWARE_PREFERENCES_FREQUENCY_HZ_ACCELEROMETER = @"frequency_hz_a
     int currentBufferSize;
     NSMutableArray * bufferArray;
     NSDictionary * defaultSettings;
+    double hzMonitor;
+    double hz;
 }
 
 - (instancetype)initWithAwareStudy:(AWAREStudy *)study dbType:(AwareDBType)dbType{
@@ -32,10 +34,12 @@ NSString * const AWARE_PREFERENCES_FREQUENCY_HZ_ACCELEROMETER = @"frequency_hz_a
                               dbType:AwareDBTypeTextFile];
     if (self) {
         manager = [[CMMotionManager alloc] init];
-        sensingInterval = 0.1f;
-        dbWriteInterval = 30;
+        sensingInterval = MOTION_SENSOR_DEFAULT_SENSING_INTERVAL_SECOND;
+        dbWriteInterval = MOTION_SENSOR_DEFAULT_DB_WRITE_INTERVAL_SECOND;
         bufferArray = [[NSMutableArray alloc] init];
         currentBufferSize = 0;
+        hz = 0;
+        hzMonitor = 0;
         [self setCSVHeader:@[@"timestamp",@"device_id",@"double_values_0",@"double_values_1",@"double_values_2",@"accuracy",@"label"]];
         
         [self addDefaultSettingWithBool:@NO       key:AWARE_PREFERENCES_STATUS_ACCELEROMETER        desc:@"true or false to activate or deactivate accelerometer sensor."];
@@ -154,6 +158,19 @@ NSString * const AWARE_PREFERENCES_FREQUENCY_HZ_ACCELEROMETER = @"frequency_hz_a
                                                      [self saveData:dict];
                                                 });
                                           }
+                                          
+                                          ////////////////////////////////
+//                                          if ( hzMonitor == 0 ) {
+//                                              hzMonitor = [[NSDate date] timeIntervalSince1970];
+//                                          } else {
+//                                              double gap = ([[NSDate new] timeIntervalSince1970] - hzMonitor);
+//                                              if (gap > 1) {
+//                                                  NSLog(@"Hz:%f(hz)",hz);
+//                                                  hzMonitor = [[NSDate date] timeIntervalSince1970];
+//                                                  hz=0;
+//                                              }
+//                                          }
+//                                          hz++;
                                       }
                                   }];
 

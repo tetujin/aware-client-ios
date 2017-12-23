@@ -39,6 +39,9 @@
 #import "SCNetworkReachability.h"
 #import "LocalFileStorageHelper.h"
 
+double const MOTION_SENSOR_DEFAULT_SENSING_INTERVAL_SECOND = 0.2f;
+int const MOTION_SENSOR_DEFAULT_DB_WRITE_INTERVAL_SECOND = 30;
+
 @interface AWARESensor () {
     /** aware sensor name */
     NSString * awareSensorName;
@@ -870,38 +873,17 @@
 /**
  * Convert an iOS motion sensor frequency from an Androind frequency.
  *
- * @param   double  A sensing frequency for Andrind
- * @return  double  A sensing frequency for iOS
+ * @param   double  A sensing frequency for Andrind (frequency microsecond)
+ * @return  double  A sensing frequency for iOS (second)
  */
-- (double) convertMotionSensorFrequecyFromAndroid:(double)frequency{
-    
+- (double) convertMotionSensorFrequecyFromAndroid:(double)intervalMicroSecond{
     //  Android: Non-deterministic frequency in microseconds
     // (dependent of the hardware sensor capabilities and resources),
     // e.g., 200000 (normal), 60000 (UI), 20000 (game), 0 (fastest).
-    //  iOS: https://developer.apple.com/library/ios/documentation/EventHandling/Conceptual/EventHandlingiPhoneOS/motion_event_basics/motion_event_basics.html
-    //  e.g 10-20Hz, 30-60Hz, 70-100Hz
-    double y1 = 0.01;   //iOS 1 max
-    double y2 = 0.1;    //iOS 2 min
-    double x1 = 0;      //Android 1 max
-    double x2 = 200000; //Android 2 min
-    
-    // y1 = a * x1 + b;
-    // y2 = a * x2 + b;
-    double a = (y1-y2)/(x1-x2);
-    double b = y1 - x1*a;
-    // y =a * x + b;
-    return a *frequency + b;
-    
-    
-    // e.g., 200000 (normal), 60000 (UI), 20000 (game), 0 (fastest).
-    // 180, 60, 20, 10 (= microsecond)
-//    double fq = 0.1;
-//    if ( frequency == 200000 ) {
-//    } else if ( frequency == 60000 ){
-//    } else if ( frequency == 20000 ){
-//    } else if ( frequency == 0 ){
-//    }
-//    return fq;
+    double intervalSecond = intervalMicroSecond/(double)1000000;
+    NSLog(@"Sensing Interval: %f (second)",intervalSecond);
+    NSLog(@"Hz: %f (Hz)", (double)1/intervalSecond);
+    return intervalSecond;
 }
 
 
