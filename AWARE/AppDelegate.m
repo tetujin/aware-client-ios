@@ -14,6 +14,9 @@
     // Override point for customization after application launch.
     [super application:application didFinishLaunchingWithOptions:launchOptions];
     
+    // SAMPLE CODE: For adding a study URL directly.
+    // [self.sharedAWARECore.sharedAwareStudy setStudyInformationWithURL:@"https://api.awareframework.com/index.php/webservice/index/STUDY_ID/API_KEY"];
+    
     return YES;
 }
 
