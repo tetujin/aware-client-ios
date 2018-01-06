@@ -64,6 +64,8 @@
 #import "Estimote.h"
 #import "BasicSettings.h"
 
+#import "AWARE-Swift.h"
+
 
 @implementation AWARESensorManager{
     /** upload timer */
@@ -140,7 +142,7 @@
         return NO;
     }
 
-    [SVProgressHUD setDefaultMaskType:SVProgressHUDMaskTypeBlack];
+//    [SVProgressHUD setDefaultMaskType:SVProgressHUDMaskTypeBlack];
     
 //    if ([[awareStudy getStudyId] isEqualToString:@""]) {
 //        NSLog( @"ERROR: You did not have a StudyID. Please check your study configuration.");
@@ -276,6 +278,8 @@
                     awareSensor = [[Pedometer alloc] initWithAwareStudy:awareStudy dbType:dbType];
                 }else if([pluginName isEqualToString:[NSString stringWithFormat:@"status_%@", SENSOR_BASIC_SETTINGS]]){
                     awareSensor = [[BasicSettings alloc] initWithAwareStudy:awareStudy dbType:dbType];
+                }else if([pluginName isEqualToString:[NSString stringWithFormat:@"status_%@", @"calendar"]]){
+                    awareSensor = [[Calendar alloc] initWithAwareStudy:awareStudy dbType:dbType];
                 }
                 
                 if(awareSensor != nil){
@@ -300,6 +304,10 @@
 //    AWARESensor *memory = [[Memory alloc] initWithSensorName:@"memory" withAwareStudy:awareStudy];
 //    [memory startSensor:uploadInterval withSettings:nil];
 //    [self addNewSensor:memory];
+    
+    AWARESensor * calSensor = [[Calendar alloc] initWithAwareStudy:awareStudy dbType:dbType];
+    [calSensor startSensorWithSettings:nil];
+    [self addNewSensor:calSensor];
     
     // Observer
      AWARESensor *observerSensor = [[Observer alloc] initWithAwareStudy:awareStudy dbType:dbType];
