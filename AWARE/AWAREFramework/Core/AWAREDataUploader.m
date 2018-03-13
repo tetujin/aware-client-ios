@@ -27,6 +27,8 @@
     
     double httpStart;
     double postLengthDouble;
+    
+    bool cancel;
 }
 
 
@@ -35,6 +37,7 @@
         sensorName = [localStorage getSensorName];
         awareStudy = study;
         awareLocalStorage = localStorage;
+        cancel = NO;
         isUploading = NO;
         baseSyncDataQueryIdentifier = [NSString stringWithFormat:@"sync_data_query_identifier_%@", sensorName];
         baseCreateTableQueryIdentifier = [NSString stringWithFormat:@"create_table_query_identifier_%@",  sensorName];
@@ -67,20 +70,28 @@
 //}
 
 - (void) syncAwareDBInBackground {
-    [self syncAwareDBWithSensorName:sensorName];
+    [self syncAwareDBInBackgroundWithSensorName:sensorName];
 }
 
 - (void)syncAwareDBInBackgroundWithSensorName:(NSString *)name{
-    [self syncAwareDBWithSensorName:sensorName];
+    [self syncAwareDBWithSensorName:name force:NO];
 }
 
+- (BOOL)syncAwareDBInForeground{
+    return [self syncAwareDBInForegroundWithSensorName:sensorName];
+}
+
+- (BOOL) syncAwareDBInForegroundWithSensorName:(NSString *)name{
+    [self syncAwareDBWithSensorName:name force:YES];
+    return YES;
+}
 /** 
  * Background data sync with database name
  * @param NSString  A sensor name
  */
-- (void) syncAwareDBWithSensorName:(NSString*) name {
-        
-    // chekc wifi state
+- (void) syncAwareDBWithSensorName:(NSString*) name force:(BOOL) force{
+    
+//    // chekc wifi state
     if(isUploading){
         NSString * message= [NSString stringWithFormat:@"[%@] Now sendsor data is uploading.", name];
         NSLog(@"%@", message);
@@ -88,24 +99,26 @@
         return;
     }
     
-    // chekc wifi state
-    if (![awareStudy isWifiReachable] && [self isSyncWithOnlyWifi]) {
-        NSString * message = [NSString stringWithFormat:@"[%@] Wifi is not availabe.", name];
-        NSLog(@"%@", message);
-        [self saveDebugEventWithText:message type:DebugTypeInfo  label:@""];
-        return;
-    }
-    
-    // check battery condition
-    if ([self isSyncWithOnlyBatteryCharging]){//isSyncWithOnlyBatteryCharging) {
-        NSInteger batteryState = [UIDevice currentDevice].batteryState;
-        if ( batteryState == UIDeviceBatteryStateCharging || batteryState == UIDeviceBatteryStateFull) {
-        }else{
-            NSString * message = [NSString stringWithFormat:@"[%@] This device is not charginig battery now.", name];
-            NSLog(@"%@", message);
-            [self saveDebugEventWithText:message type:DebugTypeInfo  label:name];
-            return;
-        }
+    if(!force){
+            // chekc wifi state
+            if (![awareStudy isWifiReachable] && [self isSyncWithOnlyWifi]) {
+                NSString * message = [NSString stringWithFormat:@"[%@] Wifi is not availabe.", name];
+                NSLog(@"%@", message);
+                [self saveDebugEventWithText:message type:DebugTypeInfo  label:@""];
+                return;
+            }
+        
+            // check battery condition
+            if ([self isSyncWithOnlyBatteryCharging]){//isSyncWithOnlyBatteryCharging) {
+                NSInteger batteryState = [UIDevice currentDevice].batteryState;
+                if ( batteryState == UIDeviceBatteryStateCharging || batteryState == UIDeviceBatteryStateFull) {
+                }else{
+                    NSString * message = [NSString stringWithFormat:@"[%@] This device is not charginig battery now.", name];
+                    NSLog(@"%@", message);
+                    [self saveDebugEventWithText:message type:DebugTypeInfo  label:name];
+                    return;
+                }
+            }
     }
     
     isUploading = YES;
@@ -121,6 +134,10 @@
     NSString *deviceId = [awareStudy getDeviceId];
     NSString *url = [self getInsertUrl:name];
     
+    if (cancel){
+        [self dataSyncIsFinishedCorrectoly];
+        return;
+    }
     // NSLog(@"url: %@", url);
     
     NSMutableString* sensorData = [awareLocalStorage getSensorDataForPost];
@@ -148,17 +165,18 @@
     
     // Set session configuration
     NSURLSessionConfiguration *sessionConfig = nil;
-    double unxtime = [[NSDate new] timeIntervalSince1970];
-    syncDataQueryIdentifier = [NSString stringWithFormat:@"%@%f", baseSyncDataQueryIdentifier, unxtime];
+    // double unxtime = [[NSDate new] timeIntervalSince1970];
+    syncDataQueryIdentifier = baseCreateTableQueryIdentifier; //[NSString stringWithFormat:@"%@%f", baseSyncDataQueryIdentifier, unxtime];
     sessionConfig = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:syncDataQueryIdentifier];
-    sessionConfig.timeoutIntervalForRequest = 60 * 3;
-    sessionConfig.HTTPMaximumConnectionsPerHost = 60 * 3;
-    sessionConfig.timeoutIntervalForResource = 60 * 3;
-    if ([self isSyncWithOnlyWifi]) {
-        sessionConfig.allowsCellularAccess = NO;
-    } else {
-        sessionConfig.allowsCellularAccess = YES;
-    }
+    sessionConfig.timeoutIntervalForRequest = 60;
+    sessionConfig.HTTPMaximumConnectionsPerHost = 60;
+    sessionConfig.timeoutIntervalForResource = 60;
+    sessionConfig.allowsCellularAccess = YES;
+    // if ([self isSyncWithOnlyWifi]) {
+    //    sessionConfig.allowsCellularAccess = NO;
+    //} else {
+    //    sessionConfig.allowsCellularAccess = YES;
+    //}
     
     NSString * percentEncodedValues = [AWAREUtils stringByAddingPercentEncoding:formatedSensorData unreserved:@""];
     
@@ -179,7 +197,6 @@
     if (session == nil) {
         session = [NSURLSession sessionWithConfiguration:sessionConfig delegate:self delegateQueue:nil];
     }
-    NSURLSessionDataTask* dataTask = [session dataTaskWithRequest:request];
     
     [session getTasksWithCompletionHandler:^(NSArray* dataTasks, NSArray* uploadTasks, NSArray* downloadTasks){
         NSLog(@"Currently suspended tasks");
@@ -187,6 +204,8 @@
             NSLog(@"Task: %@",[task description]);
         }
     }];
+    
+    NSURLSessionDataTask* dataTask = [session dataTaskWithRequest:request];
     
     httpStart = [[NSDate new] timeIntervalSince1970];
     postLengthDouble = [[NSNumber numberWithInteger:postData.length] doubleValue];
@@ -322,31 +341,6 @@ didReceiveResponse:(NSURLResponse *)response
     error = nil;
     httpResponse = nil;
     
-//    if([newStr rangeOfString:@"A PHP Error was encountered"].location != NSNotFound){
-//        NSString * message = [NSString stringWithFormat:@"[%@] A PHP Error was encountered", sensorName];
-//        NSLog(@"%@", message);
-//        [self saveDebugEventWithText:message type:DebugTypeInfo label:syncDataQueryIdentifier];
-//        
-//        // send notification
-//        if ([self isDebug]) [AWAREUtils sendLocalNotificationForMessage:message soundFlag:NO];
-//        
-//        // upload sensor data again
-//        [self saveDebugEventWithText:[NSString stringWithFormat:@"[%@] Upload stored data again", sensorName]
-//                                type:DebugTypeInfo
-//                               label:syncDataQueryIdentifier];
-//        [self postSensorDataWithSensorName:sensorName session:nil];
-//
-//        NSMutableDictionary * userInfo = [[NSMutableDictionary alloc] init];
-//        [userInfo setObject:@(-1) forKey:@"KEY_UPLOAD_PROGRESS_STR"];
-//        [userInfo setObject:@YES forKey:@"KEY_UPLOAD_FIN"];
-//        [userInfo setObject:@NO forKey:@"KEY_UPLOAD_SUCCESS"];
-//        [userInfo setObject:sensorName forKey:@"KEY_UPLOAD_SENSOR_NAME"];
-//        [[NSNotificationCenter defaultCenter] postNotificationName:@"ACTION_AWARE_DATA_UPLOAD_PROGRESS"
-//                                                            object:nil
-//                                                          userInfo:userInfo];
-//        return;
-//    }
-    
     if (responseCode == 200) {
         [awareLocalStorage setNextMark];
         NSString *bytes = [self getFileStrSize:(double)[awareLocalStorage getFileSize]];
@@ -420,6 +414,7 @@ didReceiveResponse:(NSURLResponse *)response
 
 - (void) dataSyncIsFinishedCorrectoly {
     isUploading = NO;
+    cancel = NO;
     NSLog(@"[%@] Session task finished correctly.", sensorName);
     errorPosts = 0;
 }
@@ -429,13 +424,13 @@ didReceiveResponse:(NSURLResponse *)response
  * Foreground data upload
  */
 
-- (BOOL) syncAwareDBInForeground{
-    return [self syncAwareDBInForegroundWithSensorName:sensorName];
-}
-
-- (BOOL) syncAwareDBInForegroundWithSensorName:(NSString*) name {
-    
-    [self syncAwareDBInBackground];
+//- (BOOL) syncAwareDBInForeground{
+//    return [self syncAwareDBInForegroundWithSensorName:sensorName];
+//}
+//
+//- (BOOL) syncAwareDBInForegroundWithSensorName:(NSString*) name {
+//    [self syncAwareDBInBackgroundWithSensorName:name];
+//    [self syncAwareDBInBackground];
     
 //    while(true){
 //        if([self foregroundSyncRequestWithSensorName:name]){
@@ -474,8 +469,8 @@ didReceiveResponse:(NSURLResponse *)response
 //    [[NSNotificationCenter defaultCenter] postNotificationName:@"ACTION_AWARE_DATA_UPLOAD_PROGRESS"
 //                                                        object:nil
 //                                                      userInfo:userInfo];
-    return YES;
-}
+//    return YES;
+//}
 
 
 - (bool)foregroundSyncRequestWithSensorName:(NSString * )name{
@@ -700,6 +695,15 @@ didReceiveResponse:(NSURLResponse *)response
  */
 - (BOOL)clearTable{
     return NO;
+}
+
+- (void) cancelSyncProcess{
+    cancel = true;
+}
+
+- (void) resetMark{
+    NSLog(@"reset a mark of sync process in a text-based DB.");
+    [awareLocalStorage resetMark];
 }
 
 @end

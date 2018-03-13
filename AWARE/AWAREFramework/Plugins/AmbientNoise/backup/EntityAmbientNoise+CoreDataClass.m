@@ -2,7 +2,7 @@
 //  EntityAmbientNoise+CoreDataClass.m
 //  
 //
-//  Created by Yuuki Nishiyama on 2018/03/12.
+//  Created by Yuuki Nishiyama on 2017/12/22.
 //
 //
 

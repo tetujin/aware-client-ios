@@ -63,6 +63,7 @@
         [userDefaults setInteger:1000 * 1000 forKey:KEY_MAX_DATA_SIZE];        // Defualt Value: 1000*1000 (byte) (1000 KB)
         [userDefaults setInteger:cleanOldDataTypeAlways forKey:SETTING_FREQUENCY_CLEAN_OLD_DATA];
         [userDefaults setInteger:AwareUIModeNormal forKey:SETTING_UI_MODE];
+        [userDefaults setBool:YES forKey:SETTING_AUTO_SYNC];
         [userDefaults setBool:YES forKey:@"aware_inited"];
     }
     if (![userDefaults boolForKey:@"aware_inited_1.8.2"]) {
@@ -73,6 +74,12 @@
     if (![userDefaults boolForKey:@"aware_inited_2.0"]) {
         [userDefaults setBool:YES forKey:@"aware_inited_2.0"];
         [userDefaults setInteger:cleanOldDataTypeWeekly forKey:SETTING_FREQUENCY_CLEAN_OLD_DATA];
+    }
+    
+    if(![userDefaults boolForKey:@"aware_inited_2.1"]){
+        [userDefaults setBool:YES forKey:@"aware_inited_2.1"];
+        [userDefaults setInteger:cleanOldDataTypeWeekly forKey:SETTING_FREQUENCY_CLEAN_OLD_DATA];
+        [userDefaults setBool:YES forKey:SETTING_AUTO_SYNC];
     }
     
     if([userDefaults integerForKey:SETTING_DB_TYPE] == AwareDBTypeUnknown){
@@ -92,7 +99,9 @@
     
     // start sensors
     [_sharedSensorManager startAllSensors];
-    [_sharedSensorManager startUploadTimerWithInterval:uploadInterval];
+    if([_sharedAwareStudy getAutoSyncState]){
+        [_sharedSensorManager startUploadTimerWithInterval:uploadInterval];
+    }
     //    [self.sharedSensorManager syncAllSensorsWithDBInBackground];
     
     /// Set a timer for a daily sync update
@@ -145,18 +154,21 @@
 }
 
 - (void) changedBatteryState:(id) sender{
-    NSInteger batteryState = [UIDevice currentDevice].batteryState;
-    if (batteryState == UIDeviceBatteryStateCharging || batteryState == UIDeviceBatteryStateFull) {
-        Debug * debugSensor = [[Debug alloc] initWithAwareStudy:self.sharedAwareStudy dbType:AwareDBTypeTextFile];
-        [debugSensor saveDebugEventWithText:@"[Uploader] The battery is charging. AWARE iOS start to upload sensor data." type:DebugTypeInfo label:@""];
-        [self.sharedSensorManager syncAllSensorsWithDBInBackground];
-        [self.sharedSensorManager runBatteryStateChangeEvents];
+    if ([_sharedAwareStudy getAutoSyncState]){
+        NSInteger batteryState = [UIDevice currentDevice].batteryState;
+        if (batteryState == UIDeviceBatteryStateCharging || batteryState == UIDeviceBatteryStateFull) {
+            Debug * debugSensor = [[Debug alloc] initWithAwareStudy:self.sharedAwareStudy dbType:AwareDBTypeTextFile];
+            [debugSensor saveDebugEventWithText:@"[Uploader] The battery is charging. AWARE iOS start to upload sensor data." type:DebugTypeInfo label:@""];
+            [self.sharedSensorManager syncAllSensorsWithDBInBackground];
+            [self.sharedSensorManager runBatteryStateChangeEvents];
+        }
     }
 }
 
 - (void) deactivate{
     [_sharedSensorManager stopAndRemoveAllSensors];
     [_sharedLocationManager stopUpdatingLocation];
+    [_sharedSensorManager stopUploadTimer];
     [_dailyUpdateTimer invalidate];
     [_complianceTimer invalidate];
     //
@@ -206,7 +218,7 @@
     CLAuthorizationStatus state = [CLLocationManager authorizationStatus];
     if(state == kCLAuthorizationStatusAuthorizedAlways){
         // Set a movement threshold for new events.
-        _sharedLocationManager.distanceFilter = 25; // meters
+        // _sharedLocationManager.distanceFilter = 25; // meters
         [_sharedLocationManager startUpdatingLocation];
         [_sharedLocationManager startMonitoringSignificantLocationChanges];
     }

@@ -125,6 +125,7 @@
                                            selector:@selector(batteryLevelChanged:)
                                            userInfo:nil
                                             repeats:YES];
+    
     return YES;
 }
 

@@ -43,6 +43,7 @@
 #import "Accelerometer.h"
 #import "PushNotification.h"
 #import "Contacts.h"
+#import "Battery.h"
 
 // Library
 #import <SVProgressHUD.h>
@@ -166,6 +167,8 @@
                                              selector:@selector(viewDidAppear:)
                                                  name:ACTION_AWARE_SETTING_UI_UPDATE_REQUEST
                                                object:nil];
+    
+
 }
 
 
@@ -462,7 +465,37 @@
 }
 
 - (IBAction)pushedUploadButton:(id)sender {
-    [sensorManager syncAllSensorsWithDBInForeground];
+    UIAlertController * alert = [UIAlertController
+                                 alertControllerWithTitle:@"Confirmation"
+                                 message:@"Do you execute a manual data upload? (NOTE: This upload conducts even if this device has a mobile-network and battery uncharged condition.)"
+                                 preferredStyle:UIAlertControllerStyleAlert];
+
+    UIAlertAction* yesButton = [UIAlertAction
+                                actionWithTitle:@"Yes"
+                                style:UIAlertActionStyleDefault
+                                handler:^(UIAlertAction * action) {
+                                    //Handle your yes please button action here
+                                    [sensorManager syncAllSensorsWithDBInForeground];
+                                }];
+    
+    UIAlertAction* cancelButton = [UIAlertAction
+                               actionWithTitle:@"Cancel"
+                               style:UIAlertActionStyleCancel
+                               handler:^(UIAlertAction * action) {
+                                   //Handle no, thanks button
+                               }];
+    
+    [alert addAction:yesButton];
+    [alert addAction:cancelButton];
+    
+    [self presentViewController:alert animated:YES completion:nil];
+    
+    //////// TEST ///////
+//    [awareStudy setMaximumNumberOfRecordsForDataUpload:10];
+//    [awareStudy setDataUploadStateInWifi:NO];
+//    [awareStudy setDataUploadStateWithOnlyBatterChargning:NO];
+//    [awareStudy setStudyInformationWithURL:@"https://api.awareframework.com/index.php/webservice/index/1409/dm8AtgA0IInd"];
+    
 }
 
 /**

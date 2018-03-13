@@ -65,6 +65,7 @@ extern NSString* const SETTING_AUTO_SYNC_STATE;
 extern NSString* const SETTING_CSV_EXPORT_STATE;
 extern NSString* const SETTING_DB_TYPE;
 extern NSString* const SETTING_UI_MODE;
+extern NSString* const SETTING_AUTO_SYNC;
 
 
 extern NSString* const TABLE_INSER;

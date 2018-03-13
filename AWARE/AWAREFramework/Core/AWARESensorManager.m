@@ -305,9 +305,9 @@
 //    [memory startSensor:uploadInterval withSettings:nil];
 //    [self addNewSensor:memory];
     
-    AWARESensor * calSensor = [[Calendar alloc] initWithAwareStudy:awareStudy dbType:dbType];
-    [calSensor startSensorWithSettings:nil];
-    [self addNewSensor:calSensor];
+//    AWARESensor * calSensor = [[Calendar alloc] initWithAwareStudy:awareStudy dbType:dbType];
+//    [calSensor startSensorWithSettings:nil];
+//    [self addNewSensor:calSensor];
     
     // Observer
      AWARESensor *observerSensor = [[Observer alloc] initWithAwareStudy:awareStudy dbType:dbType];
@@ -412,6 +412,7 @@
             NSLog(@"%@", message);
             [sensor saveDebugEventWithText:message type:DebugTypeInfo label:@"stop"];
             [sensor stopSensor];
+            [sensor cancelSyncProcess];
         }
         [awareSensors removeAllObjects];
     }
@@ -584,6 +585,7 @@
                                            
                                            // stop
                                            if(isFinish == YES && isSuccess == NO){
+                                               
                                                AudioServicesPlayAlertSound(1010);
                                                if([AWAREUtils isBackground]){
                                                    [AWAREUtils sendLocalNotificationForMessage:@"[Manual Upload] Failed to upload sensor data. Please try uploading again." soundFlag:YES];
@@ -603,6 +605,7 @@
         
         for ( AWARESensor * sensor in awareSensors ) {
             // NSLog(sensor.getSensorName);
+            // [sensor resetMark]; // <- [TEST]
             [sensor syncAwareDBInForeground];
         }
         
@@ -634,7 +637,6 @@
     BOOL finish = YES;
     for (AWARESensor * sensor in awareSensors) {
         if([sensor isUploading]){
-            // NSLog(@"%d", [sensor isUploading]);
             finish = NO;
         }
     }
