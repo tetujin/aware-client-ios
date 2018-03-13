@@ -214,28 +214,13 @@
 //    if ([_sharedLocationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
 //        [_sharedLocationManager requestAlwaysAuthorization];
 //    }
-    
-    switch ([CLLocationManager authorizationStatus]) {
-        case kCLAuthorizationStatusDenied:
-            NSLog(@"kCLAuthorizationStatusDenied");
-            break;
-        case kCLAuthorizationStatusRestricted:
-            NSLog(@"kCLAuthorizationStatusRestricted");
-            break;
-        case kCLAuthorizationStatusNotDetermined:
-            NSLog(@"kCLAuthorizationStatusNotDetermined");
-            break;
-        case kCLAuthorizationStatusAuthorizedAlways:
-            _sharedLocationManager.distanceFilter = 25; // meters
-            [_sharedLocationManager startUpdatingLocation];
-            [_sharedLocationManager startMonitoringSignificantLocationChanges];
-            NSLog(@"kCLAuthorizationStatusAuthorizedAlways");
-            break;
-        case kCLAuthorizationStatusAuthorizedWhenInUse:
-            NSLog(@"kCLAuthorizationStatusAuthorizedWhenInUse");
-            break;
-        default:
-            break;
+     
+    CLAuthorizationStatus state = [CLLocationManager authorizationStatus];
+    if(state == kCLAuthorizationStatusAuthorizedAlways){
+        // Set a movement threshold for new events.
+        // _sharedLocationManager.distanceFilter = 25; // meters
+        [_sharedLocationManager startUpdatingLocation];
+        [_sharedLocationManager startMonitoringSignificantLocationChanges];
     }
 }
 
