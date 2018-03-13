@@ -261,13 +261,21 @@ NSString * const AWARE_PREFERENCES_LIVE_MODE_IOS_ACTIVITY_RECOGNITION = @"status
                     }
                 });
             }
+            
+            /////////////////////////////
+            if ( activities != nil && activities.count == 0 ){
+                [self startSensorWithConfidenceFilter:CMMotionActivityConfidenceLow
+                                                 mode:IOSActivityRecognitionModeDisposable
+                                             interval:0
+                                      disposableLimit:0];
+            }
         }];
         
-        // disposable
-        [self startSensorWithConfidenceFilter:CMMotionActivityConfidenceLow
-                                         mode:IOSActivityRecognitionModeDisposable
-                                     interval:0
-                              disposableLimit:0];
+//        // disposable
+//        [self startSensorWithConfidenceFilter:CMMotionActivityConfidenceLow
+//                                         mode:IOSActivityRecognitionModeDisposable
+//                                     interval:0
+//                              disposableLimit:0];
     }
 }
 

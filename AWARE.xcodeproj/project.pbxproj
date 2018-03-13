@@ -54,6 +54,8 @@
 		1623CE921BFD1B2C00EFAD72 /* AWAREUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1623CE911BFD1B2C00EFAD72 /* AWAREUITests.m */; };
 		1623CEB11BFD40FB00EFAD72 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1623CEB01BFD40FB00EFAD72 /* AVFoundation.framework */; };
 		1623CEB91BFE319100EFAD72 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1623CEB81BFE319100EFAD72 /* CoreMotion.framework */; };
+		162811CE1FF4A95600425959 /* EntityContact+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 162811CB1FF4A95500425959 /* EntityContact+CoreDataProperties.m */; };
+		162811CF1FF4A95600425959 /* EntityContact+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 162811CC1FF4A95600425959 /* EntityContact+CoreDataClass.m */; };
 		162B7DDC1C4EF792006972B5 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 162B7DDB1C4EF792006972B5 /* CoreTelephony.framework */; };
 		163A824A1E2B3AC800987A1D /* Fitbit.m in Sources */ = {isa = PBXBuildFile; fileRef = 163A82491E2B3AC800987A1D /* Fitbit.m */; };
 		163ADFC01D8F2C1900B15C8F /* EntityIOSActivityRecognition+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 163ADFBD1D8F2C1900B15C8F /* EntityIOSActivityRecognition+CoreDataClass.m */; };
@@ -85,8 +87,6 @@
 		16606B281F4E4FC200EF6C4D /* PNScatterChartDataItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 16606B181F4E4FC200EF6C4D /* PNScatterChartDataItem.m */; };
 		166082CC1D93DC1A004D1858 /* IntroPage5.xib in Resources */ = {isa = PBXBuildFile; fileRef = 166082CB1D93DC1A004D1858 /* IntroPage5.xib */; };
 		16654EA21D027DC600280051 /* AWAREUploader.m in Sources */ = {isa = PBXBuildFile; fileRef = 16654EA11D027DC600280051 /* AWAREUploader.m */; };
-		16776EA61FECDFAD007E1039 /* EntityAmbientNoise+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 16776EA21FECDFAB007E1039 /* EntityAmbientNoise+CoreDataProperties.m */; };
-		16776EA71FECDFAD007E1039 /* EntityAmbientNoise+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 16776EA31FECDFAC007E1039 /* EntityAmbientNoise+CoreDataClass.m */; };
 		167F149D1F4EFB7B00EA6323 /* EntityEstimoteMotion+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 167F148E1F4EFB7B00EA6323 /* EntityEstimoteMotion+CoreDataClass.m */; };
 		167F149E1F4EFB7B00EA6323 /* EntityEstimoteMotion+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 167F14901F4EFB7B00EA6323 /* EntityEstimoteMotion+CoreDataProperties.m */; };
 		167F149F1F4EFB7B00EA6323 /* EntityEstimoteTemperature+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 167F14921F4EFB7B00EA6323 /* EntityEstimoteTemperature+CoreDataClass.m */; };
@@ -296,8 +296,6 @@
 		16C0B9581F2F4321003A1E49 /* BaseESMView.m in Sources */ = {isa = PBXBuildFile; fileRef = 16C0B9561F2F4321003A1E49 /* BaseESMView.m */; };
 		16C1FF7D1C617FB100C070AA /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16C1FF7C1C617FB100C070AA /* Accelerate.framework */; };
 		16C1FF7F1C617FC300C070AA /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16C1FF7E1C617FC300C070AA /* GLKit.framework */; };
-		16C21AB01E45A7D9001C88BC /* EntityContact+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 16C21AAD1E45A7D9001C88BC /* EntityContact+CoreDataClass.m */; };
-		16C21AB11E45A7D9001C88BC /* EntityContact+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 16C21AAF1E45A7D9001C88BC /* EntityContact+CoreDataProperties.m */; };
 		16C21AB41E45A81A001C88BC /* Contacts.m in Sources */ = {isa = PBXBuildFile; fileRef = 16C21AB31E45A81A001C88BC /* Contacts.m */; };
 		16C907A01F3303B8005D357C /* ESMLikertScaleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 16C9079F1F3303B8005D357C /* ESMLikertScaleView.m */; };
 		16C907A31F34263E005D357C /* ESMRadioView.m in Sources */ = {isa = PBXBuildFile; fileRef = 16C907A21F34263E005D357C /* ESMRadioView.m */; };
@@ -339,8 +337,16 @@
 		16EC4F181D2E7D8200524424 /* EntityMSBandRRInterval.m in Sources */ = {isa = PBXBuildFile; fileRef = 16EC4F161D2E7D8200524424 /* EntityMSBandRRInterval.m */; };
 		16EC4F1B1D2EAA3600524424 /* WebESM.m in Sources */ = {isa = PBXBuildFile; fileRef = 16EC4F1A1D2EAA3600524424 /* WebESM.m */; };
 		16ECFC481D8F0C95005C3DA6 /* IOSActivityRecognition.m in Sources */ = {isa = PBXBuildFile; fileRef = 16ECFC471D8F0C95005C3DA6 /* IOSActivityRecognition.m */; };
+		16EEA1861FEF147500190799 /* Calendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16EEA1851FEF147500190799 /* Calendar.swift */; };
 		16FD37561CF0B1F700EEB416 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 16FD37541CF0B1DE00EEB416 /* Settings.bundle */; };
 		33DD1EAB0B6DC89A0BE94442 /* libPods-AWAREUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F2C7B48DB0AFA845366B8320 /* libPods-AWAREUITests.a */; };
+		4FD479AF20568857003BDDF9 /* DBTableCreator.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD479AE20568857003BDDF9 /* DBTableCreator.m */; };
+		4FD479C920568E7E003BDDF9 /* EntityAmbientNoise+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD479C720568E7E003BDDF9 /* EntityAmbientNoise+CoreDataClass.m */; };
+		4FD479CA20568E7E003BDDF9 /* EntityAmbientNoise+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD479C820568E7E003BDDF9 /* EntityAmbientNoise+CoreDataProperties.m */; };
+		4FD479CF20568EAC003BDDF9 /* EntityCalendar+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD479CC20568EAB003BDDF9 /* EntityCalendar+CoreDataClass.m */; };
+		4FD479D020568EAC003BDDF9 /* EntityCalendar+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD479CE20568EAC003BDDF9 /* EntityCalendar+CoreDataProperties.m */; };
+		4FD479D42056A073003BDDF9 /* SQLiteSyncExecutor.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD479D32056A073003BDDF9 /* SQLiteSyncExecutor.m */; };
+		4FD479D62056AC3D003BDDF9 /* AwareSQLiteTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD479D52056AC3D003BDDF9 /* AwareSQLiteTests.m */; };
 		52022F401E13B81200AB52AB /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52022F3F1E13B81200AB52AB /* AddressBook.framework */; };
 		52BBE03D1E13C6EE00F57906 /* ContactsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 52BBE03C1E13C6EE00F57906 /* ContactsViewController.m */; };
 		8EEA355C71944920BDD1D33A /* libPods-AWARE.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FDD502C633ED8DBE54DF24B7 /* libPods-AWARE.a */; };
@@ -478,6 +484,10 @@
 		1623CEB01BFD40FB00EFAD72 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		1623CEB81BFE319100EFAD72 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		1623FFDC1C5ADB6E00F3E3E4 /* libSystem.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libSystem.tbd; path = usr/lib/libSystem.tbd; sourceTree = SDKROOT; };
+		162811CA1FF4A95500425959 /* EntityContact+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "EntityContact+CoreDataClass.h"; path = "Contacts/EntityContact+CoreDataClass.h"; sourceTree = "<group>"; };
+		162811CB1FF4A95500425959 /* EntityContact+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "EntityContact+CoreDataProperties.m"; path = "Contacts/EntityContact+CoreDataProperties.m"; sourceTree = "<group>"; };
+		162811CC1FF4A95600425959 /* EntityContact+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "EntityContact+CoreDataClass.m"; path = "Contacts/EntityContact+CoreDataClass.m"; sourceTree = "<group>"; };
+		162811CD1FF4A95600425959 /* EntityContact+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "EntityContact+CoreDataProperties.h"; path = "Contacts/EntityContact+CoreDataProperties.h"; sourceTree = "<group>"; };
 		162B7DDB1C4EF792006972B5 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		163A82481E2B3AC800987A1D /* Fitbit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Fitbit.h; path = Fitbit/Fitbit.h; sourceTree = "<group>"; };
 		163A82491E2B3AC800987A1D /* Fitbit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Fitbit.m; path = Fitbit/Fitbit.m; sourceTree = "<group>"; };
@@ -534,10 +544,6 @@
 		16654EA01D027DC600280051 /* AWAREUploader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AWAREUploader.h; sourceTree = "<group>"; };
 		16654EA11D027DC600280051 /* AWAREUploader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AWAREUploader.m; sourceTree = "<group>"; };
 		16776EA11FECDF0F007E1039 /* AWARE_v4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = AWARE_v4.xcdatamodel; sourceTree = "<group>"; };
-		16776EA21FECDFAB007E1039 /* EntityAmbientNoise+CoreDataProperties.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "EntityAmbientNoise+CoreDataProperties.m"; path = "/Users/tetujin/Dropbox (Personal)/tokuda_Lab/codes/objective-c/AWARE/AWARE/AWAREFramework/Plugins/AmbientNoise/EntityAmbientNoise+CoreDataProperties.m"; sourceTree = "<absolute>"; };
-		16776EA31FECDFAC007E1039 /* EntityAmbientNoise+CoreDataClass.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "EntityAmbientNoise+CoreDataClass.m"; path = "/Users/tetujin/Dropbox (Personal)/tokuda_Lab/codes/objective-c/AWARE/AWARE/AWAREFramework/Plugins/AmbientNoise/EntityAmbientNoise+CoreDataClass.m"; sourceTree = "<absolute>"; };
-		16776EA41FECDFAC007E1039 /* EntityAmbientNoise+CoreDataProperties.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "EntityAmbientNoise+CoreDataProperties.h"; path = "/Users/tetujin/Dropbox (Personal)/tokuda_Lab/codes/objective-c/AWARE/AWARE/AWAREFramework/Plugins/AmbientNoise/EntityAmbientNoise+CoreDataProperties.h"; sourceTree = "<absolute>"; };
-		16776EA51FECDFAD007E1039 /* EntityAmbientNoise+CoreDataClass.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "EntityAmbientNoise+CoreDataClass.h"; path = "/Users/tetujin/Dropbox (Personal)/tokuda_Lab/codes/objective-c/AWARE/AWARE/AWAREFramework/Plugins/AmbientNoise/EntityAmbientNoise+CoreDataClass.h"; sourceTree = "<absolute>"; };
 		167F148D1F4EFB7B00EA6323 /* EntityEstimoteMotion+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "EntityEstimoteMotion+CoreDataClass.h"; path = "Estimote/EntityEstimoteMotion+CoreDataClass.h"; sourceTree = "<group>"; };
 		167F148E1F4EFB7B00EA6323 /* EntityEstimoteMotion+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "EntityEstimoteMotion+CoreDataClass.m"; path = "Estimote/EntityEstimoteMotion+CoreDataClass.m"; sourceTree = "<group>"; };
 		167F148F1F4EFB7B00EA6323 /* EntityEstimoteMotion+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "EntityEstimoteMotion+CoreDataProperties.h"; path = "Estimote/EntityEstimoteMotion+CoreDataProperties.h"; sourceTree = "<group>"; };
@@ -935,10 +941,6 @@
 		16C0B9561F2F4321003A1E49 /* BaseESMView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BaseESMView.m; path = ESMScrollViewCells/BaseESMView.m; sourceTree = "<group>"; };
 		16C1FF7C1C617FB100C070AA /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		16C1FF7E1C617FC300C070AA /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
-		16C21AAC1E45A7D9001C88BC /* EntityContact+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "EntityContact+CoreDataClass.h"; path = "Contacts/EntityContact+CoreDataClass.h"; sourceTree = "<group>"; };
-		16C21AAD1E45A7D9001C88BC /* EntityContact+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "EntityContact+CoreDataClass.m"; path = "Contacts/EntityContact+CoreDataClass.m"; sourceTree = "<group>"; };
-		16C21AAE1E45A7D9001C88BC /* EntityContact+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "EntityContact+CoreDataProperties.h"; path = "Contacts/EntityContact+CoreDataProperties.h"; sourceTree = "<group>"; };
-		16C21AAF1E45A7D9001C88BC /* EntityContact+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "EntityContact+CoreDataProperties.m"; path = "Contacts/EntityContact+CoreDataProperties.m"; sourceTree = "<group>"; };
 		16C21AB21E45A81A001C88BC /* Contacts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Contacts.h; path = Contacts/Contacts.h; sourceTree = "<group>"; };
 		16C21AB31E45A81A001C88BC /* Contacts.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Contacts.m; path = Contacts/Contacts.m; sourceTree = "<group>"; };
 		16C81FF41CD6B32D0013A87C /* AWARE_v2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = AWARE_v2.xcdatamodel; sourceTree = "<group>"; };
@@ -1012,8 +1014,23 @@
 		16EC4F1A1D2EAA3600524424 /* WebESM.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WebESM.m; path = AWARE/AWAREFramework/Plugins/WebESM/WebESM.m; sourceTree = SOURCE_ROOT; };
 		16ECFC461D8F0C95005C3DA6 /* IOSActivityRecognition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IOSActivityRecognition.h; path = IOSActivityRecognition/IOSActivityRecognition.h; sourceTree = "<group>"; };
 		16ECFC471D8F0C95005C3DA6 /* IOSActivityRecognition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IOSActivityRecognition.m; path = IOSActivityRecognition/IOSActivityRecognition.m; sourceTree = "<group>"; };
+		16EEA1851FEF147500190799 /* Calendar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Calendar.swift; sourceTree = "<group>"; };
+		16EEA1871FEF16DF00190799 /* AWARE-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AWARE-Bridging-Header.h"; sourceTree = "<group>"; };
 		16FD37541CF0B1DE00EEB416 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		1EB67F5CA2CB715737A0C978 /* Pods-AWAREUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AWAREUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-AWAREUITests/Pods-AWAREUITests.release.xcconfig"; sourceTree = "<group>"; };
+		4FD479AD20568857003BDDF9 /* DBTableCreator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DBTableCreator.h; sourceTree = "<group>"; };
+		4FD479AE20568857003BDDF9 /* DBTableCreator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DBTableCreator.m; sourceTree = "<group>"; };
+		4FD479C520568E7D003BDDF9 /* EntityAmbientNoise+CoreDataProperties.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "EntityAmbientNoise+CoreDataProperties.h"; path = "/Users/yuuki/Dropbox/tokuda_Lab/codes/objective-c/AWARE/AWARE/AWAREFramework/Plugins/AmbientNoise/EntityAmbientNoise+CoreDataProperties.h"; sourceTree = "<absolute>"; };
+		4FD479C620568E7E003BDDF9 /* EntityAmbientNoise+CoreDataClass.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "EntityAmbientNoise+CoreDataClass.h"; path = "/Users/yuuki/Dropbox/tokuda_Lab/codes/objective-c/AWARE/AWARE/AWAREFramework/Plugins/AmbientNoise/EntityAmbientNoise+CoreDataClass.h"; sourceTree = "<absolute>"; };
+		4FD479C720568E7E003BDDF9 /* EntityAmbientNoise+CoreDataClass.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "EntityAmbientNoise+CoreDataClass.m"; path = "/Users/yuuki/Dropbox/tokuda_Lab/codes/objective-c/AWARE/AWARE/AWAREFramework/Plugins/AmbientNoise/EntityAmbientNoise+CoreDataClass.m"; sourceTree = "<absolute>"; };
+		4FD479C820568E7E003BDDF9 /* EntityAmbientNoise+CoreDataProperties.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "EntityAmbientNoise+CoreDataProperties.m"; path = "/Users/yuuki/Dropbox/tokuda_Lab/codes/objective-c/AWARE/AWARE/AWAREFramework/Plugins/AmbientNoise/EntityAmbientNoise+CoreDataProperties.m"; sourceTree = "<absolute>"; };
+		4FD479CB20568EAB003BDDF9 /* EntityCalendar+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EntityCalendar+CoreDataClass.h"; sourceTree = "<group>"; };
+		4FD479CC20568EAB003BDDF9 /* EntityCalendar+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EntityCalendar+CoreDataClass.m"; sourceTree = "<group>"; };
+		4FD479CD20568EAB003BDDF9 /* EntityCalendar+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EntityCalendar+CoreDataProperties.h"; sourceTree = "<group>"; };
+		4FD479CE20568EAC003BDDF9 /* EntityCalendar+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EntityCalendar+CoreDataProperties.m"; sourceTree = "<group>"; };
+		4FD479D22056A073003BDDF9 /* SQLiteSyncExecutor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SQLiteSyncExecutor.h; sourceTree = "<group>"; };
+		4FD479D32056A073003BDDF9 /* SQLiteSyncExecutor.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SQLiteSyncExecutor.m; sourceTree = "<group>"; };
+		4FD479D52056AC3D003BDDF9 /* AwareSQLiteTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AwareSQLiteTests.m; sourceTree = "<group>"; };
 		52022F3F1E13B81200AB52AB /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		52BBE03B1E13C6EE00F57906 /* ContactsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactsViewController.h; sourceTree = "<group>"; };
 		52BBE03C1E13C6EE00F57906 /* ContactsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactsViewController.m; sourceTree = "<group>"; };
@@ -1228,6 +1245,7 @@
 			isa = PBXGroup;
 			children = (
 				1623CE861BFD1B2C00EFAD72 /* AWARETests.m */,
+				4FD479D52056AC3D003BDDF9 /* AwareSQLiteTests.m */,
 				1623CE881BFD1B2C00EFAD72 /* Info.plist */,
 			);
 			path = AWARETests;
@@ -1370,6 +1388,7 @@
 				1648FE921DAB2E87001D870A /* AWARESensors.m */,
 				169C871B1D01382C00825761 /* AWARESchedule.h */,
 				169C871C1D01382C00825761 /* AWARESchedule.m */,
+				16EEA1871FEF16DF00190799 /* AWARE-Bridging-Header.h */,
 				16AE13401F50696700263C14 /* CoreDataStorage */,
 				16AE133E1F5068C200263C14 /* TextFileStorage */,
 				16AE133F1F5068DC00263C14 /* Utilites */,
@@ -1595,6 +1614,7 @@
 				169C87891D01382C00825761 /* AmbientNoise */,
 				16A45CDC1D2392A1008A02B1 /* BalacnedCampusScheduler */,
 				169C878E1D01382C00825761 /* BLEHeartRate */,
+				16EEA1841FEF140D00190799 /* Calendar */,
 				52022F3B1E13B7D100AB52AB /* Contacts */,
 				169C87911D01382C00825761 /* DeviceUsage */,
 				16CE5FF31F4DB30A000E177F /* Estimote */,
@@ -1641,10 +1661,10 @@
 				169C878B1D01382C00825761 /* AmbientNoise.m */,
 				169C878C1D01382C00825761 /* AudioAnalysis.h */,
 				169C878D1D01382C00825761 /* AudioAnalysis.m */,
-				16776EA41FECDFAC007E1039 /* EntityAmbientNoise+CoreDataProperties.h */,
-				16776EA51FECDFAD007E1039 /* EntityAmbientNoise+CoreDataClass.h */,
-				16776EA31FECDFAC007E1039 /* EntityAmbientNoise+CoreDataClass.m */,
-				16776EA21FECDFAB007E1039 /* EntityAmbientNoise+CoreDataProperties.m */,
+				4FD479C620568E7E003BDDF9 /* EntityAmbientNoise+CoreDataClass.h */,
+				4FD479C720568E7E003BDDF9 /* EntityAmbientNoise+CoreDataClass.m */,
+				4FD479C520568E7D003BDDF9 /* EntityAmbientNoise+CoreDataProperties.h */,
+				4FD479C820568E7E003BDDF9 /* EntityAmbientNoise+CoreDataProperties.m */,
 			);
 			path = AmbientNoise;
 			sourceTree = "<group>";
@@ -2272,6 +2292,10 @@
 			children = (
 				169C87111D01382C00825761 /* AWARECoreDataManager.h */,
 				169C87121D01382C00825761 /* AWARECoreDataManager.m */,
+				4FD479D22056A073003BDDF9 /* SQLiteSyncExecutor.h */,
+				4FD479D32056A073003BDDF9 /* SQLiteSyncExecutor.m */,
+				4FD479AD20568857003BDDF9 /* DBTableCreator.h */,
+				4FD479AE20568857003BDDF9 /* DBTableCreator.m */,
 			);
 			name = CoreDataStorage;
 			sourceTree = "<group>";
@@ -2435,6 +2459,18 @@
 			name = IOSActivityRecognition;
 			sourceTree = "<group>";
 		};
+		16EEA1841FEF140D00190799 /* Calendar */ = {
+			isa = PBXGroup;
+			children = (
+				16EEA1851FEF147500190799 /* Calendar.swift */,
+				4FD479CB20568EAB003BDDF9 /* EntityCalendar+CoreDataClass.h */,
+				4FD479CC20568EAB003BDDF9 /* EntityCalendar+CoreDataClass.m */,
+				4FD479CD20568EAB003BDDF9 /* EntityCalendar+CoreDataProperties.h */,
+				4FD479CE20568EAC003BDDF9 /* EntityCalendar+CoreDataProperties.m */,
+			);
+			path = Calendar;
+			sourceTree = "<group>";
+		};
 		2A3CA9F5620967BACB187EB7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -2474,10 +2510,10 @@
 			children = (
 				16C21AB21E45A81A001C88BC /* Contacts.h */,
 				16C21AB31E45A81A001C88BC /* Contacts.m */,
-				16C21AAC1E45A7D9001C88BC /* EntityContact+CoreDataClass.h */,
-				16C21AAD1E45A7D9001C88BC /* EntityContact+CoreDataClass.m */,
-				16C21AAE1E45A7D9001C88BC /* EntityContact+CoreDataProperties.h */,
-				16C21AAF1E45A7D9001C88BC /* EntityContact+CoreDataProperties.m */,
+				162811CA1FF4A95500425959 /* EntityContact+CoreDataClass.h */,
+				162811CC1FF4A95600425959 /* EntityContact+CoreDataClass.m */,
+				162811CD1FF4A95600425959 /* EntityContact+CoreDataProperties.h */,
+				162811CB1FF4A95500425959 /* EntityContact+CoreDataProperties.m */,
 			);
 			name = Contacts;
 			sourceTree = "<group>";
@@ -2881,7 +2917,11 @@
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/en.lproj",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ja.lproj",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GTMOAuth2ViewTouch.nib",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleSignIn.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/SVProgressHUD.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -2997,6 +3037,8 @@
 				16E225041E063CD1000C239E /* EntityESMAnswerBC+CoreDataProperties.m in Sources */,
 				16B077BB1D1A54BF009C070B /* EntityPushNotification+CoreDataProperties.m in Sources */,
 				16B0776C1D192663009C070B /* EntityRotation+CoreDataProperties.m in Sources */,
+				162811CF1FF4A95600425959 /* EntityContact+CoreDataClass.m in Sources */,
+				4FD479CA20568E7E003BDDF9 /* EntityAmbientNoise+CoreDataProperties.m in Sources */,
 				168AEA991D3EFEC300D02EA4 /* EntityProcessor.m in Sources */,
 				169C882A1D01382C00825761 /* AWARECore.m in Sources */,
 				160F0E8F1D03D64E00673343 /* EntityBarometer+CoreDataProperties.m in Sources */,
@@ -3008,6 +3050,7 @@
 				16606B251F4E4FC200EF6C4D /* PNRadarChartDataItem.m in Sources */,
 				16B0777F1D192D72009C070B /* EntityWifi.m in Sources */,
 				169C88991D01382C00825761 /* Proximity.m in Sources */,
+				4FD479C920568E7E003BDDF9 /* EntityAmbientNoise+CoreDataClass.m in Sources */,
 				169C85731D007EDC00825761 /* ViewController.m in Sources */,
 				169C88961D01382C00825761 /* Orientation.m in Sources */,
 				16BDCC9E1D35FD3800B13BD4 /* MSBandUV.m in Sources */,
@@ -3022,6 +3065,7 @@
 				169C88881D01382C00825761 /* Battery.m in Sources */,
 				161F71FB1D3B261300309650 /* IOSESMViewController.m in Sources */,
 				16B077961D1A01A0009C070B /* EntityLocationVisit+CoreDataProperties.m in Sources */,
+				4FD479CF20568EAC003BDDF9 /* EntityCalendar+CoreDataClass.m in Sources */,
 				169C887F1D01382C00825761 /* MSBand.m in Sources */,
 				169C889F1D01382C00825761 /* GoogleLoginViewController.m in Sources */,
 				160F0EF81D042AB600673343 /* EntityNetwork.m in Sources */,
@@ -3044,14 +3088,15 @@
 				169C88841D01382C00825761 /* SensorTag.m in Sources */,
 				16BDCC981D35C11100B13BD4 /* BatteryDischarge.m in Sources */,
 				16606B271F4E4FC200EF6C4D /* PNScatterChartData.m in Sources */,
-				16C21AB11E45A7D9001C88BC /* EntityContact+CoreDataProperties.m in Sources */,
 				16B077841D1978FF009C070B /* EntityActivityRecognition+CoreDataProperties.m in Sources */,
 				16B078431D1F918B009C070B /* EntityMSBandDistance+CoreDataProperties.m in Sources */,
+				4FD479D020568EAC003BDDF9 /* EntityCalendar+CoreDataProperties.m in Sources */,
 				16CB66BC1F3EE822001EE743 /* ESMQuickAnswerView.m in Sources */,
 				16606B261F4E4FC200EF6C4D /* PNScatterChart.m in Sources */,
 				169C883D1D01382C00825761 /* ESMSchedule.m in Sources */,
 				16EC4F181D2E7D8200524424 /* EntityMSBandRRInterval.m in Sources */,
 				16CB66CB1F4197CA001EE743 /* ESMWebView.m in Sources */,
+				4FD479AF20568857003BDDF9 /* DBTableCreator.m in Sources */,
 				16B077791D192C30009C070B /* EntityTimezone.m in Sources */,
 				169C88811D01382C00825761 /* Observer.m in Sources */,
 				16606B1D1F4E4FC200EF6C4D /* PNColor.m in Sources */,
@@ -3077,7 +3122,6 @@
 				16CB66D81F4389F9001EE743 /* ESMNumberView.m in Sources */,
 				169C889E1D01382C00825761 /* Wifi.m in Sources */,
 				16606B191F4E4FC200EF6C4D /* PNBar.m in Sources */,
-				16776EA61FECDFAD007E1039 /* EntityAmbientNoise+CoreDataProperties.m in Sources */,
 				16B078381D1F918B009C070B /* EntityMSBandUV.m in Sources */,
 				16CB66D41F41E054001EE743 /* ESMClockLineView.m in Sources */,
 				16C0B9581F2F4321003A1E49 /* BaseESMView.m in Sources */,
@@ -3106,7 +3150,6 @@
 				16B078461D1F918B009C070B /* EntityMSBandHR.m in Sources */,
 				16B077D41D1A5F51009C070B /* EntityOpenWeather.m in Sources */,
 				169C88701D01382C00825761 /* PamSchema.m in Sources */,
-				16776EA71FECDFAD007E1039 /* EntityAmbientNoise+CoreDataClass.m in Sources */,
 				169C882F1D01382C00825761 /* AWAREPlugin.m in Sources */,
 				169C88A11D01382C00825761 /* WebViewController.m in Sources */,
 				169C88391D01382C00825761 /* AWAREEsmUtils.m in Sources */,
@@ -3150,8 +3193,9 @@
 				16E586281E33A0DE0069C535 /* FitbitDevice.m in Sources */,
 				160F0F081D04756800673343 /* EntityBatteryDischarge.m in Sources */,
 				169C882B1D01382C00825761 /* AWARECoreDataManager.m in Sources */,
-				16C21AB01E45A7D9001C88BC /* EntityContact+CoreDataClass.m in Sources */,
+				162811CE1FF4A95600425959 /* EntityContact+CoreDataProperties.m in Sources */,
 				169C883E1D01382C00825761 /* ESMStorageHelper.m in Sources */,
+				16EEA1861FEF147500190799 /* Calendar.swift in Sources */,
 				16B077911D1999B5009C070B /* EntityBLEHeartRate.m in Sources */,
 				16E225101E0A37DA000C239E /* AWAREHealthKitQuantity.m in Sources */,
 				16B078421D1F918B009C070B /* EntityMSBandSkinTemp.m in Sources */,
@@ -3160,6 +3204,7 @@
 				169C887A1D01382C00825761 /* GoogleCalPush.m in Sources */,
 				167F14B11F4EFCEB00EA6323 /* EstimoteAmbientLight.m in Sources */,
 				16E2250D1E0A37BB000C239E /* AWAREHealthKitCategory.m in Sources */,
+				4FD479D42056A073003BDDF9 /* SQLiteSyncExecutor.m in Sources */,
 				16B077D31D1A5F51009C070B /* EntityOpenWeather+CoreDataProperties.m in Sources */,
 				168AEA981D3EFEC300D02EA4 /* EntityProcessor+CoreDataProperties.m in Sources */,
 			);
@@ -3169,6 +3214,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4FD479D62056AC3D003BDDF9 /* AwareSQLiteTests.m in Sources */,
 				1623CE871BFD1B2C00EFAD72 /* AWARETests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3352,8 +3398,9 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "AWARE/AWARE-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/$(PRODUCT)/AWARE/AWAREFramework/Core/AWARE-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
@@ -3390,7 +3437,8 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "AWARE/AWARE-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/$(PRODUCT)/AWARE/AWAREFramework/Core/AWARE-Bridging-Header.h";
+				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};
@@ -3398,6 +3446,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = B2348D8C3EC4DD151389123D /* Pods-AWARETests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				INFOPLIST_FILE = AWARETests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -3411,6 +3460,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = C7C1B55E50B527FF2845B141 /* Pods-AWARETests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				INFOPLIST_FILE = AWARETests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -3424,6 +3474,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E739C3CFD99F685A8A452056 /* Pods-AWAREUITests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				INFOPLIST_FILE = AWAREUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = jp.ac.keio.sfc.ht.tetujin.AWAREUITests;
@@ -3437,6 +3488,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 1EB67F5CA2CB715737A0C978 /* Pods-AWAREUITests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				INFOPLIST_FILE = AWAREUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = jp.ac.keio.sfc.ht.tetujin.AWAREUITests;

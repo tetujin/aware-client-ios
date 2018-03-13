@@ -84,6 +84,9 @@
 
 - (NSData *) getCSVData;
 
+- (void) cancelSyncProcess;
+- (void) resetMark;
+
 @end
 
 @interface AWAREUploader : NSData <AWAREDataUploaderDelegate, NSURLSessionDataDelegate, NSURLSessionTaskDelegate>

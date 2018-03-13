@@ -16,6 +16,7 @@
     
     // SAMPLE CODE: For adding a study URL directly.
     // [self.sharedAWARECore.sharedAwareStudy setStudyInformationWithURL:@"https://api.awareframework.com/index.php/webservice/index/STUDY_ID/API_KEY"];
+    // [self.sharedAWARECore.sharedAwareStudy setUIMode:AwareUIModeHideAll];
     
     return YES;
 }

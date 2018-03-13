@@ -78,6 +78,8 @@
     UIView *rootView;
     
     NSString * selectedRow;
+    
+    AWARECore * core;
 }
 
 
@@ -99,7 +101,7 @@
     
     /// Init sensor manager for the list view
     AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
-    AWARECore * core = delegate.sharedAWARECore;
+    core = delegate.sharedAWARECore;
     sensorManager =     core.sharedSensorManager;
     dailyUpdateTimer =  core.dailyUpdateTimer;
     awareStudy =        core.sharedAwareStudy;
@@ -237,7 +239,7 @@
     // Get maximum fetch size per post
     NSString * fetchSizeStr = [NSString stringWithFormat:@"%ld records per post",[awareStudy getMaxFetchSize]];
 
-    
+    BOOL autoSyncState = [awareStudy getAutoSyncState];
     
     ///////////////////////////////////////////////
     
@@ -285,7 +287,12 @@
     [_settings addObject:[self getCelContent:@"Fetch records per POST (for SQLite)" desc:fetchSizeStr image:@"setting_db" key:@"STUDY_CELL_MAX_FETCH_SIZE_NORMAL_SENSOR" state:YES]];
     // maximum data size per one HTTP/POST
     [_settings addObject:[self getCelContent:@"Fetch size(KB) per POST" desc:maximumFileSizeDesc image:@"setting_db" key:@"STUDY_CELL_MAX_FILE_SIZE" state:YES]];
-
+    if (autoSyncState) {
+        [_settings addObject:[self getCelContent:@"Auto Sync" desc:@"ON" image:@"setting_auto_sync" key:SETTING_AUTO_SYNC state:YES]];
+    }else{
+        [_settings addObject:[self getCelContent:@"Auto Sync" desc:@"OFF" image:@"setting_auto_sync" key:SETTING_AUTO_SYNC state:NO]];
+    }
+    
     //////////////////////////////////////////////////////
     PushNotification * pushToken = [[PushNotification alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeCoreData];
     NSString * token = [pushToken getPushNotificationToken];
@@ -302,7 +309,6 @@
         studyInfo = [NSString stringWithFormat:@"%@ (%@)", awareStudy.getMqttServer, awareStudy.getStudyId];
     }
     [_settings addObject:[self getCelContent:@"Quit study" desc:studyInfo image:@"setting_quit" key:@"STUDY_CELL_QUIT_STUDY" state:YES]];
-    
     
     /////////////////////////////////////////////////////
     // current version of AWARE iOS
@@ -614,6 +620,14 @@
         AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
         AWARECore * core = delegate.sharedAWARECore;
         [core checkComplianceWithViewController:self showDetail:YES];
+    }else if ([key isEqualToString:SETTING_AUTO_SYNC]){
+        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"AWARE Setting"
+                                                         message:@"Do you want to sync local-DB and remove-DB in the background automatically?"
+                                                        delegate:self
+                                               cancelButtonTitle:@"Cancel"
+                                               otherButtonTitles:@"ON",@"OFF",nil];
+        alert.tag = 22;
+        [alert show];
     } else {
         // [self performSegueWithIdentifier:@"settingView" sender:self];
     }
@@ -877,6 +891,23 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
             default:
                 break;
         }
+    }else if(alertView.tag == 22){
+        switch (buttonIndex) {
+            case 1:
+                [awareStudy setAutoSyncState:YES];
+                [core deactivate];
+                [core activate];
+                break;
+            case 2:
+                [awareStudy setAutoSyncState:NO];
+                [core deactivate];
+                [core activate];
+                break;
+            default:
+                break;
+        }
+        [self.tableView reloadData];
+        [self initContentsOnTableView];
     }
 }
 

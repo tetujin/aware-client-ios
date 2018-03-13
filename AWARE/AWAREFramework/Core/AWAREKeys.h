@@ -65,6 +65,7 @@ extern NSString* const SETTING_AUTO_SYNC_STATE;
 extern NSString* const SETTING_CSV_EXPORT_STATE;
 extern NSString* const SETTING_DB_TYPE;
 extern NSString* const SETTING_UI_MODE;
+extern NSString* const SETTING_AUTO_SYNC;
 
 
 extern NSString* const TABLE_INSER;
@@ -118,6 +119,7 @@ extern NSString* const SENSOR_PLUGIN_IOS_ESM;
 extern NSString* const SENSOR_PLUGIN_FITBIT;
 extern NSString* const SENSOR_PLUGIN_CONTACTS;
 extern NSString* const SENSOR_BASIC_SETTINGS;
+extern NSString* const SENSOR_PLUGIN_CALENDAR;
 
 extern NSString* const SENSOR_PLUGIN_MSBAND_SENSORS_CALORIES;
 extern NSString* const SENSOR_PLUGIN_MSBAND_SENSORS_DEVICECONTACT;

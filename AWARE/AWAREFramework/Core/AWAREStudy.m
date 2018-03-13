@@ -1485,4 +1485,15 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
 //    <#code#>
 //}
 
+- (void) setAutoSyncState:(bool) state {
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setBool:state forKey:SETTING_AUTO_SYNC];
+    [userDefaults synchronize];
+}
+
+- (BOOL) getAutoSyncState{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    return [userDefaults boolForKey:SETTING_AUTO_SYNC];
+}
+
 @end

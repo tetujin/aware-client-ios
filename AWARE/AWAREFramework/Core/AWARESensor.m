@@ -628,14 +628,8 @@ int const MOTION_SENSOR_DEFAULT_DB_WRITE_INTERVAL_SECOND = 30;
     return NO;
 }
 
-
-
-
-
-
-
 - (void) saveDummyData {
-    
+    NSLog(@"*** Please overwrite -saveDummyData method. ***");
 }
 
 /////////////////////////////
@@ -719,7 +713,6 @@ int const MOTION_SENSOR_DEFAULT_DB_WRITE_INTERVAL_SECOND = 30;
     }else{
         [super lockDB];
     }
-    
 }
 
 - (void) unlockDB{

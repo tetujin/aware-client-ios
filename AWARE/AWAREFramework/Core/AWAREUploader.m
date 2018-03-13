@@ -413,8 +413,12 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
     }
 }
 
+- (void) cancelSyncProcess {
+    NSLog(@"*** Please overwrite -cancelSyncProcess!!! ***");
+}
 
-
-
+- (void) resetMark {
+    NSLog(@"*** Please overwrite -cancelSyncProcess!!! ***");
+}
 
 @end
