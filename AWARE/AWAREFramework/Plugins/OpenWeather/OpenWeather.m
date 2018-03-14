@@ -25,6 +25,7 @@ NSString * const AWARE_PREFERENCES_OPENWEATHER_API_KEY   = @"api_key_plugin_open
     double thisLon;
     NSString* identificationForOpenWeather;
     NSString * userApiKey;
+    NSMutableData * receivedData;
 }
 
 /** api */
@@ -75,6 +76,7 @@ int ONE_HOUR = 60*60;
                               dbType:dbType];
     if (self) {
         locationManager = nil;
+        receivedData = [[NSMutableData alloc] init];
         identificationForOpenWeather = @"http_for_open_weather_";
         [self setCSVHeader:@[@"timestamp",
                              @"device_id",
@@ -216,7 +218,7 @@ int ONE_HOUR = 60*60;
     // Set settion configu and HTTP/POST body.
     NSURLSessionConfiguration *sessionConfig = nil;
     
-    identificationForOpenWeather = [NSString stringWithFormat:@"%@%f", identificationForOpenWeather, [[NSDate new] timeIntervalSince1970]];
+    identificationForOpenWeather = [NSString stringWithFormat:@"%@", identificationForOpenWeather];//@%f", identificationForOpenWeather, [[NSDate new] timeIntervalSince1970]];
     sessionConfig = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:identificationForOpenWeather];
     sessionConfig.timeoutIntervalForRequest = 180.0;
     sessionConfig.timeoutIntervalForResource = 60.0;
@@ -253,18 +255,24 @@ int ONE_HOUR = 60*60;
 didReceiveResponse:(NSURLResponse *)response
  completionHandler:(void (^)(NSURLSessionResponseDisposition disposition))completionHandler {
     
+    completionHandler(NSURLSessionResponseAllow);
+    
     NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
     int responseCode = (int)[httpResponse statusCode];
     if (responseCode == 200) {
+        [session finishTasksAndInvalidate];
         if([self isDebug]){
             NSLog(@"[%@] Got Weather Information from API!", [self getSensorName]);
         }
+    }else{
+        [session invalidateAndCancel];
+        receivedData = [[NSMutableData alloc] init];
     }
 
-    [super URLSession:session
-             dataTask:dataTask
-   didReceiveResponse:response
-    completionHandler:completionHandler];
+//    [super URLSession:session
+//             dataTask:dataTask
+//   didReceiveResponse:response
+//    completionHandler:completionHandler];
     
 //    [session finishTasksAndInvalidate];
 //    [session invalidateAndCancel];
@@ -276,8 +284,16 @@ didReceiveResponse:(NSURLResponse *)response
          dataTask:(NSURLSessionDataTask *)dataTask
    didReceiveData:(NSData *)data {
     if(data != nil){
-        NSError *e = nil;
-        jsonWeatherData = [NSJSONSerialization JSONObjectWithData:data
+        [receivedData appendData:data];
+    }
+    // [super URLSession:session dataTask:dataTask didReceiveData:data];
+}
+
+- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error{
+    
+    if (receivedData != nil){
+        NSError * e = nil;
+        jsonWeatherData = [NSJSONSerialization JSONObjectWithData:receivedData
                                                           options:NSJSONReadingAllowFragments
                                                             error:&e];
         
@@ -287,7 +303,7 @@ didReceiveResponse:(NSURLResponse *)response
                 [self sendLocalNotificationForMessage:e.debugDescription soundFlag:NO];
             }
             return;
-        };
+        }
         
         if ([self isDebug]) {
             [self sendLocalNotificationForMessage:@"Get Weather Information" soundFlag:NO];
@@ -321,12 +337,8 @@ didReceiveResponse:(NSURLResponse *)response
             [self setLatestData:dict];
         });
     }
-
-//    [session finishTasksAndInvalidate];
-//    [session invalidateAndCancel];
-    
-    [super URLSession:session dataTask:dataTask didReceiveData:data];
 }
+
 
 
 - (void)insertNewEntityWithData:(NSDictionary *)data

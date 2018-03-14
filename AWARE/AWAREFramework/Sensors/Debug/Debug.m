@@ -161,4 +161,24 @@
     [super syncAwareDB];
 }
 
+- (BOOL)syncAwareDBInForeground{
+    return [super syncAwareDBInForeground];
+}
+
+- (void)syncAwareDBInBackground{
+    [super syncAwareDBInBackground];
+}
+
+- (void)syncAwareDBWithSensorName:(NSString *)name{
+    [super syncAwareDBWithSensorName:name];
+}
+
+- (void)syncAwareDBInBackgroundWithSensorName:(NSString *)name{
+    [super syncAwareDBInBackgroundWithSensorName:name];
+}
+
+- (BOOL)syncAwareDBInForegroundWithSensorName:(NSString *)name{
+    return [super syncAwareDBInForegroundWithSensorName:name];
+}
+
 @end

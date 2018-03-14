@@ -161,12 +161,9 @@
             }
         }
 
-        NSUserDefaults * userDefaults = [NSUserDefaults standardUserDefaults];
-        NSString * apiKey = [userDefaults objectForKey:@"fitbit.setting.client_id"];
-        _apiKeyField.text = apiKey;
+        _apiKeyField.text = [Fitbit getFitbitClientIdForUI:YES];
         
-        NSString * apiSecret = [userDefaults objectForKey:@"fitbit.setting.api_secret"];
-        _apiSecretField.text = apiSecret;
+        _apiSecretField.text = [Fitbit getFitbitApiSecretForUI:YES];
         
         NSDate * lastSyncStepData = [FitbitData getLastSyncSteps];
         _lastUpdateDatePicker.date = lastSyncStepData;
@@ -186,10 +183,11 @@
     [alertController addAction:[UIAlertAction actionWithTitle:@"YES"
                                                         style:UIAlertActionStyleDestructive
                                                       handler:^(UIAlertAction *action) {
-                                                          NSUserDefaults * userDefaults = [NSUserDefaults standardUserDefaults];
-                                                          [userDefaults setObject:_apiKeyField.text forKey:@"fitbit.setting.client_id"];
-                                                          [userDefaults setObject:_apiSecretField.text forKey:@"fitbit.setting.api_secret"];
-                                                          
+                                                          // NSUserDefaults * userDefaults = [NSUserDefaults standardUserDefaults];
+                                                          // [userDefaults setObject:_apiKeyField.text forKey:@"fitbit.setting.client_id"];
+                                                          // [userDefaults setObject:_apiSecretField.text forKey:@"fitbit.setting.api_secret"];
+                                                          [Fitbit setFitbitUserId:_apiKeyField.text];
+                                                          [Fitbit setFitbitApiSecret:_apiSecretField.text];
                                                           
                                                           // NSDate * lastSyncStepData = [FitbitData getLastSyncSteps];
                                                           NSDate * date = _lastUpdateDatePicker.date;
@@ -213,10 +211,10 @@
 
 
 - (IBAction)pushedInfoButton:(id)sender {
-    NSUserDefaults * userDefaults = [NSUserDefaults standardUserDefaults];
-    NSString * apiKey = [userDefaults objectForKey:@"fitbit.setting.client_id"];
-    NSString * apiSecret = [userDefaults objectForKey:@"fitbit.setting.api_secret"];
-    NSString * code = [userDefaults objectForKey:@"fitbit.setting.code"];
+    // NSUserDefaults * userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString * apiKey = [Fitbit getFitbitClientIdForUI:YES]; //[userDefaults objectForKey:@"fitbit.setting.client_id"];
+    NSString * apiSecret = [Fitbit getFitbitApiSecretForUI:YES]; // [userDefaults objectForKey:@"fitbit.setting.api_secret"];
+    NSString * code = [Fitbit getFitbitCode]; // [userDefaults objectForKey:@"fitbit.setting.code"];
     
     NSString * message = [NSString stringWithFormat:@"API Key: %@\nAPI Secret: %@\nCode: %@\nAccess Token: %@\nRefresh Token: %@\nUser ID: %@\nToken Type: %@",
                           apiKey,
@@ -287,7 +285,7 @@
 - (IBAction)pushedLoginButton:(id)sender {
     
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Confirmation"
-                                                                             message:@"Do you login to Fitbit with current setting?"
+                                                                             message:[NSString stringWithFormat:@"Do you login to Fitbit with current setting?\nClient ID:%@\nAPI Secret:%@",[Fitbit getFitbitClientIdForUI:NO],[Fitbit getFitbitApiSecretForUI:NO]]
                                                                       preferredStyle:UIAlertControllerStyleAlert];
     
     [alertController addAction:[UIAlertAction actionWithTitle:@"YES"
@@ -295,11 +293,11 @@
                                                       handler:^(UIAlertAction *action) {
                                                           dispatch_async(dispatch_get_main_queue(), ^{
                                                               // [self presentViewController:alertController animated:YES completion:nil];
-                                                              NSUserDefaults * userDefaults = [NSUserDefaults standardUserDefaults];
-                                                              [userDefaults setObject:_apiKeyField.text forKey:@"fitbit.setting.client_id"];
-                                                              [userDefaults setObject:_apiSecretField.text forKey:@"fitbit.setting.api_secret"];
+                                                              // NSUserDefaults * userDefaults = [NSUserDefaults standardUserDefaults];
+                                                              // [userDefaults setObject:_apiKeyField.text forKey:@"fitbit.setting.client_id"];
+                                                              // [userDefaults setObject:_apiSecretField.text forKey:@"fitbit.setting.api_secret"];
                                                               
-                                                              [fitbit loginWithOAuth2WithClientId:_apiKeyField.text apiSecret:_apiSecretField.text];
+                                                              [fitbit loginWithOAuth2WithClientId:[Fitbit getFitbitClientIdForUI:NO] apiSecret:[Fitbit getFitbitApiSecretForUI:NO]];
                                                               [self showAllSetting];
                                                           });
                                                       }]];

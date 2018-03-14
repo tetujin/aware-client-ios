@@ -8,7 +8,9 @@
 
 #import "AWARESensor.h"
 
-@interface Fitbit : AWARESensor <AWARESensorDelegate, NSURLSessionDataDelegate, NSURLSessionTaskDelegate>
+extern NSInteger const AWARE_ALERT_FITBIT_MOVE_TO_LOGIN_PAGE;
+
+@interface Fitbit : AWARESensor <AWARESensorDelegate, NSURLSessionDataDelegate, NSURLSessionTaskDelegate, UIAlertViewDelegate>
 
 - (void) loginWithOAuth2WithClientId:(NSString *)clientId apiSecret:(NSString *)apiSecret;
 - (void) refreshToken;
@@ -20,10 +22,16 @@
 + (void) setFitbitRefreshToken:(NSString *)refreshToken;
 + (void) setFitbitUserId:(NSString *)userId;
 + (void) setFibitTokenType:(NSString *)tokenType;
++ (void) setFitbitCode:(NSString *)code;
++ (void) setFitbitApiSecret:(NSString *) apiSecret;
 + (NSString *) getFitbitAccessToken;
 + (NSString *) getFitbitRefreshToken;
 + (NSString *) getFitbitUserId;
 + (NSString *) getFitbitTokenType;
++ (NSString *) getFitbitCode;
+
++ (NSString *) getFitbitApiSecretForUI:(bool)forUI;
++ (NSString *) getFitbitClientIdForUI:(bool)forUI;
 
 + (void)clearAllSettings;
 

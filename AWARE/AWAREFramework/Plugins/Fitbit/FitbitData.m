@@ -257,8 +257,6 @@
         sessionConfig.timeoutIntervalForResource = 60.0;
         sessionConfig.HTTPMaximumConnectionsPerHost = 60;
         sessionConfig.allowsCellularAccess = YES;
-        sessionConfig.allowsCellularAccess = YES;
-        sessionConfig.discretionary = YES;
         session = [NSURLSession sessionWithConfiguration:sessionConfig delegate:self delegateQueue:Nil];
         NSURLSessionDataTask* dataTask = [session dataTaskWithRequest:request];
         [dataTask resume];
@@ -382,15 +380,19 @@
           dataTask:(NSURLSessionDataTask *)dataTask
 didReceiveResponse:(NSURLResponse *)response
  completionHandler:(void (^)(NSURLSessionResponseDisposition disposition))completionHandler {
-        
+    
     NSString * identifier = session.configuration.identifier;
     // NSLog(@"[%@] session:dataTask:didReceiveResponse:completionHandler:",identifier);
+    
+    completionHandler(NSURLSessionResponseAllow);
     
     NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
     int responseCode = (int)[httpResponse statusCode];
     if (responseCode == 200) {
         NSLog(@"[%d] Success",responseCode);
+        [session finishTasksAndInvalidate];
     }else{
+        [session invalidateAndCancel];
         // clear
         NSLog(@"[%d] %@", responseCode, response.debugDescription);
         if([identifier isEqualToString:@"steps"]){
@@ -403,7 +405,7 @@ didReceiveResponse:(NSURLResponse *)response
             sleepResponse = [[NSMutableData alloc] init];
         }
     }
-    [super URLSession:session dataTask:dataTask didReceiveResponse:response completionHandler:completionHandler];
+    // [super URLSession:session dataTask:dataTask didReceiveResponse:response completionHandler:completionHandler];
 }
 
 
@@ -422,7 +424,7 @@ didReceiveResponse:(NSURLResponse *)response
     }else if([identifier isEqualToString:@"sleep"]){
         [sleepResponse appendData:data];
     }
-    [super URLSession:session dataTask:dataTask didReceiveData:data];
+    // [super URLSession:session dataTask:dataTask didReceiveData:data];
 }
 
 
@@ -467,7 +469,7 @@ didReceiveResponse:(NSURLResponse *)response
         sleepResponse = [[NSMutableData alloc] init];
     }
     
-    [super URLSession:session task:task didCompleteWithError:error];
+    // [super URLSession:session task:task didCompleteWithError:error];
     
 }
 
