@@ -30,7 +30,7 @@ NSString * const AWARE_PREFERENCES_PLUGIN_IOS_ESM_CONFIG_URL = @"plugin_ios_esm_
     bool isLock;
     NSString * tableName;
     NSArray * pluginSettings;
-    int responseCode;
+    // int responseCode;
     AWAREStudy * awareStudy;
 }
 
@@ -196,43 +196,8 @@ NSString * const AWARE_PREFERENCES_PLUGIN_IOS_ESM_CONFIG_URL = @"plugin_ios_esm_
     NSURLSessionConfiguration *sessionConfig = nil;
     
     // Make a HTTP session id
-    currentHttpSessionId = [NSString stringWithFormat:@"%@_%f", baseHttpSessionId, [NSDate new].timeIntervalSince1970];
+    currentHttpSessionId = [NSString stringWithFormat:@"%@", baseHttpSessionId]; //, [NSDate new].timeIntervalSince1970];
     
-//    if([AWAREUtils isForeground]){
-//        request = [NSMutableURLRequest requestWithURL:url];
-//        [request setHTTPMethod:@"GET"];
-//        
-//        sessionConfig = [NSURLSessionConfiguration defaultSessionConfiguration];
-//        sessionConfig.timeoutIntervalForRequest = 60.0;
-//        sessionConfig.timeoutIntervalForResource = 60.0;
-//        sessionConfig.HTTPMaximumConnectionsPerHost = 60;
-//        sessionConfig.allowsCellularAccess = YES;
-//        // sessionConfig.discretionary = YES;
-//        session = [NSURLSession sessionWithConfiguration:sessionConfig delegate:self delegateQueue:Nil];
-//        
-//        [[session dataTaskWithRequest:request  completionHandler: ^(NSData *data, NSURLResponse *response, NSError *error) {
-//            [session finishTasksAndInvalidate];
-//            [session invalidateAndCancel];
-//            dispatch_async(dispatch_get_main_queue(), ^{
-//                NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
-//                if ([httpResponse statusCode] == 200) {
-//                    // [self sendLocalNotificationForMessage:@"Get a response as 200" soundFlag:YES];
-//                    [self saveRecievedESMsWithData:[data copy] response:response error:error];
-//                }else{
-//                    if([AWAREUtils isForeground]){
-//                        NSString * message = [NSString stringWithFormat:@"The response code is %d: %@", responseCode, error.debugDescription];
-//                        [self sendAlertMessageWithTitle:[NSString stringWithFormat:@"[%@] HTTP Connection Error", [self getSensorName]]
-//                                                message:message
-//                                           cancelButton:@"Close"];
-//                        [self saveDebugEventWithText:message type:DebugTypeWarn label:@"iOS ESM"];
-//                    }
-//                }
-//            });
-//        }] resume];
-//  }else{
-
-    // [self sendLocalNotificationForMessage:@"hello backgound" soundFlag:YES];
-
     // Make a seesion config for HTTP/POST
     sessionConfig = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:currentHttpSessionId];
     sessionConfig.timeoutIntervalForRequest = 60.0;
@@ -320,22 +285,26 @@ didReceiveResponse:(NSURLResponse *)response
  completionHandler:(void (^)(NSURLSessionResponseDisposition disposition))completionHandler {
     
     if([session.configuration.identifier isEqualToString:currentHttpSessionId]){
+        
+        completionHandler(NSURLSessionResponseAllow);
+        
         NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
-        responseCode = (int)[httpResponse statusCode];
+        int responseCode = (int)[httpResponse statusCode];
         
         if (responseCode == 200) {
+            [session finishTasksAndInvalidate];
             if([self isDebug]){
                 NSLog(@"[%@] Got Web ESM configuration file from server", [self getSensorName]);
             }
         }else{
+            [session invalidateAndCancel];
             receiveData = [[NSMutableData alloc] init];
         }
-        
-        [session finishTasksAndInvalidate];
+    }else{
+        NSLog(@"******** ios esm ********");
+        [super URLSession:session dataTask:dataTask didReceiveResponse:response completionHandler:completionHandler];
         [session invalidateAndCancel];
         completionHandler(NSURLSessionResponseAllow);
-    }else{
-        [super URLSession:session dataTask:dataTask didReceiveResponse:response completionHandler:completionHandler];
     }
 }
 
@@ -343,12 +312,11 @@ didReceiveResponse:(NSURLResponse *)response
 -(void)URLSession:(NSURLSession *)session
          dataTask:(NSURLSessionDataTask *)dataTask
    didReceiveData:(NSData *)data {
-    
     NSLog(@"iOS ESM Plugin: Did received Data");
-    NSLog(@"%@", dataTask.currentRequest.URL);
+    // NSLog(@"%@", dataTask.currentRequest.URL);
     
-    NSString * log = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    NSLog(@"%@",log);
+    // NSString * log = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    // NSLog(@"%@",log);
     
     if([session.configuration.identifier isEqualToString:currentHttpSessionId]){
         if(data != nil){
@@ -356,43 +324,33 @@ didReceiveResponse:(NSURLResponse *)response
             [receiveData appendData:data];
         }
     }else{
+        NSLog(@"****** ios esm *******");
         [super URLSession:session dataTask:dataTask didReceiveData:data];
     }
 }
 
-- (void)URLSession:(NSURLSession *)session
-              task:(NSURLSessionTask *)task
-didCompleteWithError:(NSError *)error{
+- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error{
     
     NSLog(@"iOS ESM Plugin: Did compleate");
     
     if(error != nil){
         NSLog(@"Error: %@", error.debugDescription);
-        if([AWAREUtils isForeground]){
-            [self sendAlertMessageWithTitle:@"Error iOS ESM" message:error.debugDescription cancelButton:@"Close"];
-        }
+        receiveData = [[NSMutableData alloc] init];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if([AWAREUtils isForeground]){
+                [self sendAlertMessageWithTitle:@"[iOS ESM] Configuration File Download Error"
+                                        message:error.debugDescription
+                                   cancelButton:@"Close"];
+            }
+            NSString * message = [NSString stringWithFormat:@"[iOS ESM] Configuration File Download Error: %@", error.debugDescription];
+            [self saveDebugEventWithText:message type:DebugTypeWarn label:@"iOS ESM"];
+        });
+        return;
     }
     
     if([session.configuration.identifier isEqualToString:currentHttpSessionId]){
-        
-        if(responseCode != 200){
-            [session finishTasksAndInvalidate];
-            [session invalidateAndCancel];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                NSString * message = [NSString stringWithFormat:@"The response code is %d: %@", responseCode, error.debugDescription];
-                [self saveDebugEventWithText:message type:DebugTypeWarn label:@"iOS ESM"];
-            });
-            receiveData = [[NSMutableData alloc] init];
-            return;
-        }
-        
         [self saveRecievedESMsWithData:[receiveData copy] response:nil error:error];
-        
         receiveData = [[NSMutableData alloc] init];
-        
-        [session finishTasksAndInvalidate];
-        [session invalidateAndCancel];
-        
     }else{
         [super URLSession:session task:task didCompleteWithError:error];
     }
@@ -411,8 +369,6 @@ didCompleteWithError:(NSError *)error{
                 [self sendAlertMessageWithTitle:@"Error iOS ESM" message:error.debugDescription cancelButton:@"Close"];
             }
         }
-        [session invalidateAndCancel];
-        [session finishTasksAndInvalidate];
     }else{
         [super URLSession:session didBecomeInvalidWithError:error];
     }

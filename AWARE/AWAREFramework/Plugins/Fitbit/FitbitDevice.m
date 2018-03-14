@@ -81,7 +81,9 @@
     
     __weak NSURLSession *session = nil;
     NSURLSessionConfiguration *sessionConfig = nil;
-    identificationForFitbitDevice = [NSString stringWithFormat:@"fitbit.query.device.%f", [[NSDate new] timeIntervalSince1970]];
+//    identificationForFitbitDevice = [NSString stringWithFormat:@"fitbit.query.device.%f", [[NSDate new] timeIntervalSince1970]];
+    identificationForFitbitDevice = [NSString stringWithFormat:@"fitbit.query.device"];
+    
     
     if ([AWAREUtils isBackground]) {
         sessionConfig = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:identificationForFitbitDevice];
@@ -192,20 +194,24 @@
 didReceiveResponse:(NSURLResponse *)response
  completionHandler:(void (^)(NSURLSessionResponseDisposition))completionHandler{
     
+    completionHandler(NSURLSessionResponseAllow);
+    
     NSString * identifier = session.configuration.identifier;
     if([identifier isEqualToString:identificationForFitbitDevice]){
         NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
         int responseCode = (int)[httpResponse statusCode];
         if (responseCode == 200) {
+            [session finishTasksAndInvalidate];
             NSLog(@"[%d] Success",responseCode);
         }else{
             // clear
+            [session invalidateAndCancel];
             NSLog(@"[%d] %@", responseCode, response.debugDescription);
             responseData = [[NSMutableData alloc] init];
         }
 
     }
-    [super URLSession:session dataTask:dataTask didReceiveResponse:response completionHandler:completionHandler];
+    // [super URLSession:session dataTask:dataTask didReceiveResponse:response completionHandler:completionHandler];
 }
 
 - (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveData:(NSData *)data{
@@ -213,7 +219,7 @@ didReceiveResponse:(NSURLResponse *)response
     if([identifier isEqualToString:identificationForFitbitDevice]){
         [responseData appendData:data];
     }
-    [super URLSession:session dataTask:dataTask didReceiveData:data];
+    // [super URLSession:session dataTask:dataTask didReceiveData:data];
 }
 
 - (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error{
@@ -223,7 +229,7 @@ didReceiveResponse:(NSURLResponse *)response
         [self saveData:data response:nil error:error];
         responseData = [[NSMutableData alloc] init];
     }
-    [super URLSession:session task:task didCompleteWithError:error];
+    // [super URLSession:session task:task didCompleteWithError:error];
 }
 
 //////////////////////////////////////////////////////////////////////

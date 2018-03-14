@@ -86,9 +86,9 @@
         currentReachability  = [Reachability reachabilityForInternetConnection];
         receivedData = [[NSMutableData alloc] init];
         // postedTextLength = 0;
-        shortDelayForNextUpload = 1; // second
-        longDelayForNextUpload = 30; // second
-        thresholdForNextLongDelay = 10; // count
+        shortDelayForNextUpload = 1;   // second
+        longDelayForNextUpload = 1;    // second (30)
+        thresholdForNextLongDelay = 1; // count (10)
         syncProgress = @"";
         isManualUpload = NO;
         isLock = NO;
@@ -340,7 +340,12 @@
                 
                 // Convert array to json data
                 NSError * error = nil;
-                NSData * jsonData = [NSJSONSerialization dataWithJSONObject:results options:0 error:&error];
+                NSData * jsonData = nil;
+                @try {
+                    jsonData = [NSJSONSerialization dataWithJSONObject:results options:0 error:&error];
+                } @catch (NSException *exception) {
+                    NSLog(@"[%@] %@",sensorName, exception.debugDescription);
+                }
                 
                 if (error == nil && jsonData != nil) {
                     // Set HTTP/POST session on main thread

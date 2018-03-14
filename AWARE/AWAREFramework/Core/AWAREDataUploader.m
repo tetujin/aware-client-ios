@@ -166,17 +166,12 @@
     // Set session configuration
     NSURLSessionConfiguration *sessionConfig = nil;
     // double unxtime = [[NSDate new] timeIntervalSince1970];
-    syncDataQueryIdentifier = baseCreateTableQueryIdentifier; //[NSString stringWithFormat:@"%@%f", baseSyncDataQueryIdentifier, unxtime];
+    syncDataQueryIdentifier = baseSyncDataQueryIdentifier; //[NSString stringWithFormat:@"%@%f", baseSyncDataQueryIdentifier, unxtime];
     sessionConfig = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:syncDataQueryIdentifier];
     sessionConfig.timeoutIntervalForRequest = 60;
     sessionConfig.HTTPMaximumConnectionsPerHost = 60;
     sessionConfig.timeoutIntervalForResource = 60;
     sessionConfig.allowsCellularAccess = YES;
-    // if ([self isSyncWithOnlyWifi]) {
-    //    sessionConfig.allowsCellularAccess = NO;
-    //} else {
-    //    sessionConfig.allowsCellularAccess = YES;
-    //}
     
     NSString * percentEncodedValues = [AWAREUtils stringByAddingPercentEncoding:formatedSensorData unreserved:@""];
     
@@ -199,7 +194,7 @@
     }
     
     [session getTasksWithCompletionHandler:^(NSArray* dataTasks, NSArray* uploadTasks, NSArray* downloadTasks){
-        NSLog(@"Currently suspended tasks");
+        // NSLog(@"Currently suspended tasks");
         for (NSURLSessionDownloadTask* task in dataTasks) {
             NSLog(@"Task: %@",[task description]);
         }
@@ -223,30 +218,29 @@ didReceiveResponse:(NSURLResponse *)response
     
     // test: server peformance
     double diff = [[NSDate new] timeIntervalSince1970] - httpStart;
-//    NSLog(@"[%@] %f", sensorName, diff);
     if (postLengthDouble > 0 && diff > 0) {
         NSString *networkPeformance = [NSString stringWithFormat:@"%0.2f KB/s",postLengthDouble/diff/1000.0f];
         NSLog(@"[%@] %@", sensorName, networkPeformance);
         [self saveDebugEventWithText:networkPeformance type:DebugTypeInfo label:sensorName];
     }
     
-    
-    [session finishTasksAndInvalidate];
-    [session invalidateAndCancel];
     completionHandler(NSURLSessionResponseAllow);
-    
-    if ([session.configuration.identifier isEqualToString:syncDataQueryIdentifier]) {
-        NSLog(@"[%@] Get response from the server.", sensorName);
-        [self receivedResponseFromServer:dataTask.response withData:nil error:nil];
-        
-    } else if ( [session.configuration.identifier isEqualToString:createTableQueryIdentifier] ){
-        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
-        int responseCode = (int)[httpResponse statusCode];
-        if (responseCode == 200) {
-            NSLog(@"[%@] Sucess to create new table on AWARE server.", sensorName);
+   
+    NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
+    int responseCode = (int)[httpResponse statusCode];
+    if (responseCode == 200) {
+        [session finishTasksAndInvalidate];
+        // NSLog(@"[%@] Sucess to create new table on AWARE server.", sensorName);
+        if ([session.configuration.identifier isEqualToString:syncDataQueryIdentifier]) {
+            NSLog(@"[%@] Get response from the server.", sensorName);
+            [self receivedResponseFromServer:dataTask.response withData:nil error:nil];
+        } else if ( [session.configuration.identifier isEqualToString:createTableQueryIdentifier] ){
+            
+            
+        } else {
         }
-    } else {
-        
+    }else{
+        [session invalidateAndCancel];
     }
 }
 
@@ -263,18 +257,11 @@ didReceiveResponse:(NSURLResponse *)response
         NSString* newStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
         NSLog(@"[%@] %@",sensorName, newStr);
     }
-    [session finishTasksAndInvalidate];
-    [session invalidateAndCancel];
-    session = nil;
-    dataTask = nil;
-    data = nil;
 }
 
 - (void)URLSession:(NSURLSession *)session
-              task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error {
-    
-    [session finishTasksAndInvalidate];
-    [session invalidateAndCancel];
+              task:(NSURLSessionTask *)task
+didCompleteWithError:(NSError *)error {
     
     if ([session.configuration.identifier isEqualToString:syncDataQueryIdentifier]) {
         if (error) {
@@ -305,15 +292,10 @@ didReceiveResponse:(NSURLResponse *)response
                                                                   userInfo:userInfo];
             }
         } else {
-            //            [self dataSyncIsFinishedCorrectoly];
+            
         }
-        NSLog(@"%@", task.description);
-        //        NSLog(@"%@", error.debugDescription);
-        return;
-        //    completionHandler(NSURLSessionResponseAllow);
     } else if ([session.configuration.identifier isEqualToString:createTableQueryIdentifier]){
-        session = nil;
-        task = nil;
+
     }
 }
 
@@ -324,90 +306,78 @@ didReceiveResponse:(NSURLResponse *)response
         [AWAREUtils sendLocalNotificationForMessage:error.debugDescription soundFlag:NO];
     }
     [session invalidateAndCancel];
-    [session finishTasksAndInvalidate];
 }
 
 
 - (void)receivedResponseFromServer:(NSURLResponse *)response
                           withData:(NSData *)data
                              error:(NSError *)error{
-    NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
-    int responseCode = (int)[httpResponse statusCode];
-    NSString* newStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    NSLog(@"[%@] %d  Response =====> %@",sensorName, responseCode, newStr);
     
-    data = nil;
-    response = nil;
-    error = nil;
-    httpResponse = nil;
+    [awareLocalStorage setNextMark];
+    NSString *bytes = [self getFileStrSize:(double)[awareLocalStorage getFileSize]];
+    NSString *message = @"";
     
-    if (responseCode == 200) {
-        [awareLocalStorage setNextMark];
-        NSString *bytes = [self getFileStrSize:(double)[awareLocalStorage getFileSize]];
-        NSString *message = @"";
+    // NSLog(@"%d", [awareLocalStorage getMarker]);
+    
+    if( [awareLocalStorage getMarker] == 0 ){
+        // success to upload data
+        message = [NSString stringWithFormat:@"[%@] Sucess to upload sensor data to AWARE server with %@", sensorName, bytes];
+        NSLog(@"%@", message);
+        [self saveDebugEventWithText:message type:DebugTypeInfo label:syncDataQueryIdentifier];
         
-        NSLog(@"%d", [awareLocalStorage getMarker]);
+        // send notification
+        if ([self isDebug]) [AWAREUtils sendLocalNotificationForMessage:message soundFlag:NO];
         
-        if( [awareLocalStorage getMarker] == 0 ){
-            // success to upload data
-            message = [NSString stringWithFormat:@"[%@] Sucess to upload sensor data to AWARE server with %@", sensorName, bytes];
-            NSLog(@"%@", message);
-            [self saveDebugEventWithText:message type:DebugTypeInfo label:syncDataQueryIdentifier];
-            
-            // send notification
-            if ([self isDebug]) [AWAREUtils sendLocalNotificationForMessage:message soundFlag:NO];
-            
-            // remove store data
-            [awareLocalStorage clearFile:sensorName];
-            [self saveDebugEventWithText:[NSString stringWithFormat:@"[%@] Remove stored data", sensorName]
-                                    type:DebugTypeInfo
-                                   label:syncDataQueryIdentifier];
-            // init http/post condition
-            [self dataSyncIsFinishedCorrectoly];
-            
-            NSMutableDictionary * userInfo = [[NSMutableDictionary alloc] init];
-            [userInfo setObject:@100 forKey:@"KEY_UPLOAD_PROGRESS_STR"];
-            [userInfo setObject:@YES forKey:@"KEY_UPLOAD_FIN"];
-            [userInfo setObject:@YES forKey:@"KEY_UPLOAD_SUCCESS"];
-            [userInfo setObject:sensorName forKey:@"KEY_UPLOAD_SENSOR_NAME"];
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"ACTION_AWARE_DATA_UPLOAD_PROGRESS"
-                                                                object:nil
-                                                              userInfo:userInfo];
-            
-        } else {
-            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-            NSInteger length = [userDefaults integerForKey:KEY_MAX_DATA_SIZE];
-            long denominator = (long)[awareLocalStorage getFileSize]/(long)length;
-            
-            NSString* formatedLength = [self getFileStrSize:(double)length];
-            
-            message = [NSString stringWithFormat:@"[%@] Sucess to upload sensor data to AWARE server with %@ - %d/%ld", sensorName, formatedLength, [awareLocalStorage getMarker], denominator];
-            NSLog(@"%@", message);
-            [self saveDebugEventWithText:message type:DebugTypeInfo label:syncDataQueryIdentifier];
-            
-            // send notification
-            if ([self isDebug]) [AWAREUtils sendLocalNotificationForMessage:message soundFlag:NO];
-            
-            // upload sensor data again
-            [self saveDebugEventWithText:[NSString stringWithFormat:@"[%@] Upload stored data again", sensorName]
-                                    type:DebugTypeInfo
-                                   label:syncDataQueryIdentifier];
-            [self postSensorDataWithSensorName:sensorName session:nil];
-            
-            double progress = [awareLocalStorage getMarker]/(double)denominator*100;
-            if(progress>100){
-                progress = 100;
-            }
-            
-            NSMutableDictionary * userInfo = [[NSMutableDictionary alloc] init];
-            [userInfo setObject:@(progress) forKey:@"KEY_UPLOAD_PROGRESS_STR"];
-            [userInfo setObject:@YES forKey:@"KEY_UPLOAD_FIN"];
-            [userInfo setObject:@YES forKey:@"KEY_UPLOAD_SUCCESS"];
-            [userInfo setObject:sensorName forKey:@"KEY_UPLOAD_SENSOR_NAME"];
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"ACTION_AWARE_DATA_UPLOAD_PROGRESS"
-                                                                object:nil
-                                                              userInfo:userInfo];
+        // remove store data
+        [awareLocalStorage clearFile:sensorName];
+        [self saveDebugEventWithText:[NSString stringWithFormat:@"[%@] Remove stored data", sensorName]
+                                type:DebugTypeInfo
+                               label:syncDataQueryIdentifier];
+        // init http/post condition
+        [self dataSyncIsFinishedCorrectoly];
+        
+        NSMutableDictionary * userInfo = [[NSMutableDictionary alloc] init];
+        [userInfo setObject:@100 forKey:@"KEY_UPLOAD_PROGRESS_STR"];
+        [userInfo setObject:@YES forKey:@"KEY_UPLOAD_FIN"];
+        [userInfo setObject:@YES forKey:@"KEY_UPLOAD_SUCCESS"];
+        [userInfo setObject:sensorName forKey:@"KEY_UPLOAD_SENSOR_NAME"];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"ACTION_AWARE_DATA_UPLOAD_PROGRESS"
+                                                            object:nil
+                                                          userInfo:userInfo];
+        
+    } else {
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        NSInteger length = [userDefaults integerForKey:KEY_MAX_DATA_SIZE];
+        long denominator = (long)[awareLocalStorage getFileSize]/(long)length;
+        
+        NSString* formatedLength = [self getFileStrSize:(double)length];
+        
+        message = [NSString stringWithFormat:@"[%@] Sucess to upload sensor data to AWARE server with %@ - %d/%ld", sensorName, formatedLength, [awareLocalStorage getMarker], denominator];
+        NSLog(@"%@", message);
+        [self saveDebugEventWithText:message type:DebugTypeInfo label:syncDataQueryIdentifier];
+        
+        // send notification
+        if ([self isDebug]) [AWAREUtils sendLocalNotificationForMessage:message soundFlag:NO];
+        
+        // upload sensor data again
+        [self saveDebugEventWithText:[NSString stringWithFormat:@"[%@] Upload stored data again", sensorName]
+                                type:DebugTypeInfo
+                               label:syncDataQueryIdentifier];
+        [self postSensorDataWithSensorName:sensorName session:nil];
+        
+        double progress = [awareLocalStorage getMarker]/(double)denominator*100;
+        if(progress>100){
+            progress = 100;
         }
+        
+        NSMutableDictionary * userInfo = [[NSMutableDictionary alloc] init];
+        [userInfo setObject:@(progress) forKey:@"KEY_UPLOAD_PROGRESS_STR"];
+        [userInfo setObject:@YES forKey:@"KEY_UPLOAD_FIN"];
+        [userInfo setObject:@YES forKey:@"KEY_UPLOAD_SUCCESS"];
+        [userInfo setObject:sensorName forKey:@"KEY_UPLOAD_SENSOR_NAME"];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"ACTION_AWARE_DATA_UPLOAD_PROGRESS"
+                                                            object:nil
+                                                          userInfo:userInfo];
     }
 }
 
@@ -507,11 +477,12 @@ didReceiveResponse:(NSURLResponse *)response
         [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
         [request setHTTPBody:postData];
         [request setTimeoutInterval:60*3];
-        if([self isSyncWithOnlyWifi]){
-            [request setAllowsCellularAccess:NO];
-        }else{
-            [request setAllowsCellularAccess:YES];
-        }
+        request.allowsCellularAccess = YES;
+//        if([self isSyncWithOnlyWifi]){
+//            [request setAllowsCellularAccess:NO];
+//        }else{
+//            [request setAllowsCellularAccess:YES];
+//        }
         
         NSHTTPURLResponse *response = nil;
         NSData *resData = [NSURLConnection sendSynchronousRequest:request
@@ -563,6 +534,7 @@ didReceiveResponse:(NSURLResponse *)response
     [request setHTTPMethod:@"POST"];
     [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
     [request setHTTPBody:postData];
+    [request setAllowsCellularAccess:YES];
     //NSData *resData = [NSURLConnection sendSynchronousRequest:request
     //                                        returningResponse:&response error:&error];
     // NSString* newStr = [[NSString alloc] initWithData:resData encoding:NSUTF8StringEncoding];
@@ -673,7 +645,8 @@ didReceiveResponse:(NSURLResponse *)response
     
     // Generate an unique identifier for background HTTP/POST on iOS
     double unxtime = [[NSDate new] timeIntervalSince1970];
-    createTableQueryIdentifier = [NSString stringWithFormat:@"%@%f", baseCreateTableQueryIdentifier, unxtime];
+    // createTableQueryIdentifier = [NSString stringWithFormat:@"%@%f", baseCreateTableQueryIdentifier, unxtime];
+    createTableQueryIdentifier = [NSString stringWithFormat:@"%@", baseCreateTableQueryIdentifier];
     sessionConfig = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:createTableQueryIdentifier];
     sessionConfig.timeoutIntervalForRequest = 180.0;
     sessionConfig.HTTPMaximumConnectionsPerHost = 60;

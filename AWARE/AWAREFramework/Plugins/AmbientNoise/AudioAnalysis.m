@@ -109,8 +109,17 @@
             amplitude = data;
         }
     }
+    
+    // double inf = INFINITY;
     return fabs(20*log10(amplitude/32768.0));
+//    return
+//    if (isinf(dB)){
+//        NSLog(@"*** NOTE: The dB is infinity value!!! ***");
+//        dB = 0;
+//    }
+//    return dB;
 
+    
     
 //    float sum = 0.0;
 //    for(int i = 0; i < bufferSize; i++)

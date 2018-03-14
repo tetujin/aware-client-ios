@@ -413,6 +413,41 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
     }
 }
 
+- (void)URLSession:(NSURLSession *)session
+          dataTask:(NSURLSessionDataTask *)dataTask
+didReceiveResponse:(NSURLResponse *)response
+ completionHandler:(void (^)(NSURLSessionResponseDisposition))completionHandler
+{
+    NSLog(@"*** [%@] Please overwrite -URLSession:dataTask:didReceiveResponse:completionHandler: ***",session.configuration.identifier);
+    completionHandler(NSURLSessionResponseAllow);
+    [session invalidateAndCancel];
+    
+}
+
+- (void)URLSession:(NSURLSession *)session
+              task:(NSURLSessionTask *)task
+   didSendBodyData:(int64_t)bytesSent
+    totalBytesSent:(int64_t)totalBytesSent
+totalBytesExpectedToSend:(int64_t)totalBytesExpectedToSend{
+    // NSLog(@"*** [%@] Please overwrite -URLSession:dataTask:bytesSent:totalBytesSent:totalBytesExpectedToSend ***", session.configuration.identifier);
+    NSLog(@"[%@] %.2f%%",session.configuration.identifier, (double)totalBytesSent/(double)totalBytesExpectedToSend*100.0f);
+}
+
+- (void)URLSession:(NSURLSession *)session
+          dataTask:(NSURLSessionDataTask *)dataTask
+    didReceiveData:(NSData *)data{
+    NSLog(@"*** [%@] Please overwrite -URLSession:dataTask:didReceivedData ***",session.configuration.identifier);
+}
+
+- (void)URLSession:(NSURLSession *)session
+              task:(NSURLSessionTask *)task
+didCompleteWithError:(NSError *)error{
+     NSLog(@"*** [%@] Please overwrite -URLSession:task:didReceivedData ***",session.configuration.identifier);
+    if (error != nil) {
+        NSLog(@"%@",error.debugDescription);
+    }
+}
+
 - (void) cancelSyncProcess {
     NSLog(@"*** Please overwrite -cancelSyncProcess!!! ***");
 }

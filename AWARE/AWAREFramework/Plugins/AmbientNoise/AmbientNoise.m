@@ -505,9 +505,26 @@ NSString * const AWARE_PREFERENCES_PLUGIN_AMBIENT_NOISE_SILENCE_THRESHOLD = @"pl
         lastdb = 0.0;
     }
     float tempdb = ((1.0 - tiny)*lastdb) + tiny*currentdb;
-    if (tempdb == INFINITY && tempdb == -INFINITY) {
-        NSLog(@"[error] decibel value is INFINITY");
-    }else{
+//    if (tempdb == INFINITY && tempdb == -INFINITY) {
+    
+    bool isInfinity = false;
+    if (isinf(tempdb) ){
+        NSLog(@"[AmbientNoise] dB is INFINITY");
+        tempdb = 0.0;
+        isInfinity = true;
+    }
+    if(isinf(rms) ){
+        NSLog(@"[AmbientNoise] RMS is INFINITY");
+        rms = 0.0;
+        isInfinity = true;
+    }
+    if(isinf(maxFrequency)){
+        NSLog(@"[AmbientNoise] MAX Frequency is INFINITY");
+        maxFrequency = 0.0;
+        isInfinity = true;
+    }
+    
+    if (!isInfinity){
         db = tempdb;
         lastdb = tempdb;
         
