@@ -337,7 +337,7 @@
      * Debug Sensor
      * NOTE: don't remove this sensor. This sensor collects debug messages.
      */
-    AWARESensor * debug = [[Debug alloc] initWithAwareStudy:awareStudy dbType:dbType];
+    AWARESensor * debug = [[Debug alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
     [debug startSensorWithSettings:nil];
     [self addNewSensor:debug];
     
@@ -562,13 +562,14 @@
                                usingBlock:^(NSNotification *notif) {
                                    NSDictionary * userInfo = notif.userInfo;
                                    if(userInfo != nil){
-                                       NSNumber* progressStr = [userInfo objectForKey:KEY_UPLOAD_PROGRESS_STR];
-                                       BOOL isFinish =  [[userInfo objectForKey:KEY_UPLOAD_FIN] boolValue];
-                                       BOOL isSuccess = [[userInfo objectForKey:KEY_UPLOAD_SUCCESS] boolValue];
-                                       NSString* progressName = [userInfo objectForKey:KEY_UPLOAD_SENSOR_NAME];
-                                       [progresses setObject:progressStr forKey:progressName];
                                        // call main thread for UI update
                                        dispatch_sync(dispatch_get_main_queue(), ^{
+                                           NSNumber* progressStr = [userInfo objectForKey:KEY_UPLOAD_PROGRESS_STR];
+                                           BOOL isFinish =  [[userInfo objectForKey:KEY_UPLOAD_FIN] boolValue];
+                                           BOOL isSuccess = [[userInfo objectForKey:KEY_UPLOAD_SUCCESS] boolValue];
+                                           NSString* progressName = [userInfo objectForKey:KEY_UPLOAD_SENSOR_NAME];
+                                           [progresses setObject:progressStr forKey:progressName];
+
                                            // update progress
                                            @try {
                                                NSMutableString * result = [[NSMutableString alloc] init];
@@ -636,6 +637,7 @@
     
     BOOL finish = YES;
     for (AWARESensor * sensor in awareSensors) {
+        NSLog(@"[%@] %d", [sensor getSensorName], [sensor isUploading]);
         if([sensor isUploading]){
             finish = NO;
         }
@@ -674,11 +676,11 @@
 //            [SVProgressHUD showSuccessWithStatus:@"Success to upload all sensor data!"];
             AudioServicesPlayAlertSound(1000);
             if([AWAREUtils isBackground]){
-                [AWAREUtils sendLocalNotificationForMessage:@"[Manual Upload] Uploading all sensor data succeded!" soundFlag:YES];
+                [AWAREUtils sendLocalNotificationForMessage:@"[Manual Upload] sensors data are uploaded !!" soundFlag:YES];
             }else{
                 UIAlertView *alert = [ [UIAlertView alloc]
                                       initWithTitle:@""
-                                      message:@"[Manual Upload] Uploading all sensor data succeded!"
+                                      message:@"[Manual Upload] sensors data are uploaded !!"
                                       delegate:nil
                                       cancelButtonTitle:@"OK"
                                       otherButtonTitles:nil];

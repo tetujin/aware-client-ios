@@ -239,7 +239,7 @@
         if(debugMode){
             [AWAREUtils sendLocalNotificationForMessage:message soundFlag:YES];
         }
-        Debug * debugSensor = [[Debug alloc] initWithAwareStudy:_sharedAwareStudy dbType:AwareDBTypeCoreData];
+        Debug * debugSensor = [[Debug alloc] initWithAwareStudy:_sharedAwareStudy dbType:AwareDBTypeTextFile];
         [debugSensor saveDebugEventWithText:message type:DebugTypeInfo label:@""];
         [userDefaults setBool:NO forKey:KEY_APP_TERMINATED];
     }else{
@@ -363,7 +363,7 @@
         [debugSensor saveDebugEventWithText:@"[compliance] Location Services are OFF or Background Location is NOT enabled" type:DebugTypeWarn label:title];
         [debugSensor allowsCellularAccess];
         [debugSensor allowsDateUploadWithoutBatteryCharging];
-        [debugSensor syncAwareDBInBackground];
+        // [debugSensor syncAwareDBInBackground];
     }
     // The user has not enabled any location services. Request background authorization.
     else if (status == kCLAuthorizationStatusNotDetermined) {
@@ -422,7 +422,7 @@
         [debugSensor saveDebugEventWithText:@"[compliance] Background App Refresh service is Restricted or Denied" type:DebugTypeWarn label:@""];
         [debugSensor allowsDateUploadWithoutBatteryCharging];
         [debugSensor allowsCellularAccess];
-        [debugSensor syncAwareDBInBackground];
+        // [debugSensor syncAwareDBInBackground];
     } else if(backgroundRefreshStatus == UIBackgroundRefreshStatusAvailable){
         Debug * debugSensor = [[Debug alloc] initWithAwareStudy:_sharedAwareStudy dbType:AwareDBTypeTextFile];
         [debugSensor saveDebugEventWithText:@"[compliance] Background App Refresh service is Allowed" type:DebugTypeInfo label:@""];
@@ -481,7 +481,7 @@
             [debugSensor saveDebugEventWithText:@"[compliance] Notification Service is NOT permitted" type:DebugTypeWarn label:@""];
             [debugSensor allowsDateUploadWithoutBatteryCharging];
             [debugSensor allowsCellularAccess];
-            [debugSensor syncAwareDBInBackground];
+            // [debugSensor syncAwareDBInBackground];
         }else{
             Debug * debugSensor = [[Debug alloc] initWithAwareStudy:_sharedAwareStudy dbType:AwareDBTypeTextFile];
             [debugSensor saveDebugEventWithText:@"[compliance] Notification Service is permitted" type:DebugTypeInfo label:@""];
@@ -508,7 +508,7 @@
         NSString * event = [NSString stringWithFormat:@"[compliance] TOTAL:%.3fGB, USED:%.3fGB, FREE:%.3fGB", total, total-free, free];
         Debug * debugSensor = [[Debug alloc] initWithAwareStudy:_sharedAwareStudy dbType:AwareDBTypeTextFile];
         [debugSensor saveDebugEventWithText:event type:DebugTypeInfo label:@""];
-        [debugSensor syncAwareDBInBackground];
+        // [debugSensor syncAwareDBInBackground];
         if(percentage < 5 && detail){ // %
             state = NO;
             NSString * title = @"Please upload stored data manually!";
@@ -576,7 +576,7 @@
             [debugSensor saveDebugEventWithText:@"[compliance] Low Power Mode is ON" type:DebugTypeWarn label:@""];
             [debugSensor allowsDateUploadWithoutBatteryCharging];
             [debugSensor allowsCellularAccess];
-            [debugSensor syncAwareDBInBackground];
+            // [debugSensor syncAwareDBInBackground];
         }else{
             Debug * debugSensor = [[Debug alloc] initWithAwareStudy:_sharedAwareStudy dbType:AwareDBTypeTextFile];
             [debugSensor saveDebugEventWithText:@"[compliance] Low Power Mode is OFF" type:DebugTypeInfo label:@""];
@@ -627,7 +627,7 @@
         [debugSensor saveDebugEventWithText:@"[compliance] WiFi is OFF" type:DebugTypeWarn label:@""];
         [debugSensor allowsCellularAccess];
         [debugSensor allowsDateUploadWithoutBatteryCharging];
-        [debugSensor syncAwareDBInBackground];
+        // [debugSensor syncAwareDBInBackground];
     }else{
         Debug * debugSensor = [[Debug alloc] initWithAwareStudy:_sharedAwareStudy dbType:AwareDBTypeTextFile];
         [debugSensor saveDebugEventWithText:@"[compliance] WiFi is On" type:DebugTypeInfo label:@""];

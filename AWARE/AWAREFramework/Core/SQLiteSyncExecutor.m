@@ -194,6 +194,7 @@
  * @discussion Please call this method in the background
  */
 - (BOOL) setRepetationCountAfterStartToSyncDB:(NSNumber *) startTimestamp {
+
     @try {
         if (entityName == nil) {
             NSLog(@"***** ERROR: Entity Name is nil! *****");

@@ -910,57 +910,46 @@ didReceiveResponse:(NSURLResponse *)response
 
 //clientId
 + (NSString *) getFitbitClientId{
-    
-    return @"228524"; //TEMP
-    
-//    NSUserDefaults * userDefualt = [NSUserDefaults standardUserDefaults];
-//    return [userDefualt objectForKey:@"fitbit.setting.client_id"];
+    // return @"228524"; //TEMP
+    NSUserDefaults * userDefualt = [NSUserDefaults standardUserDefaults];
+    return [userDefualt objectForKey:@"fitbit.setting.client_id"];
 }
 
 //apiSecret
 + (NSString *) getFitbitApiSecret{
-    
-    return @"dc3fea72a8013836fbe70bf7b2caf54a"; //TEMP
-    
-//    NSUserDefaults * userDefualt = [NSUserDefaults standardUserDefaults];
-//    return [userDefualt objectForKey:@"fitbit.setting.api_secret"];
+//    return @"dc3fea72a8013836fbe70bf7b2caf54a"; //TEMP
+    NSUserDefaults * userDefualt = [NSUserDefaults standardUserDefaults];
+    return [userDefualt objectForKey:@"fitbit.setting.api_secret"];
 }
 /////////////////////////////////////////////////////////////////////////////////////
 
 
 
 + (NSString *) getFitbitClientIdForUI:(bool)forUI{
-    
-    return @"228524"; //TEMP
-    
-//    NSUserDefaults * userDefualt = [NSUserDefaults standardUserDefaults];
-//    NSString * clientId = [userDefualt objectForKey:@"fitbit.setting.client_id"];
-//    if(clientId == nil || [clientId isEqualToString:@""]){
-//        if(forUI){
-//            return @"";
-//        }else{
-//            return @""; // <- for a common token
-//        }
-//    }else{
-//        return clientId;
-//    }
+    NSString * clientId = [Fitbit getFitbitClientId];
+    if(clientId == nil || [clientId isEqualToString:@""]){
+        if(forUI){
+            return @"";
+        }else{
+            return @""; // <- for a common token
+        }
+    }else{
+        return clientId;
+    }
 }
 
 //apiSecret
 + (NSString *) getFitbitApiSecretForUI:(bool)forUI{
-    
-    return @"dc3fea72a8013836fbe70bf7b2caf54a"; //TEMP
-//    NSUserDefaults * userDefualt = [NSUserDefaults standardUserDefaults];
-//    NSString * apiSecret = [userDefualt objectForKey:@"fitbit.setting.api_secret"];
-//    if(apiSecret == nil || [apiSecret isEqualToString:@""]){
-//        if(forUI){
-//            return @"";
-//        }else{
-//            return @""; // <- for a common token
-//        }
-//    }else{
-//        return apiSecret;
-//    }
+    NSString * apiSecret = [Fitbit getFitbitApiSecret];
+    if(apiSecret == nil || [apiSecret isEqualToString:@""]){
+        if(forUI){
+            return @"";
+        }else{
+            return @""; // <- for a common token
+        }
+    }else{
+        return apiSecret;
+    }
 }
 
 //////////////////////////////////////////////////////////////////////////////////////
