@@ -57,6 +57,7 @@ NSString* const SETTING_CSV_EXPORT_STATE = @"setting_csv_export_state";
 NSString* const SETTING_DB_TYPE          = @"setting_db_type";
 NSString* const SETTING_UI_MODE          = @"setting_ui_mode";
 NSString* const SETTING_AUTO_SYNC        = @"setting_auto_sync";
+NSString* const SETTING_CPU_THESHOLD     = @"setting_cpu_theshold";
 
 NSString* const TABLE_INSERT = @"insert";
 NSString* const TABLE_LATEST = @"latest";
@@ -275,6 +276,7 @@ NSString * const ACTION_AWARE_CONTACT_REQUEST = @"ACTION_AWARE_CONTACT_REQUEST";
 
 NSString * const ACTION_AWARE_SETTING_UI_UPDATE_REQUEST = @"ACTION_AWARE_SETTING_UI_UPDATE_REQUEST";
 
+NSString * const ACTION_AWARE_FITBIT_LOGIN_REQUEST = @"ACTION_AWARE_FITBIT_LOGIN_REQUEST";
 
 @implementation AWAREKeys
 

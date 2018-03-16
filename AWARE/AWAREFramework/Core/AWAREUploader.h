@@ -48,7 +48,8 @@
 
 - (void) syncAwareDBInBackground;
 - (void) syncAwareDBInBackgroundWithSensorName:(NSString*) name;
-- (void) postSensorDataWithSensorName:(NSString*) name session:(NSURLSession *)oursession;
+//- (void) postSensorDataWithSensorName:(NSString*) name session:(NSURLSession *)oursession;
+- (void) postSensorDataWithSensorName:(NSString*)name;
 - (BOOL) syncAwareDBWithData:(NSDictionary *) dictionary;
 
 

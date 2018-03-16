@@ -62,9 +62,9 @@ NSInteger const AWARE_ALERT_FITBIT_MOVE_TO_LOGIN_PAGE = 2;
         
         [self setTypeAsPlugin];
         
-//        NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
-//        NSString * clientId = [defaults objectForKey:@"228524"]; // TEMP // @"227YG3"];
-//        NSString * apiSecret = [defaults objectForKey:@"dc3fea72a8013836fbe70bf7b2caf54a"]; // TEMP // @"033ed2a3710c0cde04343d073c09e378"];
+        //        NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
+        //        NSString * clientId = [defaults objectForKey:@"228524"]; // TEMP // @"227YG3"];
+        //        NSString * apiSecret = [defaults objectForKey:@"dc3fea72a8013836fbe70bf7b2caf54a"]; // TEMP // @"033ed2a3710c0cde04343d073c09e378"];
         NSString * clientId = [Fitbit getFitbitClientId];
         NSString * apiSecret = [Fitbit getFitbitApiSecret];
         if(clientId == nil) clientId = @"";
@@ -109,33 +109,30 @@ NSInteger const AWARE_ALERT_FITBIT_MOVE_TO_LOGIN_PAGE = 2;
 
 
 - (BOOL)startSensorWithSettings:(NSArray *)settings{
-
+    
     NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
     [defaults setObject:settings forKey:@"aware.plugn.fitbit.settings"];
     
-    NSString * clientId = [self getSettingAsStringFromSttings:settings withKey:@"api_key_plugin_fitbit"];
-    NSString * apiSecret = [self getSettingAsStringFromSttings:settings withKey:@"api_secret_plugin_fitbit"];
+//    NSString * clientId = [self getSettingAsStringFromSttings:settings withKey:@"api_key_plugin_fitbit"];
+//    NSString * apiSecret = [self getSettingAsStringFromSttings:settings withKey:@"api_secret_plugin_fitbit"];
     
-    if([clientId isEqualToString:@""] && [apiSecret isEqualToString:@""]){
-        // clientId = [defaults objectForKey:@"api_key_plugin_fitbit"];
-        // apiSecret = [defaults objectForKey:@"api_secret_plugin_fitbit"];
-        clientId = [Fitbit getFitbitClientId];
-        apiSecret = [Fitbit getFitbitApiSecret];
-    }
+    //    if([clientId isEqualToString:@""] && [apiSecret isEqualToString:@""]){
+    //        // clientId = [defaults objectForKey:@"api_key_plugin_fitbit"];
+    //        // apiSecret = [defaults objectForKey:@"api_secret_plugin_fitbit"];
+    //        clientId = [Fitbit getFitbitClientIdForUI:YES];
+    //        apiSecret = [Fitbit getFitbitApiSecretForUI:YES];
+    //    }
     
     double intervalMin = [self getSensorSetting:settings withKey:@"plugin_fitbit_frequency"];
     if(intervalMin<0){
         intervalMin = 15;
     }
     
-    // [Fitbit setFitbitClientId:@"227YG3"];
-    // [Fitbit setFitbitApiSecret:@"033ed2a3710c0cde04343d073c09e378"];
-    
-    if(![Fitbit getFitbitAccessToken] && ![clientId isEqualToString:@""] && ![apiSecret isEqualToString:@""]) {
+    if([Fitbit getFitbitAccessToken] == nil || [[Fitbit getFitbitAccessToken] isEqualToString:@""]) {
         if(!isAlertingFitbitLogin){
             isAlertingFitbitLogin = true;
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Move to Fitbit Login Page"
-                                                            message:@"For importing your Fitbit data from Fitbit server, you need to login and connect to your Fitbit account."
+                                                            message:@"You need to login and connect to your Fitbit account."
                                                            delegate:self
                                                   cancelButtonTitle:nil
                                                   otherButtonTitles:@"Move to Fitbit", @"Dismiss", nil];
@@ -160,13 +157,13 @@ NSInteger const AWARE_ALERT_FITBIT_MOVE_TO_LOGIN_PAGE = 2;
                                              selector:@selector(getData:)
                                                  name:@"action.aware.plugin.fitbit.get.activity.heartrate"
                                                object:[[NSDictionary alloc] initWithObjects:@[@"heartrate"] forKeys:@[@"type"]]];
-
+    
     
     updateTimer = [NSTimer scheduledTimerWithTimeInterval:intervalMin*60
-                                             target:self
+                                                   target:self
                                                  selector:@selector(getData:)
-                                           userInfo:[[NSDictionary alloc] initWithObjects:@[@"all"] forKeys:@[@"type"]]
-                                            repeats:YES];
+                                                 userInfo:[[NSDictionary alloc] initWithObjects:@[@"all"] forKeys:@[@"type"]]
+                                                  repeats:YES];
     [updateTimer fire];
     
     return YES;
@@ -197,7 +194,7 @@ NSInteger const AWARE_ALERT_FITBIT_MOVE_TO_LOGIN_PAGE = 2;
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"action.aware.plugin.fitbit.get.activity.steps" object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"action.aware.plugin.fitbit.get.activity.calories" object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"action.aware.plugin.fitbit.get.activity.heartrate" object:nil];
-
+    
     return YES;
 }
 
@@ -262,21 +259,21 @@ NSInteger const AWARE_ALERT_FITBIT_MOVE_TO_LOGIN_PAGE = 2;
         NSDate * end = [NSDate new];
         
         /// test ///
-//        if([type isEqualToString:@"all"] || [type isEqualToString:@"steps"]){
-//            // start = [FitbitData getLastSyncSteps];
-//            start = [[NSDate alloc] initWithTimeInterval:-60*60*24 sinceDate:end];
-//            NSDate * tempEnd = [[NSDate alloc] initWithTimeInterval:-1 sinceDate:end];
-//            
-//            [fitbitData getStepsWithStart:start
-//                                      end:tempEnd
-//                                   period:nil
-//                              detailLevel:activityDetailLevel];
-//        }
+        //        if([type isEqualToString:@"all"] || [type isEqualToString:@"steps"]){
+        //            // start = [FitbitData getLastSyncSteps];
+        //            start = [[NSDate alloc] initWithTimeInterval:-60*60*24 sinceDate:end];
+        //            NSDate * tempEnd = [[NSDate alloc] initWithTimeInterval:-1 sinceDate:end];
+        //
+        //            [fitbitData getStepsWithStart:start
+        //                                      end:tempEnd
+        //                                   period:nil
+        //                              detailLevel:activityDetailLevel];
+        //        }
         
         ///////////////// Step/Cal /////////////////////
         if([type isEqualToString:@"all"] || [type isEqualToString:@"steps"]){
             start = [self smoothDateWithHour:[FitbitData getLastSyncSteps]];
-
+            
             if(start == nil) start = [self smoothDateWithHour:[[NSDate alloc] initWithTimeInterval:(-60*60*24)+1 sinceDate:end]];
             
             if(([end timeIntervalSince1970] - [start timeIntervalSince1970]) > 60*60*24-1){
@@ -343,7 +340,7 @@ NSInteger const AWARE_ALERT_FITBIT_MOVE_TO_LOGIN_PAGE = 2;
 - (void) loginWithOAuth2WithClientId:(NSString *)clientId apiSecret:(NSString *)apiSecret {
     
     NSMutableString * url = [[NSMutableString alloc] initWithString:baseOAuth2URL];
-
+    
     //[url appendFormat:@"?response_type=token&client_id=%@",clientId];
     [url appendFormat:@"?response_type=code&client_id=%@",clientId];
     // [url appendFormat:@"&redirect_uri=%@", [AWAREUtils stringByAddingPercentEncoding:@"aware-client://com.aware.ios.oauth2" unreserved:@"-."]];
@@ -351,7 +348,6 @@ NSInteger const AWARE_ALERT_FITBIT_MOVE_TO_LOGIN_PAGE = 2;
     [url appendFormat:@"&scope=%@", [AWAREUtils stringByAddingPercentEncoding:@"activity heartrate location nutrition profile settings sleep social weight"]];
     [url appendFormat:@"&expires_in=%@", expiresIn.stringValue];
     
-    // NSLog(@"%@", url);
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
 }
 
@@ -383,13 +379,13 @@ NSInteger const AWARE_ALERT_FITBIT_MOVE_TO_LOGIN_PAGE = 2;
                 return;
             }
             
-                //{
-                //"errors":[{
-                //    "errorType":"expired_token",
-                //    "message":"Access token expired: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1Q1JSQ1QiLCJhdWQiOiIyMjg3VDciLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJyc29jIHJzZXQgcmFjdCBybG9jIHJ3ZWkgcmhyIHJudXQgcnBybyByc2xlIiwiZXhwIjoxNDg1Mjk4NDU2LCJpYXQiOjE0ODUyNjk2NTZ9.NTEcqo3wOFLAZ6jL-BcGhYrVENb8g3nps-LVpEv4UNQ. Visit https://dev.fitbit.com/docs/oauth2 for more information on the Fitbit Web API authorization process."}
-                //    ],
-                //"success":false
-                // }
+            //{
+            //"errors":[{
+            //    "errorType":"expired_token",
+            //    "message":"Access token expired: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1Q1JSQ1QiLCJhdWQiOiIyMjg3VDciLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJyc29jIHJzZXQgcmFjdCBybG9jIHJ3ZWkgcmhyIHJudXQgcnBybyByc2xlIiwiZXhwIjoxNDg1Mjk4NDU2LCJpYXQiOjE0ODUyNjk2NTZ9.NTEcqo3wOFLAZ6jL-BcGhYrVENb8g3nps-LVpEv4UNQ. Visit https://dev.fitbit.com/docs/oauth2 for more information on the Fitbit Web API authorization process."}
+            //    ],
+            //"success":false
+            // }
             
             //if(![values objectForKey:@"user"]){
             
@@ -405,17 +401,17 @@ NSInteger const AWARE_ALERT_FITBIT_MOVE_TO_LOGIN_PAGE = 2;
                     }
                 }
             }
-                // invalid_token
-                // expired_token
-                // invalid_client
-                // invalid_request
+            // invalid_token
+            // expired_token
+            // invalid_client
+            // invalid_request
         }
     } @catch (NSException *exception) {
         
     } @finally {
         
     }
-
+    
 }
 
 
@@ -428,10 +424,11 @@ NSInteger const AWARE_ALERT_FITBIT_MOVE_TO_LOGIN_PAGE = 2;
     
     if(code!= nil){
         // Set URL
-        NSURL*	url = [NSURL URLWithString:[NSString stringWithFormat:@"https://api.fitbit.com/oauth2/token"]];
+        NSURL*    url = [NSURL URLWithString:[NSString stringWithFormat:@"https://api.fitbit.com/oauth2/token"]];
         NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:url];
         // Create NSData object
-        NSString * baseAuth = [NSString stringWithFormat:@"%@:%@",[Fitbit getFitbitClientId],[Fitbit getFitbitApiSecret]];
+        
+        NSString * baseAuth = [NSString stringWithFormat:@"%@:%@",[Fitbit getFitbitClientIdForUI:NO],[Fitbit getFitbitApiSecretForUI:NO]];
         NSData *nsdata = [baseAuth dataUsingEncoding:NSUTF8StringEncoding];
         // Get NSString from NSData object in Base64
         NSString *base64Encoded = [nsdata base64EncodedStringWithOptions:0];
@@ -439,7 +436,7 @@ NSInteger const AWARE_ALERT_FITBIT_MOVE_TO_LOGIN_PAGE = 2;
         [request setValue:[NSString stringWithFormat:@"Basic %@", base64Encoded] forHTTPHeaderField:@"Authorization"];
         [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
         NSMutableString * bodyStr = [[NSMutableString alloc] init];
-        [bodyStr appendFormat:@"clientId=%@&",[Fitbit getFitbitClientId]];
+        [bodyStr appendFormat:@"clientId=%@&",[Fitbit getFitbitClientIdForUI:NO]];
         [bodyStr appendFormat:@"grant_type=authorization_code&"];
         [bodyStr appendFormat:@"redirect_uri=%@&",[AWAREUtils stringByAddingPercentEncoding:@"fitbit://logincallback" unreserved:@"-."]];
         [bodyStr appendFormat:@"code=%@",code];
@@ -461,7 +458,7 @@ NSInteger const AWARE_ALERT_FITBIT_MOVE_TO_LOGIN_PAGE = 2;
         session = [NSURLSession sessionWithConfiguration:sessionConfig delegate:self delegateQueue:Nil];
         NSURLSessionDataTask* dataTask = [session dataTaskWithRequest:request];
         [dataTask resume];
-
+        
     }else{
         UIAlertView *av = [[UIAlertView alloc]initWithTitle:@"Fitbit Login Error"
                                                     message:@"The Fitbit code is Null."
@@ -487,9 +484,6 @@ NSInteger const AWARE_ALERT_FITBIT_MOVE_TO_LOGIN_PAGE = 2;
         [code deleteCharactersInRange:NSMakeRange(0, 5)];
         // Save the code
         if(code != nil){
-//            NSUserDefaults * userDefaults =[NSUserDefaults standardUserDefaults];
-//            [userDefaults setObject:code forKey:@"fitbit.setting.code"];
-//            [userDefaults synchronize];
             [Fitbit setFitbitCode:code];
             [self downloadTokensFromFitbitServer];
         }
@@ -538,15 +532,15 @@ NSInteger const AWARE_ALERT_FITBIT_MOVE_TO_LOGIN_PAGE = 2;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 - (void) refreshToken {
-
-    if([Fitbit getFitbitClientId] == nil) return;
-    if([Fitbit getFitbitApiSecret] == nil) return;
+    
+    if([Fitbit getFitbitClientIdForUI:NO] == nil) return;
+    if([Fitbit getFitbitApiSecretForUI:NO] == nil) return;
     
     // Set URL
-    NSURL*	url = [NSURL URLWithString:[NSString stringWithFormat:@"https://api.fitbit.com/oauth2/token"]];
+    NSURL*    url = [NSURL URLWithString:[NSString stringWithFormat:@"https://api.fitbit.com/oauth2/token"]];
     NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:url];
     // Create NSData object
-    NSString * baseAuth = [NSString stringWithFormat:@"%@:%@",[Fitbit getFitbitClientId],[Fitbit getFitbitApiSecret]];
+    NSString * baseAuth = [NSString stringWithFormat:@"%@:%@",[Fitbit getFitbitClientIdForUI:NO],[Fitbit getFitbitApiSecretForUI:NO]];
     NSData *nsdata = [baseAuth dataUsingEncoding:NSUTF8StringEncoding];
     NSString *base64Encoded = [nsdata base64EncodedStringWithOptions:0];
     
@@ -575,7 +569,7 @@ NSInteger const AWARE_ALERT_FITBIT_MOVE_TO_LOGIN_PAGE = 2;
     sessionConfig.timeoutIntervalForResource = 60.0;
     sessionConfig.HTTPMaximumConnectionsPerHost = 60;
     sessionConfig.allowsCellularAccess = YES;
-
+    
     session = [NSURLSession sessionWithConfiguration:sessionConfig delegate:self delegateQueue:Nil];
     NSURLSessionDataTask* dataTask = [session dataTaskWithRequest:request];
     
@@ -690,10 +684,10 @@ didReceiveResponse:(NSURLResponse *)response
                 if([values objectForKey:@"access_token"] == nil){
                     if([AWAREUtils isForeground]){
                         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"[Fitbit] Refresh Token: access_tokne is empty"
-                                                                    message:responseString
-                                                                   delegate:self
-                                                          cancelButtonTitle:@"Close"
-                                                          otherButtonTitles:nil];
+                                                                        message:responseString
+                                                                       delegate:self
+                                                              cancelButtonTitle:@"Close"
+                                                              otherButtonTitles:nil];
                         [alert show];
                     }else{
                         [AWAREUtils sendLocalNotificationForMessage:responseString soundFlag:NO];
@@ -891,6 +885,11 @@ didReceiveResponse:(NSURLResponse *)response
     return [userDefault objectForKey:@"fitbit.setting.refresh_token"];
 }
 
++ (NSString *) getFitbitClientId{
+    NSUserDefaults * userDefault = [NSUserDefaults standardUserDefaults];
+    return [userDefault objectForKey:@"fitbit.setting.client_id"];
+}
+
 + (NSString *)getFitbitUserId{
     NSUserDefaults * userDefault  = [NSUserDefaults standardUserDefaults];
     NSString * userId = [userDefault objectForKey:@"fitbit.setting.user_id"];
@@ -907,31 +906,24 @@ didReceiveResponse:(NSURLResponse *)response
     return [userDefault objectForKey:@"fitbit.setting.code"];
 }
 
-
-//clientId
-+ (NSString *) getFitbitClientId{
-    // return @"228524"; //TEMP
-    NSUserDefaults * userDefualt = [NSUserDefaults standardUserDefaults];
-    return [userDefualt objectForKey:@"fitbit.setting.client_id"];
-}
-
-//apiSecret
-+ (NSString *) getFitbitApiSecret{
-//    return @"dc3fea72a8013836fbe70bf7b2caf54a"; //TEMP
++ (NSString *) getFitbitApiSecret {
     NSUserDefaults * userDefualt = [NSUserDefaults standardUserDefaults];
     return [userDefualt objectForKey:@"fitbit.setting.api_secret"];
 }
-/////////////////////////////////////////////////////////////////////////////////////
 
 
+
+//clientId
 
 + (NSString *) getFitbitClientIdForUI:(bool)forUI{
+    // NSUserDefaults * userDefualt = [NSUserDefaults standardUserDefaults];
+    // NSString * clientId = [userDefualt objectForKey:@"fitbit.setting.client_id"];
     NSString * clientId = [Fitbit getFitbitClientId];
     if(clientId == nil || [clientId isEqualToString:@""]){
         if(forUI){
             return @"";
         }else{
-            return @""; // <- for a common token
+            return @"227YG3";
         }
     }else{
         return clientId;
@@ -940,17 +932,49 @@ didReceiveResponse:(NSURLResponse *)response
 
 //apiSecret
 + (NSString *) getFitbitApiSecretForUI:(bool)forUI{
+    // NSUserDefaults * userDefualt = [NSUserDefaults standardUserDefaults];
+    // NSString * apiSecret = [userDefualt objectForKey:@"fitbit.setting.api_secret"];
     NSString * apiSecret = [Fitbit getFitbitApiSecret];
     if(apiSecret == nil || [apiSecret isEqualToString:@""]){
         if(forUI){
             return @"";
         }else{
-            return @""; // <- for a common token
+            return @"033ed2a3710c0cde04343d073c09e378";
         }
     }else{
         return apiSecret;
     }
 }
+/////////////////////////////////////////////////////////////////////////////////////
+
+
+
+//+ (NSString *) getFitbitClientIdForUI:(bool)forUI{
+//    NSString * clientId = [Fitbit getFitbitClientId];
+//    if(clientId == nil || [clientId isEqualToString:@""]){
+//        if(forUI){
+//            return @"";
+//        }else{
+//            return @""; // <- for a common token
+//        }
+//    }else{
+//        return clientId;
+//    }
+//}
+//
+////apiSecret
+//+ (NSString *) getFitbitApiSecretForUI:(bool)forUI{
+//    NSString * apiSecret = [Fitbit getFitbitApiSecret];
+//    if(apiSecret == nil || [apiSecret isEqualToString:@""]){
+//        if(forUI){
+//            return @"";
+//        }else{
+//            return @""; // <- for a common token
+//        }
+//    }else{
+//        return apiSecret;
+//    }
+//}
 
 //////////////////////////////////////////////////////////////////////////////////////
 
@@ -966,3 +990,4 @@ didReceiveResponse:(NSURLResponse *)response
 }
 
 @end
+

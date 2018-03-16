@@ -66,7 +66,7 @@ extern NSString* const SETTING_CSV_EXPORT_STATE;
 extern NSString* const SETTING_DB_TYPE;
 extern NSString* const SETTING_UI_MODE;
 extern NSString* const SETTING_AUTO_SYNC;
-
+extern NSString* const SETTING_CPU_THESHOLD;
 
 extern NSString* const TABLE_INSER;
 extern NSString* const TABLE_LATEST;
@@ -264,6 +264,8 @@ extern NSString * const ACTION_AWARE_GOOGLE_LOGIN_SUCCESS;
 extern NSString * const ACTION_AWARE_CONTACT_REQUEST;
 
 extern NSString * const ACTION_AWARE_SETTING_UI_UPDATE_REQUEST;
+
+extern NSString * const ACTION_AWARE_FITBIT_LOGIN_REQUEST;
 
 @interface AWAREKeys: NSObject
 

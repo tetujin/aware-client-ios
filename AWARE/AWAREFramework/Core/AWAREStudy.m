@@ -192,7 +192,7 @@
         sessionConfig.HTTPMaximumConnectionsPerHost = 60;
         sessionConfig.timeoutIntervalForResource = 60; //60*60*24; // 1 day
         sessionConfig.allowsCellularAccess = YES;
-        sessionConfig.discretionary = YES;
+        // sessionConfig.discretionary = YES;
         
         NSLog(@"--- This is background task ----");
         session = [NSURLSession sessionWithConfiguration:sessionConfig delegate:self delegateQueue:nil];
@@ -1494,6 +1494,21 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
 - (BOOL) getAutoSyncState{
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     return [userDefaults boolForKey:SETTING_AUTO_SYNC];
+}
+
+- (void) setCPUTheshold:(int)threshold{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setInteger:threshold forKey:SETTING_CPU_THESHOLD];
+    [userDefaults synchronize];
+}
+
+- (int) getCPUTheshold {
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    int theshold = (int)[userDefaults integerForKey:SETTING_CPU_THESHOLD];
+    if (theshold == 0) {
+        theshold = 50;
+    }
+    return theshold;
 }
 
 @end

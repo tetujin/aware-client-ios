@@ -296,7 +296,6 @@
                                                               // NSUserDefaults * userDefaults = [NSUserDefaults standardUserDefaults];
                                                               // [userDefaults setObject:_apiKeyField.text forKey:@"fitbit.setting.client_id"];
                                                               // [userDefaults setObject:_apiSecretField.text forKey:@"fitbit.setting.api_secret"];
-                                                              
                                                               [fitbit loginWithOAuth2WithClientId:[Fitbit getFitbitClientIdForUI:NO] apiSecret:[Fitbit getFitbitApiSecretForUI:NO]];
                                                               [self showAllSetting];
                                                           });
@@ -310,6 +309,30 @@
 }
 
 - (IBAction)pushedGetLatestDataButton:(id)sender {
+    
+    NSString * userId = [Fitbit getFitbitUserId];
+    NSString* token = [Fitbit getFitbitAccessToken];
+    
+    if (userId == nil || token == nil) {
+        // if ([AWAREUtils isForeground]) {
+        NSString * msg = @"User ID and Access Token do not exist. Please **login** again to get these.";
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"[Fitbit ID and Token Error]"
+                                                                                 message:msg
+                                                                          preferredStyle:UIAlertControllerStyleAlert];
+        [alertController addAction:[UIAlertAction actionWithTitle:@"Login"
+                                                            style:UIAlertActionStyleDefault
+                                                          handler:^(UIAlertAction *action) {
+                                                              [self pushedLoginButton:nil];
+                                                          }]];
+        
+        [alertController addAction:[UIAlertAction actionWithTitle:@"Dissmiss"
+                                                            style:UIAlertActionStyleCancel
+                                                          handler:^(UIAlertAction *action) {
+                                                          }]];
+        [self presentViewController:alertController animated:YES completion:nil];
+        // }
+        return;
+    }
     
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Confirmation"
                                                                              message:@"Do you access Fitbit server to get the latest data? The response will be shown on alerts."

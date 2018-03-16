@@ -168,6 +168,11 @@
                                                  name:ACTION_AWARE_SETTING_UI_UPDATE_REQUEST
                                                object:nil];
     
+//    [[NSNotificationCenter defaultCenter] addObserver:self
+//                                             selector:@selector(moveToFitbit:)
+//                                                 name:ACTION_AWARE_FITBIT_LOGIN_REQUEST
+//                                               object:nil];
+    
 
 }
 
@@ -756,6 +761,12 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
 - (void) moveToContacts:(id)sender{
     if([AWAREUtils isForeground]){
         [self performSegueWithIdentifier:@"contacts" sender:self];
+    }
+}
+
+- (void) moveToFitbit:(id)sender{
+    if ([AWAREUtils isForeground]) {
+        [self performSegueWithIdentifier:@"fitbitView" sender:self];
     }
 }
 

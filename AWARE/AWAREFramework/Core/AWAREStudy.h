@@ -116,6 +116,8 @@ typedef enum: NSInteger{
 - (bool) getCSVExport;
 - (AwareUIMode) getUIMode;
 
+- (int)  getCPUTheshold;
+- (void) setCPUTheshold:(int)threshold;
 
 - (void) setAutoSyncState:(bool) state;
 - (BOOL) getAutoSyncState;

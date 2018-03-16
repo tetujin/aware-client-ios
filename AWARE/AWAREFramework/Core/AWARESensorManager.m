@@ -179,7 +179,8 @@
                 awareSensor = [[Battery alloc] initWithAwareStudy:awareStudy dbType:dbType];
             }else if([setting isEqualToString:[NSString stringWithFormat:@"status_%@",SENSOR_LOCATIONS]]){
                 awareSensor = [[Locations alloc] initWithAwareStudy:awareStudy dbType:dbType];
-            }else if([setting isEqualToString:[NSString stringWithFormat:@"status_%@",SENSOR_NETWORK]]){
+            }else if([setting isEqualToString:[NSString stringWithFormat:@"status_%@",SENSOR_NETWORK]] ||
+                     [setting isEqualToString:@"status_network_events"]){
                 awareSensor = [[Network alloc] initWithAwareStudy:awareStudy dbType:dbType];
             }else if([setting isEqualToString:[NSString stringWithFormat:@"status_%@",SENSOR_WIFI]]){
                 awareSensor = [[Wifi alloc] initWithAwareStudy:awareStudy dbType:dbType];
@@ -637,7 +638,7 @@
     
     BOOL finish = YES;
     for (AWARESensor * sensor in awareSensors) {
-        NSLog(@"[%@] %d", [sensor getSensorName], [sensor isUploading]);
+        // NSLog(@"[%@] %d", [sensor getSensorName], [sensor isUploading]);
         if([sensor isUploading]){
             finish = NO;
         }
@@ -656,7 +657,7 @@
         @try {
             for (id key in [progresses keyEnumerator]) {
                 double progress = [[progresses objectForKey:key] doubleValue];
-                NSLog(@"[%@] %f", key ,progress);
+                // NSLog(@"[%@] %f", key ,progress);
                 if(progress < 100){
                     completion = NO;
                     break;
@@ -676,7 +677,7 @@
 //            [SVProgressHUD showSuccessWithStatus:@"Success to upload all sensor data!"];
             AudioServicesPlayAlertSound(1000);
             if([AWAREUtils isBackground]){
-                [AWAREUtils sendLocalNotificationForMessage:@"[Manual Upload] sensors data are uploaded !!" soundFlag:YES];
+                [AWAREUtils sendLocalNotificationForMessage:@"[Manual Upload] Succeed to upload all sensors data." soundFlag:YES];
             }else{
                 UIAlertView *alert = [ [UIAlertView alloc]
                                       initWithTitle:@""
