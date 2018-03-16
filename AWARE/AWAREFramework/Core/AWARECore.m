@@ -81,7 +81,7 @@
         [userDefaults setInteger:cleanOldDataTypeWeekly forKey:SETTING_FREQUENCY_CLEAN_OLD_DATA];
         [userDefaults setBool:YES forKey:SETTING_AUTO_SYNC];
         [userDefaults setInteger:10000 forKey:KEY_MAX_FETCH_SIZE_MOTION_SENSOR];        // Defualt Value: 10000
-        [userDefaults setInteger:500 forKey:KEY_MAX_FETCH_SIZE_NORMAL_SENSOR];         // Defualt Value: 10000
+        [userDefaults setInteger:2000 forKey:KEY_MAX_FETCH_SIZE_NORMAL_SENSOR];         // Defualt Value: 10000
     }
     
     if([userDefaults integerForKey:SETTING_DB_TYPE] == AwareDBTypeUnknown){
