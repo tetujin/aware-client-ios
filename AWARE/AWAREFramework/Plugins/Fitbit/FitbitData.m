@@ -195,6 +195,12 @@
     //    start = [[NSDate alloc] initWithTimeInterval:- sinceDate:start];
     //}
     
+    if (userId == nil || token == nil) {
+        NSString * msg = [NSString stringWithFormat:@"[Error: %@] User ID and Access Token do not exist. Please **login** again to get these.", [self getSensorName]];
+        NSLog(@"%@",msg);
+        return NO;
+    }
+    
     /////// create a Fitbit API query ///////////
     //  /1/user/[user-id]/[resource-path]/date/[base-date]/[end-date].json
     NSMutableString * urlStr = [[NSMutableString alloc] initWithString:@"https://api.fitbit.com"];

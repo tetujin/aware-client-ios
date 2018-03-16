@@ -15,4 +15,8 @@ extern NSString* const AWARE_PREFERENCES_FREQUENCY_PROCESSOR;
 
 @interface Processor : AWARESensor <AWARESensorDelegate>
 
++ (float) getDeviceCpuUsage;
++ (float) getCpuUsage;
++ (long) getMemory;
+
 @end

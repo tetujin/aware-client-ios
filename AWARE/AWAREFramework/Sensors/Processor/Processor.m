@@ -78,7 +78,7 @@ NSString* const AWARE_PREFERENCES_FREQUENCY_PROCESSOR = @"frequency_processor";
 
 - (void) saveCPUUsage:(id)sender{
     // Get a CPU usage
-    float cpuUsageFloat = [self getCpuUsage];
+    float cpuUsageFloat = [Processor getCpuUsage];
     NSNumber *appCpuUsage = [NSNumber numberWithFloat:cpuUsageFloat];
     NSNumber *idleCpuUsage = [NSNumber numberWithFloat:(100.0f-cpuUsageFloat)];
 
@@ -129,7 +129,7 @@ NSString* const AWARE_PREFERENCES_FREQUENCY_PROCESSOR = @"frequency_processor";
 
 
 
-- (float) getDeviceCpuUsage{
++ (float) getDeviceCpuUsage{
     
     float userTotalCpuUsage = 0;
     
@@ -188,7 +188,7 @@ NSString* const AWARE_PREFERENCES_FREQUENCY_PROCESSOR = @"frequency_processor";
     return userTotalCpuUsage;
 }
 
-- (float) getCpuUsage{
++ (float) getCpuUsage{
     kern_return_t kr;
     task_info_data_t tinfo;
     mach_msg_type_number_t task_info_count;
@@ -252,7 +252,7 @@ NSString* const AWARE_PREFERENCES_FREQUENCY_PROCESSOR = @"frequency_processor";
     return tot_cpu;
 }
 
-- (long) getMemory {
++ (long) getMemory {
     struct task_basic_info info;
     mach_msg_type_number_t size = sizeof(info);
     kern_return_t kerr = task_info(mach_task_self(),

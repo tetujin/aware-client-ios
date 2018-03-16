@@ -54,13 +54,16 @@
         awareSensor = [[Accelerometer alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
     }else if([_selectedRowKey isEqualToString:SENSOR_BAROMETER]){
         awareSensor = [[Barometer alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
+        [self.showDataButton setEnabled:YES];
     }else if([_selectedRowKey isEqualToString:SENSOR_BATTERY]){
         awareSensor = [[Battery alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
         [self.showDataButton setEnabled:YES];
     }else if([_selectedRowKey isEqualToString:SENSOR_BLUETOOTH]){
         awareSensor = [[Bluetooth alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
+        [self.showDataButton setEnabled:YES];
     }else if([_selectedRowKey isEqualToString:SENSOR_CALLS]){
         awareSensor = [[Calls alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
+        [self.showDataButton setEnabled:YES];
     }else if([_selectedRowKey isEqualToString:SENSOR_GRAVITY]){
         awareSensor = [[Gravity alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
     }else if([_selectedRowKey isEqualToString:SENSOR_GYROSCOPE]){
@@ -74,6 +77,7 @@
         awareSensor = [[Magnetometer alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
     }else if([_selectedRowKey isEqualToString:SENSOR_NETWORK]){
         awareSensor = [[Network alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
+        [self.showDataButton setEnabled:YES];
     }else if([_selectedRowKey isEqualToString:SENSOR_ORIENTATION]){
         awareSensor = [[Orientation alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeTextFile];
     }else if([_selectedRowKey isEqualToString:SENSOR_PROCESSOR]){

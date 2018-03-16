@@ -11,11 +11,12 @@
 #import "AWAREKeys.h"
 #import "AWAREStudy.h"
 #import "AWAREUtils.h"
+#import "Processor.h"
 
 @implementation AWAREDataUploader{
     NSString * sensorName;
     bool isUploading;
-    // int errorPosts;
+    int errorCount;
     LocalFileStorageHelper * awareLocalStorage;
     AWAREStudy * awareStudy;
     
@@ -29,6 +30,13 @@
     double postLengthDouble;
     
     bool cancel;
+    
+    int currentRepetitionCounts;
+    int shortDelayForNextUpload;
+    int longDelayForNextUpload;
+    int thresholdForNextLongDelay;
+    int cpuThreshold;
+    
 }
 
 
@@ -39,6 +47,16 @@
         awareLocalStorage = localStorage;
         cancel = NO;
         isUploading = NO;
+        errorCount = 0;
+        shortDelayForNextUpload = 1; // second
+        longDelayForNextUpload = 30; // second
+        thresholdForNextLongDelay = 10; // count
+        currentRepetitionCounts = 0;
+        if (study != nil) {
+            cpuThreshold = [study getCPUTheshold];
+        }else{
+            cpuThreshold = 50;
+        }
         baseSyncDataQueryIdentifier = [NSString stringWithFormat:@"sync_data_query_identifier_%@", sensorName];
         baseCreateTableQueryIdentifier = [NSString stringWithFormat:@"create_table_query_identifier_%@",  sensorName];
         
@@ -122,20 +140,21 @@
     }
     
     isUploading = YES;
-    [self postSensorDataWithSensorName:sensorName session:nil];
+    [self postSensorDataWithSensorName:sensorName];
 }
 
 
 /**
  * Upload method
  */
-- (void) postSensorDataWithSensorName:(NSString* )name session:(NSURLSession *)oursession {
+//- (void) postSensorDataWithSensorName:(NSString* )name session:(NSURLSession *)oursession {
+- (void) postSensorDataWithSensorName:(NSString*)name{
 
     NSString *deviceId = [awareStudy getDeviceId];
     NSString *url = [self getInsertUrl:name];
     
     if (cancel){
-        [self dataSyncIsFinishedCorrectoly];
+        [self dataSyncIsFinishedCorrectly];
         return;
     }
     // NSLog(@"url: %@", url);
@@ -147,7 +166,7 @@
         NSString * message = [NSString stringWithFormat:@"[%@] Data length is zero => %ld", sensorName, sensorData.length];
         NSLog(@"%@", message);
         [self saveDebugEventWithText:message type:DebugTypeInfo  label:@""];
-        [self dataSyncIsFinishedCorrectoly];
+        [self dataSyncIsFinishedCorrectly];
         [awareLocalStorage resetMark];
         
         NSMutableDictionary * userInfo = [[NSMutableDictionary alloc] init];
@@ -251,17 +270,23 @@ didCompleteWithError:(NSError *)error {
             [self checkNextUpload];
         } else {
             NSString * log = [NSString stringWithFormat:@"[%@] Session task is finished with error (%d). %@", sensorName, [awareLocalStorage getMarker], error.debugDescription];
-            NSLog(@"%@",log);
             [self saveDebugEventWithText:log type:DebugTypeError label:syncDataQueryIdentifier];
-            [self dataSyncIsFinishedCorrectoly];
-            NSMutableDictionary * userInfo = [[NSMutableDictionary alloc] init];
-            [userInfo setObject:@(-1) forKey:@"KEY_UPLOAD_PROGRESS_STR"];
-            [userInfo setObject:@YES forKey:@"KEY_UPLOAD_FIN"];
-            [userInfo setObject:@NO forKey:@"KEY_UPLOAD_SUCCESS"];
-            [userInfo setObject:sensorName forKey:@"KEY_UPLOAD_SENSOR_NAME"];
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"ACTION_AWARE_DATA_UPLOAD_PROGRESS"
-                                                                object:nil
-                                                              userInfo:userInfo];
+            NSLog(@"%@",log);
+            
+            if (errorCount < 3){
+                errorCount++;
+                [self postSensorDataWithSensorName:sensorName];
+            }else{
+                [self dataSyncIsFinishedCorrectly];
+                NSMutableDictionary * userInfo = [[NSMutableDictionary alloc] init];
+                [userInfo setObject:@(-1) forKey:@"KEY_UPLOAD_PROGRESS_STR"];
+                [userInfo setObject:@YES forKey:@"KEY_UPLOAD_FIN"];
+                [userInfo setObject:@NO forKey:@"KEY_UPLOAD_SUCCESS"];
+                [userInfo setObject:sensorName forKey:@"KEY_UPLOAD_SENSOR_NAME"];
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"ACTION_AWARE_DATA_UPLOAD_PROGRESS"
+                                                                    object:nil
+                                                                  userInfo:userInfo];
+            }
         }
     } else if ([session.configuration.identifier isEqualToString:createTableQueryIdentifier]){
 
@@ -270,13 +295,13 @@ didCompleteWithError:(NSError *)error {
 
 
 - (void)URLSession:(NSURLSession *)session didBecomeInvalidWithError:(NSError *)error{
-    
     if (error != nil) {
         NSLog(@"[%@] the session did become invaild with error: %@", sensorName, error.debugDescription);
         [AWAREUtils sendLocalNotificationForMessage:error.debugDescription soundFlag:NO];
     }
-    [session invalidateAndCancel];
-    [self dataSyncIsFinishedCorrectoly];
+    // NSLog(@"%@", sensorName);
+    // [session invalidateAndCancel];
+    // [self dataSyncIsFinishedCorrectoly];
 }
 
 
@@ -301,7 +326,7 @@ didCompleteWithError:(NSError *)error {
                                 type:DebugTypeInfo
                                label:syncDataQueryIdentifier];
         // init http/post condition
-        [self dataSyncIsFinishedCorrectoly];
+        [self dataSyncIsFinishedCorrectly];
         
         NSMutableDictionary * userInfo = [[NSMutableDictionary alloc] init];
         [userInfo setObject:@100 forKey:@"KEY_UPLOAD_PROGRESS_STR"];
@@ -330,7 +355,36 @@ didCompleteWithError:(NSError *)error {
         [self saveDebugEventWithText:[NSString stringWithFormat:@"[%@] Upload stored data again", sensorName]
                                 type:DebugTypeInfo
                                label:syncDataQueryIdentifier];
-        [self postSensorDataWithSensorName:sensorName session:nil];
+        
+        // [self postSensorDataWithSensorName:sensorName];
+        currentRepetitionCounts++;
+        // Get main queue
+        dispatch_async(dispatch_get_main_queue(), ^{
+            //https://developer.apple.com/library/ios/documentation/Performance/Conceptual/EnergyGuide-iOS/WorkLessInTheBackground.html#//apple_ref/doc/uid/TP40015243-CH22-SW1
+            if([AWAREUtils isForeground]){
+                [self performSelector:@selector(postSensorDataWithSensorName:) withObject:sensorName afterDelay:0.3];
+            }else{
+
+                float cpuUsage = [Processor getCpuUsage];
+                // NSLog(@"[%@] CPU Usage:%0.2f %%", sensorName, cpuUsage);
+                if(cpuUsage > cpuThreshold){
+                    // https://developer.apple.com/library/content/documentation/Performance/Conceptual/EnergyGuide-iOS/WorkLessInTheBackground.html
+                    NSString * logMsg = [NSString stringWithFormat:@"[%@] Over CPU Usage (%d%%) -> Stop Data Upload Process", sensorName, cpuThreshold];
+                    NSLog(@"%@", logMsg);
+                    [self saveDebugEventWithText:logMsg type:DebugTypeWarn label:sensorName];
+                    [self dataSyncIsFinishedCorrectly];
+                    return;
+                }
+                
+                // Make a long delay by each 10 upload process
+                if ([self isNeedLongBreak]) {
+                    [self performSelector:@selector(postSensorDataWithSensorName:) withObject:sensorName afterDelay:longDelayForNextUpload];
+                }else{
+                    [self performSelector:@selector(postSensorDataWithSensorName:) withObject:sensorName afterDelay:shortDelayForNextUpload];
+                }
+            }
+        });
+        
         
         double progress = [awareLocalStorage getMarker]/(double)denominator*100;
         if(progress>100){
@@ -348,12 +402,23 @@ didCompleteWithError:(NSError *)error {
     }
 }
 
+- (bool) isNeedLongBreak{
+    if (currentRepetitionCounts%thresholdForNextLongDelay == 0) {
+        NSLog(@"[%@] long break", sensorName);
+        return YES;
+    }else{
+        NSLog(@"[%@] short break", sensorName);
+        return NO;
+    }
+}
 
-- (void) dataSyncIsFinishedCorrectoly {
+- (void) dataSyncIsFinishedCorrectly {
     isUploading = NO;
     cancel = NO;
+    currentRepetitionCounts = 0;
     NSLog(@"[%@] Session task finished correctly.", sensorName);
-    // errorPosts = 0;
+//    errorPosts = 0;
+    errorCount = 0;
 }
 
 - (bool)foregroundSyncRequestWithSensorName:(NSString * )name{

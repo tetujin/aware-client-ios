@@ -13,6 +13,7 @@
 #import "AppDelegate.h"
 #import "EntityESMAnswer.h"
 #import "Reachability.h"
+#import "Processor.h"
 
 @implementation SQLiteSyncExecutor {
     AWAREStudy * awareStudy;
@@ -38,6 +39,7 @@
     BOOL isManualUpload;
     bool isSyncWithOnlyBatteryCharging;
     bool isSyncWithOnlyWifi;
+    int cpuThreshold;
     NSUInteger fetchLimit;
     // BOOL isSyncWithOnlyBatteryCharging;
     // BOOL isSyncWithWifiOnly;
@@ -82,6 +84,11 @@
         isUploading = NO;
         isFource = NO;
         cancel = NO;
+        if(study!=nil){
+            cpuThreshold = [study getCPUTheshold];
+        }else{
+            cpuThreshold = 50;
+        }
         httpStartTimestamp = [[NSDate new] timeIntervalSince1970];
         currentReachability  = [Reachability reachabilityForInternetConnection];
         receivedData = [[NSMutableData alloc] init];
@@ -149,7 +156,7 @@
                 if ( batteryState == UIDeviceBatteryStateCharging || batteryState == UIDeviceBatteryStateFull) {
                 }else{
                     NSLog(@"[%@] This device is not charginig battery now.", sensorName);
-                    [self dataSyncIsFinishedCorrectoly];
+                    [self dataSyncIsFinishedCorrectly];
                     return;
                 }
             }
@@ -158,10 +165,10 @@
                 NetworkStatus netStatus = [currentReachability currentReachabilityStatus];
                 switch (netStatus) {
                     case NotReachable:
-                        [self dataSyncIsFinishedCorrectoly];
+                        [self dataSyncIsFinishedCorrectly];
                         return;
                     case ReachableViaWWAN:
-                        [self dataSyncIsFinishedCorrectoly];
+                        [self dataSyncIsFinishedCorrectly];
                         return;
                     default:
                         break;
@@ -202,7 +209,7 @@
         }
         
         if ([self isDBLock]) {
-            [self dataSyncIsFinishedCorrectoly];
+            [self dataSyncIsFinishedCorrectly];
             return NO;
         }else{
             [self lockDB];
@@ -224,12 +231,12 @@
             NSInteger count = [private countForFetchRequest:request error:&error];
             NSLog(@"[%@] %ld records", [self getEntityName], count);
             if (count == NSNotFound) {
-                [self dataSyncIsFinishedCorrectoly];
+                [self dataSyncIsFinishedCorrectly];
                 [self unlockDB]; // Unlock DB
                 NSLog(@"[%@] There are no data in this database table",[self getEntityName]);
                 return;
             } else if(error != nil){
-                [self dataSyncIsFinishedCorrectoly];
+                [self dataSyncIsFinishedCorrectly];
                 [self unlockDB]; // Unlock DB
                 NSLog(@"%@", error.description);
                 count = 0;
@@ -249,7 +256,7 @@
     } @catch (NSException *exception) {
         NSLog(@"%@", exception.reason);
         [self unlockDB]; // Unlock DB
-        [self dataSyncIsFinishedCorrectoly];
+        [self dataSyncIsFinishedCorrectly];
     } @finally {
         return YES;
     }
@@ -268,13 +275,13 @@
     previousUploadingProcessFinishUnixTime = [self getTimeMark];
     
     if (cancel) {
-        [self dataSyncIsFinishedCorrectoly];
+        [self dataSyncIsFinishedCorrectly];
         return;
     }
     // NSLog(@"[%@] marker   end: %@", sensorName, [NSDate dateWithTimeIntervalSince1970:previousUploadingProcessFinishUnixTime.longLongValue/1000]);
     
     if ([self isDBLock]) {
-        [self dataSyncIsFinishedCorrectoly];
+        [self dataSyncIsFinishedCorrectly];
         [self performSelector:@selector(syncTask) withObject:nil afterDelay:1];
         // [self performSelector:@selector(saveDataToDB) withObject:nil afterDelay:1];
         return;
@@ -321,7 +328,7 @@
             
             if (results != nil) {
                 if (results.count == 0 || results.count == NSNotFound) {
-                    [self dataSyncIsFinishedCorrectoly];
+                    [self dataSyncIsFinishedCorrectly];
                     [self broadcastDBSyncEventWithProgress:@100 isFinish:@YES isSuccess:@YES sensorName:sensorName];
                     return;
                 }else{
@@ -354,7 +361,7 @@
                         if ( jsonData.length == 0 || jsonData.length == 2 ) {
                             NSString * message = [NSString stringWithFormat:@"[%@] Data is Null or Length is Zero", sensorName];
                             NSLog(@"%@", message);
-                            [self dataSyncIsFinishedCorrectoly];
+                            [self dataSyncIsFinishedCorrectly];
                             [self broadcastDBSyncEventWithProgress:@(100) isFinish:YES isSuccess:YES sensorName:sensorName];
                             return;
                         }
@@ -423,12 +430,12 @@
         }];
     } @catch (NSException *exception) {
         NSLog(@"%@", exception.reason);
-        [self dataSyncIsFinishedCorrectoly];
+        [self dataSyncIsFinishedCorrectly];
         [self unlockDB];
     }
 }
 
-- (NSString *)stringByAddingPercentEncodingForAWARE:(NSString *)string{
+- (NSString *)stringByAddingPercentEncodingForAWARE:(NSString *) string {
     // NSString *unreserved = @"-._~/?{}[]\"\':, ";
     NSString *unreserved = @"";
     NSMutableCharacterSet *allowed = [NSMutableCharacterSet
@@ -545,14 +552,26 @@ didCompleteWithError:(nullable NSError *)error;
     
     /** =========== Start next data upload =========== */
     if (currentRepetitionCounts > repetitionTime ){
-        [self dataSyncIsFinishedCorrectoly];
+        [self clearOldData];
+        [self dataSyncIsFinishedCorrectly];
     }else{
         // Get main queue
         dispatch_async(dispatch_get_main_queue(), ^{
             //https://developer.apple.com/library/ios/documentation/Performance/Conceptual/EnergyGuide-iOS/WorkLessInTheBackground.html#//apple_ref/doc/uid/TP40015243-CH22-SW1
-            if(isManualUpload){
+//            if(isManualUpload){
+            if([AWAREUtils isForeground]){
                 [self performSelector:@selector(syncTask) withObject:nil afterDelay: 0.3 ];
             }else{
+                float cpuUsage = [Processor getCpuUsage];
+                // NSLog(@"[%@] CPU Usage:%0.2f %%", sensorName, cpuUsage);
+                if(cpuUsage > cpuThreshold){
+                    // https://developer.apple.com/library/content/documentation/Performance/Conceptual/EnergyGuide-iOS/WorkLessInTheBackground.html
+                    NSString * logMsg = [NSString stringWithFormat:@"[%@] Over CPU Usage (%d%%) -> Stop Data Upload Process", sensorName, cpuThreshold];
+                    NSLog(@"%@", logMsg);
+                    // [ saveDebugEventWithText:logMsg type:DebugTypeWarn label:sensorName];
+                    [self dataSyncIsFinishedCorrectly];
+                    return;
+                }
                 // Make a long delay by each 10 upload process
                 if (currentRepetitionCounts%thresholdForNextLongDelay == 0) {
                     [self performSelector:@selector(syncTask) withObject:nil afterDelay:longDelayForNextUpload];
@@ -572,7 +591,7 @@ didCompleteWithError:(nullable NSError *)error;
  * init variables for data upload
  * @discussion This method is called when finish to data upload session
  */
-- (void) dataSyncIsFinishedCorrectoly {
+- (void) dataSyncIsFinishedCorrectly {
     NSLog(@"[%@] Session task finished", sensorName);
     // set uploading state is NO
     isUploading = NO;
@@ -581,8 +600,14 @@ didCompleteWithError:(nullable NSError *)error;
     // init repetation time and current count
     repetitionTime = 0;
     currentRepetitionCounts = 0;
+}
+
+- (void) clearOldData{
     
+    // if (lastSyncedTimestamp == nil) { return; }
+    // NSDate * dateOfLastSyncedData = [[NSDate alloc] initWithTimeIntervalSince1970:lastSyncedTimestamp.doubleValue/1000];
     
+    ////////
     NSFetchRequest* request = [[NSFetchRequest alloc] init];
     [request setEntity:[NSEntityDescription entityForName:entityName inManagedObjectContext:self.mainQueueManagedObjectContext]];
     [request setIncludesSubentities:NO];
@@ -628,14 +653,18 @@ didCompleteWithError:(nullable NSError *)error;
                 if(clearLimitDate == nil){
                     limitTimestamp = tempLastUnixTimestamp;
                 }else{
-                    limitTimestamp = @([clearLimitDate timeIntervalSince1970]);
+                    limitTimestamp = @([clearLimitDate timeIntervalSince1970]*1000);
                 }
                 
                 if([[self getEntityName] isEqualToString:@"EntityESMAnswerBC"] ||
                    [[self getEntityName] isEqualToString:@"EntityESMAnswer"] ){
                     [request setPredicate:[NSPredicate predicateWithFormat:@"(double_esm_user_answer_timestamp <= %@)", limitTimestamp]];
                 }else{
-                    [request setPredicate:[NSPredicate predicateWithFormat:@"(timestamp <= %@)", limitTimestamp]];
+//                    NSPredicate *  expirePredicate = [NSPredicate predicateWithFormat:@"timestamp <= %@", limitTimestamp];
+//                    NSPredicate * lastSyncPreciate = [NSPredicate predicateWithFormat:@"timestamp <= %@", tempLastUnixTimestamp];
+//                    [request setPredicate: [NSCompoundPredicate andPredicateWithSubpredicates:@[expirePredicate, lastSyncPreciate]]];
+                    // [request setPredicate:[NSPredicate predicateWithFormat:@"(timestamp <= %@ && timestamp <= %@)", limitTimestamp, tempLastUnixTimestamp]];
+                     [request setPredicate:[NSPredicate predicateWithFormat:@"(timestamp <= %@)", limitTimestamp]];
                 }
                 
                 NSBatchDeleteRequest *delete = [[NSBatchDeleteRequest alloc] initWithFetchRequest:request];
@@ -651,7 +680,6 @@ didCompleteWithError:(nullable NSError *)error;
         }
     }];
 }
-
 
 /////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
