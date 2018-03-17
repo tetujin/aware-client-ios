@@ -683,14 +683,16 @@ didReceiveResponse:(NSURLResponse *)response
                 // if([self isDebug]){
                 if([values objectForKey:@"access_token"] == nil){
                     if([AWAREUtils isForeground]){
-                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"[Fitbit] Refresh Token: access_tokne is empty"
+                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"[Fitbit] Refresh Token ERROR: access_tokne is empty"
                                                                         message:responseString
                                                                        delegate:self
                                                               cancelButtonTitle:@"Close"
                                                               otherButtonTitles:nil];
                         [alert show];
                     }else{
-                        [AWAREUtils sendLocalNotificationForMessage:responseString soundFlag:NO];
+                        if ([self isDebug]) {
+                            [AWAREUtils sendLocalNotificationForMessage:@"[Fitbit] Refresh Token: access_tokne is empty" soundFlag:NO];
+                        }
                     }
                     return;
                 }else{
@@ -702,11 +704,11 @@ didReceiveResponse:(NSURLResponse *)response
                                                               otherButtonTitles:nil];
                         [alert show];
                     }else{
-                        [AWAREUtils sendLocalNotificationForMessage:responseString soundFlag:NO];
+                        if ([self isDebug]) {
+                            [AWAREUtils sendLocalNotificationForMessage:@"[Fitbit] Refresh Token: Success to update tokens" soundFlag:NO];
+                        }
                     }
                 }
-                // }
-                
                 
                 if([values objectForKey:@"access_token"] != nil){
                     [Fitbit setFitbitAccessToken:[values objectForKey:@"access_token"]];
