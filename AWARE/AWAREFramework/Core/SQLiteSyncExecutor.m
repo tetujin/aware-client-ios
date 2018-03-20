@@ -782,9 +782,9 @@ didCompleteWithError:(nullable NSError *)error;
 
 - (BOOL) isDBLock {
     if(isLock){
-        // NSLog(@"[%@] DB is locking now", sensorName);
+        if(isDebug) NSLog(@"[%@] DB is locked now", sensorName);
     }else{
-        // NSLog(@"[%@] DB is available now", sensorName);
+        if(isDebug) NSLog(@"[%@] DB is available now", sensorName);
     }
     return isLock;
 }

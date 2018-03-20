@@ -18,7 +18,7 @@
 //                   name:(NSString* )name
 //                  email:(NSString *)email;
 
-
+extern NSString * const GOOGLE_LOGIN_CLIENT_ID;
 
 - (void) setGoogleAccountWithUserId:(NSString *)userId
                                name:(NSString* )name

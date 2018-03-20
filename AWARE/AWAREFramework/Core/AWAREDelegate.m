@@ -52,11 +52,13 @@
     
     // Set background fetch for updating debug information
     [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
-    
+
     // Google Login Plugin
-    NSError* configureError;
-    [[GGLContext sharedInstance] configureWithError: &configureError];
-    NSAssert(!configureError, @"Error configuring Google services: %@", configureError);
+//    NSError* configureError;
+//    [[GGLContext sharedInstance] configureWithError: &configureError];
+//    NSAssert(!configureError, @"Error configuring Google services: %@", configureError);
+//    [GIDSignIn sharedInstance].delegate = self;
+    [GIDSignIn sharedInstance].clientID = GOOGLE_LOGIN_CLIENT_ID;
     [GIDSignIn sharedInstance].delegate = self;
     
     NSLog(@"Turn 'OFF' the auto sleep mode on this app");

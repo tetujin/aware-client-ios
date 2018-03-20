@@ -348,8 +348,9 @@
                                                                 object:nil
                                                               userInfo:userInfo];
             NSLog(@"%@",[NSString stringWithFormat:@"action.aware.plugin.fitbit.get.activity.%@",type]);
-            
-            [self saveData:dict];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self saveData:dict];
+            });
         }else{
             
 //            NSDictionary * debugMsg = @{@"debug":@"no response", @"type":type};

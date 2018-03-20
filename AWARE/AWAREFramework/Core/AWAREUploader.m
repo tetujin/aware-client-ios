@@ -91,7 +91,7 @@
 - (BOOL) isDBLock {
     if(isLock){
         if([self isDebug])
-            NSLog(@"[%@] DB is locking now", sensorName);
+            NSLog(@"[%@] DB is locked now", sensorName);
     }else{
         if([self isDebug])
             NSLog(@"[%@] DB is available now", sensorName);
