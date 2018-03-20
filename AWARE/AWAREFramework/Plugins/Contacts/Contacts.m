@@ -29,8 +29,9 @@ NSString * const KEY_PLUGIN_SETTING_CONTACTS_UPDATE_FREQUENCY_DAY = @"key_plugin
                         dbEntityName:NSStringFromClass([EntityContact class])
                               dbType:AwareDBTypeCoreData];
     if (self) {
-        aDaySec = 60*60*24;
-        checkIntervalSec = 60*60*1; // 1 hour
+        aDaySec = 60*60*24;       // 24 hours
+        checkIntervalSec = 60*15; // check a next update every 15 min
+        
         NSDate * lastUpdate = [self getLastUpdateDate];
         if(lastUpdate != nil){
             NSString * message= [NSString stringWithFormat:@"Last Update:\n%@",
@@ -80,9 +81,13 @@ NSString * const KEY_PLUGIN_SETTING_CONTACTS_UPDATE_FREQUENCY_DAY = @"key_plugin
     // This is an initialization. This process should be called just one time when the plugin is activated.
     NSDate * nextUpdate = [self getNextUpdateDate];
     if (nextUpdate == nil) {
-        [self setNextUpdateDateWithDate:[[NSDate alloc] initWithTimeIntervalSinceNow:frequencyDays*aDaySec]];
+        // [self setNextUpdateDateWithDate:[[NSDate alloc] initWithTimeIntervalSinceNow:frequencyDays*aDaySec]];
+        NSDate * targetDate = [AWAREUtils getTargetNSDate:[[NSDate alloc] initWithTimeIntervalSinceNow:frequencyDays*aDaySec]
+                                                     hour:12
+                                                  nextDay:NO];
+        NSLog(@"%@",targetDate.debugDescription);
+        [self setNextUpdateDateWithDate:targetDate];
     }
-    
     return YES;
 }
 
@@ -140,10 +145,20 @@ NSString * const KEY_PLUGIN_SETTING_CONTACTS_UPDATE_FREQUENCY_DAY = @"key_plugin
             NSNumber * frequencyDays = [self getUpdateFrequencyDay];
             if(frequencyDays != nil){
                 ////////////////// MAIN ////////////////
-                [self setNextUpdateDateWithDate:[[NSDate alloc] initWithTimeIntervalSinceNow:frequencyDays.intValue*aDaySec]];
+                // [self setNextUpdateDateWithDate:[[NSDate alloc] initWithTimeIntervalSinceNow:frequencyDays.intValue*aDaySec]];
+                NSNumber * updateFrequencyDate = [self getUpdateFrequencyDay];
+                int frequency = frequencyDays.intValue;
+                if (updateFrequencyDate != nil) {
+                    frequency = updateFrequencyDate.intValue;
+                }
+                NSDate * targetDate = [AWAREUtils getTargetNSDate:[[NSDate alloc] initWithTimeIntervalSinceNow:frequency * aDaySec]
+                                                             hour:12
+                                                          nextDay:NO];
+                NSLog(@"%@",targetDate.debugDescription);
+                [self setNextUpdateDateWithDate:targetDate];
                 ////////////////// TEST ////////////////
                 // [self setNextUpdateDateWithDate:[[NSDate alloc] initWithTimeIntervalSinceNow:frequencyDays.intValue*60]];
-                [AWAREUtils sendLocalNotificationForMessage:@"contact update" soundFlag:YES];
+                if ([self isDebug]) [AWAREUtils sendLocalNotificationForMessage:@"contact update" soundFlag:YES];
                 ////////////////////////////////////////
             }
         }
@@ -236,7 +251,7 @@ NSString * const KEY_PLUGIN_SETTING_CONTACTS_UPDATE_FREQUENCY_DAY = @"key_plugin
             NSString * message= [NSString stringWithFormat:@"Last Update:\n%@",now.debugDescription];
             [self setLatestValue:message];
         
-            [self performSelector:@selector(syncAwareDBInBackground) withObject:nil afterDelay:5];
+            // [self performSelector:@selector(syncAwareDBInBackground) withObject:nil afterDelay:5];
         });
         
     } else {

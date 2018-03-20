@@ -154,9 +154,9 @@ NSString * const AWARE_PREFERENCES_LIVE_MODE_IOS_ACTIVITY_RECOGNITION = @"status
             motionActivityManager = [CMMotionActivityManager new];
             [motionActivityManager startActivityUpdatesToQueue:[NSOperationQueue new]
                                                    withHandler:^(CMMotionActivity *activity) {
-                                                       dispatch_async(dispatch_get_main_queue(), ^{
+                                                       // dispatch_async(dispatch_get_main_queue(), ^{
                                                            [self addMotionActivity:activity];
-                                                       });
+                                                       // });
                                                    }];
 
         }else{
@@ -170,7 +170,8 @@ NSString * const AWARE_PREFERENCES_LIVE_MODE_IOS_ACTIVITY_RECOGNITION = @"status
             motionActivityManager = [CMMotionActivityManager new];
             [motionActivityManager startActivityUpdatesToQueue:[NSOperationQueue new]
                                                    withHandler:^(CMMotionActivity *activity) {
-                                                       dispatch_async(dispatch_get_main_queue(), ^{
+                                                       // dispatch_async(dispatch_get_main_queue(), ^{
+                                                       
                                                            [self addMotionActivity:activity];
                                                            NSString * message = [NSString stringWithFormat:@"[%d] disposable mode: %@", disposableCount, activity.debugDescription];
                                                            NSLog(@"%@", message);
@@ -184,7 +185,7 @@ NSString * const AWARE_PREFERENCES_LIVE_MODE_IOS_ACTIVITY_RECOGNITION = @"status
                                                                    [AWAREUtils sendLocalNotificationForMessage:message soundFlag:NO];
                                                                }
                                                            }
-                                                       });
+                                                       // });
                                                    }];
             
         }else{
@@ -215,7 +216,7 @@ NSString * const AWARE_PREFERENCES_LIVE_MODE_IOS_ACTIVITY_RECOGNITION = @"status
 
 - (void) getMotionActivity:(id)sender{
     
-    NSOperationQueue *operationQueueUpdate = [NSOperationQueue mainQueue];
+    NSOperationQueue *operationQueueUpdate = [NSOperationQueue new]; // [NSOperationQueue mainQueue];
     if([CMMotionActivityManager isActivityAvailable]){
         // from data
         NSDate * fromDate = [self getLastUpdate];
@@ -225,50 +226,45 @@ NSString * const AWARE_PREFERENCES_LIVE_MODE_IOS_ACTIVITY_RECOGNITION = @"status
         motionActivityManager = [CMMotionActivityManager new];
         [motionActivityManager queryActivityStartingFromDate:fromDate toDate:toDate toQueue:operationQueueUpdate withHandler:^(NSArray<CMMotionActivity *> * _Nullable activities, NSError * _Nullable error) {
             if (activities!=nil && error==nil) {
-                [[[NSOperationQueue alloc] init] addOperationWithBlock:^{
-                    
-                    if(activities.count > 1000){
-                        [self setBufferSize:1000];
-                    }else if(activities.count > 100){
-                        [self setBufferSize:100];
-                    }else if (activities.count > 50) {
-                        [self setBufferSize:50];
-                    }else if(activities.count > 20){
-                        [self setBufferSize:20];
-                    }else{
-                        [self setBufferSize:0];
-                    }
-                    
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        for (CMMotionActivity * activity in activities) {
-                            [self addMotionActivity:activity];
-                            latestActivity = activity;
-                        }
-//                        if(activities.count == 0){
-//                            [self addMotionActivity:latestActivity];
-//                        }
-                        [self setLastUpdateWithDate:toDate];
-                        [self setBufferSize:0];
+                // [[[NSOperationQueue alloc] init] addOperationWithBlock:^{
+                if(activities.count > 1000){
+                    [self setBufferSize:1000];
+                }else if(activities.count > 100){
+                    [self setBufferSize:100];
+                }else if (activities.count > 50) {
+                    [self setBufferSize:50];
+                }else if(activities.count > 20){
+                    [self setBufferSize:20];
+                }else{
+                    [self setBufferSize:0];
+                }
+                
+                // dispatch_async(dispatch_get_main_queue(), ^{
+                for (CMMotionActivity * activity in activities) {
+                    [self addMotionActivity:activity];
+                    latestActivity = activity;
+                }
+                [self setLastUpdateWithDate:toDate];
+                // [self setBufferSize:0];
                         
-                    });
-                }];
+                    // });
+                // }];
+                if ([self isDebug]) {
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    if ([self isDebug]) {
                         NSInteger count = activities.count;
                         NSString * message = [NSString stringWithFormat:@"iOS Activity Recognition Sensor is called by a timer (%ld activites)" ,count];
                         [AWAREUtils sendLocalNotificationForMessage:message soundFlag:NO];
-                        
-                    }
-                });
+                    });
+                }
             }
             
             /////////////////////////////
-            if ( activities != nil && activities.count == 0 ){
-                [self startSensorWithConfidenceFilter:CMMotionActivityConfidenceLow
-                                                 mode:IOSActivityRecognitionModeDisposable
-                                             interval:0
-                                      disposableLimit:0];
-            }
+//            if ( activities != nil && activities.count == 0 ){
+//                [self startSensorWithConfidenceFilter:CMMotionActivityConfidenceLow
+//                                                 mode:IOSActivityRecognitionModeDisposable
+//                                             interval:0
+//                                      disposableLimit:0];
+//            }
         }];
         
 //        // disposable
@@ -381,15 +377,17 @@ NSString * const AWARE_PREFERENCES_LIVE_MODE_IOS_ACTIVITY_RECOGNITION = @"status
     [dict setObject:@(motionActivity.unknown)    forKey:ACTIVITY_NAME_UNKNOWN];   // 0 or 1
     [dict setObject:@""                          forKey:LABEL];
     
-    [self setLatestValue:[NSString stringWithFormat:@"%@ (%@)", activitiesStr, motionConfidence]];
-    [self saveData:dict];
-    [self setLatestData:dict];
-    
-    NSDictionary * userInfo = [NSDictionary dictionaryWithObject:dict
-                                                          forKey:EXTRA_DATA];
-    [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_IOS_ACTIVITY_RECOGNITION
-                                                        object:nil
-                                                      userInfo:userInfo];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self setLatestValue:[NSString stringWithFormat:@"%@ (%@)", activitiesStr, motionConfidence]];
+        [self saveData:dict];
+        [self setLatestData:dict];
+        
+        NSDictionary * userInfo = [NSDictionary dictionaryWithObject:dict
+                                                              forKey:EXTRA_DATA];
+        [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_IOS_ACTIVITY_RECOGNITION
+                                                            object:nil
+                                                          userInfo:userInfo];
+    });
 }
 
 

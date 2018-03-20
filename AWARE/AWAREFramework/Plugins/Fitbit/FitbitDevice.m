@@ -159,7 +159,9 @@
                     [dict setObject:fitbitMac forKey:@"fitbit_mac"];
                     [dict setObject:fitbitLastSync forKey:@"fitbit_last_sync"];
                     
-                    [self saveData:dict];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [self saveData:dict];
+                    });
                 }
             }
         }

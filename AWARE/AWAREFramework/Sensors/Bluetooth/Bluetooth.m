@@ -322,7 +322,8 @@ NSString * const AWARE_PREFERENCES_FREQUENCY_BLUETOOTH = @"frequency_bluetooth";
                             [CBUUID UUIDWithString:USER_DATA],
                             [CBUUID UUIDWithString:@"AA80"]
                               ];
-        [central scanForPeripheralsWithServices:services options:nil];
+        // [central scanForPeripheralsWithServices:services options:nil];
+        [_myCentralManager scanForPeripheralsWithServices:services options:nil];
     }else if([central state] == CBCentralManagerStateUnauthorized){
         NSLog(@"CoreBluetooth BLE hardware is unauthorized");
         [self saveDebugEventWithText:@"Bluetooth module is unauthorized" type:DebugTypeWarn label:@""];

@@ -11,6 +11,8 @@
 #import "AWAREUtils.h"
 #import "TCQMaker.h"
 
+NSString * const GOOGLE_LOGIN_CLIENT_ID = @"513561083200-em3srmsc40a2q6cuh8o2hguvhd1umfll.apps.googleusercontent.com";
+
 @implementation GoogleLogin {
     NSString* KEY_GOOGLE_NAME;
     NSString* KEY_GOOGLE_EMAIL;

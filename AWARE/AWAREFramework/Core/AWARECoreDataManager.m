@@ -271,13 +271,13 @@
                         [bufferArray addObjectsFromArray:array];
                     }
                     //if([self isDebug])
-                        NSLog(@"[%@] Save data", sensorName);
+                        NSLog(@"[%@] Data is saved", sensorName);
                     [self unlockDB];
                 }];
             }
             
         }else{
-            NSLog(@"[%@] The DB is lock by the other thread", [self getEntityName]);
+            NSLog(@"[%@] DB is locked by another thread", [self getEntityName]);
             [bufferArray addObjectsFromArray:array];
         }
     }];
@@ -321,7 +321,7 @@
         if ( error != nil ){
             NSLog(@"[%@] %@", sensorName, error.debugDescription );
         }
-        NSLog(@"[%@] Save data", sensorName);
+        NSLog(@"[%@] Data is saved", sensorName);
         [self unlockDB];
     }@catch(NSException *exception) {
         NSLog(@"%@", exception.reason);

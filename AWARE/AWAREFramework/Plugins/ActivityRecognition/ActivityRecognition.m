@@ -157,34 +157,34 @@
         motionActivityManager = [CMMotionActivityManager new];
         [motionActivityManager queryActivityStartingFromDate:fromDate toDate:toDate toQueue:operationQueueUpdate withHandler:^(NSArray<CMMotionActivity *> * _Nullable activities, NSError * _Nullable error) {
             if (activities!=nil && error==nil) {
-                [[[NSOperationQueue alloc] init] addOperationWithBlock:^{
-                    
-                    if(activities.count > 1000){
-                        [self setBufferSize:1000];
-                    }else if(activities.count > 100){
-                        [self setBufferSize:100];
-                    }else if (activities.count > 50) {
-                        [self setBufferSize:50];
-                    }else if(activities.count > 20){
-                        [self setBufferSize:20];
-                    }else{
-                        [self setBufferSize:0];
-                    }
-                    
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        for (CMMotionActivity * activity in activities) {
-                            [self addMotionActivity:activity];
-                        }
-                        [self setLastUpdateWithDate:toDate];
-                        [self setBufferSize:0];
-                    });
-                }];
+                // [[[NSOperationQueue alloc] init] addOperationWithBlock:^{
+                if(activities.count > 1000){
+                    [self setBufferSize:1000];
+                }else if(activities.count > 100){
+                    [self setBufferSize:100];
+                }else if (activities.count > 50) {
+                    [self setBufferSize:50];
+                }else if(activities.count > 20){
+                    [self setBufferSize:20];
+                }else{
+                    [self setBufferSize:0];
+                }
+                
+                if (NSThread.isMainThread){
+                    NSLog(@"[activity] sensor: main thread");
+                }else{
+                    NSLog(@"[activity] sensor: not main thread");
+                }
+                
                 dispatch_async(dispatch_get_main_queue(), ^{
+                    for (CMMotionActivity * activity in activities) {
+                        [self addMotionActivity:activity];
+                    }
+                    [self setLastUpdateWithDate:toDate];
+                    [self setBufferSize:0];
                     if ([self isDebug]) {
-                        NSInteger count = activities.count;
-                        NSString * message = [NSString stringWithFormat:@"Activity Recognition Sensor is called by a timer (%ld activites)" ,count];
+                        NSString * message = [NSString stringWithFormat:@"Activity Recognition Sensor is called by a timer (%ld activites)" ,activities.count];
                         [AWAREUtils sendLocalNotificationForMessage:message soundFlag:NO];
-                        
                     }
                 });
             }
