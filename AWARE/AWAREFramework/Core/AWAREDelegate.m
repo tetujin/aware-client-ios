@@ -200,38 +200,40 @@ performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem
     /// NOTE: A background fetch method can work for 30 second. Also, the method is called randomly by OS.
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
         
-        NSLog(@"Start a background fetch ...");
-        
-        // Send a survival signal to the AWARE server
-        // [observer sendSurvivalSignal];
-        
-        // Upload debug messagaes in the background (Wi-Fi is required for this upload process.)
-        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-        [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm"];
-        NSString *formattedDateString = [dateFormatter stringFromDate:[NSDate new]];
-        
-        Debug * debug = [[Debug alloc] initWithAwareStudy:_sharedAWARECore.sharedAwareStudy dbType:AwareDBTypeTextFile];
-        [debug saveDebugEventWithText:@"This is a background fetch" type:DebugTypeInfo label:formattedDateString];
-        bool result = [debug syncAwareDBInForeground];
-        
-        NSString * debugMessage = @"";
-        if (result) {
-            debugMessage = @"Sucess to upload debug message in the background fetch.";
-        }else{
-            debugMessage = @"Faile to upload debug message in the background fetch.";
-        }
-        [debug saveDebugEventWithText:debugMessage type:DebugTypeInfo label:formattedDateString];
-        //    [AWAREUtils sendLocalNotificationForMessage:debugMessage soundFlag:YES];
-        
-        if (result) {
-            completionHandler(UIBackgroundFetchResultNewData);
-        }else{
-            completionHandler(UIBackgroundFetchResultFailed);
-        }
-        
-        debug = nil;
-        
-        NSLog(@"... Finish a background fetch");
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSLog(@"Start a background fetch ...");
+            
+            // Send a survival signal to the AWARE server
+            // [observer sendSurvivalSignal];
+            // Upload debug messagaes in the background (Wi-Fi is required for this upload process.)
+            NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+            [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm"];
+            NSString *formattedDateString = [dateFormatter stringFromDate:[NSDate new]];
+            
+            Debug * debug = [[Debug alloc] initWithAwareStudy:_sharedAWARECore.sharedAwareStudy dbType:AwareDBTypeTextFile];
+            [debug saveDebugEventWithText:@"This is a background fetch" type:DebugTypeInfo label:formattedDateString];
+            bool result = [debug syncAwareDBInForeground];
+            
+            NSString * debugMessage = @"";
+            if (result) {
+                debugMessage = @"Sucess to upload debug message in the background fetch.";
+            }else{
+                debugMessage = @"Faile to upload debug message in the background fetch.";
+            }
+            [debug saveDebugEventWithText:debugMessage type:DebugTypeInfo label:formattedDateString];
+            //    [AWAREUtils sendLocalNotificationForMessage:debugMessage soundFlag:YES];
+            
+            if (result) {
+                completionHandler(UIBackgroundFetchResultNewData);
+            }else{
+                completionHandler(UIBackgroundFetchResultFailed);
+            }
+            
+            debug = nil;
+            
+            NSLog(@"... Finish a background fetch");
+
+        });
     });
 }
 
