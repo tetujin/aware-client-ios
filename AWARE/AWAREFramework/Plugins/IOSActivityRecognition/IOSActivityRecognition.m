@@ -154,9 +154,12 @@ NSString * const AWARE_PREFERENCES_LIVE_MODE_IOS_ACTIVITY_RECOGNITION = @"status
             motionActivityManager = [CMMotionActivityManager new];
             [motionActivityManager startActivityUpdatesToQueue:[NSOperationQueue new]
                                                    withHandler:^(CMMotionActivity *activity) {
-                                                       // dispatch_async(dispatch_get_main_queue(), ^{
-                                                           [self addMotionActivity:activity];
-                                                       // });
+                                                        dispatch_async(dispatch_get_main_queue(), ^{
+                                                           NSDictionary * data = [self toDictionary:activity];
+                                                            if (data != nil) {
+                                                                [self saveData:data];
+                                                            }
+                                                        });
                                                    }];
 
         }else{
@@ -170,22 +173,25 @@ NSString * const AWARE_PREFERENCES_LIVE_MODE_IOS_ACTIVITY_RECOGNITION = @"status
             motionActivityManager = [CMMotionActivityManager new];
             [motionActivityManager startActivityUpdatesToQueue:[NSOperationQueue new]
                                                    withHandler:^(CMMotionActivity *activity) {
-                                                       // dispatch_async(dispatch_get_main_queue(), ^{
-                                                       
-                                                           [self addMotionActivity:activity];
-                                                           NSString * message = [NSString stringWithFormat:@"[%d] disposable mode: %@", disposableCount, activity.debugDescription];
-                                                           NSLog(@"%@", message);
-                                                           if(disposableCount < limit){
-                                                               disposableCount++;
-                                                           }else{
-                                                               [motionActivityManager stopActivityUpdates];
-                                                               disposableCount = 0;
-                                                               NSLog(@"Stop iOS Activity Recognition Plugin as disposable mode");
-                                                               if([self isDebug]){
-                                                                   [AWAREUtils sendLocalNotificationForMessage:message soundFlag:NO];
+                                                       dispatch_async(dispatch_get_main_queue(), ^{
+                                                           if (activity != nil) {
+                                                               NSDictionary * activityDict = [self toDictionary:activity];
+                                                               [self saveData:activityDict];
+                                                               // [self addMotionActivity:activity];
+                                                               NSString * message = [NSString stringWithFormat:@"[%d] disposable mode: %@", disposableCount, activity.debugDescription];
+                                                               NSLog(@"%@", message);
+                                                               if(disposableCount < limit){
+                                                                   disposableCount++;
+                                                               }else{
+                                                                   [motionActivityManager stopActivityUpdates];
+                                                                   disposableCount = 0;
+                                                                   NSLog(@"Stop iOS Activity Recognition Plugin as disposable mode");
+                                                                   if([self isDebug]){
+                                                                       [AWAREUtils sendLocalNotificationForMessage:message soundFlag:NO];
+                                                                   }
                                                                }
                                                            }
-                                                       // });
+                                                       });
                                                    }];
             
         }else{
@@ -216,62 +222,55 @@ NSString * const AWARE_PREFERENCES_LIVE_MODE_IOS_ACTIVITY_RECOGNITION = @"status
 
 - (void) getMotionActivity:(id)sender{
     
-    NSOperationQueue *operationQueueUpdate = [NSOperationQueue new]; // [NSOperationQueue mainQueue];
+//     NSOperationQueue *operationQueueUpdate = [NSOperationQueue new]; // [NSOperationQueue mainQueue];
+    NSOperationQueue *operationQueueUpdate = [NSOperationQueue mainQueue];
+
     if([CMMotionActivityManager isActivityAvailable]){
         // from data
         NSDate * fromDate = [self getLastUpdate];
-        //        NSDate * fromDate = [AWAREUtils getTargetNSDate:[NSDate new] hour:-7*24 nextDay:NO];
+        // NSDate * fromDate = [AWAREUtils getTargetNSDate:[NSDate new] hour:-7*24 nextDay:NO];
         // to date
         NSDate * toDate = [NSDate new];
         motionActivityManager = [CMMotionActivityManager new];
         [motionActivityManager queryActivityStartingFromDate:fromDate toDate:toDate toQueue:operationQueueUpdate withHandler:^(NSArray<CMMotionActivity *> * _Nullable activities, NSError * _Nullable error) {
             if (activities!=nil && error==nil) {
-                // [[[NSOperationQueue alloc] init] addOperationWithBlock:^{
-                if(activities.count > 1000){
-                    [self setBufferSize:1000];
-                }else if(activities.count > 100){
-                    [self setBufferSize:100];
-                }else if (activities.count > 50) {
-                    [self setBufferSize:50];
-                }else if(activities.count > 20){
-                    [self setBufferSize:20];
-                }else{
-                    [self setBufferSize:0];
-                }
-                
-                // dispatch_async(dispatch_get_main_queue(), ^{
+                NSMutableArray * array = [[NSMutableArray alloc] init];
                 for (CMMotionActivity * activity in activities) {
-                    [self addMotionActivity:activity];
+                    NSDictionary * dict = [self toDictionary:activity];
+                    if (dict!=nil) {
+                        [array addObject:dict];
+                    }
                     latestActivity = activity;
                 }
-                [self setLastUpdateWithDate:toDate];
-                // [self setBufferSize:0];
-                        
-                    // });
-                // }];
-                if ([self isDebug]) {
                 dispatch_async(dispatch_get_main_queue(), ^{
+                    NSLog(@"[%@] %ld records", [self getSensorName], array.count);
+                    [self saveDataWithArray:array];
+                    if (latestActivity != nil) {
+                        NSDictionary * activityDict = [self toDictionary:latestActivity];
+                        if (activityDict != nil) {
+                            [self setLatestValue:[activityDict objectForKey:ACTIVITIES]];
+                            [self setLatestData:activityDict];
+                            
+                            NSDictionary * userInfo = [NSDictionary dictionaryWithObject:activityDict
+                                                                                  forKey:EXTRA_DATA];
+                            [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_IOS_ACTIVITY_RECOGNITION
+                                                                                object:nil
+                                                                              userInfo:userInfo];
+                        }
+                    }
+                });
+                
+                [self setLastUpdateWithDate:toDate];
+                
+                if ([self isDebug]) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
                         NSInteger count = activities.count;
                         NSString * message = [NSString stringWithFormat:@"iOS Activity Recognition Sensor is called by a timer (%ld activites)" ,count];
                         [AWAREUtils sendLocalNotificationForMessage:message soundFlag:NO];
                     });
                 }
             }
-            
-            /////////////////////////////
-//            if ( activities != nil && activities.count == 0 ){
-//                [self startSensorWithConfidenceFilter:CMMotionActivityConfidenceLow
-//                                                 mode:IOSActivityRecognitionModeDisposable
-//                                             interval:0
-//                                      disposableLimit:0];
-//            }
         }];
-        
-//        // disposable
-//        [self startSensorWithConfidenceFilter:CMMotionActivityConfidenceLow
-//                                         mode:IOSActivityRecognitionModeDisposable
-//                                     interval:0
-//                              disposableLimit:0];
     }
 }
 
@@ -280,7 +279,7 @@ NSString * const AWARE_PREFERENCES_LIVE_MODE_IOS_ACTIVITY_RECOGNITION = @"status
 ////////////////////////////////////////////////////////////////////////
 
 
-- (void) addMotionActivity: (CMMotionActivity *) motionActivity{
+- (NSDictionary *) toDictionary: (CMMotionActivity *) motionActivity{
     
     // NSLog(@"%ld", motionActivity.confidence);
     
@@ -288,12 +287,12 @@ NSString * const AWARE_PREFERENCES_LIVE_MODE_IOS_ACTIVITY_RECOGNITION = @"status
         case CMMotionActivityConfidenceHigh:
             if(motionActivity.confidence == CMMotionActivityConfidenceMedium ||
                motionActivity.confidence == CMMotionActivityConfidenceLow){
-                return;
+                return nil;
             }
             break;
         case CMMotionActivityConfidenceMedium:
             if(motionActivity.confidence == CMMotionActivityConfidenceLow){
-                return;
+                return nil;
             }
             break;
         case CMMotionActivityConfidenceLow:
@@ -354,10 +353,6 @@ NSString * const AWARE_PREFERENCES_LIVE_MODE_IOS_ACTIVITY_RECOGNITION = @"status
         }
     }
     
-    //if([self getDBType] == AwareDBTypeTextFile){
-    //    activitiesStr = @"";
-    //}
-    
     if ([self isDebug]) {
         NSLog(@"[%@] %@ %ld", motionActivity.startDate, activitiesStr, motionActivity.confidence);
     }
@@ -377,17 +372,7 @@ NSString * const AWARE_PREFERENCES_LIVE_MODE_IOS_ACTIVITY_RECOGNITION = @"status
     [dict setObject:@(motionActivity.unknown)    forKey:ACTIVITY_NAME_UNKNOWN];   // 0 or 1
     [dict setObject:@""                          forKey:LABEL];
     
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self setLatestValue:[NSString stringWithFormat:@"%@ (%@)", activitiesStr, motionConfidence]];
-        [self saveData:dict];
-        [self setLatestData:dict];
-        
-        NSDictionary * userInfo = [NSDictionary dictionaryWithObject:dict
-                                                              forKey:EXTRA_DATA];
-        [[NSNotificationCenter defaultCenter] postNotificationName:ACTION_AWARE_IOS_ACTIVITY_RECOGNITION
-                                                            object:nil
-                                                          userInfo:userInfo];
-    });
+    return dict;
 }
 
 

@@ -202,17 +202,24 @@
 
 //// save data
 - (bool) saveDataWithArray:(NSArray*) array {
-    if(array!=nil && bufferArray != nil){
-        [bufferArray addObjectsFromArray:array];
-        if(bufferCount > [self getBufferSize]){
-            bufferCount = 0;
-            [self saveDataInBackground];
-        }else{
-            bufferCount ++;
-        }
+    if (array!=nil) {
+        [self saveDataInBackgroundWithArray:array];
         return YES;
+    }else{
+        return NO;
     }
-    return NO;
+    
+//    if(array!=nil && bufferArray!=nil){
+//        [bufferArray addObjectsFromArray:array];
+//        if(bufferCount > [self getBufferSize]){
+//            bufferCount = 0;
+//            [self saveDataInBackground];
+//        }else{
+//            bufferCount ++;
+//        }
+//        return YES;
+//    }
+//    return NO;
 }
 
 // save data
@@ -237,16 +244,26 @@
  * @discussion This method should be called in the background thread.
  */
 - (void) saveDataInBackground {
+    @try{
+        // Copy the buffer and remove the buffer objects
+        // NSLog(@"[%@] start to copy %ld data", sensorName, bufferArray.count);
+        NSArray * array = [bufferArray mutableCopy];
+        [bufferArray removeAllObjects];
+        // NSLog(@"[%@] end to copy %ld data", sensorName, array.count);
+        [self saveDataInBackgroundWithArray:array];
+    } @catch (NSException * error){
+        NSLog(@"[%@] %@", sensorName, error.debugDescription);
+        [self saveDebugEventWithText:error.debugDescription type:DebugTypeError label:[NSString stringWithFormat:@"[%@] Buffer Copy Error",sensorName]];
+    }
+}
+
+- (void) saveDataInBackgroundWithArray:(NSArray *)array{
     AppDelegate * delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
     NSManagedObjectContext* parentContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
     [parentContext setPersistentStoreCoordinator:delegate.persistentStoreCoordinator];
     
     NSManagedObjectContext* childContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
     [childContext setParentContext:parentContext];
-    
-    // Copy the buffer and remove the buffer objects
-    NSArray * array = [[NSArray alloc] initWithArray:[bufferArray copy]];
-    [bufferArray removeAllObjects];
     
     [childContext performBlock:^{
         if(![self isDBLock]){
@@ -271,7 +288,7 @@
                         [bufferArray addObjectsFromArray:array];
                     }
                     //if([self isDebug])
-                        NSLog(@"[%@] Data is saved", sensorName);
+                    NSLog(@"[%@] Data is saved", sensorName);
                     [self unlockDB];
                 }];
             }
@@ -282,6 +299,7 @@
         }
     }];
 }
+
 
 - (void)insertNewEntityWithData:(NSDictionary *)data
            managedObjectContext:(NSManagedObjectContext *)childContext
