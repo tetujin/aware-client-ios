@@ -50,6 +50,8 @@
 
 #import <QuartzCore/QuartzCore.h>
 
+#import <AWARESQLiteMigrationManager.h>
+
 @interface ViewController ()
 @end
 
@@ -84,6 +86,8 @@
     NSString * selectedRow;
     UIView * overlayView;
     UILabel * deviceIdLabel;
+    
+    Accelerometer * sensor;
 }
 
 - (void)viewDidLoad {
@@ -174,6 +178,35 @@
 //                                               object:nil];
     
 
+    if ( [delegate isRequiredMigration] ){
+        
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Database Migration" message:@"A database migration is reuiqred. Please don't close this application during the migration process." preferredStyle:UIAlertControllerStyleAlert];
+        
+        [alertController addAction:[UIAlertAction actionWithTitle:@"Execute" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            // [self otherButtonPushed];
+            // AWARESQLiteMigrationManager * migManager = [[AWARESQLiteMigrationManager alloc] init];
+            // bool success = [migManager executMigration];
+            bool success = [delegate doMigration];
+            if (success) {
+                [core activate];
+                
+                [awareStudy setDebugState:YES];
+                sensor = [[Accelerometer alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeCoreData];
+                // [sensorManager addNewSensor:sensor];
+                [sensor startSensorWithInterval:0.1];
+                [sensorManager addNewSensor:sensor];
+                [self pushedStudyRefreshButton:nil];
+                // [self viewDidLoad];
+            }else{
+                
+            }
+        }]];
+        
+        [alertController addAction:[UIAlertAction actionWithTitle:@"Dismiss" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+            
+        }]];
+        [self presentViewController:alertController animated:YES completion:nil];
+    }
 }
 
 

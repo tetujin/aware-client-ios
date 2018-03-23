@@ -13,7 +13,7 @@ pod 'EZAudio'
 pod 'SVProgressHUD'
 pod 'EAIntroView', '~> 2.9.0'
 pod 'NXOAuth2Client', '~> 1.2.8'
-pod "EstimoteSDK"
+pod 'EstimoteSDK'
 pod 'UICountingLabel'
 #pod 'PNChart'
 # pod 'Charts'

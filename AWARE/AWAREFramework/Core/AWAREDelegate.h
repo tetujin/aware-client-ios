@@ -27,6 +27,9 @@
 
 - (void)setNotification:(UIApplication *)application;
 
+- (BOOL)isRequiredMigration;
+- (BOOL)doMigration;
+
 // for migration
 //- (BOOL)isRequiredMigration;
 //- (BOOL)doMigration;

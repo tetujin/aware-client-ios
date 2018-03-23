@@ -48,28 +48,25 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     
-    // [self setNotification:application];
-    
-    // Set background fetch for updating debug information
-    [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
-
-    // Google Login Plugin
-//    NSError* configureError;
-//    [[GGLContext sharedInstance] configureWithError: &configureError];
-//    NSAssert(!configureError, @"Error configuring Google services: %@", configureError);
-//    [GIDSignIn sharedInstance].delegate = self;
-    [GIDSignIn sharedInstance].clientID = GOOGLE_LOGIN_CLIENT_ID;
-    [GIDSignIn sharedInstance].delegate = self;
-    
-    NSLog(@"Turn 'OFF' the auto sleep mode on this app");
-    [UIApplication sharedApplication].idleTimerDisabled = YES;
-    
     // Error Tacking
     NSSetUncaughtExceptionHandler(&exceptionHandler);
     
+    // Google Login Plugin
+    [GIDSignIn sharedInstance].clientID = GOOGLE_LOGIN_CLIENT_ID;
+    [GIDSignIn sharedInstance].delegate = self;
+
+    // Set background fetch for updating debug information
+    [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
     
-    _sharedAWARECore = [[AWARECore alloc] init];
-    [_sharedAWARECore activate];
+    // Lock events
+    // NSLog(@"Turn 'OFF' the auto sleep mode on this app");
+    [UIApplication sharedApplication].idleTimerDisabled = YES;
+    
+    if (![self isRequiredMigration]){
+        [_sharedAWARECore activate];
+    }else{
+        NSLog(@"DB Migration is reuqired... Please class -AWAREDelegate.doMigration on ViewController");
+    }
     
     return YES;
 }
@@ -797,7 +794,6 @@ didDisconnectWithUser:(GIDGoogleUser *)user
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
 //        abort();
     }
-    
     return _persistentStoreCoordinator;
 }
 
@@ -832,45 +828,46 @@ didDisconnectWithUser:(GIDGoogleUser *)user
     }
 }
 
-//- (BOOL)isRequiredMigration {
-//    NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"AWARE.sqlite"];
-//    NSError* error = nil;
-//    
-//    NSDictionary* sourceMetaData = [NSPersistentStoreCoordinator metadataForPersistentStoreOfType:NSSQLiteStoreType
-//                                                                                              URL:storeURL
-//                                                                                            error:&error];
-//    if (sourceMetaData == nil) {
-//        return NO;
-//    } else if (error) {
-//        NSLog(@"Checking migration was failed (%@, %@)", error, [error userInfo]);
-//        abort();
-//    }
-//    
-//    BOOL isCompatible = [self.managedObjectModel isConfiguration:nil
-//                                     compatibleWithStoreMetadata:sourceMetaData];
-//    
-//    return !isCompatible;
-//}
-//
-//- (BOOL) doMigration {
-//    NSLog(@"--- doMigration ---");
-//    NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"AWARE.sqlite"];
-//    
-//    NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
-//                             [NSNumber numberWithBool:YES], NSMigratePersistentStoresAutomaticallyOption,
-//                             [NSNumber numberWithBool:YES], NSInferMappingModelAutomaticallyOption,
-//                             nil];
-//    NSError *error = nil;
-//    _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
-//    if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:options error:&error])
-//    {
-//        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-//        // abort();
-//        return NO;
-//    }
-//    
-//    return YES;//_persistentStoreCoordinator;
-//}
-//
+- (BOOL)isRequiredMigration {
+    NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"AWARE.sqlite"];
+    NSError* error = nil;
+    
+    NSDictionary* sourceMetaData = [NSPersistentStoreCoordinator metadataForPersistentStoreOfType:NSSQLiteStoreType
+                                                                                              URL:storeURL
+                                                                                            error:&error];
+    if (sourceMetaData == nil) {
+        return NO;
+    } else if (error) {
+        NSLog(@"Checking migration was failed (%@, %@)", error, [error userInfo]);
+        // abort();
+    }
+    
+    BOOL isCompatible = [self.managedObjectModel isConfiguration:nil
+                                     compatibleWithStoreMetadata:sourceMetaData];
+    
+    return !isCompatible;
+}
+
+
+- (BOOL) doMigration {
+    NSLog(@"--- doMigration ---");
+    NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"AWARE.sqlite"];
+    
+    NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
+                             [NSNumber numberWithBool:YES], NSMigratePersistentStoresAutomaticallyOption,
+                             [NSNumber numberWithBool:YES], NSInferMappingModelAutomaticallyOption,
+                             nil];
+    NSError *error = nil;
+    _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
+    if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:options error:&error])
+    {
+        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        // abort();
+        return NO;
+    }
+    
+    return _persistentStoreCoordinator;
+}
+
 
 @end
