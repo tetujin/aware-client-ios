@@ -340,7 +340,6 @@
 		16EEA1861FEF147500190799 /* Calendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16EEA1851FEF147500190799 /* Calendar.swift */; };
 		16FD37561CF0B1F700EEB416 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 16FD37541CF0B1DE00EEB416 /* Settings.bundle */; };
 		33DD1EAB0B6DC89A0BE94442 /* libPods-AWAREUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F2C7B48DB0AFA845366B8320 /* libPods-AWAREUITests.a */; };
-		4F50CAD3206538030095AEE7 /* AWARESQLiteMigrationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F50CAD2206538030095AEE7 /* AWARESQLiteMigrationManager.m */; };
 		4FD479AF20568857003BDDF9 /* DBTableCreator.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD479AE20568857003BDDF9 /* DBTableCreator.m */; };
 		4FD479C920568E7E003BDDF9 /* EntityAmbientNoise+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD479C720568E7E003BDDF9 /* EntityAmbientNoise+CoreDataClass.m */; };
 		4FD479CA20568E7E003BDDF9 /* EntityAmbientNoise+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD479C820568E7E003BDDF9 /* EntityAmbientNoise+CoreDataProperties.m */; };
@@ -1019,8 +1018,6 @@
 		16EEA1871FEF16DF00190799 /* AWARE-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AWARE-Bridging-Header.h"; sourceTree = "<group>"; };
 		16FD37541CF0B1DE00EEB416 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		1EB67F5CA2CB715737A0C978 /* Pods-AWAREUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AWAREUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-AWAREUITests/Pods-AWAREUITests.release.xcconfig"; sourceTree = "<group>"; };
-		4F50CAD1206538030095AEE7 /* AWARESQLiteMigrationManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AWARESQLiteMigrationManager.h; sourceTree = "<group>"; };
-		4F50CAD2206538030095AEE7 /* AWARESQLiteMigrationManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AWARESQLiteMigrationManager.m; sourceTree = "<group>"; };
 		4FD479AD20568857003BDDF9 /* DBTableCreator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DBTableCreator.h; sourceTree = "<group>"; };
 		4FD479AE20568857003BDDF9 /* DBTableCreator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DBTableCreator.m; sourceTree = "<group>"; };
 		4FD479C520568E7D003BDDF9 /* EntityAmbientNoise+CoreDataProperties.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "EntityAmbientNoise+CoreDataProperties.h"; path = "/Users/yuuki/Dropbox/tokuda_Lab/codes/objective-c/AWARE/AWARE/AWAREFramework/Plugins/AmbientNoise/EntityAmbientNoise+CoreDataProperties.h"; sourceTree = "<absolute>"; };
@@ -1391,8 +1388,6 @@
 				1648FE921DAB2E87001D870A /* AWARESensors.m */,
 				169C871B1D01382C00825761 /* AWARESchedule.h */,
 				169C871C1D01382C00825761 /* AWARESchedule.m */,
-				4F50CAD1206538030095AEE7 /* AWARESQLiteMigrationManager.h */,
-				4F50CAD2206538030095AEE7 /* AWARESQLiteMigrationManager.m */,
 				16EEA1871FEF16DF00190799 /* AWARE-Bridging-Header.h */,
 				16AE13401F50696700263C14 /* CoreDataStorage */,
 				16AE133E1F5068C200263C14 /* TextFileStorage */,
@@ -3084,7 +3079,6 @@
 				16BDCC951D35B80E00B13BD4 /* BatteryCharge.m in Sources */,
 				167F14A01F4EFB7B00EA6323 /* EntityEstimoteTemperature+CoreDataProperties.m in Sources */,
 				160F0EC61D040B7F00673343 /* EntityDebug+CoreDataProperties.m in Sources */,
-				4F50CAD3206538030095AEE7 /* AWARESQLiteMigrationManager.m in Sources */,
 				16CB66E41F452F69001EE743 /* ESMPictureView.m in Sources */,
 				169C889D1D01382C00825761 /* Timezone.m in Sources */,
 				160F0ED81D041B5D00673343 /* EntityLinearAccelerometer+CoreDataProperties.m in Sources */,

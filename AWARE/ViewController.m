@@ -50,8 +50,6 @@
 
 #import <QuartzCore/QuartzCore.h>
 
-#import <AWARESQLiteMigrationManager.h>
-
 @interface ViewController ()
 @end
 

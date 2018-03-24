@@ -133,7 +133,7 @@ NSString * const AWARE_PREFERENCES_FREQUENCY_HZ_ACCELEROMETER = @"frequency_hz_a
                                           [dict setObject:@(accelerometerData.acceleration.z) forKey:@"double_values_2"];
                                           [dict setObject:@3 forKey:@"accuracy"];
                                           [dict setObject:@"" forKey:@"label"];
-                                          NSLog(@"%f", accelerometerData.acceleration.x);
+                                          // NSLog(@"%f", accelerometerData.acceleration.x);
                                           [self setLatestValue:[NSString stringWithFormat:
                                                                 @"%f, %f, %f",
                                                                 accelerometerData.acceleration.x,
