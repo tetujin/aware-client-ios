@@ -84,6 +84,8 @@
     NSString * selectedRow;
     UIView * overlayView;
     UILabel * deviceIdLabel;
+    
+    Accelerometer * sensor;
 }
 
 - (void)viewDidLoad {
@@ -172,10 +174,114 @@
 //                                             selector:@selector(moveToFitbit:)
 //                                                 name:ACTION_AWARE_FITBIT_LOGIN_REQUEST
 //                                               object:nil];
+
+
+    [overlayView setHidden:YES];
+    if ( [AWAREUtils needSafeBoot] ){
+        [self doSafeBootOperation];
+    }
+}
+
+- (void) doSafeBootOperation{
+    AWAREDelegate * delegate = (AWAREDelegate *)[UIApplication sharedApplication].delegate;
+    
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Safeboot" message:@"A serious error occurred on a local storage. Please recover it." preferredStyle:UIAlertControllerStyleAlert];
+    [alertController addAction:[UIAlertAction actionWithTitle:@"Make a backup" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        [SVProgressHUD showWithStatus:@"AWARE client is making a backup of the local-storage.\nDo not close this app."];
+        
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            bool backupSuccess = [delegate backupCoreData];
+            [SVProgressHUD dismiss];
+            NSString * msg = @"";
+            if (backupSuccess) {
+                msg = @"Succeed to make a backup of the local-storage!";
+            }else{
+                msg = @"Failed to make a backup of the local-storage!";
+            }
+            
+            UIAlertController *alertChildController = [UIAlertController alertControllerWithTitle:msg message:nil preferredStyle:UIAlertControllerStyleAlert];
+            [alertChildController addAction:[UIAlertAction actionWithTitle:@"Close" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                [self doSafeBootOperation];
+            }]];
+            [self presentViewController:alertChildController animated:YES completion:nil];
+        });
+    }]];
+    
+    [alertController addAction:[UIAlertAction actionWithTitle:@"Make a backup forcefully" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        [SVProgressHUD showWithStatus:@"AWARE client is making a backup of the local-storage forcefully.\nDo not close this app."];
+        
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            bool backupSuccess = [delegate backupCoreDataForce];
+            [SVProgressHUD dismiss];
+            NSString * msg = @"";
+            if (backupSuccess) {
+                msg = @"Succeed to make a backup of the local-storage!";
+            }else{
+                msg = @"Failed to make a backup of the local-storage!";
+            }
+            
+            UIAlertController *alertChildController = [UIAlertController alertControllerWithTitle:msg message:nil preferredStyle:UIAlertControllerStyleAlert];
+            [alertChildController addAction:[UIAlertAction actionWithTitle:@"Close" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                [self doSafeBootOperation];
+            }]];
+            [self presentViewController:alertChildController animated:YES completion:nil];
+        });
+    }]];
+    
+    [alertController addAction:[UIAlertAction actionWithTitle:@"Try a local-storage migration" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        [SVProgressHUD showWithStatus:@"AWARE client is retrying a migrateion of the local-storage. Do not close this app."];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            bool migrationSuccess =[delegate migrateCoreData];
+            [SVProgressHUD dismiss];
+            NSString * msg = @"";
+            if (migrationSuccess) {
+                msg = @"Succeed to migrate the local-storage";
+            }else{
+                msg = @"Failed to migrate the local-storage";
+            }
+            
+            UIAlertController *alertChildController = [UIAlertController alertControllerWithTitle:msg message:nil preferredStyle:UIAlertControllerStyleAlert];
+            [alertChildController addAction:[UIAlertAction actionWithTitle:@"Close" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                [self doSafeBootOperation];
+            }]];
+            [self presentViewController:alertChildController animated:YES completion:nil];
+
+            
+        });
+    }]];
+    
+    [alertController addAction:[UIAlertAction actionWithTitle:@"Initialize the local-storage" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+        [SVProgressHUD showWithStatus:@"AWARE client is initilazing the local-storage. Do not close this app."];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [delegate deleteCoreData];
+            [SVProgressHUD dismiss];
+            NSString * msg = @"Initialized the local-storage";
+            UIAlertController *alertChildController = [UIAlertController alertControllerWithTitle:msg message:nil preferredStyle:UIAlertControllerStyleAlert];
+            [alertChildController addAction:[UIAlertAction actionWithTitle:@"Close" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                [self doSafeBootOperation];
+            }]];
+            [self presentViewController:alertChildController animated:YES completion:nil];
+        });
+    }]];
+    
+    [alertController addAction:[UIAlertAction actionWithTitle:@"Restart" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        AWARECore * core= [[AWARECore alloc] init];
+        [core activate];
+        delegate.sharedAWARECore = core;
+        [AWAREUtils setNecessityOfSafeBoot:NO];
+        [self viewDidLoad];
+//        UIAlertController *alertChildController = [UIAlertController alertControllerWithTitle:@"Please open the application again after the application is closed." message:nil preferredStyle:UIAlertControllerStyleAlert];
+//        [alertChildController addAction:[UIAlertAction actionWithTitle:@"Restart" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+//            abort();
+//        }]];
+//        [self presentViewController:alertChildController animated:YES completion:nil];
+        
+    }]];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
     
 
 }
-
 
 /**
  * This method is called when application did becase active.
@@ -213,7 +319,7 @@
     
     dispatch_async(dispatch_get_main_queue(), ^{
         
-    NSLog(@"%ld",[awareStudy getUIMode]);
+        NSLog(@"%ld",[awareStudy getUIMode]);
         if([awareStudy getUIMode] == AwareUIModeHideAll){
             [overlayView setHidden:NO];
             [self.tableView setScrollEnabled:NO];

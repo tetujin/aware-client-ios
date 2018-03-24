@@ -511,7 +511,27 @@ This method provides a system uuid.
     return [string stringByAddingPercentEncodingWithAllowedCharacters:allowed];
 }
 
+//+ (void) setNecessityOfDBMigration:(BOOL)necessity{
+//    NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
+//    [defaults setBool:necessity forKey:@"aware.necessity.db.migration"];
+//    [defaults synchronize];
+//}
+//
+//+ (BOOL) getNecessityOfDBMigration{
+//    NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
+//    return [defaults boolForKey:@"aware.necessity.db.migration"];
+//}
 
++ (void)setNecessityOfSafeBoot:(BOOL)necessity{
+    NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setBool:necessity forKey:@"aware.necessity.safeboot"];
+    [defaults synchronize];
+}
+
++ (BOOL)needSafeBoot{
+    NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
+    return [defaults boolForKey:@"aware.necessity.safeboot"];
+}
 
 @end
 

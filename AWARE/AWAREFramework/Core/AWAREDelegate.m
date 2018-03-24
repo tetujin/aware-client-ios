@@ -48,28 +48,28 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     
-    // [self setNotification:application];
-    
-    // Set background fetch for updating debug information
-    [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
-
-    // Google Login Plugin
-//    NSError* configureError;
-//    [[GGLContext sharedInstance] configureWithError: &configureError];
-//    NSAssert(!configureError, @"Error configuring Google services: %@", configureError);
-//    [GIDSignIn sharedInstance].delegate = self;
-    [GIDSignIn sharedInstance].clientID = GOOGLE_LOGIN_CLIENT_ID;
-    [GIDSignIn sharedInstance].delegate = self;
-    
-    NSLog(@"Turn 'OFF' the auto sleep mode on this app");
-    [UIApplication sharedApplication].idleTimerDisabled = YES;
-    
     // Error Tacking
     NSSetUncaughtExceptionHandler(&exceptionHandler);
     
+    // Google Login Plugin
+    [GIDSignIn sharedInstance].clientID = GOOGLE_LOGIN_CLIENT_ID;
+    [GIDSignIn sharedInstance].delegate = self;
+
+    // Set background fetch for updating debug information
+    [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
     
-    _sharedAWARECore = [[AWARECore alloc] init];
-    [_sharedAWARECore activate];
+    // Lock events
+    // NSLog(@"Turn 'OFF' the auto sleep mode on this app");
+    [UIApplication sharedApplication].idleTimerDisabled = YES;
+    
+    // [AWAREUtils setNecessityOfSafeBoot:YES];
+    
+    if ([AWAREUtils needSafeBoot]) {
+        return YES;
+    }
+    
+    AWARECore * core = [self sharedAWARECoreManager];
+    [core activate];
     
     return YES;
 }
@@ -795,9 +795,9 @@ didDisconnectWithUser:(GIDGoogleUser *)user
         // Replace this with code to handle the error appropriately.
         // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-//        abort();
+        [AWAREUtils setNecessityOfSafeBoot:YES];
+        // abort();
     }
-    
     return _persistentStoreCoordinator;
 }
 
@@ -828,49 +828,138 @@ didDisconnectWithUser:(GIDGoogleUser *)user
             // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
             NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
             // abort();
+            // [AWAREUtils setNecessityOfSafeBoot:YES];
         }
     }
 }
 
-//- (BOOL)isRequiredMigration {
-//    NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"AWARE.sqlite"];
-//    NSError* error = nil;
-//    
-//    NSDictionary* sourceMetaData = [NSPersistentStoreCoordinator metadataForPersistentStoreOfType:NSSQLiteStoreType
-//                                                                                              URL:storeURL
-//                                                                                            error:&error];
-//    if (sourceMetaData == nil) {
-//        return NO;
-//    } else if (error) {
-//        NSLog(@"Checking migration was failed (%@, %@)", error, [error userInfo]);
-//        abort();
-//    }
-//    
-//    BOOL isCompatible = [self.managedObjectModel isConfiguration:nil
-//                                     compatibleWithStoreMetadata:sourceMetaData];
-//    
-//    return !isCompatible;
-//}
-//
-//- (BOOL) doMigration {
-//    NSLog(@"--- doMigration ---");
-//    NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"AWARE.sqlite"];
-//    
-//    NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
-//                             [NSNumber numberWithBool:YES], NSMigratePersistentStoresAutomaticallyOption,
-//                             [NSNumber numberWithBool:YES], NSInferMappingModelAutomaticallyOption,
-//                             nil];
-//    NSError *error = nil;
-//    _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
-//    if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:options error:&error])
-//    {
-//        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-//        // abort();
-//        return NO;
-//    }
-//    
-//    return YES;//_persistentStoreCoordinator;
-//}
-//
+- (BOOL)isRequiredMigration {
+    NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"AWARE.sqlite"];
+    NSError* error = nil;
+    
+    NSDictionary* sourceMetaData = [NSPersistentStoreCoordinator metadataForPersistentStoreOfType:NSSQLiteStoreType
+                                                                                              URL:storeURL
+                                                                                            error:&error];
+    if (sourceMetaData == nil) {
+        return NO;
+    } else if (error) {
+        NSLog(@"Checking migration was failed (%@, %@)", error, [error userInfo]);
+        // abort();
+    }
+    
+    BOOL isCompatible = [self.managedObjectModel isConfiguration:nil
+                                     compatibleWithStoreMetadata:sourceMetaData];
+    
+    return !isCompatible;
+}
+
+
+- (BOOL) migrateCoreData{
+    NSLog(@"--- doMigration ---");
+    NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"AWARE.sqlite"];
+    
+    NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
+                             [NSNumber numberWithBool:YES], NSMigratePersistentStoresAutomaticallyOption,
+                             [NSNumber numberWithBool:YES], NSInferMappingModelAutomaticallyOption,
+                             nil];
+    NSError *error = nil;
+    _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
+    if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:options error:&error])
+    {
+        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        // abort();
+        return NO;
+    }
+    
+    return _persistentStoreCoordinator;
+}
+
+
+/*! Creates a backup of the Local store
+ 
+ @return Returns YES of file was migrated or NO if not.
+ */
+- (bool)backupCoreData {
+    // Lets use the existing PSC
+    NSPersistentStoreCoordinator *migrationPSC = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:self.managedObjectModel];
+    
+    NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"AWARE.sqlite"];
+    // Open the store
+    id sourceStore = [migrationPSC addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:nil];
+    
+    if (!sourceStore) {
+        
+        NSLog(@" failed to add old store");
+        migrationPSC = nil;
+        return FALSE;
+    } else {
+        NSLog(@" Successfully added store to migrate");
+        
+        NSError *error;
+        NSURL *backupStoreURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:[NSString stringWithFormat:@"AWARE_%@.sqlite",[NSDate new].debugDescription]];
+        NSLog(@" About to migrate the store...");
+        id migrationSuccess = [migrationPSC migratePersistentStore:sourceStore toURL:backupStoreURL options:nil withType:NSSQLiteStoreType error:&error];
+        
+        if (migrationSuccess) {
+            NSLog(@"store successfully backed up");
+            migrationPSC = nil;
+            // Now reset the backup preference
+            // [[NSUserDefaults standardUserDefaults] setBool:NO forKey:_makeBackupPreferenceKey];
+            // [[NSUserDefaults standardUserDefaults] synchronize];
+            return TRUE;
+        }
+        else {
+            NSLog(@"Failed to backup store: %@, %@", error, error.userInfo);
+            migrationPSC = nil;
+            return FALSE;
+        }
+    }
+    migrationPSC = nil;
+    return FALSE;
+}
+
+- (BOOL)backupCoreDataForce{
+    NSError *error;
+    NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"AWARE.sqlite"];
+    NSURL *backupStoreURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:[NSString stringWithFormat:@"AWARE_%@.sqlite",[NSDate new].debugDescription]];
+    NSFileManager* manager = [NSFileManager defaultManager];
+    BOOL result = [manager moveItemAtURL:storeURL toURL:backupStoreURL error:&error];
+    if (result) {
+        return YES;
+    }else{
+        if (error!=nil) {
+            NSLog(@"%@",error.debugDescription);
+        }
+        return NO;
+    }
+}
+
+- (BOOL)resetCoreData{
+    for(NSPersistentStore * store in self.managedObjectContext.persistentStoreCoordinator.persistentStores){
+        NSError * error = nil;
+        bool isRemoved = [self.managedObjectContext.persistentStoreCoordinator removePersistentStore:store error:&error];
+        if (error !=nil) NSLog(@"%@",error.debugDescription);
+        if (!isRemoved) {
+            return NO;
+        }
+    }
+    return YES;
+}
+
+
+- (void) deleteCoreData{
+    NSURL *storeURL = [[[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject] URLByAppendingPathComponent:@"AWARE.sqlite"];
+    NSPersistentStoreCoordinator *storeCoodinator = [self.managedObjectContext persistentStoreCoordinator];
+    NSPersistentStore  *store = [storeCoodinator persistentStoreForURL:storeURL];
+    NSError *error;
+    [storeCoodinator removePersistentStore:store error:&error];
+    [[NSFileManager defaultManager] removeItemAtURL:storeURL error:&error];
+    
+    // Add new PersistentStore
+    [storeCoodinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&error];
+    
+    // Reset NSFetchedResultController
+    [NSFetchedResultsController deleteCacheWithName:@"Root"];
+}
 
 @end
