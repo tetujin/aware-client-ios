@@ -62,7 +62,7 @@
     // NSLog(@"Turn 'OFF' the auto sleep mode on this app");
     [UIApplication sharedApplication].idleTimerDisabled = YES;
     
-    [AWAREUtils setNecessityOfSafeBoot:YES];
+    // [AWAREUtils setNecessityOfSafeBoot:YES];
     
     if ([AWAREUtils needSafeBoot]) {
         return YES;
