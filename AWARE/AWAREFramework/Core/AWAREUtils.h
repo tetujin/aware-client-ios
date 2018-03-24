@@ -59,5 +59,10 @@
 + (NSString *)stringByAddingPercentEncoding:(NSString *)string;
 + (NSString *)stringByAddingPercentEncoding:(NSString *)string unreserved:(NSString*)unreserved;
 
+//+ (void) setNecessityOfDBMigration:(BOOL)necessity;
+//+ (BOOL) getNecessityOfDBMigration;
+
++ (void) setNecessityOfSafeBoot:(BOOL)necessity;
++ (BOOL) needSafeBoot;
 
 @end

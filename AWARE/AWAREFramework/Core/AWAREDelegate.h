@@ -27,11 +27,12 @@
 
 - (void)setNotification:(UIApplication *)application;
 
-- (BOOL)isRequiredMigration;
-- (BOOL)doMigration;
-
-// for migration
-//- (BOOL)isRequiredMigration;
-//- (BOOL)doMigration;
+@property bool needDBMigration;
+// - (BOOL)isRequiredMigration;
+- (BOOL) migrateCoreData;
+- (bool) backupCoreData;
+- (BOOL) backupCoreDataForce;
+- (BOOL) resetCoreData;
+- (void) deleteCoreData;
 
 @end

@@ -62,11 +62,14 @@
     // NSLog(@"Turn 'OFF' the auto sleep mode on this app");
     [UIApplication sharedApplication].idleTimerDisabled = YES;
     
-    if (![self isRequiredMigration]){
-        [_sharedAWARECore activate];
-    }else{
-        NSLog(@"DB Migration is reuqired... Please class -AWAREDelegate.doMigration on ViewController");
+    [AWAREUtils setNecessityOfSafeBoot:YES];
+    
+    if ([AWAREUtils needSafeBoot]) {
+        return YES;
     }
+    
+    AWARECore * core = [self sharedAWARECoreManager];
+    [core activate];
     
     return YES;
 }
@@ -792,7 +795,8 @@ didDisconnectWithUser:(GIDGoogleUser *)user
         // Replace this with code to handle the error appropriately.
         // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-//        abort();
+        [AWAREUtils setNecessityOfSafeBoot:YES];
+        // abort();
     }
     return _persistentStoreCoordinator;
 }
@@ -824,6 +828,7 @@ didDisconnectWithUser:(GIDGoogleUser *)user
             // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
             NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
             // abort();
+            // [AWAREUtils setNecessityOfSafeBoot:YES];
         }
     }
 }
@@ -849,7 +854,7 @@ didDisconnectWithUser:(GIDGoogleUser *)user
 }
 
 
-- (BOOL) doMigration {
+- (BOOL) migrateCoreData{
     NSLog(@"--- doMigration ---");
     NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"AWARE.sqlite"];
     
@@ -869,5 +874,92 @@ didDisconnectWithUser:(GIDGoogleUser *)user
     return _persistentStoreCoordinator;
 }
 
+
+/*! Creates a backup of the Local store
+ 
+ @return Returns YES of file was migrated or NO if not.
+ */
+- (bool)backupCoreData {
+    // Lets use the existing PSC
+    NSPersistentStoreCoordinator *migrationPSC = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:self.managedObjectModel];
+    
+    NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"AWARE.sqlite"];
+    // Open the store
+    id sourceStore = [migrationPSC addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:nil];
+    
+    if (!sourceStore) {
+        
+        NSLog(@" failed to add old store");
+        migrationPSC = nil;
+        return FALSE;
+    } else {
+        NSLog(@" Successfully added store to migrate");
+        
+        NSError *error;
+        NSURL *backupStoreURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:[NSString stringWithFormat:@"AWARE_%@.sqlite",[NSDate new].debugDescription]];
+        NSLog(@" About to migrate the store...");
+        id migrationSuccess = [migrationPSC migratePersistentStore:sourceStore toURL:backupStoreURL options:nil withType:NSSQLiteStoreType error:&error];
+        
+        if (migrationSuccess) {
+            NSLog(@"store successfully backed up");
+            migrationPSC = nil;
+            // Now reset the backup preference
+            // [[NSUserDefaults standardUserDefaults] setBool:NO forKey:_makeBackupPreferenceKey];
+            // [[NSUserDefaults standardUserDefaults] synchronize];
+            return TRUE;
+        }
+        else {
+            NSLog(@"Failed to backup store: %@, %@", error, error.userInfo);
+            migrationPSC = nil;
+            return FALSE;
+        }
+    }
+    migrationPSC = nil;
+    return FALSE;
+}
+
+- (BOOL)backupCoreDataForce{
+    NSError *error;
+    NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"AWARE.sqlite"];
+    NSURL *backupStoreURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:[NSString stringWithFormat:@"AWARE_%@.sqlite",[NSDate new].debugDescription]];
+    NSFileManager* manager = [NSFileManager defaultManager];
+    BOOL result = [manager moveItemAtURL:storeURL toURL:backupStoreURL error:&error];
+    if (result) {
+        return YES;
+    }else{
+        if (error!=nil) {
+            NSLog(@"%@",error.debugDescription);
+        }
+        return NO;
+    }
+}
+
+- (BOOL)resetCoreData{
+    for(NSPersistentStore * store in self.managedObjectContext.persistentStoreCoordinator.persistentStores){
+        NSError * error = nil;
+        bool isRemoved = [self.managedObjectContext.persistentStoreCoordinator removePersistentStore:store error:&error];
+        if (error !=nil) NSLog(@"%@",error.debugDescription);
+        if (!isRemoved) {
+            return NO;
+        }
+    }
+    return YES;
+}
+
+
+- (void) deleteCoreData{
+    NSURL *storeURL = [[[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject] URLByAppendingPathComponent:@"AWARE.sqlite"];
+    NSPersistentStoreCoordinator *storeCoodinator = [self.managedObjectContext persistentStoreCoordinator];
+    NSPersistentStore  *store = [storeCoodinator persistentStoreForURL:storeURL];
+    NSError *error;
+    [storeCoodinator removePersistentStore:store error:&error];
+    [[NSFileManager defaultManager] removeItemAtURL:storeURL error:&error];
+    
+    // Add new PersistentStore
+    [storeCoodinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&error];
+    
+    // Reset NSFetchedResultController
+    [NSFetchedResultsController deleteCacheWithName:@"Root"];
+}
 
 @end
