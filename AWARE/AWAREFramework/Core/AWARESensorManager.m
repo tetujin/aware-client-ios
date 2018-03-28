@@ -75,7 +75,8 @@
     /** aware study */
     AWAREStudy * awareStudy;
     /** lock state*/
-    BOOL lock;
+    // BOOL lock;
+    BOOL backgroundSyncState;
     /** progress of manual upload */
     int manualUploadProgress;
     int numberOfSensors;
@@ -97,8 +98,7 @@
     if (self) {
         awareSensors = [[NSMutableArray alloc] init];
         awareStudy = study;
-        lock = false;
-
+        backgroundSyncState = YES;
         manualUploadProgress = 0;
         numberOfSensors = 0;
         manualUploadTime = 0;
@@ -108,18 +108,18 @@
     return self;
 }
 
-
-- (void)lock{
-    lock = YES;
+- (void) allowBackgroundSync{
+    backgroundSyncState = YES;
 }
 
-- (void)unlock{
-    lock = NO;
+- (void) disallowBackgroundSync{
+    backgroundSyncState = NO;
 }
 
-- (BOOL)isLocked{
-    return lock;
+- (BOOL) getBackgroundSyncState{
+    return backgroundSyncState;
 }
+
 
 - (BOOL) startAllSensors{
     return [self startAllSensorsWithStudy:awareStudy];
@@ -405,7 +405,6 @@
  * Remove all sensors from the manager after stop the sensors
  */
 - (void) stopAndRemoveAllSensors {
-    [self lock];
     NSString * message = nil;
     @autoreleasepool {
         for (AWARESensor* sensor in awareSensors) {
@@ -417,7 +416,6 @@
         }
         [awareSensors removeAllObjects];
     }
-    [self unlock];
 }
 
 - (AWARESensor *) getSensorWithKey:(NSString *)sensorName {
@@ -472,8 +470,6 @@
  * @return A latest sensor value as
  */
 - (NSString*) getLatestSensorValue:(NSString *) sensorName {
-    if ([self isLocked]) return @"";
-    
     if([sensorName isEqualToString:@"location_gps"] || [sensorName isEqualToString:@"location_network"]){
         sensorName = @"locations";
     }
@@ -492,9 +488,7 @@
 
 
 - (NSDictionary * ) getLatestSensorData:(NSString *) sensorName {
-    if ([self isLocked])
-        return [[NSDictionary alloc] init];
-    
+
     if([sensorName isEqualToString:@"location_gps"] || [sensorName isEqualToString:@"location_network"]){
         sensorName = @"locations";
     }
@@ -845,6 +839,11 @@
  *
  */
 - (bool) syncAllSensorsWithDBInBackground {
+    
+    if (!backgroundSyncState) {
+        NSLog(@"background sync is disallowed.");
+        return NO;
+    }
     
     if([[awareStudy getStudyURL] isEqualToString:@""]){
         return NO;
