@@ -71,6 +71,8 @@
     AWARECore * core = delegate.sharedAWARECore;
     study = core.sharedAwareStudy;
     
+    [core.sharedSensorManager disallowBackgroundSync];
+    
     flowsFlag = NO;
     
     iOSESM = [[IOSESM alloc] initWithAwareStudy:study dbType:AwareDBTypeCoreData];
@@ -304,8 +306,9 @@
     if (observer != nil) {
         [[NSNotificationCenter defaultCenter] removeObserver:observer];
         [[NSNotificationCenter defaultCenter] removeObserver:quickBtnObserver];
-        
     }
+    AWAREDelegate * delegate = (AWAREDelegate *) [UIApplication sharedApplication].delegate;
+    [delegate.sharedAWARECore.sharedSensorManager allowBackgroundSync];
 }
 
 //////////////////////////////////////////////////////////////

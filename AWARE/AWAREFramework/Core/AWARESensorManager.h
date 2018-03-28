@@ -19,9 +19,10 @@
 - (instancetype)initWithAWAREStudy:(AWAREStudy *) study;
 
 // lock and unlock the sensor manager
-- (void) lock;
-- (void) unlock;
-- (BOOL) isLocked;
+- (void) allowBackgroundSync;
+- (void) disallowBackgroundSync;
+- (BOOL) getBackgroundSyncState;
+
 
 // add a new sensor
 - (void) addNewSensor:(AWARESensor *) sensor;
