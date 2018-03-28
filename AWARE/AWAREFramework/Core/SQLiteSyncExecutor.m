@@ -76,7 +76,10 @@
                         sensorName:(NSString *)name
                       dbEntityName:(NSString *)entity {
     // self = [super initWithAwareStudy:study sensorName:name];
+    self = [super initWithAwareStudy:study sensorName:name];
     if(self != nil){
+        
+        
         awareStudy = study;
         sensorName = name;
         tableName = name;
