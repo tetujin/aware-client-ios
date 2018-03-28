@@ -143,9 +143,12 @@ NSString * const AWARE_PREFERENCES_PLUGIN_IOS_ESM_CONFIG_URL = @"plugin_ios_esm_
     [self syncAwareDBInBackgroundWithSensorName:tableName];
 }
 
-
-- (void) syncAwareDBInBackground{
+- (void) syncAwareDBInBackground {
     [self syncAwareDBInBackgroundWithSensorName:tableName];
+}
+
+- (BOOL)syncAwareDBInForeground {
+    return [self syncAwareDBInForegroundWithSensorName:tableName];
 }
 
 ////////////////////////////////////////////////////////////
