@@ -615,7 +615,7 @@
                 if([delegate.sharedAWARECore.sharedSensorManager isExist:SENSOR_PLUGIN_IOS_ESM]){
                     [SVProgressHUD showWithStatus:@"uploading"];
                     [iOSESM setUploadingState:NO];
-                    [iOSESM syncAwareDB];
+                    [iOSESM syncAwareDBInForeground];
                     [iOSESM refreshNotifications];
                 }
             }
