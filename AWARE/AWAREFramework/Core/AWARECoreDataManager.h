@@ -35,4 +35,7 @@ typedef enum: NSInteger {
            managedObjectContext:(NSManagedObjectContext *)childContext
                      entityName:(NSString*) entity;
 
+- (void) setTimeMarkWithTimestamp:(NSNumber *)timestamp;
+- (NSNumber *) getTimeMark;
+
 @end
