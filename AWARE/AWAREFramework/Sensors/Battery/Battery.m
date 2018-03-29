@@ -215,7 +215,8 @@
     
     // NSLog(@"[Battery Sensor] %d", [NSThread isMainThread] );
     
-    [self saveData:dict];
+//    [self saveData:dict];
+    [self saveDataWithArray:@[dict]];
     
 }
 

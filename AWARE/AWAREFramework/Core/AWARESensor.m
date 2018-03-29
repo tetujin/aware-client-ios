@@ -469,12 +469,19 @@ int const MOTION_SENSOR_DEFAULT_DB_WRITE_INTERVAL_SECOND = 30;
 - (void) resetMarkerPosition{
     if(localStorage != nil){
         [localStorage resetMark];
+    }else{
+        [super setTimeMarkWithTimestamp:@0];
     }
 }
 
 - (int) getMarkerPosition{
     if(localStorage != nil){
         return [localStorage getMarker];
+    }else{
+        NSNumber * mark = [super getTimeMark];
+        if (mark != nil) {
+            return mark.intValue;
+        }
     }
     return 0;
 }
