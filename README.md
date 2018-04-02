@@ -18,9 +18,8 @@ AWARE Framework client for iOS is developed by [Yuuki Nishiyama](https://www.ht.
 
 ## Contributions
 Help is welcome! If you do not know what to do, just pick one item and send me a pull request.
-- [ ] Develop Library Version (.framework)
-- [ ] Support Cocoapods
-- [ ] Support Swift
+- [x] Develop the library (Cocoapods) version of [AWAREFramework-iOS](https://github.com/tetujin/AWAREFramework-iOS) (2018/4/2)
+- [x] Support Swift (The library version supports Swift) (2018/4/2)
 - [ ] Wirte test cases 
 - [ ] Plugin Update: Keyboard
 - [ ] Plugin Update: Event-based ESM (for iOS ESM)
