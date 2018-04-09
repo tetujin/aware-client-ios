@@ -528,7 +528,7 @@ didCompleteWithError:(nullable NSError *)error;
 {
     if (error!=nil) {
         [self broadcastDBSyncEventWithProgress:@(-1) isFinish:NO isSuccess:NO sensorName:sensorName];
-        [self saveDebugEventWithText:error.debugDescription type:DebugTypeError label:@"SQLiteSyncExecutor Error"];
+        [self saveDebugEventWithText:error.debugDescription type:DebugTypeError label:[NSString stringWithFormat:@"SQLiteSyncExecutor Error: %@",sensorName]];
         receivedData = [[NSMutableData alloc] init];
         [self dataSyncIsFinishedCorrectly];
         return;
