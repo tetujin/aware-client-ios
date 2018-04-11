@@ -130,7 +130,7 @@
 }
 
 
-- (void)syncAwareDBInBackground{
+- (void) syncAwareDBInBackground{
     [self syncAwareDBInBackgroundWithSensorName:sensorName];
 }
 
@@ -150,6 +150,11 @@
 
 - (BOOL)syncDBInForeground{
     [self syncAwareDBInForeground];
+    return YES;
+}
+
+- (BOOL) syncAwareDBInForegroundWithSensorName:(NSString *)name{
+    [syncExexutor sync:name fource:YES];
     return YES;
 }
 
