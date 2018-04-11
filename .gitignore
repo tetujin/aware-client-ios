@@ -37,6 +37,7 @@ Pods/*
 Pods/
 
 AWARE/AWAREFramework/Plugins/Conversation/
+AWARE.xcworkspace
 
 # Carthage
 #
