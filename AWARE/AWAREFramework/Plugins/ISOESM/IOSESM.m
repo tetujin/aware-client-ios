@@ -211,7 +211,7 @@ NSString * const AWARE_PREFERENCES_PLUGIN_IOS_ESM_CONFIG_URL = @"plugin_ios_esm_
     
     request = [[NSMutableURLRequest alloc] init];
     [request setURL:url];
-    [request setHTTPMethod:@"POST"];
+    [request setHTTPMethod:@"GET"];
     [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
     
     // set HTTP/POST body information
@@ -293,13 +293,13 @@ didReceiveResponse:(NSURLResponse *)response
         
         NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
         int responseCode = (int)[httpResponse statusCode];
-        
         if (responseCode == 200) {
             [session finishTasksAndInvalidate];
             if([self isDebug]){
                 NSLog(@"[%@] Got Web ESM configuration file from server", [self getSensorName]);
             }
         }else{
+            NSLog(@"[IOSESM] Error: %@", response.debugDescription);
             [session invalidateAndCancel];
             receiveData = [[NSMutableData alloc] init];
         }

@@ -76,14 +76,6 @@
         [userDefaults setInteger:cleanOldDataTypeWeekly forKey:SETTING_FREQUENCY_CLEAN_OLD_DATA];
     }
     
-    if(![userDefaults boolForKey:@"aware_inited_2.2"]){
-        [userDefaults setBool:YES forKey:@"aware_inited_2.2"];
-        [userDefaults setInteger:cleanOldDataTypeDaily forKey:SETTING_FREQUENCY_CLEAN_OLD_DATA];
-        [userDefaults setBool:YES forKey:SETTING_AUTO_SYNC];
-        [userDefaults setInteger:1000 forKey:KEY_MAX_FETCH_SIZE_NORMAL_SENSOR];         // Defualt Value: 10000
-        [userDefaults setInteger:100*1000 forKey:KEY_MAX_DATA_SIZE];
-    }
-    
     if([userDefaults integerForKey:SETTING_DB_TYPE] == AwareDBTypeUnknown){
         [userDefaults setInteger:AwareDBTypeCoreData forKey:SETTING_DB_TYPE];
     }
