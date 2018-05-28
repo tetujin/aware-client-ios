@@ -19,8 +19,8 @@
 @property (weak, nonatomic) IBOutlet UISegmentedControl *htGranularitySegment;
 @property (weak, nonatomic) IBOutlet UITextField *apiKeyField;
 @property (weak, nonatomic) IBOutlet UITextField *apiSecretField;
-@property (weak, nonatomic) IBOutlet UIDatePicker *lastUpdateDatePicker;
-@property (weak, nonatomic) IBOutlet UITextView *debugField;
+@property (weak, nonatomic) IBOutlet UITextView *debugTextView;
+@property (weak, nonatomic) IBOutlet UITextField *LastSyncDateField;
 
 // Actions
 - (IBAction)pushedApplyButton:(id)sender;

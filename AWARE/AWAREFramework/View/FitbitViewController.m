@@ -10,6 +10,7 @@
 #import "AppDelegate.h"
 #import "Fitbit.h"
 #import "FitbitData.h"
+#import "DataVisualizationViewController.h"
 
 @interface FitbitViewController ()
 
@@ -47,10 +48,20 @@
                                              selector:@selector(getData:)
                                                  name:@"action.aware.plugin.fitbit.get.activity.debug"
                                                object:nil];
+    _debugTextView.text = @"";
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveDebugMessage:) name:@"aware.plugin.fitbit.debug.event" object:nil];
 }
 
 - (void)viewDidDisappear:(BOOL)animated{
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"action.aware.plugin.fitbit.get.activity.debug" object:nil];
+}
+
+- (void) receiveDebugMessage:(NSNotification *) notification {
+    NSDictionary * userInfo = notification.userInfo;
+    if (userInfo!=nil) {
+        NSString * message = [userInfo objectForKey:@"message"];
+        _debugTextView.text = [NSString stringWithFormat:@"%@\n%@",_debugTextView.text,message];
+    }
 }
 
 
@@ -64,7 +75,7 @@
     [_updateIntervalMin resignFirstResponder];
     [_apiKeyField resignFirstResponder];
     [_apiSecretField resignFirstResponder];
-    [_debugField resignFirstResponder];
+    [_debugTextView resignFirstResponder];
 }
 
 -(BOOL) gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
@@ -161,12 +172,17 @@
             }
         }
 
+        // NSUserDefaults * userDefaults = [NSUserDefaults standardUserDefaults];
+        // NSString * apiKey = [userDefaults objectForKey:@"fitbit.setting.client_id"];
         _apiKeyField.text = [Fitbit getFitbitClientIdForUI:YES];
         
+        // NSString * apiSecret = [userDefaults objectForKey:@"fitbit.setting.api_secret"];
+        // _apiSecretField.text = apiSecret;
         _apiSecretField.text = [Fitbit getFitbitApiSecretForUI:YES];
         
-        NSDate * lastSyncStepData = [FitbitData getLastSyncSteps];
-        _lastUpdateDatePicker.date = lastSyncStepData;
+        // NSDate * lastSyncStepData = [FitbitData getLastSyncSteps];
+        // _lastUpdateDatePicker.date = lastSyncStepData;
+        _LastSyncDateField.text = [FitbitData getLastSyncDateHeartrate];
     }
 }
 
@@ -183,19 +199,19 @@
     [alertController addAction:[UIAlertAction actionWithTitle:@"YES"
                                                         style:UIAlertActionStyleDestructive
                                                       handler:^(UIAlertAction *action) {
-                                                          // NSUserDefaults * userDefaults = [NSUserDefaults standardUserDefaults];
-                                                          // [userDefaults setObject:_apiKeyField.text forKey:@"fitbit.setting.client_id"];
-                                                          // [userDefaults setObject:_apiSecretField.text forKey:@"fitbit.setting.api_secret"];
-                                                          [Fitbit setFitbitUserId:_apiKeyField.text];
+//                                                           NSUserDefaults * userDefaults = [NSUserDefaults standardUserDefaults];
+//                                                           [userDefaults setObject:_apiKeyField.text forKey:@"fitbit.setting.client_id"];
+//                                                           [userDefaults setObject:_apiSecretField.text forKey:@"fitbit.setting.api_secret"];
+                                                          [Fitbit setFitbitClientId:_apiKeyField.text];
                                                           [Fitbit setFitbitApiSecret:_apiSecretField.text];
                                                           
                                                           // NSDate * lastSyncStepData = [FitbitData getLastSyncSteps];
-                                                          NSDate * date = _lastUpdateDatePicker.date;
+                                                          NSString * date = _LastSyncDateField.text;
                                                           
-                                                          [FitbitData setLastSyncSteps:date];
-                                                          [FitbitData setLastSyncSleep:date];
-                                                          [FitbitData setLastSyncCalories:date];
-                                                          [FitbitData setLastSyncHeartrate:date];
+                                                          [FitbitData setLastSyncDateSteps:date];
+                                                          [FitbitData setLastSyncDateSleep:date];
+                                                          [FitbitData setLastSyncDateCalories:date];
+                                                          [FitbitData setLastSyncDateHeartrate:date];
 
                                                       }]];
     
@@ -217,13 +233,8 @@
     NSString * code = [Fitbit getFitbitCode]; // [userDefaults objectForKey:@"fitbit.setting.code"];
     
     NSString * message = [NSString stringWithFormat:@"API Key: %@\nAPI Secret: %@\nCode: %@\nAccess Token: %@\nRefresh Token: %@\nUser ID: %@\nToken Type: %@",
-                          apiKey,
-                          apiSecret,
-                          code,
-                          [Fitbit getFitbitAccessToken],
-                          [Fitbit getFitbitRefreshToken],
-                          [Fitbit getFitbitUserId],
-                          [Fitbit getFitbitTokenType]];
+                          apiKey, apiSecret, code,
+                          [Fitbit getFitbitAccessToken], [Fitbit getFitbitRefreshToken], [Fitbit getFitbitUserId], [Fitbit getFitbitTokenType]];
     
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Current Tokens"
                                                                              message:message
@@ -296,6 +307,9 @@
                                                               // NSUserDefaults * userDefaults = [NSUserDefaults standardUserDefaults];
                                                               // [userDefaults setObject:_apiKeyField.text forKey:@"fitbit.setting.client_id"];
                                                               // [userDefaults setObject:_apiSecretField.text forKey:@"fitbit.setting.api_secret"];
+                                                              // NSString * deviceId = [Fitbit getFitbitClientIdForUI:NO];
+                                                              // NSString * apiSecret = [Fitbit getFitbitApiSecretForUI:NO];
+                                                              
                                                               [fitbit loginWithOAuth2WithClientId:[Fitbit getFitbitClientIdForUI:NO] apiSecret:[Fitbit getFitbitApiSecretForUI:NO]];
                                                               [self showAllSetting];
                                                           });
@@ -341,11 +355,11 @@
     [alertController addAction:[UIAlertAction actionWithTitle:@"YES"
                                                         style:UIAlertActionStyleDefault
                                                       handler:^(UIAlertAction *action) {
-                                                          NSDate * date = _lastUpdateDatePicker.date;
-                                                          [FitbitData setLastSyncSteps:date];
-                                                          [FitbitData setLastSyncSleep:date];
-                                                          [FitbitData setLastSyncCalories:date];
-                                                          [FitbitData setLastSyncHeartrate:date];
+                                                          NSString * date = _LastSyncDateField.text;
+                                                          [FitbitData setLastSyncDateSteps:date];
+                                                          [FitbitData setLastSyncDateSleep:date];
+                                                          [FitbitData setLastSyncDateCalories:date];
+                                                          [FitbitData setLastSyncDateHeartrate:date];
                                                           
                                                           NSDictionary * settings = [[NSDictionary alloc] initWithObjects:@[@"all"] forKeys:@[@"type"]];
                                                           NSTimer * timer = [[NSTimer alloc] initWithFireDate:[NSDate new]
@@ -387,6 +401,16 @@
         [alert show];
         
     });
+}
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    //     Get the new view controller using [segue destinationViewController].
+    //     Pass the selected object to the new view controller.
+    if([segue.identifier isEqualToString:@"visualizeDataVC"]){
+        DataVisualizationViewController * dataVVC = [segue destinationViewController];
+        dataVVC.sensor = fitbit;
+    }
 }
 
 @end

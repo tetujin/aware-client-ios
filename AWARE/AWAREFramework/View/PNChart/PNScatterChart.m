@@ -248,7 +248,7 @@
                     xValue = chartData.getData(i).x;
                     if (!(xValue >= _AxisX_minValue && xValue <= _AxisX_maxValue) || !(yValue >= _AxisY_minValue && yValue <= _AxisY_maxValue)) {
                         NSLog(@"input is not in correct range.");
-                        exit(0);
+                        // exit(0);
                     }
                     xFinilizeValue = [self mappingIsForAxisX:true WithValue:xValue];
                     yFinilizeValue = [self mappingIsForAxisX:false WithValue:yValue];

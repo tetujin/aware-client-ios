@@ -21,14 +21,18 @@ extern NSInteger const AWARE_ALERT_FITBIT_MOVE_TO_LOGIN_PAGE;
 + (void) setFitbitAccessToken:(NSString *)accessToken;
 + (void) setFitbitRefreshToken:(NSString *)refreshToken;
 + (void) setFitbitUserId:(NSString *)userId;
-+ (void) setFibitTokenType:(NSString *)tokenType;
+// + (void) setFibitTokenType:(NSString *)tokenType;
 + (void) setFitbitCode:(NSString *)code;
 + (void) setFitbitApiSecret:(NSString *) apiSecret;
++ (void) setFitbitClientId:(NSString *) clientId;
+    
 + (NSString *) getFitbitAccessToken;
 + (NSString *) getFitbitRefreshToken;
-+ (NSString *) getFitbitUserId;
++ (NSString *) getFitbitClientId;
++ (NSString *) getFitbitApiSecret;
 + (NSString *) getFitbitTokenType;
 + (NSString *) getFitbitCode;
++ (NSString *) getFitbitUserId;
 
 + (NSString *) getFitbitApiSecretForUI:(bool)forUI;
 + (NSString *) getFitbitClientIdForUI:(bool)forUI;

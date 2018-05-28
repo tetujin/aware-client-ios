@@ -13,6 +13,7 @@
 @implementation FitbitDevice{
     NSString * identificationForFitbitDevice;
     NSMutableData * responseData;
+    FitbitDeviceInfoCallback deviceInfoCallback;
 }
 
 - (instancetype)initWithAwareStudy:(AWAREStudy *)study
@@ -26,6 +27,7 @@
     if(self != nil){
         identificationForFitbitDevice = @"";
         responseData = [[NSMutableData alloc] init];
+        [self trackDebugEvents];
     }
     return self;
 }
@@ -56,7 +58,9 @@
 /////////////////////////////////////////////////////////////////////
 
 
-- (BOOL) getDeviceInfo {
+- (void) getDeviceInfoWithCallback:(FitbitDeviceInfoCallback)callback{
+    
+    deviceInfoCallback = callback;
     
     NSString * userId = [Fitbit getFitbitUserId];
     NSString* token = [Fitbit getFitbitAccessToken];
@@ -72,46 +76,23 @@
     [request setValue:[NSString stringWithFormat:@"Bearer %@", token] forHTTPHeaderField:@"Authorization"];
     [request setHTTPMethod:@"GET"];
     
-    if(token == nil){
-        return NO;
+    if(token == nil || userId  == nil){
+        [self sendBroadcastNotification:@"[error][fitbit_device] token and/or userId is null"];
+        return;
     }
-    if(userId == nil){
-        return NO;
-    }
-    
     __weak NSURLSession *session = nil;
     NSURLSessionConfiguration *sessionConfig = nil;
-//    identificationForFitbitDevice = [NSString stringWithFormat:@"fitbit.query.device.%f", [[NSDate new] timeIntervalSince1970]];
-    identificationForFitbitDevice = [NSString stringWithFormat:@"fitbit.query.device"];
+    identificationForFitbitDevice = [NSString stringWithFormat:@"fitbit.query.device.%f", [[NSDate new] timeIntervalSince1970]];
+    // identificationForFitbitDevice = [NSString stringWithFormat:@"fitbit.query.device"];
     
-    
-    if ([AWAREUtils isBackground]) {
-        sessionConfig = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:identificationForFitbitDevice];
-        sessionConfig.timeoutIntervalForRequest = 180.0;
-        sessionConfig.timeoutIntervalForResource = 60.0;
-        sessionConfig.HTTPMaximumConnectionsPerHost = 60;
-        sessionConfig.allowsCellularAccess = YES;
-        sessionConfig.allowsCellularAccess = YES;
-        sessionConfig.discretionary = YES;
-        session = [NSURLSession sessionWithConfiguration:sessionConfig delegate:self delegateQueue:Nil];
-        NSURLSessionDataTask* dataTask = [session dataTaskWithRequest:request];
-        [dataTask resume];
-    }else{
-        sessionConfig = [NSURLSessionConfiguration defaultSessionConfiguration];
-        sessionConfig.timeoutIntervalForRequest = 180.0;
-        sessionConfig.timeoutIntervalForResource = 60.0;
-        sessionConfig.HTTPMaximumConnectionsPerHost = 60;
-        sessionConfig.allowsCellularAccess = YES;
-        sessionConfig.allowsCellularAccess = YES;
-        sessionConfig.discretionary = YES;
-        session = [NSURLSession sessionWithConfiguration:sessionConfig delegate:self delegateQueue:Nil];
-        [[session dataTaskWithRequest:request  completionHandler: ^(NSData *data, NSURLResponse *response, NSError *error) {
-            [session finishTasksAndInvalidate];
-            [session invalidateAndCancel];
-            [self saveData:data response:response error:error];
-        }] resume];
-    }
-    return YES;
+    sessionConfig = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:identificationForFitbitDevice];
+    sessionConfig.timeoutIntervalForRequest = 60.0;
+    sessionConfig.timeoutIntervalForResource = 60.0;
+    sessionConfig.HTTPMaximumConnectionsPerHost = 60;
+    sessionConfig.allowsCellularAccess = YES;
+    session = [NSURLSession sessionWithConfiguration:sessionConfig delegate:self delegateQueue:Nil];
+    NSURLSessionDataTask* dataTask = [session dataTaskWithRequest:request];
+    [dataTask resume];
 }
 
 
@@ -127,7 +108,12 @@
             NSArray *devices = [NSJSONSerialization JSONObjectWithData:jsonData
                                                                options:NSJSONReadingAllowFragments error:&error];
             if (error != nil) {
-                NSLog(@"failed to parse JSON: %@", error.debugDescription);
+                NSString * message = [NSString stringWithFormat:@"[error][fitbit_device] failed to parse JSON: %@",error.debugDescription];
+                NSLog(@"%@",message);
+                [self sendBroadcastNotification:message];
+                if (responseString!=nil) {
+                    [self sendBroadcastNotification:responseString];
+                }
                 return;
             }
             
@@ -158,6 +144,10 @@
                     [dict setObject:fitbitBattery forKey:@"fitbit_battery"];
                     [dict setObject:fitbitMac forKey:@"fitbit_mac"];
                     [dict setObject:fitbitLastSync forKey:@"fitbit_last_sync"];
+                    
+                    if(deviceInfoCallback){
+                        deviceInfoCallback(fitbitId, fitbitVersion, fitbitBattery, fitbitMac, fitbitLastSync);
+                    }
                     
                     dispatch_async(dispatch_get_main_queue(), ^{
                         [self saveData:dict];
@@ -236,5 +226,14 @@ didReceiveResponse:(NSURLResponse *)response
 
 //////////////////////////////////////////////////////////////////////
 
+- (void) sendBroadcastNotification:(NSString *) message {
+    if ([NSThread isMainThread]){
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"aware.plugin.fitbit.debug.event" object:self userInfo:@{@"message":message}];
+    }else{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self sendBroadcastNotification:message];
+        });
+    }
+}
 
 @end

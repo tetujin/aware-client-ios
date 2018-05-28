@@ -18,6 +18,7 @@
 #import "EntityBluetooth.h"
 #import "EntityCall.h"
 #import "EntityNetwork.h"
+#import "EntityFitbitData+CoreDataClass.h"
 
 #import "AWAREUtils.h"
 #import "AWAREUtils.h"
@@ -50,11 +51,55 @@
     // locations
     // google_fused_location
     
+    NSLog(@"--> %@",[_sensor getSensorName]);
+    
     if([[_sensor getSensorName] isEqualToString:@"battery"]){
         [self showBatteryDataWithStart:start end:end];
     }else if([[_sensor getSensorName] isEqualToString:@"locations"]||
              [[_sensor getSensorName] isEqualToString:@"google_fused_location"]){
         [self showLocationDataOnMapWithStart:start end:end];
+    }else if([[_sensor getSensorName] isEqualToString:@"plugin_fitbit"]){
+        PNScatterChartData * data00 = [PNScatterChartData new];
+        data00.strokeColor = PNGreen;
+        data00.fillColor = PNFreshGreen;
+        data00.size = 1;
+        data00.inflexionPointStyle = PNScatterChartPointStyleCircle;
+        [self showFitbitChartWithStart:start
+                                   end:end
+                                  type:@"heartrate"
+                                   key:@"activities-heart-intraday"
+                               xLabels:@[@"0:00", @"6:00", @"12:00", @"18:00", @"24:00"]
+                               yLabels:nil // @[@"0", @"50", @"100", @"150", @"200"]
+                             chartData:data00
+                              position:0];
+        ////////////////////////
+        PNScatterChartData * data01 = [PNScatterChartData new];
+        data01.strokeColor = PNRed;
+        data01.fillColor = PNRed;
+        data01.size = 1;
+        data01.inflexionPointStyle = PNScatterChartPointStyleCircle;
+        [self showFitbitChartWithStart:start
+                                   end:end
+                                  type:@"steps"
+                                   key:@"activities-steps-intraday"
+                               xLabels:@[@"0:00", @"6:00", @"12:00", @"18:00", @"24:00"]
+                               yLabels:nil //@[@"0", @"50", @"100", @"150", @"200"]
+                             chartData:data01
+                              position:1];
+        //////////////////////////
+        PNScatterChartData * data02 = [PNScatterChartData new];
+        data02.strokeColor = PNBlue;
+        data02.fillColor = PNDarkBlue;
+        data02.size = 1;
+        data02.inflexionPointStyle = PNScatterChartPointStyleCircle;
+        [self showFitbitChartWithStart:start
+                                   end:end
+                                  type:@"calories"
+                                   key:@"activities-calories-intraday"
+                               xLabels:@[@"0:00", @"6:00", @"12:00", @"18:00", @"24:00"]
+                               yLabels:nil //@[@"0", @"50", @"100", @"150", @"200"]
+                             chartData:data02
+                              position:2];
     }else{
         [self showRawDataWithStart:start end:end];
     }
@@ -65,13 +110,148 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void) showFitbitChartWithStart:(NSNumber *)start end:(NSNumber *)end type:(NSString *)type key:(NSString *)key xLabels:(NSArray *) xLabels yLabels:(NSArray *)yLabels chartData:(PNScatterChartData *)chartData position:(int)position{
+    [SVProgressHUD showWithStatus:@"Loading"];
+    
+    AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+    
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    [fetchRequest setEntity:[NSEntityDescription entityForName:NSStringFromClass([EntityFitbitData class])
+                                        inManagedObjectContext:delegate.managedObjectContext]];
+    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"(timestamp <= %@) AND (timestamp >= %@) AND (fitbit_data_type=%@)", end, start, type]];
+    NSSortDescriptor *descriptor=[[NSSortDescriptor alloc] initWithKey:@"timestamp" ascending:NO];
+    NSArray *descriptors = [NSArray arrayWithObjects:descriptor,nil];
+    [fetchRequest setSortDescriptors:descriptors];
+    [fetchRequest setFetchLimit:1];
+    NSError *error = nil;
+    NSArray *results = [delegate.managedObjectContext executeFetchRequest:fetchRequest error:&error] ;
+    if (error) {
+        NSLog(@"[error][showFitbitChartWithStart:start:end] %@",error.debugDescription);
+    }
 
+    NSMutableArray * xArray = [[NSMutableArray alloc] init];
+    NSMutableArray * yArray = [[NSMutableArray alloc] init];
+    NSMutableArray * labelArray = [[NSMutableArray alloc] init];
+    if(results.count > 0){
+        EntityFitbitData * fitbitData = (EntityFitbitData*)[results lastObject];
+        if ([fitbitData.fitbit_data_type isEqualToString:type]) {
+            NSString * dataStr = fitbitData.fitbit_data;
+            if (dataStr!=nil) {
+                @try {
+                    NSError * error = nil;
+                    NSDictionary * dict = [NSJSONSerialization JSONObjectWithData:[dataStr dataUsingEncoding:NSUTF8StringEncoding]
+                                                                          options:NSJSONReadingMutableContainers
+                                                                            error:&error];
+                    if ( error == nil && dict != nil) {
+                        if ([dict.allKeys containsObject:key]) {
+                            NSDictionary * activities = [dict objectForKey:key];
+                            if ([activities.allKeys containsObject:@"dataset"]){
+                                NSArray * datasets = [activities objectForKey:@"dataset"];
+                                if (datasets!=nil) {
+                                    for (NSDictionary * dataset in datasets) {
+                                        if ([dataset.allKeys containsObject:@"value"]) {
+                                            NSNumber * value = [dataset objectForKey:@"value"];
+                                            NSString * time = [dataset objectForKey:@"time"];
+
+                                            NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+                                            [dateFormat setDateFormat:@"YYYY-MM-dd"];
+                                            NSString * dateString = [dateFormat stringFromDate:[NSDate new]];
+                                            
+                                            NSDateFormatter *dateTimeFormat = [[NSDateFormatter alloc] init];
+                                            [dateTimeFormat setDateFormat:@"YYYY-MM-dd HH:mm:ss"];
+                                            NSDate *datetime = [dateTimeFormat dateFromString:[NSString stringWithFormat:@"%@ %@",dateString,time] ];
+                                            NSNumber * timestamp = @(datetime.timeIntervalSince1970 * 1000);
+                                            
+                                            if(value.intValue >= 0 && value.intValue <= 200 &&
+                                               timestamp.integerValue >= start.integerValue && timestamp.integerValue <= end.integerValue){
+                                                [yArray addObject:value];
+                                                [xArray addObject:timestamp];
+                                                [labelArray addObject:time];
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        
+                    }else{
+                        NSLog(@"[error] %@", error.debugDescription);
+                    }
+                } @catch (NSException *exception) {
+                    
+                } @finally {
+                    
+                }
+            }
+        }
+        if (xArray.count == 0 && yArray.count == 0) {
+            return;
+        }
+        /////////////////////////////////////////
+        
+        float ymax = -MAXFLOAT;
+        float ymin = MAXFLOAT;
+        for (NSNumber *num in yArray) {
+            float y = num.floatValue;
+            if (y < ymin) ymin = y;
+            if (y > ymax) ymax = y;
+        }
+        
+        PNScatterChart * scatterChart = [[PNScatterChart alloc] initWithFrame:CGRectMake(0, 100+(200*position), SCREEN_WIDTH, 170)];
+        // self.scatterChart.yLabelFormat = @"%f.1";
+        [scatterChart setAxisXWithMinimumValue:start.integerValue andMaxValue:end.integerValue toTicks:5];
+        [scatterChart setAxisYWithMinimumValue:ymin andMaxValue:ymax toTicks:5];
+        
+        [scatterChart setHasLegend:YES];
+        
+        NSArray *data01Array = @[xArray,yArray];
+        PNScatterChartData *data01 = chartData;
+        data01.itemCount = [data01Array[0] count];
+        __block NSMutableArray *XAr1 = [NSMutableArray arrayWithArray:data01Array[0]];
+        __block NSMutableArray *YAr1 = [NSMutableArray arrayWithArray:data01Array[1]];
+        
+        data01.getData = ^(NSUInteger index) {
+            CGFloat xValue = [XAr1[index] floatValue];
+            CGFloat yValue = [YAr1[index] floatValue];
+            return [PNScatterChartDataItem dataItemWithX:xValue AndWithY:yValue];
+        };
+        
+        scatterChart.chartData = @[data01];
+        
+        if (xLabels) [scatterChart setAxisXLabel:xLabels];
+        if (yLabels) [scatterChart setAxisYLabel:yLabels];
+        
+        [scatterChart setup];
+        
+        /***
+         this is for drawing line to compare
+         CGPoint start = CGPointMake(20, 35);
+         CGPoint end = CGPointMake(80, 45);
+         [self.scatterChart drawLineFromPoint:start ToPoint:end WithLineWith:2 AndWithColor:PNBlack];
+         ***/
+        // self.scatterChart.delegate = self;
+        // self.scatterChart.displayAnimated = NO;
+        [self.view addSubview:scatterChart];
+        
+        UILabel * label = [[UILabel alloc] initWithFrame:CGRectMake(0, 80+(200*position), SCREEN_WIDTH,35)];
+        label.text = type;
+        [self.view addSubview:label];
+    }else{
+        UILabel * label = [[UILabel alloc] initWithFrame:CGRectMake(0, 135, SCREEN_WIDTH, 200)];
+        label.text = @"The data is empty.";
+        [self.view addSubview:label];
+    }
+    [SVProgressHUD dismiss];
+}
+
+////////////
 - (void) showBatteryDataWithStart:(NSNumber *)start end:(NSNumber *)end{
     
     [SVProgressHUD showWithStatus:@"Loading"];
     
+    AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+    
     [[[NSOperationQueue alloc] init] addOperationWithBlock:^{
-        AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
         
         NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
         [fetchRequest setEntity:[NSEntityDescription entityForName:NSStringFromClass([EntityBattery class])
@@ -84,7 +264,7 @@
             /////////////////////// battery //////////////////////////////
             NSMutableArray * xArray = [[NSMutableArray alloc] init];
             NSMutableArray * yArray = [[NSMutableArray alloc] init];
-            NSMutableArray * labelArray = [[NSMutableArray alloc] init];
+            // NSMutableArray * labelArray = [[NSMutableArray alloc] init];
             if(results.count > 0){
                 for (int i=0; i<results.count; i++) {
                     EntityBattery * battery = (EntityBattery*)results[i];
@@ -94,14 +274,14 @@
                            // NSLog(@"[battery level:%@] %@",battery.timestamp,battery.battery_level);
                            [yArray addObject:battery.battery_level];
                            [xArray addObject:battery.timestamp];
-                           [labelArray addObject:[NSDate dateWithTimeIntervalSince1970:battery.timestamp.longLongValue].debugDescription];
+                           // [labelArray addObject:[NSDate dateWithTimeIntervalSince1970:battery.timestamp.longLongValue].debugDescription];
                        }
                 }
                 /////////////////////////////////////////
                 self.scatterChart = [[PNScatterChart alloc] initWithFrame:CGRectMake(0, 135, SCREEN_WIDTH, 200)];
-                self.scatterChart.yLabelFormat = @"%f.1";
-                [self.scatterChart setAxisXWithMinimumValue:start.integerValue andMaxValue:end.integerValue toTicks:6];
-                [self.scatterChart setAxisYWithMinimumValue:0 andMaxValue:100 toTicks:5];
+                // self.scatterChart.yLabelFormat = @"%f.1";
+                [self.scatterChart setAxisXWithMinimumValue:start.integerValue andMaxValue:end.integerValue toTicks:5];
+                [self.scatterChart setAxisYWithMinimumValue:0 andMaxValue:100 toTicks:6];
                 
                 NSArray *data01Array = @[xArray,yArray];
                 PNScatterChartData *data01 = [PNScatterChartData new];
@@ -119,11 +299,13 @@
                     return [PNScatterChartDataItem dataItemWithX:xValue AndWithY:yValue];
                 };
                 
-                [self.scatterChart setAxisXLabel:labelArray];
-                
-                [self.scatterChart setup];
                 self.scatterChart.chartData = @[data01];
                 
+                [self.scatterChart setAxisXLabel:@[@"00:00,06:00,12:00,18:00,24:00"]];
+                [self.scatterChart setAxisYLabel:@[@"0",@"20",@"40",@"60",@"80",@"100"]];
+                
+                
+                [self.scatterChart setup];
                 /***
                  this is for drawing line to compare
                  CGPoint start = CGPointMake(20, 35);
