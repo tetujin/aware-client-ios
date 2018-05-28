@@ -19,10 +19,20 @@
     NSMutableData * caloriesResponse;
     NSMutableData * heartResponse;
     
-    NSDate * sleepLastSyncTime;
-    NSDate * stepsLastSyncTime;
-    NSDate * caloriesSyncTime;
-    NSDate * heartrateSyncTime;
+    NSString * sleepStartDate;
+    NSString * stepsStartDate;
+    NSString * caloriesStartDate;
+    NSString * heartrateStartDate;
+
+    NSString * sleepEndDate;
+    NSString * stepsEndDate;
+    NSString * caloriesEndDate;
+    NSString * heartrateEndDate;
+    
+    FitbitCaloriesRequestCallback calCallback;
+    FitbitStepsRequestCallback stepCallback;
+    FitbitHeartrateRequestCallback heartrateCallback;
+    FitbitSleepRequestCallback sleepCallback;
 }
 
 - (instancetype)initWithAwareStudy:(AWAREStudy *)study dbType:(AwareDBType)dbType{
@@ -44,6 +54,7 @@
         stepsResponse = [[NSMutableData alloc] init];
         caloriesResponse = [[NSMutableData alloc] init];
         heartResponse = [[NSMutableData alloc] init];
+        [self trackDebugEvents];
     }
     return self;
 }
@@ -72,46 +83,49 @@
 
 //////////////////////////////////////////////////////
 
-+ (NSDate *) getLastSyncSteps{
-    return [FitbitData getLastQueryDateWithKey:@"steps"];
++ (NSString *) getLastSyncDateSteps{
+    return [FitbitData getLastSyncDateWithKey:@"steps"];
 }
 
-+ (NSDate *) getLastSyncCalories{
-    return [FitbitData getLastQueryDateWithKey:@"calories"];
++ (NSString *) getLastSyncDateCalories{
+    return [FitbitData getLastSyncDateWithKey:@"calories"];
 }
 
-+ (NSDate *) getLastSyncHeartrate{
-    return [FitbitData getLastQueryDateWithKey:@"heartrate"];
++ (NSString *) getLastSyncDateHeartrate{
+    return [FitbitData getLastSyncDateWithKey:@"heartrate"];
 }
 
-+ (NSDate *) getLastSyncSleep{
-    return [FitbitData getLastQueryDateWithKey:@"sleep"];
++ (NSString *) getLastSyncDateSleep{
+    return [FitbitData getLastSyncDateWithKey:@"sleep"];
 }
 
 ////////////////////////////////////////////////////
-+ (void) setLastSyncSteps:(NSDate *)date{
-    [FitbitData setLastQueryDate:date withKey:@"steps"];
++ (void) setLastSyncDateSteps:(NSString *)date{
+    [FitbitData setLastSyncDate:date withKey:@"steps"];
 }
 
-+ (void) setLastSyncCalories:(NSDate *)date{
-    [FitbitData setLastQueryDate:date withKey:@"calories"];
++ (void) setLastSyncDateCalories:(NSString *)date{
+    [FitbitData setLastSyncDate:date withKey:@"calories"];
 }
 
-+ (void) setLastSyncHeartrate:(NSDate *)date{
-    [FitbitData setLastQueryDate:date withKey:@"heartrate"];
++ (void) setLastSyncDateHeartrate:(NSString *)date{
+    [FitbitData setLastSyncDate:date withKey:@"heartrate"];
 }
 
-+ (void) setLastSyncSleep:(NSDate *)date{
-    [FitbitData setLastQueryDate:date withKey:@"sleep"];
++ (void) setLastSyncDateSleep:(NSString *)date{
+    [FitbitData setLastSyncDate:date withKey:@"sleep"];
 }
 
 //////////////////////////////////////////////////
 
-- (void) getCaloriesWithStart:(NSDate*)start
-                       end:(NSDate *)end
-                    period:(NSString *)period
-               detailLevel:(NSString *)detailLevel{
-    caloriesSyncTime = end;
+- (void) getCaloriesWithStart:(NSString *)start
+                           end:(NSString *)end
+                        period:(NSString *)period
+                   detailLevel:(NSString *)detailLevel
+                     callback:(FitbitCaloriesRequestCallback)callback{
+    caloriesStartDate = start;
+    caloriesEndDate = end;
+    calCallback = callback;
     // start = [self getLastQueryDateWithKey:@"calories"];
     [self getActivityWithDataType:@"calories"
                      ResourcePath:@"activities/calories"
@@ -121,12 +135,15 @@
                       detailLevel:detailLevel];
 }
 
-- (void) getStepsWithStart:(NSDate*)start
-                       end:(NSDate *)end
+- (void) getStepsWithStart:(NSString *)start
+                       end:(NSString *)end
                     period:(NSString *)period
-               detailLevel:(NSString *)detailLevel{
+               detailLevel:(NSString *)detailLevel
+                  callback:(FitbitStepsRequestCallback)callback{
     
-    stepsLastSyncTime = end;
+    stepsStartDate = start;
+    stepsEndDate = end;
+    stepCallback = callback;
 
     // activities-steps, activities-calories, activities-heartrate,sleep-efficie
     // start = [self getLastQueryDateWithKey:@"steps"];
@@ -138,12 +155,16 @@
                       detailLevel:detailLevel];
 }
 
-- (void) getHeartrateWithStart:(NSDate*)start
-                           end:(NSDate *)end
+- (void) getHeartrateWithStart:(NSString *)start
+                           end:(NSString *)end
                         period:(NSString *)period
-                   detailLevel:(NSString *)detailLevel{
+                   detailLevel:(NSString *)detailLevel
+                      callback:(FitbitHeartrateRequestCallback)callback{
     ///////////////////////////////////////////////
-    heartrateSyncTime = end;
+    heartrateStartDate = start;
+    heartrateEndDate = end;
+    heartrateCallback = callback;
+    
     // start = [self getLastQueryDateWithKey:@"heartrate"];
     [self getActivityWithDataType:@"heartrate"
                      ResourcePath:@"activities/heart"
@@ -153,11 +174,14 @@
                       detailLevel:detailLevel];
 }
 
-- (void) getSleepWithStart:(NSDate*)start
-                       end:(NSDate *)end
+- (void) getSleepWithStart:(NSString *)start
+                       end:(NSString *)end
                     period:(NSString *)period
-               detailLevel:(NSString *)detailLevel{
-    sleepLastSyncTime = end;
+               detailLevel:(NSString *)detailLevel
+                  callback:(FitbitSleepRequestCallback)callback{
+    sleepStartDate = start;
+    sleepEndDate = end;
+    sleepCallback = callback;
 //    start = [self getLastQueryDateWithKey:@"sleep"];
     [self getActivityWithDataType:@"sleep"
                      ResourcePath:@"sleep/efficiency"
@@ -184,67 +208,54 @@
 
 - (BOOL) getActivityWithDataType:(NSString *)type
                     ResourcePath:(NSString *)resourcePath
-                               start:(NSDate *)start
-                                 end:(NSDate *)end
+                               start:(NSString *)start
+                                 end:(NSString *)end
                               period:(NSString *)period
                          detailLevel:(NSString *)detailLevel{
     NSString * userId = [Fitbit getFitbitUserId];
     NSString* token = [Fitbit getFitbitAccessToken];
     
-    //if([start isEqualToDate:end]){
-    //    start = [[NSDate alloc] initWithTimeInterval:- sinceDate:start];
-    //}
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self saveDebugEventWithText:[NSString stringWithFormat:@"call getActivityWithDataType:%@:%@:%@:%@:%@:%@",type,resourcePath,start,end,period,detailLevel]
+                                type:DebugTypeInfo
+                               label:SENSOR_PLUGIN_FITBIT];
+    });
     
     if (userId == nil || token == nil) {
-        NSString * msg = [NSString stringWithFormat:@"[Error: %@] User ID and Access Token do not exist. Please **login** again to get these.", [self getSensorName]];
-        NSLog(@"%@",msg);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSString * msg = [NSString stringWithFormat:@"[Error: %@] User ID and Access Token do not exist. Please **login** again to get these.", [self getSensorName]];
+            NSLog(@"%@",msg);
+            [self saveDebugEventWithText:[NSString stringWithFormat:@"userId(%@) and token(%@) are null",userId,token]
+                                    type:DebugTypeError
+                                   label:SENSOR_PLUGIN_FITBIT];
+        });
         return NO;
     }
     
     /////// create a Fitbit API query ///////////
-    //  /1/user/[user-id]/[resource-path]/date/[base-date]/[end-date].json
+    // "https://api.fitbit.com/" + FITBIT_API_LEVEL + "/user/-/activities/steps/date/" + localSyncDate + "/" + serverSyncDate + "/" + Aware.getSetting(getApplicationContext(), Settings.FITBIT_GRANULARITY) + ".json");
     NSMutableString * urlStr = [[NSMutableString alloc] initWithString:@"https://api.fitbit.com"];
-    
-    if( start!=nil && end!=nil && period==nil && detailLevel!=nil){
-        // https://api.fitbit.com/1/user/-/[resource-path]/date/[date]/[date]/[detail-level]/time/[start-time]/[end-time].json
-        [urlStr appendFormat:@"/1/user/%@/%@/date/%@/%@/%@/time/%@/%@.json",
-         userId,
-         resourcePath,
-         [dateFormat stringFromDate:start],
-         [dateFormat stringFromDate:end],
-         detailLevel,
-         [timeFormat stringFromDate:start],
-         [timeFormat stringFromDate:end]];
+    if ([type isEqualToString:@"heartrate"]){
+        [urlStr appendFormat:@"/1/user/-/%@/date/%@/%@/%@.json", resourcePath, start, start, detailLevel];
+        [self sendBroadcastNotification:urlStr];
+    }else if([type isEqualToString:@"sleep"]){
+        // GET https://api.fitbit.com/1.2/user/[user-id]/sleep/date/[startDate]/[endDate].json
+        [urlStr appendFormat:@"/1.2/user/-/sleep/date/%@/%@.json", start, end];
+        [self sendBroadcastNotification:urlStr];
+    }else if( start!=nil && end!=nil && detailLevel!=nil){
+        // https://dev.fitbit.com/build/reference/web-api/activity/
+        // [urlStr appendFormat:@"/1/user/-/%@/date/%@/%@/%@.json", resourcePath, start, end, detailLevel];
+        [urlStr appendFormat:@"/1/user/-/%@/date/%@/%@.json", resourcePath, start, detailLevel];
+        [self sendBroadcastNotification:urlStr];
         NSLog(@"%@",urlStr);
-    } else if ( start != nil && end != nil && period == nil ) {
-        [urlStr appendFormat:@"/1/user/%@/%@/date/%@/%@.json",
-                                            userId,
-                                            resourcePath,
-                                            [dateFormat stringFromDate:start],
-                                            [dateFormat stringFromDate:end]];
-    //  /1/user/[user-id]/[activities/heart]/date/[base-date]/[end-date]/[period].json
-    } else if ( start!=nil && end!=nil && period!=nil) {
-        [urlStr appendFormat:@"/1/user/%@/%@/date/%@/%@/%@.json",
-         userId,
-         resourcePath,
-         [dateFormat stringFromDate:start],
-         [dateFormat stringFromDate:end],
-         period];
-    // ERROR
-    } else if ( start!=nil && end ==nil && period==nil && detailLevel==nil){
-        [urlStr appendFormat:@"/1/user/%@/%@/date/%@.json",
-         userId,
-         resourcePath,
-         [dateFormat stringFromDate:start]];
     } else {
-        NSLog(@"Error: Query Format Error");
+        NSString * message = [NSString stringWithFormat:@"[error][%@]URL format Error: %@", type, urlStr];
+        NSLog(@"%@", message);
+        [self sendBroadcastNotification:message];
         return NO;
     }
-    
-    
-    
-    NSURL*	url = [NSURL URLWithString:urlStr];
-    NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:url];
+
+    NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:urlStr]];
     if(token == nil) return NO;
     if(userId == nil) return NO;
     
@@ -254,34 +265,16 @@
     __weak NSURLSession *session = nil;
     // NSURLSessionConfiguration *sessionConfig = [NSURLSessionConfiguration defaultSessionConfiguration];
     NSURLSessionConfiguration *sessionConfig = nil;
-    // identificationForFitbitData = [NSString stringWithFormat:@"%@%f", identificationForFitbitData, [[NSDate new] timeIntervalSince1970]];
     identificationForFitbitData = type;
     
-    //if ([AWAREUtils isBackground]) {
-        sessionConfig = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:identificationForFitbitData];
-        sessionConfig.timeoutIntervalForRequest = 180.0;
-        sessionConfig.timeoutIntervalForResource = 60.0;
-        sessionConfig.HTTPMaximumConnectionsPerHost = 60;
-        sessionConfig.allowsCellularAccess = YES;
-        session = [NSURLSession sessionWithConfiguration:sessionConfig delegate:self delegateQueue:Nil];
-        NSURLSessionDataTask* dataTask = [session dataTaskWithRequest:request];
-        [dataTask resume];
-//    }else{
-//        sessionConfig = [NSURLSessionConfiguration defaultSessionConfiguration];
-//        sessionConfig.timeoutIntervalForRequest = 180.0;
-//        sessionConfig.timeoutIntervalForResource = 60.0;
-//        sessionConfig.HTTPMaximumConnectionsPerHost = 60;
-//        sessionConfig.allowsCellularAccess = YES;
-//        sessionConfig.allowsCellularAccess = YES;
-//        sessionConfig.discretionary = YES;
-//        session = [NSURLSession sessionWithConfiguration:sessionConfig delegate:self delegateQueue:Nil];
-//        [[session dataTaskWithRequest:request  completionHandler: ^(NSData *data, NSURLResponse *response, NSError *error) {
-//            [session finishTasksAndInvalidate];
-//            [session invalidateAndCancel];
-//            [self saveData:data response:response error:error type:type];
-//        }] resume];
-//    }
-    
+    sessionConfig = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:identificationForFitbitData];
+    sessionConfig.timeoutIntervalForRequest = 60.0;
+    sessionConfig.timeoutIntervalForResource = 60.0;
+    sessionConfig.HTTPMaximumConnectionsPerHost = 60;
+    sessionConfig.allowsCellularAccess = YES;
+    session = [NSURLSession sessionWithConfiguration:sessionConfig delegate:self delegateQueue:Nil];
+    NSURLSessionDataTask* dataTask = [session dataTaskWithRequest:request];
+    [dataTask resume];
     return YES;
 }
 
@@ -296,28 +289,47 @@
                 if ([self isDebug]) {
                     [self sendLocalNotificationForMessage:[NSString stringWithFormat:@"[%@]%@",type,error.debugDescription] soundFlag:NO];
                 }
+                [self saveDebugEventWithText:[NSString stringWithFormat:@"[error][%@]-saveData:response:error:type %@", type, error.debugDescription]
+                                        type:DebugTypeError
+                                       label:SENSOR_PLUGIN_FITBIT];
             });
             return;
-        }else if(data != nil){
-            NSData *jsonData = data; // [responseString dataUsingEncoding:NSUTF8StringEncoding];
-            
-            NSError *error = nil;
-            NSDictionary *activities = [NSJSONSerialization JSONObjectWithData:jsonData
-                                                                       options:NSJSONReadingAllowFragments error:&error];
-            if (error != nil) {
+        }
+        
+        if(data != nil){
+            // NSData *jsonData = data; // [responseString dataUsingEncoding:NSUTF8StringEncoding];
+            NSError *e = nil;
+            NSDictionary *activities = [NSJSONSerialization JSONObjectWithData:data
+                                                                       options:NSJSONReadingAllowFragments
+                                                                         error:&e];
+            if (e != nil) {
                 NSLog(@"failed to parse JSON: %@", error.debugDescription);
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    NSString * message = [NSString stringWithFormat:@"[error][%@] failed to parse JSON: %@", type, e.debugDescription];
+                    [self saveDebugEventWithText:message type:DebugTypeError label:SENSOR_PLUGIN_FITBIT];
+                    [self sendBroadcastNotification:message];
+                });
                 return;
             }
             
             if([activities objectForKey:@"errors"]!=nil){
                 NSLog(@"%@",activities.debugDescription);
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    NSString * message = [NSString stringWithFormat:@"[error][%@] failed to parse JSON: %@", type, e.debugDescription];
+                    [self saveDebugEventWithText:message type:DebugTypeError label:SENSOR_PLUGIN_FITBIT];
+                    [self sendBroadcastNotification:message];
+                });
                 return;
             }
             
             dispatch_async(dispatch_get_main_queue(), ^{
+                NSString * msg = [NSString stringWithFormat:@"Fitbit plugin got %@ data (%ld bytes)", type, data.length];
                 if ([self isDebug]) {
-                    [self sendLocalNotificationForMessage:[NSString stringWithFormat:@"Fitbit plugin got %@ data (%ld bytes)", type, data.length] soundFlag:NO];
+                    [self sendLocalNotificationForMessage:msg soundFlag:NO];
                 }
+                [self saveDebugEventWithText:msg type:DebugTypeInfo label:SENSOR_PLUGIN_FITBIT];
+                [self sendBroadcastNotification:msg];
+                
             });
             
             NSString *responseString = [[NSString alloc] initWithData:data  encoding: NSUTF8StringEncoding];
@@ -333,13 +345,43 @@
             [dict setObject:[Fitbit getFitbitUserId] forKey:@"fitbit_id"];          //    fitbit_id
             
             if([type isEqualToString:@"steps"]){
-                [self setLastQueryDate:stepsLastSyncTime withKey:type];
+                [FitbitData setLastSyncDate:[NSString stringWithFormat:@"%@T00:00:00",stepsEndDate] withKey:type];
+                if (stepCallback) {
+                    if ([self getDaysBetweenLocalSyncDate:stepsStartDate andRemoteSyncDate:stepsEndDate] > 0) {
+                        NSString * nextDate = [self getNextDateFromDate:stepsStartDate];
+                        [FitbitData setLastSyncDateSteps:nextDate];
+                        stepCallback(data, nextDate);
+                    }else{
+                        [FitbitData setLastSyncDateSteps:[NSString stringWithFormat:@"%@T00:00:00",stepsEndDate]];
+                        stepCallback(data, nil);
+                    }
+                }
             }else if([type isEqualToString:@"calories"]){
-                [self setLastQueryDate:caloriesSyncTime  withKey:type];
+                [FitbitData setLastSyncDate:[NSString stringWithFormat:@"%@T00:00:00",caloriesEndDate]  withKey:type];
+                if (calCallback) {
+                    if ([self getDaysBetweenLocalSyncDate:caloriesStartDate andRemoteSyncDate:caloriesEndDate] > 0) {
+                        NSString * nextDate = [self getNextDateFromDate:caloriesStartDate];
+                        [FitbitData setLastSyncDateCalories:nextDate];
+                        calCallback(data, nextDate);
+                    }else{
+                        [FitbitData setLastSyncDateCalories:[NSString stringWithFormat:@"%@T00:00:00", caloriesEndDate]];
+                        calCallback(data, nil);
+                    }
+                }
             }else if([type isEqualToString:@"heartrate"]){
-                [self setLastQueryDate:heartrateSyncTime withKey:type];
+                if (heartrateCallback){
+                    if ([self getDaysBetweenLocalSyncDate:heartrateStartDate andRemoteSyncDate:heartrateEndDate] > 0) {
+                        NSString * nextDate = [self getNextDateFromDate:heartrateStartDate];
+                        [FitbitData setLastSyncDateHeartrate:nextDate];
+                        heartrateCallback(data, nextDate);
+                    }else{
+                        [FitbitData setLastSyncDateHeartrate:[NSString stringWithFormat:@"%@T00:00:00",heartrateEndDate]];
+                        heartrateCallback(data, nil);
+                    }
+                }
             }else if([type isEqualToString:@"sleep"]){
-                [self setLastQueryDate:sleepLastSyncTime withKey:type];
+                [FitbitData setLastSyncDate:sleepEndDate withKey:type];
+                if (sleepCallback) sleepCallback();
             }
             
             NSDictionary *userInfo = [NSDictionary dictionaryWithObject:dict
@@ -352,7 +394,7 @@
                 [self saveData:dict];
             });
         }else{
-            
+            [self sendBroadcastNotification:[NSString stringWithFormat:@"[%@] received data is null ", type]];
 //            NSDictionary * debugMsg = @{@"debug":@"no response", @"type":type};
 //            if([responseString isEqualToString:@""]){
 //                debugMsg = @{@"debug":@"no response", @"type":type};
@@ -364,6 +406,12 @@
 //                                                              userInfo:debugMsg];
         }
     } @catch (NSException *exception) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self saveDebugEventWithText:[NSString stringWithFormat:@"[exception][%@] -saveData:response:error:type %@", type, exception.debugDescription]
+                                    type:DebugTypeError
+                                   label:SENSOR_PLUGIN_FITBIT];
+            
+        });
     } @finally {
     }
 }
@@ -484,25 +532,79 @@ didReceiveResponse:(NSURLResponse *)response
 //////////////////////////////////////////////////////////////
 
 
-- (void) setLastQueryDate:(NSDate *)date withKey:(NSString *)key{
++ (void) setLastSyncDate:(NSString *)date withKey:(NSString *)key{
     NSUserDefaults * userDefualts = [NSUserDefaults standardUserDefaults];
-    [userDefualts setObject:date forKey:[NSString stringWithFormat:@"fitbit.last.query.data.%@",key]];
+    [userDefualts setObject:date forKey:[NSString stringWithFormat:@"fitbit.last.local.sync.date.%@",key]];
 }
 
-+ (NSDate *) getLastQueryDateWithKey:(NSString *)key{
++ (NSString *) getLastSyncDateWithKey:(NSString *)key{
     NSUserDefaults * userDefualts = [NSUserDefaults standardUserDefaults];
-    NSDate * date = (NSDate *)[userDefualts objectForKey:[NSString stringWithFormat:@"fitbit.last.query.data.%@",key]];
-    if(date != nil){
-        return date;
+    NSString * date = [userDefualts objectForKey:[NSString stringWithFormat:@"fitbit.last.local.sync.date.%@",key]];
+    if (date==nil || [date isEqualToString:@""]) {
+        NSDateFormatter * dateFormat = [[NSDateFormatter alloc] init];
+        [dateFormat setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS"];
+        date = [dateFormat stringFromDate:[NSDate new]];
+        [FitbitData setLastSyncDate:date withKey:key];
+    }
+    return date;
+}
+
+- (void) sendBroadcastNotification:(NSString *) message {
+    if ([NSThread isMainThread]){
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"aware.plugin.fitbit.debug.event" object:self userInfo:@{@"message":message}];
     }else{
-        return [NSDate new];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self sendBroadcastNotification:message];
+        });
     }
 }
 
 
-+ (void) setLastQueryDate:(NSDate *)date withKey:(NSString *)key{
-    NSUserDefaults * userDefualts = [NSUserDefaults standardUserDefaults];
-    [userDefualts setObject:date forKey:[NSString stringWithFormat:@"fitbit.last.query.data.%@",key]];
+////////////////////////////////////////////////////////////
+- (int) getDaysBetweenLocalSyncDate:(NSString *)localSyncDate andRemoteSyncDate:(NSString *)remoteSyncDate {
+    NSString * format = @"YYYY-MM-dd";
+    NSDateFormatter *dateFormatter = [NSDateFormatter new];
+    [dateFormatter setDateFormat:format];
+    [dateFormatter setTimeZone:[NSTimeZone localTimeZone]];
+    
+    NSDate * localDate = [dateFormatter dateFromString:localSyncDate];
+    NSLog(@"%@", localDate);
+    
+    NSDate * remoteDate = [dateFormatter dateFromString:remoteSyncDate];
+    
+    NSTimeInterval interval = [remoteDate timeIntervalSinceDate:localDate];
+    // NSLog(@"%ld",(long)interval/60/60/24);
+    return interval;
 }
+
+- (NSString *) getNextDateFromDate:(NSString *)date{
+    NSString * format = @"YYYY-MM-dd";
+    NSDateFormatter *dateFormatter = [NSDateFormatter new];
+    [dateFormatter setDateFormat:format];
+    [dateFormatter setTimeZone:[NSTimeZone defaultTimeZone]];
+    NSDate * targetDate = [dateFormatter dateFromString:date];
+    
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSDateComponents *dateComps = [calendar components:NSCalendarUnitYear|
+                                   NSCalendarUnitMonth|NSCalendarUnitDay|NSCalendarUnitHour|
+                                   NSCalendarUnitMinute|NSCalendarUnitSecond
+                                              fromDate:targetDate];
+    [dateComps setDay:(dateComps.day + 1)];
+    [dateComps setHour:0];
+    [dateComps setMinute:0];
+    [dateComps setSecond:0];
+    
+    NSDate * nextDate = [calendar dateFromComponents:dateComps];
+    
+    format = @"YYYY-MM-dd'T'HH:mm:ss";
+    NSDateFormatter *fullDateFormatter = [NSDateFormatter new];
+    [fullDateFormatter setDateFormat:format];
+    [fullDateFormatter setTimeZone:[NSTimeZone localTimeZone]];
+    NSString * finalDateStr = [fullDateFormatter stringFromDate:nextDate];
+    
+    return finalDateStr;
+}
+
+
 
 @end
