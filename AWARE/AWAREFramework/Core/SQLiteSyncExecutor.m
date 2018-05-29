@@ -147,7 +147,7 @@
     }
     
     // check battery condition
-    if (isSyncWithOnlyBatteryCharging && !isFource) {
+    if (isSyncWithOnlyBatteryCharging && !fource) {
         NSInteger batteryState = [UIDevice currentDevice].batteryState;
         if ( batteryState == UIDeviceBatteryStateCharging || batteryState == UIDeviceBatteryStateFull) {
         }else{
@@ -158,7 +158,7 @@
     }
     
     // check wifi state
-    if (isSyncWithOnlyWifi && !isFource){
+    if (isSyncWithOnlyWifi && !fource){
         NetworkStatus netStatus = [currentReachability currentReachabilityStatus];
         switch (netStatus) {
             case NotReachable:{
