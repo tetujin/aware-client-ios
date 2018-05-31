@@ -34,6 +34,11 @@
     
     fitbit = [[Fitbit alloc] initWithAwareStudy:awareStudy dbType:AwareDBTypeCoreData];
 
+    self.lastSyncDateHRField.delegate = self;
+    self.lastSyncDateSleepField.delegate = self;
+    self.lastSyncDateStepField.delegate = self;
+    self.lastSyncDateCalField.delegate = self;
+    
     [self showAllSetting];
     
 //    layer.cornerRadius = 2.0;
@@ -182,7 +187,10 @@
         
         // NSDate * lastSyncStepData = [FitbitData getLastSyncSteps];
         // _lastUpdateDatePicker.date = lastSyncStepData;
-        _LastSyncDateField.text = [FitbitData getLastSyncDateHeartrate];
+        _lastSyncDateHRField.text = [FitbitData getLastSyncDateHeartrate];
+        _lastSyncDateSleepField.text = [FitbitData getLastSyncDateSleep];
+        _lastSyncDateStepField.text = [FitbitData getLastSyncDateSteps];
+        _lastSyncDateCalField.text = [FitbitData getLastSyncDateCalories];
     }
 }
 
@@ -205,13 +213,10 @@
                                                           [Fitbit setFitbitClientId:_apiKeyField.text];
                                                           [Fitbit setFitbitApiSecret:_apiSecretField.text];
                                                           
-                                                          // NSDate * lastSyncStepData = [FitbitData getLastSyncSteps];
-                                                          NSString * date = _LastSyncDateField.text;
-                                                          
-                                                          [FitbitData setLastSyncDateSteps:date];
-                                                          [FitbitData setLastSyncDateSleep:date];
-                                                          [FitbitData setLastSyncDateCalories:date];
-                                                          [FitbitData setLastSyncDateHeartrate:date];
+                                                          [FitbitData setLastSyncDateHeartrate:_lastSyncDateHRField.text];
+                                                          [FitbitData setLastSyncDateSteps:_lastSyncDateStepField.text];
+                                                          [FitbitData setLastSyncDateCalories:_lastSyncDateCalField.text];
+                                                          [FitbitData setLastSyncDateSleep:_lastSyncDateSleepField.text];
 
                                                       }]];
     
@@ -355,11 +360,11 @@
     [alertController addAction:[UIAlertAction actionWithTitle:@"YES"
                                                         style:UIAlertActionStyleDefault
                                                       handler:^(UIAlertAction *action) {
-                                                          NSString * date = _LastSyncDateField.text;
-                                                          [FitbitData setLastSyncDateSteps:date];
-                                                          [FitbitData setLastSyncDateSleep:date];
-                                                          [FitbitData setLastSyncDateCalories:date];
-                                                          [FitbitData setLastSyncDateHeartrate:date];
+                                                          
+                                                          [FitbitData setLastSyncDateHeartrate:_lastSyncDateHRField.text];
+                                                          [FitbitData setLastSyncDateSteps:_lastSyncDateStepField.text];
+                                                          [FitbitData setLastSyncDateCalories:_lastSyncDateCalField.text];
+                                                          [FitbitData setLastSyncDateSleep:_lastSyncDateSleepField.text];
                                                           
                                                           NSDictionary * settings = [[NSDictionary alloc] initWithObjects:@[@"all"] forKeys:@[@"type"]];
                                                           NSTimer * timer = [[NSTimer alloc] initWithFireDate:[NSDate new]
@@ -411,6 +416,11 @@
         DataVisualizationViewController * dataVVC = [segue destinationViewController];
         dataVVC.sensor = fitbit;
     }
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)sender {
+    [sender resignFirstResponder];
+    return TRUE;
 }
 
 @end

@@ -62,11 +62,9 @@ NSInteger const AWARE_ALERT_FITBIT_MOVE_TO_LOGIN_PAGE = 2;
         
         [self setTypeAsPlugin];
         
-        //        NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
-        //        NSString * clientId = [defaults objectForKey:@"228524"]; // TEMP // @"227YG3"];
-        //        NSString * apiSecret = [defaults objectForKey:@"dc3fea72a8013836fbe70bf7b2caf54a"]; // TEMP // @"033ed2a3710c0cde04343d073c09e378"];
         NSString * clientId = [Fitbit getFitbitClientId];
         NSString * apiSecret = [Fitbit getFitbitApiSecret];
+        
         if(clientId == nil) clientId = @"";
         if(apiSecret == nil) apiSecret = @"";
         
@@ -113,15 +111,15 @@ NSInteger const AWARE_ALERT_FITBIT_MOVE_TO_LOGIN_PAGE = 2;
     NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
     [defaults setObject:settings forKey:@"aware.plugn.fitbit.settings"];
     
-//    NSString * clientId = [self getSettingAsStringFromSttings:settings withKey:@"api_key_plugin_fitbit"];
-//    NSString * apiSecret = [self getSettingAsStringFromSttings:settings withKey:@"api_secret_plugin_fitbit"];
+    //    NSString * clientId = [self getSettingAsStringFromSttings:settings withKey:@"api_key_plugin_fitbit"];
+    //    NSString * apiSecret = [self getSettingAsStringFromSttings:settings withKey:@"api_secret_plugin_fitbit"];
     
-//    if([clientId isEqualToString:@""] && [apiSecret isEqualToString:@""]){
-//        // clientId = [defaults objectForKey:@"api_key_plugin_fitbit"];
-//        // apiSecret = [defaults objectForKey:@"api_secret_plugin_fitbit"];
-//        clientId = [Fitbit getFitbitClientIdForUI:YES];
-//        apiSecret = [Fitbit getFitbitApiSecretForUI:YES];
-//    }
+    //    if([clientId isEqualToString:@""] && [apiSecret isEqualToString:@""]){
+    //        // clientId = [defaults objectForKey:@"api_key_plugin_fitbit"];
+    //        // apiSecret = [defaults objectForKey:@"api_secret_plugin_fitbit"];
+    //        clientId = [Fitbit getFitbitClientIdForUI:YES];
+    //        apiSecret = [Fitbit getFitbitApiSecretForUI:YES];
+    //    }
     
     double intervalMin = [self getSensorSetting:settings withKey:@"plugin_fitbit_frequency"];
     if(intervalMin<0){
@@ -141,23 +139,23 @@ NSInteger const AWARE_ALERT_FITBIT_MOVE_TO_LOGIN_PAGE = 2;
         }
     }
     
-//    [[NSNotificationCenter defaultCenter] addObserver:self
-//                                             selector:@selector(getData:)
-//                                                 name:@"action.aware.plugin.fitbit.get.activity.sleep"
-//                                               object:[[NSDictionary alloc] initWithObjects:@[@"sleep"] forKeys:@[@"type"]]];
-//
-//    [[NSNotificationCenter defaultCenter] addObserver:self
-//                                             selector:@selector(getData:)
-//                                                 name:@"action.aware.plugin.fitbit.get.activity.steps"
-//                                               object:[[NSDictionary alloc] initWithObjects:@[@"steps"] forKeys:@[@"type"]]];
-//    [[NSNotificationCenter defaultCenter] addObserver:self
-//                                             selector:@selector(getData:)
-//                                                 name:@"action.aware.plugin.fitbit.get.activity.calories"
-//                                               object:[[NSDictionary alloc] initWithObjects:@[@"calories"] forKeys:@[@"type"]]];
-//    [[NSNotificationCenter defaultCenter] addObserver:self
-//                                             selector:@selector(getData:)
-//                                                 name:@"action.aware.plugin.fitbit.get.activity.heartrate"
-//                                               object:[[NSDictionary alloc] initWithObjects:@[@"heartrate"] forKeys:@[@"type"]]];
+    //    [[NSNotificationCenter defaultCenter] addObserver:self
+    //                                             selector:@selector(getData:)
+    //                                                 name:@"action.aware.plugin.fitbit.get.activity.sleep"
+    //                                               object:[[NSDictionary alloc] initWithObjects:@[@"sleep"] forKeys:@[@"type"]]];
+    //
+    //    [[NSNotificationCenter defaultCenter] addObserver:self
+    //                                             selector:@selector(getData:)
+    //                                                 name:@"action.aware.plugin.fitbit.get.activity.steps"
+    //                                               object:[[NSDictionary alloc] initWithObjects:@[@"steps"] forKeys:@[@"type"]]];
+    //    [[NSNotificationCenter defaultCenter] addObserver:self
+    //                                             selector:@selector(getData:)
+    //                                                 name:@"action.aware.plugin.fitbit.get.activity.calories"
+    //                                               object:[[NSDictionary alloc] initWithObjects:@[@"calories"] forKeys:@[@"type"]]];
+    //    [[NSNotificationCenter defaultCenter] addObserver:self
+    //                                             selector:@selector(getData:)
+    //                                                 name:@"action.aware.plugin.fitbit.get.activity.heartrate"
+    //                                               object:[[NSDictionary alloc] initWithObjects:@[@"heartrate"] forKeys:@[@"type"]]];
     
     
     updateTimer = [NSTimer scheduledTimerWithTimeInterval:intervalMin*60
@@ -189,10 +187,10 @@ NSInteger const AWARE_ALERT_FITBIT_MOVE_TO_LOGIN_PAGE = 2;
         [updateTimer invalidate];
         updateTimer = nil;
     }
-//    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"action.aware.plugin.fitbit.get.activity.sleep" object:nil];
-//    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"action.aware.plugin.fitbit.get.activity.steps" object:nil];
-//    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"action.aware.plugin.fitbit.get.activity.calories" object:nil];
-//    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"action.aware.plugin.fitbit.get.activity.heartrate" object:nil];
+    //    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"action.aware.plugin.fitbit.get.activity.sleep" object:nil];
+    //    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"action.aware.plugin.fitbit.get.activity.steps" object:nil];
+    //    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"action.aware.plugin.fitbit.get.activity.calories" object:nil];
+    //    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"action.aware.plugin.fitbit.get.activity.heartrate" object:nil];
     return YES;
 }
 
@@ -226,105 +224,117 @@ NSInteger const AWARE_ALERT_FITBIT_MOVE_TO_LOGIN_PAGE = 2;
     NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
     NSArray * settings = [defaults objectForKey:@"aware.plugn.fitbit.settings"];
     
-    if(settings != nil){
-        [self getProfile];
+    [self getProfile];
+    
+    [self sendBroadcastNotification:@"call -getData: method"];
+    
+    [fitbitDevice getDeviceInfoWithCallback:^(NSString *fitbitId, NSString *fitbitVersion, NSString *fitbitBattery, NSString *fitbitMac, NSString *fitbitLastSync) {
+        // 2018-05-25T07:39:54.000
+        [self sendBroadcastNotification:[NSString stringWithFormat:@"last sync: %@", fitbitLastSync]];
         
-        [self sendBroadcastNotification:@"call -getData: method"];
         
-        [fitbitDevice getDeviceInfoWithCallback:^(NSString *fitbitId, NSString *fitbitVersion, NSString *fitbitBattery, NSString *fitbitMac, NSString *fitbitLastSync) {
-            // 2018-05-25T07:39:54.000
-            [self sendBroadcastNotification:[NSString stringWithFormat:@"last sync: %@", fitbitLastSync]];
-            
-            
-            /// granularity of fitbit data =>  1d/15min/1min
-            NSString * activityDetailLevel = [self getSettingAsStringFromSttings:settings withKey:@"fitbit_granularity"];
-            if([activityDetailLevel isEqualToString:@""] || activityDetailLevel == nil ){
-                activityDetailLevel = @"1d";
-            }
-            
-            /// granularity of hr data => 1min/1sec
-            NSString * hrDetailLevel = [self getSettingAsStringFromSttings:settings withKey:@"fitbit_hr_granularity"];
-            if( [hrDetailLevel isEqualToString:@""] || hrDetailLevel == nil){
-                hrDetailLevel = @"1min";
-            }
-            
-            // 1d/15min/1min
-            int granuTimeActivity = 60*60*24;
-            if([activityDetailLevel isEqualToString:@"15min"]) {
-                granuTimeActivity = 60*15;
-            }else if([activityDetailLevel isEqualToString:@"1min"]){
-                granuTimeActivity = 60;
-            }
-            
-            // 1min/1sec
-            int granuTimeHr = 60;
-            if ([hrDetailLevel isEqualToString:@"1sec"]) {
-                granuTimeHr = 1;
-            }
-            
-            NSString * remoteLastSyncDate = [self extractDateFromDateTime:fitbitLastSync];
-            if (remoteLastSyncDate==nil) return;
-            
-            ///////////////// Step/Cal /////////////////////
-            if([type isEqualToString:@"all"] || [type isEqualToString:@"steps"]){
-                NSString * lastLocalSyncDate = [self extractDateFromDateTime:[FitbitData getLastSyncDateSteps]];
-                if(lastLocalSyncDate != nil)
-                    [fitbitData getStepsWithStart:lastLocalSyncDate end:remoteLastSyncDate period:nil detailLevel:activityDetailLevel callback:^(NSData * data, NSString * nextSyncDate){
-                        if (nextSyncDate) {
-                            dispatch_async(dispatch_get_main_queue(), ^{
-                                NSNotification * notification = [[NSNotification alloc] initWithName:@"action.aware.plugin.fitbit.get.activity.steps"
-                                                                                              object:nil
-                                                                                            userInfo:[[NSDictionary alloc] initWithObjects:@[@"steps"] forKeys:@[@"type"]]];
-                                [self getData:notification];
-                            });
-                        }
-                    }];
-            }
-            
-            if([type isEqualToString:@"all"] || [type isEqualToString:@"calories"]){
-                NSString * lastLocalSyncDate = [self extractDateFromDateTime:[FitbitData getLastSyncDateCalories]];
-                if(lastLocalSyncDate != nil)
-                    [fitbitData getCaloriesWithStart:lastLocalSyncDate end:remoteLastSyncDate period:nil detailLevel:activityDetailLevel callback:^(NSData * data, NSString * nextSyncDate){
-                        if (nextSyncDate) {
-                            dispatch_async(dispatch_get_main_queue(), ^{
-                                NSNotification * notification = [[NSNotification alloc] initWithName:@"action.aware.plugin.fitbit.get.activity.calories"
-                                                                                              object:nil
-                                                                                            userInfo:[[NSDictionary alloc] initWithObjects:@[@"calories"] forKeys:@[@"type"]]];
-                                [self getData:notification];
-                            });
-                        }
-                    }];
-            }
-            
-            ///////////////// Heartrate ////////////////////
-            if([type isEqualToString:@"all"] || [type isEqualToString:@"heartrate"]){
-                NSString * lastLocalSyncDate = [self extractDateFromDateTime:[FitbitData getLastSyncDateHeartrate]];
-                FitbitHeartrateRequestCallback hrCallback = ^(NSData * data, NSString * nextSyncDate){
-                    if (nextSyncDate) {
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            NSNotification * notification = [[NSNotification alloc] initWithName:@"action.aware.plugin.fitbit.get.activity.heartrate"
-                                                                                          object:nil
-                                                                                        userInfo:[[NSDictionary alloc] initWithObjects:@[@"heartrate"] forKeys:@[@"type"]]];
-                            [self getData:notification];
-                        });
-                    }
-                };
-                if(lastLocalSyncDate != nil){
-                    [fitbitData getHeartrateWithStart:lastLocalSyncDate end:remoteLastSyncDate period:nil detailLevel:hrDetailLevel callback:hrCallback];
-                }
-            }
-            
-            ///////////////// Sleep  /////////////////////
-            if([type isEqualToString:@"all"] || [type isEqualToString:@"sleep"]){
-                NSString * lastLocalSyncDate = [self extractDateFromDateTime:[FitbitData getLastSyncDateSleep]];
-                if(lastLocalSyncDate != nil)
-                    [fitbitData getSleepWithStart:lastLocalSyncDate end:remoteLastSyncDate period:nil detailLevel:activityDetailLevel callback:^{
-                        
-                    }];
+        /// granularity of fitbit data =>  1d/15min/1min
+        NSString * activityDetailLevel = [self getSettingAsStringFromSttings:settings withKey:@"fitbit_granularity"];
+        if([activityDetailLevel isEqualToString:@""] || activityDetailLevel == nil ){
+            activityDetailLevel = @"1d";
+        }
+        
+        /// granularity of hr data => 1min/1sec
+        NSString * hrDetailLevel = [self getSettingAsStringFromSttings:settings withKey:@"fitbit_hr_granularity"];
+        if( [hrDetailLevel isEqualToString:@""] || hrDetailLevel == nil){
+            hrDetailLevel = @"1min";
+        }
+        
+        // 1d/15min/1min
+        int granuTimeActivity = 60*60*24;
+        if([activityDetailLevel isEqualToString:@"15min"]) {
+            granuTimeActivity = 60*15;
+        }else if([activityDetailLevel isEqualToString:@"1min"]){
+            granuTimeActivity = 60;
+        }
+        
+        // 1min/1sec
+        int granuTimeHr = 60;
+        if ([hrDetailLevel isEqualToString:@"1sec"]) {
+            granuTimeHr = 1;
+        }
+        
+        NSString * remoteLastSyncDate = [self extractDateFromDateTime:fitbitLastSync];
+        if (remoteLastSyncDate==nil) return;
+        
+        ///////////////// Step/Cal /////////////////////
+        if([type isEqualToString:@"all"] || [type isEqualToString:@"steps"]){
+            [self getStepsWithEnd:remoteLastSyncDate period:nil detailLevel:activityDetailLevel];
+        }
+        
+        if([type isEqualToString:@"all"] || [type isEqualToString:@"calories"]){
+            [self getCaloriesWithEnd:remoteLastSyncDate period:nil detailLevel:activityDetailLevel];
+        }
+        
+        ///////////////// Heartrate ////////////////////
+        if([type isEqualToString:@"all"] || [type isEqualToString:@"heartrate"]){
+            [self getHeartrateWithEnd:remoteLastSyncDate period:nil detailLevel:hrDetailLevel];
+        }
+        
+        ///////////////// Sleep  /////////////////////
+        if([type isEqualToString:@"all"] || [type isEqualToString:@"sleep"]){
+            [self getSleepWithEnd:remoteLastSyncDate period:nil detailLevel:activityDetailLevel];
+        }
+    }];
+}
+
+
+
+- (void) getStepsWithEnd:(NSString *) end period:(NSString *)period detailLevel:(NSString *)activityDetailLevel{
+    NSString * lastLocalSyncDate = [self extractDateFromDateTime:[FitbitData getLastSyncDateSteps]];
+    if(lastLocalSyncDate != nil)
+        [fitbitData getStepsWithStart:lastLocalSyncDate end:end period:nil detailLevel:activityDetailLevel callback:^(NSData * data, NSString * nextSyncDate){
+            if (nextSyncDate) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self getStepsWithEnd:end period:period detailLevel:activityDetailLevel];
+                });
             }
         }];
+}
+
+- (void) getCaloriesWithEnd:(NSString *) end period:(NSString *)period detailLevel:(NSString *)activityDetailLevel{
+    NSString * lastLocalSyncDate = [self extractDateFromDateTime:[FitbitData getLastSyncDateCalories]];
+    if(lastLocalSyncDate != nil)
+        [fitbitData getCaloriesWithStart:lastLocalSyncDate end:end period:nil detailLevel:activityDetailLevel callback:^(NSData * data, NSString * nextSyncDate){
+            if (nextSyncDate) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self getCaloriesWithEnd:end period:period detailLevel:activityDetailLevel];
+                });
+            }
+        }];
+}
+
+- (void) getHeartrateWithEnd:(NSString *) end period:(NSString *)period detailLevel:(NSString *)activityDetailLevel{
+    NSString * lastLocalSyncDate = [self extractDateFromDateTime:[FitbitData getLastSyncDateHeartrate]];
+    FitbitHeartrateRequestCallback hrCallback = ^(NSData * data, NSString * nextSyncDate){
+        if (nextSyncDate) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self getHeartrateWithEnd:end period:period detailLevel:activityDetailLevel];
+            });
+        }
+    };
+    if(lastLocalSyncDate != nil){
+        [fitbitData getHeartrateWithStart:lastLocalSyncDate end:end period:nil detailLevel:activityDetailLevel callback:hrCallback];
     }
 }
+
+- (void) getSleepWithEnd:(NSString *) end period:(NSString *)period detailLevel:(NSString *)activityDetailLevel{
+    NSString * lastLocalSyncDate = [self extractDateFromDateTime:[FitbitData getLastSyncDateSleep]];
+    if(lastLocalSyncDate != nil)
+        [fitbitData getSleepWithStart:lastLocalSyncDate end:end period:nil detailLevel:activityDetailLevel callback:^(NSData *result, NSString * _Nullable nextSyncDate) {
+            if (nextSyncDate) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self getSleepWithEnd:end period:period detailLevel:activityDetailLevel];
+                });
+            }
+        }];
+}
+
 
 // yyyy/MM/dd'T'HH:mm:ss.SSS -> yyyy/MM/dd
 - (NSString *) extractDateFromDateTime:(NSString*) datetime {
@@ -413,12 +423,8 @@ NSInteger const AWARE_ALERT_FITBIT_MOVE_TO_LOGIN_PAGE = 2;
                 [self saveDebugEventWithText:errorMsg type:DebugTypeError label:SENSOR_PLUGIN_FITBIT];
                 // [self sendLocalNotificationForMessage:errorMsg soundFlag:NO];
             }else{
-
+                
             }
-            // invalid_token
-            // expired_token
-            // invalid_client
-            // invalid_request
         }
     } @catch (NSException *exception) {
         
@@ -460,12 +466,10 @@ NSInteger const AWARE_ALERT_FITBIT_MOVE_TO_LOGIN_PAGE = 2;
         sessionConfig.timeoutIntervalForResource = 60.0;
         sessionConfig.HTTPMaximumConnectionsPerHost = 60;
         sessionConfig.allowsCellularAccess = YES;
-        
         __weak NSURLSession *session = nil;
         session = [NSURLSession sessionWithConfiguration:sessionConfig delegate:self delegateQueue:Nil];
         NSURLSessionDataTask* dataTask = [session dataTaskWithRequest:request];
         [dataTask resume];
-        
     }else{
         UIAlertView *av = [[UIAlertView alloc]initWithTitle:@"Fitbit Login Error"
                                                     message:@"The Fitbit code is Null."
@@ -592,7 +596,7 @@ NSInteger const AWARE_ALERT_FITBIT_MOVE_TO_LOGIN_PAGE = 2;
                 NSLog(@"[%ld] %@", task.taskIdentifier, sessionConfig.identifier);
             }
             [self saveDebugEventWithText:[NSString stringWithFormat:@"data tasks: %ld",dataTasks.count] type:DebugTypeInfo label:SENSOR_PLUGIN_FITBIT];
-
+            
         }
     }];
     
@@ -969,33 +973,6 @@ didReceiveResponse:(NSURLResponse *)response
 }
 /////////////////////////////////////////////////////////////////////////////////////
 
-
-//+ (NSString *) getFitbitClientIdForUI:(bool)forUI{
-//    NSString * clientId = [Fitbit getFitbitClientId];
-//    if(clientId == nil || [clientId isEqualToString:@""]){
-//        if(forUI){
-//            return @"";
-//        }else{
-//            return @""; // <- for a common token
-//        }
-//    }else{
-//        return clientId;
-//    }
-//}
-//
-////apiSecret
-//+ (NSString *) getFitbitApiSecretForUI:(bool)forUI{
-//    NSString * apiSecret = [Fitbit getFitbitApiSecret];
-//    if(apiSecret == nil || [apiSecret isEqualToString:@""]){
-//        if(forUI){
-//            return @"";
-//        }else{
-//            return @""; // <- for a common token
-//        }
-//    }else{
-//        return apiSecret;
-//    }
-//}
 
 //////////////////////////////////////////////////////////////////////////////////////
 

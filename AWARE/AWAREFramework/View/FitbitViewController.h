@@ -20,7 +20,11 @@
 @property (weak, nonatomic) IBOutlet UITextField *apiKeyField;
 @property (weak, nonatomic) IBOutlet UITextField *apiSecretField;
 @property (weak, nonatomic) IBOutlet UITextView *debugTextView;
-@property (weak, nonatomic) IBOutlet UITextField *LastSyncDateField;
+
+@property (weak, nonatomic) IBOutlet UITextField *lastSyncDateHRField;
+@property (weak, nonatomic) IBOutlet UITextField *lastSyncDateSleepField;
+@property (weak, nonatomic) IBOutlet UITextField *lastSyncDateStepField;
+@property (weak, nonatomic) IBOutlet UITextField *lastSyncDateCalField;
 
 // Actions
 - (IBAction)pushedApplyButton:(id)sender;

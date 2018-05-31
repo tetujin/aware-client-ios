@@ -27,6 +27,7 @@
     if(self != nil){
         identificationForFitbitDevice = @"";
         responseData = [[NSMutableData alloc] init];
+        [self setFetchLimit:50];
         [self trackDebugEvents];
     }
     return self;
@@ -71,7 +72,7 @@
     NSMutableString * urlStr = [[NSMutableString alloc] initWithString:@"https://api.fitbit.com"];
     [urlStr appendFormat:@"/1/user/%@/devices.json",userId];
     
-    NSURL*	url = [NSURL URLWithString:urlStr];
+    NSURL*    url = [NSURL URLWithString:urlStr];
     NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:url];
     [request setValue:[NSString stringWithFormat:@"Bearer %@", token] forHTTPHeaderField:@"Authorization"];
     [request setHTTPMethod:@"GET"];
@@ -166,9 +167,9 @@
            managedObjectContext:(NSManagedObjectContext *)childContext
                      entityName:(NSString *)entity{
     EntityFitbitDevice* entityFitbitDevice = (EntityFitbitDevice *)[NSEntityDescription
-                                                               insertNewObjectForEntityForName:entity
-                                                               inManagedObjectContext:childContext];
-
+                                                                    insertNewObjectForEntityForName:entity
+                                                                    inManagedObjectContext:childContext];
+    
     entityFitbitDevice.timestamp = [data objectForKey:@"timestamp"];
     entityFitbitDevice.device_id = [data objectForKey:@"device_id"];
     entityFitbitDevice.fitbit_id = [data objectForKey:@"fitbit_id"];
@@ -201,7 +202,7 @@ didReceiveResponse:(NSURLResponse *)response
             NSLog(@"[%d] %@", responseCode, response.debugDescription);
             responseData = [[NSMutableData alloc] init];
         }
-
+        
     }
     // [super URLSession:session dataTask:dataTask didReceiveResponse:response completionHandler:completionHandler];
 }
@@ -237,3 +238,4 @@ didReceiveResponse:(NSURLResponse *)response
 }
 
 @end
+
