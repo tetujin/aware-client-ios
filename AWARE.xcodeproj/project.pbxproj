@@ -341,12 +341,12 @@
 		16FD37561CF0B1F700EEB416 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 16FD37541CF0B1DE00EEB416 /* Settings.bundle */; };
 		33DD1EAB0B6DC89A0BE94442 /* libPods-AWAREUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F2C7B48DB0AFA845366B8320 /* libPods-AWAREUITests.a */; };
 		4FD479AF20568857003BDDF9 /* DBTableCreator.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD479AE20568857003BDDF9 /* DBTableCreator.m */; };
-		4FD479C920568E7E003BDDF9 /* EntityAmbientNoise+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD479C720568E7E003BDDF9 /* EntityAmbientNoise+CoreDataClass.m */; };
-		4FD479CA20568E7E003BDDF9 /* EntityAmbientNoise+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD479C820568E7E003BDDF9 /* EntityAmbientNoise+CoreDataProperties.m */; };
 		4FD479CF20568EAC003BDDF9 /* EntityCalendar+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD479CC20568EAB003BDDF9 /* EntityCalendar+CoreDataClass.m */; };
 		4FD479D020568EAC003BDDF9 /* EntityCalendar+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD479CE20568EAC003BDDF9 /* EntityCalendar+CoreDataProperties.m */; };
 		4FD479D42056A073003BDDF9 /* SQLiteSyncExecutor.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD479D32056A073003BDDF9 /* SQLiteSyncExecutor.m */; };
 		4FD479D62056AC3D003BDDF9 /* AwareSQLiteTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD479D52056AC3D003BDDF9 /* AwareSQLiteTests.m */; };
+		4FDA7DD320F149DA00A60C9F /* EntityAmbientNoise+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FDA7DCF20F149D900A60C9F /* EntityAmbientNoise+CoreDataClass.m */; };
+		4FDA7DD420F149DA00A60C9F /* EntityAmbientNoise+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FDA7DD120F149D900A60C9F /* EntityAmbientNoise+CoreDataProperties.m */; };
 		52022F401E13B81200AB52AB /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52022F3F1E13B81200AB52AB /* AddressBook.framework */; };
 		52BBE03D1E13C6EE00F57906 /* ContactsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 52BBE03C1E13C6EE00F57906 /* ContactsViewController.m */; };
 		8EEA355C71944920BDD1D33A /* libPods-AWARE.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FDD502C633ED8DBE54DF24B7 /* libPods-AWARE.a */; };
@@ -1020,10 +1020,6 @@
 		1EB67F5CA2CB715737A0C978 /* Pods-AWAREUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AWAREUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-AWAREUITests/Pods-AWAREUITests.release.xcconfig"; sourceTree = "<group>"; };
 		4FD479AD20568857003BDDF9 /* DBTableCreator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DBTableCreator.h; sourceTree = "<group>"; };
 		4FD479AE20568857003BDDF9 /* DBTableCreator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DBTableCreator.m; sourceTree = "<group>"; };
-		4FD479C520568E7D003BDDF9 /* EntityAmbientNoise+CoreDataProperties.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "EntityAmbientNoise+CoreDataProperties.h"; path = "/Users/yuuki/Dropbox/tokuda_Lab/codes/objective-c/AWARE/AWARE/AWAREFramework/Plugins/AmbientNoise/EntityAmbientNoise+CoreDataProperties.h"; sourceTree = "<absolute>"; };
-		4FD479C620568E7E003BDDF9 /* EntityAmbientNoise+CoreDataClass.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "EntityAmbientNoise+CoreDataClass.h"; path = "/Users/yuuki/Dropbox/tokuda_Lab/codes/objective-c/AWARE/AWARE/AWAREFramework/Plugins/AmbientNoise/EntityAmbientNoise+CoreDataClass.h"; sourceTree = "<absolute>"; };
-		4FD479C720568E7E003BDDF9 /* EntityAmbientNoise+CoreDataClass.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "EntityAmbientNoise+CoreDataClass.m"; path = "/Users/yuuki/Dropbox/tokuda_Lab/codes/objective-c/AWARE/AWARE/AWAREFramework/Plugins/AmbientNoise/EntityAmbientNoise+CoreDataClass.m"; sourceTree = "<absolute>"; };
-		4FD479C820568E7E003BDDF9 /* EntityAmbientNoise+CoreDataProperties.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "EntityAmbientNoise+CoreDataProperties.m"; path = "/Users/yuuki/Dropbox/tokuda_Lab/codes/objective-c/AWARE/AWARE/AWAREFramework/Plugins/AmbientNoise/EntityAmbientNoise+CoreDataProperties.m"; sourceTree = "<absolute>"; };
 		4FD479CB20568EAB003BDDF9 /* EntityCalendar+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EntityCalendar+CoreDataClass.h"; sourceTree = "<group>"; };
 		4FD479CC20568EAB003BDDF9 /* EntityCalendar+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EntityCalendar+CoreDataClass.m"; sourceTree = "<group>"; };
 		4FD479CD20568EAB003BDDF9 /* EntityCalendar+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EntityCalendar+CoreDataProperties.h"; sourceTree = "<group>"; };
@@ -1031,6 +1027,10 @@
 		4FD479D22056A073003BDDF9 /* SQLiteSyncExecutor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SQLiteSyncExecutor.h; sourceTree = "<group>"; };
 		4FD479D32056A073003BDDF9 /* SQLiteSyncExecutor.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SQLiteSyncExecutor.m; sourceTree = "<group>"; };
 		4FD479D52056AC3D003BDDF9 /* AwareSQLiteTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AwareSQLiteTests.m; sourceTree = "<group>"; };
+		4FDA7DCF20F149D900A60C9F /* EntityAmbientNoise+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EntityAmbientNoise+CoreDataClass.m"; sourceTree = "<group>"; };
+		4FDA7DD020F149D900A60C9F /* EntityAmbientNoise+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EntityAmbientNoise+CoreDataClass.h"; sourceTree = "<group>"; };
+		4FDA7DD120F149D900A60C9F /* EntityAmbientNoise+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EntityAmbientNoise+CoreDataProperties.m"; sourceTree = "<group>"; };
+		4FDA7DD220F149D900A60C9F /* EntityAmbientNoise+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EntityAmbientNoise+CoreDataProperties.h"; sourceTree = "<group>"; };
 		52022F3F1E13B81200AB52AB /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		52BBE03B1E13C6EE00F57906 /* ContactsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactsViewController.h; sourceTree = "<group>"; };
 		52BBE03C1E13C6EE00F57906 /* ContactsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactsViewController.m; sourceTree = "<group>"; };
@@ -1657,14 +1657,14 @@
 		169C87891D01382C00825761 /* AmbientNoise */ = {
 			isa = PBXGroup;
 			children = (
+				4FDA7DD020F149D900A60C9F /* EntityAmbientNoise+CoreDataClass.h */,
+				4FDA7DCF20F149D900A60C9F /* EntityAmbientNoise+CoreDataClass.m */,
+				4FDA7DD220F149D900A60C9F /* EntityAmbientNoise+CoreDataProperties.h */,
+				4FDA7DD120F149D900A60C9F /* EntityAmbientNoise+CoreDataProperties.m */,
 				169C878A1D01382C00825761 /* AmbientNoise.h */,
 				169C878B1D01382C00825761 /* AmbientNoise.m */,
 				169C878C1D01382C00825761 /* AudioAnalysis.h */,
 				169C878D1D01382C00825761 /* AudioAnalysis.m */,
-				4FD479C620568E7E003BDDF9 /* EntityAmbientNoise+CoreDataClass.h */,
-				4FD479C720568E7E003BDDF9 /* EntityAmbientNoise+CoreDataClass.m */,
-				4FD479C520568E7D003BDDF9 /* EntityAmbientNoise+CoreDataProperties.h */,
-				4FD479C820568E7E003BDDF9 /* EntityAmbientNoise+CoreDataProperties.m */,
 			);
 			path = AmbientNoise;
 			sourceTree = "<group>";
@@ -2543,7 +2543,6 @@
 				1623CE631BFD1B2C00EFAD72 /* Frameworks */,
 				1623CE641BFD1B2C00EFAD72 /* Resources */,
 				16228A4B1C22DAE20081C839 /* Embed App Extensions */,
-				9A2380402923A6D74997BF8A /* [CP] Embed Pods Frameworks */,
 				F81D864F422FBE4518F1BE3B /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
@@ -2564,8 +2563,6 @@
 				1623CE7E1BFD1B2C00EFAD72 /* Sources */,
 				1623CE7F1BFD1B2C00EFAD72 /* Frameworks */,
 				1623CE801BFD1B2C00EFAD72 /* Resources */,
-				FECD7974E737F2FDE6A7616A /* [CP] Embed Pods Frameworks */,
-				7D8DCB944F805035ED6F5FC6 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -2585,8 +2582,6 @@
 				1623CE891BFD1B2C00EFAD72 /* Sources */,
 				1623CE8A1BFD1B2C00EFAD72 /* Frameworks */,
 				1623CE8B1BFD1B2C00EFAD72 /* Resources */,
-				3A5F74C4EC8B50F3B7A012A5 /* [CP] Embed Pods Frameworks */,
-				9AA0EEDC2B4617A106DA36AB /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -2806,21 +2801,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		3A5F74C4EC8B50F3B7A012A5 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-AWAREUITests/Pods-AWAREUITests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		70004CF66D6EA56E2F6C2EB7 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -2837,51 +2817,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		7D8DCB944F805035ED6F5FC6 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-AWARETests/Pods-AWARETests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		9A2380402923A6D74997BF8A /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-AWARE/Pods-AWARE-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		9AA0EEDC2B4617A106DA36AB /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-AWAREUITests/Pods-AWAREUITests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		AD1A947900143F5FC8A5F5B6 /* [CP] Check Pods Manifest.lock */ = {
@@ -2928,21 +2863,6 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-AWARE/Pods-AWARE-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		FECD7974E737F2FDE6A7616A /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-AWARETests/Pods-AWARETests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -2975,6 +2895,7 @@
 				16AB2BFD1E2B665800F05B72 /* EntityFitbitDevice+CoreDataClass.m in Sources */,
 				16B0780F1D1F2487009C070B /* EntityLabel+CoreDataProperties.m in Sources */,
 				16C907A01F3303B8005D357C /* ESMLikertScaleView.m in Sources */,
+				4FDA7DD420F149DA00A60C9F /* EntityAmbientNoise+CoreDataProperties.m in Sources */,
 				161DD2D21F4A251C000D22A1 /* AppSettingTableViewController.m in Sources */,
 				167F14A31F4EFB7B00EA6323 /* EntityEstimoteAirpressure+CoreDataClass.m in Sources */,
 				160F0EC71D040B7F00673343 /* EntityDebug.m in Sources */,
@@ -3038,7 +2959,6 @@
 				16B077BB1D1A54BF009C070B /* EntityPushNotification+CoreDataProperties.m in Sources */,
 				16B0776C1D192663009C070B /* EntityRotation+CoreDataProperties.m in Sources */,
 				162811CF1FF4A95600425959 /* EntityContact+CoreDataClass.m in Sources */,
-				4FD479CA20568E7E003BDDF9 /* EntityAmbientNoise+CoreDataProperties.m in Sources */,
 				168AEA991D3EFEC300D02EA4 /* EntityProcessor.m in Sources */,
 				169C882A1D01382C00825761 /* AWARECore.m in Sources */,
 				160F0E8F1D03D64E00673343 /* EntityBarometer+CoreDataProperties.m in Sources */,
@@ -3050,7 +2970,6 @@
 				16606B251F4E4FC200EF6C4D /* PNRadarChartDataItem.m in Sources */,
 				16B0777F1D192D72009C070B /* EntityWifi.m in Sources */,
 				169C88991D01382C00825761 /* Proximity.m in Sources */,
-				4FD479C920568E7E003BDDF9 /* EntityAmbientNoise+CoreDataClass.m in Sources */,
 				169C85731D007EDC00825761 /* ViewController.m in Sources */,
 				169C88961D01382C00825761 /* Orientation.m in Sources */,
 				16BDCC9E1D35FD3800B13BD4 /* MSBandUV.m in Sources */,
@@ -3092,6 +3011,7 @@
 				16B078431D1F918B009C070B /* EntityMSBandDistance+CoreDataProperties.m in Sources */,
 				4FD479D020568EAC003BDDF9 /* EntityCalendar+CoreDataProperties.m in Sources */,
 				16CB66BC1F3EE822001EE743 /* ESMQuickAnswerView.m in Sources */,
+				4FDA7DD320F149DA00A60C9F /* EntityAmbientNoise+CoreDataClass.m in Sources */,
 				16606B261F4E4FC200EF6C4D /* PNScatterChart.m in Sources */,
 				169C883D1D01382C00825761 /* ESMSchedule.m in Sources */,
 				16EC4F181D2E7D8200524424 /* EntityMSBandRRInterval.m in Sources */,
