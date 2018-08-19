@@ -71,7 +71,7 @@ NSString * const AWARE_PREFERENCES_PLUGIN_AMBIENT_NOISE_SILENCE_THRESHOLD = @"pl
         KEY_AMBIENT_NOISE_RMS = @"double_rms";
         KEY_AMBIENT_NOISE_SILENT = @"is_silent";
         KEY_AMBIENT_NOISE_SILENT_THRESHOLD = @"double_silent_threshold";
-        KEY_AMBIENT_NOISE_RAW = @"blob_raw";
+        KEY_AMBIENT_NOISE_RAW = @"raw"; // blob_raw
         
         [self setCSVHeader:@[KEY_AMBIENT_NOISE_TIMESTAMP,
                              KEY_AMBIENT_NOISE_DEVICE_ID,
@@ -147,7 +147,7 @@ NSString * const AWARE_PREFERENCES_PLUGIN_AMBIENT_NOISE_SILENCE_THRESHOLD = @"pl
 //    AmbientNoise_Data.IS_SILENT + " integer default 0," +
     [query appendFormat:@"%@ real default 0,", KEY_AMBIENT_NOISE_SILENT_THRESHOLD];
 //    AmbientNoise_Data.SILENCE_THRESHOLD + " real default 0," +
-    [query appendFormat:@"%@ blob default null", KEY_AMBIENT_NOISE_RAW];
+    [query appendFormat:@"%@ text default null", KEY_AMBIENT_NOISE_RAW];
 //    AmbientNoise_Data.RAW + " blob default null," +
 //    [query appendFormat:@"UNIQUE (%@,%@)", KEY_AMBIENT_NOISE_TIMESTAMP, KEY_AMBIENT_NOISE_DEVICE_ID];
 //    "UNIQUE("+AmbientNoise_Data.TIMESTAMP+","+AmbientNoise_Data.DEVICE_ID+")"
