@@ -183,8 +183,6 @@
 		169C88711D01382C00825761 /* SingleESMObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 169C87811D01382C00825761 /* SingleESMObject.m */; };
 		169C88721D01382C00825761 /* AWAREMqtt.m in Sources */ = {isa = PBXBuildFile; fileRef = 169C87841D01382C00825761 /* AWAREMqtt.m */; };
 		169C88731D01382C00825761 /* ActivityRecognition.m in Sources */ = {isa = PBXBuildFile; fileRef = 169C87881D01382C00825761 /* ActivityRecognition.m */; };
-		169C88741D01382C00825761 /* AmbientNoise.m in Sources */ = {isa = PBXBuildFile; fileRef = 169C878B1D01382C00825761 /* AmbientNoise.m */; };
-		169C88751D01382C00825761 /* AudioAnalysis.m in Sources */ = {isa = PBXBuildFile; fileRef = 169C878D1D01382C00825761 /* AudioAnalysis.m */; };
 		169C88761D01382C00825761 /* BLEHeartRate.m in Sources */ = {isa = PBXBuildFile; fileRef = 169C87901D01382C00825761 /* BLEHeartRate.m */; };
 		169C88771D01382C00825761 /* DeviceUsage.m in Sources */ = {isa = PBXBuildFile; fileRef = 169C87931D01382C00825761 /* DeviceUsage.m */; };
 		169C88781D01382C00825761 /* FusedLocations.m in Sources */ = {isa = PBXBuildFile; fileRef = 169C87961D01382C00825761 /* FusedLocations.m */; };
@@ -340,6 +338,8 @@
 		16EEA1861FEF147500190799 /* Calendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16EEA1851FEF147500190799 /* Calendar.swift */; };
 		16FD37561CF0B1F700EEB416 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 16FD37541CF0B1DE00EEB416 /* Settings.bundle */; };
 		33DD1EAB0B6DC89A0BE94442 /* libPods-AWAREUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F2C7B48DB0AFA845366B8320 /* libPods-AWAREUITests.a */; };
+		4F36613D2129D74800173445 /* AmbientNoise.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F36613A2129D74800173445 /* AmbientNoise.m */; };
+		4F36613E2129D74800173445 /* AudioAnalysis.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F36613B2129D74800173445 /* AudioAnalysis.m */; };
 		4FD479AF20568857003BDDF9 /* DBTableCreator.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD479AE20568857003BDDF9 /* DBTableCreator.m */; };
 		4FD479C920568E7E003BDDF9 /* EntityAmbientNoise+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD479C720568E7E003BDDF9 /* EntityAmbientNoise+CoreDataClass.m */; };
 		4FD479CA20568E7E003BDDF9 /* EntityAmbientNoise+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD479C820568E7E003BDDF9 /* EntityAmbientNoise+CoreDataProperties.m */; };
@@ -688,10 +688,6 @@
 		169C87841D01382C00825761 /* AWAREMqtt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AWAREMqtt.m; sourceTree = "<group>"; };
 		169C87871D01382C00825761 /* ActivityRecognition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActivityRecognition.h; sourceTree = "<group>"; };
 		169C87881D01382C00825761 /* ActivityRecognition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActivityRecognition.m; sourceTree = "<group>"; };
-		169C878A1D01382C00825761 /* AmbientNoise.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AmbientNoise.h; sourceTree = "<group>"; };
-		169C878B1D01382C00825761 /* AmbientNoise.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AmbientNoise.m; sourceTree = "<group>"; };
-		169C878C1D01382C00825761 /* AudioAnalysis.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioAnalysis.h; sourceTree = "<group>"; };
-		169C878D1D01382C00825761 /* AudioAnalysis.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioAnalysis.m; sourceTree = "<group>"; };
 		169C878F1D01382C00825761 /* BLEHeartRate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BLEHeartRate.h; sourceTree = "<group>"; };
 		169C87901D01382C00825761 /* BLEHeartRate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BLEHeartRate.m; sourceTree = "<group>"; };
 		169C87921D01382C00825761 /* DeviceUsage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceUsage.h; sourceTree = "<group>"; };
@@ -1018,6 +1014,10 @@
 		16EEA1871FEF16DF00190799 /* AWARE-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AWARE-Bridging-Header.h"; sourceTree = "<group>"; };
 		16FD37541CF0B1DE00EEB416 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		1EB67F5CA2CB715737A0C978 /* Pods-AWAREUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AWAREUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-AWAREUITests/Pods-AWAREUITests.release.xcconfig"; sourceTree = "<group>"; };
+		4F3661392129D74800173445 /* AmbientNoise.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AmbientNoise.h; sourceTree = "<group>"; };
+		4F36613A2129D74800173445 /* AmbientNoise.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AmbientNoise.m; sourceTree = "<group>"; };
+		4F36613B2129D74800173445 /* AudioAnalysis.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioAnalysis.m; sourceTree = "<group>"; };
+		4F36613C2129D74800173445 /* AudioAnalysis.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioAnalysis.h; sourceTree = "<group>"; };
 		4FD479AD20568857003BDDF9 /* DBTableCreator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DBTableCreator.h; sourceTree = "<group>"; };
 		4FD479AE20568857003BDDF9 /* DBTableCreator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DBTableCreator.m; sourceTree = "<group>"; };
 		4FD479C520568E7D003BDDF9 /* EntityAmbientNoise+CoreDataProperties.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "EntityAmbientNoise+CoreDataProperties.h"; path = "/Users/yuuki/Dropbox/tokuda_Lab/codes/objective-c/AWARE/AWARE/AWAREFramework/Plugins/AmbientNoise/EntityAmbientNoise+CoreDataProperties.h"; sourceTree = "<absolute>"; };
@@ -1657,10 +1657,10 @@
 		169C87891D01382C00825761 /* AmbientNoise */ = {
 			isa = PBXGroup;
 			children = (
-				169C878A1D01382C00825761 /* AmbientNoise.h */,
-				169C878B1D01382C00825761 /* AmbientNoise.m */,
-				169C878C1D01382C00825761 /* AudioAnalysis.h */,
-				169C878D1D01382C00825761 /* AudioAnalysis.m */,
+				4F3661392129D74800173445 /* AmbientNoise.h */,
+				4F36613A2129D74800173445 /* AmbientNoise.m */,
+				4F36613C2129D74800173445 /* AudioAnalysis.h */,
+				4F36613B2129D74800173445 /* AudioAnalysis.m */,
 				4FD479C620568E7E003BDDF9 /* EntityAmbientNoise+CoreDataClass.h */,
 				4FD479C720568E7E003BDDF9 /* EntityAmbientNoise+CoreDataClass.m */,
 				4FD479C520568E7D003BDDF9 /* EntityAmbientNoise+CoreDataProperties.h */,
@@ -2958,7 +2958,6 @@
 				16BDCD011D38646400B13BD4 /* MealViewController.m in Sources */,
 				16B077BC1D1A54BF009C070B /* EntityPushNotification.m in Sources */,
 				16606B281F4E4FC200EF6C4D /* PNScatterChartDataItem.m in Sources */,
-				169C88751D01382C00825761 /* AudioAnalysis.m in Sources */,
 				167F14A41F4EFB7B00EA6323 /* EntityEstimoteAirpressure+CoreDataProperties.m in Sources */,
 				169C88781D01382C00825761 /* FusedLocations.m in Sources */,
 				16B0783C1D1F918B009C070B /* EntityMSBandPedometer.m in Sources */,
@@ -3054,6 +3053,7 @@
 				169C85731D007EDC00825761 /* ViewController.m in Sources */,
 				169C88961D01382C00825761 /* Orientation.m in Sources */,
 				16BDCC9E1D35FD3800B13BD4 /* MSBandUV.m in Sources */,
+				4F36613D2129D74800173445 /* AmbientNoise.m in Sources */,
 				169C887E1D01382C00825761 /* Memory.m in Sources */,
 				160F0F071D04756800673343 /* EntityBatteryDischarge+CoreDataProperties.m in Sources */,
 				16B0776D1D192663009C070B /* EntityRotation.m in Sources */,
@@ -3105,6 +3105,7 @@
 				16606B241F4E4FC200EF6C4D /* PNRadarChart.m in Sources */,
 				160F0EB41D03E2EC00673343 /* EntityBluetooth+CoreDataProperties.m in Sources */,
 				167F149D1F4EFB7B00EA6323 /* EntityEstimoteMotion+CoreDataClass.m in Sources */,
+				4F36613E2129D74800173445 /* AudioAnalysis.m in Sources */,
 				16B0777E1D192D72009C070B /* EntityWifi+CoreDataProperties.m in Sources */,
 				1698DF081F769258001F8AC4 /* EntityESM+CoreDataClass.m in Sources */,
 				169C88891D01382C00825761 /* Bluetooth.m in Sources */,
@@ -3139,7 +3140,6 @@
 				169C889C1D01382C00825761 /* Screen.m in Sources */,
 				16B078451D1F918B009C070B /* EntityMSBandHR+CoreDataProperties.m in Sources */,
 				1623CE771BFD1B2C00EFAD72 /* AWARE.xcdatamodeld in Sources */,
-				169C88741D01382C00825761 /* AmbientNoise.m in Sources */,
 				160F0ECD1D04132600673343 /* EntityGravity.m in Sources */,
 				16ECFC481D8F0C95005C3DA6 /* IOSActivityRecognition.m in Sources */,
 				169C88721D01382C00825761 /* AWAREMqtt.m in Sources */,
