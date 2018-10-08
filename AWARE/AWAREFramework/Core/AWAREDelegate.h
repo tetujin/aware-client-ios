@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <Google/SignIn.h>
+#import <GoogleSignIn/GoogleSignIn.h>
 #import <DeployGateSDK/DeployGateSDK.h>
 #import <CoreData/CoreData.h>
 #import "AWARECore.h"
