@@ -8,12 +8,12 @@
 
 #import <sys/utsname.h>
 #import "QRCodeViewController.h"
+#import "OnboardingViewController.h"
 #import "AWAREKeys.h"
 #import "AWAREStudy.h"
 #import "AWAREUtils.h"
 #import "SSLManager.h"
 #import "AppDelegate.h"
-
 
 @interface QRCodeViewController (){
     // AWARE Study Object
@@ -157,10 +157,8 @@
                     qrcodeStr = qrcode;
                     _button.enabled = YES;
                     _button.titleLabel.font = [UIFont boldSystemFontOfSize:20];
-                    // [_button setTitle:@"Find a QR code!" forState:UIControlStateNormal];
                     [_button setTitle:@"Tap to join a study!" forState:UIControlStateNormal];
                     
-                    // [self performSelector:@selector(setTapToJoinTextToButton:) withObject:nil afterDelay:1];
                 }
             }
         }
@@ -177,131 +175,58 @@
 
 
 - (void)pushedJoinButton:(id) sender {
-    
-    if(![AWAREUtils checkURLFormat:qrcodeStr]) return;
-    
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults setObject:qrcodeStr forKey:KEY_STUDY_QR_CODE];
-    
-    // https://github.com/tetujin/aware-client/blob/master/aware-core/src/main/java/com/aware/ui/Aware_QRCode.java
-    
-    // Get the study information from the aware server using the study url
-    // https://HOST/index.php/webservice/client_get_study_info/STUDY_API_KEY
-    NSURL *url = [NSURL URLWithString:qrcodeStr];
-
-    NSString * apiKey = @"";
-    NSArray * pathComponents = [url pathComponents];
-    for (NSString * component in pathComponents) {
-        apiKey = component;
+    if(![AWAREUtils checkURLFormat:qrcodeStr]){
+        return;
     }
-    
-    // NSLog(@"%@", url.absoluteString);
-    // https://r2d2.hcii.cs.cmu.edu/aware/dashboard/
-    NSRange indexRange = [url.absoluteString rangeOfString:@"index.php"];
-    NSString * baseURL = [url.absoluteString substringWithRange:NSMakeRange(0, indexRange.location)];
-    
-    // baseURL
-    NSString * requestUrl = [NSString stringWithFormat:@"%@index.php/webservice/client_get_study_info/%@", baseURL , apiKey];
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
-    [request setURL:[NSURL URLWithString:requestUrl]];
-    [request setHTTPMethod:@"GET"];
-    
-    NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSession sharedSession].configuration
-                                                          delegate:self
-                                                     delegateQueue:nil];
-    [[session dataTaskWithRequest:request completionHandler:^(NSData * data,
-                                                              NSURLResponse *  response,
-                                                              NSError * error) {
-        dispatch_async(dispatch_get_main_queue(),^{
-            // Success
-            if (response && ! error) {
-                // NSString *responseString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-                // NSLog(@"Success: %@", responseString);
-                NSDictionary  * studyInfo    = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
-                NSString * studyTitle        = [studyInfo objectForKey:@"study_name"];
-                NSString * studyDescription  = [studyInfo objectForKey:@"study_description"];
-                NSString * researcherFirst   = [studyInfo objectForKey:@"researcher_first"];
-                NSString * researcherLast    = [studyInfo objectForKey:@"researcher_last"];
-                NSString * researcherContact = [studyInfo objectForKey:@"researcher_contact"];
-                
-                NSString * description = [NSString stringWithFormat:@"[Description]\n%@\n\n[Researcher]\n%@ %@\n[Contact]\n%@", studyDescription,researcherFirst, researcherLast, researcherContact];
-                
-                UIAlertView * alert = [[UIAlertView alloc] initWithTitle:studyTitle
-                                                                 message:description
-                                                                delegate:self
-                                                       cancelButtonTitle:@"Cancel"
-                                                       otherButtonTitles:@"Join", nil];
-                alert.tag = 1;
-                [alert show];
-            // Error
-            } else {
-                NSLog(@"ERROR: %@ %ld", error.debugDescription , error.code);
-                if (error.code == -1202) {
-                    // Install CRT file for SSL: If the error code is -1202, this device needs .crt for SSL(secure) connection.
-                    [self installSSLCertificationFile];
-                    [self joinStudy];
-                } else if (error.code == -1009){
-                    UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Network Error"
-                                                                     message:@"Please connect the Internet. The operation couldn't be completed."
-                                                                    delegate:self
-                                                           cancelButtonTitle:@"Close"
-                                                           otherButtonTitles:nil];
-                    [alert show];
-                }
-            }
-            [session finishTasksAndInvalidate];
-            [session invalidateAndCancel];
-        });
-
-    }] resume];
-
+    OnboardingViewController *onboaringViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"onboardingView"];
+    [self.navigationController pushViewController:onboaringViewController animated:YES];
+    [onboaringViewController setStudyURL:qrcodeStr];
 }
 
 
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if(alertView.tag == 1){
-            if( buttonIndex == 1){
-                [self joinStudy];
-            }
-        }else if (alertView.tag == 2){
-            if( buttonIndex == 1){
-                SSLManager * sslManager = [[SSLManager alloc] init];
-                [sslManager installCRTWithTextOfQRCode:qrcodeStr];
-            }
-        }
-    });
-}
-
-- (void) joinStudy {
-    // Join a study
-    dispatch_async(dispatch_get_main_queue(),^{
-        AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
-        AWAREStudy * study = delegate.sharedAWARECore.sharedAwareStudy;
-        [study setStudyInformationWithURL:qrcodeStr];
-        [self moveToTopPage];
-        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Thank you for joining our study!"
-                                                         message:nil
-                                                        delegate:self
-                                               cancelButtonTitle:@"Close"
-                                               otherButtonTitles:nil];
-        [alert show];
-    });
-}
-
-
-- (void)installSSLCertificationFile{
-    NSString * alertTitle = @"SLL certification is requred!";
-    NSString * alertMessage = [NSString stringWithFormat:@"AWARE needs a SSL certification for secure network connection between the server. Could you install the certification file? "];
-    UIAlertView * alert = [[UIAlertView alloc] initWithTitle:alertTitle
-                                                     message:alertMessage
-                                                    delegate:self
-                                           cancelButtonTitle:@"Cancel"
-                                           otherButtonTitles:@"Install", nil];
-    alert.tag = 2;
-    
-    [alert show];
-}
+//- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        if(alertView.tag == 1){
+//            if( buttonIndex == 1){
+//                [self joinStudy];
+//            }
+//        }else if (alertView.tag == 2){
+//            if( buttonIndex == 1){
+//                SSLManager * sslManager = [[SSLManager alloc] init];
+//                [sslManager installCRTWithTextOfQRCode:qrcodeStr];
+//            }
+//        }
+//    });
+//}
+//- (void) joinStudy {
+//    // Join a study
+//    dispatch_async(dispatch_get_main_queue(),^{
+//        AppDelegate *delegate=(AppDelegate*)[UIApplication sharedApplication].delegate;
+//        AWAREStudy * study = delegate.sharedAWARECore.sharedAwareStudy;
+//        [study setStudyInformationWithURL:qrcodeStr];
+//        [self moveToTopPage];
+//        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Thank you for joining our study!"
+//                                                         message:nil
+//                                                        delegate:self
+//                                               cancelButtonTitle:@"Close"
+//                                               otherButtonTitles:nil];
+//        [alert show];
+//    });
+//}
+//
+//
+//- (void)installSSLCertificationFile{
+//    NSString * alertTitle = @"SLL certification is requred!";
+//    NSString * alertMessage = [NSString stringWithFormat:@"AWARE needs a SSL certification for secure network connection between the server. Could you install the certification file? "];
+//    UIAlertView * alert = [[UIAlertView alloc] initWithTitle:alertTitle
+//                                                     message:alertMessage
+//                                                    delegate:self
+//                                           cancelButtonTitle:@"Cancel"
+//                                           otherButtonTitles:@"Install", nil];
+//    alert.tag = 2;
+//
+//    [alert show];
+//}
 
 
 //////////////////////////////////////////////////////

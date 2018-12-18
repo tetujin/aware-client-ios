@@ -340,6 +340,7 @@
 		33DD1EAB0B6DC89A0BE94442 /* libPods-AWAREUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F2C7B48DB0AFA845366B8320 /* libPods-AWAREUITests.a */; };
 		4F36613D2129D74800173445 /* AmbientNoise.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F36613A2129D74800173445 /* AmbientNoise.m */; };
 		4F36613E2129D74800173445 /* AudioAnalysis.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F36613B2129D74800173445 /* AudioAnalysis.m */; };
+		4F85AC0921C9316600CB9435 /* OnboardingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F85AC0721C9316600CB9435 /* OnboardingViewController.m */; };
 		4FD479AF20568857003BDDF9 /* DBTableCreator.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD479AE20568857003BDDF9 /* DBTableCreator.m */; };
 		4FD479C920568E7E003BDDF9 /* EntityAmbientNoise+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD479C720568E7E003BDDF9 /* EntityAmbientNoise+CoreDataClass.m */; };
 		4FD479CA20568E7E003BDDF9 /* EntityAmbientNoise+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD479C820568E7E003BDDF9 /* EntityAmbientNoise+CoreDataProperties.m */; };
@@ -1018,6 +1019,8 @@
 		4F36613A2129D74800173445 /* AmbientNoise.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AmbientNoise.m; sourceTree = "<group>"; };
 		4F36613B2129D74800173445 /* AudioAnalysis.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioAnalysis.m; sourceTree = "<group>"; };
 		4F36613C2129D74800173445 /* AudioAnalysis.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioAnalysis.h; sourceTree = "<group>"; };
+		4F85AC0621C9316600CB9435 /* OnboardingViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OnboardingViewController.h; sourceTree = "<group>"; };
+		4F85AC0721C9316600CB9435 /* OnboardingViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OnboardingViewController.m; sourceTree = "<group>"; };
 		4FD479AD20568857003BDDF9 /* DBTableCreator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DBTableCreator.h; sourceTree = "<group>"; };
 		4FD479AE20568857003BDDF9 /* DBTableCreator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DBTableCreator.m; sourceTree = "<group>"; };
 		4FD479C520568E7D003BDDF9 /* EntityAmbientNoise+CoreDataProperties.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "EntityAmbientNoise+CoreDataProperties.h"; path = "/Users/yuuki/Dropbox/tokuda_Lab/codes/objective-c/AWARE/AWARE/AWAREFramework/Plugins/AmbientNoise/EntityAmbientNoise+CoreDataProperties.h"; sourceTree = "<absolute>"; };
@@ -2226,6 +2229,8 @@
 				169C88251D01382C00825761 /* GoogleLoginViewController.m */,
 				169C88261D01382C00825761 /* QRCodeViewController.h */,
 				169C88271D01382C00825761 /* QRCodeViewController.m */,
+				4F85AC0621C9316600CB9435 /* OnboardingViewController.h */,
+				4F85AC0721C9316600CB9435 /* OnboardingViewController.m */,
 				169C88281D01382C00825761 /* WebViewController.h */,
 				169C88291D01382C00825761 /* WebViewController.m */,
 				1683920D1D9BDCE1006D6607 /* SettingTableViewController.h */,
@@ -2543,7 +2548,6 @@
 				1623CE631BFD1B2C00EFAD72 /* Frameworks */,
 				1623CE641BFD1B2C00EFAD72 /* Resources */,
 				16228A4B1C22DAE20081C839 /* Embed App Extensions */,
-				9A2380402923A6D74997BF8A /* [CP] Embed Pods Frameworks */,
 				F81D864F422FBE4518F1BE3B /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
@@ -2564,8 +2568,6 @@
 				1623CE7E1BFD1B2C00EFAD72 /* Sources */,
 				1623CE7F1BFD1B2C00EFAD72 /* Frameworks */,
 				1623CE801BFD1B2C00EFAD72 /* Resources */,
-				FECD7974E737F2FDE6A7616A /* [CP] Embed Pods Frameworks */,
-				7D8DCB944F805035ED6F5FC6 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -2585,8 +2587,6 @@
 				1623CE891BFD1B2C00EFAD72 /* Sources */,
 				1623CE8A1BFD1B2C00EFAD72 /* Frameworks */,
 				1623CE8B1BFD1B2C00EFAD72 /* Resources */,
-				3A5F74C4EC8B50F3B7A012A5 /* [CP] Embed Pods Frameworks */,
-				9AA0EEDC2B4617A106DA36AB /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -2806,21 +2806,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		3A5F74C4EC8B50F3B7A012A5 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-AWAREUITests/Pods-AWAREUITests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		70004CF66D6EA56E2F6C2EB7 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -2837,51 +2822,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		7D8DCB944F805035ED6F5FC6 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-AWARETests/Pods-AWARETests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		9A2380402923A6D74997BF8A /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-AWARE/Pods-AWARE-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		9AA0EEDC2B4617A106DA36AB /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-AWAREUITests/Pods-AWAREUITests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		AD1A947900143F5FC8A5F5B6 /* [CP] Check Pods Manifest.lock */ = {
@@ -2911,7 +2851,6 @@
 				"${SRCROOT}/Pods/Target Support Files/Pods-AWARE/Pods-AWARE-resources.sh",
 				"${PODS_ROOT}/DeployGateSDK/DeployGateSDK1.0.7.embeddedframework/DeployGateSDK.framework/Versions/A/Resources/en.lproj",
 				"${PODS_ROOT}/DeployGateSDK/DeployGateSDK1.0.7.embeddedframework/DeployGateSDK.framework/Versions/A/Resources/ja.lproj",
-				"${PODS_ROOT}/GTMOAuth2/Source/Touch/GTMOAuth2ViewTouch.xib",
 				"${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle",
 				"${PODS_ROOT}/SVProgressHUD/SVProgressHUD/SVProgressHUD.bundle",
 			);
@@ -2919,28 +2858,12 @@
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/en.lproj",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ja.lproj",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GTMOAuth2ViewTouch.nib",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleSignIn.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/SVProgressHUD.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-AWARE/Pods-AWARE-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		FECD7974E737F2FDE6A7616A /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-AWARETests/Pods-AWARETests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -3187,6 +3110,7 @@
 				16606B1C1F4E4FC200EF6C4D /* PNCircleChart.m in Sources */,
 				168AEA921D3EE84100D02EA4 /* EntityGyroscope+CoreDataProperties.m in Sources */,
 				16BDCCB01D36661800B13BD4 /* MSBandPedometer.m in Sources */,
+				4F85AC0921C9316600CB9435 /* OnboardingViewController.m in Sources */,
 				160F0EB51D03E2EC00673343 /* EntityBluetooth.m in Sources */,
 				1613E0CE1D3E16B8000528F5 /* IBeacon.m in Sources */,
 				169C88861D01382C00825761 /* AmbientLight.m in Sources */,
@@ -3319,7 +3243,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -3357,7 +3281,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -3385,7 +3309,7 @@
 					"$(PROJECT_DIR)/ThirdPatyFrameworks",
 				);
 				INFOPLIST_FILE = AWARE/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3424,7 +3348,7 @@
 					"$(PROJECT_DIR)/ThirdPatyFrameworks",
 				);
 				INFOPLIST_FILE = AWARE/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",

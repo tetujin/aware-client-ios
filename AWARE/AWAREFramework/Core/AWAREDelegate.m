@@ -724,10 +724,18 @@ didSignInForUser:(GIDGoogleUser *)user
     // NSString *idToken = user.authentication.idToken; // Safe to send to the server
     NSString *name = user.profile.name;
     NSString *email = user.profile.email;
-    
     if (name != nil ) {
         GoogleLogin * googleLogin = [[GoogleLogin alloc] initWithAwareStudy:_sharedAWARECore.sharedAwareStudy dbType:AwareDBTypeCoreData];
-        [googleLogin setGoogleAccountWithUserId:userId name:name email:email];
+        if(![GoogleLogin.getGoogleAccountEmail isEqualToString:email] ){
+            // save google account information
+            [googleLogin setGoogleAccountWithUserId:userId name:name email:email];
+            [NSTimer scheduledTimerWithTimeInterval:1 repeats:NO block:^(NSTimer * _Nonnull timer) {
+                [NSNotificationCenter.defaultCenter postNotificationName:ACTION_AWARE_GOOGLE_LOGIN_SUCCESS object:nil];
+            }];
+        }else{
+            // save google account information
+            [googleLogin setGoogleAccountWithUserId:userId name:name email:email];
+        }
     }
 }
 
