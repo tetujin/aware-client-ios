@@ -22,7 +22,6 @@
 #import "AppDelegate.h"
 #import "Observer.h"
 #import "NXOAuth2.h"
-// #import "WebESM.h"
 
 // Plugins
 #import "GoogleCalPush.h"
@@ -36,11 +35,11 @@
 #import "Labels.h"
 #import "BLEHeartRate.h"
 #import "AmbientLight.h"
-// #import "ESM.h"
 #import "IOSESM.h"
 #import "Accelerometer.h"
 #import "PushNotification.h"
 #import "Contacts.h"
+#import "EntityESMAnswer.h"
 
 // Library
 #import "SVProgressHUD.h"
@@ -300,8 +299,10 @@
         token= @"";
     }
     [_settings addObject:[self getCelContent:@"Operations" desc:@"" image:@"" key:@"TITLE_CELL_VIEW" state:NO]];
-    [_settings addObject:[self getCelContent:@"Upload stored data manually" desc:@"Please push this row for uploading sensor data!" image:@"aware_upload_icon" key:@"STUDY_CELL_MANULA_UPLOAD" state:YES]];
-    [_settings addObject:[self getCelContent:@"Check settings for background sensing" desc:@"" image:@"setting_check_all" key:@"STUDY_CELL_CHECK_COMPLIANCE" state:YES]];
+    [_settings addObject:[self getCelContent:@"Upload stored data" desc:@"Please push this row for uploading sensor data!" image:@"aware_upload_icon" key:@"STUDY_CELL_MANULA_UPLOAD" state:YES]];
+    [_settings addObject:[self getCelContent:@"Export stored data" desc:@"Export stored data to other applications or platforms" image:@"export_db" key:@"STUDY_CELL_EXPORT_SQLITE" state:YES]];
+    // [_settings addObject:[self getCelContent:@"Export CSV files" desc:@"" image:@"export_csv" key:@"STUDY_CELL_EXPORT_CSV_FILES" state:YES]];
+    [_settings addObject:[self getCelContent:@"Check settings" desc:@"" image:@"setting_check_all" key:@"STUDY_CELL_CHECK_COMPLIANCE" state:YES]];
     [_settings addObject:[self getCelContent:@"Open setting.app" desc:@"Move to Settings.app which is a default app on iOS" image:@"setting_setting" key:@"STUDY_CELL_SETTINGS_APP" state:YES]];
     [_settings addObject:[self getCelContent:@"Get a push notification token" desc:token image:@"setting_notification" key:@"push_notification_device_tokens" state:YES]];
     NSString * studyInfo = @"No Study: Let's join a study!";
@@ -409,36 +410,102 @@
     // Debug Model ON/OFF
     if([key isEqualToString:@"ADVANCED_SETTINGS"]){
         [self performSegueWithIdentifier:@"AppSettingView" sender:self];
-    }else if ([key isEqualToString:@"STUDY_CELL_DEBUG"]) { //Debug
-        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Debug Statement" message:@"" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"ON", @"OFF", nil];
-        alert.tag = 1;
-        [alert show];
-        // Set Sync Interval
-    } else if ([key isEqualToString:@"STUDY_CELL_SYNC"]) { //Sync
-        // Get the interval
-        // NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        // double interval = [userDefaults doubleForKey:SETTING_SYNC_INT];
-        // Set the interval
+    }else if ([key isEqualToString:@"STUDY_CELL_DEBUG"]) {
+        UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Debug Mode"
+                                                                        message:@"Change the status of debug mode?"
+                                                                 preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction * turnOnAction = [UIAlertAction actionWithTitle:@"Turn ON"
+                                                                style:UIAlertActionStyleDefault
+                                                              handler:^(UIAlertAction * _Nonnull action) {
+                                                                  [awareStudy setDebugState:YES];
+                                                                  [self.tableView reloadData];
+                                                                  [self initContentsOnTableView];
+                                                                }];
+        UIAlertAction * turnOffAction = [UIAlertAction actionWithTitle:@"Turn OFF"
+                                                                style:UIAlertActionStyleDefault
+                                                              handler:^(UIAlertAction * _Nonnull action) {
+                                                                  [awareStudy setDebugState:NO];
+                                                                  [self.tableView reloadData];
+                                                                  [self initContentsOnTableView];
+                                                              }];
+        UIAlertAction * cancelAction = [UIAlertAction actionWithTitle:@"Cancel"
+                                                                style:UIAlertActionStyleDefault
+                                                              handler:^(UIAlertAction * _Nonnull action) {
+                                                            
+                                                               }];
+        [alert addAction:turnOnAction];
+        [alert addAction:turnOffAction];
+        [alert addAction:cancelAction];
+        [self presentViewController:alert animated:YES completion:^{
+            
+        }];
+    // Set Sync Interval
+    } else if ([key isEqualToString:@"STUDY_CELL_SYNC"]) {
         double interval = [awareStudy getUploadIntervalAsSecond];
-        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Sync Interval (min)" message:@"Please inpute a sync interval to the server." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Done",nil];
-        alert.alertViewStyle = UIAlertViewStylePlainTextInput;
-        [[alert textFieldAtIndex:0] setKeyboardType:UIKeyboardTypeNumberPad];
-        [[alert textFieldAtIndex:0] becomeFirstResponder];
-        [alert textFieldAtIndex:0].text = [NSString stringWithFormat:@"%d", (int)(interval/60)];
-        alert.tag = 2;
-        [alert show];
+        UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Sync Interval (min)"
+                                                                             message:@"Please set the sync interval by minute."
+                                                                      preferredStyle:UIAlertControllerStyleAlert];
+        [alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+            textField.keyboardType = UIKeyboardTypeNumberPad;
+            textField.text = [NSString stringWithFormat:@"%d",(int)(interval/60.0)];
+            [textField becomeFirstResponder];
+        }];
+        UIAlertAction * setAction = [UIAlertAction actionWithTitle:@"Update"
+                                                             style:UIAlertActionStyleDefault
+                                                           handler:^(UIAlertAction * _Nonnull action) {
+                                                               NSArray<UITextField *> * textFields = alert.textFields;
+                                                               if (textFields != nil){
+                                                                   if (textFields.count > 0) {
+                                                                       UITextField * intervalTextField = textFields[0];
+                                                                       NSString * intervalStr = intervalTextField.text;
+                                                                       if (intervalStr == nil){
+                                                                           return;
+                                                                       }
+                                                                       if ([intervalStr isEqualToString:@""] || [intervalStr isEqualToString:@"0"]) {
+                                                                           return;
+                                                                       }
+                                                                       // Set the sync interval to userDedaults
+                                                                       // double syncInterval = [interval doubleValue] * 60.0f;
+                                                                       [awareStudy setUploadIntervalWithMinutue:[intervalStr doubleValue]];
+                                                                       [sensorManager startUploadTimerWithInterval:[intervalStr doubleValue]*60.0f];
+                                                                       
+                                                                       [self.tableView reloadData];
+                                                                       [self initContentsOnTableView];
+                                                                   }
+                                                               }
+                                                           }];
+        UIAlertAction * cancelAction = [UIAlertAction actionWithTitle:@"Cancel"
+                                                                style:UIAlertActionStyleCancel
+                                                              handler:^(UIAlertAction * _Nonnull action) {
+                                                                  
+                                                              }];
+        [alert addAction:setAction];
+        [alert addAction:cancelAction];
+        [self presentViewController:alert animated:YES completion:nil];
         // Set Wi-Fi and mobile network setting
-    }else if([key isEqualToString:@"STUDY_CELL_WIFI"]){ //wifi
-        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Sync Statement (Network)" message:@"Do you want to sync your data with only Wi-Fi enviroment?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"YES",@"NO",nil];
+    }else if([key isEqualToString:@"STUDY_CELL_WIFI"]){
+        // WiFi
+        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Sync Statement (Network)"
+                                                         message:@"Do you want to sync your data with only Wi-Fi enviroment?"
+                                                        delegate:self cancelButtonTitle:@"Cancel"
+                                               otherButtonTitles:@"YES",@"NO",nil];
         alert.tag = 3;
         [alert show];
     }else if([key isEqualToString:@"STUDY_CELL_BATTERY"]){
-        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Sync Statement (Battery)" message:@"Do you want to sync your data with only battery charging condition?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"YES",@"NO",nil];
+        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Sync Statement (Battery)"
+                                                         message:@"Do you want to sync your data with only battery charging condition?"
+                                                        delegate:self
+                                               cancelButtonTitle:@"Cancel"
+                                               otherButtonTitles:@"YES",@"NO",nil];
         alert.tag = 9;
         [alert show];
         // Set maximum file size
     }else if([key isEqualToString:@"STUDY_CELL_MAX_FILE_SIZE"]){ //max file size
-        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Maximum Size of Post Data(KB)" message:@"Please input a maximum file size for uploading sensor data." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Done",nil];
+        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Maximum Size of Post Data(KB)"
+                                                         message:@"Please input a maximum file size for uploading sensor data."
+                                                        delegate:self
+                                               cancelButtonTitle:@"Cancel"
+                                               otherButtonTitles:@"Done",nil];
         alert.alertViewStyle = UIAlertViewStylePlainTextInput;
         // NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         // NSInteger maximumFileValue =  [userDefaults integerForKey:KEY_MAX_DATA_SIZE];
@@ -628,9 +695,152 @@
                                                otherButtonTitles:@"ON",@"OFF",nil];
         alert.tag = 22;
         [alert show];
-    } else {
+    }else if ([key isEqualToString:@"STUDY_CELL_EXPORT_SQLITE"]){
+        UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Data export"
+                                                                        message:@"Please select an export type."
+                                                                 preferredStyle:UIAlertControllerStyleActionSheet];
+//        UIAlertAction * actionCSV = [UIAlertAction actionWithTitle:@"CSV Files"
+//                                                             style:UIAlertActionStyleDefault
+//                                                           handler:^(UIAlertAction * _Nonnull action) {
+//                                                               [self exportCSVFileFromSQLite];
+//                                                           }];
+        UIAlertAction * actionSQLite = [UIAlertAction actionWithTitle:@"SQLite"
+                                                                style:UIAlertActionStyleDefault
+                                                              handler:^(UIAlertAction * _Nonnull action) {
+                                                                  [self exportSQLite];
+                                                              }];
+        UIAlertAction * actionCSV = [UIAlertAction actionWithTitle:@"CSV"
+                                                             style:UIAlertActionStyleDefault
+                                                           handler:^(UIAlertAction * _Nonnull action) {
+                                                               [self exportCSVFiles];
+                                                           }];
+        UIAlertAction * actionLWDB = [UIAlertAction actionWithTitle:@"Light Weight DB"
+                                                             style:UIAlertActionStyleDefault
+                                                           handler:^(UIAlertAction * _Nonnull action) {
+                                                               [self exportLightWeightDBFiles];
+                                                           }];
+        
+        UIAlertAction * actionESM = [UIAlertAction actionWithTitle:@"ESM (CSV Format)"
+                                                             style:UIAlertActionStyleDefault
+                                                           handler:^(UIAlertAction * _Nonnull action) {
+                                                               [self exportESMWithCSV];
+                                                           }];
+        
+        UIAlertAction * actionCancel = [UIAlertAction actionWithTitle:@"Cancel"
+                                                                style:UIAlertActionStyleCancel
+                                                              handler:nil];
+//        [alert addAction:actionCSV];
+        [alert addAction:actionSQLite];
+        [alert addAction:actionESM];
+        [alert addAction:actionCSV];
+        [alert addAction:actionLWDB];
+        [alert addAction:actionCancel];
+        [self presentViewController:alert animated:YES completion:nil];
+    }else if ([key isEqualToString:@"STUDY_CELL_EXPORT_CSV_FILES"]){
+        [self exportCSVFiles];
+    }else {
         // [self performSegueWithIdentifier:@"settingView" sender:self];
     }
+}
+
+- (void) exportSQLite{
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentDirectory = paths[0];
+    NSString* sqliteFilePath = [documentDirectory stringByAppendingPathComponent:@"AWARE.sqlite"];
+    NSString* walFilePath = [documentDirectory stringByAppendingPathComponent:@"AWARE.sqlite-wal"];
+    NSString* shmFilePath = [documentDirectory stringByAppendingPathComponent:@"AWARE.sqlite-shm"];
+    
+    NSArray *activityItems = @[[NSURL fileURLWithPath:sqliteFilePath],
+                               [NSURL fileURLWithPath:walFilePath],
+                               [NSURL fileURLWithPath:shmFilePath]];
+    UIActivityViewController *activityViewControntroller = [[UIActivityViewController alloc] initWithActivityItems:activityItems
+                                                                                             applicationActivities:nil];
+    activityViewControntroller.excludedActivityTypes = @[];
+    [self presentViewController:activityViewControntroller animated:true completion:nil];
+}
+
+- (void) exportESMWithCSV {
+    NSMutableString * data = [[NSMutableString alloc] init];
+    AppDelegate * delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    NSArray * sensors = [[delegate.sharedAWARECore sharedSensorManager] getAllSensors];
+    for (AWARESensor * sensor in sensors) {
+        if ([[sensor getSensorName] isEqualToString:@"plugin_ios_esm"]){
+            NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:NSStringFromClass([EntityESMAnswer class])];
+            NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"timestamp" ascending:NO];
+            NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
+            [fetchRequest setSortDescriptors:sortDescriptors];
+            NSArray *results = [sensor.getSensorManagedObjectContext  executeFetchRequest:fetchRequest error:nil];
+            bool existHeader = false;
+            for (EntityESMAnswer * answer in results) {
+                if (!existHeader) {
+                    [data appendFormat:@"%@\n",answer.getCSVHeader];
+                    existHeader = true;
+                }
+                [data appendFormat:@"%@\n",answer.getCSVBody];
+            }
+        }
+    }
+    
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *csvFilePath = [[paths objectAtIndex:0] stringByAppendingPathComponent:@"esm_answers.csv"];
+    [[NSFileManager defaultManager] createFileAtPath:csvFilePath
+                                            contents:[data dataUsingEncoding:NSUTF8StringEncoding]
+                                          attributes:nil];
+    
+    // Export CSV files using ActivityView
+    UIActivityViewController *activityViewControntroller = [[UIActivityViewController alloc] initWithActivityItems:@[ [NSURL fileURLWithPath:csvFilePath] ]
+                                                                                             applicationActivities:nil];
+    activityViewControntroller.excludedActivityTypes = @[];
+    [self presentViewController:activityViewControntroller animated:true completion:nil];
+    
+    
+}
+
+- (void) exportCSVFiles{
+    [self exportFiles:@".csv"];
+}
+
+- (void) exportLightWeightDBFiles {
+    [self exportFiles:@".dat"];
+}
+
+- (void) exportFiles:(NSString *) extension {
+    NSMutableArray * targetFileURLs = [[NSMutableArray alloc] init];
+    NSMutableArray * csvFileNames = [[NSMutableArray alloc] init];
+    NSError * error = nil;
+    NSFileManager *manager = [NSFileManager defaultManager];
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentDirectory = paths[0];
+    NSArray *list = [manager contentsOfDirectoryAtPath:documentDirectory error:&error];
+    // find .csv files
+    for (NSString *path in list) {
+        NSRange range = [path rangeOfString:extension];
+        if (NSNotFound != range.location) {
+            [csvFileNames addObject:path];
+            NSString *target = [documentDirectory stringByAppendingPathComponent:path];
+            [targetFileURLs addObject:[NSURL fileURLWithPath:target]];
+        }
+    }
+    
+    UIAlertController * alert = [UIAlertController alertControllerWithTitle:[NSString stringWithFormat:@"Do you export %ld files?", targetFileURLs.count]
+                                                                    message:[csvFileNames componentsJoinedByString:@"\n"]
+                                                             preferredStyle:UIAlertControllerStyleActionSheet];
+    UIAlertAction * exportAction = [UIAlertAction actionWithTitle:@"Export"
+                                                            style:UIAlertActionStyleDefault
+                                                          handler:^(UIAlertAction * _Nonnull action) {
+                                                              
+                                                              // Export CSV files using ActivityView
+                                                              UIActivityViewController *activityViewControntroller = [[UIActivityViewController alloc] initWithActivityItems:targetFileURLs
+                                                                                                                                                       applicationActivities:nil];
+                                                              activityViewControntroller.excludedActivityTypes = @[];
+                                                              [self presentViewController:activityViewControntroller animated:true completion:nil];
+                                                          }];
+    UIAlertAction * cancelAction = [UIAlertAction actionWithTitle:@"Cancel"
+                                                            style:UIAlertActionStyleCancel
+                                                          handler:nil];
+    [alert addAction:exportAction];
+    [alert addAction:cancelAction];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 
@@ -641,43 +851,8 @@
 clickedButtonAtIndex:(NSInteger)buttonIndex{
     NSString* title = alertView.title;
     NSLog(@"%ld", buttonIndex);
-    // NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    ///////////// Debug State //////////////////
-    if([title isEqualToString:@"Debug Statement"]){
-        if (buttonIndex == 1){ //yes
-            [awareStudy setDebugState:YES];
-            // [userDefaults setBool:YES forKey:SETTING_DEBUG_STATE];
-            [self pushedStudyRefreshButton:alertView];
-        } else if (buttonIndex == 2){ // no
-            // [userDefaults setBool:NO forKey:SETTING_DEBUG_STATE];
-            [awareStudy setDebugState:NO];
-            [self pushedStudyRefreshButton:alertView];
-        } else {
-            NSLog(@"Cancel");
-        }
-        [self.tableView reloadData];
-        [self initContentsOnTableView];
-        ////////////// Sync Interval //////////////
-    }else if([title isEqualToString:@"Sync Interval (min)"]){
-        // cancel
-        if ( buttonIndex == [alertView cancelButtonIndex]){
-            NSLog(@"Cancel");
-            return;
-        }
-        // Set value
-        NSString *interval = [alertView textFieldAtIndex:0].text;
-        if ([interval isEqualToString:@""] || [interval isEqualToString:@"0"]) {
-            return;
-        }
-        // Set the sync interval to userDedaults
-        // double syncInterval = [interval doubleValue] * 60.0f;
-        [awareStudy setUploadIntervalWithMinutue:[interval doubleValue]];
-        [sensorManager startUploadTimerWithInterval:[interval doubleValue]*60.0f];
-        
-        [self.tableView reloadData];
-        [self initContentsOnTableView];
-        ///////////////////// Upload Setting (Wifi) ////////////////////
-    }else if(alertView.tag == 3){
+    ///////////////////// Upload Setting (Wifi) ////////////////////
+    if(alertView.tag == 3){
         if (buttonIndex == 1){ //yes
             // [userDefaults setBool:YES forKey:SETTING_SYNC_WIFI_ONLY];
             [awareStudy setDataUploadStateInWifi:YES];
@@ -835,7 +1010,11 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
                     [self.tableView reloadData];
                     [self initContentsOnTableView];
                 }else{
-                    UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"The URL is wrong!" message:@"Please edit a correct URL." delegate:self cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+                    UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"The URL is wrong!"
+                                                                     message:@"Please edit a correct URL."
+                                                                    delegate:self
+                                                           cancelButtonTitle:nil
+                                                           otherButtonTitles:@"OK", nil];
                     [alert show];
                 }
             }

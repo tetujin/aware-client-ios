@@ -382,7 +382,7 @@
                         <rightBarButtonItems>
                             <barButtonItem systemItem="action" id="6kH-dy-Iji">
                                 <connections>
-                                    <action selector="pushedActionButton:" destination="0tU-Ir-X24" id="zY9-bh-uPE"/>
+                                    <action selector="pushedShareButton:" destination="0tU-Ir-X24" id="DuA-9I-663"/>
                                 </connections>
                             </barButtonItem>
                             <barButtonItem image="aware_eye" id="eEV-nf-zFJ">

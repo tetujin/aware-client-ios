@@ -18,5 +18,6 @@
 
 - (IBAction)pushedActionButton:(id)sender;
 - (IBAction)pushedShowDataButton:(id)sender;
+- (IBAction)pushedShareButton:(id)sender;
 
 @end

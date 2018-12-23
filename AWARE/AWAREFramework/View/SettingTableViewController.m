@@ -484,4 +484,27 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
     }];
 }
 
+- (IBAction)pushedShareButton:(id)sender{
+    if (![MFMailComposeViewController canSendMail]){
+        return;
+    }
+
+    MFMailComposeViewController *picker = [[MFMailComposeViewController alloc] init];
+    picker.mailComposeDelegate = self;
+
+    [picker setSubject:[NSString stringWithFormat:@"[AWARE][CSV][%@][%@]",[awareSensor getSensorName],[awareSensor getDeviceId]]];
+    [picker setMessageBody:@"" isHTML:NO];
+
+    // set 'text/csv' as a mimeType
+    NSData * csvData = [awareSensor getCSVData];
+    if(csvData != nil){
+        NSString * fileName = [NSString stringWithFormat:@"%@_%@_%@.csv",[awareSensor getSensorName], [awareSensor getDeviceId],[NSDate new].debugDescription];
+        [picker addAttachmentData:csvData mimeType:@"text/csv" fileName:fileName];
+    }
+
+    [self presentViewController:picker animated:YES completion:^{
+
+    }];
+}
+
 @end
