@@ -323,9 +323,6 @@
                                                                   handler:^(UIAlertAction * action) {
                                                                       // Send the user to the Settings for this app
                                                                       NSURL *settingsURL = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
-                                                                      if([AWAREUtils getCurrentOSVersionAsFloat] < 10.0f ){
-                                                                          settingsURL = [NSURL URLWithString:@"prefs:root=LOCATION_SERVICES"];
-                                                                      }
                                                                       [[UIApplication sharedApplication] openURL:settingsURL];
                                                                   }];
             UIAlertAction * cancelAction = [UIAlertAction actionWithTitle:@"Cancel"
@@ -391,9 +388,6 @@
                                                                   handler:^(UIAlertAction * action) {
                                                                       // Send the user to the Settings for this app
                                                                       NSURL *settingsURL = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
-                                                                      if([AWAREUtils getCurrentOSVersionAsFloat] < 10.0f ){
-                                                                          settingsURL = [NSURL URLWithString:@"prefs:root=General&path=AUTO_CONTENT_DOWNLOAD"];
-                                                                      }
                                                                       [[UIApplication sharedApplication] openURL:settingsURL];
                                                                   }];
             UIAlertAction * cancelAction = [UIAlertAction actionWithTitle:@"Cancel"
@@ -450,9 +444,6 @@
                                                                       handler:^(UIAlertAction * action) {
                                                                           // Send the user to the Settings for this app
                                                                           NSURL *settingsURL = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
-                                                                          if([AWAREUtils getCurrentOSVersionAsFloat] < 10.0f ){
-                                                                              settingsURL = [NSURL URLWithString:@"prefs:root=Notifications"];
-                                                                          }
                                                                           [[UIApplication sharedApplication] openURL:settingsURL];
                                                                       }];
                 UIAlertAction * cancelAction = [UIAlertAction actionWithTitle:@"Cancel"
@@ -532,7 +523,6 @@
         NSString * message = @"";
         if ([NSProcessInfo processInfo].lowPowerModeEnabled ) {
             
-            // [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"prefs:root=BATTERY_USAGE"]];
             if([AWAREUtils isForeground]){
                 UIAlertController* alert = [UIAlertController alertControllerWithTitle:title
                                                                                message:message
@@ -540,14 +530,7 @@
                 UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"Settings" style:UIAlertActionStyleDefault
                                                                       handler:^(UIAlertAction * action) {
                                                                           NSURL * settingsURL = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
-                                                                          NSLog(@"%@", UIApplicationOpenSettingsURLString);
-                                                                          // settingsURL = [NSURL URLWithString:@"prefs:"];
-                                                                          
-                                                                          if([AWAREUtils getCurrentOSVersionAsFloat] < 10.0f ){
-                                                                              settingsURL = [NSURL URLWithString:@"prefs:root=BATTERY_USAGE"];
-                                                                          }
                                                                           [[UIApplication sharedApplication] openURL:settingsURL];
-                                                                          
                                                                       }];
                 UIAlertAction * cancelAction = [UIAlertAction actionWithTitle:@"Cancel"
                                                                         style:UIAlertActionStyleCancel
@@ -595,9 +578,6 @@
                                                                   handler:^(UIAlertAction * action) {
 //                                                                       Send the user to the Settings for this app
                                                                       NSURL *settingsURL = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
-                                                                      if([AWAREUtils getCurrentOSVersionAsFloat] < 10.0f ){
-                                                                          settingsURL = [NSURL URLWithString:@"prefs:root=WIFI"];
-                                                                      }
                                                                       [[UIApplication sharedApplication] openURL:settingsURL];
                                                                       
                                                                   }];
