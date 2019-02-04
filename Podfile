@@ -6,7 +6,7 @@ platform :ios, '8.0'
 target 'AWARE' do
 pod 'MQTTKit' 
 pod 'SCNetworkReachability'
-pod 'Google/SignIn'
+pod 'GoogleSignIn'
 pod 'DeployGateSDK'
 pod 'ios-ntp'
 pod 'EZAudio'

@@ -35,9 +35,10 @@ xcuserdata
 #
 Pods/*
 Pods/
+Podfile.lock
 
 AWARE/AWAREFramework/Plugins/Conversation/
-AWARE.xcworkspace
+# AWARE.xcworkspace
 
 # Carthage
 #
@@ -55,3 +56,5 @@ Carthage/Build
 
 fastlane/report.xml
 fastlane/screenshots
+
+.DS_Store
