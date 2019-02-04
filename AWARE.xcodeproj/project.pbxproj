@@ -341,9 +341,9 @@
 		4F36613D2129D74800173445 /* AmbientNoise.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F36613A2129D74800173445 /* AmbientNoise.m */; };
 		4F36613E2129D74800173445 /* AudioAnalysis.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F36613B2129D74800173445 /* AudioAnalysis.m */; };
 		4F85AC0921C9316600CB9435 /* OnboardingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F85AC0721C9316600CB9435 /* OnboardingViewController.m */; };
+		4FC6CE6A2208422E00CB9BAE /* EntityAmbientNoise+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FC6CE662208422D00CB9BAE /* EntityAmbientNoise+CoreDataProperties.m */; };
+		4FC6CE6B2208422E00CB9BAE /* EntityAmbientNoise+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FC6CE682208422E00CB9BAE /* EntityAmbientNoise+CoreDataClass.m */; };
 		4FD479AF20568857003BDDF9 /* DBTableCreator.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD479AE20568857003BDDF9 /* DBTableCreator.m */; };
-		4FD479C920568E7E003BDDF9 /* EntityAmbientNoise+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD479C720568E7E003BDDF9 /* EntityAmbientNoise+CoreDataClass.m */; };
-		4FD479CA20568E7E003BDDF9 /* EntityAmbientNoise+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD479C820568E7E003BDDF9 /* EntityAmbientNoise+CoreDataProperties.m */; };
 		4FD479CF20568EAC003BDDF9 /* EntityCalendar+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD479CC20568EAB003BDDF9 /* EntityCalendar+CoreDataClass.m */; };
 		4FD479D020568EAC003BDDF9 /* EntityCalendar+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD479CE20568EAC003BDDF9 /* EntityCalendar+CoreDataProperties.m */; };
 		4FD479D42056A073003BDDF9 /* SQLiteSyncExecutor.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD479D32056A073003BDDF9 /* SQLiteSyncExecutor.m */; };
@@ -1021,12 +1021,12 @@
 		4F36613C2129D74800173445 /* AudioAnalysis.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioAnalysis.h; sourceTree = "<group>"; };
 		4F85AC0621C9316600CB9435 /* OnboardingViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OnboardingViewController.h; sourceTree = "<group>"; };
 		4F85AC0721C9316600CB9435 /* OnboardingViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OnboardingViewController.m; sourceTree = "<group>"; };
+		4FC6CE662208422D00CB9BAE /* EntityAmbientNoise+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EntityAmbientNoise+CoreDataProperties.m"; sourceTree = "<group>"; };
+		4FC6CE672208422E00CB9BAE /* EntityAmbientNoise+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EntityAmbientNoise+CoreDataClass.h"; sourceTree = "<group>"; };
+		4FC6CE682208422E00CB9BAE /* EntityAmbientNoise+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EntityAmbientNoise+CoreDataClass.m"; sourceTree = "<group>"; };
+		4FC6CE692208422E00CB9BAE /* EntityAmbientNoise+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EntityAmbientNoise+CoreDataProperties.h"; sourceTree = "<group>"; };
 		4FD479AD20568857003BDDF9 /* DBTableCreator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DBTableCreator.h; sourceTree = "<group>"; };
 		4FD479AE20568857003BDDF9 /* DBTableCreator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DBTableCreator.m; sourceTree = "<group>"; };
-		4FD479C520568E7D003BDDF9 /* EntityAmbientNoise+CoreDataProperties.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "EntityAmbientNoise+CoreDataProperties.h"; path = "/Users/yuuki/Dropbox/tokuda_Lab/codes/objective-c/AWARE/AWARE/AWAREFramework/Plugins/AmbientNoise/EntityAmbientNoise+CoreDataProperties.h"; sourceTree = "<absolute>"; };
-		4FD479C620568E7E003BDDF9 /* EntityAmbientNoise+CoreDataClass.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "EntityAmbientNoise+CoreDataClass.h"; path = "/Users/yuuki/Dropbox/tokuda_Lab/codes/objective-c/AWARE/AWARE/AWAREFramework/Plugins/AmbientNoise/EntityAmbientNoise+CoreDataClass.h"; sourceTree = "<absolute>"; };
-		4FD479C720568E7E003BDDF9 /* EntityAmbientNoise+CoreDataClass.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "EntityAmbientNoise+CoreDataClass.m"; path = "/Users/yuuki/Dropbox/tokuda_Lab/codes/objective-c/AWARE/AWARE/AWAREFramework/Plugins/AmbientNoise/EntityAmbientNoise+CoreDataClass.m"; sourceTree = "<absolute>"; };
-		4FD479C820568E7E003BDDF9 /* EntityAmbientNoise+CoreDataProperties.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "EntityAmbientNoise+CoreDataProperties.m"; path = "/Users/yuuki/Dropbox/tokuda_Lab/codes/objective-c/AWARE/AWARE/AWAREFramework/Plugins/AmbientNoise/EntityAmbientNoise+CoreDataProperties.m"; sourceTree = "<absolute>"; };
 		4FD479CB20568EAB003BDDF9 /* EntityCalendar+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EntityCalendar+CoreDataClass.h"; sourceTree = "<group>"; };
 		4FD479CC20568EAB003BDDF9 /* EntityCalendar+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EntityCalendar+CoreDataClass.m"; sourceTree = "<group>"; };
 		4FD479CD20568EAB003BDDF9 /* EntityCalendar+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EntityCalendar+CoreDataProperties.h"; sourceTree = "<group>"; };
@@ -1664,10 +1664,10 @@
 				4F36613A2129D74800173445 /* AmbientNoise.m */,
 				4F36613C2129D74800173445 /* AudioAnalysis.h */,
 				4F36613B2129D74800173445 /* AudioAnalysis.m */,
-				4FD479C620568E7E003BDDF9 /* EntityAmbientNoise+CoreDataClass.h */,
-				4FD479C720568E7E003BDDF9 /* EntityAmbientNoise+CoreDataClass.m */,
-				4FD479C520568E7D003BDDF9 /* EntityAmbientNoise+CoreDataProperties.h */,
-				4FD479C820568E7E003BDDF9 /* EntityAmbientNoise+CoreDataProperties.m */,
+				4FC6CE672208422E00CB9BAE /* EntityAmbientNoise+CoreDataClass.h */,
+				4FC6CE682208422E00CB9BAE /* EntityAmbientNoise+CoreDataClass.m */,
+				4FC6CE692208422E00CB9BAE /* EntityAmbientNoise+CoreDataProperties.h */,
+				4FC6CE662208422D00CB9BAE /* EntityAmbientNoise+CoreDataProperties.m */,
 			);
 			path = AmbientNoise;
 			sourceTree = "<group>";
@@ -2960,7 +2960,6 @@
 				16B077BB1D1A54BF009C070B /* EntityPushNotification+CoreDataProperties.m in Sources */,
 				16B0776C1D192663009C070B /* EntityRotation+CoreDataProperties.m in Sources */,
 				162811CF1FF4A95600425959 /* EntityContact+CoreDataClass.m in Sources */,
-				4FD479CA20568E7E003BDDF9 /* EntityAmbientNoise+CoreDataProperties.m in Sources */,
 				168AEA991D3EFEC300D02EA4 /* EntityProcessor.m in Sources */,
 				169C882A1D01382C00825761 /* AWARECore.m in Sources */,
 				160F0E8F1D03D64E00673343 /* EntityBarometer+CoreDataProperties.m in Sources */,
@@ -2972,7 +2971,6 @@
 				16606B251F4E4FC200EF6C4D /* PNRadarChartDataItem.m in Sources */,
 				16B0777F1D192D72009C070B /* EntityWifi.m in Sources */,
 				169C88991D01382C00825761 /* Proximity.m in Sources */,
-				4FD479C920568E7E003BDDF9 /* EntityAmbientNoise+CoreDataClass.m in Sources */,
 				169C85731D007EDC00825761 /* ViewController.m in Sources */,
 				169C88961D01382C00825761 /* Orientation.m in Sources */,
 				16BDCC9E1D35FD3800B13BD4 /* MSBandUV.m in Sources */,
@@ -3053,6 +3051,7 @@
 				160F0F051D04756800673343 /* EntityBatteryCharge+CoreDataProperties.m in Sources */,
 				16BDCCA11D3609CE00B13BD4 /* MSBandGSR.m in Sources */,
 				16CE5FEF1F4D68A8000E177F /* DataVisualizationViewController.m in Sources */,
+				4FC6CE6B2208422E00CB9BAE /* EntityAmbientNoise+CoreDataClass.m in Sources */,
 				169C88381D01382C00825761 /* SSLManager.m in Sources */,
 				160F0EF71D042AB600673343 /* EntityNetwork+CoreDataProperties.m in Sources */,
 				169C88361D01382C00825761 /* LocalFileStorageHelper.m in Sources */,
@@ -3115,6 +3114,7 @@
 				1613E0CE1D3E16B8000528F5 /* IBeacon.m in Sources */,
 				169C88861D01382C00825761 /* AmbientLight.m in Sources */,
 				16E586281E33A0DE0069C535 /* FitbitDevice.m in Sources */,
+				4FC6CE6A2208422E00CB9BAE /* EntityAmbientNoise+CoreDataProperties.m in Sources */,
 				160F0F081D04756800673343 /* EntityBatteryDischarge.m in Sources */,
 				169C882B1D01382C00825761 /* AWARECoreDataManager.m in Sources */,
 				162811CE1FF4A95600425959 /* EntityContact+CoreDataProperties.m in Sources */,

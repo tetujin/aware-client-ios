@@ -7,6 +7,7 @@
 //
 
 #import "ESMWebView.h"
+#import "AppDelegate.h"
 
 @implementation ESMWebView{
     UIWebView * webView;
@@ -34,10 +35,14 @@
 
 - (void) addWebPageElement:(EntityESM *)esm withFrame:(CGRect) frame {
     
-    webView = [[UIWebView alloc] initWithFrame:CGRectMake(20,
-                                                        0,
-                                                        frame.size.width-40,
-                                                        self.mainView.frame.size.height*3)];
+    CGRect rect = [[UIScreen mainScreen] bounds];
+    // printf("w:%f, h:%f\n", r2.size.width, r2.size.height);
+    
+    webView = [[UIWebView alloc] initWithFrame:CGRectMake(8,
+                                                          0,
+                                                        frame.size.width - 16,
+                                                        rect.size.height - 260)];
+                                                        // self.mainView.frame.size.height*3)];
     self.mainView.frame = CGRectMake(self.mainView.frame.origin.x,
                                      self.mainView.frame.origin.y,
                                      self.mainView.frame.size.width,
@@ -47,9 +52,14 @@
     [self.mainView addSubview:webView];
     
     NSString *path = esm.esm_url;
-    NSURL *url = [NSURL URLWithString:path];
-    NSURLRequest *req = [NSURLRequest requestWithURL:url];
-    [webView loadRequest:req];
+    if (path!=nil) {
+        AppDelegate * delete = (AppDelegate *)[UIApplication sharedApplication].delegate;
+        NSString * deviceId = [delete.sharedAWARECore.sharedAwareStudy getDeviceId];
+        NSString * newPath = [path stringByReplacingOccurrencesOfString:@"AWARE_DEVICE_ID" withString: deviceId];
+        NSURL *url = [NSURL URLWithString:newPath];
+        NSURLRequest *req = [NSURLRequest requestWithURL:url];
+        [webView loadRequest:req];
+    }
     
     [self refreshSizeOfRootView];
 }
