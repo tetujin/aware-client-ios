@@ -38,10 +38,10 @@
     CGRect rect = [[UIScreen mainScreen] bounds];
     // printf("w:%f, h:%f\n", r2.size.width, r2.size.height);
     
-    webView = [[UIWebView alloc] initWithFrame:CGRectMake(8,
+    webView = [[UIWebView alloc] initWithFrame:CGRectMake(5,
                                                           0,
-                                                        frame.size.width - 16,
-                                                        rect.size.height - 260)];
+                                                        frame.size.width - 10,
+                                                        rect.size.height - 210)];
                                                         // self.mainView.frame.size.height*3)];
     self.mainView.frame = CGRectMake(self.mainView.frame.origin.x,
                                      self.mainView.frame.origin.y,
