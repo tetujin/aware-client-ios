@@ -17,19 +17,6 @@ PODS:
   - EZAudio/Full (1.1.5):
     - EZAudio/Core
     - TPCircularBuffer (= 1.1)
-  - FirebaseAnalytics (3.9.0):
-    - FirebaseCore (~> 3.6)
-    - FirebaseInstanceID (~> 1.0)
-    - "GoogleToolboxForMac/NSData+zlib (~> 2.1)"
-  - FirebaseCore (3.6.0):
-    - "GoogleToolboxForMac/NSData+zlib (~> 2.1)"
-  - FirebaseInstanceID (1.0.10):
-    - FirebaseCore (~> 3.6)
-  - Google/Core (3.1.0):
-    - FirebaseAnalytics (~> 3.2)
-  - Google/SignIn (3.1.0):
-    - Google/Core
-    - GoogleSignIn (~> 4.0)
   - GoogleSignIn (4.4.0):
     - "GoogleToolboxForMac/NSDictionary+URLArguments (~> 2.1)"
     - "GoogleToolboxForMac/NSString+URLArguments (~> 2.1)"
@@ -37,8 +24,6 @@ PODS:
   - GoogleToolboxForMac/DebugUtils (2.2.0):
     - GoogleToolboxForMac/Defines (= 2.2.0)
   - GoogleToolboxForMac/Defines (2.2.0)
-  - "GoogleToolboxForMac/NSData+zlib (2.2.0)":
-    - GoogleToolboxForMac/Defines (= 2.2.0)
   - "GoogleToolboxForMac/NSDictionary+URLArguments (2.2.0)":
     - GoogleToolboxForMac/DebugUtils (= 2.2.0)
     - GoogleToolboxForMac/Defines (= 2.2.0)
@@ -65,7 +50,7 @@ DEPENDENCIES:
   - EAIntroView (~> 2.9.0)
   - EstimoteSDK
   - EZAudio
-  - Google/SignIn
+  - GoogleSignIn
   - ios-ntp
   - MQTTKit
   - NXOAuth2Client (~> 1.2.8)
@@ -81,10 +66,6 @@ SPEC REPOS:
     - EARestrictedScrollView
     - EstimoteSDK
     - EZAudio
-    - FirebaseAnalytics
-    - FirebaseCore
-    - FirebaseInstanceID
-    - Google
     - GoogleSignIn
     - GoogleToolboxForMac
     - GTMSessionFetcher
@@ -104,10 +85,6 @@ SPEC CHECKSUMS:
   EARestrictedScrollView: b0c2a3f92fb2610bb44d71c5e4893777c89e45ef
   EstimoteSDK: 61935c7fbcb9fe93b97b0360351aef66fb1c338d
   EZAudio: 3b1cb4b6d7ebca68f0c2478576d75940aad4aa99
-  FirebaseAnalytics: e5fe8486efc01bec33f6bf82e2fa9fce4b124052
-  FirebaseCore: 9691ee2ade70c098d7cf92440f4303f16d83ca75
-  FirebaseInstanceID: b9eedd6846fb5e1f0f7279e1deaa7a7e4cf8392e
-  Google: 98da4b1a60ed0beb80a290387a28333406a1eb90
   GoogleSignIn: 7ff245e1a7b26d379099d3243a562f5747e23d39
   GoogleToolboxForMac: ff31605b7d66400dcec09bed5861689aebadda4d
   GTMSessionFetcher: 32aeca0aa144acea523e1c8e053089dec2cb98ca
@@ -120,6 +97,6 @@ SPEC CHECKSUMS:
   TPCircularBuffer: 4960a919e667280f7f38963d771f45871b64fe62
   UICountingLabel: faf890b505d96312e324a86718f031fafffb0ccb
 
-PODFILE CHECKSUM: 1566775e7bca4e8e49f99079e36ed7f38696d654
+PODFILE CHECKSUM: 904cb0ec72699baedb9504e604638f12e25987f1
 
-COCOAPODS: 1.5.3
+COCOAPODS: 1.6.0.beta.2
