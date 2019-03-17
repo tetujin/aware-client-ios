@@ -1,3 +1,6 @@
+## Deprecated
+aware-client-ios has recently been deprecated. Instead of aware-client-ios, a new client named aware-client-ios-v2 is ready on [GitHub](https://github.com/tetujin/aware-client-ios-v2) and [AppStore](https://itunes.apple.com/jp/app/aware-client-v2/id1455986181). Please use the new one if you need to use the client. The new version's sensing module is built on [AWAREFramework-iOS](https://github.com/tetujin/AWAREFramework-iOS) which is a library version of AWARE framework for iOS. In addition, all source code of the client is written in Swift, so then if you don't familiar with Objective-C, you can easily modify and extend the source code. 
+
 ## AWARE Framework Client source code for iOS (http://awareframework.com)
 AWARE is an Android and iOS framework dedicated to instrument, infer, log and share mobile context information, 
 for application developers, researchers and smartphone users. AWARE captures hardware-, software-, and human-based data. 
